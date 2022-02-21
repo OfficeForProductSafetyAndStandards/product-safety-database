@@ -38,7 +38,7 @@ module ApplicationHelper
 
   def replace_uploaded_file_field(form, field_name, label:, label_classes: "govuk-label--m")
     existing_uploaded_file_id = form.hidden_field "existing_#{field_name}_file_id"
-    file_upload_field         = form.govuk_file_upload(field_name, label: label, label_classes: label_classes)
+    file_upload_field         = form.govuk_file_upload(field_name, label:, label_classes:)
     uploaded_file             = form.object.public_send(field_name)
 
     return safe_join([existing_uploaded_file_id, file_upload_field]) if uploaded_file.blank?

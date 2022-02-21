@@ -27,9 +27,9 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
   describe "#product_export" do
     let(:user)           { create(:user) }
     let(:params)         { {} }
-    let(:product_export) { ProductExport.create!(user: user, params: params) }
+    let(:product_export) { ProductExport.create!(user:, params:) }
 
-    let(:mail) { described_class.product_export(email: user.email, name: user.name, product_export: product_export) }
+    let(:mail) { described_class.product_export(email: user.email, name: user.name, product_export:) }
 
     it "sets the recipient of the email" do
       expect(mail.to).to eq([user.email])
@@ -52,9 +52,9 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
   describe "#case_export" do
     let(:user) { create(:user) }
     let(:params) { {} }
-    let(:case_export) { CaseExport.create!(user: user, params: params) }
+    let(:case_export) { CaseExport.create!(user:, params:) }
 
-    let(:mail) { described_class.case_export(email: user.email, name: user.name, case_export: case_export) }
+    let(:mail) { described_class.case_export(email: user.email, name: user.name, case_export:) }
 
     it "sets the recipient of the email" do
       expect(mail.to).to eq([user.email])
@@ -112,7 +112,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
         invitation_url = complete_registration_user_url(user.id, invitation: user.invitation_token)
 
         expect(mail.govuk_notify_personalisation)
-          .to eq(invitation_url: invitation_url, inviting_team_member_name: inviting_user.name)
+          .to eq(invitation_url:, inviting_team_member_name: inviting_user.name)
       end
     end
 
@@ -125,13 +125,13 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
         invitation_url = complete_registration_user_url(user.id, invitation: user.invitation_token)
 
         expect(mail.govuk_notify_personalisation)
-          .to eq(invitation_url: invitation_url, inviting_team_member_name: "a colleague")
+          .to eq(invitation_url:, inviting_team_member_name: "a colleague")
       end
     end
   end
 
   describe "#team_added_to_case_email" do
-    subject(:mail) { described_class.team_added_to_case_email(investigation: investigation, team: team, added_by_user: user, message: message, to_email: "test@example.com") }
+    subject(:mail) { described_class.team_added_to_case_email(investigation:, team:, added_by_user: user, message:, to_email: "test@example.com") }
 
     let(:investigation) { create(:allegation, creator: user) }
     let(:user) { create(:user, :activated, name: "Bob Jones") }
@@ -165,10 +165,10 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
   describe "#team_deleted_from_case_email" do
     subject(:mail) do
       described_class.team_deleted_from_case_email(
-        message: message,
-        investigation: investigation,
+        message:,
+        investigation:,
         team_deleted: team_to_be_deleted,
-        user_who_deleted: user_who_deleted,
+        user_who_deleted:,
         to_email: "test@example.com"
       )
     end
@@ -209,13 +209,13 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
   describe "#case_permission_changed_for_team" do
     subject(:mail) do
       described_class.case_permission_changed_for_team(
-        investigation: investigation,
-        team: team,
-        user: user,
-        message: message,
+        investigation:,
+        team:,
+        user:,
+        message:,
         to_email: "test@example.com",
-        old_permission: old_permission,
-        new_permission: new_permission
+        old_permission:,
+        new_permission:
       )
     end
 
@@ -258,8 +258,8 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
 
   def expect_personalisation_to_include_case_attributes
     expect(mail.govuk_notify_personalisation).to include(
-      case_type: case_type,
-      case_title: case_title,
+      case_type:,
+      case_title:,
       case_id: investigation.pretty_id,
     )
   end

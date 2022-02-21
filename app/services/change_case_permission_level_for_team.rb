@@ -30,10 +30,10 @@ private
 
   def create_new_collaboration!
     new_collaboration_class.create!(
-      investigation: investigation,
+      investigation:,
       collaborator: team,
       added_by_user: user,
-      message: message
+      message:
     )
   end
 
@@ -53,9 +53,9 @@ private
     metadata = activity_class.build_metadata(team, old_permission, new_permission, message)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
-      metadata: metadata
+      source: UserSource.new(user:),
+      investigation:,
+      metadata:
     )
   end
 
@@ -68,13 +68,13 @@ private
   def send_notification_email
     entities_to_notify.each do |entity|
       NotifyMailer.case_permission_changed_for_team(
-        message: message,
-        investigation: investigation,
-        team: team,
-        user: user,
+        message:,
+        investigation:,
+        team:,
+        user:,
         to_email: entity.email,
-        old_permission: old_permission,
-        new_permission: new_permission
+        old_permission:,
+        new_permission:
       ).deliver_later
     end
   end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_opensearch, :with_stubbed_mailer do
-  let(:audit_activity)       { create(:legacy_audit_update_activity_corrective_action, metadata: metadata) }
+  let(:audit_activity)       { create(:legacy_audit_update_activity_corrective_action, metadata:) }
   let(:old_geographic_scope) { "Regional" }
   let(:new_geographic_scope) { "Local" }
   let(:metadata) do

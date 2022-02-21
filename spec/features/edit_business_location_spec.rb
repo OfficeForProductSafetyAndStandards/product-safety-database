@@ -5,7 +5,7 @@ RSpec.feature "Editing a business location", :with_stubbed_opensearch, :with_stu
   let(:business) { create(:business, trading_name: "Acme Ltd") }
   let!(:location) do
     create(:location,
-           business: business,
+           business:,
            name: "Headquarters",
            address_line_1: "Unit 1",
            address_line_2: "100 High Street",

@@ -16,14 +16,14 @@ class UpdateRiskAssessment
 
     ActiveRecord::Base.transaction do
       risk_assessment.assign_attributes(
-        assessed_on: assessed_on,
-        risk_level: risk_level,
+        assessed_on:,
+        risk_level:,
         custom_risk_level: custom_risk_level.presence,
         assessed_by_team_id: assessed_by_team_id.presence,
         assessed_by_business_id: assessed_by_business_id.presence,
         assessed_by_other: assessed_by_other.presence,
-        details: details,
-        product_ids: product_ids
+        details:,
+        product_ids:
       )
 
       if risk_assessment_file
@@ -49,7 +49,7 @@ private
   def create_audit_activity
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.create!(
       source: user_source,
-      investigation: investigation,
+      investigation:,
       metadata: audit_activity_metadata,
       title: nil,
       body: nil
@@ -57,12 +57,12 @@ private
   end
 
   def user_source
-    @user_source ||= UserSource.new(user: user)
+    @user_source ||= UserSource.new(user:)
   end
 
   def audit_activity_metadata
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.build_metadata(
-      risk_assessment: risk_assessment,
+      risk_assessment:,
       previous_product_ids: @previous_product_ids,
       attachment_changed: risk_assessment_file.present?,
       previous_attachment_filename: @previous_attachment_filename

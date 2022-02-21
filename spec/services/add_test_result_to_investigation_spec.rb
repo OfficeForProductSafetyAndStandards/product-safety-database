@@ -14,20 +14,20 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
   let(:product_id)                           { create(:product).id }
   let(:params) do
     {
-      investigation: investigation,
-      user: user,
-      document: document,
-      date: date,
-      details: details,
-      legislation: legislation,
+      investigation:,
+      user:,
+      document:,
+      date:,
+      details:,
+      legislation:,
       result: test_result,
-      standards_product_was_tested_against: standards_product_was_tested_against,
-      product_id: product_id
+      standards_product_was_tested_against:,
+      product_id:
     }
   end
 
   def expected_email_body(user, viewing_user)
-    "Test result was added to the #{investigation.case_type} by #{UserSource.new(user: user).show(viewing_user)}."
+    "Test result was added to the #{investigation.case_type} by #{UserSource.new(user:).show(viewing_user)}."
   end
 
   def expected_email_subject
@@ -41,15 +41,15 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
       expect(command).to be_a_success
 
       expect(command.test_result).to have_attributes(
-        date: date, details: details, legislation: legislation, result: "passed", product_id: product_id,
-        standards_product_was_tested_against: standards_product_was_tested_against,
+        date:, details:, legislation:, result: "passed", product_id:,
+        standards_product_was_tested_against:,
         document_blob: document
       )
     end
 
     it "creates an audit log", :aggregate_failures do
       test_result = command.test_result
-      audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", product_id: product_id)
+      audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", product_id:)
       expect(audit.source.user).to eq(user)
       expect(audit.metadata["test_result"]["id"]).to eq(test_result.id)
     end

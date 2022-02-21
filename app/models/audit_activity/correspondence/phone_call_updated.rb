@@ -8,7 +8,7 @@ class AuditActivity::Correspondence::PhoneCallUpdated < AuditActivity::Correspon
       updates["transcript"] = correspondence.attachment_changes["transcript"].blob.filename
     end
 
-    { updates: updates }
+    { updates: }
   end
 
   def restricted_title(_user)

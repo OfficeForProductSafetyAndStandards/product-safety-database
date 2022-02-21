@@ -5,11 +5,11 @@ RSpec.describe UpdateEmail, :with_stubbed_opensearch, :with_stubbed_mailer, :wit
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team, name: "Team 2") }
-  let(:user) { create(:user, :activated, name: "User 2", team: team) }
+  let(:user) { create(:user, :activated, name: "User 2", team:) }
 
   let!(:email) do
     create(:email,
-           investigation: investigation,
+           investigation:,
            correspondence_date: Date.new(2019, 1, 1),
            correspondent_name: "Mr Jones",
            details: "Please call me.",
@@ -35,7 +35,7 @@ RSpec.describe UpdateEmail, :with_stubbed_opensearch, :with_stubbed_mailer, :wit
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(email: email) }
+      let(:result) { described_class.call(email:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -43,7 +43,7 @@ RSpec.describe UpdateEmail, :with_stubbed_opensearch, :with_stubbed_mailer, :wit
     end
 
     context "with no email parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -67,20 +67,20 @@ RSpec.describe UpdateEmail, :with_stubbed_opensearch, :with_stubbed_mailer, :wit
 
       let(:result) do
         described_class.call(
-          email: email,
-          user: user,
-          correspondence_date: correspondence_date,
-          correspondent_name: correspondent_name,
-          details: details,
-          email_address: email_address,
-          email_attachment_action: email_attachment_action,
-          email_attachment: email_attachment,
-          email_direction: email_direction,
-          email_file_action: email_file_action,
-          email_file: email_file,
-          email_subject: email_subject,
-          overview: overview,
-          attachment_description: attachment_description
+          email:,
+          user:,
+          correspondence_date:,
+          correspondent_name:,
+          details:,
+          email_address:,
+          email_attachment_action:,
+          email_attachment:,
+          email_direction:,
+          email_file_action:,
+          email_file:,
+          email_subject:,
+          overview:,
+          attachment_description:
         )
       end
 

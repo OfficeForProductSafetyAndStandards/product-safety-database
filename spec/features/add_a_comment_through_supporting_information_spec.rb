@@ -5,7 +5,7 @@ RSpec.feature "Adding a comment through supporting information tab", :with_stubb
   let(:investigation) { create(:allegation, creator: user) }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, user: user, owner: user.team)
+    ChangeCaseOwner.call!(investigation:, user:, owner: user.team)
   end
 
   scenario "Adding a comment" do

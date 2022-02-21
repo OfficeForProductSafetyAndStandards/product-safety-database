@@ -74,7 +74,7 @@ class Investigations::BusinessesController < ApplicationController
 
     result = RemoveBusinessFromCase.call!(
       reason: @remove_business_form.reason,
-      investigation: investigation,
+      investigation:,
       business: @business,
       user: current_user
     )

@@ -180,10 +180,10 @@ private
 
   def set_risk_assessment_form
     @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(
-      current_user: current_user,
+      current_user:,
       investigation: @investigation,
       businesses: businesses_from_session,
-      product: product
+      product:
     )
     set_repeat_step(:trading_standards_risk_assessment_form)
   end
@@ -335,7 +335,7 @@ private
                        .select { |relationship, selected| relationship != "other" && selected == "1" }
                        .keys
       businesses << which_businesses_params[:other_business_type] if which_businesses_params[:other] == "1"
-      session[:businesses] = businesses.map { |type| { type: type, business: nil } }
+      session[:businesses] = businesses.map { |type| { type:, business: nil } }
     end
   end
 
@@ -517,7 +517,7 @@ private
       @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(
         trading_standards_risk_assessment_form_params
           .merge(
-            current_user: current_user,
+            current_user:,
             investigation: @investigation,
             businesses: businesses_from_session,
             product: ProductForm.new(product_step_params)
@@ -602,7 +602,7 @@ private
       if session_business[:location]
         business.locations << Location.new(session_business[:location])
       end
-      AddBusinessToCase.call!(business: business, investigation: @investigation, relationship: session_business[:type], user: current_user, skip_email: true)
+      AddBusinessToCase.call!(business:, investigation: @investigation, relationship: session_business[:type], user: current_user, skip_email: true)
     end
   end
 
@@ -716,6 +716,6 @@ private
   def test_file_metadata
     title = "#{@test.result&.capitalize} test: #{@test.product&.name}"
     document_type = "test_results"
-    get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
+    get_attachment_metadata_params(:file).merge(title:, document_type:)
   end
 end

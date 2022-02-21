@@ -4,7 +4,7 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       @actions_form = InvestigationActionsForm.new(
         investigation: @investigation,
-        current_user: current_user
+        current_user:
       )
     end
 
@@ -14,7 +14,7 @@ module Investigations
 
       @actions_form = InvestigationActionsForm.new(
         investigation: @investigation,
-        current_user: current_user,
+        current_user:,
         investigation_action: actions_params[:investigation_action]
       )
 

@@ -32,7 +32,7 @@ module ProductsHelper
   end
 
   def search_for_product_code(product_code, excluded_ids)
-    match_product_code = { match: { product_code: product_code } }
+    match_product_code = { match: { product_code: } }
     Product.search(query: {
       bool: {
         must: match_product_code,
@@ -91,7 +91,7 @@ module ProductsHelper
   def options_for_country_of_origin(countries, product_form)
     countries.map do |country|
       text = country[0]
-      option = { text: text, value: country[1] }
+      option = { text:, value: country[1] }
       option[:selected] = true if product_form.country_of_origin == text
       option
     end

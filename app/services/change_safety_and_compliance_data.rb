@@ -27,19 +27,19 @@ private
 
   def assign_attributes
     if reported_reason == :safe_and_compliant
-      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason: reported_reason)
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason:)
     end
 
     if reported_reason == :unsafe_and_non_compliant
-      investigation.assign_attributes(hazard_description: hazard_description, hazard_type: hazard_type, non_compliant_reason: non_compliant_reason, reported_reason: reported_reason)
+      investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason:, reported_reason:)
     end
 
     if reported_reason == :unsafe
-      investigation.assign_attributes(hazard_description: hazard_description, hazard_type: hazard_type, non_compliant_reason: nil, reported_reason: reported_reason)
+      investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason: nil, reported_reason:)
     end
 
     if reported_reason == :non_compliant
-      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: non_compliant_reason, reported_reason: reported_reason)
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason:, reported_reason:)
     end
   end
 
@@ -48,8 +48,8 @@ private
 
     activity_class.create!(
       source: user_source,
-      investigation: investigation,
-      metadata: metadata
+      investigation:,
+      metadata:
     )
   end
 
@@ -58,7 +58,7 @@ private
   end
 
   def user_source
-    @user_source ||= UserSource.new(user: user)
+    @user_source ||= UserSource.new(user:)
   end
 
   def send_notification_email(investigation, user)

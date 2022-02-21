@@ -19,7 +19,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(team: team, user: user) }
+      let(:result) { described_class.call(team:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -27,7 +27,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(team: team, investigation: investigation) }
+      let(:result) { described_class.call(team:, investigation:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -35,7 +35,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
     end
 
     context "with no team parameter" do
-      let(:result) { described_class.call(investigation: investigation, user: user) }
+      let(:result) { described_class.call(investigation:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -45,11 +45,11 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
     context "with required parameters" do
       let(:result) do
         described_class.call(
-          team: team,
-          message: message,
-          investigation: investigation,
-          collaboration_class: collaboration_class,
-          user: user
+          team:,
+          message:,
+          investigation:,
+          collaboration_class:,
+          user:
         )
       end
 
@@ -61,8 +61,8 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
         expect(result.collaboration).to have_attributes(
           collaborator: team,
           added_by_user: user,
-          investigation: investigation,
-          message: message
+          investigation:,
+          message:
         )
       end
 
@@ -93,8 +93,8 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       context "when the team does not have an email address" do
         let(:team) { create(:team, team_recipient_email: nil) }
-        let!(:active_team_user) { create(:user, :activated, team: team, organisation: team.organisation) }
-        let!(:inactive_team_user) { create(:user, :inactive, team: team, organisation: team.organisation) }
+        let!(:active_team_user) { create(:user, :activated, team:, organisation: team.organisation) }
+        let!(:inactive_team_user) { create(:user, :inactive, team:, organisation: team.organisation) }
 
         before { result }
 
@@ -112,11 +112,11 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
       context "when the silent parameter is true", :with_test_queue_adapter do
         let(:result) do
           described_class.call(
-            team: team,
-            message: message,
-            investigation: investigation,
-            collaboration_class: collaboration_class,
-            user: user,
+            team:,
+            message:,
+            investigation:,
+            collaboration_class:,
+            user:,
             silent: true
           )
         end

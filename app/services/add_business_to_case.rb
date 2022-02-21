@@ -10,8 +10,8 @@ class AddBusinessToCase
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
     Business.transaction do
-      business.primary_location&.assign_attributes(name: "Registered office address", source: UserSource.new(user: user))
-      investigation_business = business.investigation_businesses.build(investigation: investigation, relationship: relationship)
+      business.primary_location&.assign_attributes(name: "Registered office address", source: UserSource.new(user:))
+      investigation_business = business.investigation_businesses.build(investigation:, relationship:)
       business.save!
 
       send_notification_email(
@@ -24,9 +24,9 @@ private
 
   def create_audit_activity_for_business_added(business, investigation_business)
     AuditActivity::Business::Add.create!(
-      investigation: investigation,
-      source: UserSource.new(user: user),
-      business: business,
+      investigation:,
+      source: UserSource.new(user:),
+      business:,
       metadata: AuditActivity::Business::Add.build_metadata(business, investigation_business)
     )
   end

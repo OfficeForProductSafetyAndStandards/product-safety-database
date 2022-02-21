@@ -24,7 +24,7 @@ class Investigations::SummaryController < ApplicationController
       end
     end
 
-    ChangeCaseSummary.call!(investigation: investigation, summary: @form.summary, user: current_user)
+    ChangeCaseSummary.call!(investigation:, summary: @form.summary, user: current_user)
 
     respond_to do |format|
       format.html do

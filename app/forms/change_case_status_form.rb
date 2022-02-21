@@ -13,12 +13,12 @@ class ChangeCaseStatusForm
 
   def self.from(investigation)
     old_status = investigation.is_closed? ? "closed" : "open"
-    new(case_type: investigation.case_type, old_status: old_status)
+    new(case_type: investigation.case_type, old_status:)
   end
 
 private
 
   def new_status_is_different
-    errors.add(:new_status, :same_as_existing, case_type: case_type, status: new_status) if new_status == old_status
+    errors.add(:new_status, :same_as_existing, case_type:, status: new_status) if new_status == old_status
   end
 end

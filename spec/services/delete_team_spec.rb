@@ -4,7 +4,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:team) { create(:team) }
   let(:new_team) { create(:team) }
 
-  let(:team_user) { create(:user, :activated, :team_admin, team: team, organisation: team.organisation) }
+  let(:team_user) { create(:user, :activated, :team_admin, team:, organisation: team.organisation) }
   let(:new_team_user) { create(:user, :activated, :team_admin, team: new_team, organisation: new_team.organisation) }
   let(:deleting_user) { create(:user) }
 
@@ -12,7 +12,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
     subject(:result) { delete_team }
 
     def delete_team
-      described_class.call(team: team, new_team: new_team, user: deleting_user)
+      described_class.call(team:, new_team:, user: deleting_user)
     end
 
     context "with no parameters" do
@@ -206,7 +206,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       end
 
       context "when the team is a collaborator on a case owned by another team" do
-        let!(:other_team_case) { create(:allegation, read_only_teams: read_only_teams, edit_access_teams: edit_access_teams) }
+        let!(:other_team_case) { create(:allegation, read_only_teams:, edit_access_teams:) }
         let(:read_only_teams) { [team] }
         let(:edit_access_teams) { nil }
 

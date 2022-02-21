@@ -30,8 +30,8 @@ private
 
   def create_audit_activity_for_risk_level_update
     AUDIT_ACTIVITY_CLASS.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       metadata: AUDIT_ACTIVITY_CLASS.build_metadata(investigation, change_action)
     )
   end
@@ -40,9 +40,9 @@ private
     email_recipients_for_team_with_access(investigation, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.case_risk_level_updated(
-        email: email,
+        email:,
         name: entity.name,
-        investigation: investigation,
+        investigation:,
         update_verb: change_action.to_s,
         level: updated_risk_level
       ).deliver_later

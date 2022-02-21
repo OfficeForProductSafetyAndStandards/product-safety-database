@@ -5,7 +5,7 @@ class ProductExportJob < ApplicationJob
     NotifyMailer.product_export(
       email: product_export.user.email,
       name: product_export.user.name,
-      product_export: product_export
+      product_export:
     ).deliver_later
   rescue StandardError => e
     Sentry.capture_exception(e)

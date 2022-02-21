@@ -9,7 +9,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     ).decorate
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, risk_level: risk_level, custom_risk_level: custom_risk_level, assessed_by_team: assessed_by_team, assessed_by_business: assessed_by_business, assessed_by_other: assessed_by_other, products: products) }
+  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, custom_risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, products:) }
   let(:trait) { :without_file }
   let(:risk_level) { "serious" }
   let(:custom_risk_level) { nil }

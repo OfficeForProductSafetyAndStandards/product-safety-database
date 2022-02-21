@@ -35,7 +35,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   end
 
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, :opss_user, team: team) }
+  let(:user) { create(:user, :activated, :opss_user, team:) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
 

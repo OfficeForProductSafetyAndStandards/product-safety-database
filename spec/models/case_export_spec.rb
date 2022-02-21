@@ -2,13 +2,13 @@ require "rails_helper"
 
 RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:organisation) { create(:organisation) }
-  let!(:team) { create(:team, organisation: organisation) }
-  let!(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let!(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
+  let!(:team) { create(:team, organisation:) }
+  let!(:user) { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
+  let!(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation:, team:) }
   let!(:investigation) { create(:allegation, creator: user).decorate }
   let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team).decorate }
   let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }
-  let(:case_export) { described_class.create!(user: user, params: params) }
+  let(:case_export) { described_class.create!(user:, params:) }
 
   before { Investigation.__elasticsearch__.import force: true, refresh: :wait }
 

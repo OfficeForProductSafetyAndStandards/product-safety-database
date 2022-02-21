@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adapter do
-  let(:investigation) { create(:allegation, creator: creator) }
+  let(:investigation) { create(:allegation, creator:) }
   let(:attributes) { attributes_for(:product_washing_machine) }
 
   let(:user) { create(:user) }
@@ -18,7 +18,7 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure", :aggregate_failures do
         expect(result).to be_failure
@@ -27,7 +27,7 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation: investigation) }
+      let(:result) { described_class.call(investigation:) }
 
       it "returns a failure", :aggregate_failures do
         expect(result).to be_failure
@@ -44,7 +44,7 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
         "Product was added to the allegation by #{name}."
       end
 
-      let(:result) { described_class.call(investigation: investigation, user: user, **attributes) }
+      let(:result) { described_class.call(investigation:, user:, **attributes) }
 
       it "returns success" do
         expect(result).to be_success
@@ -55,7 +55,7 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
 
         expect(result.product).to have_attributes(attributes.except(:country_of_origin))
         expect(JSON(result.product.country_of_origin)).to eq(attributes[:country_of_origin])
-        expect(result.product.investigation_products.where(investigation: investigation)).to exist
+        expect(result.product.investigation_products.where(investigation:)).to exist
       end
 
       it "creates an audit activity", :aggregate_failures do

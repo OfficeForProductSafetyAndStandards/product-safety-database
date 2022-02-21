@@ -51,8 +51,8 @@ private
   def create_audit_activity
     activity = AuditActivity::Document::Update.create!(
       metadata: audit_activity_metadata,
-      source: UserSource.new(user: user),
-      investigation: investigation
+      source: UserSource.new(user:),
+      investigation:
     )
 
     activity.attachment.attach(file)
@@ -63,7 +63,7 @@ private
   end
 
   def source
-    UserSource.new(user: user)
+    UserSource.new(user:)
   end
 
   def send_notification_email

@@ -12,7 +12,7 @@ namespace :data_import do
       reference = report.xpath("reference").text
       unless imported_reports_contains_reference(previously_imported_reports, reference)
         import_report(report)
-        RapexImport.create!(reference: reference)
+        RapexImport.create!(reference:)
       end
     end
   end
@@ -87,15 +87,15 @@ module DataImportHelper
 
   def create_investigation_product(investigation, product)
     InvestigationProduct.create(
-      investigation: investigation,
-      product: product
+      investigation:,
+      product:
     )
   end
 
   def create_activity(notification, investigation, date)
     # TODO: update this to be a CorrectiveActionActivity
     CommentActivity.create(
-      investigation: investigation,
+      investigation:,
       created_at: date,
       updated_at: date,
       description: field_from_notification(notification, "measures"),

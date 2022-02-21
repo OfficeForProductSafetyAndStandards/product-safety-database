@@ -31,10 +31,10 @@ private
 
     activity_class.create!(
       source: nil, # DeleteUser is called from rake user:delete where no user source is available
-      investigation: investigation,
+      investigation:,
       title: nil,
       body: nil,
-      metadata: metadata
+      metadata:
     )
   end
 

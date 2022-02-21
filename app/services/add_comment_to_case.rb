@@ -10,7 +10,7 @@ class AddCommentToCase
 
     ActiveRecord::Base.transaction do
       context.comment = AuditActivity::Investigation::AddComment.create!(
-        source: UserSource.new(user: user),
+        source: UserSource.new(user:),
         metadata: audit_activity_metadata,
         investigation_id: investigation.id
       )
@@ -24,7 +24,7 @@ class AddCommentToCase
   end
 
   def source
-    UserSource.new(user: user)
+    UserSource.new(user:)
   end
 
   def send_notification_email(investigation, _user)

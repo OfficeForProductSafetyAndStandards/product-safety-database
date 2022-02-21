@@ -27,7 +27,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
 
   def expect_user_to_have_received_sms_code(code)
     expect(notify_stub).to have_received(:send_sms).with(
-      hash_including(phone_number: user.mobile_number, personalisation: { code: code })
+      hash_including(phone_number: user.mobile_number, personalisation: { code: })
     )
   end
 

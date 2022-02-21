@@ -24,7 +24,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_opensearch, :with_st
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -32,7 +32,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_opensearch, :with_st
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation: investigation) }
+      let(:result) { described_class.call(investigation:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -42,12 +42,12 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_opensearch, :with_st
     context "with the required parameters" do
       let(:result) do
         described_class.call(
-          user: user,
-          investigation: investigation,
-          hazard_type: hazard_type,
-          hazard_description: hazard_description,
-          non_compliant_reason: non_compliant_reason,
-          reported_reason: reported_reason
+          user:,
+          investigation:,
+          hazard_type:,
+          hazard_description:,
+          non_compliant_reason:,
+          reported_reason:
         )
       end
 

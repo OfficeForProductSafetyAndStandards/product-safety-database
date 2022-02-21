@@ -7,7 +7,7 @@ namespace :investigations do
 
     closed_investigations.each do |investigation|
       date_closed = investigation.activities.where(type: "AuditActivity::Investigation::UpdateStatus").order(created_at: :asc).last.created_at
-      investigation.update!(date_closed: date_closed)
+      investigation.update!(date_closed:)
     end
   end
 end

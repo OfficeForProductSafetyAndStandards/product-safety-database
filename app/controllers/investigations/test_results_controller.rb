@@ -17,7 +17,7 @@ class Investigations::TestResultsController < ApplicationController
 
     service_attributes = @test_result_form
                            .serializable_hash
-                           .merge(investigation: investigation, user: current_user)
+                           .merge(investigation:, user: current_user)
 
     result = AddTestResultToInvestigation.call(service_attributes)
 
@@ -62,8 +62,8 @@ class Investigations::TestResultsController < ApplicationController
 
     result = UpdateTestResult.call(
       @test_result_form.serializable_hash
-        .merge(test_result: test_result,
-               investigation: investigation,
+        .merge(test_result:,
+               investigation:,
                user: current_user,
                changes: @test_result_form.changes)
     )

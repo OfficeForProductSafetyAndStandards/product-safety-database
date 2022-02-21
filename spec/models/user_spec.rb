@@ -323,7 +323,7 @@ RSpec.describe User do
   end
 
   describe "#has_role?" do
-    subject(:user) { create(:user, team: team, organisation: team.organisation, roles: user_roles) }
+    subject(:user) { create(:user, team:, organisation: team.organisation, roles: user_roles) }
 
     let(:team) { create(:team, roles: team_roles) }
     let(:team_roles) { [] }
@@ -390,7 +390,7 @@ RSpec.describe User do
   describe ".inactive" do
     subject(:users) { described_class.inactive }
 
-    let!(:user) { create(:user, trait, last_activity_at_approx: last_activity_at_approx) }
+    let!(:user) { create(:user, trait, last_activity_at_approx:) }
     let(:trait) { :activated }
 
     context "when last_activity_at_approx is nil" do
@@ -465,7 +465,7 @@ RSpec.describe User do
   end
 
   describe "#update_last_activity_time!" do
-    subject(:user) { create(:user, last_activity_at_approx: last_activity_at_approx) }
+    subject(:user) { create(:user, last_activity_at_approx:) }
 
     context "when last_activity_at_approx is nil" do
       let(:last_activity_at_approx) { nil }

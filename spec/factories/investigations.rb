@@ -47,7 +47,7 @@ FactoryBot.define do
       end
 
       after(:create) do |investigation, evaluator|
-        AddBusinessToCase.call!(investigation: investigation, business: evaluator.business_to_add, relationship: evaluator.business_relationship, user: investigation.owner)
+        AddBusinessToCase.call!(investigation:, business: evaluator.business_to_add, relationship: evaluator.business_relationship, user: investigation.owner)
         investigation.reload # This ensures investigation.businesses returns business_to_add
       end
     end
@@ -110,13 +110,13 @@ FactoryBot.define do
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
     before(:create) do |investigation, options|
-      CreateCase.call(investigation: investigation, user: options.creator)
+      CreateCase.call(investigation:, user: options.creator)
     end
 
     after(:create) do |investigation, evaluator|
       Array.wrap(evaluator.read_only_teams).each do |read_only_team|
         AddTeamToCase.call!(
-          investigation: investigation,
+          investigation:,
           user: investigation.creator_user,
           team: read_only_team,
           collaboration_class: Collaboration::Access::ReadOnly
@@ -125,7 +125,7 @@ FactoryBot.define do
 
       Array.wrap(evaluator.edit_access_teams).each do |edit_access_team|
         AddTeamToCase.call!(
-          investigation: investigation,
+          investigation:,
           user: investigation.creator_user,
           team: edit_access_team,
           collaboration_class: Collaboration::Access::Edit

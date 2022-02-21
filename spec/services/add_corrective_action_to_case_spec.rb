@@ -11,8 +11,8 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
     corrective_action_form
       .serializable_hash
       .merge(
-        investigation: investigation,
-        user: user,
+        investigation:,
+        user:,
         changes: corrective_action_form.changes
       )
   end
@@ -23,7 +23,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
   end
 
   def expected_email_body(user, user_with_edit_access)
-    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{UserSource.new(user: user)&.show(user_with_edit_access)}."
+    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{UserSource.new(user:)&.show(user_with_edit_access)}."
   end
 
   def expected_email_subject
@@ -34,9 +34,9 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
     expect(result.corrective_action).not_to be_new_record
     expect(result.corrective_action)
       .to have_attributes(
-        investigation: investigation, date_decided: date_decided, business_id: business.id, details: details, legislation: legislation, measure_type: measure_type,
-        duration: duration, geographic_scopes: geographic_scopes, other_action: other_action, action: action, product_id: product.id,
-        online_recall_information: online_recall_information, has_online_recall_information: has_online_recall_information
+        investigation:, date_decided:, business_id: business.id, details:, legislation:, measure_type:,
+        duration:, geographic_scopes:, other_action:, action:, product_id: product.id,
+        online_recall_information:, has_online_recall_information:
       )
   end
 

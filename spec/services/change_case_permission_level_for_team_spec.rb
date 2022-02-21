@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator: user, read_only_teams: read_only_teams) }
+  let!(:investigation) { create(:allegation, creator: user, read_only_teams:) }
 
   let(:user) { create(:user) }
   let(:message) { "Thanks for collaborating." }
@@ -22,7 +22,7 @@ RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stu
     end
 
     context "with no existing_collaboration parameter" do
-      let(:result) { described_class.call(new_collaboration_class: new_collaboration_class, user: user) }
+      let(:result) { described_class.call(new_collaboration_class:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -30,7 +30,7 @@ RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stu
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(existing_collaboration: existing_collaboration, new_collaboration_class: new_collaboration_class) }
+      let(:result) { described_class.call(existing_collaboration:, new_collaboration_class:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -38,7 +38,7 @@ RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stu
     end
 
     context "with no new_collaboration_class parameter" do
-      let(:result) { described_class.call(existing_collaboration: existing_collaboration, user: user) }
+      let(:result) { described_class.call(existing_collaboration:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -48,10 +48,10 @@ RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stu
     context "with required parameters" do
       let(:result) do
         described_class.call(
-          existing_collaboration: existing_collaboration,
-          message: message,
-          new_collaboration_class: new_collaboration_class,
-          user: user
+          existing_collaboration:,
+          message:,
+          new_collaboration_class:,
+          user:
         )
       end
 
@@ -68,8 +68,8 @@ RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stu
         expect(result.collaboration).to have_attributes(
           collaborator: team,
           added_by_user: user,
-          investigation: investigation,
-          message: message
+          investigation:,
+          message:
         )
       end
 
@@ -100,8 +100,8 @@ RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stu
 
       context "when the team does not have an email address" do
         let(:team) { create(:team, team_recipient_email: nil) }
-        let!(:active_team_user) { create(:user, :activated, team: team, organisation: team.organisation) }
-        let!(:inactive_team_user) { create(:user, :inactive, team: team, organisation: team.organisation) }
+        let!(:active_team_user) { create(:user, :activated, team:, organisation: team.organisation) }
+        let!(:inactive_team_user) { create(:user, :inactive, team:, organisation: team.organisation) }
 
         before { result }
 

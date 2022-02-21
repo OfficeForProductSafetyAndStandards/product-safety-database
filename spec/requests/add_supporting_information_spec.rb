@@ -5,7 +5,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
   let(:investigation) { create(:allegation, creator: user) }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
     sign_in(user)
   end
 
@@ -28,7 +28,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
       post investigation_supporting_information_index_path(investigation),
            params: {
              commit: "Continue",
-             type: type
+             type:
            }
     end
 
