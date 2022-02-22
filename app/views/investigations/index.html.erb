@@ -65,7 +65,7 @@
             <%= paginate @investigations.object %>
           </div>
         </div>
-      <% else %>
+      <% elsif ["team_cases", "your_cases"].include?(@page_name)%>
         <%= render "investigations/no_cases" %>
       <% end %>
     </section>
