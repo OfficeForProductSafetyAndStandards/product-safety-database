@@ -278,7 +278,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
         scenario "with keywords entered" do
           fill_in "Search", with: other_user_other_team_investigation.description
-          click_on "Search"
+          click_on "Submit search"
 
           find("#filter-details").click
 
