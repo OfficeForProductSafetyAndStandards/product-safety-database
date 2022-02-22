@@ -57,6 +57,9 @@ jobs:
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
 
+    - name: Install Graphviz
+      run: sudo apt-get install graphviz
+
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
