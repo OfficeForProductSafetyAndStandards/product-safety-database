@@ -19,12 +19,13 @@ module InvestigationsHelper
       :case_owner_is_someone_else_id,
       :teams_with_access_other_id,
       :created_by,
-      :created_by_other_id
+      :created_by_other_id,
+      :page_name
     )
   end
 
   def export_params
-    query_params.except(:page, :sort_by)
+    query_params.except(:page, :sort_by, :page_name)
   end
 
   def build_breadcrumb_structure

@@ -1,31 +1,39 @@
 <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
-  <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
-
-  <%= govukSkipLink(text: "Skip to results", href: "#results") %>
-
-  <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
-  <%= render "investigations/case_owner_radios", form: form %>
-
-
-  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details", open: search.uses_expanded_filter_options?) do %>
-    <%= render "investigations/teams_with_access_radios", form: form %>
-    <%= render "investigations/case_creator_radios", form: form %>
-    <%= render "investigations/case_type_radios", form: form %>
-    <%= render "investigations/case_status_radios", form: form %>
+  <a href="#page-content" class="govuk-skip-link opss-skip-link">
+    Skip to the main content
+  </a>
+  <%= render "investigations/secondary_nav" %>
+  <% unless ["team_cases", "your_cases"].include? @page_name %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-6 govuk-!-margin-right-6">
   <% end %>
+  <% if ["team_cases", "your_cases"].exclude? @page_name %>
+    <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
 
-  <div class="govuk-button-group">
-    <%= form.submit "Apply", name: nil, class: "govuk-button" %>
+    <%= govukSkipLink(text: "Skip to results", href: "#results") %>
 
-    <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
-  </div>
+    <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
+    <%= render "investigations/case_owner_radios", form: form %>
 
-  <% if policy(Investigation).export? %>
-    <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-padding-left-3 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
-      <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
-          Request this list as a downloadable <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
-      </p>
+
+    <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details", open: search.uses_expanded_filter_options?) do %>
+      <%= render "investigations/teams_with_access_radios", form: form %>
+      <%= render "investigations/case_creator_radios", form: form %>
+      <%= render "investigations/case_type_radios", form: form %>
+      <%= render "investigations/case_status_radios", form: form %>
+    <% end %>
+
+    <div class="govuk-button-group">
+      <%= form.submit "Apply", name: nil, class: "govuk-button" %>
+
+      <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
     </div>
-  <% end %>
 
+    <% if policy(Investigation).export? %>
+      <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-padding-left-3 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
+        <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
+            Request this list as a downloadable <br class="opss-br-desktop"><%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+        </p>
+      </div>
+    <% end %>
+  <% end %>
 </section>

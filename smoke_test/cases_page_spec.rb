@@ -43,6 +43,7 @@ RSpec.feature "Search smoke test" do
     end
 
     @session.click_link "Cases"
+    @session.click_link "All cases"
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(3)")
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(13)")
   end

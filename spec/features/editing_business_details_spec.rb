@@ -55,7 +55,9 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
 
     within("header") { click_on "Cases" }
 
-    fill_in "Keywords", with: "NewCo"
+    click_on "All cases - Search"
+
+    fill_in "Search", with: "NewCo"
     sleep 1
     click_on "Apply"
 
