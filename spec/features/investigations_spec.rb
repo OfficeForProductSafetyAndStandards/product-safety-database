@@ -31,29 +31,29 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
     # Expect investigations to be in reverse chronological order
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_1_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_1_days_ago.pretty_id)
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
     expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
 
-    expect(page).to have_link("Next page", href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
+    expect(page).to have_link("Next page", href: /#{Regexp.escape(all_cases_investigations_path(pagination_link_params))}/)
 
-    fill_in "Keywords", with: "electric skateboard"
+    fill_in "Search", with: "electric skateboard"
     click_on "Apply"
 
     # Expect only the single relevant investigation to be returned
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
     expect(page.find("select#sort_by option", text: "Relevance")).to be_selected
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Relevance")
 
     expect(page).to have_current_path(investigations_search_path, ignore_query: true)
 
-    fill_in "Keywords", with: ""
+    fill_in "Search", with: ""
     click_on "Apply"
 
     expect(page).not_to have_css("select#sort_by option", text: "Relevance")
@@ -63,11 +63,11 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
     # Expect investigations to be back in reverse chronological order again
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_1_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_1_days_ago.pretty_id)
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
     expect(page)
-      .to have_css("table#results tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
+      .to have_css("tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
     expect(page).to have_current_path(investigations_path, ignore_query: true)
 

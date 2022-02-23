@@ -13,9 +13,9 @@ RSpec.describe "Home page", :with_stubbed_opensearch, type: :request do
 
     before { sign_in(user) }
 
-    it "signed in visits / gets redirected to /cases" do
+    it "signed in visits / gets redirected to /cases/your-cases" do
       get "/"
-      expect(response).to redirect_to("/cases")
+      expect(response).to redirect_to("/cases/your-cases")
     end
   end
 end

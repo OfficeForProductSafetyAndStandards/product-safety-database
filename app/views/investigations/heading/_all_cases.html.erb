@@ -1,0 +1,27 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+      All cases &ndash; Search
+    </h1>
+    <p class="govuk-body opss-secondary-text">
+      Search all cases in the Product Safety Database (<abbr>PSD</abbr>).
+    </p>
+    <%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm") do %>
+      <p class="govuk-body-s govuk-!-margin-bottom-4">
+          <span id="search-hint">You can search for a case using a case number or the keywords that describe it and by filtering the results.</span> You can also filter all case records without a case number or a keyword search.
+      </p>
+
+      <% if policy(Investigation).export? %>
+        <p class="govuk-body-s govuk-!-margin-bottom-1">
+            When viewing a list of search results you can <%= link_to  "request the list", generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
+        </p>
+      <% end %>
+
+      <p class="govuk-body-s govuk-visually-hidden">
+        Search results appear within the following <code>form</code> and within the <code>role = region</code>.
+      </p>
+    <% end %>
+  </div>
+
+  <%= render "investigations/create_a_case_link" %>
+</div>
