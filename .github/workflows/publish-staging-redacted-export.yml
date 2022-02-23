@@ -86,6 +86,7 @@ jobs:
         id: export-database
         env:
           SPACE: staging
+          APP_NAME: psd-web
           CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
           CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
         run: |
@@ -112,17 +113,19 @@ jobs:
 
           cf push $TEMP_APP_NAME --task -f redex/manifest.yml --var app-name=$TEMP_APP_NAME --var db-name=$TEMP_DB_SERVICE_NAME --var env-name=$SECRETS_SERVICE_NAME
 
-          cf run-task $TEMP_APP_NAME
-          echo "::group::Waiting for task"
-          timeout 15m bash -c 'until cf tasks $TEMP_APP_NAME > /tmp/task_result && grep -E "SUCCEEDED" /tmp/task_result; do sleep 10; echo "Waiting for task..."; done'
-          echo "::endgroup::"
-
+          echo "Exporting schema..."
+          cf run-task $TEMP_APP_NAME --wait
           cf logs $TEMP_APP_NAME --recent 2>&1 | grep --silent "TASK SCRIPT COMPLETED"
 
+          echo "Cleaning up temporary apps..."
           sleep 5
           cf delete $TEMP_APP_NAME -f
           sleep 5
           cf delete-service $TEMP_DB_SERVICE_NAME -f
+
+          echo "Exporting files..."
+          cf run-task $APP_NAME --name 'redacted-export-s3-copy' --command 'export $(./env/get-env-from-vcap.sh) && bin/rails redacted_export:copy_s3_objects' --wait
+
           cf logout
 
       - name: Alert team via Slack of export failure
