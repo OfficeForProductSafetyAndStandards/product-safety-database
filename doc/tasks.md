@@ -45,3 +45,30 @@ cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && CLASS_NA
 ```
 
 To implement a conversion, override the `metadata` getter method on the class being changed to return legacy activity metadata in the new format. This task will invoke the overridden getter method and update each instance with the new structure.
+
+## Redacted data export
+
+The service has the ability to export a redacted version of its database, and certain user-uploaded files, to Amazon S3. A [Github Actions workflow](/.github/workflows/publish-staging-redacted-export.yml) is provided for this purpose and this runs on a schedule as well as manually when required. It's also possible to trigger parts of this export via the `redacted_export` rake task.
+
+### Redacting the database
+
+To produce a `.sql` script suitable for redacting the database, and to apply it to produce a redacted database dump:
+
+```bash
+bin/rails redacted_export:generate_sql > create_redacted_schema.sql
+psql < create_redacted_schema.sql
+pg_dump --table='redacted.*' --file=psd_redacted_export.sql --no-acl --no-owner --quote-all-identifiers --format=p --inserts --encoding=UTF8
+```
+
+The way to do this on the deployed service is a little different and it's best done by [triggering the workflow manually](https://github.com/UKGovernmentBEIS/beis-opss-psd/actions/workflows/publish-staging-redacted-export.yml), or by following [the steps inside it](/.github/workflows/publish-staging-redacted-export.yml). These perform steps two and three of the above by deploying [a separate CF app](/redex) which has secured access to the database and to S3.
+
+### Copying the user uploaded files
+
+Risk Assessment and Test Result user uploads are also exported to S3. These are copied to a separate bucket using an S3 Batch Operation job. This is usually done as part of the [same workflow which exports the database](/.github/workflows/publish-staging-redacted-export.yml), however it can be triggered manually:
+
+```bash
+cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && bin/rails redacted_export:copy_s3_objects" --name <task name> -k 2G --wait
+cf logs psd-web --recent
+```
+
+This task returns a Job ID, the progress of which can be tracked in the AWS S3 Console.
