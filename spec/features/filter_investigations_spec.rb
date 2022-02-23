@@ -39,7 +39,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     other_team_investigation.touch # Tests sort order
     Investigation.import refresh: :wait_for
     sign_in(user)
-    visit investigations_path
+    visit all_cases_investigations_path
   end
 
   scenario "no filters applied shows all open cases" do
@@ -277,8 +277,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         end
 
         scenario "with keywords entered" do
-          fill_in "Keywords", with: other_user_other_team_investigation.description
-          click_on "Search"
+          fill_in "Search", with: other_user_other_team_investigation.description
+          click_on "Submit search"
 
           find("#filter-details").click
 
@@ -452,12 +452,10 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-
-    expect(find("details#filter-details")["open"]).to eq(nil)
   end
 
   scenario "search returning a restricted cases" do
-    fill_in "Keywords", with: restricted_case_title
+    fill_in "Search", with: restricted_case_title
     click_on "Search"
 
     expect(page).not_to have_link(restricted_case.title, href: "/cases/#{restricted_case.pretty_id}")

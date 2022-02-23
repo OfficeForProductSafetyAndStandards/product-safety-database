@@ -1,0 +1,25 @@
+<nav aria-label="Secondary">
+    <ul class="govuk-list opss-left-nav">
+      <% if @page_name == "your_cases" %>
+        <li class="opss-left-nav__active">
+      <% else %>
+        <li>
+      <% end %>
+          <%= link_to "Your cases", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if  @page_name == "your_cases") %>
+        </li>
+      <% if @page_name == "team_cases" %>
+        <li class="opss-left-nav__active">
+      <% else %>
+        <li>
+      <% end %>
+          <%= link_to "Team cases", team_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if  @page_name == "team_cases") %>
+        </li>
+      <% unless ["team_cases", "your_cases"].include? @page_name %>
+        <li class="opss-left-nav__active">
+      <% else %>
+        <li>
+      <% end %>
+          <%= link_to "All cases - Search", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_cases", "your_cases"].include? @page_name) %>
+        </li>
+    </ul>
+</nav>

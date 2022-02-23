@@ -22,7 +22,7 @@
   <div class="govuk-grid-column-one-third">
     <h2 class="govuk-heading-m">
       <%= link_to "Your cases",
-        investigations_path(case_owner: "me"),
+        your_cases_investigations_path,
         class: "govuk-link govuk-link--no-visited-state"
       %>
     </h2>
@@ -32,7 +32,7 @@
   <div class="govuk-grid-column-one-third">
     <h2 class="govuk-heading-m">
       <%= link_to "All cases",
-        investigations_path,
+        all_cases_investigations_path,
         class: "govuk-link govuk-link--no-visited-state"
       %>
     </h2>

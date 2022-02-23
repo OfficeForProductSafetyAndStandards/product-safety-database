@@ -125,6 +125,10 @@ en:
         remove_business_hint: "Removing a business from a case cannot be undone"
         remove:
           remove_business_warning: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab."
+    titles:
+      team_cases: Team cases
+      your_cases: Your cases
+      all_cases: All Cases - Search
     filters:
       teams_added_to_case: "Teams added to case"
       my_team: "My team"

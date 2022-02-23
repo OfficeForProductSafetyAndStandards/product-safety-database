@@ -15,7 +15,7 @@ class Investigations::BusinessesController < ApplicationController
   def index
     @breadcrumbs = {
       items: [
-        { text: "Cases", href: investigations_path },
+        { text: "Cases", href: all_cases_investigations_path },
         { text: @investigation.pretty_description }
       ]
     }

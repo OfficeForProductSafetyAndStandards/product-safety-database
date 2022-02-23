@@ -86,11 +86,14 @@ Rails.application.routes.draw do
 
   resource :investigations, only: [], path: "cases" do
     resource :search, only: :show
+    get "your-cases", to: "investigations#your_cases", as: "your_cases"
+    get "team-cases", to: "investigations#team_cases", as: "team_cases"
+    get "all-cases", to: "investigations#index"
   end
 
   resources :investigations,
             path: "cases",
-            only: %i[index show new],
+            only: %i[show new index],
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
@@ -232,7 +235,7 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
   authenticated :user, ->(user) { user.is_opss? } do
-    root to: redirect("/cases"), as: "authenticated_opss_root"
+    root to: redirect("/cases/your-cases"), as: "authenticated_opss_root"
   end
 
   authenticated :user, ->(user) { !user.is_opss? } do
