@@ -31,6 +31,10 @@ class SearchParams
     sort_by
   end
 
+  def selected_sort_dir
+    sort_dir
+  end
+
   def sorting_params
     sort_by_field = sort_by.blank? ? "updated_at" : sort_by
     sort_dir_value = sort_dir.blank? ? "desc" : sort_dir
