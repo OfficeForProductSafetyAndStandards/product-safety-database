@@ -1,10 +1,6 @@
 module SortByHelper
   SORT_BY_VALUES = [
-    SORT_BY_NEWEST   = "newest".freeze,
-    SORT_BY_OLDEST   = "oldest".freeze,
-    SORT_BY_RECENT   = "recent".freeze,
     SORT_BY_RELEVANT = "relevant".freeze,
-    SORT_BY_OLDEST_CREATED = "oldest_created".freeze,
     SORT_BY_NAME     = "name".freeze,
     SORT_BY_CREATED_AT = "created_at".freeze,
     SORT_BY_UPDATED_AT = "updated_at".freeze
