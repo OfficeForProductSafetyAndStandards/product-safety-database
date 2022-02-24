@@ -16,6 +16,7 @@ class SearchParams
   attribute :case_owner, default: "all"
   attribute :case_owner_is_someone_else_id
   attribute :sort_by
+  attribute :sort_dir
   attribute :page, :integer
   attribute :teams_with_access, default: "all"
   attribute :teams_with_access_other_id
@@ -31,26 +32,18 @@ class SearchParams
   end
 
   def sorting_params
-    case sort_by
-    when SortByHelper::SORT_BY_NEWEST
-      { created_at: "desc" }
-    when SortByHelper::SORT_BY_OLDEST
-      { updated_at: "asc" }
-    when SortByHelper::SORT_BY_RECENT
-      { updated_at: "desc" }
-    when SortByHelper::SORT_BY_OLDEST_CREATED
-      { created_at: "asc" }
-    else
-      { updated_at: "desc" }
-    end
+    sort_by_field = sort_by.blank? ? "updated_at" : sort_by
+    sort_dir_value = sort_dir.blank? ? "desc" : sort_dir
+
+    { sort_by_field => sort_dir_value }
   end
 
   def sort_by_items(with_relevant_option: false)
     items = [
-      SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_RECENT, SortByHelper::SORT_DIRECTION_DEFAULT),
-      SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_OLDEST, SortByHelper::SORT_DIRECTION_DEFAULT),
-      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIRECTION_DEFAULT),
-      SortByHelper::SortByItem.new("Oldest cases", SortByHelper::SORT_BY_OLDEST_CREATED, SortByHelper::SORT_DIRECTION_DEFAULT)
+      SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DESC),
+      SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_ASC),
+      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DESC),
+      SortByHelper::SortByItem.new("Oldest cases", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_ASC)
     ]
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if with_relevant_option
     items
