@@ -4,6 +4,7 @@ module SortByHelper
     SORT_BY_OLDEST   = "oldest".freeze,
     SORT_BY_RECENT   = "recent".freeze,
     SORT_BY_RELEVANT = "relevant".freeze,
+    SORT_BY_OLDEST_CREATED = "oldest_created".freeze,
     SORT_BY_NAME     = "name".freeze
   ].freeze
 

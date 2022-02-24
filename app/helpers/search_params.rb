@@ -38,6 +38,8 @@ class SearchParams
       { updated_at: "asc" }
     when SortByHelper::SORT_BY_RECENT
       { updated_at: "desc" }
+    when SortByHelper::SORT_BY_OLDEST_CREATED
+      { created_at: "asc" }
     else
       { updated_at: "desc" }
     end
@@ -47,7 +49,8 @@ class SearchParams
     items = [
       SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_RECENT, SortByHelper::SORT_DIRECTION_DEFAULT),
       SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_OLDEST, SortByHelper::SORT_DIRECTION_DEFAULT),
-      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIRECTION_DEFAULT)
+      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Oldest cases", SortByHelper::SORT_BY_OLDEST_CREATED, SortByHelper::SORT_DIRECTION_DEFAULT)
     ]
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if with_relevant_option
     items
