@@ -32,6 +32,10 @@ class SearchParams
   end
 
   def selected_sort_dir
+    if sort_dir.blank?
+      return SortByHelper::SORT_DIRECTION_DESC
+    end
+    
     sort_dir
   end
 

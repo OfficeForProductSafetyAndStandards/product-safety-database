@@ -15,7 +15,7 @@ RSpec.describe SearchParams do
 
       describe "sorting_params" do
         it "returns updated_at descending" do
-          expect(model_instance.sorting_params).to eq({ updated_at: "desc" })
+          expect(model_instance.sorting_params).to eq({ "updated_at" => "desc" })
         end
       end
     end

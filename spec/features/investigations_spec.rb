@@ -74,7 +74,7 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
     within("form#cases-search-form dl.opss-dl-select") do
       click_on "Oldest updates"
     end
-    expect(page).to have_current_path(/sort_by=oldest/, ignore_query: false)
+    expect(page).to have_current_path(/sort_by=updated_at&sort_dir=asc/, ignore_query: false)
 
     expect(page.find("select#sort_by option", text: "Oldest updates")).to be_selected
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Oldest updates")
