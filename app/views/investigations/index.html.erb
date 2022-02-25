@@ -6,17 +6,15 @@
   <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters" id="page-content">
-      <% if ["team_cases", "your_cases"].exclude?(@page_name)  &&  @investigations.size > 11 %>
+      <% if ["team_cases", "your_cases"].exclude?(@page_name) %>
         <div class="govuk-grid-row">
-          <%= render 'investigations/search_bar', form: form if ["team_cases", "your_cases"].exclude? @page_name %>
+          <%= render 'investigations/search_bar', form: form %>
           <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir if @answer.total_count > 11 %>
         </div>
         <div class="govuk-grid-row">
           <%= search_result_statement(@search.q, @count) %>
         </div>
-      <% end %>
-
-      <% if ["team_cases", "your_cases"].include?(@page_name ) &&  @investigations.size > 11 %>
+      <% else %>
         <div class="govuk-grid-row">
           <%= render_sort_by(form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir, "govuk-grid-column-one-third opss-float-right-desktop") if @answer.total_count > 11 %>
         </div>
