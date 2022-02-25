@@ -26,7 +26,7 @@ class SearchParams
     if sort_by.blank?
       return SortByHelper::SORT_BY_RELEVANT if q.present?
 
-      return SortByHelper::SORT_BY_RECENT
+      return SortByHelper::SORT_BY_UPDATED_AT
     end
     sort_by
   end

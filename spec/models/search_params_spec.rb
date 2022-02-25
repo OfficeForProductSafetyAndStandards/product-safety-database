@@ -9,7 +9,7 @@ RSpec.describe SearchParams do
     context "when there is no search query present" do
       describe "selected_sort_by" do
         it "returns recent" do
-          expect(model_instance.selected_sort_by).to eq(SortByHelper::SORT_BY_RECENT)
+          expect(model_instance.selected_sort_by).to eq(SortByHelper::SORT_BY_UPDATED_AT)
         end
       end
 
