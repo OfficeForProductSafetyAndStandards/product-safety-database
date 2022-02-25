@@ -27,12 +27,13 @@ module SortByHelper
     end
   end
 
-  def render_sort_by(form, sort_by_items, selected_value, sort_direction = SORT_DIRECTION_DEFAULT)
+  def render_sort_by(form, sort_by_items, selected_value, sort_direction = SORT_DIRECTION_DEFAULT, custom_classes = nil)
     render "application/sort_dropdown",
            form: form,
            sort_by_items: sort_by_items,
            selected_value: selected_value,
-           sort_direction: sort_direction
+           sort_direction: sort_direction,
+           custom_classes: custom_classes
   end
 
   def url_for_sort_by(sort_by_item)
