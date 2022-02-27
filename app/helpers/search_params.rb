@@ -35,13 +35,13 @@ class SearchParams
     if sort_dir.blank?
       return SortByHelper::SORT_DIRECTION_DESC
     end
-    
+
     sort_dir
   end
 
   def sorting_params
-    sort_by_field = sort_by.blank? ? "updated_at" : sort_by
-    sort_dir_value = sort_dir.blank? ? "desc" : sort_dir
+    sort_by_field = sort_by.presence || "updated_at"
+    sort_dir_value = sort_dir.presence || "desc"
 
     { sort_by_field => sort_dir_value }
   end

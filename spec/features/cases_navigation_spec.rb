@@ -70,7 +70,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       context "when more than 11 cases" do
         before do
-          11.times { create(:allegation, creator: user) }
+          create_list(:allegation, 11, creator: user)
           Investigation.import refresh: true, force: true
         end
 
@@ -98,7 +98,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       context "when more than 11 cases" do
         before do
-          11.times { create(:allegation, creator: other_user_same_team) }
+          create_list(:allegation, 11, creator: other_user_same_team)
           Investigation.import refresh: true, force: true
         end
 
@@ -132,7 +132,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       context "when more than 11 cases" do
         before do
-          11.times { create(:allegation) }
+          create_list(:allegation, 11)
           Investigation.import refresh: true, force: true
         end
 
