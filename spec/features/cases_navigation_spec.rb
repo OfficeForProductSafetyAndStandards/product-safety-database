@@ -52,11 +52,32 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     context "when the user is on the your cases page" do
-      it "shows cases that are owned by the user" do
+      before do
         click_on "Your cases"
+      end
+
+      it "shows cases that are owned by the user" do
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
+      end
+
+      context "when less than 12 cases" do
+        it "does not show the sort filter drop down" do
+          expect(page).not_to have_css("form dl.opss-dl-select dd")
+        end
+      end
+
+      context "when more than 11 cases" do
+        before do
+          11.times { create(:allegation, creator: user) }
+          Investigation.import refresh: true, force: true
+        end
+
+        it "does show the sort filter drop down" do
+          visit "/cases/your-cases"
+          expect(page).to have_css("form dl.opss-dl-select dd")
+        end
       end
     end
 
@@ -67,6 +88,24 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
         expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
+      end
+
+      context "when less than 12 cases" do
+        it "does not show the sort filter drop down" do
+          expect(page).not_to have_css("form dl.opss-dl-select dd")
+        end
+      end
+
+      context "when more than 11 cases" do
+        before do
+          11.times { create(:allegation, creator: other_user_same_team) }
+          Investigation.import refresh: true, force: true
+        end
+
+        it "does show the sort filter drop down" do
+          visit "/cases/team-cases"
+          expect(page).to have_css("form dl.opss-dl-select dd")
+        end
       end
     end
 
@@ -83,6 +122,24 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       it "highlights the all cases tab" do
         expect(highlighted_tab).to eq "All cases - Search"
+      end
+
+      context "when less than 12 cases" do
+        it "does not show the sort filter drop down" do
+          expect(page).not_to have_css("form dl.opss-dl-select dd")
+        end
+      end
+
+      context "when more than 11 cases" do
+        before do
+          11.times { create(:allegation) }
+          Investigation.import refresh: true, force: true
+        end
+
+        it "does show the sort filter drop down" do
+          visit "/cases/all-cases"
+          expect(page).to have_css("form dl.opss-dl-select dd")
+        end
       end
     end
   end
