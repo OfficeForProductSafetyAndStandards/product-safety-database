@@ -55,8 +55,7 @@ class InvestigationsController < ApplicationController
     @search = SearchParams.new({ "case_owner" => "me",
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
-                                 "page_name" => "team_cases"
-                               })
+                                 "page_name" => "team_cases" })
     @answer         = search_for_investigations(20)
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
@@ -69,8 +68,7 @@ class InvestigationsController < ApplicationController
     @search = SearchParams.new({ "case_owner" => "my_team",
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
-                                 "page_name" => @page_name
-                               })
+                                 "page_name" => @page_name })
     @answer         = search_for_investigations(20)
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
