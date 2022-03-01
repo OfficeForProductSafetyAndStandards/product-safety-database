@@ -14,6 +14,7 @@ module InvestigationsHelper
       :page,
       :case_owner,
       :sort_by,
+      :sort_dir,
       :priority,
       :teams_with_access,
       :case_owner_is_someone_else_id,
