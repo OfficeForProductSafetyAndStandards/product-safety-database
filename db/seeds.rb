@@ -693,7 +693,7 @@ if run_seeds
 
   operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
   User.where(team_id: operational_support_unit.id).each do |u|
-    u.roles.create!(name: "psd_admin")
+    u.roles.create!(name: "all_data_exporter")
     u.roles.create!(name: "risk_level_validator")
   end
 

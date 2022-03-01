@@ -69,9 +69,9 @@ FactoryBot.define do
       end
     end
 
-    trait :psd_admin do
+    trait :all_data_exporter do
       transient do
-        roles { %i[psd_admin] }
+        roles { %i[all_data_exporter] }
       end
     end
 
