@@ -84,8 +84,8 @@ class User < ApplicationRecord
     super.to_s
   end
 
-  def is_psd_admin?
-    has_role? :psd_admin
+  def all_data_exporter?
+    has_role? :all_data_exporter
   end
 
   def notifying_country_editor?
