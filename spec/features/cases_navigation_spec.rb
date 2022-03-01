@@ -74,9 +74,9 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           Investigation.import refresh: true, force: true
         end
 
-        it "does show the sort filter drop down" do
+        it "does show the sort filter drop down with 'newest cases' sorting option selected" do
           visit "/cases/your-cases"
-          expect(page).to have_css("form dl.opss-dl-select dd")
+          expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest cases")
         end
       end
     end
@@ -102,9 +102,9 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           Investigation.import refresh: true, force: true
         end
 
-        it "does show the sort filter drop down" do
+        it "does show the sort filter drop down with 'newest cases' sorting option selected" do
           visit "/cases/team-cases"
-          expect(page).to have_css("form dl.opss-dl-select dd")
+          expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest cases")
         end
       end
     end
@@ -136,9 +136,9 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           Investigation.import refresh: true, force: true
         end
 
-        it "does show the sort filter drop down" do
+        it "does show the sort filter drop down with 'recent cases' sorting option selected" do
           visit "/cases/all-cases"
-          expect(page).to have_css("form dl.opss-dl-select dd")
+          expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Recent updates")
         end
       end
     end
