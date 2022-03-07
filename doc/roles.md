@@ -12,7 +12,7 @@ The available role names and their meanings are described below:
 |---------|-------|
 |`team_admin`|One or more members of each team should ordinarily have this role, which allows them to send and re-send invitations to new users to create an account on the Product Safety Database as a member of their team, or to remove users from their team.|
 |`opss`|Normally set at the team level for OPSS teams and alters certain presentation and navigation elements accordingly.|
-|`psd_admin`|Allows the user to export data from case, business and product listings in spreadsheet format. Restricted to specific OPSS teams.|
+|`all_data_exporter`|Allows the user to export data from all case, business and product listings in spreadsheet format. Includes cases which the user would not ordinarily have access to. Restricted to specific OPSS teams.|
 |`notifying_country_editor`|Allows the user to edit the notifying country of any case on the Product Safety Database.  Restricted to specific OPSS teams.|
 |`risk_level_validator`|Allows the user to mark the risk level of any case on the Product Safety Database as 'validated'. Restricted to specific OPSS teams.|
 |`email_alert_sender`|Allows the user to send an e-mail product safety alert to all users of the Product Safety Database. Restricted to specific OPSS teams.|

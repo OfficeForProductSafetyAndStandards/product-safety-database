@@ -64,13 +64,13 @@ private
     params[:sort_by] = nil if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT && params[:q].blank?
 
     @sort_by_items = sort_by_items
-    @selected_sort_by = params[:sort_by].presence || SortByHelper::SORT_BY_RECENT
+    @selected_sort_by = params[:sort_by].presence || SortByHelper::SORT_BY_UPDATED_AT
     @selected_sort_direction = params[:sort_dir]
   end
 
   def sort_by_items
     items = [
-      SortByHelper::SortByItem.new("Recently added", SortByHelper::SORT_BY_RECENT, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Recently added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
       SortByHelper::SortByItem.new("Name A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
       SortByHelper::SortByItem.new("Name Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
     ]
