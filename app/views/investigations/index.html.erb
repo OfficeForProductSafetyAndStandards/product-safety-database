@@ -6,13 +6,17 @@
   <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters" id="page-content">
-      <% if ["team_cases", "your_cases"].exclude? @page_name  ||  @investigations.size > 11 %>
+      <% if ["team_cases", "your_cases"].exclude?(@page_name) %>
         <div class="govuk-grid-row">
-          <%= render 'investigations/search_bar', form: form if ["team_cases", "your_cases"].exclude? @page_name %>
-          <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by if @investigations.size > 11 %>
+          <%= render 'investigations/search_bar', form: form %>
+          <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir if (@answer.total_count && @answer.total_count > 11) %>
         </div>
         <div class="govuk-grid-row">
           <%= search_result_statement(@search.q, @count) %>
+        </div>
+      <% else %>
+        <div class="govuk-grid-row">
+          <%= render_sort_by(form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir, "govuk-grid-column-one-third opss-float-right-desktop") if (@answer.total_count && @answer.total_count > 11) %>
         </div>
       <% end %>
 
@@ -32,7 +36,7 @@
                   <% else %>
                     <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
                   <% end %>
-                  <% if query_params[:sort_by] == SortByHelper::SORT_BY_NEWEST %>
+                  <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && ["team_cases", "your_cases"].exclude?(@page_name) %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% else %>
                     <th id="updated" scope="col" class="govuk-table__header">Updated</th>
@@ -52,7 +56,7 @@
                     <th class="govuk-visually-hidden">&nbsp;</th>
                     <th scope="col" class="govuk-table__header">Case number</th>
                     <th scope="col" class="govuk-table__header">Case owner</th>
-                    <% if query_params[:sort_by] == SortByHelper::SORT_BY_NEWEST %>
+                    <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && ["team_cases", "your_cases"].exclude?(@page_name) %>
                       <th scope="col" class="govuk-table__header">Created</th>
                     <% else %>
                       <th scope="col" class="govuk-table__header">Updated</th>
