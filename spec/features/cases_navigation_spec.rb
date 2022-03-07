@@ -80,15 +80,15 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         end
 
         it "does not change table headers when user changes the filter options" do
-          expect(page).to have_css("#updated")
-          expect(page).not_to have_css("#created")
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
 
           within "form dl.govuk-list.opss-dl-select" do
             click_on "Oldest cases"
           end
 
-          expect(page).to have_css("#updated")
-          expect(page).not_to have_css("#created")
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("#thcreated")
         end
       end
     end
@@ -120,15 +120,15 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         end
 
         it "does not change table headers when user changes the filter options" do
-          expect(page).to have_css("#updated")
-          expect(page).not_to have_css("#created")
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
 
           within "form dl.govuk-list.opss-dl-select" do
             click_on "Oldest cases"
           end
 
-          expect(page).to have_css("#updated")
-          expect(page).not_to have_css("#created")
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
         end
       end
     end
@@ -166,15 +166,15 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         end
 
         it "changes table headers when user changes the filter options" do
-          expect(page).to have_css("#updated")
-          expect(page).not_to have_css("#created")
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
 
           within "form dl.govuk-list.opss-dl-select" do
             click_on "Oldest cases"
           end
 
-          expect(page).to have_css("#created")
-          expect(page).not_to have_css("#updated")
+          expect(page).to have_css("th#created")
+          expect(page).not_to have_css("th#updated")
         end
       end
     end
