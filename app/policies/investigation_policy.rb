@@ -48,7 +48,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def export?
-    user.is_psd_admin?
+    user.all_data_exporter?
   end
 
   def risk_level_validation?

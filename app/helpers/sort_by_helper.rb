@@ -1,10 +1,9 @@
 module SortByHelper
   SORT_BY_VALUES = [
-    SORT_BY_NEWEST   = "newest".freeze,
-    SORT_BY_OLDEST   = "oldest".freeze,
-    SORT_BY_RECENT   = "recent".freeze,
     SORT_BY_RELEVANT = "relevant".freeze,
-    SORT_BY_NAME     = "name".freeze
+    SORT_BY_NAME     = "name".freeze,
+    SORT_BY_CREATED_AT = "created_at".freeze,
+    SORT_BY_UPDATED_AT = "updated_at".freeze
   ].freeze
 
   SORT_DIRECTIONS = [
@@ -28,12 +27,13 @@ module SortByHelper
     end
   end
 
-  def render_sort_by(form, sort_by_items, selected_value, sort_direction = SORT_DIRECTION_DEFAULT)
+  def render_sort_by(form, sort_by_items, selected_value, sort_direction = SORT_DIRECTION_DEFAULT, custom_classes = nil)
     render "application/sort_dropdown",
            form: form,
            sort_by_items: sort_by_items,
            selected_value: selected_value,
-           sort_direction: sort_direction
+           sort_direction: sort_direction,
+           custom_classes: custom_classes
   end
 
   def url_for_sort_by(sort_by_item)
