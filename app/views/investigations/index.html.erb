@@ -56,7 +56,7 @@
                     <th class="govuk-visually-hidden">&nbsp;</th>
                     <th scope="col" class="govuk-table__header">Case number</th>
                     <th scope="col" class="govuk-table__header">Case owner</th>
-                    <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT %>
+                    <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && ["team_cases", "your_cases"].exclude?(@page_name) %>
                       <th scope="col" class="govuk-table__header">Created</th>
                     <% else %>
                       <th scope="col" class="govuk-table__header">Updated</th>
