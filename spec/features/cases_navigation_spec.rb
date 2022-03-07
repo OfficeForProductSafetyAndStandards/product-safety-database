@@ -72,11 +72,23 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         before do
           create_list(:allegation, 11, creator: user)
           Investigation.import refresh: true, force: true
+          visit "/cases/your-cases"
         end
 
         it "does show the sort filter drop down with 'newest cases' sorting option selected" do
-          visit "/cases/your-cases"
           expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest cases")
+        end
+
+        it "does not change table headers when user changes the filter options" do
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
+
+          within "form dl.govuk-list.opss-dl-select" do
+            click_on "Oldest cases"
+          end
+
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("#thcreated")
         end
       end
     end
@@ -100,11 +112,23 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         before do
           create_list(:allegation, 11, creator: other_user_same_team)
           Investigation.import refresh: true, force: true
+          visit "/cases/team-cases"
         end
 
         it "does show the sort filter drop down with 'newest cases' sorting option selected" do
-          visit "/cases/team-cases"
           expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest cases")
+        end
+
+        it "does not change table headers when user changes the filter options" do
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
+
+          within "form dl.govuk-list.opss-dl-select" do
+            click_on "Oldest cases"
+          end
+
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
         end
       end
     end
@@ -134,11 +158,23 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         before do
           create_list(:allegation, 11)
           Investigation.import refresh: true, force: true
+          visit "/cases/all-cases"
         end
 
         it "does show the sort filter drop down with 'recent cases' sorting option selected" do
-          visit "/cases/all-cases"
           expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Recent updates")
+        end
+
+        it "changes table headers when user changes the filter options" do
+          expect(page).to have_css("th#updated")
+          expect(page).not_to have_css("th#created")
+
+          within "form dl.govuk-list.opss-dl-select" do
+            click_on "Oldest cases"
+          end
+
+          expect(page).to have_css("th#created")
+          expect(page).not_to have_css("th#updated")
         end
       end
     end
