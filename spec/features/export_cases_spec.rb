@@ -253,7 +253,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
   end
 
   context "when search does not return any results" do
-    it "does not " do
+    it "does not show the export link" do
       expand_help_details
       expect(page).to have_link("XLSX (spreadsheet)")
       expect(page).to have_link("request the list")
