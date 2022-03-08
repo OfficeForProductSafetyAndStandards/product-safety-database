@@ -5,7 +5,7 @@ ruby "~> 3.0"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.112"
+gem "aws-sdk-s3", "~> 1.113"
 gem "aws-sdk-s3control", "~> 1.48"
 gem "caxlsx"
 gem "caxlsx_rails"
@@ -44,7 +44,7 @@ gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.4"
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
-gem "sprockets", "4.0.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
+gem "sprockets", "4.0.3" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
 gem "tty-table", require: false
