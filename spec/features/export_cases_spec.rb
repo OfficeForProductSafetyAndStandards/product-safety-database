@@ -252,7 +252,26 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)
   end
 
+  context "when search does not return any results" do
+    it "does not show the export link" do
+      expand_help_details
+      expect(page).to have_link("XLSX (spreadsheet)")
+      expect(page).to have_link("request the list")
+
+      fill_in "Search", with: "unsuccesfulsearchquery"
+      click_button "Submit search"
+
+      expand_help_details
+      expect(page).not_to have_link("XLSX (spreadsheet)")
+      expect(page).not_to have_link("request the list")
+    end
+  end
+
   def expand_filters
     find("#filter-details").click
+  end
+
+  def expand_help_details
+    find(".opss-details--sm").click
   end
 end
