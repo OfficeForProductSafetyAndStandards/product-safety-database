@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: 4fd75fe84b943dc64d047f2b0d17420ecdec3ddc
-  tag: 0.8.1
+  revision: 924859834b4be0a877aec03ec257bc4745c17dff
+  tag: 0.8.2
   specs:
     govuk-design-system-rails (0.8.1)
       slim-rails
@@ -120,7 +120,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (3.1.1)
+    caxlsx (3.2.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -189,8 +189,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.19.0)
-      i18n (>= 1.6, < 2)
+    faker (2.20.0)
+      i18n (>= 1.8.11, < 2)
     faraday (1.9.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -647,7 +647,7 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
-  faker (~> 2.19)
+  faker (~> 2.20)
   govuk-design-system-rails!
   govuk_notify_rails (~> 2.2)
   image_processing
