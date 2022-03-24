@@ -507,7 +507,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
     end
 
-    context "after searching" do
+    context "when user has searched" do
       before do
         fill_in "Search", with: "xyz"
         click_button "Submit search"
