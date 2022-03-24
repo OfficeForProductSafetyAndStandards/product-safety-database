@@ -17,6 +17,3 @@ The available role names and their meanings are described below:
 |`risk_level_validator`|Allows the user to mark the risk level of any case on the Product Safety Database as 'validated'. Restricted to specific OPSS teams.|
 |`email_alert_sender`|Allows the user to send an e-mail product safety alert to all users of the Product Safety Database. Restricted to specific OPSS teams.|
 |`restricted_case_viewer`|Allows the user to view all data on the Product Safety Database, including restricted cases, even when their team is not specifically added to the case. Highly restricted to specific OPSS teams for auditing purposes.|
-
-
-OPSS Incident Management, OPSS Trading Standards Co-ordination, OPSS Operational support unit, OPSS Digital, OPSS Analysis, OPSS Enforcement, OPSS Intelligence
