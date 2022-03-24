@@ -506,5 +506,42 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
+
+    context "when user has searched" do
+      before do
+        fill_in "Search", with: "xyz"
+        click_button "Submit search"
+      end
+
+      it "is initially sorted by relevant" do
+        expect(page).to have_content "Sort the results by Relevance"
+      end
+
+      it "allows user to sort by other options" do
+        within "form dl.govuk-list.opss-dl-select" do
+          click_on "Oldest cases"
+        end
+
+        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Oldest cases")
+
+        within "form dl.govuk-list.opss-dl-select" do
+          click_on "Newest cases"
+        end
+
+        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest cases")
+
+        within "form dl.govuk-list.opss-dl-select" do
+          click_on "Oldest updates"
+        end
+
+        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Oldest updates")
+
+        within "form dl.govuk-list.opss-dl-select" do
+          click_on "Recent updates"
+        end
+
+        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Recent updates")
+      end
+    end
   end
 end

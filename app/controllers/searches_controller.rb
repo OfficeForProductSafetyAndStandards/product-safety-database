@@ -3,7 +3,6 @@ class SearchesController < ApplicationController
 
   def show
     @search = SearchParams.new(query_params.except(:page_name))
-
     if @search.q.blank?
       redirect_to investigations_path(query_params.except(:page_name))
     else
