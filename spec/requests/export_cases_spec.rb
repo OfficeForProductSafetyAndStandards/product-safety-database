@@ -165,8 +165,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 20)).to eq "Risk_Assessments"
-          expect(exported_data.cell(2, 20)).to eq "1"
+          expect(exported_data.cell(1, 19)).to eq "Risk_Assessments"
+          expect(exported_data.cell(2, 19)).to eq "1"
         end
       end
 
@@ -178,10 +178,10 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 21)).to eq "Date_Created"
-          expect(exported_data.cell(1, 22)).to eq "Last_Updated"
-          expect(exported_data.cell(2, 21)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
-          expect(exported_data.cell(2, 22)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(1, 20)).to eq "Date_Created"
+          expect(exported_data.cell(1, 21)).to eq "Last_Updated"
+          expect(exported_data.cell(2, 20)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(2, 21)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
         end
       end
 
@@ -193,8 +193,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 24)).to eq "Date_Validated"
-          expect(exported_data.cell(2, 24)).to eq investigation.risk_validated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(1, 23)).to eq "Date_Validated"
+          expect(exported_data.cell(2, 23)).to eq investigation.risk_validated_at.strftime("%Y-%m-%d %H:%M:%S %z")
         end
       end
 
@@ -205,8 +205,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 26)).to eq "Notifying_Country"
-          expect(exported_data.cell(2, 26)).to eq "England"
+          expect(exported_data.cell(1, 25)).to eq "Notifying_Country"
+          expect(exported_data.cell(2, 25)).to eq "England"
         end
       end
 
@@ -217,8 +217,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 27)).to eq "Reported_as"
-          expect(exported_data.cell(2, 27)).to eq "unsafe"
+          expect(exported_data.cell(1, 26)).to eq "Reported_as"
+          expect(exported_data.cell(2, 26)).to eq "unsafe"
         end
       end
 
@@ -233,8 +233,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           get generate_case_exports_path
 
           aggregate_failures do
-            expect(exported_data.cell(1, 25)).to eq "Case_Creator_Team"
-            expect(exported_data.cell(2, 25)).to eq nil
+            expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
+            expect(exported_data.cell(2, 24)).to eq nil
           end
         end
       end
@@ -250,8 +250,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           get generate_case_exports_path
 
           aggregate_failures do
-            expect(exported_data.cell(1, 25)).to eq "Case_Creator_Team"
-            expect(exported_data.cell(2, 25)).to eq creator_user.team.name
+            expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
+            expect(exported_data.cell(2, 24)).to eq creator_user.team.name
           end
         end
       end
@@ -265,8 +265,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           get generate_case_exports_path
 
           aggregate_failures do
-            expect(exported_data.cell(1, 23)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 23)).to eq nil
+            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 22)).to eq nil
           end
         end
       end
@@ -281,8 +281,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           get generate_case_exports_path, params: { case_status: "closed", format: :xlsx }
 
           aggregate_failures do
-            expect(exported_data.cell(1, 23)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 23)).to eq closed_at_date.strftime("%Y-%m-%d %H:%M:%S %z")
+            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 22)).to eq closed_at_date.strftime("%Y-%m-%d %H:%M:%S %z")
           end
         end
       end
