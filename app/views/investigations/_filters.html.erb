@@ -9,7 +9,7 @@
   <% if ["team_cases", "your_cases"].exclude? @page_name %>
     <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
 
-    <%= govukSkipLink(text: "Skip to results", href: "#results") %>
+    <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
 
     <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
     <%= render "investigations/case_owner_radios", form: form %>
