@@ -53,7 +53,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
 
   scenario "filtering by hazard type and a keyword" do
     select "Fire", from: "Hazard type"
-    fill_in "Keywords search", with: "Fire"
+    fill_in "Search", with: "Fire"
     click_button "Apply"
 
     expect(page).to have_content(fire_product_1.name)
@@ -64,7 +64,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering by a keyword" do
-    fill_in "Keywords search", with: "Dangerous"
+    fill_in "Search", with: "Dangerous"
     click_button "Apply"
 
     expect(page).to have_content(drowning_product.name)
@@ -75,7 +75,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering by a keyword with whitespaces" do
-    fill_in "Keywords search", with: "   Dangerous    "
+    fill_in "Search", with: "   Dangerous    "
     click_button "Apply"
 
     expect(page).to have_content(drowning_product.name)
@@ -86,14 +86,14 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering by an ID" do
-    fill_in "Keywords search", with: chemical_product.id
+    fill_in "Search", with: chemical_product.id
     click_button "Apply"
 
     expect(page).to have_content(chemical_product.name)
   end
 
   scenario "filtering by a PSD ref" do
-    fill_in "Keywords search", with: chemical_product.psd_ref
+    fill_in "Search", with: chemical_product.psd_ref
     click_button "Apply"
 
     expect(page).to have_content(chemical_product.name)

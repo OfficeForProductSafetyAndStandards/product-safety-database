@@ -70,7 +70,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   end
 
   scenario "filtering by keyword sorts by Relevance by default" do
-    fill_in "Keywords search", with: "Dangerous"
+    fill_in "Search", with: "Dangerous"
     click_button "Apply"
 
     expect(page).to have_css("form dl.govuk-list.opss-dl-select dd", text: "Active: Relevance")
@@ -87,7 +87,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
       click_on "Name A–Z"
     end
 
-    fill_in "Keywords search", with: "Dangerous"
+    fill_in "Search", with: "Dangerous"
     click_button "Apply"
 
     expect(page).to have_current_path(/sort_by=name/, ignore_query: false)
