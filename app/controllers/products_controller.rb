@@ -17,6 +17,7 @@ class ProductsController < ApplicationController
         @results = search_for_products(20)
         @count = count_to_display
         @products = ProductDecorator.decorate_collection(@results)
+        byebug
       end
       format.csv do
         authorize Product, :export?
@@ -79,6 +80,18 @@ class ProductsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def your_products
+    @search = SearchParams.new({ "case_owner" => "me",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "team_cases" })
+    @results = search_for_products(20)
+    byebug
+  end
+
+  # {:must=>[{:bool=>{:should=>[{:term=>{:owner_id=>"820fbc4b-83e8-4c3b-845e-4e5d3d85e9f4"}}], :must_not=>[]}}]}
+  # {:must=>[{:term=>{:is_closed=>false}}, {:bool=>{:should=>[], :must_not=>[]}}, {:bool=>{:should=>[{:term=>{:owner_id=>"820fbc4b-83e8-4c3b-845e-4e5d3d85e9f4"}}], :must_not=>[]}}, {:term=>{:coronavirus_related=>true}}]}
 
 private
 

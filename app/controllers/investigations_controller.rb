@@ -12,6 +12,7 @@ class InvestigationsController < ApplicationController
     respond_to do |format|
       format.html do
         @answer         = search_for_investigations(20)
+        byebug
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))

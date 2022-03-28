@@ -41,7 +41,12 @@ class Product < ApplicationRecord
 
   def as_indexed_json(*)
     as_json(
-      include: { investigations: { only: :hazard_type } },
+      include: {
+        investigations: {
+          only: :hazard_type,
+          methods: :owner_id
+        }
+      },
       methods: %i[tiebreaker_id name_for_sorting psd_ref]
     )
   end
