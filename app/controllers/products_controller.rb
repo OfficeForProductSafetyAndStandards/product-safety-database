@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update]
   before_action :set_countries, only: %i[update edit]
   before_action :build_breadcrumbs, only: %i[show]
-  before_action :set_sort_by_items, only: %i[index]
+  before_action :set_sort_by_items, only: %i[index your_products]
 
   # GET /products
   # GET /products.json
@@ -17,7 +17,6 @@ class ProductsController < ApplicationController
         @results = search_for_products(20)
         @count = count_to_display
         @products = ProductDecorator.decorate_collection(@results)
-        byebug
       end
       format.csv do
         authorize Product, :export?
@@ -87,7 +86,11 @@ class ProductsController < ApplicationController
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_cases" })
     @results = search_for_products(20)
-    byebug
+    @count = count_to_display
+    @products = ProductDecorator.decorate_collection(@results)
+    @page_name = "your_products"
+
+    render "products/index.html.erb"
   end
 
   # {:must=>[{:bool=>{:should=>[{:term=>{:owner_id=>"820fbc4b-83e8-4c3b-845e-4e5d3d85e9f4"}}], :must_not=>[]}}]}

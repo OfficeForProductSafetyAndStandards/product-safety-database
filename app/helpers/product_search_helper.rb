@@ -17,7 +17,6 @@ module ProductSearchHelper
   end
 
   def get_owner_filter(user)
-    byebug
     return if @search.case_owner == "all"
     # return { bool: { should: [], must_not: [] } } if @search.case_owner == "all"
     # return { bool: { should: [], must_not: compute_excluded_terms(user) } } if @search.case_owner == "others" && @search.case_owner_is_someone_else_id.blank?
