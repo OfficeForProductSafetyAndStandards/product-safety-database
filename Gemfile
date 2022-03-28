@@ -83,7 +83,7 @@ group :test do
   gem "faker", "~> 2.20"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
-  gem "roo", "~> 2.8"
+  gem "roo", "~> 2.9"
   gem "rspec"
   gem "rspec-mocks", "~> 3.10"
   gem "rspec-rails"
