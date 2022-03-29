@@ -1,0 +1,10 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full" role="region" aria-label="Cases">
+    <p class="govuk-body opss-text-align-center">
+       <%= "There are no product records linked to your open cases." if page_name == "your_products" %>
+       <%= "There are no product records linked to the team's open cases." if page_name == "team_products" %>
+       You can search all product records in the <%= link_to "all products", all_products_products_path, class: "govuk-link govuk-link--no-visited-state" %> search page.
+
+    </p>
+  </div>
+</div>
