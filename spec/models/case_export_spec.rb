@@ -75,70 +75,66 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 11)).to eq investigation.owner_user&.name
       expect(sheet.cell(3, 11)).to eq other_user_investigation.owner_user&.name
 
-      expect(sheet.cell(1, 12)).to eq "Source"
-      expect(sheet.cell(2, 12)).to eq investigation.creator_user&.name
-      expect(sheet.cell(3, 12)).to eq other_user_investigation.creator_user&.name
-
-      expect(sheet.cell(1, 13)).to eq "Complainant_Type"
-      expect(sheet.cell(2, 13)).to eq investigation.complainant&.complainant_type
-      expect(sheet.cell(3, 13)).to eq other_user_investigation.complainant&.complainant_type
+      expect(sheet.cell(1, 12)).to eq "Source_Type"
+      expect(sheet.cell(2, 12)).to eq investigation.complainant&.complainant_type
+      expect(sheet.cell(3, 12)).to eq other_user_investigation.complainant&.complainant_type
 
       # TODO: This will be flaky if Faker generates two dupes
-      expect(sheet.cell(1, 14)).to eq "Products"
+      expect(sheet.cell(1, 13)).to eq "Products"
+      expect(sheet.cell(2, 13)).to eq "0"
+      expect(sheet.cell(3, 13)).to eq "0"
+
+      expect(sheet.cell(1, 14)).to eq "Businesses"
       expect(sheet.cell(2, 14)).to eq "0"
       expect(sheet.cell(3, 14)).to eq "0"
 
-      expect(sheet.cell(1, 15)).to eq "Businesses"
-      expect(sheet.cell(2, 15)).to eq "0"
-      expect(sheet.cell(3, 15)).to eq "0"
+      expect(sheet.cell(1, 15)).to eq "Activities"
+      expect(sheet.cell(2, 15)).to eq "1"
+      expect(sheet.cell(3, 15)).to eq "1"
 
-      expect(sheet.cell(1, 16)).to eq "Activities"
-      expect(sheet.cell(2, 16)).to eq "1"
-      expect(sheet.cell(3, 16)).to eq "1"
+      expect(sheet.cell(1, 16)).to eq "Correspondences"
+      expect(sheet.cell(2, 16)).to eq "0"
+      expect(sheet.cell(3, 16)).to eq "0"
 
-      expect(sheet.cell(1, 17)).to eq "Correspondences"
+      expect(sheet.cell(1, 17)).to eq "Corrective_Actions"
       expect(sheet.cell(2, 17)).to eq "0"
       expect(sheet.cell(3, 17)).to eq "0"
 
-      expect(sheet.cell(1, 18)).to eq "Corrective_Actions"
+      expect(sheet.cell(1, 18)).to eq "Tests"
       expect(sheet.cell(2, 18)).to eq "0"
       expect(sheet.cell(3, 18)).to eq "0"
 
-      expect(sheet.cell(1, 19)).to eq "Tests"
+      expect(sheet.cell(1, 19)).to eq "Risk_Assessments"
       expect(sheet.cell(2, 19)).to eq "0"
       expect(sheet.cell(3, 19)).to eq "0"
 
-      expect(sheet.cell(1, 20)).to eq "Risk_Assessments"
-      expect(sheet.cell(2, 20)).to eq "0"
-      expect(sheet.cell(3, 20)).to eq "0"
+      expect(sheet.cell(1, 20)).to eq "Date_Created"
+      expect(sheet.cell(2, 20)).to eq investigation.created_at&.to_s
+      expect(sheet.cell(3, 20)).to eq other_user_investigation.created_at&.to_s
 
-      expect(sheet.cell(1, 21)).to eq "Date_Created"
-      expect(sheet.cell(2, 21)).to eq investigation.created_at&.to_s
-      expect(sheet.cell(3, 21)).to eq other_user_investigation.created_at&.to_s
+      expect(sheet.cell(1, 21)).to eq "Last_Updated"
+      expect(sheet.cell(2, 21)).to eq investigation.updated_at&.to_s
+      expect(sheet.cell(3, 21)).to eq other_user_investigation.updated_at&.to_s
 
-      expect(sheet.cell(1, 22)).to eq "Last_Updated"
-      expect(sheet.cell(2, 22)).to eq investigation.updated_at&.to_s
-      expect(sheet.cell(3, 22)).to eq other_user_investigation.updated_at&.to_s
+      expect(sheet.cell(1, 22)).to eq "Date_Closed"
+      expect(sheet.cell(2, 22)).to eq investigation.date_closed&.to_s
+      expect(sheet.cell(3, 22)).to eq other_user_investigation.date_closed&.to_s
 
-      expect(sheet.cell(1, 23)).to eq "Date_Closed"
-      expect(sheet.cell(2, 23)).to eq investigation.date_closed&.to_s
-      expect(sheet.cell(3, 23)).to eq other_user_investigation.date_closed&.to_s
+      expect(sheet.cell(1, 23)).to eq "Date_Validated"
+      expect(sheet.cell(2, 23)).to eq investigation.risk_validated_at&.to_s
+      expect(sheet.cell(3, 23)).to eq other_user_investigation.risk_validated_at&.to_s
 
-      expect(sheet.cell(1, 24)).to eq "Date_Validated"
-      expect(sheet.cell(2, 24)).to eq investigation.risk_validated_at&.to_s
-      expect(sheet.cell(3, 24)).to eq other_user_investigation.risk_validated_at&.to_s
+      expect(sheet.cell(1, 24)).to eq "Case_Creator_Team"
+      expect(sheet.cell(2, 24)).to eq investigation.creator_user&.team&.name
+      expect(sheet.cell(3, 24)).to eq other_user_investigation.creator_user&.team&.name
 
-      expect(sheet.cell(1, 25)).to eq "Case_Creator_Team"
-      expect(sheet.cell(2, 25)).to eq investigation.creator_user&.team&.name
-      expect(sheet.cell(3, 25)).to eq other_user_investigation.creator_user&.team&.name
+      expect(sheet.cell(1, 25)).to eq "Notifying_Country"
+      expect(sheet.cell(2, 25)).to eq "England"
+      expect(sheet.cell(3, 25)).to eq "England"
 
-      expect(sheet.cell(1, 26)).to eq "Notifying_Country"
-      expect(sheet.cell(2, 26)).to eq "England"
-      expect(sheet.cell(3, 26)).to eq "England"
-
-      expect(sheet.cell(1, 27)).to eq "Reported_as"
-      expect(sheet.cell(2, 27)).to eq investigation.reported_reason
-      expect(sheet.cell(3, 27)).to eq other_user_investigation.reported_reason
+      expect(sheet.cell(1, 26)).to eq "Reported_as"
+      expect(sheet.cell(2, 26)).to eq investigation.reported_reason
+      expect(sheet.cell(3, 26)).to eq other_user_investigation.reported_reason
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength
