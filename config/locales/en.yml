@@ -100,7 +100,11 @@ en:
       date_of_activity: "Date of activity"
       date_added: "Date added"
       title: "Title"
-
+  products:
+    title:
+      team_products: Team products
+      your_products: Your products
+      all_products: All Products - Search
   investigations:
     activities:
       business:
