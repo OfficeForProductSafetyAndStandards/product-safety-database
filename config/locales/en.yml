@@ -101,7 +101,7 @@ en:
       date_added: "Date added"
       title: "Title"
   products:
-    title:
+    titles:
       team_products: Team products
       your_products: Your products
       all_products: All Products - Search
