@@ -2,17 +2,19 @@ module ProductSearchHelper
   include SearchHelper
 
   def filter_params(user)
-    filters_to_apply = [
-      get_hazard_filter,
-      get_owner_filter(user)
+    must_match_filters = [
+      get_hazard_filter
     ].compact
+    should_match_filters = [
+      get_owner_filter(user)
+    ].compact.flatten
 
-    { must: filters_to_apply }
+    { must: must_match_filters, should: should_match_filters }
   end
 
   def get_hazard_filter
     if params[:hazard_type].present?
-      { match: { "investigations.hazard_type" => @search.hazard_type } }
+      { must: { match: { "investigations.hazard_type" => @search.hazard_type } } }
     end
   end
 
@@ -20,8 +22,12 @@ module ProductSearchHelper
     return if @search.case_owner == "all"
     # return { bool: { should: [], must_not: [] } } if @search.case_owner == "all"
     # return { bool: { should: [], must_not: compute_excluded_terms(user) } } if @search.case_owner == "others" && @search.case_owner_is_someone_else_id.blank?
-    if @search.case_owner == "me"
-      { match: { "investigations.owner_id" => user.id } }
+    # if @search.case_owner == "me"
+    #   return { should: { match: { "investigations.owner_id" => user.id } } }
+    # end
+
+    if (@search.case_owner == "my_team" || @search.case_owner == "me")
+      compute_included_terms(user)
     end
   end
 
@@ -46,7 +52,11 @@ module ProductSearchHelper
 
   def format_owner_terms(owner_array)
     owner_array.map do |a|
-      { term: { "investigations.owner_id" => a } }
+      { match: { "investigations.owner_id" => a } }
     end
+  end
+
+  def user_ids_from_team(team)
+    [team.id] + team.users.map(&:id)
   end
 end

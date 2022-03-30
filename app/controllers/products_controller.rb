@@ -87,7 +87,7 @@ class ProductsController < ApplicationController
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_products" })
     @results = search_for_products(20)
-    @count = count_to_display
+    @count = @results.total_count
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "your_products"
 
@@ -100,7 +100,7 @@ class ProductsController < ApplicationController
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_products" })
     @results = search_for_products(20)
-    @count = count_to_display
+    @count = @results.total_count
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "team_products"
 
