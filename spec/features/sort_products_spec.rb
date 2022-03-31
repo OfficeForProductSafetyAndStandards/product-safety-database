@@ -7,7 +7,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   let!(:chemical_investigation)              { create(:allegation, hazard_type: "Chemical") }
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
   let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
-
+  # rubocop:disable RSpec/LetSetup
   let!(:fire_product_1)   { create(:product, name: "Hot product", investigations: [fire_investigation]) }
   let!(:fire_product_2)   { create(:product, name: "Xtra hot product", investigations: [fire_investigation]) }
   let!(:fire_product_3)   { create(:product, name: "Very very hot product", investigations: [fire_investigation]) }
@@ -24,6 +24,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   let!(:drowning_product) { create(:product, name: "Dangerous life vest", investigations: [drowning_investigation]) }
   let!(:another_drowning_product) { create(:product, name: "Another dangerous life vest", investigations: [drowning_investigation]) }
   let!(:zebra_product) { create(:product, name: "Zebra print jacket", investigations: [drowning_investigation]) }
+  # rubocop:enable RSpec/LetSetup
 
   before do
     Investigation.import refresh: :wait_for

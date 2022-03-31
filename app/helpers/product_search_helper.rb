@@ -23,7 +23,7 @@ module ProductSearchHelper
   def get_owner_filter(user)
     return if @search.case_owner == "all"
 
-    if (@search.case_owner == "my_team" || @search.case_owner == "me")
+    if @search.case_owner == "my_team" || @search.case_owner == "me"
       compute_included_terms(user)
     end
   end

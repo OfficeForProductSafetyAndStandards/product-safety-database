@@ -48,14 +48,14 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     let!(:other_product) { create(:product) }
     let!(:team_product) { create(:product) }
     let!(:closed_product) { create(:product) }
-    let!(:user_case) { create(:allegation, creator: user, products: [user_product]) }
-    let!(:other_case) { create(:allegation, products: [other_product]) }
-    let!(:team_case) { create(:allegation, creator: other_user_same_team, products: [team_product]) }
-    let!(:closed_case) { create(:allegation, creator: user, products: [closed_product], is_closed: true) }
 
     before do
       Investigation.import refresh: true, force: true
       Product.import refresh: true, force: true
+      create(:allegation, creator: user, products: [user_product])
+      create(:allegation, products: [other_product])
+      create(:allegation, creator: other_user_same_team, products: [team_product])
+      create(:allegation, creator: user, products: [closed_product], is_closed: true)
     end
 
     context "when the user is on the your products page" do
@@ -83,7 +83,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     context "when more than 11 products" do
       before do
         11.times do
-          create(:allegation, creator: user, products: [ create(:product) ])
+          create(:allegation, creator: user, products: [create(:product)])
           Investigation.import refresh: true, force: true
           Product.import refresh: true, force: true
         end
@@ -117,7 +117,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
       context "when more than 11 cases" do
         before do
           10.times do
-            create(:allegation, creator: other_user_same_team, products: [ create(:product) ])
+            create(:allegation, creator: other_user_same_team, products: [create(:product)])
             Investigation.import refresh: true, force: true
             Product.import refresh: true, force: true
           end
@@ -158,7 +158,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
       context "when more than 11 products" do
         before do
           9.times do
-            create(:allegation, products: [ create(:product) ])
+            create(:allegation, products: [create(:product)])
             Investigation.import refresh: true, force: true
             Product.import refresh: true, force: true
           end

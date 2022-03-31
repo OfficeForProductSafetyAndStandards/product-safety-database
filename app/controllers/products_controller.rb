@@ -83,7 +83,7 @@ class ProductsController < ApplicationController
 
   def your_products
     @search = SearchParams.new({ "case_owner" => "me",
-                                 "case_status"=>"open_only",
+                                 "case_status" => "open_only",
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_products" })
@@ -97,7 +97,7 @@ class ProductsController < ApplicationController
 
   def team_products
     @search = SearchParams.new({ "case_owner" => "my_team",
-                                 "case_status"=>"open_only",
+                                 "case_status" => "open_only",
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_products" })
