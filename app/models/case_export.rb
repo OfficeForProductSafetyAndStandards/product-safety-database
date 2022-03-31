@@ -90,8 +90,7 @@ private
                      Risk_Level
                      Case_Owner_Team
                      Case_Owner_User
-                     Source
-                     Complainant_Type
+                     Source_Type
                      Products
                      Businesses
                      Activities
@@ -127,7 +126,6 @@ private
       investigation.risk_level_description,
       investigation.owner_team&.name,
       investigation.owner_user&.name,
-      investigation.creator_user&.name,
       investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,

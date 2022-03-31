@@ -46,7 +46,7 @@ gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
 gem "sprockets", "4.0.3" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "~> 0.7"
+gem "strong_migrations", "~> 1.0"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
@@ -83,7 +83,7 @@ group :test do
   gem "faker", "~> 2.20"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
-  gem "roo", "~> 2.8"
+  gem "roo", "~> 2.9"
   gem "rspec"
   gem "rspec-mocks", "~> 3.10"
   gem "rspec-rails"
