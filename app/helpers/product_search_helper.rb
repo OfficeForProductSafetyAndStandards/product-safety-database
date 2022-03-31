@@ -16,7 +16,7 @@ module ProductSearchHelper
 
   def get_hazard_filter
     if params[:hazard_type].present?
-      { must: { match: { "investigations.hazard_type" => @search.hazard_type } } }
+      { match: { "investigations.hazard_type" => @search.hazard_type } }
     end
   end
 
