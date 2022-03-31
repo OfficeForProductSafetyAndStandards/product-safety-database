@@ -83,6 +83,7 @@ class ProductsController < ApplicationController
 
   def your_products
     @search = SearchParams.new({ "case_owner" => "me",
+                                 "case_status"=>"open_only",
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_products" })
@@ -96,6 +97,7 @@ class ProductsController < ApplicationController
 
   def team_products
     @search = SearchParams.new({ "case_owner" => "my_team",
+                                 "case_status"=>"open_only",
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_products" })
@@ -106,9 +108,6 @@ class ProductsController < ApplicationController
 
     render "products/index.html.erb"
   end
-
-  # {:must=>[{:bool=>{:should=>[{:term=>{:owner_id=>"820fbc4b-83e8-4c3b-845e-4e5d3d85e9f4"}}], :must_not=>[]}}]}
-  # {:must=>[{:term=>{:is_closed=>false}}, {:bool=>{:should=>[], :must_not=>[]}}, {:bool=>{:should=>[{:term=>{:owner_id=>"820fbc4b-83e8-4c3b-845e-4e5d3d85e9f4"}}], :must_not=>[]}}, {:term=>{:coronavirus_related=>true}}]}
 
 private
 

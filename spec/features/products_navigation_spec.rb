@@ -47,9 +47,11 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     let!(:user_product) { create(:product) }
     let!(:other_product) { create(:product) }
     let!(:team_product) { create(:product) }
+    let!(:closed_product) { create(:product) }
     let!(:user_case) { create(:allegation, creator: user, products: [user_product]) }
     let!(:other_case) { create(:allegation, products: [other_product]) }
     let!(:team_case) { create(:allegation, creator: other_user_same_team, products: [team_product]) }
+    let!(:closed_case) { create(:allegation, creator: user, products: [closed_product], is_closed: true) }
 
     before do
       Investigation.import refresh: true, force: true
@@ -61,10 +63,14 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
         click_on "Your products"
       end
 
-      it "shows products that are associated with cases that are owned by the user" do
+      it "shows products that are associated with cases that are owned by the user and open" do
         expect(page).to have_selector("td.govuk-table__cell", text: user_product.psd_ref)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_product.psd_ref)
         expect(page).not_to have_selector("td.govuk-table__cell", text: team_product.psd_ref)
+      end
+
+      it "does not show closed cases" do
+        expect(page).not_to have_selector("td.govuk-table__cell", text: closed_product.psd_ref)
       end
 
       context "when less than 12 products" do
@@ -87,18 +93,6 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
       it "does show the sort filter drop down with 'newest cases' sorting option selected" do
         expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added")
       end
-
-      # it "does not change table headers when user changes the filter options" do
-      #   expect(page).to have_css("th#updated")
-      #   expect(page).not_to have_css("th#created")
-      #
-      #   within "form dl.govuk-list.opss-dl-select" do
-      #     click_on "Oldest cases"
-      #   end
-      #
-      #   expect(page).to have_css("th#updated")
-      #   expect(page).not_to have_css("#thcreated")
-      # end
     end
 
     context "when the user is on the team cases page" do
@@ -110,6 +104,10 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_product.psd_ref)
       end
 
+      it "does not show closed cases" do
+        expect(page).not_to have_selector("td.govuk-table__cell", text: closed_product.psd_ref)
+      end
+
       context "when less than 12 cases" do
         it "does not show the sort filter drop down" do
           expect(page).not_to have_css("form dl.opss-dl-select dd")
@@ -118,7 +116,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
 
       context "when more than 11 cases" do
         before do
-          11.times do
+          10.times do
             create(:allegation, creator: other_user_same_team, products: [ create(:product) ])
             Investigation.import refresh: true, force: true
             Product.import refresh: true, force: true
@@ -129,18 +127,6 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
         it "does show the sort filter drop down with 'newest cases' sorting option selected" do
           expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added")
         end
-
-        # it "does not change table headers when user changes the filter options" do
-        #   expect(page).to have_css("th#updated")
-        #   expect(page).not_to have_css("th#created")
-        #
-        #   within "form dl.govuk-list.opss-dl-select" do
-        #     click_on "Oldest cases"
-        #   end
-        #
-        #   expect(page).to have_css("th#updated")
-        #   expect(page).not_to have_css("th#created")
-        # end
       end
     end
 
@@ -159,6 +145,10 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
         expect(highlighted_tab).to eq "All products - Search"
       end
 
+      it "shows closed cases" do
+        expect(page).to have_selector("td.govuk-table__cell", text: closed_product.psd_ref)
+      end
+
       context "when less than 12 products" do
         it "does not show the sort filter drop down" do
           expect(page).not_to have_css("form dl.opss-dl-select dd")
@@ -167,7 +157,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
 
       context "when more than 11 products" do
         before do
-          11.times do
+          9.times do
             create(:allegation, products: [ create(:product) ])
             Investigation.import refresh: true, force: true
             Product.import refresh: true, force: true
@@ -178,18 +168,6 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
         it "does show the sort filter drop down with 'recent products' sorting option selected" do
           expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added")
         end
-
-        # it "changes table headers when user changes the filter options" do
-        #   expect(page).to have_css("th#updated")
-        #   expect(page).not_to have_css("th#created")
-        #
-        #   within "form dl.govuk-list.opss-dl-select" do
-        #     click_on "Oldest cases"
-        #   end
-        #
-        #   expect(page).to have_css("th#created")
-        #   expect(page).not_to have_css("th#updated")
-        # end
       end
     end
   end

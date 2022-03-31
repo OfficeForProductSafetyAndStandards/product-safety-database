@@ -3,8 +3,10 @@ module ProductSearchHelper
 
   def filter_params(user)
     must_match_filters = [
-      get_hazard_filter
+      get_hazard_filter,
+      get_status_filter
     ].compact
+
     should_match_filters = [
       get_owner_filter(user)
     ].compact.flatten
@@ -20,14 +22,15 @@ module ProductSearchHelper
 
   def get_owner_filter(user)
     return if @search.case_owner == "all"
-    # return { bool: { should: [], must_not: [] } } if @search.case_owner == "all"
-    # return { bool: { should: [], must_not: compute_excluded_terms(user) } } if @search.case_owner == "others" && @search.case_owner_is_someone_else_id.blank?
-    # if @search.case_owner == "me"
-    #   return { should: { match: { "investigations.owner_id" => user.id } } }
-    # end
 
     if (@search.case_owner == "my_team" || @search.case_owner == "me")
       compute_included_terms(user)
+    end
+  end
+
+  def get_status_filter
+    if @search.case_status == "open_only"
+      { term: { "investigations.is_closed" => "false" } }
     end
   end
 
