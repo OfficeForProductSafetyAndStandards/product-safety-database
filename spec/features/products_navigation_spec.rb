@@ -50,12 +50,12 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     let!(:closed_product) { create(:product) }
 
     before do
-      Investigation.import refresh: true, force: true
-      Product.import refresh: true, force: true
       create(:allegation, creator: user, products: [user_product])
       create(:allegation, products: [other_product])
       create(:allegation, creator: other_user_same_team, products: [team_product])
       create(:allegation, creator: user, products: [closed_product], is_closed: true)
+      Investigation.import refresh: true, force: true
+      Product.import refresh: true, force: true
     end
 
     context "when the user is on the your products page" do
