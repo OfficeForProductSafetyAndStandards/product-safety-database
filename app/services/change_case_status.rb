@@ -19,6 +19,8 @@ class ChangeCaseStatus
       create_audit_activity_for_case_status_changed
     end
 
+    investigations.products.each { |product| product.__elasticsearch.update_document }
+
     send_notification_email
   end
 
