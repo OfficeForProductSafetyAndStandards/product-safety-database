@@ -1,0 +1,28 @@
+<a href="#page-content" class="govuk-skip-link opss-skip-link">
+  Skip to the main content
+</a>
+<nav aria-label="Secondary">
+  <ul class="govuk-list opss-left-nav">
+    <% if @page_name == "your_products" %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "Your products", your_products_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_products") %>
+      </li>
+    <% if @page_name == "team_products" %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "Team products", team_products_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_products") %>
+      </li>
+    <% unless ["team_products", "your_products"].include? @page_name %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "All products - Search", all_products_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_products", "your_products"].include? @page_name) %>
+      </li>
+    </ul>
+  </nav>

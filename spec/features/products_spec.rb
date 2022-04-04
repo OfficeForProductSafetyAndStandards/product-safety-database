@@ -54,11 +54,11 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       expect(page).to have_css("tfoot")
 
       expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
-      expect(page).to have_link("Next page", href: products_path(page: 2))
+      expect(page).to have_link("Next page", href: all_products_path(page: 2))
 
       pending 'this will be fixed once we re-add fuzzy "or" matching on'
 
-      fill_in "Keywords", with: iphone.name
+      fill_in "Search", with: iphone.name
       click_on "Search"
 
       within "#item-0" do

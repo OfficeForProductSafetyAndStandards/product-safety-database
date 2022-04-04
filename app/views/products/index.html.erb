@@ -1,88 +1,49 @@
-<%= page_title "Products" %>
+<%= page_title I18n.t(".products.titles.#{@page_name}") %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-        Products
-    </h1>
-    <%= govukDetails(summaryText: "Help with the Products page", classes: "opss-details--sm") do %>
-      <p class="govuk-body-s">
-        <span id="search-hint">You can search for one or more products by using the keywords that describe them or use a single <abbr>PSD</abbr> reference number to find a specific product record.</span> You can also sort the ordering of the search results.
-      </p>
-      <p class="govuk-body-s govuk-!-margin-bottom-1">
-        You can filter the results by hazard type.
-      </p>
-      <p class="govuk-body-s govuk-visually-hidden">
-        Search results appear within the following <code>form</code> and within the <code>role = region</code>.
-      </p>
-    <% end %>
-  </div>
-</div>
+<%= render "products/heading/#{@page_name}", count: @count %>
 
 <%= form_with(model: @search, scope: "", url: products_path, method: :get, local: true, html: { novalidate: true, role: "search" }) do |form| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <div class="govuk-form-group govuk-!-padding-top-4 govuk-!-padding-bottom-7">
-        <%= form.label :q, "Keywords search", class: "govuk-label" %>
-        <div class="govuk-input__wrapper opss-search__wrapper">
-          <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
-          <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
-          <%= form.search_field :q, class: "govuk-input govuk-!-width-one-half", data: { "opss-clear-on-reset" => "element" }, spellcheck: false, "aria-describedby" => "search-hint" %>
-          <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
-            <span class="govuk-visually-hidden">Search</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="govuk-grid-row opss-full-height">
-    <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
-        <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
-        <%= govukSkipLink(text: "Skip to results", href: "#results") %>
-        <%= render "form_components/govuk_select",
-           key: "hazard_type",
-           form: form,
-           items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
-           label: { text: "Hazard type" },
-           formGroup: { classes: "govuk-!-margin-right-1" },
-           is_autocomplete: false,
-           attributes: { "data-opss-clear-on-reset" => "element" }
-        %>
+    <%= render 'products/filters', form: form %>
 
-        <div class="govuk-button-group">
-          <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
-          <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
-        </div>
-
-        <% if @products.any? && policy(Product).export? %>
-          <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-padding-left-3 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
-            <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
-              Request this list as a downloadable <br class="opss-br-desktop">
-              <%= link_to(generate_product_exports_path(params: product_export_params), class: "govuk-link govuk-link--no-visited-state") do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
-            </p>
+    <section class="govuk-grid-column-three-quarters" id="page-content">
+      <% if ["team_products", "your_products"].exclude?(@page_name) %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group govuk-!-padding-bottom-2">
+              <%= form.label :q, "Search", class: "govuk-label" %>
+              <div class="govuk-input__wrapper opss-search__wrapper">
+                <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
+                <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
+                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", data: { "opss-clear-on-reset" => "element" }, spellcheck: false, "aria-describedby" => "search-hint" %>
+                <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+                  <span class="govuk-visually-hidden">Submit search</span>
+                </button>
+              </div>
+            </div>
           </div>
-        <% end %>
-    </section>
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@results.total_count && @results.total_count > 11) %>
+        </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <%= render "search_statement", count: @count, keywords: params[:q], filter: params[:hazard_type] %>
+          </div>
+        </div>
+      <% elsif (@results.total_count && @results.total_count > 11) %>
+        <div class="govuk-grid-row">
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third opss-float-right-desktop" %>
+        </div>
+      <% end %>
 
-    <section class="govuk-grid-column-three-quarters">
-      <%= render "controls",
-        count: @count,
-        keywords: params[:q],
-        filter: params[:hazard_type],
-        form: form,
-        sort_by_items: @sort_by_items,
-        selected_sort_by: @selected_sort_by,
-        selected_sort_direction: @selected_sort_direction
-      %>
-      <% unless @products.empty? %>
+      <% if @products.any? %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full" role="region" aria-label="Products">
             <%= render "table", products: @products %>
             <%= paginate @products.object %>
           </div>
         </div>
+      <% elsif ["team_products", "your_products"].include?(@page_name) %>
+        <%= render "products/no_products", page_name: @page_name %>
       <% end %>
     </section>
-  </div>
-<% end %>
+  <% end %>
