@@ -205,9 +205,9 @@ Rails.application.routes.draw do
   end
 
   resource :products, only: [], path: "products" do
-    get "your-products", to: "products#your_products", as: "your_products"
-    get "team-products", to: "products#team_products", as: "team_products"
-    get "all-products", to: "products#index"
+    get "your-products", to: "products#your_products", as: "your"
+    get "team-products", to: "products#team_products", as: "team"
+    get "all-products", to: "products#index", as: "all"
   end
 
   resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
