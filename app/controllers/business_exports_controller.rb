@@ -4,6 +4,8 @@ class BusinessExportsController < ApplicationController
   def generate
     authorize Business, :export?
 
+    Sentry.capture_exception "Testing the new Sentry DSN"
+
     business_export = BusinessExport.create!(params: business_export_params, user: current_user)
     BusinessExportJob.perform_later(business_export)
 
