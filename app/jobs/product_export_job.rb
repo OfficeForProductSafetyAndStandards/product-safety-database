@@ -1,5 +1,6 @@
 class ProductExportJob < ApplicationJob
   def perform(product_export)
+    Sentry.capture_exception "Testing the new Sentry DSN"
     product_export.export!
 
     NotifyMailer.product_export(
