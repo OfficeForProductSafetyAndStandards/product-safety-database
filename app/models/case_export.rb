@@ -33,7 +33,7 @@ class CaseExport < ApplicationRecord
 
     case_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_case_ids|
       find_cases(batch_case_ids).each do |investigation|
-        sheet.add_row(serialize_case(investigation.decorate), types: :text)
+        sheet.add_row(serialize_case(investigation.decorate, user.team), types: :text)
       end
     end
 
@@ -113,7 +113,25 @@ private
         .find(ids)
   end
 
-  def serialize_case(investigation)
+  def title(investigation, current_user_is_on_creator_team)
+    current_user_is_on_creator_team ? investigation.title : "Restricted"
+  end
+
+  def decription(investigation, current_users_team_id)
+    current_user_is_on_creator_team ? investigation.description : "Restricted"
+  end
+
+  def case_owner_user(investigation, current_users_team_id)
+    current_user_is_on_creator_team ? investigation.owner_user&.name : "Restricted"
+  end
+
+  def serialize_case(investigation, team)
+    restrict_info = !current_user_is_on_owner_team?(team, investigation) && investigation.is_closed?
+
+    restrict_info ? restricted_data(investigation) : non_restricted_data(investigation)
+  end
+
+  def non_restricted_data(investigation)
     [
       investigation.pretty_id,
       investigation.is_closed? ? "Closed" : "Open",
@@ -142,5 +160,40 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason
     ]
+  end
+
+  def restricted_data(investigation)
+    [
+      investigation.pretty_id,
+      investigation.is_closed? ? "Closed" : "Open",
+      "Restricted",
+      investigation.type,
+      "Restricted",
+      investigation.categories.join(", "),
+      investigation.hazard_type,
+      investigation.coronavirus_related?,
+      investigation.risk_level_description,
+      investigation.owner_team&.name,
+      "Restricted",
+      investigation.complainant&.complainant_type,
+      product_counts[investigation.id] || 0,
+      business_counts[investigation.id] || 0,
+      activity_counts[investigation.id] || 0,
+      correspondence_counts[investigation.id] || 0,
+      corrective_action_counts[investigation.id] || 0,
+      test_counts[investigation.id] || 0,
+      risk_assessment_counts[investigation.id] || 0,
+      investigation.created_at,
+      investigation.updated_at,
+      investigation.date_closed,
+      investigation.risk_validated_at,
+      investigation.creator_user&.team&.name,
+      country_from_code(investigation.notifying_country, Country.notifying_countries),
+      investigation.reported_reason
+    ]
+  end
+
+  def current_user_is_on_owner_team?(team, investigation)
+    investigation.owner_team == team
   end
 end
