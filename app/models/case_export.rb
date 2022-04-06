@@ -126,7 +126,7 @@ private
   end
 
   def serialize_case(investigation, team)
-    restrict_info = !current_user_is_on_owner_team?(team, investigation) && investigation.is_private?
+    restrict_info = !current_user_is_on_owner_team?(team, investigation) && investigation.is_private
 
     restrict_info ? restricted_data(investigation) : non_restricted_data(investigation)
   end
