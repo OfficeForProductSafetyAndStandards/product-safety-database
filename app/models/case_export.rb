@@ -114,9 +114,7 @@ private
   end
 
   def serialize_case(investigation, team)
-    restrict_info = !current_user_is_on_owner_team?(team, investigation) && investigation.is_private
-
-    restrict_info ? restricted_data(investigation) : non_restricted_data(investigation)
+    restrict_info?(team, investigation) ? restricted_data(investigation) : non_restricted_data(investigation)
   end
 
   def non_restricted_data(investigation)
@@ -179,6 +177,10 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason
     ]
+  end
+
+  def restrict_info?(team, investigation)
+    !current_user_is_on_owner_team?(team, investigation) && investigation.is_private
   end
 
   def current_user_is_on_owner_team?(team, investigation)
