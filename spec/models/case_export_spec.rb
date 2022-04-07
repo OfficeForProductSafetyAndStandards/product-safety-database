@@ -7,7 +7,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   let!(:user) { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
   let!(:other_user_other_team) { create(:user, :activated, name: "other user same team", organisation:, team: other_team) }
   let!(:investigation) { create(:allegation, creator: user).decorate }
-  let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team).decorate }
+  let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
   let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }
   let(:case_export) { described_class.create!(user:, params:) }
 
@@ -50,7 +50,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
       expect(sheet.cell(1, 5)).to eq "Description"
       expect(sheet.cell(2, 5)).to eq investigation.object.description
-      expect(sheet.cell(3, 5)).to eq other_team_investigation.object.description
+      expect(sheet.cell(3, 5)).to eq "Restricted"
 
       expect(sheet.cell(1, 6)).to eq "Product_Category"
       expect(sheet.cell(2, 6)).to eq investigation.categories.presence&.join(", ")
@@ -74,7 +74,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
       expect(sheet.cell(1, 11)).to eq "Case_Owner_User"
       expect(sheet.cell(2, 11)).to eq investigation.owner_user&.name
-      expect(sheet.cell(3, 11)).to eq other_team_investigation.owner_user&.name
+      expect(sheet.cell(3, 11)).to eq "Restricted"
 
       expect(sheet.cell(1, 12)).to eq "Source_Type"
       expect(sheet.cell(2, 12)).to eq investigation.complainant&.complainant_type
