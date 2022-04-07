@@ -113,18 +113,6 @@ private
         .find(ids)
   end
 
-  def title(investigation, current_user_is_on_creator_team)
-    current_user_is_on_creator_team ? investigation.title : "Restricted"
-  end
-
-  def decription(investigation, current_users_team_id)
-    current_user_is_on_creator_team ? investigation.description : "Restricted"
-  end
-
-  def case_owner_user(investigation, current_users_team_id)
-    current_user_is_on_creator_team ? investigation.owner_user&.name : "Restricted"
-  end
-
   def serialize_case(investigation, team)
     restrict_info = !current_user_is_on_owner_team?(team, investigation) && investigation.is_private
 
