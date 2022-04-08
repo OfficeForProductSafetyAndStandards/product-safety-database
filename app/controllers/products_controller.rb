@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update]
   before_action :set_countries, only: %i[update edit]
   before_action :build_breadcrumbs, only: %i[show]
-  before_action :set_sort_by_items, only: %i[index]
+  before_action :set_sort_by_items, only: %i[index your_products team_products]
 
   # GET /products
   # GET /products.json
@@ -17,6 +17,7 @@ class ProductsController < ApplicationController
         @results = search_for_products(20)
         @count = count_to_display
         @products = ProductDecorator.decorate_collection(@results)
+        @page_name = "all_products"
       end
       format.csv do
         authorize Product, :export?
@@ -78,6 +79,34 @@ class ProductsController < ApplicationController
       format.html { redirect_to products_path, flash: { success: "Product was successfully deleted." } }
       format.json { head :no_content }
     end
+  end
+
+  def your_products
+    @search = SearchParams.new({ "case_owner" => "me",
+                                 "case_status" => "open_only",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "your_products" })
+    @results = search_for_products(20)
+    @count = @results.total_count
+    @products = ProductDecorator.decorate_collection(@results)
+    @page_name = "your_products"
+
+    render "products/index.html.erb"
+  end
+
+  def team_products
+    @search = SearchParams.new({ "case_owner" => "my_team",
+                                 "case_status" => "open_only",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "team_products" })
+    @results = search_for_products(20)
+    @count = @results.total_count
+    @products = ProductDecorator.decorate_collection(@results)
+    @page_name = "team_products"
+
+    render "products/index.html.erb"
   end
 
 private

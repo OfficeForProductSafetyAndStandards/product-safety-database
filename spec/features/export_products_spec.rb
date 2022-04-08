@@ -48,8 +48,8 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
   scenario "with search query" do
     visit products_path
 
-    fill_in "Keywords", with: product_2.name
-    click_button "Search"
+    fill_in "Search", with: product_2.name
+    click_button "Submit search"
 
     expect(page).not_to have_text product_1.name
     expect(page).not_to have_text hazardous_product.name
@@ -65,7 +65,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     visit products_path
 
     select hazard_type, from: "Hazard type"
-    click_button "Search"
+    click_button "Submit search"
 
     expect(page).not_to have_text product_1.name
     expect(page).not_to have_text product_2.name
