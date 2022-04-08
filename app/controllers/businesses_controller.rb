@@ -18,6 +18,7 @@ class BusinessesController < ApplicationController
         @results = search_for_businesses(20)
         @count = count_to_display
         @businesses = BusinessDecorator.decorate_collection(@results)
+        @page_name = "all_businesses"
       end
     end
   end
@@ -46,6 +47,34 @@ class BusinessesController < ApplicationController
         format.json { render json: @business.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def your_businesses
+    @search = SearchParams.new({ "case_owner" => "me",
+                                 "case_status" => "open_only",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "your_businesses" })
+    @results = search_for_businesses(20)
+    @count = @results.total_count
+    @businesses = BusinessDecorator.decorate_collection(@results)
+    @page_name = "your_businesses"
+
+    render "businesses/index.html.erb"
+  end
+
+  def team_businesses
+    @search = SearchParams.new({ "case_owner" => "my_team",
+                                 "case_status" => "open_only",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "team_businesses" })
+    @results = search_for_businesses(20)
+    @count = @results.total_count
+    @businesses = BusinessDecorator.decorate_collection(@results)
+    @page_name = "team_businesses"
+
+    render "businesses/index.html.erb"
   end
 
 private
