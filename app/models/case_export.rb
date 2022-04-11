@@ -33,7 +33,7 @@ class CaseExport < ApplicationRecord
 
     case_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_case_ids|
       find_cases(batch_case_ids).each do |investigation|
-        sheet.add_row(serialize_case(investigation.decorate, user.team), types: :text)
+        sheet.add_row(serialize_case(investigation.decorate), types: :text)
       end
     end
 
