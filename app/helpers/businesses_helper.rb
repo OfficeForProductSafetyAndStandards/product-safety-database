@@ -1,5 +1,5 @@
 module BusinessesHelper
-  include SearchHelper
+  include BusinessSearchHelper
 
   def defaults_on_primary_location(business)
     business.primary_location.name ||= "Registered office address"
