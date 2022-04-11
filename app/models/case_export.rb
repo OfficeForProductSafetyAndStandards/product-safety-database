@@ -113,8 +113,8 @@ private
         .find(ids)
   end
 
-  def serialize_case(investigation, team)
-    Pundit.policy!(user, investigation).view_protected_details?(user: user) ? non_restricted_data(investigation) : restricted_data(investigation)
+  def serialize_case(investigation)
+    Pundit.policy!(user, investigation).view_protected_details?(user:) ? non_restricted_data(investigation) : restricted_data(investigation)
   end
 
   def non_restricted_data(investigation)
