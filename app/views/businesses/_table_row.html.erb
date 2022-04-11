@@ -3,6 +3,9 @@
     <%= link_to business.trading_name, business, class: "govuk-link govuk-link--no-visited-state" %>
   </th>
   <td class="govuk-table__cell">
+    <%= business.created_at.to_s(:govuk) %>
+  </td>
+  <td class="govuk-table__cell">
     <%= business.company_number %>
   </td>
 </tr>
