@@ -114,7 +114,7 @@ private
   end
 
   def serialize_case(investigation, team)
-    restrict_info?(team, investigation) ? restricted_data(investigation) : non_restricted_data(investigation)
+    Pundit.policy!(user, investigation).view_protected_details?(user: user) ? non_restricted_data(investigation) : restricted_data(investigation)
   end
 
   def non_restricted_data(investigation)
