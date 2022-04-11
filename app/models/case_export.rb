@@ -178,12 +178,4 @@ private
       investigation.reported_reason
     ]
   end
-
-  def restrict_info?(team, investigation)
-    !current_user_is_on_owner_team?(team, investigation) && investigation.is_private
-  end
-
-  def current_user_is_on_owner_team?(team, investigation)
-    investigation.owner_team == team
-  end
 end
