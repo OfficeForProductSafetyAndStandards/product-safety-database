@@ -8,7 +8,7 @@ class BusinessesController < ApplicationController
   before_action :update_business, only: %i[update]
   before_action :build_breadcrumbs, only: %i[show]
   before_action :set_countries, only: %i[update edit]
-  before_action :set_sort_by_items, only: %i[index]
+  before_action :set_sort_by_items, only: %i[index your_businesses team_businesses]
 
   # GET /businesses
   # GET /businesses.json
@@ -99,7 +99,7 @@ private
 
   def sort_by_items
     items = [
-      SortByHelper::SortByItem.new("Recently added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
       SortByHelper::SortByItem.new("Name A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
       SortByHelper::SortByItem.new("Name Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
     ]
