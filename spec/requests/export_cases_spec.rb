@@ -286,6 +286,52 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           end
         end
       end
+
+      context "when investigation is restricted" do
+        context "when user is on the team that owns the case" do
+          it "shows description, title and user owner name" do
+            investigation = create(:allegation, creator: user, is_private: true)
+
+            Investigation.import refresh: true, force: true
+
+            get generate_case_exports_path
+
+            aggregate_failures do
+              expect(exported_data.cell(1, 3)).to eq "Title"
+              expect(exported_data.cell(2, 3)).to eq "Allegation (no product specified)"
+
+              expect(exported_data.cell(1, 5)).to eq "Description"
+              expect(exported_data.cell(2, 5)).to eq investigation.description
+
+              expect(exported_data.cell(1, 11)).to eq "Case_Owner_User"
+              expect(exported_data.cell(2, 11)).to eq user.name
+            end
+          end
+        end
+
+        context "when user is not on the team that owns the case" do
+          it "does not show description, title and user owner name" do
+            other_team = create(:team)
+            other_user = create(:user, team: other_team)
+            create(:allegation, creator: other_user, is_private: true)
+
+            Investigation.import refresh: true, force: true
+
+            get generate_case_exports_path
+
+            aggregate_failures do
+              expect(exported_data.cell(1, 3)).to eq "Title"
+              expect(exported_data.cell(2, 3)).to eq "Restricted"
+
+              expect(exported_data.cell(1, 5)).to eq "Description"
+              expect(exported_data.cell(2, 5)).to eq "Restricted"
+
+              expect(exported_data.cell(1, 11)).to eq "Case_Owner_User"
+              expect(exported_data.cell(2, 11)).to eq "Restricted"
+            end
+          end
+        end
+      end
     end
     # rubocop:enable RSpec/ExampleLength
   end
