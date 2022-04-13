@@ -33,10 +33,10 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
     end
 
     expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
-    expect(page).to have_link("Next page", href: businesses_path(page: 2))
+    expect(page).to have_link("Next page", href: all_businesses_path(page: 2))
 
-    fill_in "Keywords", with: business_three.trading_name
-    click_on "Search"
+    fill_in "Search", with: business_three.trading_name
+    click_on "Submit search"
 
     within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
@@ -44,8 +44,8 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
   end
 
   scenario "strips leading and trailing whitespace from search queries" do
-    fill_in "Keywords", with: "  #{business_three.trading_name} "
-    click_on "Search"
+    fill_in "Search", with: "  #{business_three.trading_name} "
+    click_on "Submit search"
 
     within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
