@@ -114,6 +114,10 @@ private
   end
 
   def serialize_case(investigation)
+    Pundit.policy!(user, investigation).view_protected_details?(user:) || !investigation.is_private? ? non_restricted_data(investigation) : restricted_data(investigation)
+  end
+
+  def non_restricted_data(investigation)
     [
       investigation.pretty_id,
       investigation.is_closed? ? "Closed" : "Open",
@@ -126,6 +130,37 @@ private
       investigation.risk_level_description,
       investigation.owner_team&.name,
       investigation.owner_user&.name,
+      investigation.complainant&.complainant_type,
+      product_counts[investigation.id] || 0,
+      business_counts[investigation.id] || 0,
+      activity_counts[investigation.id] || 0,
+      correspondence_counts[investigation.id] || 0,
+      corrective_action_counts[investigation.id] || 0,
+      test_counts[investigation.id] || 0,
+      risk_assessment_counts[investigation.id] || 0,
+      investigation.created_at,
+      investigation.updated_at,
+      investigation.date_closed,
+      investigation.risk_validated_at,
+      investigation.creator_user&.team&.name,
+      country_from_code(investigation.notifying_country, Country.notifying_countries),
+      investigation.reported_reason
+    ]
+  end
+
+  def restricted_data(investigation)
+    [
+      investigation.pretty_id,
+      investigation.is_closed? ? "Closed" : "Open",
+      "Restricted",
+      investigation.type,
+      "Restricted",
+      investigation.categories.join(", "),
+      investigation.hazard_type,
+      investigation.coronavirus_related?,
+      investigation.risk_level_description,
+      investigation.owner_team&.name,
+      "Restricted",
       investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,

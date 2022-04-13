@@ -20,7 +20,7 @@ gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
-gem "lograge", "~> 0.11"
+gem "lograge", "~> 0.12"
 gem "mini_magick", "~> 4.11"
 
 # ActionMailer dependencies

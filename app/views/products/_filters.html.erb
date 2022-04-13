@@ -1,0 +1,34 @@
+<section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+  <%= render "products/secondary_nav" %>
+
+  <% unless ["team_products", "your_products"].include? @page_name %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-6 govuk-!-margin-right-6">
+  <% end %>
+  <% if ["team_products", "your_products"].exclude? @page_name %>
+    <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
+    <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
+    <%= render "form_components/govuk_select",
+       key: "hazard_type",
+       form: form,
+       items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+       label: { text: "Hazard type" },
+       formGroup: { classes: "govuk-!-margin-right-1" },
+       is_autocomplete: false,
+       attributes: { "data-opss-clear-on-reset" => "element" }
+    %>
+
+    <div class="govuk-button-group">
+      <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
+      <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
+    </div>
+
+    <% if @products.any? && policy(Product).export? %>
+      <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-padding-left-3 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
+        <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
+          Request this list as a downloadable <br class="opss-br-desktop">
+          <%= link_to(generate_product_exports_path(params: product_export_params), class: "govuk-link govuk-link--no-visited-state") do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+        </p>
+      </div>
+    <% end %>
+  <% end %>
+</section>
