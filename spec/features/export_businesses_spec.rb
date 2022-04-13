@@ -42,8 +42,8 @@ RSpec.feature "Business export", :with_opensearch, :with_stubbed_antivirus, :wit
   scenario "with search query" do
     visit businesses_path
 
-    fill_in "Keywords", with: "XYZ"
-    click_button "Search"
+    fill_in "Search", with: "XYZ"
+    click_button "Submit search"
 
     expect(page).not_to have_text "ABC"
     expect(page).to have_text "XYZ"
