@@ -7,23 +7,23 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
   let!(:chemical_investigation)              { create(:allegation, hazard_type: "Chemical") }
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
   let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
-
+  # rubocop:disable RSpec/LetSetup
   let!(:business_1)   { create(:business, trading_name: "AA Business", investigations: [chemical_investigation]) }
   let!(:business_2)   { create(:business, trading_name: "CC Business", investigations: [fire_investigation]) }
   let!(:business_3)   { create(:business, trading_name: "BB Business", investigations: [drowning_investigation]) }
   let!(:business_4)   { create(:business, trading_name: "DD Business", investigations: [drowning_investigation]) }
   let!(:business_5)   { create(:business, trading_name: "EE Business", investigations: [drowning_investigation]) }
+  let!(:business_6)   { create(:business, trading_name: "FF Business", investigations: [drowning_investigation]) }
+  let!(:business_7)   { create(:business, trading_name: "GG Business", investigations: [drowning_investigation]) }
+  let!(:business_8)   { create(:business, trading_name: "HH Business", investigations: [drowning_investigation]) }
   let!(:business_9)   { create(:business, trading_name: "II Business", investigations: [drowning_investigation]) }
   let!(:business_10)   { create(:business, trading_name: "JJ Business", investigations: [drowning_investigation]) }
   let!(:business_11)   { create(:business, trading_name: "KK Business", investigations: [drowning_investigation]) }
   let!(:business_12)   { create(:business, trading_name: "ZZ Business", investigations: [drowning_investigation]) }
   let!(:business_13)   { create(:business, trading_name: "MM Business", investigations: [drowning_investigation]) }
+  # rubocop:enable RSpec/LetSetup
 
   before do
-    create(:business, trading_name: "FF Business", investigations: [drowning_investigation])
-    create(:business, trading_name: "GG Business", investigations: [drowning_investigation])
-    create(:business, trading_name: "HH Business", investigations: [drowning_investigation])
-
     Investigation.import refresh: :wait_for
     Business.import refresh: :wait_for
     sign_in(user)
