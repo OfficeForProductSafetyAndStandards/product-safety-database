@@ -47,7 +47,7 @@ module RedactedExport
         DROP SCHEMA IF EXISTS redacted CASCADE; CREATE SCHEMA redacted;
 
       SQL_OUTPUT
-      self.sort.each do |table, attributes|
+      sort.each do |table, attributes|
         io.puts <<~SQL_OUTPUT
           CREATE TABLE redacted.#{table} AS (SELECT #{attributes.join ', '} FROM public.#{table});
 
