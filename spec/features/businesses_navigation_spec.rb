@@ -55,10 +55,10 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
       closed_case = create(:allegation, creator: user, is_closed: true)
       other_case = create(:allegation)
 
-      InvestigationBusiness.create(business_id: user_business.id, investigation_id: user_case.id)
-      InvestigationBusiness.create(business_id: team_business.id, investigation_id: team_case.id)
-      InvestigationBusiness.create(business_id: closed_business.id, investigation_id: closed_case.id)
-      InvestigationBusiness.create(business_id: other_business.id, investigation_id: other_case.id)
+      InvestigationBusiness.create!(business_id: user_business.id, investigation_id: user_case.id)
+      InvestigationBusiness.create!(business_id: team_business.id, investigation_id: team_case.id)
+      InvestigationBusiness.create!(business_id: closed_business.id, investigation_id: closed_case.id)
+      InvestigationBusiness.create!(business_id: other_business.id, investigation_id: other_case.id)
 
       Investigation.import refresh: true, force: true
       Business.import refresh: true, force: true

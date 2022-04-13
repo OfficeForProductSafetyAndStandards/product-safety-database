@@ -36,7 +36,7 @@ module SearchHelper
       compute_included_terms(user)
     end
   end
-  
+
   def compute_excluded_terms(user)
     format_owner_terms([user.id])
   end
@@ -52,7 +52,6 @@ module SearchHelper
     when "others"
       owners += other_owner_ids
     end
-
     format_owner_terms(owners.uniq)
   end
 

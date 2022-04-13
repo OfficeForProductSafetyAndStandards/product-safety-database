@@ -13,9 +13,6 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
   let!(:business_3)   { create(:business, trading_name: "BB Business", investigations: [drowning_investigation]) }
   let!(:business_4)   { create(:business, trading_name: "DD Business", investigations: [drowning_investigation]) }
   let!(:business_5)   { create(:business, trading_name: "EE Business", investigations: [drowning_investigation]) }
-  let!(:business_6)   { create(:business, trading_name: "FF Business", investigations: [drowning_investigation]) }
-  let!(:business_7)   { create(:business, trading_name: "GG Business", investigations: [drowning_investigation]) }
-  let!(:business_8)   { create(:business, trading_name: "HH Business", investigations: [drowning_investigation]) }
   let!(:business_9)   { create(:business, trading_name: "II Business", investigations: [drowning_investigation]) }
   let!(:business_10)   { create(:business, trading_name: "JJ Business", investigations: [drowning_investigation]) }
   let!(:business_11)   { create(:business, trading_name: "KK Business", investigations: [drowning_investigation]) }
@@ -23,6 +20,10 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
   let!(:business_13)   { create(:business, trading_name: "MM Business", investigations: [drowning_investigation]) }
 
   before do
+    create(:business, trading_name: "FF Business", investigations: [drowning_investigation])
+    create(:business, trading_name: "GG Business", investigations: [drowning_investigation])
+    create(:business, trading_name: "HH Business", investigations: [drowning_investigation])
+
     Investigation.import refresh: :wait_for
     Business.import refresh: :wait_for
     sign_in(user)
