@@ -229,8 +229,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
         expect(find("details#filter-details")["open"]).to eq("open")
 
-        # find("details#filter-details").click
-
         choose "Others", id: "case_owner_others"
         select other_user_same_team.name, from: "case_owner_is_someone_else_id"
         click_button "Apply"
