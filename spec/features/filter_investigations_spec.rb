@@ -136,68 +136,29 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
       expect(find("details#filter-details")["open"]).to eq(nil)
     end
-  end
 
-  describe "Case owner" do
-    scenario "filtering cases where the user is the owner" do
-      within_fieldset("Case owner") { choose "Me" }
-      click_button "Apply"
+    describe "Case status" do
+      scenario "filtering for both open and closed cases" do
+        within_fieldset("Case status") { choose "All" }
+        click_button "Apply"
 
-      expect(page).to have_listed_case(investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(closed_investigation.pretty_id)
 
-      expect(find("details#filter-details")["open"]).to eq(nil)
-    end
-
-    scenario "filtering cases where the user’s team is the owner" do
-      within_fieldset("Case owner") { choose "Me and my team" }
-      click_button "Apply"
-
-      expect(page).to have_listed_case(investigation.pretty_id)
-      expect(page).to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-
-      expect(find("details#filter-details")["open"]).to eq(nil)
-    end
-
-    scenario "filtering cases where the owner is someone else" do
-      choose "Others", id: "case_owner_others"
-      click_button "Apply"
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).to have_listed_case(other_team_investigation.pretty_id)
-
-      expect(find("details#filter-details")["open"]).to eq(nil)
-    end
-
-    scenario "filtering cases where another person or team is the owner" do
-      within_fieldset("Case owner") do
-        choose "Others", id: "case_owner_others"
-        select other_team.name, from: "case_owner_is_someone_else_id"
+        expect(find("details#filter-details")["open"]).to eq(nil)
       end
-      click_button "Apply"
 
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).to have_listed_case(other_team_investigation.pretty_id)
+      scenario "filtering only closed cases" do
+        within_fieldset "Case status" do
+          choose "Closed"
+        end
+        click_button "Apply"
 
-      expect(find("details#filter-details")["open"]).to eq(nil)
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(closed_investigation.pretty_id)
 
-      choose "Others", id: "case_owner_others"
-      select other_user_same_team.name, from: "case_owner_is_someone_else_id"
-      click_button "Apply"
-
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-
-      expect(find("details#filter-details")["open"]).to eq(nil)
+        expect(find("details#filter-details")["open"]).to eq(nil)
+      end
     end
   end
 
@@ -215,6 +176,69 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       within_fieldset("Created by") do
         expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
         expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
+      end
+    end
+
+    describe "Case owner" do
+      scenario "filtering cases where the user is the owner" do
+        within_fieldset("Case owner") { choose "Me" }
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering cases where the user’s team is the owner" do
+        within_fieldset("Case owner") { choose "Me and my team" }
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering cases where the owner is someone else" do
+        choose "Others", id: "case_owner_others"
+        click_button "Apply"
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering cases where another person or team is the owner" do
+        within_fieldset("Case owner") do
+          choose "Others", id: "case_owner_others"
+          select other_team.name, from: "case_owner_is_someone_else_id"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+
+        choose "Others", id: "case_owner_others"
+        select other_user_same_team.name, from: "case_owner_is_someone_else_id"
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
       end
     end
 
@@ -273,7 +297,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
           expect(page).to have_listed_case(investigation.pretty_id)
           expect(page).to have_listed_case(other_user_investigation.pretty_id)
 
-          expect(find("details#filter-details")["open"]).to eq(nil)
+          expect(find("details#filter-details")["open"]).to eq("open")
         end
 
         scenario "with keywords entered" do
@@ -413,30 +437,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(page).to have_listed_case(investigation.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-    end
-
-    describe "Case status" do
-      scenario "filtering for both open and closed cases" do
-        within_fieldset("Case status") { choose "All" }
-        click_button "Apply"
-
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(closed_investigation.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering only closed cases" do
-        within_fieldset "Case status" do
-          choose "Closed"
-        end
-        click_button "Apply"
-
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(closed_investigation.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
