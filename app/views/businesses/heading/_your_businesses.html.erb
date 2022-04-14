@@ -5,7 +5,11 @@
         </h1>
 
         <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-1">
-            <%= "There are #{@count} businesses linked to open cases where you are the case owner." %>
+          <% if count == 1 %>
+            <%= "There is #{count} business linked to open cases where you are the case owner." %>
+          <% else %>
+            <%= "There are #{count} businesses linked to open cases where you are the case owner." %>
+          <% end %>
         </p>
     </div>
 </div>
