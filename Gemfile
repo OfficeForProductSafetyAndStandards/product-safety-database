@@ -20,7 +20,7 @@ gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
-gem "lograge", "~> 0.11"
+gem "lograge", "~> 0.12"
 gem "mini_magick", "~> 4.11"
 
 # ActionMailer dependencies
@@ -85,7 +85,7 @@ group :test do
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.9"
   gem "rspec"
-  gem "rspec-mocks", "~> 3.10"
+  gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
   gem "rubocop", "~> 1.25"
   gem "rubocop-govuk", "~> 4.3"
