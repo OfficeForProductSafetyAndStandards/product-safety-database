@@ -6,7 +6,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.113"
-gem "aws-sdk-s3control", "~> 1.49"
+gem "aws-sdk-s3control", "~> 1.50"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
