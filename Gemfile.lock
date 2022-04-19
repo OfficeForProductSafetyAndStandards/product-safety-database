@@ -83,8 +83,8 @@ GEM
     attr_extras (6.2.5)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.563.0)
-    aws-sdk-core (3.128.1)
+    aws-partitions (1.573.0)
+    aws-sdk-core (3.130.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -96,7 +96,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sdk-s3control (1.49.0)
+    aws-sdk-s3control (1.50.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.4.0)
@@ -182,7 +182,7 @@ GEM
       faraday (~> 1)
       multi_json
     erubi (1.10.0)
-    et-orbi (1.2.6)
+    et-orbi (1.2.7)
       tzinfo
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
@@ -215,8 +215,8 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
-    fugit (1.5.2)
-      et-orbi (~> 1.1, >= 1.1.8)
+    fugit (1.5.3)
+      et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -306,10 +306,10 @@ GEM
       timeout
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.3)
+    nokogiri (1.13.4)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.3-x86_64-darwin)
+    nokogiri (1.13.4-x86_64-darwin)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -519,8 +519,8 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-cron (1.2.0)
-      fugit (~> 1.1)
+    sidekiq-cron (1.3.0)
+      fugit (>= 1.1)
       sidekiq (>= 4.2.1)
     simplecov (0.21.2)
       docile (~> 1.1)
@@ -630,7 +630,7 @@ DEPENDENCIES
   activerecord-pg_enum (~> 1.2)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.113)
-  aws-sdk-s3control (~> 1.49)
+  aws-sdk-s3control (~> 1.50)
   bootsnap
   byebug (~> 11.1)
   capybara (~> 3.36)
@@ -693,7 +693,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers
   sidekiq (~> 6.4)
-  sidekiq-cron (~> 1.2)
+  sidekiq-cron (~> 1.3)
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
