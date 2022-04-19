@@ -33,11 +33,11 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
   scenario "no filters applied sorts by Recently added" do
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added")
 
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_13.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_12.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_11.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_10.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_9.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_13.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_12.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_11.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_10.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_9.trading_name)
   end
 
   scenario "selecting Name A–Z sorts ascending by name" do
@@ -48,11 +48,11 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
     expect(page).to have_current_path(/sort_dir=asc/, ignore_query: false)
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name A–Z")
 
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_1.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_3.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_2.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_4.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_5.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_1.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_3.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_2.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_4.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_5.trading_name)
   end
 
   scenario "selecting Name Z–A sorts descending by name" do
@@ -63,11 +63,11 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
     expect(page).to have_current_path(/sort_dir=desc/, ignore_query: false)
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name Z–A")
 
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_12.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_13.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_11.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_10.trading_name)
-    expect(page).to have_css("table#results tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_9.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_12.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_13.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_11.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_10.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_9.trading_name)
   end
 
   scenario "filtering by keyword sorts by Relevance by default" do

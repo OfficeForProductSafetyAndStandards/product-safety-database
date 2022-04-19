@@ -20,15 +20,15 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
   end
 
   scenario "lists business according to search relevance" do
-    within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+    within "table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
     end
 
-    within "table#results tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
+    within "table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
       expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
     end
 
-    within "table#results tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)" do
+    within "table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
 
@@ -38,7 +38,7 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
     fill_in "Search", with: business_three.trading_name
     click_on "Submit search"
 
-    within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+    within "table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
   end
@@ -47,7 +47,7 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
     fill_in "Search", with: "  #{business_three.trading_name} "
     click_on "Submit search"
 
-    within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+    within "table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
   end
