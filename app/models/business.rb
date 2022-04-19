@@ -38,7 +38,15 @@ class Business < ApplicationRecord
   end
 
   def as_indexed_json(*)
-    as_json(methods: %i[tiebreaker_id name_for_sorting])
+    as_json(
+      include: {
+        investigations: {
+          only: %i[is_closed],
+          methods: :owner_id
+        }
+      },
+      methods: %i[tiebreaker_id name_for_sorting]
+    )
   end
 
   def supporting_information

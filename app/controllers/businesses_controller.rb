@@ -8,7 +8,7 @@ class BusinessesController < ApplicationController
   before_action :update_business, only: %i[update]
   before_action :build_breadcrumbs, only: %i[show]
   before_action :set_countries, only: %i[update edit]
-  before_action :set_sort_by_items, only: %i[index]
+  before_action :set_sort_by_items, only: %i[index your_businesses team_businesses]
 
   # GET /businesses
   # GET /businesses.json
@@ -18,6 +18,7 @@ class BusinessesController < ApplicationController
         @results = search_for_businesses(20)
         @count = count_to_display
         @businesses = BusinessDecorator.decorate_collection(@results)
+        @page_name = "all_businesses"
       end
     end
   end
@@ -48,6 +49,34 @@ class BusinessesController < ApplicationController
     end
   end
 
+  def your_businesses
+    @search = SearchParams.new({ "case_owner" => "me",
+                                 "case_status" => "open_only",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "your_businesses" })
+    @results = search_for_businesses(20)
+    @count = @results.total_count
+    @businesses = BusinessDecorator.decorate_collection(@results)
+    @page_name = "your_businesses"
+
+    render "businesses/index.html.erb"
+  end
+
+  def team_businesses
+    @search = SearchParams.new({ "case_owner" => "my_team",
+                                 "case_status" => "open_only",
+                                 "sort_by" => params["sort_by"],
+                                 "sort_dir" => params["sort_dir"],
+                                 "page_name" => "team_businesses" })
+    @results = search_for_businesses(20)
+    @count = @results.total_count
+    @businesses = BusinessDecorator.decorate_collection(@results)
+    @page_name = "team_businesses"
+
+    render "businesses/index.html.erb"
+  end
+
 private
 
   def update_business
@@ -70,7 +99,7 @@ private
 
   def sort_by_items
     items = [
-      SortByHelper::SortByItem.new("Recently added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
       SortByHelper::SortByItem.new("Name A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
       SortByHelper::SortByItem.new("Name Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
     ]
