@@ -125,6 +125,6 @@ private
       return false unless ["all", nil].include? param_value
     end
 
-    ["open", nil].include?(params["case_status"]) && params[:q].blank?
+    params["case_status"] == "all" && params[:q].blank?
   end
 end

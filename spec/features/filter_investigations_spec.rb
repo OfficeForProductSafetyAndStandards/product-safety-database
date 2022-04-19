@@ -49,6 +49,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
 
     expect(page).not_to have_listed_case(closed_investigation.pretty_id)
+    number_of_open_cases = Investigation.where(is_closed: false).count
+    expect(page).to have_content("#{number_of_open_cases} cases using the current filters, were found.")
 
     expect(find("details#filter-details")["open"]).to eq(nil)
 
@@ -57,6 +59,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       expect(page).to have_checked_field("Open")
       expect(page).to have_unchecked_field("Closed")
     end
+
+    expect(page).to have_content("#{number_of_open_cases} cases using the current filters, were found.")
 
     within "#sort-by-fieldset" do
       expect(page).to have_select("Sort the results by", selected: "Recent updates")
@@ -437,6 +441,34 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(page).to have_listed_case(investigation.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+    end
+
+    describe "Case status" do
+      scenario "filtering for both open and closed cases" do
+        within_fieldset("Case status") { choose "All" }
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(closed_investigation.pretty_id)
+        number_of_total_cases = Investigation.count
+        expect(page).to have_content("#{number_of_total_cases} cases using the current filters, were found.")
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering only closed cases" do
+        within_fieldset "Case status" do
+          choose "Closed"
+        end
+        click_button "Apply"
+
+        expect(page).to have_content("1 case using the current filters, was found.")
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(closed_investigation.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
