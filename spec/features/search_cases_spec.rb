@@ -259,7 +259,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
             choose "Closed"
           end
           click_button "Apply"
-          
+
           expect(page).to have_content "10001 cases using the current filters, were found."
         end
       end
