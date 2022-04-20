@@ -1,5 +1,5 @@
 <p class="govuk-body">
-  <% if keywords.blank? && filter.blank? %>
+  <% if keywords.blank? %>
     There are currently <%= pluralize count, "business" %>.
   <% else %>
     <% if keywords.present? %>

@@ -1,0 +1,28 @@
+<a href="#page-content" class="govuk-skip-link opss-skip-link">
+  Skip to the main content
+</a>
+<nav aria-label="Secondary">
+  <ul class="govuk-list opss-left-nav">
+    <% if @page_name == "your_businesses" %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "Your businesses", your_businesses_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_businesses") %>
+      </li>
+    <% if @page_name == "team_businesses" %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "Team businesses", team_businesses_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_businesses") %>
+      </li>
+    <% unless ["team_businesses", "your_businesses"].include? @page_name %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "All businesses - Search", all_businesses_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_businesses", "your_businesses"].include? @page_name) %>
+      </li>
+    </ul>
+  </nav>
