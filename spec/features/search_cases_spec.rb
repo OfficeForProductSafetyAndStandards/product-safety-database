@@ -256,7 +256,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         it "shows total number of cases" do
           visit "/cases"
           within_fieldset "Case status" do
-            choose "Closed"
+            choose "All"
           end
           click_button "Apply"
 
