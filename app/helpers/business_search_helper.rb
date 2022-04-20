@@ -1,9 +1,8 @@
-module ProductSearchHelper
+module BusinessSearchHelper
   include SearchHelper
 
   def filter_params(user)
     must_match_filters = [
-      get_hazard_filter,
       get_status_filter
     ].compact
 
@@ -12,12 +11,6 @@ module ProductSearchHelper
     ].compact.flatten
 
     { must: must_match_filters, should: should_match_filters }
-  end
-
-  def get_hazard_filter
-    if params[:hazard_type].present?
-      { match: { "investigations.hazard_type" => @search.hazard_type } }
-    end
   end
 
   def get_status_filter

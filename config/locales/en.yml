@@ -105,6 +105,11 @@ en:
       team_products: Team products
       your_products: Your products
       all_products: All Products - Search
+  businesses:
+      titles:
+        team_businesses: Team businesses
+        your_businesses: Your businesses
+        all_businesses: All Businesses - Search
   investigations:
     activities:
       business:
