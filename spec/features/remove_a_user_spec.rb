@@ -45,6 +45,35 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_opensearch,
           end
         end
 
+        context "when an admin removes a user then clicks back" do
+          scenario "user is deleted once" do
+            visit "/teams/#{team.id}"
+            click_link "Remove"
+
+            expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
+
+            choose("Yes")
+
+            click_button("Save and continue")
+
+            expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
+            expect(page).to have_content "The team member was removed"
+            expect(page).not_to have_content other_user.name
+
+            visit remove_user_path(user_id: other_user.id)
+
+            expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
+
+            choose("Yes")
+
+            click_button("Save and continue")
+
+            expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
+            expect(page).to have_content "The team member has already been removed"
+            expect(page).not_to have_content other_user.name
+          end
+        end
+
         context "when admin does not select an option" do
           scenario "shows error message" do
             visit "/teams/#{team.id}"
