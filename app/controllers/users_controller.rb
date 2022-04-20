@@ -58,8 +58,11 @@ class UsersController < ApplicationController
     return render(:remove) if @remove_user_form.invalid?
 
     if @remove_user_form.remove == "yes"
-      DeleteUser.call!(user: @user, deleted_by: current_user)
-      redirect_to team_path(team), flash: { success: "The team member was removed" }
+      if DeleteUser.call(user: @user, deleted_by: current_user).success?
+        redirect_to team_path(team), flash: { success: "The team member was removed" }
+      else
+        redirect_to team_path(team), flash: { alert: "The team member has already been removed" }
+      end
     else
       redirect_to team_path(team)
     end
