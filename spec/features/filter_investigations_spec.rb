@@ -456,7 +456,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         number_of_total_cases = Investigation.count
         expect(page).to have_content("#{number_of_total_cases} cases using the current filters, were found.")
 
-        expect(find("details#filter-details")["open"]).to eq("open")
+        expect(find("details#filter-details")["open"]).to eq(nil)
       end
 
       scenario "filtering only closed cases" do
@@ -470,7 +470,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(page).not_to have_listed_case(investigation.pretty_id)
         expect(page).to have_listed_case(closed_investigation.pretty_id)
 
-        expect(find("details#filter-details")["open"]).to eq("open")
+        expect(find("details#filter-details")["open"]).to eq(nil)
       end
     end
   end
