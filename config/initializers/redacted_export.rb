@@ -8,21 +8,38 @@ end
 
 # NOTE: Application models can define fields which will form part of a 'redacted' export:
 #     redacted_export_with :id, :created_at, :updated_at
-# NOTE: Rails internal or gem model fields added to the registry below.
 
-ActiveSupport.on_load(:active_storage) do
-  RedactedExport.register_model_attributes(
-    ActiveStorage::Attachment,
-    :id, :blob_id, :created_at, :name, :record_id, :record_type
-  )
+# NOTE: Rails internal or gem model fields can be added to the registry like this:
+# ActiveSupport.on_load(:active_storage) do
+#   RedactedExport.register_model_attributes(
+#     ActiveStorage::Attachment,
+#     :id, :blob_id, :created_at, :name, :record_id, :record_type
+#   )
+# end
 
-  RedactedExport.register_model_attributes(
-    ActiveStorage::Blob,
-    :id, :byte_size, :checksum, :content_type, :created_at, :filename, :service_name
-  )
+# NOTE: Known or non-model tables can be redacted and exported like this:
 
-  RedactedExport.register_model_attributes(
-    ActiveStorage::VariantRecord,
-    :id, :blob_id
-  )
-end
+RedactedExport.register_table_attributes(
+  "active_storage_attachments",
+  :id, :blob_id, :created_at, :name, :record_id, :record_type
+)
+
+RedactedExport.register_table_attributes(
+  "active_storage_blobs",
+  :id, :byte_size, :checksum, :content_type, :created_at, :filename, :service_name
+)
+
+RedactedExport.register_table_attributes(
+  "active_storage_variant_records",
+  :id, :blob_id
+)
+
+RedactedExport.register_table_attributes(
+  "investigation_businesses",
+  :business_id, :created_at, :investigation_id, :relationship, :updated_at
+)
+
+RedactedExport.register_table_attributes(
+  "investigation_products",
+  :created_at, :investigation_id, :product_id, :updated_at
+)
