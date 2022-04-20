@@ -34,6 +34,7 @@ class ChangeCaseOwner
 
     investigation.reload
     investigation.products.each { |product| product.__elasticsearch__.update_document }
+    investigation.businesses.each { |business| business.__elasticsearch__.update_document }
     send_notification_email unless context.silent
   end
 

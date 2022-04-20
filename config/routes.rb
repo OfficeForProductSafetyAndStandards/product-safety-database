@@ -191,6 +191,21 @@ Rails.application.routes.draw do
     end
   end
 
+  # yo
+  resource :products, only: [], path: "products" do
+    get "your-products", to: "products#your_products", as: "your"
+    get "team-products", to: "products#team_products", as: "team"
+    get "all-products", to: "products#index", as: "all"
+  end
+
+  resource :businesses, only: [], path: "businesses" do
+    get "your-businesses", to: "businesses#your_businesses", as: "your"
+    get "team-businesses", to: "businesses#team_businesses", as: "team"
+    get "all-businesses", to: "businesses#index", as: "all"
+  end
+
+  resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
+
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do
       member do
@@ -203,14 +218,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  resource :products, only: [], path: "products" do
-    get "your-products", to: "products#your_products", as: "your"
-    get "team-products", to: "products#team_products", as: "team"
-    get "all-products", to: "products#index", as: "all"
-  end
-
-  resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
 
   resources :product_exports do
     collection do
