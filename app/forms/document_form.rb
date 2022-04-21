@@ -62,7 +62,6 @@ private
   end
 
   def max_file_byte_size
-    # 100.megabytes
-    2.kilobytes
+    100.megabytes
   end
 end
