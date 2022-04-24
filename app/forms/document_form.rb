@@ -48,6 +48,8 @@ class DocumentForm
       # we also have made a mess of the analyzer config i think. I don't think master analyzer is even needed.
       # byebug
       # document.analyze_later
+      Rails.logger.info("Abouttosleep")
+      Rails.logger.info(document.metadata)
       sleep 10
 
       Rails.logger.info("$$$$$$$$$$$$$$$$$$$ analyze_later has not been called")
