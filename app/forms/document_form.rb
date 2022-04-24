@@ -47,7 +47,8 @@ class DocumentForm
       # i don't think we actually need to call analyze later here as it seems to be done automatically
       # we also have made a mess of the analyzer config i think. I don't think master analyzer is even needed.
       # byebug
-      # document.analyze_later
+      Rails.logger.info("Running analyze_later now")
+      document.analyze_later
       Rails.logger.info("Abouttosleep")
       Rails.logger.info(document.metadata)
       sleep 10
