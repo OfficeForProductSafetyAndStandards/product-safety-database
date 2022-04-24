@@ -17,6 +17,10 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
+    Rails.logger.info("Validatingdocumentformnow")
+    @document_form.valid?
+    Rails.logger.info("Donevalidatingdocumentform")
+
     unless @document_form.valid?
       @parent = @parent.decorate
       return render :new
