@@ -1,0 +1,62 @@
+DSN keys
+PSD
+
+VALID MAMMAL = https://14023c267ab7493badd95b39707420c0@o97159.ingest.sentry.io/1329381
+               https://14023c267ab7493badd95b39707420c0@o97159.ingest.sentry.io/1329381
+used for my current testing on int
+
+CLEAN LOON = https://fe08719d51d84d37837e5a2a2755f909@o97159.ingest.sentry.io/1329381
+used for ?
+
+DEFAULT = https://f6993fb69b4e41ea81bdddf477295587@o97159.ingest.sentry.io/1329381
+          https://f6993fb69b4e41ea81bdddf477295587@sentry.io/1329381
+          https://f6993fb69b4e41ea81bdddf477295587@sentry.io/1329381
+          https://f6993fb69b4e41ea81bdddf477295587@sentry.io/1329381
+used for review apps and prod and staging.
+
+COS
+
+DEFAULT = https://861a588e41524ea8bc4a070ce2f5a3cf@o97159.ingest.sentry.io/1398436
+          https://861a588e41524ea8bc4a070ce2f5a3cf@sentry.io/1398436
+
+PAR
+
+DEFAULT = https://627128d512794c438d2a3697b424942a@o97159.ingest.sentry.io/218320
+
+Note: This is a deprecated dsn which includes a secret which is no longer needed for newer SDK versions.
+
+Used for review apps.
+
+-----------------------------------------
+
+90 days
+
+68k errors
+
+PAR - 52k - 76%
+COS- 15k - 22%
+PSD - 934 - 1.5%
+AV - 91 - 0.5%
+
+I propose we have 2 DSN keys for each project (apart from AV), prod and non prod:
+
+PAR prod - 67.5k
+PAR non-prod - 7.5k
+COS prod - 20k
+COS non-prod - 2k
+PSD prod - 1500
+PSD non-prod - 150
+AV - 350
+
+
+
+-----------------------------------------
+
+
+COS, PSD and PAR already use seperate DSN keys so we should be able to seperate them out on our quota without the need to change any env variables. These DSN keys are currently used for all environments however.
+
+Have tested changing env variables on PSD by adding VALID_MAMMAL. Errors are still correctly recorded on Sentry.
+
+We can rate limit by DSN, however we are currently on the teams plan, we need to be on the business plan to do this.
+
+Surfaces slack notifications still regardless of DSN although currently we only trigger alerts for our prod environment. I briefly created an alert for all environments to verify that we could notify on slack for new DSN key on a review app.
