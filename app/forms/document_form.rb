@@ -42,18 +42,16 @@ class DocumentForm
         content_type: document.content_type
       )
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
-      # raise error unless document.image?
-      # raise error unless document.byte_size > x
-      # i don't think we actually need to call analyze later here as it seems to be done automatically
-      # we also have made a mess of the analyzer config i think. I don't think master analyzer is even needed.
-      # byebug
-      Rails.logger.info("Running analyze_later now")
-      document.analyze_later
-      Rails.logger.info("Abouttosleep")
-      Rails.logger.info(document.metadata)
-      sleep 10
 
-      Rails.logger.info("$$$$$$$$$$$$$$$$$$$ analyze_later has not been called")
+      Rails.logger.info("Runninganalyzenow")
+      # ok the below actually does run the analyzer
+      # can we run it synchronously?
+      document.analyze
+
+
+      Rails.logger.info("Abouttosleep")
+      sleep 10
+      Rails.logger.info("Hasthisworked? metadata below")
       Rails.logger.info(document.metadata)
 
       self.existing_document_file_id = document.signed_id
