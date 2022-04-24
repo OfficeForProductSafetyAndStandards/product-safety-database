@@ -31,6 +31,8 @@ class DocumentsController < ApplicationController
       user: current_user,
     }))
 
+    Rails.logger.info("Adddocumenthasbeencalledisthiswhenactivejobisrun?!?!")
+
     flash[:success] = t(:file_added, type: @parent.model_name.human.downcase)
 
     return redirect_to(@parent) unless @parent.is_a?(Investigation)
