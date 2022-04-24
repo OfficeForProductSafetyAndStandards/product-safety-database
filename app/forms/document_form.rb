@@ -46,8 +46,12 @@ class DocumentForm
       # raise error unless document.byte_size > x
       # i don't think we actually need to call analyze later here as it seems to be done automatically
       # we also have made a mess of the analyzer config i think. I don't think master analyzer is even needed.
-      document.analyze_later
-      sleep 2
+      # byebug
+      # document.analyze_later
+      sleep 10
+
+      Rails.logger.info("$$$$$$$$$$$$$$$$$$$ analyze_later has not been called")
+      Rails.logger.info(document.metadata)
 
       self.existing_document_file_id = document.signed_id
     end
