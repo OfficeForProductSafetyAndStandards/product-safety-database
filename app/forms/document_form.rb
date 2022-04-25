@@ -66,7 +66,6 @@ class DocumentForm
 private
 
   def file_size_acceptable
-    Rails.logger.info("RUNNINGFILESIZEISACCEPTABLEVALIDATION")
     return unless document.byte_size > max_file_byte_size
 
     errors.add(:base, :file_too_large, message: "File is too big, allowed size is #{max_file_byte_size / 1.megabyte} MB")
@@ -77,7 +76,8 @@ private
   end
 
   def file_is_free_of_viruses
-    return if document.metadaata["safe"] == true
+    Rails.logger.info("RUNNINGFILESIZEISACCEPTABLEVALIDATION")
+    return if document.metadata["safe"] == true
 
     errors.add(:base, :virus, message: "File has a virus")
   end
