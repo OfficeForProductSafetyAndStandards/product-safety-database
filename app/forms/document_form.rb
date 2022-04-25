@@ -15,7 +15,7 @@ class DocumentForm
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
   validates :description, length: { maximum: 10_000 }
   validate :file_size_acceptable, if: -> { existing_document_file_id.blank? && document.present? }
-  validate :file_is_free_of_viruses, if: -> { existing_document_file_id.blank? && document.present? }
+  validate :file_is_free_of_viruses, if: -> { document.present? }}
 
   before_validation do
     trim_line_endings(:description)

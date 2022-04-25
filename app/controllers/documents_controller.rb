@@ -22,9 +22,12 @@ class DocumentsController < ApplicationController
     Rails.logger.info("Donevalidatingdocumentform")
 
     unless @document_form.valid?
+
       @parent = @parent.decorate
       return render :new
     end
+
+    Rails.logger.info("DocumentFormIsValid")
 
     AddDocument.call!(@document_form.attributes.except("existing_document_file_id").merge({
       parent: @parent,
