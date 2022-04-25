@@ -15,6 +15,7 @@ class DocumentForm
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
   validates :description, length: { maximum: 10_000 }
   validate :file_size_acceptable, if: -> { existing_document_file_id.blank? && document.present? }
+  validate :file_is_free_of_viruses, if: -> { existing_document_file_id.blank? && document.present? }
 
   before_validation do
     trim_line_endings(:description)
@@ -53,7 +54,11 @@ class DocumentForm
       sleep 10
       Rails.logger.info("Hasthisworked? metadata below")
       Rails.logger.info(document.metadata)
-
+      Rails.logger.info(document)
+      # yes
+      # {"title"=>"fdsfsafsa", "description"=>"fdsadfsafasfdasfsad", "created_by"=>"195e256b-eb7b-45d7-9137-ac6f3b492b0c", "updated"=>"2022-04-24T14:59:04.786+01:00", "width"=>3024, "height"=>4032, "safe"=>true, "analyzed"=>true
+      document.metadata["safe"] = false
+      document.save
       self.existing_document_file_id = document.signed_id
     end
   end
@@ -68,5 +73,11 @@ private
 
   def max_file_byte_size
     100.megabytes
+  end
+
+  def file_is_free_of_viruses
+    return if document.metadaata["safe"] == true
+
+    errors.add(:base, :virus, message: "File has a virus")
   end
 end
