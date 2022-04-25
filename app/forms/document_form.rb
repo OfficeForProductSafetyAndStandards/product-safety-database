@@ -45,7 +45,10 @@ class DocumentForm
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
 
       # this runs the analyzer sync i think, so maybe we don't need a sleep?
-      document.analyze
+      document.analyze_later
+      sleep 2
+      Rails.logger.info(document.metadata)
+      Rails.logger.info(document.attributes)
 
       self.existing_document_file_id = document.signed_id
     end
