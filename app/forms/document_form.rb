@@ -44,8 +44,8 @@ class DocumentForm
       )
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
 
-      # this runs the analyzer sync i think, so maybe we don't need a sleep?
-      document.analyze_later
+      # i think we need to run analyze synchronously because we want the AntiVirusAnalyzer to run now so that we can know if the document is safe before we attach it
+      document.analyze
 
       self.existing_document_file_id = document.signed_id
     end
