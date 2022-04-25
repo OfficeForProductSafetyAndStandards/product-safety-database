@@ -59,6 +59,7 @@ class DocumentForm
       # {"title"=>"fdsfsafsa", "description"=>"fdsadfsafasfdasfsad", "created_by"=>"195e256b-eb7b-45d7-9137-ac6f3b492b0c", "updated"=>"2022-04-24T14:59:04.786+01:00", "width"=>3024, "height"=>4032, "safe"=>true, "analyzed"=>true
       document.metadata["safe"] = false
       document.save
+      errors.add(:base, :virus, message: "File has a virus") unless document.metadata["safe"] == true
       self.existing_document_file_id = document.signed_id
     end
   end
