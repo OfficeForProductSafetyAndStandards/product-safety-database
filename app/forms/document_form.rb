@@ -46,9 +46,6 @@ class DocumentForm
 
       # this runs the analyzer sync i think, so maybe we don't need a sleep?
       document.analyze_later
-      sleep 2
-      Rails.logger.info(document.metadata)
-      Rails.logger.info(document.attributes)
 
       self.existing_document_file_id = document.signed_id
     end
@@ -67,6 +64,8 @@ private
   end
 
   def file_is_free_of_viruses
+    # don't run this validation unless document has been analyzed by antivirus analyzer
+    return unless document.metadata.keys.include?("safe")
     return if document.metadata["safe"] == true
 
     errors.add(:base, :virus, message: "Files must be virus free")

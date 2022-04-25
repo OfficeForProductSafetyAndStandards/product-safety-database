@@ -17,16 +17,13 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
-    Rails.logger.info("Validatingdocumentformnow")
-    @document_form.valid?
-    Rails.logger.info("Donevalidatingdocumentform")
+    # sleep here to give analyze a chance to run before validating
+    sleep 2
 
     unless @document_form.valid?
       @parent = @parent.decorate
       return render :new
     end
-
-    Rails.logger.info("DocumentFormIsValid")
 
     AddDocument.call!(@document_form.attributes.except("existing_document_file_id").merge({
       parent: @parent,
