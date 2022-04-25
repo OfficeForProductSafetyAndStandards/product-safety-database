@@ -66,6 +66,7 @@ class DocumentForm
 private
 
   def file_size_acceptable
+    Rails.logger.info("RUNNINGFILESIZEISACCEPTABLEVALIDATION")
     return unless document.byte_size > max_file_byte_size
 
     errors.add(:base, :file_too_large, message: "File is too big, allowed size is #{max_file_byte_size / 1.megabyte} MB")
