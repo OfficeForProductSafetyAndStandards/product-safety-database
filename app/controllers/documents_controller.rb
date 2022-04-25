@@ -22,7 +22,6 @@ class DocumentsController < ApplicationController
     Rails.logger.info("Donevalidatingdocumentform")
 
     unless @document_form.valid?
-
       @parent = @parent.decorate
       return render :new
     end

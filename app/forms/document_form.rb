@@ -14,7 +14,7 @@ class DocumentForm
   validates :title, presence: true
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
   validates :description, length: { maximum: 10_000 }
-  validate :file_size_acceptable, if: -> { existing_document_file_id.blank? && document.present? }
+  validate :file_size_acceptable, if: -> { document.present? }
   validate :file_is_free_of_viruses, if: -> { document.present? }
 
   before_validation do
@@ -44,21 +44,8 @@ class DocumentForm
       )
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
 
-      Rails.logger.info("Runninganalyzenow")
-      # ok the below actually does run the analyzer
-      # can we run it synchronously?
+      # this runs the analyzer sync i think, so maybe we don't need a sleep?
       document.analyze
-
-
-      Rails.logger.info("Abouttosleep")
-      sleep 10
-      Rails.logger.info("Hasthisworked? metadata below")
-      Rails.logger.info(document.metadata)
-      Rails.logger.info(document)
-      # yes
-      # {"title"=>"fdsfsafsa", "description"=>"fdsadfsafasfdasfsad", "created_by"=>"195e256b-eb7b-45d7-9137-ac6f3b492b0c", "updated"=>"2022-04-24T14:59:04.786+01:00", "width"=>3024, "height"=>4032, "safe"=>true, "analyzed"=>true
-      document.metadata["safe"] = false
-      document.save
 
       self.existing_document_file_id = document.signed_id
     end
@@ -77,9 +64,8 @@ private
   end
 
   def file_is_free_of_viruses
-    Rails.logger.info("RUNNINGFILESIZEISACCEPTABLEVALIDATION")
     return if document.metadata["safe"] == true
 
-    errors.add(:base, :virus, message: "File has a virus")
+    errors.add(:base, :virus, message: "Files must be virus free")
   end
 end
