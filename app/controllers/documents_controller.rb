@@ -17,7 +17,7 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
-    # sleep 2
+    sleep 2
 
     unless @document_form.valid?
       @parent = @parent.decorate
