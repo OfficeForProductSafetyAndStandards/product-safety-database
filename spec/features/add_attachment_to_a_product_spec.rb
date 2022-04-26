@@ -29,7 +29,7 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     click_button "Save attachment"
 
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect_confirmation_banner("File has been added to the product")
+    expect_confirmation_banner("The image was added")
 
     within "#images" do
       expect(page).to have_selector("h2", text: title)

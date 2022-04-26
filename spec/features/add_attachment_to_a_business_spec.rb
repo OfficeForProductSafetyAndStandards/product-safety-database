@@ -28,7 +28,7 @@ RSpec.feature "Add an attachment to a business", :with_stubbed_opensearch, :with
     click_button "Save attachment"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: business.trading_name)
-    expect_confirmation_banner("File has been added to the business")
+    expect_confirmation_banner("The image was added")
 
     within "#attachments" do
       expect(page).to have_selector("h2", text: title)
