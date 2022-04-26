@@ -766,6 +766,9 @@ en:
   file_added: "File has been added to the %{type}"
   file_updated: "File has been updated"
   file_removed: "File was successfully removed"
+  image_added: "The image was added"
+  image_updated: "The image was updated"
+  image_removed: "The image was successfully removed"
   otp_code:
     blank: "Enter the security code"
     too_short: "You haven’t entered enough numbers"

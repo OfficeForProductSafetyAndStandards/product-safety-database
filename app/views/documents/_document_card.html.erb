@@ -21,7 +21,7 @@
 
     <p class="govuk-body"><%= document.description %></p>
 
-    <% if analyzed %>
+    <% if analyzed && safe %>
       <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
          "(#{document.title}, opens in new tab)",
          document,

@@ -1,6 +1,8 @@
 <%
   hide_link ||= false
   class_name ||= ""
+  analyzed = document.metadata["analyzed"]
+  safe = document.metadata["safe"]
   image_class = if document.variable?
                   "app-document-preview__image"
                 else
@@ -9,7 +11,7 @@
 %>
 
 <div class="app-document-preview <%= class_name %>">
-  <% if false %>
+  <% if analyzed && safe %>
     <% if document.image? %>
       <div class="<%= image_class %>">
         <% if hide_link %>
