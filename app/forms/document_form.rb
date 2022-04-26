@@ -64,6 +64,8 @@ private
   end
 
   def file_is_free_of_viruses
+    # don't run this validation unless document has been analyzed by antivirus analyzer
+    return unless document.metadata.keys.include?("safe")
     return if document.metadata["safe"] == true
 
     errors.add(:base, :virus, message: "Files must be virus free")
