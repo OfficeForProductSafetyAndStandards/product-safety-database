@@ -44,6 +44,8 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
   end
 
   describe "validations" do
+    subject(:form) { described_class.from(existing_document) }
+
     context "with valid attributes" do
       it "is valid" do
         expect(form).to be_valid
