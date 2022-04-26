@@ -45,7 +45,7 @@ class DocumentForm
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
 
       # i think we need to run analyze synchronously because we want the AntiVirusAnalyzer to run now so that we can know if the document is safe before we attach it
-      # document.analyze
+      document.analyze_later
 
       self.existing_document_file_id = document.signed_id
     end
@@ -56,7 +56,7 @@ private
   def file_size_acceptable
     return unless document.byte_size > max_file_byte_size
 
-    errors.add(:base, :file_too_large, message: "File is too big, allowed size is #{max_file_byte_size / 1.megabyte} MB")
+    errors.add(:base, :file_too_large, message: "Files must be smaller than #{max_file_byte_size / 1.megabyte} MB in size")
   end
 
   def max_file_byte_size
