@@ -44,7 +44,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
   end
 
   describe "validations" do
-    subject(:form) { described_class.from(existing_document) }
+    # subject(:form) { described_class.from(existing_document) }
 
     context "with valid attributes" do
       it "is valid" do
@@ -79,7 +79,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
     end
 
     context "with long description" do
-      let(:description) { "0" * 999_999 }
+      let(:description) { "0" * 10001}
 
       it "is invalid" do
         expect(form).to be_invalid

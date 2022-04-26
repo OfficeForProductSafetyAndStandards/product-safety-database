@@ -57,7 +57,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     click_button "Save attachment"
 
     expect_to_be_on_images_page
-    expect_confirmation_banner("File has been added to the allegation")
+    expect_confirmation_banner("The image was added")
 
     expect(page).to have_selector("h2", text: title)
     expect(page).to have_selector("p", text: description)
@@ -82,7 +82,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       click_button "Save attachment"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
-      expect(page).not_to have_error_messages
+      expect(page).to have_error_messages
       expect(page).to have_error_summary "Files must be virus free"
     end
   end
@@ -110,7 +110,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).not_to have_error_messages
       # expect(page).to have_error_summary "Files must be virus free"
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "File is too big, allowed size is 0 MB"
+      expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
     end
   end
 end
