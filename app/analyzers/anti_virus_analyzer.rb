@@ -12,6 +12,7 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       response = RestClient::Request.execute method: :post, url: Rails.application.config.antivirus_url, user: ENV["ANTIVIRUS_USERNAME"], password: ENV["ANTIVIRUS_PASSWORD"], payload: { file: }
       body = JSON.parse(response.body)
       # adding user_notified false to show that the user has not seen an error message about this issue yet.
+      Rails.logger.info "$$$$$ ANTIVIRUS ANALYZER CALLED"
       { safe: body["safe"], user_notified: false }
     end
   end
