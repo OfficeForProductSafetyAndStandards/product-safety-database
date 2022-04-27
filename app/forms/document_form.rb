@@ -46,7 +46,7 @@ class DocumentForm
 
       # i think we need to run analyze synchronously because we want the AntiVirusAnalyzer to run now so that we can know if the document is safe before we attach it
       Rails.logger.info "£££££££ Does it create a background job if we call analyze directly?"
-      document.analyze
+      document.analyze_later
 
       self.existing_document_file_id = document.signed_id
     end
