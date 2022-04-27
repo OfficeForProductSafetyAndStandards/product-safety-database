@@ -7,7 +7,8 @@ module Investigations
       authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
 
-      @images_with_viruses = images_to_raise_errors
+      @images_with_viruses_present = images_with_viruses_created_by_current_user.any?
+      destroy_images_with_viruses
       # @images_with_viruses.each { |image| image.update(metadata: image.metadata.merge({ user_notified: true })) }
 
       @breadcrumbs = {
@@ -20,8 +21,14 @@ module Investigations
 
     private
 
-    def images_to_raise_errors
-      @investigation.images.map(&:blob).select { |b| b.metadata["safe"] == false &&  b.metadata["user_notified"] == false && b.metadata["created_by"] == current_user.id }
+    def images_with_viruses_created_by_current_user
+      @investigation.images.map(&:blob).select { |b| b.metadata["safe"] == false && b.metadata["created_by"] == current_user.id }
+    end
+
+    def destroy_documents_with_viruses
+      images_with_viruses_created_by_current_user.each do |image|
+        DeleteDocument.call!(user: current_user, parent: image.parent, document: image)
+      end
     end
   end
 end

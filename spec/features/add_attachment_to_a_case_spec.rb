@@ -63,7 +63,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     expect(page).to have_selector("p", text: description)
   end
 
-  context "fails the antivirus check" do
+  context "fails the antivirus check", :with_stubbed_failing_antivirus do
     it "shows error" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}/supporting-information/new"
@@ -81,7 +81,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
       click_button "Save attachment"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
+      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/images")
       expect(page).to have_error_messages
       expect(page).to have_error_summary "Files must be virus free"
     end

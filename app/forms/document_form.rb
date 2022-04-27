@@ -44,8 +44,6 @@ class DocumentForm
       )
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
 
-      # i think we need to run analyze synchronously because we want the AntiVirusAnalyzer to run now so that we can know if the document is safe before we attach it
-      Rails.logger.info "£££££££ Does it create a background job if we call analyze directly?"
       document.analyze_later
 
       self.existing_document_file_id = document.signed_id
@@ -67,6 +65,7 @@ private
   def file_is_free_of_viruses
     # don't run this validation unless document has been analyzed by antivirus analyzer
     return unless document.metadata.keys.include?("safe")
+
     return if document.metadata["safe"] == true
 
     errors.add(:base, :virus, message: "Files must be virus free")

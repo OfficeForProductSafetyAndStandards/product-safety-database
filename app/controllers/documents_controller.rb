@@ -17,15 +17,7 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
-    Rails.logger.info "!!!!!!! initial metadata before the sleep"
-    Rails.logger.info @document_form.document.metadata
-
-    sleep 1
-
-    Rails.logger.info "%%%%%%%%%%%%%%%%% METADATA"
-    # 10 seconds works
-    Rails.logger.info @document_form.document.reload.metadata
-
+    sleep 2
 
     unless @document_form.valid?
       @parent = @parent.decorate
