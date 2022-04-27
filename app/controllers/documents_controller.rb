@@ -22,8 +22,8 @@ class DocumentsController < ApplicationController
 
     sleep 10
 
-    Rails.logger.info "$$$$$ METADATA"
-    Rails.logger.info @document_form.document.metadata
+    Rails.logger.info "%%%%%%%%%%%%%%%%% METADATA"
+    Rails.logger.info @document_form.document.reload.metadata
 
 
     unless @document_form.valid?
