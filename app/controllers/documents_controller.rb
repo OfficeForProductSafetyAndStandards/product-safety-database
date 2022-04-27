@@ -20,9 +20,10 @@ class DocumentsController < ApplicationController
     Rails.logger.info "!!!!!!! initial metadata before the sleep"
     Rails.logger.info @document_form.document.metadata
 
-    sleep 10
+    sleep 4
 
     Rails.logger.info "%%%%%%%%%%%%%%%%% METADATA"
+    # 10 seconds works
     Rails.logger.info @document_form.document.reload.metadata
 
 
