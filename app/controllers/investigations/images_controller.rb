@@ -6,10 +6,8 @@ module Investigations
 
       authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
-
-      @images_with_viruses_present = images_with_viruses_created_by_current_user.any?
+      @images_with_viruses_present = images_with_viruses_created_by_current_user
       destroy_images_with_viruses
-      # @images_with_viruses.each { |image| image.update(metadata: image.metadata.merge({ user_notified: true })) }
 
       @breadcrumbs = {
         items: [
@@ -25,9 +23,11 @@ module Investigations
       @investigation.images.map(&:blob).select { |b| b.metadata["safe"] == false && b.metadata["created_by"] == current_user.id }
     end
 
-    def destroy_documents_with_viruses
+    def destroy_images_with_viruses
       images_with_viruses_created_by_current_user.each do |image|
-        DeleteDocument.call!(user: current_user, parent: image.parent, document: image)
+        image.attachments.each do |attachment|
+          DeleteDocument.call!(user: current_user, document: attachment)
+        end
       end
     end
   end
