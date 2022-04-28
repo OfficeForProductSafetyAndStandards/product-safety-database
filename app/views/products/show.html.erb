@@ -6,6 +6,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% if @images_with_viruses_present.any? %>
+      <%= govukErrorSummary(titleText: "There is a problem", errorList: [{:text=>"One or more images failed to upload. Image files must be virus free", :href=>"#summary"}]) %>
+    <% end %>
     <span class="govuk-caption-l">Product</span>
     <h1 class="govuk-heading-l"><%= @product.name %></h1>
 

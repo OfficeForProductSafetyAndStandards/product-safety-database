@@ -17,6 +17,7 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
+    # sleep to give the antivirus checks a chance to be completed before running document form validations
     sleep 2
 
     unless @document_form.valid?

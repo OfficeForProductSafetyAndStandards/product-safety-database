@@ -34,6 +34,8 @@ class ProductsController < ApplicationController
   # GET /products/1.json
   def show
     respond_to do |format|
+      @images_with_viruses_present = images_with_viruses_created_by_current_user
+      destroy_images_with_viruses
       format.html
     end
   end
@@ -136,5 +138,17 @@ private
 
   def count_to_display
     params[:hazard_type].blank? && params[:q].blank? ? Product.count : @results.total_count
+  end
+
+  def images_with_viruses_created_by_current_user
+    @product.images.map(&:blob).select { |b| b.metadata["safe"] == false && b.metadata["created_by"] == current_user.id }
+  end
+
+  def destroy_images_with_viruses
+    images_with_viruses_created_by_current_user.each do |image|
+      image.attachments.each do |attachment|
+        DeleteDocument.call!(user: current_user, document: attachment)
+      end
+    end
   end
 end
