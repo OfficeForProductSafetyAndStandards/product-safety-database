@@ -14,8 +14,8 @@ class DocumentForm
   validates :title, presence: true
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
   validates :description, length: { maximum: 10_000 }
-  validate :file_size_acceptable, if: -> { document.present? }
-  validate :file_is_free_of_viruses, if: -> { document.present? }
+  validate :file_size_acceptable, if: -> { document.present? && existing_document_file_id.present? }
+  validate :file_is_free_of_viruses, if: -> { document.present? && existing_document_file_id.present? }
 
   before_validation do
     trim_line_endings(:description)
@@ -27,7 +27,7 @@ class DocumentForm
 
   def initialize(*args)
     super
-    self.document ||= ActiveStorage::Blob.find_signed!(existing_document_file_id) if existing_document_file_id.present?
+    self.document = ActiveStorage::Blob.find_signed!(existing_document_file_id) if existing_document_file_id.present?
   end
 
   def cache_file!(user)
