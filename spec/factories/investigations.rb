@@ -107,6 +107,14 @@ FactoryBot.define do
       end
     end
 
+    trait :with_image do
+      documents { [Rack::Test::UploadedFile.new("test/fixtures/files/testImage.png")] }
+      after(:create) do |investigation|
+        investigation.documents.first.blob.metadata["title"] = "Test document"
+        investigation.documents.first.blob.save!
+      end
+    end
+
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
     before(:create) do |investigation, options|
