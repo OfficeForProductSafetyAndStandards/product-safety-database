@@ -82,8 +82,9 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       click_button "Save attachment"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/images")
-      expect(page).to have_error_messages
-      expect(page).to have_error_summary "Files must be virus free"
+
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "One or more images failed to upload. Image files must be virus free"
     end
   end
 
@@ -107,8 +108,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       click_button "Save attachment"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
-      expect(page).not_to have_error_messages
-      # expect(page).to have_error_summary "Files must be virus free"
+
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
     end
