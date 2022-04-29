@@ -30,7 +30,6 @@ class DocumentsController < ApplicationController
       user: current_user,
     }))
 
-
     flash[:success] = @document_form.document.image? ? t(:image_added) : t(:file_added, type: @parent.model_name.human.downcase)
 
     return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?

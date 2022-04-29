@@ -17,7 +17,7 @@ module Investigations
       }
     end
 
-    private
+  private
 
     def images_with_viruses_created_by_current_user
       @investigation.images.map(&:blob).select { |b| b.metadata["safe"] == false && b.metadata["created_by"] == current_user.id }

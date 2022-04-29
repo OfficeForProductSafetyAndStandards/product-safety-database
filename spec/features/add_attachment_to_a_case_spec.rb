@@ -63,7 +63,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     expect(page).to have_selector("p", text: description)
   end
 
-  context "fails the antivirus check", :with_stubbed_failing_antivirus do
+  context "when it fails the antivirus check", :with_stubbed_failing_antivirus do
     it "shows error" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}/supporting-information/new"
@@ -88,9 +88,10 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     end
   end
 
-  context "image is too large" do
+  # rubocop:disable RSpec/AnyInstance
+  context "when image is too large" do
     it "shows error" do
-      allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.kilobytes}
+      allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.kilobytes }
       sign_in user
       visit "/cases/#{investigation.pretty_id}/supporting-information/new"
 
@@ -112,5 +113,6 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
     end
+    # rubocop:enable RSpec/AnyInstance
   end
 end

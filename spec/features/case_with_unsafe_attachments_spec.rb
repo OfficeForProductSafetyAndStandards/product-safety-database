@@ -7,11 +7,11 @@ RSpec.feature "Case with unsafe image", :with_stubbed_opensearch, :with_stubbed_
 
   before do
     blob = investigation.images.first.blob
-    blob.update!(metadata: blob.metadata.merge({safe: false, created_by: user.id}))
+    blob.update!(metadata: blob.metadata.merge({ safe: false, created_by: user.id }))
   end
 
-  context 'when user is the user that originally attached the image' do
-    it 'displays error alerting user that an attached image is not virus free and deletes offending images' do
+  context "when user is the user that originally attached the image" do
+    it "displays error alerting user that an attached image is not virus free and deletes offending images" do
       sign_in(user)
       visit investigation_images_path(investigation)
 
@@ -25,8 +25,8 @@ RSpec.feature "Case with unsafe image", :with_stubbed_opensearch, :with_stubbed_
     end
   end
 
-  context 'when user is not the user that originally attached the image' do
-    it 'does not display the error or delete the image' do
+  context "when user is not the user that originally attached the image" do
+    it "does not display the error or delete the image" do
       sign_in(other_user)
       visit investigation_images_path(investigation)
 
