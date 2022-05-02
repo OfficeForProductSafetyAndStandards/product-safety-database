@@ -6,6 +6,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
   let(:image_file)  { Rails.root.join "test/fixtures/files/testImage.png" }
   let(:other_file)  { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
+  let(:empty_file)  { Rails.root.join "test/fixtures/files/empty_file.txt" }
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
@@ -113,6 +114,31 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
     end
-    # rubocop:enable RSpec/AnyInstance
+  end
+  # rubocop:enable RSpec/AnyInstance
+
+  context "when image is too small" do
+    it "shows error" do
+      sign_in user
+      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
+
+      expect_to_be_on_add_supporting_information_page
+
+      choose "Other document or attachment"
+      click_button "Continue"
+
+      expect_to_be_on_add_attachment_to_a_case_page
+
+      attach_file "document[document]", empty_file
+      fill_in "Document title", with: title
+      fill_in "Description",    with: description
+
+      click_button "Save attachment"
+
+      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
+
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "File did not upload correctly"
+    end
   end
 end
