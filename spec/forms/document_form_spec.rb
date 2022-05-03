@@ -69,6 +69,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
 
       context "when existing_document_file_id is supplied" do
         let(:existing_document_file_id) { existing_document.signed_id }
+
         it "is valid" do
           expect(form).to be_valid
         end
