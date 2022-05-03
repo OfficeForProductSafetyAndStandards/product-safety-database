@@ -88,7 +88,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
+      expect(errors_list[0].text).to eq "Image file must be smaller than 0 MB in size"
     end
   end
   # rubocop:enable RSpec/AnyInstance
@@ -114,7 +114,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Image did not upload correctly. Replace the file or try again."
+      expect(errors_list[0].text).to eq "The selected file could not be uploaded – try again"
     end
   end
 
@@ -141,7 +141,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
+      expect(errors_list[0].text).to eq "File must be smaller than 0 MB in size"
     end
     # rubocop:enable RSpec/AnyInstance
   end
@@ -167,7 +167,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "File did not upload correctly. Replace the file or try again."
+      expect(errors_list[0].text).to eq "The selected file could not be uploaded – try again"
     end
   end
 end
