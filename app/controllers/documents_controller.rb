@@ -30,8 +30,12 @@ class DocumentsController < ApplicationController
     flash[:success] = @document_form.document.image? ? t(:image_added) : t(:file_added)
 
     return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?
+<<<<<<< HEAD
     return redirect_to(product_path(@parent, anchor: "attachments")) if is_a_product_file?
     return redirect_to(business_path(@parent, anchor: "attachments")) if is_a_business_file?
+=======
+    return redirect_to(business_path(@parent, anchor: "images")) if is_a_product_image?
+>>>>>>> bab1b9ceb (Fix tests)
     return redirect_to(@parent) unless @parent.is_a?(Investigation)
     return redirect_to investigation_images_path(@parent) if @document_form.document.image?
 
