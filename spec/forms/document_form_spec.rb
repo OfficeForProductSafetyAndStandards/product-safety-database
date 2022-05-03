@@ -44,6 +44,12 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
   end
 
   describe "validations" do
+    let(:existing_document_file_id) { nil }
+
+    before do
+      form.cache_file!(create(:user))
+    end
+
     context "with valid attributes" do
       it "is valid" do
         expect(form).to be_valid
@@ -62,6 +68,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
       let(:document) { nil }
 
       context "when existing_document_file_id is supplied" do
+        let(:existing_document_file_id) { existing_document.signed_id }
         it "is valid" do
           expect(form).to be_valid
         end
