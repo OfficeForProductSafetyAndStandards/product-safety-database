@@ -7,7 +7,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   let(:image_file)  { Rails.root.join "test/fixtures/files/testImage.png" }
   let(:other_file)  { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
   let(:empty_file)  { Rails.root.join "test/fixtures/files/empty_file.txt" }
-  let(:empty_image)  { Rails.root.join "test/fixtures/files/empty_image.png" }
+  let(:empty_image) { Rails.root.join "test/fixtures/files/empty_image.png" }
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
@@ -119,6 +119,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   end
 
   context "when non image file is too large" do
+    # rubocop:disable RSpec/AnyInstance
     it "shows error" do
       allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.bytes }
       sign_in user
@@ -142,8 +143,8 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
     end
+    # rubocop:enable RSpec/AnyInstance
   end
-  # rubocop:enable RSpec/AnyInstance
 
   context "when non image file too small" do
     it "shows error" do

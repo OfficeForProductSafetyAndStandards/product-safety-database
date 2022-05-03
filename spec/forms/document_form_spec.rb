@@ -84,6 +84,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
       end
     end
     # rubocop:disable RSpec/SubjectStub
+
     context "with large file" do
       it "is invalid" do
         allow(form).to receive(:max_file_byte_size).and_return(1)
