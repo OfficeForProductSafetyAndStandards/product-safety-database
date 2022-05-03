@@ -27,7 +27,7 @@ class DocumentForm
 
   def initialize(*args)
     super
-    self.document = ActiveStorage::Blob.find_signed!(existing_document_file_id) if existing_document_file_id.present?
+    self.document ||= ActiveStorage::Blob.find_signed!(existing_document_file_id) if existing_document_file_id.present?
   end
 
   def cache_file!(user)
