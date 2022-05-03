@@ -31,10 +31,8 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
     expect_confirmation_banner("The image was added")
 
-    within "#images" do
-      expect(page).to have_selector("h2", text: title)
-      expect(page).to have_selector("p", text: description)
-    end
+    expect(page).to have_selector("h2", text: title)
+    expect(page).to have_selector("p", text: description)
   end
 
   scenario "Adding an attachment" do
@@ -59,9 +57,7 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
     expect_confirmation_banner("The file was added")
 
-    within "#attachments" do
-      expect(page).to have_selector("h2", text: title)
-      expect(page).to have_selector("p", text: description)
-    end
+    expect(page).to have_selector("h2", text: title)
+    expect(page).to have_selector("p", text: description)
   end
 end
