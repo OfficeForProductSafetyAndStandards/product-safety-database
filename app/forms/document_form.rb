@@ -14,7 +14,8 @@ class DocumentForm
   validates :title, presence: true
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
   validates :description, length: { maximum: 10_000 }
-  validate :file_size_acceptable, if: -> { existing_document_file_id.blank? && document.present? }
+  validate :file_size_below_max, if: -> { document.present? && existing_document_file_id.present? }
+  validate :file_size_above_min, if: -> { document.present? && existing_document_file_id.present? }
 
   before_validation do
     trim_line_endings(:description)
@@ -26,7 +27,7 @@ class DocumentForm
 
   def initialize(*args)
     super
-    self.document ||= ActiveStorage::Blob.find_signed!(existing_document_file_id) if existing_document_file_id.present?
+    self.document = ActiveStorage::Blob.find_signed!(existing_document_file_id) if existing_document_file_id.present?
   end
 
   def cache_file!(user)
@@ -51,13 +52,23 @@ class DocumentForm
 
 private
 
-  def file_size_acceptable
+  def file_size_below_max
     return unless document.byte_size > max_file_byte_size
 
-    errors.add(:base, :file_too_large, message: "File is too big, allowed size is #{max_file_byte_size / 1.megabyte} MB")
+    errors.add(:base, :file_too_large, message: "Files must be smaller than #{max_file_byte_size / 1.megabyte} MB in size")
+  end
+
+  def file_size_above_min
+    return unless document.byte_size < min_file_byte_size
+
+    errors.add(:base, :file_too_large, message: "File did not upload correctly. Replace the file or try again.")
   end
 
   def max_file_byte_size
     100.megabytes
+  end
+
+  def min_file_byte_size
+    1.bytes
   end
 end
