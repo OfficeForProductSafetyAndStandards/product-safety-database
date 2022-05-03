@@ -63,9 +63,8 @@ private
   def file_size_above_min
     return unless document.byte_size < min_file_byte_size
 
-    file_type = document.image? ? "Image file" : "File"
-
-    errors.add(:base, :file_too_large, message: "#{file_type} did not upload correctly. Replace the file or try again.")
+    # using an error that assumes that the upload has failed, rather than that the user has tried to upload an empty file.
+    errors.add(:base, :upload_failed, message: "The selected file could not be uploaded – try again")
   end
 
   def max_file_byte_size
