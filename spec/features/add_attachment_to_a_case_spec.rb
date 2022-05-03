@@ -7,7 +7,11 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   let(:image_file)  { Rails.root.join "test/fixtures/files/testImage.png" }
   let(:other_file)  { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
   let(:empty_file)  { Rails.root.join "test/fixtures/files/empty_file.txt" }
+<<<<<<< HEAD
   let(:empty_image) { Rails.root.join "test/fixtures/files/empty_image.png" }
+=======
+  let(:empty_image)  { Rails.root.join "test/fixtures/files/empty_image.png" }
+>>>>>>> d3275efb8 (Do not allow empty files or files that are too large)
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
@@ -59,7 +63,11 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     click_button "Save attachment"
 
     expect_to_be_on_images_page
+<<<<<<< HEAD
     expect_confirmation_banner("The image was added")
+=======
+    expect_confirmation_banner("The file was added")
+>>>>>>> d3275efb8 (Do not allow empty files or files that are too large)
 
     expect(page).to have_selector("h2", text: title)
     expect(page).to have_selector("p", text: description)
@@ -88,7 +96,11 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
+<<<<<<< HEAD
       expect(errors_list[0].text).to eq "Image file must be smaller than 0 MB in size"
+=======
+      expect(errors_list[0].text).to eq "Files must be smaller than 0 MB in size"
+>>>>>>> d3275efb8 (Do not allow empty files or files that are too large)
     end
   end
   # rubocop:enable RSpec/AnyInstance
@@ -114,7 +126,11 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
+<<<<<<< HEAD
       expect(errors_list[0].text).to eq "The selected file could not be uploaded – try again"
+=======
+      expect(errors_list[0].text).to eq "File did not upload correctly. Replace the file or try again."
+>>>>>>> d3275efb8 (Do not allow empty files or files that are too large)
     end
   end
 
