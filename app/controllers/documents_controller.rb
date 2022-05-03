@@ -18,11 +18,7 @@ class DocumentsController < ApplicationController
     @document_form.cache_file!(current_user)
 
     # sleep to give the antivirus checks a chance to be completed before running document form validations
-    Rails.logger.info "BEFORE!!!!"
-    Rails.logger.info @document_form.document.metadata
     sleep 3
-    Rails.logger.info "AFTER!!!!"
-    Rails.logger.info @document_form.document.metadata
 
     unless @document_form.valid?
       @parent = @parent.decorate
@@ -37,7 +33,8 @@ class DocumentsController < ApplicationController
     if @document_form.document.metadata["safe"] && @document_form.document.metadata["analyzed"]
       flash[:success] = @document_form.document.image? ? t(:image_added) : t(:file_added, type: @parent.model_name.human.downcase)
     else
-      flash[:information] = "The file did not finish uploading - you must refresh the file"
+      file_type = @document_form.document.image? ? "image" : "file"
+      flash[:information] = "The #{file_type} did not finish uploading - you must refresh the #{file_type}"
     end
 
     return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?
