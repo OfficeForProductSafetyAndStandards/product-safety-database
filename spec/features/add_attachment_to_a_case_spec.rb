@@ -59,7 +59,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     click_button "Save attachment"
 
     expect_to_be_on_images_page
-    expect_confirmation_banner("The file was added")
+    expect_confirmation_banner("The image was added")
 
     expect(page).to have_selector("h2", text: title)
     expect(page).to have_selector("p", text: description)
@@ -114,7 +114,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "File did not upload correctly. Replace the file or try again."
+      expect(errors_list[0].text).to eq "Image did not upload correctly. Replace the file or try again."
     end
   end
 
