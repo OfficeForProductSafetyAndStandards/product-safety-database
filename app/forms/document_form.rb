@@ -62,7 +62,7 @@ private
   def file_size_above_min
     return unless document.byte_size < min_file_byte_size
 
-    errors.add(:base, :file_too_large, message: "File did not upload correctly")
+    errors.add(:base, :file_too_large, message: "File did not upload correctly. Replace the file or try again.")
   end
 
   def max_file_byte_size
