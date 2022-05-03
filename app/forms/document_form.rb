@@ -55,13 +55,15 @@ private
   def file_size_below_max
     return unless document.byte_size > max_file_byte_size
 
-    errors.add(:base, :file_too_large, message: "Files must be smaller than #{max_file_byte_size / 1.megabyte} MB in size")
+    file_type = document.image? ? "Image file" : "File"
+
+    errors.add(:base, :file_too_large, message: "#{file_type} must be smaller than #{max_file_byte_size / 1.megabyte} MB in size")
   end
 
   def file_size_above_min
     return unless document.byte_size < min_file_byte_size
 
-    file_type = document.image? ? "Image" : "File"
+    file_type = document.image? ? "Image file" : "File"
 
     errors.add(:base, :file_too_large, message: "#{file_type} did not upload correctly. Replace the file or try again.")
   end
