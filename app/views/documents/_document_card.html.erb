@@ -1,5 +1,6 @@
 <%
   safe = document.metadata["safe"]
+  analyzed = document.metadata["analyzed"]
   document = document.decorate
   heading_classes = heading_classes || "govuk-heading-m govuk-!-margin-bottom-1"
   do_not_show_edit_and_remove_links = do_not_show_edit_and_remove_links || false
@@ -20,7 +21,7 @@
 
     <p class="govuk-body"><%= document.description %></p>
 
-    <% if safe %>
+    <% if analyzed && safe %>
       <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
          "(#{document.title}, opens in new tab)",
          document,
@@ -31,6 +32,17 @@
       <% if (!parent.is_a?(Investigation) || policy(parent).update?(user: current_user)) && !do_not_show_edit_and_remove_links %>
         <%= render "documents/document_card_links", document: document, parent: parent %>
       <% end %>
+    <% else %>
+      <div class="govuk-warning-text govuk-!-margin-right-7 govuk-!-margin-bottom-3 opss-warning-text--s">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            The image did not finish uploading - this may take several minutes or more. Refresh the image to confirm that the upload process has completed.
+        </strong>
+      </div>
+
+      <%= link_to "Refresh the image", "", class: "govuk-button govuk-button--secondary opss-button-refresh" %>
     <% end %>
   </div>
 </div>
