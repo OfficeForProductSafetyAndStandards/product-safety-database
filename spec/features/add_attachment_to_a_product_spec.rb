@@ -9,7 +9,7 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
   let(:title)                 { Faker::Lorem.sentence }
   let(:description)           { Faker::Lorem.paragraph }
 
-  scenario "Adding an image" do
+  scenario "Adding an image", :with_stubbed_antivirus do
     sign_in user
     visit "/products/#{product.id}"
 
@@ -35,7 +35,7 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     expect(page).to have_selector("p", text: description)
   end
 
-  scenario "Adding an attachment" do
+  scenario "Adding an attachment", :with_stubbed_antivirus do
     sign_in user
     visit "/products/#{product.id}"
 
