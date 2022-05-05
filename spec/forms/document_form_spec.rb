@@ -44,6 +44,12 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
   end
 
   describe "validations" do
+    let(:existing_document_file_id) { nil }
+
+    before do
+      form.cache_file!(create(:user))
+    end
+
     context "with valid attributes" do
       it "is valid" do
         expect(form).to be_valid
@@ -62,6 +68,8 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
       let(:document) { nil }
 
       context "when existing_document_file_id is supplied" do
+        let(:existing_document_file_id) { existing_document.signed_id }
+
         it "is valid" do
           expect(form).to be_valid
         end
@@ -77,21 +85,21 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
     end
 
     context "with long description" do
-      let(:description) { "0" * 999_999 }
+      let(:description) { "0" * 10_001 }
 
       it "is invalid" do
         expect(form).to be_invalid
       end
     end
+    # rubocop:disable RSpec/SubjectStub
 
     context "with large file" do
-      let(:existing_document_file_id) { nil }
-      let(:document) { instance_double(ActiveStorage::Blob, byte_size: 200.megabytes) }
-
       it "is invalid" do
+        allow(form).to receive(:max_file_byte_size).and_return(1)
         expect(form).to be_invalid
       end
     end
+    # rubocop:enable RSpec/SubjectStub
   end
 
   describe "#initialize" do

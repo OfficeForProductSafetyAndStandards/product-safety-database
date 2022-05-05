@@ -763,7 +763,8 @@ en:
   coronavirus_related_form:
     inclusion: "Select whether or not the case is related to the coronavirus outbreak"
   enter_email_address: "Enter your email address"
-  file_added: "File has been added to the %{type}"
+  file_added: "The file was added"
+  image_added: "The image was added"
   file_updated: "File has been updated"
   file_removed: "File was successfully removed"
   otp_code:

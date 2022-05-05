@@ -30,7 +30,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
     attach_and_submit_file
 
     expect_to_be_on_images_page
-    expect_confirmation_banner("File has been added to the allegation")
+    expect_confirmation_banner("The image was added")
 
     expect_case_images_page_to_show_entered_information
 
@@ -81,7 +81,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
       attach_and_submit_file
 
       expect_to_be_on_images_page
-      expect_confirmation_banner("File has been added to the allegation")
+      expect_confirmation_banner("The image was added")
 
       expect(page).to have_content "Images (1)"
       expect(page).to have_content "Case images (1)"
