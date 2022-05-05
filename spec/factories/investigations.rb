@@ -100,7 +100,7 @@ FactoryBot.define do
     end
 
     trait :with_document do
-      documents { [Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")] }
+      documents { [Rack::Test::UploadedFile.new("test/fixtures/files/attachment_filename.txt")] }
       after(:create) do |investigation|
         investigation.documents.first.blob.metadata["title"] = "Test document"
         investigation.documents.first.blob.save!

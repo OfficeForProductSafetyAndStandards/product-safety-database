@@ -5,7 +5,7 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
   let(:product) { create(:product) }
 
   let(:image)                 { Rails.root.join "test/fixtures/files/testImage.png" }
-  let(:non_image_attachment)  { Rails.root.join "test/fixtures/files/email_file.txt" }
+  let(:non_image_attachment)  { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
   let(:title)                 { Faker::Lorem.sentence }
   let(:description)           { Faker::Lorem.paragraph }
 
@@ -29,12 +29,10 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     click_button "Save attachment"
 
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect_confirmation_banner("File has been added to the product")
+    expect_confirmation_banner("The image was added")
 
-    within "#images" do
-      expect(page).to have_selector("h2", text: title)
-      expect(page).to have_selector("p", text: description)
-    end
+    expect(page).to have_selector("h2", text: title)
+    expect(page).to have_selector("p", text: description)
   end
 
   scenario "Adding an attachment" do
@@ -57,11 +55,9 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     click_button "Save attachment"
 
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect_confirmation_banner("File has been added to the product")
+    expect_confirmation_banner("The file was added")
 
-    within "#attachments" do
-      expect(page).to have_selector("h2", text: title)
-      expect(page).to have_selector("p", text: description)
-    end
+    expect(page).to have_selector("h2", text: title)
+    expect(page).to have_selector("p", text: description)
   end
 end

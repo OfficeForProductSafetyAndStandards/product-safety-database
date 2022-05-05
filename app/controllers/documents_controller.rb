@@ -27,8 +27,11 @@ class DocumentsController < ApplicationController
       user: current_user,
     }))
 
-    flash[:success] = t(:file_added, type: @parent.model_name.human.downcase)
+    flash[:success] = @document_form.document.image? ? t(:image_added) : t(:file_added)
 
+    return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?
+    return redirect_to(product_path(@parent, anchor: "attachments")) if is_a_product_file?
+    return redirect_to(business_path(@parent, anchor: "attachments")) if is_a_business_file?
     return redirect_to(@parent) unless @parent.is_a?(Investigation)
     return redirect_to investigation_images_path(@parent) if @document_form.document.image?
 
@@ -121,5 +124,17 @@ private
 
   def authorize_if_attached_to_investigation
     authorize @parent, :update? if @parent.is_a? Investigation
+  end
+
+  def is_a_product_image?
+    @parent.is_a?(Product) && @document_form.document.image?
+  end
+
+  def is_a_business_file?
+    @parent.is_a?(Business)
+  end
+
+  def is_a_product_file?
+    @parent.is_a?(Product) && !@document_form.document.image?
   end
 end
