@@ -171,28 +171,26 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     end
   end
 
-  context "when it fails the antivirus check", :with_stubbed_failing_antivirus do
-  it "shows error" do
-    sign_in user
-    visit "/cases/#{investigation.pretty_id}/supporting-information/new"
+  context "when an imagine fails the antivirus check", :with_stubbed_failing_antivirus do
+    it "shows error" do
+      sign_in user
+      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
 
-    expect_to_be_on_add_supporting_information_page
+      expect_to_be_on_add_supporting_information_page
 
-    choose "Other document or attachment"
-    click_button "Continue"
+      choose "Other document or attachment"
+      click_button "Continue"
 
-    expect_to_be_on_add_attachment_to_a_case_page
+      expect_to_be_on_add_attachment_to_a_case_page
 
-    attach_file "document[document]", image_file
-    fill_in "Document title", with: title
-    fill_in "Description",    with: description
+      attach_file "document[document]", image_file
+      fill_in "Document title", with: title
+      fill_in "Description",    with: description
 
-    click_button "Save attachment"
+      click_button "Save attachment"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/images")
-
-    errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "One or more images failed to upload. Image files must be virus free"
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "Files must be virus free"
+    end
   end
-end
 end
