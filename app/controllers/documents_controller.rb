@@ -18,9 +18,11 @@ class DocumentsController < ApplicationController
     @document_form.cache_file!(current_user)
 
     # sleep to give the antivirus checks a chance to be completed before running document form validations
-    sleep 2
-
+    sleep 3
+    
+    Rails.logger.info @document_form.document.metadata
     @document_form.document.try(:reload)
+    Rails.logger.info @document_form.document.metadata
 
     unless @document_form.valid?
       @parent = @parent.decorate
