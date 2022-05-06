@@ -7,7 +7,6 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
     download_blob_to_tempfile do |file|
       response = RestClient::Request.execute method: :post, url: Rails.application.config.antivirus_url, user: ENV["ANTIVIRUS_USERNAME"], password: ENV["ANTIVIRUS_PASSWORD"], payload: { file: }
       body = JSON.parse(response.body)
-      Rails.logger.info "@@@@@@@"
       { safe: body["safe"] }
     end
   end
