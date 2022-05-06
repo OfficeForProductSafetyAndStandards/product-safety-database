@@ -60,4 +60,29 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     expect(page).to have_selector("h2", text: title)
     expect(page).to have_selector("p", text: description)
   end
+
+  context "when an imagine fails the antivirus check", :with_stubbed_failing_antivirus do
+    it "shows error" do
+      sign_in user
+      visit "/products/#{product.id}"
+
+      expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
+
+      click_link "Add attachment"
+      expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
+
+      click_button "Save attachment"
+
+      expect(page).to have_error_summary("Select a file", "Enter a document title")
+
+      attach_file "document[document]", non_image_attachment
+      fill_in "Document title", with: title
+      fill_in "Description",    with: description
+
+      click_button "Save attachment"
+
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "Files must be virus free"
+    end
+  end
 end

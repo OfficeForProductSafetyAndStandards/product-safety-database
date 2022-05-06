@@ -156,8 +156,6 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       choose "Other document or attachment"
       click_button "Continue"
 
-      expect_to_be_on_add_attachment_to_a_case_page
-
       attach_file "document[document]", empty_file
       fill_in "Document title", with: title
       fill_in "Description",    with: description
