@@ -71,6 +71,8 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
 
     change_attachment_to_have_simulate_virus(product.reload)
 
+    visit "/products/#{product.id}"
+
     click_link "Attachments (0)"
 
     expect(page).not_to have_selector("h2", text: title)
