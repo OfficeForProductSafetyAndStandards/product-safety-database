@@ -46,6 +46,8 @@ class DocumentForm
       document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
       document.analyze_later
 
+      # testing
+
       self.existing_document_file_id = document.signed_id
     end
   end
