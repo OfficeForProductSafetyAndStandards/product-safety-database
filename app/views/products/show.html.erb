@@ -46,12 +46,12 @@
     },
     {
       id: "attachments",
-      label: "Attachments (#{@product.non_image_documents.count})",
+      label: "Attachments (#{@product.virus_free_non_image_attachments.count})",
       panel: { html: render("products/tabs/attachments") }
     },
     {
       id: "images",
-      label: "Images (#{@product.images.count})",
+      label: "Images (#{@product.virus_free_images.count})",
       panel: { html: render("products/tabs/images") }
     },
     {

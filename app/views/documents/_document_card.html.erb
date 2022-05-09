@@ -12,16 +12,18 @@
   </div>
 
   <div class="govuk-grid-column-three-quarters">
-    <h2 class="<%= heading_classes %>">
-      <%= document.title %>
-    </h2>
-    <span class="govuk-hint govuk-!-font-size-16">
-      <%= formatted_file_updated_date(document) %>
-    </span>
+    <% if safe || !analyzed %>
+      <h2 class="<%= heading_classes %>">
+        <%= document.title %>
+      </h2>
+      <span class="govuk-hint govuk-!-font-size-16">
+        <%= formatted_file_updated_date(document) %>
+      </span>
 
-    <p class="govuk-body"><%= document.description %></p>
+      <p class="govuk-body"><%= document.description %></p>
+    <% end %>
 
-    <% if analyzed && safe %>
+    <% if safe %>
       <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
          "(#{document.title}, opens in new tab)",
          document,
@@ -32,7 +34,7 @@
       <% if (!parent.is_a?(Investigation) || policy(parent).update?(user: current_user)) && !do_not_show_edit_and_remove_links %>
         <%= render "documents/document_card_links", document: document, parent: parent %>
       <% end %>
-    <% else %>
+    <% elsif !analyzed %>
       <div class="govuk-warning-text govuk-!-margin-right-7 govuk-!-margin-bottom-3 opss-warning-text--s">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
 

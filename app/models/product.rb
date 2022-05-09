@@ -82,6 +82,14 @@ class Product < ApplicationRecord
     documents.includes(:blob).joins(:blob).where("left(content_type, 5) != 'image'")
   end
 
+  def virus_free_images
+    images.joins(:blob).where('active_storage_blobs.metadata LIKE ?', '%"safe":true%')
+  end
+
+  def virus_free_non_image_attachments
+    non_image_documents.joins(:blob).where('active_storage_blobs.metadata LIKE ?', '%"safe":true%')
+  end
+
   def name_for_sorting
     name
   end
