@@ -106,6 +106,6 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
 
   def change_attachment_to_have_simulate_virus(product)
     blob = product.documents.first.blob
-    blob.update(metadata: blob.metadata.merge(safe: false))
+    blob.update!(metadata: blob.metadata.merge(safe: false))
   end
 end

@@ -136,11 +136,11 @@ class Investigation < ApplicationRecord
   end
 
   def virus_free_images
-    images.joins(:blob).where('active_storage_blobs.metadata LIKE ?', '%"safe":true%')
+    images.joins(:blob).where("active_storage_blobs.metadata LIKE ?", '%"safe":true%')
   end
 
   def virus_free_non_image_attachments
-    generic_supporting_information_attachments.joins(:blob).where('active_storage_blobs.metadata LIKE ?', '%"safe":true%')
+    generic_supporting_information_attachments.joins(:blob).where("active_storage_blobs.metadata LIKE ?", '%"safe":true%')
   end
 
   def supporting_information

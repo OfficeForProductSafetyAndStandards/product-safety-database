@@ -208,6 +208,6 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
   def change_attachment_to_have_simulate_virus(investigation)
     blob = investigation.documents.first.blob
-    blob.update(metadata: blob.metadata.merge(safe: false))
+    blob.update!(metadata: blob.metadata.merge(safe: false))
   end
 end
