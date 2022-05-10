@@ -1,5 +1,6 @@
 <%
   safe = document.metadata["safe"]
+  analyzed = document.metadata["analyzed"]
   document = document.decorate
   heading_classes = heading_classes || "govuk-heading-m govuk-!-margin-bottom-1"
   do_not_show_edit_and_remove_links = do_not_show_edit_and_remove_links || false
@@ -11,14 +12,16 @@
   </div>
 
   <div class="govuk-grid-column-three-quarters">
-    <h2 class="<%= heading_classes %>">
-      <%= document.title %>
-    </h2>
-    <span class="govuk-hint govuk-!-font-size-16">
-      <%= formatted_file_updated_date(document) %>
-    </span>
+    <% if safe || !analyzed %>
+      <h2 class="<%= heading_classes %>">
+        <%= document.title %>
+      </h2>
+      <span class="govuk-hint govuk-!-font-size-16">
+        <%= formatted_file_updated_date(document) %>
+      </span>
 
-    <p class="govuk-body"><%= document.description %></p>
+      <p class="govuk-body"><%= document.description %></p>
+    <% end %>
 
     <% if safe %>
       <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
@@ -31,6 +34,22 @@
       <% if (!parent.is_a?(Investigation) || policy(parent).update?(user: current_user)) && !do_not_show_edit_and_remove_links %>
         <%= render "documents/document_card_links", document: document, parent: parent %>
       <% end %>
+    <% elsif !analyzed %>
+      <div class="govuk-warning-text govuk-!-margin-right-7 govuk-!-margin-bottom-3 opss-warning-text--s">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            The file did not finish uploading - this may take several minutes or more. Refresh the file to confirm that the upload process has completed.
+        </strong>
+      </div>
+
+      <%= link_with_hidden_text_to "Refresh the #{pretty_type_description(document)}",
+         "#{document.title}",
+         "",
+         class: "govuk-button govuk-button--secondary opss-button-refresh",
+         "role" => "button"
+      %>
     <% end %>
   </div>
 </div>

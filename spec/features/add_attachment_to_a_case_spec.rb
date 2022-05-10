@@ -39,6 +39,13 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       expect(page).to have_selector("h2", text: title)
       expect(page).to have_selector("p", text: description)
     end
+
+    change_attachment_to_have_simulate_virus(investigation.reload)
+
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+    expect(page).not_to have_selector("h2", text: title)
+    expect(page).not_to have_selector("p", text: description)
   end
 
   scenario "Adding an image" do
@@ -63,6 +70,13 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
     expect(page).to have_selector("h2", text: title)
     expect(page).to have_selector("p", text: description)
+
+    change_attachment_to_have_simulate_virus(investigation.reload)
+
+    visit "/cases/#{investigation.pretty_id}/images"
+
+    expect(page).not_to have_selector("h2", text: title)
+    expect(page).not_to have_selector("p", text: description)
   end
 
   # rubocop:disable RSpec/AnyInstance
@@ -156,8 +170,6 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       choose "Other document or attachment"
       click_button "Continue"
 
-      expect_to_be_on_add_attachment_to_a_case_page
-
       attach_file "document[document]", empty_file
       fill_in "Document title", with: title
       fill_in "Description",    with: description
@@ -169,5 +181,33 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "The selected file could not be uploaded – try again"
     end
+  end
+
+  context "when an imagine fails the antivirus check", :with_stubbed_failing_antivirus do
+    it "shows error" do
+      sign_in user
+      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
+
+      expect_to_be_on_add_supporting_information_page
+
+      choose "Other document or attachment"
+      click_button "Continue"
+
+      expect_to_be_on_add_attachment_to_a_case_page
+
+      attach_file "document[document]", image_file
+      fill_in "Document title", with: title
+      fill_in "Description",    with: description
+
+      click_button "Save attachment"
+
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "Files must be virus free"
+    end
+  end
+
+  def change_attachment_to_have_simulate_virus(investigation)
+    blob = investigation.documents.first.blob
+    blob.update!(metadata: blob.metadata.merge(safe: false))
   end
 end
