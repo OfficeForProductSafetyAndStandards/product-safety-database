@@ -9,5 +9,9 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       body = JSON.parse(response.body)
       { safe: body["safe"] }
     end
+    Rails.logger.info "££££££"
+    Rails.logger.info blob
+    Rails.logger.info "%%%%%%"
+    Rails.logger.info ActiveStorage::Attachment.find_by(blob_id: blob.id)
   end
 end
