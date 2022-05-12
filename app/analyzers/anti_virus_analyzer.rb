@@ -23,12 +23,13 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
             attachment.purge_later
             Activity.find(attachment.record_id).destroy if attachment.record_type == "Activity"
           end
+
         else
           Rails.logger.info "Blob!!!!!"
           blob.purge_later
         end
       # else
-      #   { safe: body["safe"] }
+        { safe: body["safe"] }
       # end
     end
   end
