@@ -17,8 +17,9 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
-    # if antivirus fails then file will be deleted so what do we do here?
-    # generic error message about how file failed and check your email for further details?
+    sleep 3
+
+    @document_form.document.try(:reload)
 
     unless @document_form.valid?
       @parent = @parent.decorate
