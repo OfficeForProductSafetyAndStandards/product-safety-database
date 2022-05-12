@@ -30,7 +30,7 @@ private
       investigation:
     )
 
-    activity.attachment.attach(document)
+    # activity.attachment.attach(document)
   end
 
   def investigation
