@@ -26,7 +26,6 @@ class DocumentsController < ApplicationController
       return render :new
     end
 
-    Rails.logger.info "@@@@@@ Adding document"
     AddDocument.call!(@document_form.attributes.except("existing_document_file_id").merge({
       parent: @parent,
       user: current_user,
