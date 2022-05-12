@@ -8,7 +8,9 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       response = RestClient::Request.execute method: :post, url: Rails.application.config.antivirus_url, user: ENV["ANTIVIRUS_USERNAME"], password: ENV["ANTIVIRUS_PASSWORD"], payload: { file: }
       body = JSON.parse(response.body)
 
-      # if body["safe"] == false
+      # sleep to ensure that file is attached
+      sleep 1
+
       attachment = ActiveStorage::Attachment.find_by(blob_id: blob.id)
       user = User.find(blob.metadata["created_by"])
       Rails.logger.info "$$$$$$$$$"

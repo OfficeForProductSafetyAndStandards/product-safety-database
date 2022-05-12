@@ -288,6 +288,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     set_personalisation(
       name: user.name,
+      created_at: created_at
     )
 
     mail(to: user.email)
