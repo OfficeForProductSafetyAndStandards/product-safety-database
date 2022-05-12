@@ -17,16 +17,15 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
-    # sleep to give the antivirus checks a chance to be completed before running document form validations
-    sleep 3
-
-    @document_form.document.try(:reload)
+    # if antivirus fails then file will be deleted so what do we do here?
+    # generic error message about how file failed and check your email for further details?
 
     unless @document_form.valid?
       @parent = @parent.decorate
       return render :new
     end
 
+    Rails.logger.info "@@@@@@ Adding document"
     AddDocument.call!(@document_form.attributes.except("existing_document_file_id").merge({
       parent: @parent,
       user: current_user,
