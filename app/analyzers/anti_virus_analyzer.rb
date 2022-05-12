@@ -18,6 +18,7 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
 
       if attachment
         Rails.logger.info "Sending unsafe attachment email"
+        Rails.logger.info attachment.record_type
         NotifyMailer.unsafe_attachment(user: user, record_type: attachment.record_type, id: attachment.record_id).deliver_later
         attachment.purge_later
       else
