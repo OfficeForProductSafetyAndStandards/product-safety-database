@@ -25,9 +25,10 @@ RSpec.describe DeleteUnsafeFilesJob do
             end
 
             it "deletes document, blob and does not send email" do
-              # delivered_emails.clear
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
+              expect(Activity.where(type: activity.type).count).to eq 1
+
               blob = ActiveStorage::Blob.first
               blob.update(metadata: blob.metadata.merge({safe: false}))
 
@@ -35,6 +36,7 @@ RSpec.describe DeleteUnsafeFilesJob do
 
               expect(ActiveStorage::Attachment.count).to eq 0
               expect(ActiveStorage::Blob.count).to eq 0
+              expect(Activity.where(type: activity.type).count).to eq 0
 
               email = delivered_emails.last
               expect(email).to eq nil
@@ -48,7 +50,6 @@ RSpec.describe DeleteUnsafeFilesJob do
             end
 
             it "deletes document, blob and does not send email" do
-              # delivered_emails.clear
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
@@ -75,7 +76,6 @@ RSpec.describe DeleteUnsafeFilesJob do
             end
 
             it "deletes document, blob and does not send email" do
-              # delivered_emails.clear
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
@@ -99,7 +99,6 @@ RSpec.describe DeleteUnsafeFilesJob do
             end
 
             it "deletes document, blob and does not send email" do
-              # delivered_emails.clear
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
@@ -126,7 +125,6 @@ RSpec.describe DeleteUnsafeFilesJob do
         end
 
         it "deletes blob and does not send email" do
-          # delivered_emails.clear
           product.documents.detach
           expect(ActiveStorage::Attachment.count).to eq 0
           expect(ActiveStorage::Blob.count).to eq 1
@@ -137,6 +135,21 @@ RSpec.describe DeleteUnsafeFilesJob do
 
           email = delivered_emails.last
           expect(email).to eq nil
+        end
+      end
+
+
+    end
+
+    context "when there are no unsafe files"do
+      let!(:product) { create(:product, :with_document) }
+
+      context "when the blob has a created_by field in the metadata" do
+        it "does not delete any blobs, attachments or send any emails" do
+          expect(ActiveStorage::Attachment.count).to eq 1
+          expect(ActiveStorage::Blob.count).to eq 1
+
+          DeleteUnsafeFilesJob.perform
         end
       end
     end
