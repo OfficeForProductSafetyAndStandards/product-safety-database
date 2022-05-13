@@ -12,7 +12,6 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       Rails.logger.info "uuuuuusssssseeeeerrrrrr:"
       Rails.logger.info blob.metadata
       Rails.logger.info blob
-      Rails.logger.info Blob.find(blob.id)
       user = User.find(blob.metadata["created_by"])
 
       # if body["safe"] == false - allow this to run all the time for logging purposes etc.
