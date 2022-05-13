@@ -9,6 +9,8 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       body = JSON.parse(response.body)
 
       attachments = ActiveStorage::Attachment.where(blob_id: blob.id)
+      Rails.logger.info "uuuuuusssssseeeeerrrrrr:"
+      Rails.logger.info blob.metadata["created_by"]
       user = User.find(blob.metadata["created_by"])
 
       # if body["safe"] == false - allow this to run all the time for logging purposes etc.
