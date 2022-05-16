@@ -74,4 +74,16 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#date_or_recent_time_ago" do
+    it "returns time ago in words within the last 24 hours" do
+      expect(helper.date_or_recent_time_ago(10.minutes.ago)).to eq("10 minutes ago")
+    end
+
+    it "returns the date in GovUK format outside of the last 24 hours" do
+      travel_to Time.zone.local(2000, 1, 1, 0, 0, 0) do
+        expect(helper.date_or_recent_time_ago(25.hours.ago)).to eq("30 December 1999")
+      end
+    end
+  end
 end
