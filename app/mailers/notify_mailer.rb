@@ -19,7 +19,9 @@ class NotifyMailer < GovukNotifyRails::Mailer
       risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
       product_export: "1c88c503-638e-4f91-b55f-726900b83f92",
       case_export: "f6c9a4ad-2050-4f76-bbad-d73bd9747d18",
-      business_export: "68df2257-07f5-4768-b50a-74ffa3cb7fd3"
+      business_export: "68df2257-07f5-4768-b50a-74ffa3cb7fd3",
+      unsafe_file: "3ba1da4f-a6e4-4d29-a03c-8996fe711c26",
+      unsafe_attachment: "6960b99c-7c60-4e28-a7ea-d29a0d0f3d0e"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -278,5 +280,30 @@ class NotifyMailer < GovukNotifyRails::Mailer
     )
 
     mail(to: email)
+  end
+
+
+  def unsafe_file(user:, created_at:)
+    set_template(TEMPLATES[:unsafe_file])
+    set_reference("Unsafe file")
+
+    set_personalisation(
+      name: user.name,
+    )
+
+    mail(to: user.email)
+  end
+
+  def unsafe_attachment(user:, record_type:, id:)
+    set_template(TEMPLATES[:unsafe_attachment])
+    set_reference("Unsafe attachment")
+
+    set_personalisation(
+      name: user.name,
+      record_type: record_type,
+      id: id
+    )
+
+    mail(to: user.email)
   end
 end
