@@ -282,8 +282,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-
-  def unsafe_file(user:, created_at:)
+  def unsafe_file(user:)
     set_template(TEMPLATES[:unsafe_file])
     set_reference("Unsafe file")
 
@@ -300,8 +299,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     set_personalisation(
       name: user.name,
-      record_type: record_type,
-      id: id
+      record_type:,
+      id:
     )
 
     mail(to: user.email)

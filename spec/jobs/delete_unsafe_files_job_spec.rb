@@ -3,25 +3,29 @@ require "rails_helper"
 RSpec.describe DeleteUnsafeFilesJob do
   describe "#perform", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
     subject(:job) { described_class.new }
+
     let(:user) { create(:user) }
 
     context "when there are unsafe files" do
-      before(:each) do
+      before do
         delivered_emails.clear
       end
+
       context "when blob is attached" do
         context "when blob is attached to an activity" do
           let(:investigation) { create(:allegation) }
-          let!(:activity) { create(:audit_activity_test_result, :with_document, investigation: investigation) }
+          let!(:activity) { create(:audit_activity_test_result, :with_document, investigation:) }
 
           before do
             delivered_emails.clear
           end
+          # rubocop:disable RSpec/MultipleExpectations
+          # rubocop:disable RSpec/ExampleLength
 
           context "when the blob has a created_by field in the metadata" do
             before do
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false, created_by: user.id}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false, created_by: user.id }))
             end
 
             it "deletes document, blob and does not send email" do
@@ -30,7 +34,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               expect(Activity.where(type: activity.type).count).to eq 1
 
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false }))
 
               job.perform
 
@@ -46,14 +50,14 @@ RSpec.describe DeleteUnsafeFilesJob do
           context "when the blob does not have a created_by field in the metadata" do
             before do
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false }))
             end
 
             it "deletes document, blob and does not send email" do
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false }))
 
               job.perform
 
@@ -67,19 +71,21 @@ RSpec.describe DeleteUnsafeFilesJob do
         end
 
         context "when blob is not attached to an activity" do
-          let!(:product) { create(:product, :with_document) }
+          before do
+            create(:product, :with_document)
+          end
 
           context "when the blob has a created_by field in the metadata" do
             before do
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false, created_by: user.id}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false, created_by: user.id }))
             end
 
             it "deletes document, blob and does not send email" do
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false }))
 
               job.perform
 
@@ -95,14 +101,14 @@ RSpec.describe DeleteUnsafeFilesJob do
           context "when the blob does not have a created_by field in the metadata" do
             before do
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false }))
             end
 
             it "deletes document, blob and does not send email" do
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
-              blob.update(metadata: blob.metadata.merge({safe: false}))
+              blob.update!(metadata: blob.metadata.merge({ safe: false }))
 
               job.perform
 
@@ -121,7 +127,7 @@ RSpec.describe DeleteUnsafeFilesJob do
 
         before do
           blob = ActiveStorage::Blob.first
-          blob.update(metadata: blob.metadata.merge({safe: false}))
+          blob.update!(metadata: blob.metadata.merge({ safe: false }))
         end
 
         it "deletes blob and does not send email" do
@@ -137,12 +143,12 @@ RSpec.describe DeleteUnsafeFilesJob do
           expect(email).to eq nil
         end
       end
-
-
     end
 
-    context "when there are no unsafe files"do
-      let!(:product) { create(:product, :with_document) }
+    context "when there are no unsafe files" do
+      before do
+        create(:product, :with_document)
+      end
 
       context "when the blob has a created_by field in the metadata" do
         it "does not delete any blobs, attachments or send any emails" do
@@ -155,6 +161,8 @@ RSpec.describe DeleteUnsafeFilesJob do
           expect(ActiveStorage::Blob.count).to eq 1
         end
       end
+      # rubocop:enable RSpec/MultipleExpectations
+      # rubocop:enable RSpec/ExampleLength
     end
   end
 end
