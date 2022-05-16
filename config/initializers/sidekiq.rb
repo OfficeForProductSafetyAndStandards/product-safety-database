@@ -33,7 +33,7 @@ def create_delete_unsafe_files_job
   )
   unless delete_unsafe_files_job.save
     Rails.logger.error "***** WARNING - Delete unsafe files job not saved *****"
-    Rails.logger.error log_db_metrics_job.errors.join("; ")
+    Rails.logger.error delete_unsafe_files_job.errors.join("; ")
   end
 end
 
