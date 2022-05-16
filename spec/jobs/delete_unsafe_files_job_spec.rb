@@ -81,7 +81,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               blob.update!(metadata: blob.metadata.merge({ safe: false, created_by: user.id }))
             end
 
-            it "deletes document, blob and does not send email" do
+            it "deletes document, blob and does send email" do
               expect(ActiveStorage::Attachment.count).to eq 1
               expect(ActiveStorage::Blob.count).to eq 1
               blob = ActiveStorage::Blob.first
