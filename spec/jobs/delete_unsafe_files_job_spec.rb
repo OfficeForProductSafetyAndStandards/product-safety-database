@@ -32,7 +32,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               blob = ActiveStorage::Blob.first
               blob.update(metadata: blob.metadata.merge({safe: false}))
 
-              DeleteUnsafeFilesJob.perform
+              job.perform
 
               expect(ActiveStorage::Attachment.count).to eq 0
               expect(ActiveStorage::Blob.count).to eq 0
@@ -55,7 +55,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               blob = ActiveStorage::Blob.first
               blob.update(metadata: blob.metadata.merge({safe: false}))
 
-              DeleteUnsafeFilesJob.perform
+              job.perform
 
               expect(ActiveStorage::Attachment.count).to eq 0
               expect(ActiveStorage::Blob.count).to eq 0
@@ -81,7 +81,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               blob = ActiveStorage::Blob.first
               blob.update(metadata: blob.metadata.merge({safe: false}))
 
-              DeleteUnsafeFilesJob.perform
+              job.perform
 
               expect(ActiveStorage::Attachment.count).to eq 0
               expect(ActiveStorage::Blob.count).to eq 0
@@ -104,7 +104,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               blob = ActiveStorage::Blob.first
               blob.update(metadata: blob.metadata.merge({safe: false}))
 
-              DeleteUnsafeFilesJob.perform
+              job.perform
 
               expect(ActiveStorage::Attachment.count).to eq 0
               expect(ActiveStorage::Blob.count).to eq 0
@@ -129,7 +129,7 @@ RSpec.describe DeleteUnsafeFilesJob do
           expect(ActiveStorage::Attachment.count).to eq 0
           expect(ActiveStorage::Blob.count).to eq 1
 
-          DeleteUnsafeFilesJob.perform
+          job.perform
 
           expect(ActiveStorage::Blob.count).to eq 0
 
@@ -149,7 +149,10 @@ RSpec.describe DeleteUnsafeFilesJob do
           expect(ActiveStorage::Attachment.count).to eq 1
           expect(ActiveStorage::Blob.count).to eq 1
 
-          DeleteUnsafeFilesJob.perform
+          job.perform
+
+          expect(ActiveStorage::Attachment.count).to eq 1
+          expect(ActiveStorage::Blob.count).to eq 1
         end
       end
     end
