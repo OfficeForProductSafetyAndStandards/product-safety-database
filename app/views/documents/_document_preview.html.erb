@@ -1,6 +1,8 @@
 <%
   hide_link ||= false
   class_name ||= ""
+  analyzed = document.metadata["analyzed"]
+  safe = document.metadata["safe"]
   image_class = if document.variable?
                   "app-document-preview__image"
                 else
@@ -9,7 +11,7 @@
 %>
 
 <div class="app-document-preview <%= class_name %>">
-  <% if document.metadata["safe"] %>
+  <% if analyzed && safe %>
     <% if document.image? %>
       <div class="<%= image_class %>">
         <% if hide_link %>
@@ -26,8 +28,13 @@
       <%= document_placeholder(document) %>
     <% end %>
   <% else %>
-    <div class="app-document-preview__processing">
-      <span><%= "Processing #{image_document_text(document)}" %></span>
-    </div>
+    <div class="app-document-preview ">
+       <div class="app-document-preview__image">
+           <a target="_blank" rel="noopener" href="#">
+             <%= image_tag "img-icon.png", alt: "" %>
+             <span class="govuk-visually-hidden">(opens in new tab)</span>
+           </a>
+       </div>
+     </div>
   <% end %>
 </div>

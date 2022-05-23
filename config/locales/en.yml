@@ -764,9 +764,11 @@ en:
     inclusion: "Select whether or not the case is related to the coronavirus outbreak"
   enter_email_address: "Enter your email address"
   file_added: "The file was added"
-  image_added: "The image was added"
   file_updated: "File has been updated"
   file_removed: "File was successfully removed"
+  image_added: "The image was added"
+  image_updated: "The image was updated"
+  image_removed: "The image was successfully removed"
   otp_code:
     blank: "Enter the security code"
     too_short: "You haven’t entered enough numbers"

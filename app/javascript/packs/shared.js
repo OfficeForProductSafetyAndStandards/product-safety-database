@@ -34,6 +34,7 @@ import 'govuk-frontend/govuk/assets/images/govuk-logotype-crown.png'
 
 import 'images/document_placeholder_document.png'
 import 'images/document_placeholder_spreadsheet.png'
+import 'images/img-icon.png'
 
 Rails.start()
 window.GOVUKFrontend = GOVUKFrontend

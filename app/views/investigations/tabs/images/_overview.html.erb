@@ -12,16 +12,17 @@
 
 <% @products = @investigation.products %>
 
+
 <%= render "components/govuk_tabs",
 items: [
   {
     id: "case-images",
-    label: "Case images (#{@investigation.images.count})",
+    label: "Case images (#{@investigation.virus_free_images.count})",
     panel: { html: render("investigations/tabs/images/images") }
   },
   {
     id: "product-images",
-    label: "Product images (#{@products.flat_map(&:images).count})",
+    label: "Product images (#{@products.flat_map(&:virus_free_images).count})",
     panel: { html: render("investigations/tabs/images/product_images") }
   }
 ]
