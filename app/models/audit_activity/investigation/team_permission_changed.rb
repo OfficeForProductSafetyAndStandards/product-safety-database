@@ -9,7 +9,7 @@ class AuditActivity::Investigation::TeamPermissionChanged < AuditActivity::Inves
         old: old_permission,
         new: new_permission
       },
-      message: message
+      message:
     }
   end
 end

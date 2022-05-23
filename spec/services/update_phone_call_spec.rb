@@ -10,7 +10,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
   let(:params) do
     {
       user: user_same_team,
-      investigation: investigation,
+      investigation:,
       correspondence: phone_call,
       correspondence_date: new_correspondence_date,
       correspondent_name: new_correspondent_name,
@@ -58,14 +58,14 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
       let(:params) do
         {
           user: user_same_team,
-          investigation: investigation,
+          investigation:,
           correspondence: phone_call,
-          correspondence_date: correspondence_date,
-          correspondent_name: correspondent_name,
-          phone_number: phone_number,
-          transcript: transcript,
-          overview: overview,
-          details: details
+          correspondence_date:,
+          correspondent_name:,
+          phone_number:,
+          transcript:,
+          overview:,
+          details:
         }
       end
 

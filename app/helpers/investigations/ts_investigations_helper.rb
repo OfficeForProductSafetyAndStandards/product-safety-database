@@ -2,7 +2,7 @@ module Investigations::TsInvestigationsHelper
   def why_reporting_checkboxes(form, page_heading, errors)
     base_errors = errors.full_messages_for(:base)
     render "form_components/govuk_checkboxes",
-           form: form,
+           form:,
            key: :why_reporting,
            fieldset: { legend: { html: page_heading_html(page_heading) }, classes: "js-mutually-exclusive" },
            hint: { text: "Select all that apply" },
@@ -18,17 +18,17 @@ module Investigations::TsInvestigationsHelper
 private
 
   def page_heading_html(page_heading)
-    render "investigations/ts_investigations/why_reporting_form_heading", page_heading: page_heading
+    render "investigations/ts_investigations/why_reporting_form_heading", page_heading:
   end
 
   def unsafe_details_html(form, hazard_types)
-    render "investigations/ts_investigations/why_reporting_form_unsafe_details", form: form, hazard_types: hazard_types
+    render "investigations/ts_investigations/why_reporting_form_unsafe_details", form:, hazard_types:
   end
 
   def non_compliant_details_html(form)
     render "form_components/govuk_textarea",
            key: :non_compliant_reason,
-           form: form,
+           form:,
            id: "non_compliant_reason",
            attributes: { maxlength: 10_000 },
            label: { text: "Why is the product non-compliant?" },

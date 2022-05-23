@@ -41,7 +41,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
     end
 
     let(:do_request) do
-      put investigation_collaborator_path(investigation.pretty_id, edit_access_collaboration.id), params: params
+      put investigation_collaborator_path(investigation.pretty_id, edit_access_collaboration.id), params:
     end
 
     context "when successful" do
@@ -70,7 +70,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
 
     context "with owner collaboration", :with_errors_rendered do
       before do
-        put investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id), params: params
+        put investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id), params:
       end
 
       it "responds with a 404 (not found) status" do

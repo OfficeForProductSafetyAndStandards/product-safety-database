@@ -22,7 +22,7 @@ RSpec.describe "Validate risk level", type: :request, with_stubbed_mailer: true,
     before do
       other_user.roles.create!(name: "risk_level_validator")
       sign_in other_user
-      put investigation_risk_validations_url(investigation.pretty_id), params: params
+      put investigation_risk_validations_url(investigation.pretty_id), params:
     end
 
     it "does not return a forbidden status code" do
@@ -33,7 +33,7 @@ RSpec.describe "Validate risk level", type: :request, with_stubbed_mailer: true,
   context "when the user does not have the `risk_level_validator` role", :with_errors_rendered do
     before do
       sign_in other_user
-      put investigation_risk_validations_url(investigation.pretty_id), params: params
+      put investigation_risk_validations_url(investigation.pretty_id), params:
     end
 
     it "returns a forbidden status code" do

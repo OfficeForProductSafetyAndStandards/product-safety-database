@@ -28,7 +28,7 @@ class InvestigationDecorator < ApplicationDecorator
       },
     ]
     rows.compact!
-    h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
+    h.render "components/govuk_summary_list", rows:, classes: "govuk-summary-list--no-border"
   end
 
   def risk_level_set?
@@ -58,7 +58,7 @@ class InvestigationDecorator < ApplicationDecorator
 
     rows.compact!
 
-    h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
+    h.render "components/govuk_summary_list", rows:, classes: "govuk-summary-list--no-border"
   end
 
   def pretty_description

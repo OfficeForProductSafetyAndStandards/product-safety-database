@@ -12,7 +12,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   let(:allegation_details) do
     {
       description: Faker::Lorem.paragraph,
-      hazard_type: hazard_type,
+      hazard_type:,
       category: Rails.application.config.product_constants["product_category"].sample,
       file: Rails.root.join("test/fixtures/files/testImage.png")
     }

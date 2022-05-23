@@ -13,7 +13,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     @template.render "components/govuk_date_input",
                      id: "#{attribute}-fieldset",
                      errorMessage: error_message,
-                     hint: hint,
+                     hint:,
                      fieldset: {
                        legend: {
                          classes:,
@@ -57,12 +57,12 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                        text: label,
                        classes: label_classes
                      },
-                     hint: hint,
+                     hint:,
                      name: input_name(attribute),
                      id: attribute.to_s,
                      value: object.public_send(attribute),
                      errorMessage: error_message,
-                     attributes: attributes
+                     attributes:
   end
 
   def govuk_input(attribute, label:, value: nil, label_classes: nil, classes: nil, hint: nil)
@@ -79,10 +79,10 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                        text: label,
                        classes: label_classes.to_s
                      },
-                     hint: hint,
+                     hint:,
                      name: input_name(attribute),
                      id: attribute.to_s,
-                     classes: classes,
+                     classes:,
                      value: value || object.public_send(attribute),
                      errorMessage: error_message
   end
@@ -133,7 +133,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      id: attribute.to_s,
                      name: input_name(attribute),
                      label: { text: label, classes: label_classes.to_s },
-                     hint: hint,
+                     hint:,
                      items: @items,
                      errorMessage: error_message
   end
@@ -159,7 +159,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      id: attribute.to_s,
                      name: input_name(attribute),
                      label: { text: label, classes: label_classes.to_s },
-                     hint: hint,
+                     hint:,
                      items: @items,
                      errorMessage: error_message,
                      show_all_values: true,
@@ -235,8 +235,8 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      name: input_name(attribute),
                      errorMessage: error_message,
                      items: @items,
-                     classes: classes,
-                     hint: hint,
+                     classes:,
+                     hint:,
                      fieldset: {
                        legend: {
                          text: legend,

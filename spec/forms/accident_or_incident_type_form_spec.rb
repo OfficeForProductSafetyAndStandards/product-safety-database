@@ -5,7 +5,7 @@ RSpec.describe AccidentOrIncidentTypeForm, :with_stubbed_opensearch, :with_test_
   let(:type) { "Accident" }
   let(:params) do
     {
-      type: type
+      type:
     }
   end
 
