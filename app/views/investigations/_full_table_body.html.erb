@@ -29,7 +29,7 @@
       </td>
     <% else %>
       <td headers="updated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
-        <%= "#{time_ago_in_words(investigation.updated_at)} ago" %>
+        <%= date_or_recent_time_ago investigation.updated_at %>
       </td>
     <% end %>
   </tr>

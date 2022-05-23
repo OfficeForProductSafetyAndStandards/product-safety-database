@@ -51,4 +51,8 @@ module ApplicationHelper
       ]
     )
   end
+
+  def date_or_recent_time_ago(datetime)
+    24.hours.ago < datetime ? "#{time_ago_in_words(datetime)} ago" : datetime.to_s(:govuk)
+  end
 end
