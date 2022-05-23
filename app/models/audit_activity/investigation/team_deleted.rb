@@ -5,7 +5,7 @@ class AuditActivity::Investigation::TeamDeleted < AuditActivity::Investigation::
         id: team.id,
         name: team.display_name
       },
-      message: message
+      message:
     }
   end
 

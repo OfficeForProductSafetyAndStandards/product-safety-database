@@ -67,7 +67,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
 
       before do
         allow(InviteUserToTeamForm).to receive(:new).and_return(form_double)
-        post team_invitations_path(team), params: params
+        post team_invitations_path(team), params:
       end
 
       it "returns 403 status" do
@@ -85,11 +85,11 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
       before do
         allow(InviteUserToTeamForm).to receive(:new).and_return(form_double)
         allow(InviteUserToTeam).to receive(:call).and_return(invite_double)
-        post team_invitations_path(team), params: params
+        post team_invitations_path(team), params:
       end
 
       it "calls the InviteUserToTeam service" do
-        expect(InviteUserToTeam).to have_received(:call).with({ email: email, team: team, inviting_user: user }.with_indifferent_access)
+        expect(InviteUserToTeam).to have_received(:call).with({ email:, team:, inviting_user: user }.with_indifferent_access)
       end
 
       it "redirects to the team page" do

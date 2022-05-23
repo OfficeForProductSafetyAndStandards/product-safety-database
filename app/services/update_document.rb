@@ -39,8 +39,8 @@ private
 
   def new_metadata
     {
-      title: title,
-      description: description
+      title:,
+      description:
     }
   end
 

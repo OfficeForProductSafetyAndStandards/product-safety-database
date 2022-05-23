@@ -170,7 +170,7 @@ module InvestigationsHelper
   def search_result_statement(search_terms, number_of_results)
     search_result_values = search_result_values(search_terms, number_of_results)
 
-    render "investigations/search_result", word: search_result_values[:word], number_of_cases_in_english: search_result_values[:number_of_cases_in_english], search_terms: search_terms
+    render "investigations/search_result", word: search_result_values[:word], number_of_cases_in_english: search_result_values[:number_of_cases_in_english], search_terms:
   end
 
   def safety_and_compliance_actions(investigation, user, field_name)

@@ -5,7 +5,7 @@ RSpec.describe SendSMS, :with_stubbed_notify do
     let(:phone_number) { "123234234" }
     let(:code) { 123 }
     let(:expected_payload) do
-      { phone_number: phone_number, template_id: described_class::TEMPLATES[:otp_code], personalisation: { code: } }
+      { phone_number:, template_id: described_class::TEMPLATES[:otp_code], personalisation: { code: } }
     end
 
     it "sends the otp code" do

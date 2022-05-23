@@ -9,7 +9,7 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
   let(:owner)                    { user }
   let(:product)                  { create(:product, investigations: [investigation]) }
   let(:investigation)            { create(:allegation, :with_business, creator:, business_to_add: business) }
-  let(:common_context)           { { user: user, investigation: investigation } }
+  let(:common_context)           { { user:, investigation: } }
   let(:reason)                   { Faker::Hipster.sentence }
 
   describe "#call" do

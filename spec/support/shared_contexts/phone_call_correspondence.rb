@@ -2,8 +2,8 @@ RSpec.shared_context "with phone call correspondence setup" do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:team_recipient_email) { Faker::Internet.safe_email }
-  let(:team)                 { create :team, team_recipient_email: team_recipient_email }
-  let(:user)                 { create :user, :activated, team: team }
+  let(:team)                 { create :team, team_recipient_email: }
+  let(:user)                 { create :user, :activated, team: }
   let(:investigation)        { create :allegation, creator: user || create(:user) }
   let(:phone_number)         { Faker::PhoneNumber.phone_number }
   let(:correspondence_date)  { Date.parse("1-1-2020") }
@@ -14,12 +14,12 @@ RSpec.shared_context "with phone call correspondence setup" do
 
   let(:params) do
     {
-      transcript: transcript,
-      correspondence_date: correspondence_date,
-      phone_number: phone_number,
-      correspondent_name: correspondent_name,
-      overview: overview,
-      details: details
+      transcript:,
+      correspondence_date:,
+      phone_number:,
+      correspondent_name:,
+      overview:,
+      details:
     }
   end
 

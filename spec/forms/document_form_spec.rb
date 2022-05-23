@@ -20,10 +20,10 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
 
   let(:params) do
     {
-      title: title,
-      description: description,
-      document: document,
-      existing_document_file_id: existing_document_file_id
+      title:,
+      description:,
+      document:,
+      existing_document_file_id:
     }
   end
 

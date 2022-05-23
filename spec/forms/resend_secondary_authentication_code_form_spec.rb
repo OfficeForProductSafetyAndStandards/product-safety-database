@@ -6,8 +6,8 @@ RSpec.describe ResendSecondaryAuthenticationCodeForm, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
   let(:params) do
     {
-      mobile_number: mobile_number,
-      user: user
+      mobile_number:,
+      user:
     }
   end
 

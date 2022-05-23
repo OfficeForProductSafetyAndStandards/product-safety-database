@@ -48,8 +48,8 @@ RSpec.describe WhyReportingForm do
     let(:why_reporting_params) do
       {
         reported_reason_unsafe: true,
-        hazard_type: hazard_type,
-        hazard_description: hazard_description
+        hazard_type:,
+        hazard_description:
       }
     end
 
@@ -79,7 +79,7 @@ RSpec.describe WhyReportingForm do
     let(:why_reporting_params) do
       {
         reported_reason_non_compliant: true,
-        non_compliant_reason: non_compliant_reason
+        non_compliant_reason:
       }
     end
 
@@ -115,18 +115,18 @@ RSpec.describe WhyReportingForm do
     let(:non_compliant_reason) { Faker::Lorem.paragraph }
     let(:why_reporting_params) do
       {
-        hazard_type: hazard_type,
-        hazard_description: hazard_description,
-        non_compliant_reason: non_compliant_reason
+        hazard_type:,
+        hazard_description:,
+        non_compliant_reason:
       }
     end
     let(:expected_assigned_attributes) do
       {
-        reported_reason: reported_reason,
-        hazard_type: hazard_type,
-        hazard_description: hazard_description,
-        non_compliant_reason: non_compliant_reason,
-        description: description
+        reported_reason:,
+        hazard_type:,
+        hazard_description:,
+        non_compliant_reason:,
+        description:
       }
     end
 

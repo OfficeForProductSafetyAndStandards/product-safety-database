@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create :team }
-  let(:user) { create :user, :activated, has_viewed_introduction: true, team: team }
+  let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
 
   before do
     sign_in user
@@ -42,7 +42,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
   end
 
   context "when there are cases" do
-    let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: team }
+    let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: }
     let!(:user_case) { create(:allegation, creator: user) }
     let!(:other_case) { create(:allegation) }
     let!(:team_case) { create(:allegation, creator: other_user_same_team) }

@@ -9,7 +9,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
     let(:inviting_user) { create(:user, :activated, team:) }
 
     context "when there is no existing user" do
-      let(:params) { { email: email, team: team } }
+      let(:params) { { email:, team: } }
       let(:new_token) { "new_token" }
 
       before do
@@ -42,7 +42,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
       end
 
       context "with inviting_user parameter" do
-        let(:params) { { email: email, team: team, inviting_user: inviting_user } }
+        let(:params) { { email:, team:, inviting_user: } }
 
         it "enqueues the SendUserInvitationJob with the new user ID and inviting user ID", :aggregate_failures do
           expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
@@ -60,7 +60,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
       let(:invited_at) { Time.zone.now }
 
       context "with email parameter" do
-        let(:params) { { email: email, team: team } }
+        let(:params) { { email:, team: } }
 
         context "when the existing user is already on the same team" do
           it "enqueues the SendUserInvitationJob with the existing user ID", :aggregate_failures do
@@ -134,7 +134,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
       end
 
       context "with user parameter" do
-        let(:params) { { user: existing_user, team: team } }
+        let(:params) { { user: existing_user, team: } }
 
         context "when the existing user has no invitation token" do
           let(:invitation_token) { nil }
@@ -172,7 +172,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
         end
 
         context "with inviting_user parameter" do
-          let(:params) { { user: existing_user, team: team, inviting_user: inviting_user } }
+          let(:params) { { user: existing_user, team:, inviting_user: } }
 
           it "enqueues the SendUserInvitationJob with the inviting user ID", :aggregate_failures do
             expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
@@ -183,7 +183,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
         end
 
         context "with no inviting_user parameter" do
-          let(:params) { { user: existing_user, team: team } }
+          let(:params) { { user: existing_user, team: } }
 
           it "enqueues the SendUserInvitationJob with nil inviting user ID", :aggregate_failures do
             expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
@@ -196,7 +196,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
     end
 
     context "with no team parameter" do
-      let(:params) { { email: email } }
+      let(:params) { { email: } }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -204,7 +204,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
     end
 
     context "with no user or email parameter" do
-      let(:params) { { team: team } }
+      let(:params) { { team: } }
 
       it "returns a failure" do
         expect(result).to be_failure
