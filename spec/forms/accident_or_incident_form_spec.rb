@@ -16,13 +16,13 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_opensearch, :with_test_queu
 
   let(:params) do
     {
-      date: date,
-      is_date_known: is_date_known,
-      severity: severity,
-      severity_other: severity_other,
-      usage: usage,
-      product_id: product_id,
-      type: type
+      date:,
+      is_date_known:,
+      severity:,
+      severity_other:,
+      usage:,
+      product_id:,
+      type:
     }
   end
 

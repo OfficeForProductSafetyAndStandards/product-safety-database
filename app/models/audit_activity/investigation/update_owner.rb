@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
   def self.build_metadata(owner, rationale)
     {
       owner_id: owner.id,
-      rationale: rationale
+      rationale:
     }
   end
 

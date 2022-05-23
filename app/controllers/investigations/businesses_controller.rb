@@ -162,7 +162,7 @@ private
   end
 
   def redirect_to_investigation_businesses_tab(flash)
-    redirect_to investigation_businesses_path(@investigation), flash: flash
+    redirect_to investigation_businesses_path(@investigation), flash:
   end
 
   def set_investigation

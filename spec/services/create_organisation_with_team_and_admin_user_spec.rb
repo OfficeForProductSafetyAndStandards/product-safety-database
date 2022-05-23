@@ -41,7 +41,7 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
       let(:result) { described_class.call(org_name:, admin_email: email, country: "country:GB") }
       let(:created_org) { Organisation.find_by name: org_name }
       let(:created_team) { Team.find_by name: org_name }
-      let(:created_user) { User.find_by email: email }
+      let(:created_user) { User.find_by email: }
       let(:invitation_email) { delivered_emails.last }
 
       context "when an exception is raised" do

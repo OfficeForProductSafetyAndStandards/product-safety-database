@@ -86,7 +86,7 @@ RSpec.describe RedactedExport do
   context "when included and used within a class" do
     subject!(:model) do
       Class.new do
-        def self.table_name() = "things"
+        def self.table_name = "things"
         include RedactedExport
         redacted_export_with :test_1, :test_2, :test_3
       end

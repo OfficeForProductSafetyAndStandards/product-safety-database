@@ -14,10 +14,10 @@ RSpec.describe EditCaseCollaboratorForm, :with_opensearch, :with_stubbed_mailer 
 
   let(:params) do
     {
-      permission_level: permission_level,
-      message: message,
-      include_message: include_message,
-      collaboration: collaboration
+      permission_level:,
+      message:,
+      include_message:,
+      collaboration:
     }
   end
 

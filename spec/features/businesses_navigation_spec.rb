@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create :team }
-  let(:user) { create :user, :activated, has_viewed_introduction: true, team: team }
+  let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
 
   before do
     sign_in user
@@ -43,7 +43,7 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
   end
 
   context "when there are businesses" do
-    let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: team }
+    let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: }
     let(:user_business) { create(:business, trading_name: "user_business") }
     let(:team_business) { create(:business, trading_name: "team_business") }
     let(:closed_business) { create(:business, trading_name: "closed_business") }

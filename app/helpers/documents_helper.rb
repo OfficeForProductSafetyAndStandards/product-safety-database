@@ -2,7 +2,7 @@ module DocumentsHelper
   include FileConcern
 
   def document_placeholder(document)
-    render "documents/placeholder", document: document
+    render "documents/placeholder", document:
   end
 
   def document_file_extension(document)

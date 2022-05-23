@@ -72,7 +72,7 @@ class Investigations::ProductsController < ApplicationController
 private
 
   def redirect_to_investigation_products_tab(flash = nil)
-    redirect_to investigation_products_path(@investigation), flash: flash
+    redirect_to investigation_products_path(@investigation), flash:
   end
 
   def set_investigation

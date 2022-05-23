@@ -20,19 +20,19 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
 
   let(:params) do
     {
-      investigation: investigation,
+      investigation:,
       current_user: user,
       assessed_on: assessment_date,
-      assessed_by: assessed_by,
-      assessed_by_team_id: assessed_by_team_id,
-      assessed_by_business_id: assessed_by_business_id,
-      assessed_by_other: assessed_by_other,
-      risk_level: risk_level,
-      custom_risk_level: custom_risk_level,
-      product_ids: product_ids,
-      old_file: old_file,
-      risk_assessment_file: risk_assessment_file,
-      details: details
+      assessed_by:,
+      assessed_by_team_id:,
+      assessed_by_business_id:,
+      assessed_by_other:,
+      risk_level:,
+      custom_risk_level:,
+      product_ids:,
+      old_file:,
+      risk_assessment_file:,
+      details:
     }
   end
 

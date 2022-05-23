@@ -25,7 +25,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mai
   let(:product_id) { create(:product).id }
   let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:file_description) { Faker::Hipster.sentence }
-  let(:file_form) { { file: file, description: file_description } }
+  let(:file_form) { { file:, description: file_description } }
   let(:action) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:other_action) { nil }
   let(:date_decided) { Faker::Date.backward(days: 14) }
