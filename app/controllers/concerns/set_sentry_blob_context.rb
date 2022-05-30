@@ -14,7 +14,7 @@ private
       scope.set_context(
         "blob",
         @blob.serializable_hash(
-          only: %i[id byte_size key content_type filename],
+          only: %i[id byte_size key content_type],
           include: {
             attachments: {
               only: %i[id record_type record_id name]
