@@ -3,7 +3,8 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
 import Rails from 'rails-ujs'
-import GOVUKFrontend from 'govuk-frontend'
+import { initAll } from 'govuk-frontend'
+initAll()
 
 import 'javascripts/location_picker'
 import 'javascripts/autocomplete'
