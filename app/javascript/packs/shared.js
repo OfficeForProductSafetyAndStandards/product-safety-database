@@ -38,4 +38,3 @@ import 'images/document_placeholder_spreadsheet.png'
 import 'images/img-icon.png'
 
 Rails.start()
-window.GOVUKFrontend = GOVUKFrontend
