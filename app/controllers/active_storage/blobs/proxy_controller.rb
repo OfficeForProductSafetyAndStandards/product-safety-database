@@ -12,6 +12,7 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetCurrent
   include HttpAuthConcern
   include SentryConfigurationConcern
+  include SetSentryBlobContext
   include Pundit
 
   self.etag_with_template_digest = false
