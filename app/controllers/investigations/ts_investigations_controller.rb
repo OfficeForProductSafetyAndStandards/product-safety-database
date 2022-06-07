@@ -49,9 +49,9 @@ class Investigations::TsInvestigationsController < ApplicationController
                       %i[has_corrective_action product_images evidence_images other_files].include? step
                     }
   after_action :store_product, only: %i[update], if: -> { step == :product }
-  before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
+  before_action :store_investigation, only: %i[update], if: -> { %i[why_reporting reference_number].include? step }
   before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
-  after_action  :store_investigation, only: :update, if: -> { %i[why_reporting coronavirus].include?(step) }
+  after_action  :store_investigation, only: :update, if: -> { %i[why_reporting].include?(step) }
   after_action  :store_risk_assessment, only: :update, if: -> { step == :risk_assessments }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
@@ -242,16 +242,9 @@ private
   end
 
   def investigation_request_params
-    # This must be done first because the browser will send no params if no radio is selected
-    if step == :coronavirus
-      params[:investigation] ||= { coronavirus_related: nil }
-    end
-
     return {} if params[:investigation].blank?
 
     case step
-    when :coronavirus
-      params.require(:investigation).permit(:coronavirus_related)
     when :reference_number
       params[:investigation][:complainant_reference] = nil unless params[:investigation][:has_complainant_reference] == "Yes"
       params.require(:investigation).permit(:complainant_reference)
@@ -470,10 +463,6 @@ private
     end
   end
 
-  def coronavirus_form_params
-    params.require(:investigation).permit(:coronavirus_related)
-  end
-
   def why_reporting_form_params
     params.require(:investigation)
       .permit(
@@ -496,8 +485,6 @@ private
 
   def records_valid?
     case step
-    when :coronavirus
-      return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
     when :product
       @product_form = ProductForm.new(product_step_params)
       return @product_form.valid?

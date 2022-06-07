@@ -1,12 +1,4 @@
 <% badges = [] %>
-<% if investigation.coronavirus_related? %>
-  <% badges << capture do %>
-    <%= render "components/hmcts_badge",
-               text: t(:coronavirus_related, scope: "case.badges"),
-               classes: "app-badge--coronavirus app-tag--nowrap #{local_assigns[:classes]}"
-    %>
-  <% end %>
-<% end %>
 <% if investigation.serious? %>
   <% badges << capture do %>
     <%= render "components/hmcts_badge",

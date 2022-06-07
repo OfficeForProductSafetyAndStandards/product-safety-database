@@ -1,6 +1,0 @@
-<% content_for :after_header do %>
-  <%= govukBackLink text: "Back to cases", href: investigations_path %>
-<% end %>
-
-<%= render partial: "investigations/coronavirus",
-    locals: { scope: :investigation, unsafe_product_message: false } %>
