@@ -22,7 +22,7 @@ class Investigations::TsInvestigationsController < ApplicationController
         :other_files,
         :reference_number
 
-  before_action :redirect_to_first_step_if_wizard_not_started, if: -> { step && (step != steps.first) }
+  before_action :redirect_to_first_step_if_wizard_not_started, if: -> { step && (step != :why_reporting && step != :product) }
   before_action :set_countries, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
   before_action :set_selected_businesses, only: %i[show update], if: -> { step.in?(%i[risk_assessments which_businesses]) }
