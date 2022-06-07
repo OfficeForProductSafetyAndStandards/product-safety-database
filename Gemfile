@@ -87,10 +87,10 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.25"
-  gem "rubocop-govuk", "~> 4.3"
+  gem "rubocop", "~> 1.30"
+  gem "rubocop-govuk", "~> 4.5"
   gem "rubocop-performance", "~> 1.14"
-  gem "rubocop-rspec", "~> 2.7", require: false
+  gem "rubocop-rspec", "~> 2.11", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "selenium-webdriver", "~> 4.1"
   gem "shoulda-matchers"
