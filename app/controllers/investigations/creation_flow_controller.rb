@@ -11,9 +11,6 @@ class Investigations::CreationFlowController < ApplicationController
   before_action :store_investigation, only: %i[update]
   before_action :store_complainant, only: %i[update], unless: -> { %i[coronavirus about_enquiry].include? step }
 
-  # We need model key to be set before setting form parameters
-  include FlowWithCoronavirusForm
-
   # GET /xxx/step
   def show
     render_wizard

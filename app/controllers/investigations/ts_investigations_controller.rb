@@ -5,12 +5,10 @@ class Investigations::TsInvestigationsController < ApplicationController
   include ProductsHelper
   include BusinessesHelper
   include FileConcern
-  include FlowWithCoronavirusForm
   set_attachment_names :file, :risk_assessment_file
   set_file_params_key :file
 
-  steps :coronavirus,
-        :product,
+  steps :product,
         :why_reporting,
         :which_businesses,
         :business,
