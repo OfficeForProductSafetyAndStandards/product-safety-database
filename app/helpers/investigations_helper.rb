@@ -204,11 +204,6 @@ module InvestigationsHelper
         href: new_investigation_supporting_information_path(investigation),
         text: "Add supporting information"
       }
-      coronavirus_related_actions[:items] << {
-        href: investigation_coronavirus_related_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "coronavirus status"
-      }
     end
 
     if policy(investigation).change_owner_or_status?(user:)
