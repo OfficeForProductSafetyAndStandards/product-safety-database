@@ -89,22 +89,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   end
 
   describe "Case priority" do
-    scenario "filtering to coronavirus-related cases only" do
-      choose "Coronavirus"
-      click_on "Apply"
-
-      expect(page.find_field("Coronavirus")).to be_checked
-
-      expect(page).to have_listed_case(coronavirus_investigation.pretty_id)
-
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-
-      expect(find("details#filter-details")["open"]).to eq(nil)
-    end
-
     scenario "filtering by serious and high risk-level cases only" do
       choose "Serious and high risk"
       click_on "Apply"
@@ -113,24 +97,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
       expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
       expect(page).to have_css(".opss-tag--risk1", text: "High risk case")
-
-      expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-
-      expect(find("details#filter-details")["open"]).to eq(nil)
-    end
-
-    scenario "filtering by serious and risk-level and coronavirus cases only" do
-      choose "Coronavirus and serious and high risk"
-      click_on "Apply"
-      expect(page).to have_checked_field("Coronavirus and serious and high risk")
-
-      expect(page).to have_listed_case(coronavirus_and_high_risk_investigation.pretty_id)
-      expect(page).not_to have_listed_case(serious_risk_level_investigation.pretty_id)
-      expect(page).not_to have_listed_case(high_risk_level_investigation.pretty_id)
 
       expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
       expect(page).not_to have_listed_case(investigation.pretty_id)
