@@ -10,6 +10,7 @@ class ActiveStorage::Representations::ProxyController < ActiveStorage::BaseContr
   include ActiveStorage::SetHeaders
   include HttpAuthConcern
   include SentryConfigurationConcern
+  include SetSentryBlobContext
 
   before_action :authorize_blob
 
