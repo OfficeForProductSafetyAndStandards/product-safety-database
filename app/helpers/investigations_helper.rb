@@ -256,7 +256,7 @@ module InvestigationsHelper
     ]
 
     if investigation.coronavirus_related
-      coronavirus_row = { key: { text: "Coronavirus related" }, value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") }}
+      coronavirus_row = { key: { text: "Coronavirus related" }, value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") } }
       rows.insert(1, coronavirus_row)
     end
 

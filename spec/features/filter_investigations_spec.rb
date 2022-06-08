@@ -24,7 +24,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
   let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
   let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
-  let!(:coronavirus_and_high_risk_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
 
   let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team:) }
   let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team:) }
@@ -36,6 +35,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let!(:restricted_case) { create(:allegation, creator: restricted_case_team_user, is_private: true, description: restricted_case_title).decorate }
 
   before do
+    create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
     other_team_investigation.touch # Tests sort order
     Investigation.import refresh: :wait_for
     sign_in(user)
