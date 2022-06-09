@@ -1,11 +1,4 @@
 <% badges = [] %>
-<% if investigation.coronavirus_related? %>
-  <% badges << capture do %>
-    <%= tag.span t(:coronavirus_related, scope: "case.badges"),
-          class: "opss-tag opss-tag--covid"
-    %>
-  <% end %>
-<% end %>
 <% if investigation.serious? %>
   <% badges << capture do %>
     <%= tag.span t(:risk_level_serious, scope: "case.badges"),
