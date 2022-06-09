@@ -9,10 +9,7 @@ class Investigations::CreationFlowController < ApplicationController
   before_action :set_attachment, only: %i[show create update]
   before_action :update_attachment, only: %i[create update]
   before_action :store_investigation, only: %i[update]
-  before_action :store_complainant, only: %i[update], unless: -> { %i[coronavirus about_enquiry].include? step }
-
-  # We need model key to be set before setting form parameters
-  include FlowWithCoronavirusForm
+  before_action :store_complainant, only: %i[update], unless: -> { %i[about_enquiry].include? step }
 
   # GET /xxx/step
   def show
@@ -104,14 +101,8 @@ private
     session[model_key] = @investigation.attributes if @investigation.valid?(step)
   end
 
-  def coronavirus_form_params
-    params.require(@model_key).permit(:coronavirus_related)
-  end
-
   def investigation_valid?
     case step
-    when :coronavirus
-      return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
     when :about_enquiry
       if params[:enquiry][:received_type].nil?
         @investigation.errors.add(:received_type, "Select a type")

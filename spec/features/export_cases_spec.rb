@@ -60,21 +60,6 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(allegation_serious.pretty_id)
   end
 
-  scenario "with filtering on coronavirus status" do
-    choose "Coronavirus"
-    click_button "Apply"
-
-    expect(page).to have_text enquiry_coronavirus.pretty_id
-    expect(page).not_to have_text allegation_serious.pretty_id
-    expect(page).not_to have_text allegation_closed.pretty_id
-    expect(page).not_to have_text allegation_other_team.pretty_id
-
-    click_link "XLSX (spreadsheet)"
-
-    expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
-  end
-
   scenario "with filtering on risk level" do
     choose "Serious and high risk"
     click_button "Apply"

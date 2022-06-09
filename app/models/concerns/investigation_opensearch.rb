@@ -30,7 +30,6 @@ module InvestigationOpensearch
                  pretty_id
                  hazard_description
                  non_compliant_reason
-                 coronavirus_related
                  risk_level],
         methods: %i[title creator_id owner_id tiebreaker_id],
         include: {
