@@ -1,12 +1,8 @@
 class Investigations::ProjectController < ApplicationController
   include Wicked::Wizard
-  include FlowWithCoronavirusForm
-  steps :coronavirus, :project_details
+  steps :project_details
 
   before_action :set_investigation, only: %i[show new create update]
-  before_action :validate_coronavirus_related_form,
-                only: :update,
-                if: -> { step == :coronavirus }
 
   # GET /xxx/step
   def show
@@ -59,19 +55,11 @@ private
   def investigation_request_params
     return {} if params[:investigation].blank?
 
-    params.require(:investigation).permit(:user_title, :description, :coronavirus_related)
+    params.require(:investigation).permit(:user_title, :description)
   end
 
   def set_investigation
     @investigation = Investigation::Project.new(investigation_params).build_owner_collaborations_from(current_user)
-  end
-
-  def coronavirus_form_params
-    params.require(:investigation).permit(:coronavirus_related)
-  end
-
-  def validate_coronavirus_related_form
-    return render_wizard unless assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
   end
 
   def model_key

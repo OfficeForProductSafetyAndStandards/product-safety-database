@@ -51,14 +51,6 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       choose "Product safety allegation"
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page("/allegation/coronavirus")
-      click_button "Continue"
-
-      expect_to_be_on_coronavirus_page("/allegation/coronavirus")
-      expect(page).to have_summary_error("Select whether or not the case is related to the coronavirus outbreak")
-      choose "Yes, it is (or could be)"
-      click_button "Continue"
-
       expect_to_be_on_allegation_complainant_page
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
@@ -203,8 +195,6 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   def expect_details_on_summary_page
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
     expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
-    expect(page.find("dt", text: "Coronavirus related"))
-      .to have_sibling("dd", text: "Coronavirus related case")
   end
 
   def expect_protected_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
@@ -220,7 +210,6 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   end
 
   def expect_details_on_activity_page(contact, allegation)
-    expect(page).to have_text("Case is related to the coronavirus outbreak.")
     expect(page).to have_text("Product category: #{allegation.fetch(:category)}")
     expect(page).to have_text("Hazard type: #{allegation.fetch(:hazard_type)}")
     expect(page).to have_text(allegation.fetch(:description))
@@ -231,7 +220,6 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   end
 
   def expect_case_activity_page_to_show_restricted_information(allegation)
-    expect(page).to have_text("Case is related to the coronavirus outbreak.")
     expect(page).to have_text("Product category: #{allegation.fetch(:category)}")
     expect(page).to have_text("Hazard type: #{allegation.fetch(:hazard_type)}")
     expect(page).to have_text(allegation.fetch(:description))
