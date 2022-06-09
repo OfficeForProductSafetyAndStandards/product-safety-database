@@ -73,7 +73,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
 
       expect_confirmation_banner("Enquiry was successfully created.")
 
-      expect_page_to_have_h1("Overview")
+      expect_page_to_have_h1("Case")
 
       expect_details_on_summary_page
       expect_protected_details_on_summary_page(**contact_details)

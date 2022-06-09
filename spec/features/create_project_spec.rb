@@ -42,7 +42,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
       click_button "Create project"
 
       expect_confirmation_banner("Project was successfully created")
-      expect_page_to_have_h1("Overview")
+      expect_page_to_have_h1("Case")
       expect(page).to have_css("p", text: title)
       expect(page).to have_css("p", text: summary)
       expect(page.find("dt", text: "Coronavirus related"))
