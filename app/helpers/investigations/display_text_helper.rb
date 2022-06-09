@@ -9,7 +9,8 @@ module Investigations::DisplayTextHelper
     items = [
       {
         href: investigation_path(investigation),
-        text: "Overview",
+        html: safe_join(["Case ", tag.span(" #{investigation.pretty_id}", class: "govuk-!-font-weight-regular")]),
+        text: "Case",
         active: is_current_tab.overview?
       },
       {

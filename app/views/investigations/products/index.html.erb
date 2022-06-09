@@ -1,2 +1,3 @@
-<%= render "investigations/pages_top", investigation: @investigation, current_tab: "products" %>
-<%= render "investigations/tabs/products" %>
+<%= render "investigations/transitional_case_nav", investigation: @investigation, current_tab: "products", case_page_heading: "Products" do %>
+  <%= render "investigations/tabs/products" %>
+<% end %>

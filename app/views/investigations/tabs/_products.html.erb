@@ -1,23 +1,11 @@
-<% page_heading = "Products" %>
-<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+<%= page_title "Products - #{@investigation.pretty_id}" %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
-
-    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-    <h1 class="govuk-heading-l">
-      <%= page_heading %>
-    </h1>
-
-    <% if policy(@investigation).update?(user: current_user) %>
-      <p class="govuk-body">
-        <%= link_to "Add product", new_investigation_product_url(@investigation) %>
-      </p>
-    <% end %>
-
-    <hr class="govuk-section-break govuk-section-break--l">
-  </div>
-</div>
+<% if policy(@investigation).update?(user: current_user) %>
+  <p class="govuk-body">
+    <%= link_to "Add product", new_investigation_product_url(@investigation) %>
+  </p>
+  <hr class="govuk-section-break govuk-section-break--l">
+<% end %>
 
 <% @investigation.products.each do |product| %>
 
