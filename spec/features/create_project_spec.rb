@@ -66,7 +66,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
     end
 
     def expect_details_on_activity_page(title, summary)
-      within ".govuk-list" do
+      within ".timeline .govuk-list" do
         expect(page).to have_css("h3",           text: "Project logged: #{title}")
         expect(page).to have_css("p.govuk-body", text: "Case is related to the coronavirus outbreak.")
         expect(page).to have_css("p.govuk-body", text: summary, exact_text: true)

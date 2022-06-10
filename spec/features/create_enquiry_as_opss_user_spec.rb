@@ -183,7 +183,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   end
 
   def expect_details_on_activity_page(contact, enquiry)
-    within ".govuk-list" do
+    within ".timeline .govuk-list" do
       expect(page).to have_css("h3",           text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
       expect(page).to have_css("p",            text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p",            text: enquiry.fetch(:enquiry_description))
