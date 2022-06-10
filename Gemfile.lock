@@ -518,7 +518,7 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-cron (1.4.0)
+    sidekiq-cron (1.5.1)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
     simplecov (0.21.2)
@@ -693,7 +693,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers
   sidekiq (~> 6.4)
-  sidekiq-cron (~> 1.4)
+  sidekiq-cron (~> 1.5)
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
