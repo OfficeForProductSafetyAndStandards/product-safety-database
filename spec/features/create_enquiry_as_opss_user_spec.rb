@@ -183,7 +183,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   end
 
   def expect_case_activity_page_to_show_restricted_information(enquiry)
-    within ".govuk-list" do
+    within ".timeline .govuk-list" do
       expect(page).to have_css("h3", text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
       expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
 
