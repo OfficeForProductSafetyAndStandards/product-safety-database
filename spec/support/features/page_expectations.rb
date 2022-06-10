@@ -427,12 +427,6 @@ module PageExpectations
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end
 
-  # Shared pages across different flows
-  def expect_to_be_on_coronavirus_page(path)
-    expect(page).to have_current_path(path)
-    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
-  end
-
   # Login and account management pages
   def expect_to_be_on_secondary_authentication_page
     expect(page).to have_current_path(/\/two-factor/)

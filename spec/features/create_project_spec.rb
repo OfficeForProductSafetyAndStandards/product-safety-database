@@ -19,16 +19,6 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
       choose "Project"
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page("/project/coronavirus")
-      click_button "Continue"
-
-      expect_to_be_on_coronavirus_page("/project/coronavirus")
-      expect(page).to have_error_messages
-      expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
-
-      choose "Yes, it is (or could be)"
-      click_button "Continue"
-
       expect_page_to_have_h1("New project")
       click_button "Create project"
 
@@ -45,8 +35,6 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
       expect_page_to_have_h1("Case")
       expect(page).to have_css("p", text: title)
       expect(page).to have_css("p", text: summary)
-      expect(page.find("dt", text: "Coronavirus related"))
-        .to have_sibling("dd", text: "Coronavirus related case")
       expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
 
       click_on "Activity"
@@ -68,7 +56,6 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
     def expect_details_on_activity_page(title, summary)
       within ".timeline .govuk-list" do
         expect(page).to have_css("h3",           text: "Project logged: #{title}")
-        expect(page).to have_css("p.govuk-body", text: "Case is related to the coronavirus outbreak.")
         expect(page).to have_css("p.govuk-body", text: summary, exact_text: true)
       end
     end

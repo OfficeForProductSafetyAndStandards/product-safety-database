@@ -194,7 +194,6 @@ module InvestigationsHelper
   # This builds an array from an investigation which can then
   # be passed as a `rows` argument to the govukSummaryList() helper.
   def about_the_case_rows(investigation, user)
-    coronavirus_related_actions = { items: [] }
     status_actions = { items: [] }
     activity_actions = { items: [] }
     notifying_country_actions = { items: [] }
@@ -203,11 +202,6 @@ module InvestigationsHelper
       activity_actions[:items] << {
         href: new_investigation_supporting_information_path(investigation),
         text: "Add supporting information"
-      }
-      coronavirus_related_actions[:items] << {
-        href: investigation_coronavirus_related_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "coronavirus status"
       }
     end
 
@@ -242,11 +236,6 @@ module InvestigationsHelper
         actions: status_actions
       },
       {
-        key: { text: "Coronavirus related" },
-        value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") },
-        actions: coronavirus_related_actions
-      },
-      {
         key: { text: "Created by" },
         value: { text: investigation.created_by }
       },
@@ -265,6 +254,11 @@ module InvestigationsHelper
         actions: activity_actions
       }
     ]
+
+    if investigation.coronavirus_related
+      coronavirus_row = { key: { text: "Coronavirus related" }, value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") } }
+      rows.insert(1, coronavirus_row)
+    end
 
     if investigation.complainant_reference.present?
       rows << {

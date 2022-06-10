@@ -142,9 +142,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
       scenario "not coronavirus-related" do
         visit new_ts_investigation_path
 
-        expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
-        fill_in_coronavirus_page(coronavirus)
-
         expect_to_be_on_what_product_are_you_reporting_page
         fill_in_product_page(with: product_details)
 
@@ -263,8 +260,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
         expect_case_details_page_to_show_entered_information
         expect_product_reported_unsafe_and_non_compliant
 
-        expect(page.find("dt.govuk-summary-list__key", text: "Coronavirus related")).to have_sibling("dd.govuk-summary-list__value", text: "Not a coronavirus related case")
-
         click_link "Products (1)"
 
         expect_to_be_on_case_products_page
@@ -292,111 +287,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
         risk_assessments.each { |assessment| expect_case_activity_page_to_show_risk_assessment(assessment) }
       end
     end
-
-    context "with minimum details" do
-      let(:product_details) do
-        {
-          name: Faker::Lorem.sentence,
-          category: Rails.application.config.product_constants["product_category"].sample,
-          type: Faker::Appliance.equipment,
-          authenticity: "Yes",
-          affected_units_status: "Unknown",
-          has_markings: "markings_no",
-          when_placed_on_market: "Yes"
-        }
-      end
-
-      let(:coronavirus) { true }
-
-      scenario "coronavirus-related, with input errors" do
-        visit new_ts_investigation_path
-
-        expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
-
-        # Do not select an option
-        click_button "Continue"
-
-        expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
-        expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
-
-        fill_in_coronavirus_page(coronavirus)
-
-        expect_to_be_on_what_product_are_you_reporting_page
-        click_button "Continue"
-
-        expect_to_be_on_what_product_are_you_reporting_page
-        expect(page).to have_error_summary "Name cannot be blank", "Product subcategory cannot be blank", "Category cannot be blank"
-
-        fill_in_product_page(with: product_details)
-
-        expect_to_be_on_why_reporting_page
-        click_button "Continue"
-
-        expect_to_be_on_why_reporting_page
-        expect(page).to have_error_summary "Choose at least one option"
-
-        check "It’s non-compliant (or suspected to be)"
-
-        click_button "Continue"
-
-        expect_to_be_on_why_reporting_page
-        expect(page).to have_error_summary "Non compliant reason cannot be blank"
-
-        fill_in "Why is the product non-compliant?", with: non_compliance_details
-        click_button "Continue"
-
-        expect_to_be_on_supply_chain_page
-        click_button "Continue"
-
-        expect_to_be_on_supply_chain_page
-        expect(page).to have_error_summary "Indicate which if any business is known"
-
-        check "None of the above"
-        click_button "Continue"
-
-        expect_to_be_on_corrective_action_taken_page
-        click_button "Continue"
-
-        expect_to_be_on_corrective_action_taken_page
-        expect(page).to have_error_summary "Select whether or not you have corrective action to record"
-
-        choose "No"
-        click_button "Continue"
-
-        expect_to_be_on_other_information_page
-        click_button "Continue"
-
-        expect_to_be_on_reference_number_page
-        click_button "Create case"
-
-        expect_to_be_on_reference_number_page
-        expect(page).to have_error_summary "Choose whether you want to add your own reference number"
-
-        choose "No"
-        click_button "Create case"
-
-        expect_to_be_on_case_created_page
-        expect(page).to have_text("You are now the case owner for #{product_details[:name]}, #{product_details[:type]}")
-
-        click_link "View case"
-
-        expect_to_be_on_case_page
-        expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]}")
-        expect(page).to have_text("Product reported because it is non-compliant.")
-        expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Coronavirus related case")
-
-        click_link "Products (1)"
-
-        expect_to_be_on_case_products_page
-        expect_case_products_page_to_show(info: product_details, images: [])
-
-        click_link "Activity"
-
-        expect_to_be_on_case_activity_page
-        expect_case_activity_page_to_show_allegation_logged
-        expect_case_activity_page_to_show_product_added
-      end
-    end
   end
 
   def expect_test_result_page_to_show_entered_information(details)
@@ -420,7 +310,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
     expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliance_details)
-    expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Not a coronavirus related case")
   end
 
   def expect_case_products_page_to_show(info:, images:)
@@ -523,14 +412,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
     expect(item).to have_text("Date of test: #{test[:date].to_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
-  end
-
-  def fill_in_coronavirus_page(answer)
-    within_fieldset("Is this case related to the coronavirus outbreak?") do
-      choose answer ? "Yes, it is (or could be)" : "No, this is business as usual"
-    end
-
-    click_button "Continue"
   end
 
   def fill_in_product_page(with:)

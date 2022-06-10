@@ -38,7 +38,6 @@ private
       get_status_filter,
       get_creator_filter(user),
       get_owner_filter(user),
-      get_coronavirus_filter,
       get_serious_and_high_risk_filter
     ].compact
 
@@ -52,14 +51,8 @@ private
     { term: { is_closed: } }
   end
 
-  def get_coronavirus_filter
-    if @search.priority == "coronavirus_related_only" || @search.priority == "coronavirus_and_serious_and_high_risk"
-      { term: { coronavirus_related: true } }
-    end
-  end
-
   def get_serious_and_high_risk_filter
-    if @search.priority == "serious_and_high_risk_level_only" || @search.priority == "coronavirus_and_serious_and_high_risk"
+    if @search.priority == "serious_and_high_risk_level_only"
       { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     end
   end

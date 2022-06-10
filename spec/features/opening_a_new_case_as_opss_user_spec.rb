@@ -22,9 +22,6 @@ RSpec.feature "Opening a new case", :with_stubbed_opensearch, :with_stubbed_anti
 
     click_button "Continue"
 
-    expect_to_be_on_coronavirus_page("/project/coronavirus")
-
-    # The detailed flows for each of the separate case types (allegation,
-    # project and enquiry) are each covered as separate scenarios.
+    expect(page).to have_current_path("/project/project_details")
   end
 end

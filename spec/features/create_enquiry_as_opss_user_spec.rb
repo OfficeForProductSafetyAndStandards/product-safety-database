@@ -41,14 +41,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
       choose "type_enquiry"
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page("/enquiry/coronavirus")
-      click_button "Continue"
-
-      expect_to_be_on_coronavirus_page("/enquiry/coronavirus")
-      expect(page).to have_summary_error("Select whether or not the case is related to the coronavirus outbreak",)
-      choose "Yes, it is (or could be)"
-      click_button "Continue"
-
       expect_to_be_on_about_enquiry_page
 
       check_invalid_date
@@ -166,8 +158,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   def expect_details_on_summary_page
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
     expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
-    expect(page.find("dt", text: "Coronavirus related"))
-      .to have_sibling("dd", text: "Coronavirus related case")
   end
 
   def expect_protected_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
@@ -185,7 +175,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   def expect_details_on_activity_page(contact, enquiry)
     within ".timeline .govuk-list" do
       expect(page).to have_css("h3",           text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
-      expect(page).to have_css("p",            text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p",            text: enquiry.fetch(:enquiry_description))
       expect(page).to have_css("p.govuk-body", text: /Name: #{Regexp.escape(contact.fetch(:contact_name))}/)
       expect(page).to have_css("p.govuk-body", text: /Email address: #{Regexp.escape(contact.fetch(:contact_email))}/)
@@ -196,7 +185,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   def expect_case_activity_page_to_show_restricted_information(enquiry)
     within ".govuk-list" do
       expect(page).to have_css("h3", text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
-      expect(page).to have_css("p", text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
 
       expect(page).to have_css("p", text: "Only teams added to the case can view enquiry contact details")
