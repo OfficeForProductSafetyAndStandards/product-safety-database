@@ -7,3 +7,6 @@
   delete_unsafe_files_job:
     cron: "*/15 * * * *"
     class: "DeleteUnsafeFilesJob"
+  log_db_metrics_job:
+    cron: "*/15 * * * *"
+    class: "LogDbMetricsJob"
