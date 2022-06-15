@@ -11,5 +11,5 @@
     cron: "*/15 * * * *"
     class: "LogDbMetricsJob"
   lock_inactive_users_job:
-    cron: "0 1 * * *",
+    cron: "0 1 * * *"
     class: "LockInactiveUsersJob"
