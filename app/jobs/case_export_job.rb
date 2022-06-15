@@ -1,6 +1,4 @@
-class CaseExportJob < ApplicationJob
-  include Sidekiq::Worker
-  
+class CaseExportJob < ApplicationJob  
   def perform(case_export)
     case_export.export!
 
