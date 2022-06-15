@@ -1,3 +1,5 @@
+require 'sidekiq-scheduler'
+
 class DeleteUnsafeFilesJob < ApplicationJob
   def perform
     unsafe_blobs = ActiveStorage::Blob.where("metadata LIKE ?", '%"safe":false%')

@@ -26,8 +26,6 @@ end
 
 Sidekiq.configure_server do |config|
   config.redis = Rails.application.config_for(:redis_store)
-  create_log_db_metrics_job
-  create_lock_inactive_users_job
 end
 
 Sidekiq.configure_client do |config|
