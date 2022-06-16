@@ -1,4 +1,4 @@
-class CaseExportJob < ApplicationJob  
+class CaseExportJob < ApplicationJob
   def perform(case_export)
     case_export.export!
 
