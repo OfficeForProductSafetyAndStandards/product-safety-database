@@ -24,24 +24,10 @@ def create_lock_inactive_users_job
   end
 end
 
-def create_delete_unsafe_files_job
-  delete_unsafe_files_job = Sidekiq::Cron::Job.new(
-    name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: delete unsafe files, every 15 minutes",
-    cron: "*/15 * * * *",
-    class: "DeleteUnsafeFilesJob",
-    queue: ENV["SIDEKIQ_QUEUE"] || "psd"
-  )
-  unless delete_unsafe_files_job.save
-    Rails.logger.error "***** WARNING - Delete unsafe files job not saved *****"
-    Rails.logger.error delete_unsafe_files_job.errors.join("; ")
-  end
-end
-
 Sidekiq.configure_server do |config|
   config.redis = Rails.application.config_for(:redis_store)
   create_log_db_metrics_job
   create_lock_inactive_users_job
-  create_delete_unsafe_files_job
 end
 
 Sidekiq.configure_client do |config|
