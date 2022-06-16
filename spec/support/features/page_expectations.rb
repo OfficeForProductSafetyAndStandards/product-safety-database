@@ -14,7 +14,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/[\d\-]+$/)
     end
-    expect(page).to have_selector("h1", text: "Overview")
+    expect(page).to have_selector("h1", text: "Case")
   end
 
   def expect_to_be_on_investigation_businesses_page

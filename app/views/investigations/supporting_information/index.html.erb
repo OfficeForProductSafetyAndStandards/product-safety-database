@@ -1,2 +1,3 @@
-<%= render "investigations/pages_top", investigation: @investigation, current_tab: "supporting_information" %>
-<%= render "investigations/tabs/supporting_information" %>
+<%= render "investigations/navigable_case_nav", investigation: @investigation, current_tab: "supporting_information", case_page_heading: "Supporting information" do %>
+  <%= render "investigations/tabs/supporting_information" %>
+<% end %>

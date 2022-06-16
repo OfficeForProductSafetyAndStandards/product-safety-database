@@ -145,7 +145,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
 
       it "highlights the all cases tab" do
-        expect(highlighted_tab).to eq "All cases - Search"
+        expect(highlighted_tab).to eq "All cases – Search"
       end
 
       context "when less than 12 cases" do

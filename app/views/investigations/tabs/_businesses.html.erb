@@ -1,60 +1,44 @@
-<% page_heading = "Businesses" %>
-<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+<%= page_title "Businesses - #{@investigation.pretty_id}" %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
+<% if policy(@investigation).update?(user: current_user) %>
+  <p class="govuk-body">
+    <%= link_to "Add business", new_investigation_business_path(@investigation) %>
+  </p>
+  <hr class="govuk-section-break govuk-section-break--l">
+<% end %>
 
-    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-    <h1 class="govuk-heading-l">
-      <%= page_heading %>
-    </h1>
+<% @investigation.investigation_businesses.each do |ib| %>
+  <h2 class="govuk-heading-m">
+    <%= ib.decorate.pretty_relationship %>
+  </h2>
 
-    <% if policy(@investigation).update?(user: current_user) %>
-      <p class="govuk-body">
-        <%= link_to "Add business", new_investigation_business_path(@investigation) %>
-      </p>
-    <% end %>
+  <%= business_summary_list ib.business %>
 
-    <hr class="govuk-section-break govuk-section-break--l">
-  </div>
-</div>
+  <%= link_with_hidden_text_to "View business",
+     "(#{ib.business.trading_name})",
+   ib.business,
+   class: "govuk-link app-block-link govuk-!-margin-right-3" %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
-    <% @investigation.investigation_businesses.each do |ib| %>
-      <h2 class="govuk-heading-m">
-        <%= ib.decorate.pretty_relationship %>
-      </h2>
+  <%= link_with_hidden_text_to t("change_business_details"), t("change_business_details"), edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
+  <% if policy(@investigation).update?(user: current_user) %>
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        <%= t(".remove_business_hint") %>
+      </strong>
+      <br />
+      <%= link_with_hidden_text_to "Remove business",
+             "(#{ib.business.trading_name})",
+       remove_investigation_business_path(@investigation, ib.business),
+       class: "govuk-link app-block-link" %>
+    </div>
+  <% end %>
 
-      <%= business_summary_list ib.business %>
+  <hr class="govuk-section-break govuk-section-break--m">
 
-      <%= link_with_hidden_text_to "View business",
-         "(#{ib.business.trading_name})",
-       ib.business,
-       class: "govuk-link app-block-link govuk-!-margin-right-3" %>
+<% end %>
 
-      <%= link_with_hidden_text_to t("change_business_details"), t("change_business_details"), edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
-      <% if policy(@investigation).update?(user: current_user) %>
-        <div class="govuk-warning-text">
-          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <span class="govuk-warning-text__assistive">Warning</span>
-            <%= t(".remove_business_hint") %>
-          </strong>
-          <br />
-          <%= link_with_hidden_text_to "Remove business",
-                 "(#{ib.business.trading_name})",
-           remove_investigation_business_path(@investigation, ib.business),
-           class: "govuk-link app-block-link" %>
-        </div>
-      <% end %>
-
-      <hr class="govuk-section-break govuk-section-break--m">
-
-    <% end %>
-
-    <% if @investigation.investigation_businesses.length.zero? %>
-      <p class="govuk-body">No businesses</p>
-    <% end %>
-  </div>
-</div>
+<% if @investigation.investigation_businesses.length.zero? %>
+  <p class="govuk-body">No businesses</p>
+<% end %>
