@@ -2,10 +2,10 @@ module Investigations
   class SupportingInformationController < ApplicationController
     def index
       authorize investigation, :view_non_protected_details?
-
       @supporting_information       = Investigation::SupportingInformationDecorator.new(investigation.supporting_information.map(&:decorate), params[:sort_by])
       @other_supporting_information = investigation.virus_free_non_image_attachments.decorate
-
+      @grouped_supporting_information =
+        { "accident_or_incidents" => investigation.unexpected_events }
       @breadcrumbs = {
         items: [
           { text: "Cases", href: all_cases_investigations_path },

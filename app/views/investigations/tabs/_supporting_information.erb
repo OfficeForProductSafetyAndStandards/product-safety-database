@@ -1,36 +1,28 @@
-<%= page_title "Supporting information - #{@investigation.pretty_id}" %>
+<h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The supporting information for this case</h2>
 
-<% if policy(@investigation).update?(user: current_user) %>
-  <p class="govuk-body">
-    <%= link_to "Add supporting information", new_investigation_supporting_information_path(@investigation) %>
-  </p>
-  <hr class="govuk-section-break govuk-section-break--l">
-<% end %>
+<section id="accidents" class="govuk-!-margin-bottom-9 govuk-!-padding-right-4 govuk-!-padding-left-4" data-info-number="2">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h3 class="govuk-heading-m">
+                Accidents and incidents <span class="govuk-!-font-weight-regular govuk-!-font-size-24">(2)</span>
+            </h3>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+            <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+                <a href="#" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset">
+                    Add <span class="govuk-visually-hidden">an accident or incident</span>
+                </a><!-- goes directly to the relevant form page -->
+            </div>
+        </div>
+    </div>
 
-<% if @supporting_information.any? %>
-  <h2 class="govuk-heading-m">Documents</h2>
-  <%= render partial: 'search_form' %>
-  <table class="govuk-table govuk-!-margin-bottom-9">
-    <thead class="govuk-table__head">
-      <th class="govuk-table__header">Title</th>
-      <th class="govuk-table__header">Type</th>
-      <th class="govuk-table__header">Date of activity</th>
-      <th class="govuk-table__header">Date added</th>
-    </thead>
-    <tbody class="govuk-table__body">
-      <%= render partial: "supporting_information_row", collection: @supporting_information, locals: { investigation: @investigation } %>
-    </tbody>
-  </table>
-<% end %>
+    <ul class="govuk-list">
+      <% @grouped_supporting_information["accident_or_incidents"].each do |item| %>
+        <%=
+          decorated_item = item.decorate
 
-<% if @supporting_information.none? && @other_supporting_information.none?  %>
-  <p class="govuk-body">No supporting information</p>
-<% elsif @other_supporting_information.any?  %>
-  <h2 class="govuk-heading-m">Other files and attachments</h2>
-  <p class="govuk-body govuk-hint govuk-!-margin-bottom-6"><%= t("case.protected_details", data_type: "these files") %></p>
-  <%= render partial:    @investigation.generic_attachment_partial(current_user),
-             collection: @other_supporting_information,
-             as:         :document,
-             locals:     { parent: @investigation }
-  %>
-<% end %>
+          render "investigations/supporting_information/card.html.erb", event_date: decorated_item.date_of_activity, type: decorated_item.supporting_information_type, title: decorated_item.supporting_information_title, added_date: decorated_item.date_added, show_path: decorated_item.show_path
+        %>
+      <% end %>
+    </ul>
+</section>
