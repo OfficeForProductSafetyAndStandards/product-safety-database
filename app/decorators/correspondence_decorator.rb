@@ -26,6 +26,10 @@ class CorrespondenceDecorator < ApplicationDecorator
     "Correspondence#{h.tag.span(super, class: 'govuk-caption-m')}".html_safe
   end
 
+  def event_type
+    object.class.model_name.human
+  end
+
   def activity_cell_partial(viewing_user)
     return "activity_table_cell_no_link" unless Pundit.policy!(viewing_user, investigation).view_protected_details?(user: viewing_user)
 
