@@ -99,7 +99,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       expect_page_to_show_case_owner(another_active_user_another_team)
       expect_activity_page_to_show_case_owner_changed_to(another_active_user_another_team)
 
-      click_link "Overview"
+      within('nav[aria-label="Secondary"]') { click_link "Case" }
       expect(page).not_to have_link("Change owner")
     end
   end

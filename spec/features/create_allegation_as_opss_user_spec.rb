@@ -72,7 +72,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
 
       expect_confirmation_banner("Allegation was successfully created")
 
-      expect_page_to_have_h1("Overview")
+      expect_page_to_have_h1("Case")
 
       investigation = Investigation.last.decorate
       expect(delivered_emails.last.personalization).to eq({

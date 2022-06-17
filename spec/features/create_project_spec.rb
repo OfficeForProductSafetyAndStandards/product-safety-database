@@ -32,7 +32,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
       click_button "Create project"
 
       expect_confirmation_banner("Project was successfully created")
-      expect_page_to_have_h1("Overview")
+      expect_page_to_have_h1("Case")
       expect(page).to have_css("p", text: title)
       expect(page).to have_css("p", text: summary)
       expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
@@ -54,7 +54,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
     end
 
     def expect_details_on_activity_page(title, summary)
-      within ".govuk-list" do
+      within ".timeline .govuk-list" do
         expect(page).to have_css("h3",           text: "Project logged: #{title}")
         expect(page).to have_css("p.govuk-body", text: summary, exact_text: true)
       end

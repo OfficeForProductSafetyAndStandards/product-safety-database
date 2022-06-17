@@ -65,7 +65,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
 
       expect_confirmation_banner("Enquiry was successfully created.")
 
-      expect_page_to_have_h1("Overview")
+      expect_page_to_have_h1("Case")
 
       expect_details_on_summary_page
       expect_protected_details_on_summary_page(**contact_details)
@@ -173,7 +173,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   end
 
   def expect_details_on_activity_page(contact, enquiry)
-    within ".govuk-list" do
+    within ".timeline .govuk-list" do
       expect(page).to have_css("h3",           text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
       expect(page).to have_css("p",            text: enquiry.fetch(:enquiry_description))
       expect(page).to have_css("p.govuk-body", text: /Name: #{Regexp.escape(contact.fetch(:contact_name))}/)
@@ -183,7 +183,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   end
 
   def expect_case_activity_page_to_show_restricted_information(enquiry)
-    within ".govuk-list" do
+    within ".timeline .govuk-list" do
       expect(page).to have_css("h3", text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
       expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
 

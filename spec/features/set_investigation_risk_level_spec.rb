@@ -118,7 +118,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     )
 
     # Changing the risk level back to a default one
-    click_link "Overview"
+    within('nav[aria-label="Secondary"]') { click_link "Case" }
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
@@ -146,7 +146,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     # Selecting Other and introducing a level that matches one of the other options
     # will result in the other option being pre-selected when changing risk level
     # in the future
-    click_link "Overview"
+    within('nav[aria-label="Secondary"]') { click_link "Case" }
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)

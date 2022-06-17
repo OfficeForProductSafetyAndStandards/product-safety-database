@@ -1,132 +1,121 @@
-<% page_heading = "Overview" %>
-<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+<%= page_title "Case - #{@investigation.pretty_id}" %>
 <% products_count = @investigation.products.count %>
 
-<div class="govuk-grid-row govuk-!-padding-bottom-6">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+<p class="govuk-body-l"><%= @investigation.title %></p>
 
-    <p class="govuk-body-l"><%= @investigation.title %></p>
+<h2 class="govuk-heading-m">Summary</h2>
 
-    <h2 class="govuk-heading-m">Summary</h2>
+<p class="govuk-body"><%= @investigation.description %></p>
 
-    <p class="govuk-body"><%= @investigation.description %></p>
+<% if policy(@investigation).update? %>
+  <p class="govuk-body"><%= link_to "Change summary", edit_investigation_summary_path(@investigation), class: "govuk-link" %></p>
+<% end %>
 
-    <% if policy(@investigation).update? %>
-      <p class="govuk-body"><%= link_to "Change summary", edit_investigation_summary_path(@investigation), class: "govuk-link" %></p>
-    <% end %>
+<% if @investigation.display_product_summary_list? %>
+  <%= govuk_hr %>
+  <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).upcase_first %></h2>
+  <%= @investigation.product_summary_list %>
+<% end %>
 
-    <% if @investigation.display_product_summary_list? %>
-      <%= govuk_hr %>
-      <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).upcase_first %></h2>
-      <%= @investigation.product_summary_list %>
-    <% end %>
+<%= govuk_hr %>
+<h2 class="govuk-heading-m"><%= "Risks and issues" %></h2>
 
-    <%= govuk_hr %>
-    <h2 class="govuk-heading-m"><%= "Risks and issues" %></h2>
+<%= govukSummaryList(
+  classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
+  rows: risks_and_issues_rows(@investigation, current_user)
+) %>
 
-    <%= govukSummaryList(
-      classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-      rows: risks_and_issues_rows(@investigation, current_user)
-    ) %>
+<%= govuk_hr %>
+<h2 class="govuk-heading-m">Safety and compliance</h2>
 
-    <%= govuk_hr %>
-    <h2 class="govuk-heading-m">Safety and compliance</h2>
+<%= govukSummaryList(
+classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
+rows: safety_and_compliance_rows(@investigation, current_user)
+) %>
 
-    <%= govukSummaryList(
-    classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-    rows: safety_and_compliance_rows(@investigation, current_user)
-    ) %>
-    
-    <% if @investigation.complainant %>
-      <%= govuk_hr %>
-      <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
-      <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
-    <% end %>
+<% if @investigation.complainant %>
+  <%= govuk_hr %>
+  <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
+  <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
+<% end %>
 
 
-    <%= govuk_hr %>
-    <h2 class="govuk-heading-m">Sharing and collaboration</h2>
+<%= govuk_hr %>
+<h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-    <% if policy(@investigation).change_owner_or_status? %>
-      <% case_owner_actions = {
+<% if policy(@investigation).change_owner_or_status? %>
+  <% case_owner_actions = {
+    items: [
+      href: new_investigation_ownership_path(@investigation),
+      text: "Change",
+      visuallyHiddenText: "case owner"
+    ]
+  } %>
+  <% case_restriction_actions = {
+    items: [
+      href: investigation_visibility_path(@investigation),
+      text: "Change",
+      visuallyHiddenText: "case restriction"
+    ]
+  }
+  %>
+<% else %>
+  <% case_owner_actions = {} %>
+  <% case_restriction_actions = {} %>
+<% end %>
+
+<% team_list_html = capture do %>
+  <% if @investigation.teams_with_access.length > 1 %>
+    <ul class="govuk-list">
+      <% @investigation.teams_with_access.each do |team| %>
+        <li><%= team.name %></li>
+      <% end %>
+    </ul>
+  <% elsif @investigation.teams_with_access.length == 1 %>
+    <%= @investigation.teams_with_access.first.name %>
+  <% else %>
+    No teams added
+  <% end %>
+
+<% end %>
+
+<%= govukSummaryList(
+  classes: "govuk-summary-list--no-border",
+  rows: [
+    {
+      key: { text: "Case owner" },
+      value: { text: investigation_owner(@investigation) },
+      actions: case_owner_actions
+    },
+    {
+      key: { text: "Teams added to case" },
+      value: { text: team_list_html },
+      actions: {
         items: [
-          href: new_investigation_ownership_path(@investigation),
-          text: "Change",
-          visuallyHiddenText: "case owner"
-        ]
-      } %>
-      <% case_restriction_actions = {
-        items: [
-          href: investigation_visibility_path(@investigation),
-          text: "Change",
-          visuallyHiddenText: "case restriction"
+          href: investigation_collaborators_path(@investigation),
+          text: (policy(@investigation).manage_collaborators? ? "Change" : "View"),
+          visuallyHiddenText: "teams added to the case"
         ]
       }
-      %>
-    <% else %>
-      <% case_owner_actions = {} %>
-      <% case_restriction_actions = {} %>
-    <% end %>
+    },
+    {
+      key: { text: "Case restriction" },
+      value: { text: @investigation.is_private? ? "Restricted" : "Unrestricted" },
+      actions: case_restriction_actions
+    }
+  ]
+) %>
 
-    <% team_list_html = capture do %>
-      <% if @investigation.teams_with_access.length > 1 %>
-        <ul class="govuk-list">
-          <% @investigation.teams_with_access.each do |team| %>
-            <li><%= team.name %></li>
-          <% end %>
-        </ul>
-      <% elsif @investigation.teams_with_access.length == 1 %>
-        <%= @investigation.teams_with_access.first.name %>
-      <% else %>
-        No teams added
-      <% end %>
+<%= govuk_hr %>
+<h2 class="govuk-heading-m">About the case</h2>
 
-    <% end %>
+<%= govukSummaryList(
+  classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
+  rows: about_the_case_rows(@investigation, current_user)
+) %>
 
-    <%= govukSummaryList(
-      classes: "govuk-summary-list--no-border",
-      rows: [
-        {
-          key: { text: "Case owner" },
-          value: { text: investigation_owner(@investigation) },
-          actions: case_owner_actions
-        },
-        {
-          key: { text: "Teams added to case" },
-          value: { text: team_list_html },
-          actions: {
-            items: [
-              href: investigation_collaborators_path(@investigation),
-              text: (policy(@investigation).manage_collaborators? ? "Change" : "View"),
-              visuallyHiddenText: "teams added to the case"
-            ]
-          }
-        },
-        {
-          key: { text: "Case restriction" },
-          value: { text: @investigation.is_private? ? "Restricted" : "Unrestricted" },
-          actions: case_restriction_actions
-        }
-      ]
-    ) %>
-
-    <%= govuk_hr %>
-    <h2 class="govuk-heading-m">About the case</h2>
-
-    <%= govukSummaryList(
-      classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-      rows: about_the_case_rows(@investigation, current_user)
-    ) %>
-  </div>
-
-  <% if @investigation.products.any? %>
-    <div class="govuk-grid-column-one-third">
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible app-!-display-mobile--only">
-
-      <h2 class="govuk-heading-m"><%= "Products (#{products_count})" %></h2>
-      <%= @investigation.products_list %>
-    </div>
-  <% end %>
-</div>
+<% if @investigation.products.any? %>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible app-!-display-mobile--only">
+    <h2 class="govuk-heading-m"><%= "Products (#{products_count})" %></h2>
+    <%= @investigation.products_list %>
+<% end %>
