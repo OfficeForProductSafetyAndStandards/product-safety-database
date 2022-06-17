@@ -13,6 +13,16 @@ class Test < ApplicationRecord
       "#{result_text}: #{product.name}"
     end
 
+    def result_text
+      if passed?
+        "Passed test"
+      elsif failed?
+        "Failed test"
+      else
+        "Test result"
+      end
+    end
+
     def supporting_information_title
       title
     end
@@ -49,6 +59,12 @@ class Test < ApplicationRecord
       return "Not provided" if object.failure_details.nil?
 
       object.failure_details
+    end
+
+    def event_type
+      return "Pass" if passed?
+      return "Fail" if failed?
+      supporting_information_type
     end
   end
 end
