@@ -4,11 +4,26 @@ module Investigations
       authorize investigation, :view_non_protected_details?
 
       @grouped_supporting_information = {
-        "Accident or incidents" => investigation.unexpected_events.map(&:decorate),
-        "Corrective actions" => investigation.corrective_actions.map(&:decorate),
-        "Risk assessments" => investigation.risk_assessments.map(&:decorate),
-        "Correspondence" => investigation.correspondences.map(&:decorate),
-        "Test results" => investigation.test_results.map(&:decorate)
+        "Accident or incidents" => {
+          items: investigation.unexpected_events.map(&:decorate),
+          new_path: new_investigation_accident_or_incidents_type_path(investigation)
+        },
+        "Corrective actions" => {
+          items: investigation.corrective_actions.map(&:decorate),
+          new_path: new_investigation_corrective_action_path(investigation)
+        },
+        "Risk assessments" => {
+          items: investigation.risk_assessments.map(&:decorate),
+          new_path: new_investigation_risk_assessment_path(investigation)
+        },
+        "Correspondence" => {
+          items: investigation.correspondences.map(&:decorate),
+          new_path: new_investigation_correspondence_path(investigation)
+        },
+        "Test results" => {
+          items: investigation.test_results.map(&:decorate),
+          new_path: new_investigation_test_result_path(investigation)
+        }
       }
       @breadcrumbs = {
         items: [

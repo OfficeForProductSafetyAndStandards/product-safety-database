@@ -3,7 +3,8 @@
 <% @grouped_supporting_information.each_with_index do |supporting_information_type, index| %>
   <%
     supporting_information_type_name = supporting_information_type.first
-    supporting_information_items = supporting_information_type[1]
+    supporting_information_items = supporting_information_type.last[:items]
+    supporting_information_new_path = supporting_information_type.last[:new_path]
 
     section_classes = class_names(
       "govuk-!-margin-bottom-9 govuk-!-padding-right-4 govuk-!-padding-left-4",
@@ -25,9 +26,9 @@
         </div>
         <div class="govuk-grid-column-one-quarter">
             <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-                <a href="#" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset">
-                    Add <span class="govuk-visually-hidden"><%= supporting_information_type_name %></span>
-                </a>
+                <%= link_to supporting_information_new_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" do %>
+                  Add <span class="govuk-visually-hidden"><%= supporting_information_type_name %></span>
+                <% end %>
             </div>
         </div>
     </div>
