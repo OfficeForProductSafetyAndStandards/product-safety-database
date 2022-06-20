@@ -25,13 +25,15 @@
                 <span class="govuk-!-font-weight-regular govuk-!-font-size-24">(<%=supporting_information_items.count%>)</span>
             </h3>
         </div>
-        <div class="govuk-grid-column-one-quarter">
-            <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-                <%= link_to supporting_information_new_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" do %>
-                  Add <span class="govuk-visually-hidden"><%= supporting_information_type_name %></span>
-                <% end %>
-            </div>
-        </div>
+        <% if policy(@investigation).update? %>
+          <div class="govuk-grid-column-one-quarter">
+              <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+                  <%= link_to supporting_information_new_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" do %>
+                    Add <span class="govuk-visually-hidden"><%= supporting_information_type_name %></span>
+                  <% end %>
+              </div>
+          </div>
+        <% end %>
     </div>
     <% unless supporting_information_items.empty? %>
       <ul class="govuk-list">
