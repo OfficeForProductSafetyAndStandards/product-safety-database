@@ -39,23 +39,28 @@ module Investigations::DisplayTextHelper
         sub_items: [
           {
             text: "Accidents and incidents",
-            count: " (#{investigation.unexpected_events.size})"
+            count: " (#{investigation.unexpected_events.size})",
+            html: link_to("Accidents and incidents (#{investigation.unexpected_events.size})", investigation_supporting_information_index_path(investigation, anchor: "accident-or-incidents"), class: "govuk-link govuk-link--no-visited-state")
           },
           {
             text: "Corrective actions",
-            count: " (#{investigation.corrective_actions.size})"
+            count: " (#{investigation.corrective_actions.size})",
+            html: link_to("Corrective actions (#{investigation.corrective_actions.size})", investigation_supporting_information_index_path(investigation, anchor: "corrective-actions"), class: "govuk-link govuk-link--no-visited-state")
           },
           {
             text: "Risk assessments",
-            count: " (#{investigation.risk_assessments.size})"
+            count: " (#{investigation.risk_assessments.size})",
+            html: link_to("Risk assessments (#{investigation.risk_assessments.size})", investigation_supporting_information_index_path(investigation, anchor: "risk-assessments"), class: "govuk-link govuk-link--no-visited-state")
           },
           {
             text: "Correspondence",
-            count: " (#{investigation.correspondences.size})"
+            count: " (#{investigation.correspondences.size})",
+            html: link_to("Correspondence (#{investigation.correspondences.size})", investigation_supporting_information_index_path(investigation, anchor: "correspondence"), class: "govuk-link govuk-link--no-visited-state")
           },
           {
             text: "Test results",
-            count: " (#{investigation.test_results.size})"
+            count: " (#{investigation.test_results.size})",
+            html: link_to("Test results (#{investigation.test_results.size})", investigation_supporting_information_index_path(investigation, anchor: "test-results"), class: "govuk-link govuk-link--no-visited-state")
           }
         ]
       },

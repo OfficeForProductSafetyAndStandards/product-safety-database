@@ -3,6 +3,7 @@
 <% @grouped_supporting_information.each_with_index do |supporting_information_type, index| %>
   <%
     supporting_information_type_name = supporting_information_type.first
+    supporting_information_type_id = supporting_information_type_name.downcase.gsub(' ', '-')
     supporting_information_items = supporting_information_type.last[:items]
     supporting_information_new_path = supporting_information_type.last[:new_path]
 
@@ -13,7 +14,7 @@
     section_attributes = {
       "class" => section_classes,
       "data-info-number" => supporting_information_items.count,
-      "id" => supporting_information_type_name
+      "id" => supporting_information_type_id
     }
   %>
   <%= tag.section(**section_attributes) do %>
