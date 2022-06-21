@@ -78,7 +78,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     fill_and_submit_form
 
-    expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link CorrectiveAction.first.decorate.supporting_information_title
 
     expect(page).to have_summary_item(key: "Event date",      value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")

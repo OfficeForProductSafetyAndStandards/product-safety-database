@@ -407,7 +407,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     # Skip the 'Case risk level' page as it already matches
 
-    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_serious_risk_level.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: investigation_with_serious_risk_level.pretty_id)
   end
 
   scenario "Attempting to add a risk assessment to a case with no associated products" do

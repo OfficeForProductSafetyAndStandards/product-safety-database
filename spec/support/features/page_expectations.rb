@@ -49,33 +49,54 @@ module PageExpectations
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
-  def expect_to_view_supporting_information_table
-    within page.first("table") do
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: email.supporting_information_title)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceEmail")
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_added)
+  def expect_to_view_supporting_information_sections
+    within("section#correspondence") do
+      expect(page).to have_css(".govuk-summary-list__key", text: "Type")
+      expect(page).to have_css(".govuk-summary-list__value", text: "Telephone")
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: phone_call.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
+      expect(page).to have_css(".govuk-summary-list__value", text: phone_call.date_of_activity)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Added")
+      expect(page).to have_css(".govuk-summary-list__value", text: phone_call.date_added)
 
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: phone_call.supporting_information_title)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondencePhone call")
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_added)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Type")
+      expect(page).to have_css(".govuk-summary-list__value", text: "Meeting")
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: meeting.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
+      expect(page).to have_css(".govuk-summary-list__value", text: meeting.date_of_activity)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Added")
+      expect(page).to have_css(".govuk-summary-list__value", text: meeting.date_added)
 
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: meeting.supporting_information_title)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceMeeting")
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_added)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Type")
+      expect(page).to have_css(".govuk-summary-list__value", text: "Email")
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: email.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
+      expect(page).to have_css(".govuk-summary-list__value", text: email.date_of_activity)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Added")
+      expect(page).to have_css(".govuk-summary-list__value", text: email.date_added)
+    end
 
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: corrective_action.supporting_information_title)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.supporting_information_type)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_added)
+    within("section#test-results") do
+      expect(page).to have_css(".govuk-summary-list__key", text: "Type")
+      expect(page).to have_css(".govuk-summary-list__value", text: "Pass")
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: test_result.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
+      expect(page).to have_css(".govuk-summary-list__value", text: test_result.date_of_activity)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Added")
+      expect(page).to have_css(".govuk-summary-list__value", text: test_result.date_added)
+    end
 
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: test_result.supporting_information_title)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+    within("section#corrective-actions") do
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: corrective_action.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
+      expect(page).to have_css(".govuk-summary-list__value", text: corrective_action.date_of_activity)
+      expect(page).to have_css(".govuk-summary-list__key", text: "Added")
+      expect(page).to have_css(".govuk-summary-list__value", text: corrective_action.date_added)
     end
   end
 
