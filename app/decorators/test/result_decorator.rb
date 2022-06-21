@@ -64,6 +64,7 @@ class Test < ApplicationRecord
     def event_type
       return "Pass" if passed?
       return "Fail" if failed?
+
       supporting_information_type
     end
   end

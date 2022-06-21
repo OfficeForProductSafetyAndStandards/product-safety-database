@@ -82,7 +82,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     click_link CorrectiveAction.first.decorate.supporting_information_title
 
-    expect(page).to have_summary_item(key: "Event date",      value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Recall information",  value: "#{online_recall_information} (opens in new tab)")
@@ -109,7 +109,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Event date",      value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")

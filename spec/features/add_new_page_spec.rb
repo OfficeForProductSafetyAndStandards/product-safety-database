@@ -73,7 +73,7 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
       expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
     end
   end
-  
+
   context "when user selects `product`" do
     it "takes user to the new product page" do
       within_fieldset("What are you adding to the case?") do

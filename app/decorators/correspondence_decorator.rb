@@ -28,6 +28,7 @@ class CorrespondenceDecorator < ApplicationDecorator
 
   def event_type
     return "Telephone" if object.class.model_name.human == "Phone call"
+
     object.class.model_name.human
   end
 
