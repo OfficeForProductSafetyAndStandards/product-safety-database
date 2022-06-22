@@ -22,8 +22,7 @@ class Investigations::TestResultsController < ApplicationController
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
-      flash_message = "#{result.test_result.pretty_name.capitalize} was successfully recorded."
-      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: flash_message }
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
     end
 
     @investigation = investigation.decorate

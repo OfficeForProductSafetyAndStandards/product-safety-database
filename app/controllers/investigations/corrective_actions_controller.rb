@@ -26,7 +26,7 @@ module Investigations
       )
 
       if result.success?
-        return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: t(".success") }
+        return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
       end
 
       render :new

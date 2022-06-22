@@ -26,7 +26,7 @@ class Investigations::RecordPhoneCallsController < ApplicationController
         .merge(investigation:, user: current_user)
     )
 
-    redirect_to investigation_phone_call_path(@investigation.pretty_id, result.correspondence)
+    redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
   end
 
   def edit

@@ -30,7 +30,7 @@ class Investigations::RecordEmailsController < ApplicationController
         })
       )
 
-      redirect_to investigation_email_path(@investigation.pretty_id, result.email)
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
     else
 
       @email = @investigation.emails.new

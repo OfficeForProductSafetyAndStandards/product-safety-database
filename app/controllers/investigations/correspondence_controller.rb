@@ -18,6 +18,7 @@ class Investigations::CorrespondenceController < ApplicationController
   def create
     update_attachments
     attach_files
+    byebug
     if correspondence_valid? && @investigation.save
       audit_class.from(@correspondence, @investigation)
       redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "Correspondence was successfully recorded" }
