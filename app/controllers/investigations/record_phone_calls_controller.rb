@@ -51,7 +51,7 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     if correspondence_form.valid?
       result = UpdatePhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
 
-      return redirect_to investigation_phone_call_path(investigation, phone_call) if result.success?
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
     end
 
     @investigation       = investigation.decorate

@@ -52,7 +52,7 @@ module Investigations
           })
         )
 
-        redirect_to investigation_accident_or_incident_path(investigation, result.accident_or_incident), flash: { success: "#{@accident_or_incident_form.type} was successfully updated." }
+        redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
 
       else
         @type = type

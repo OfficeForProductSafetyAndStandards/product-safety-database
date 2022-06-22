@@ -71,7 +71,7 @@ module Investigations
           )
       )
 
-      return redirect_to investigation_corrective_action_path(investigation, result.corrective_action), flash: { success: t(".success") } if result.success?
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
 
       render :edit
     end
