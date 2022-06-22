@@ -17,7 +17,6 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     # Test update without changing anything
     # there was a problem with the audit log and transcript
     click_on "Update phone call"
-    click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect(page).not_to have_css("p.govuk-body-s", text: /Phone call updated by/)
@@ -48,9 +47,12 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     attach_file "Upload a file", new_transcript
     click_on "Update phone call"
 
+    click_on correspondence.overview
+
     expect(page).to have_summary_item(key: "Transcript", value: "#{new_transcript.basename} (30 Bytes)")
 
     click_on "Back to allegation: #{investigation.pretty_id}"
+
     click_on "Activity"
 
     activity = correspondence.activities.order(created_at: :desc).find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
@@ -78,7 +80,9 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
 
     click_on "Update phone call"
 
-    expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_on new_overview
 
     expect(page).to have_summary_item(key: "Date of call", value: new_correspondence_date.to_s(:govuk))
     expect(page).to have_summary_item(key: "Call with",    value: "#{new_correspondent_name} (#{new_phone_number})")

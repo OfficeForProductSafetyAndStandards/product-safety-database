@@ -33,6 +33,8 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
     change_values_in_form
 
+    click_on "Failed test: MyBrand red washing machine"
+
     expect_result_page_to_show_updated_values
 
     click_link "Back to #{investigation.decorate.pretty_description.downcase}"
@@ -55,6 +57,8 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       expect_edit_form_to_have_fields_populated_by_original_test_result_values(result: "Fail")
 
       change_values_in_form
+
+      click_on "Failed test: MyBrand red washing machine"
 
       expect_result_page_to_show_updated_values
 
@@ -79,6 +83,8 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       expect_edit_form_to_have_fields_populated_by_original_test_result_values(result: "Fail")
 
       change_values_in_form(file_path: "test/fixtures/files/test_result.txt")
+
+      click_on "Failed test: MyBrand red washing machine"
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
