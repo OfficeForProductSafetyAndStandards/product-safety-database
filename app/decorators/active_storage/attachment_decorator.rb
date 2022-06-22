@@ -23,7 +23,7 @@ module ActiveStorage
     end
 
     def show_path
-      object
+      h.edit_investigation_document_path(Investigation.find_by(id: object.record_id), object)
     end
   end
 end
