@@ -11,13 +11,50 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
+  scenario "Adding an attachment that is not an image" do
+    sign_in user
+    visit "/cases/#{investigation.pretty_id}/supporting-information/new"
+
+    expect_to_be_on_add_supporting_information_page
+
+    choose "Other document or attachment"
+    click_button "Continue"
+
+    expect_to_be_on_add_attachment_to_a_case_page
+
+    click_button "Save attachment"
+
+    expect(page).to have_error_summary("Select a file", "Enter a document title")
+
+    attach_file "document[document]", other_file
+    fill_in "Document title", with: title
+    fill_in "Description",    with: description
+
+    click_button "Save attachment"
+
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    expect_confirmation_banner("The file was added")
+
+    within page.find("h2", text: "Other files and attachments").find(:xpath, "..") do
+      expect(page).to have_selector("h2", text: title)
+      expect(page).to have_selector("p", text: description)
+    end
+
+    change_attachment_to_have_simulate_virus(investigation.reload)
+
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+    expect(page).not_to have_selector("h2", text: title)
+    expect(page).not_to have_selector("p", text: description)
+  end
+
   scenario "Adding an image" do
     sign_in user
     visit "/cases/#{investigation.pretty_id}/supporting-information/new"
 
     expect_to_be_on_add_supporting_information_page
 
-    choose "Case image"
+    choose "Other document or attachment"
     click_button "Continue"
 
     expect_to_be_on_add_attachment_to_a_case_page

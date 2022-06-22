@@ -18,6 +18,10 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_opensearch, :with
 
     fill_and_submit_attachment_details_page
 
+    click_link "Supporting information (1)"
+
+    expect_case_attachments_page_to_show_entered_information
+
     click_link "Activity"
 
     expect_case_activity_page_to_show_entered_information

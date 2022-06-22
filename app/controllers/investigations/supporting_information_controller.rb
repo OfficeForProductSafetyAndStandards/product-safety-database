@@ -22,6 +22,10 @@ module Investigations
         "Test results" => {
           items: investigation.test_results.order(created_at: :desc).map(&:decorate),
           new_path: new_investigation_test_result_path(investigation)
+        },
+        "Other" => {
+          items: investigation.generic_supporting_information_attachments.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_document_path(investigation)
         }
       }
       @breadcrumbs = {

@@ -34,7 +34,7 @@ module Investigations::DisplayTextHelper
       {
         href: investigation_supporting_information_index_path(investigation),
         text: "Supporting information",
-        count: " (#{investigation.supporting_information.size})",
+        count: " (#{investigation.supporting_information.size + investigation.generic_supporting_information_attachments.size})",
         active: is_current_tab.supporting_information?,
         sub_items: [
           {
@@ -61,6 +61,11 @@ module Investigations::DisplayTextHelper
             text: "Test results",
             count: " (#{investigation.test_results.size})",
             html: link_to("Test results (#{investigation.test_results.size})", investigation_supporting_information_index_path(investigation, anchor: "test-results"), class: "govuk-link govuk-link--no-visited-state")
+          },
+          {
+            text: "Other",
+            count: " (#{investigation.generic_supporting_information_attachments.size})",
+            html: link_to("Other (#{investigation.generic_supporting_information_attachments.size})", investigation_supporting_information_index_path(investigation, anchor: "other"), class: "govuk-link govuk-link--no-visited-state")
           }
         ]
       },

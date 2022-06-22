@@ -7,7 +7,8 @@ class SupportingInformationTypeForm
     corrective_action: "Corrective action",
     correspondence: "Correspondence",
     testing_result: "Test result",
-    risk_assessment: "Risk assessment"
+    risk_assessment: "Risk assessment",
+    generic_information: "Other document or attachment"
   }.freeze
   IMAGE_TYPE = { image: "Case image", }.freeze
   AVAILABLE_TYPES = MAIN_TYPES.merge(IMAGE_TYPE)
