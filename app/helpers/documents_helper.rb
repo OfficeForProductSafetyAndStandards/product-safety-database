@@ -6,7 +6,7 @@ module DocumentsHelper
   end
 
   def document_file_extension(document)
-    File.extname(object.filename.to_s)&.remove(".")&.upcase
+    File.extname(document.filename.to_s)&.remove(".")&.upcase
   end
 
   def filename_with_size(file)
