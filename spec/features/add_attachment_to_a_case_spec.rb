@@ -35,17 +35,17 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
     expect_confirmation_banner("The file was added")
 
-    within page.find("h2", text: "Other files and attachments").find(:xpath, "..") do
-      expect(page).to have_selector("h2", text: title)
-      expect(page).to have_selector("p", text: description)
+    within("section#other") do
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: title)
     end
 
     change_attachment_to_have_simulate_virus(investigation.reload)
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    expect(page).not_to have_selector("h2", text: title)
-    expect(page).not_to have_selector("p", text: description)
+    expect(page).not_to have_selector("h2", text: "Title")
+    expect(page).not_to have_selector("p", text: title)
   end
 
   scenario "Adding an image" do

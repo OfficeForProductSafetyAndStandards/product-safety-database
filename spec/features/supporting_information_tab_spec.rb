@@ -12,7 +12,7 @@ RSpec.feature "Manage supporting information", :with_stubbed_opensearch, :with_s
 
       visit "/cases/#{investigation.pretty_id}"
 
-      click_on "Supporting information (5)"
+      click_on "Supporting information (6)"
 
       expect_to_view_supporting_information_sections
 
@@ -22,7 +22,7 @@ RSpec.feature "Manage supporting information", :with_stubbed_opensearch, :with_s
 
       visit "/cases/#{investigation.pretty_id}"
 
-      click_on "Supporting information (5)"
+      click_on "Supporting information (6)"
 
       expect_to_view_supporting_information_sections
     end
