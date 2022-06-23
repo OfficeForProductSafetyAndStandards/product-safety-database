@@ -477,6 +477,8 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    rufus-scheduler (3.8.1)
+      fugit (~> 1.1, >= 1.1.6)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -518,9 +520,11 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-cron (1.4.0)
-      fugit (~> 1)
-      sidekiq (>= 4.2.1)
+    sidekiq-scheduler (4.0.1)
+      redis (>= 4.2.0)
+      rufus-scheduler (~> 3.2)
+      sidekiq (>= 4)
+      tilt (>= 1.4.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -693,7 +697,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers
   sidekiq (~> 6.4)
-  sidekiq-cron (~> 1.4)
+  sidekiq-scheduler
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
