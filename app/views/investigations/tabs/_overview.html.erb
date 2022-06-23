@@ -1,5 +1,7 @@
 <%= page_title "Case - #{@investigation.pretty_id}" %>
-<% products_count = @investigation.products.count %>
+<% products_count = @investigation.products.size %>
+
+<%= render 'investigations/actions', investigation: @investigation %>
 
 <p class="govuk-body-l"><%= @investigation.title %></p>
 
