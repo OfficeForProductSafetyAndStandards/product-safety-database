@@ -61,7 +61,7 @@ module Investigations
 
       return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
-      result = UpdateCorrectiveAction.call(
+      UpdateCorrectiveAction.call(
         @corrective_action_form
           .serializable_hash
           .merge(
@@ -71,9 +71,7 @@ module Investigations
           )
       )
 
-      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
-
-      render :edit
+      redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
     end
   end
 end

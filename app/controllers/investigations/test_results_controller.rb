@@ -59,7 +59,7 @@ class Investigations::TestResultsController < ApplicationController
       return render :edit
     end
 
-    result = UpdateTestResult.call(
+    UpdateTestResult.call(
       @test_result_form.serializable_hash
         .merge(test_result:,
                investigation:,
@@ -67,10 +67,7 @@ class Investigations::TestResultsController < ApplicationController
                changes: @test_result_form.changes)
     )
 
-    return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
-
-    @investigation = investigation.decorate
-    render "edit"
+    redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
   end
 
 private

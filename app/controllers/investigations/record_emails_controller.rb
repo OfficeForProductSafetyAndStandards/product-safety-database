@@ -18,7 +18,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      result = AddEmailToCase.call(
+      AddEmailToCase.call(
         @email_correspondence_form.attributes.except(
           "email_file_id",
           "email_attachment_id"
@@ -65,7 +65,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      result = UpdateEmail.call(
+      UpdateEmail.call(
         @email_correspondence_form.attributes.merge({
           email: @email,
           user: current_user

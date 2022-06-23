@@ -44,7 +44,7 @@ module Investigations
       @accident_or_incident_form.assign_attributes(accident_or_incident_params)
 
       if @accident_or_incident_form.valid?
-        result = UpdateAccidentOrIncident.call!(
+        UpdateAccidentOrIncident.call!(
           @accident_or_incident_form.serializable_hash.merge({
             accident_or_incident: @accident_or_incident,
             investigation:,
