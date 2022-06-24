@@ -127,6 +127,10 @@ class Investigation < ApplicationRecord
       .where.not(record: [corrective_actions, correspondences, tests])
   end
 
+  def number_of_related_images
+    images.size + products.flat_map(&:images).count
+  end
+
   def generic_supporting_information_attachments
     @generic_supporting_information_attachments ||= documents
       .includes(:blob)
