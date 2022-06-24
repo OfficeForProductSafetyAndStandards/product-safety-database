@@ -28,7 +28,7 @@ gem "net-imap"
 gem "net-pop"
 gem "net-smtp"
 
-gem "pg", "~> 1.3"
+gem "pg", "~> 1.4"
 gem "pghero", "~> 2.8"
 gem "puma", "~> 5.6"
 gem "pundit", "~> 2.1"
