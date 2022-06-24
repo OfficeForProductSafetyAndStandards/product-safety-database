@@ -3,3 +3,13 @@
 :queues:
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
+:schedule:
+  delete_unsafe_files_job:
+    cron: "*/15 * * * *"
+    class: "DeleteUnsafeFilesJob"
+  log_db_metrics_job:
+    cron: "*/15 * * * *"
+    class: "LogDbMetricsJob"
+  lock_inactive_users_job:
+    cron: "0 1 * * *"
+    class: "LockInactiveUsersJob"
