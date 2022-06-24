@@ -44,7 +44,7 @@ gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.4"
 gem "sidekiq-scheduler"
 gem "slim-rails"
-gem "sprockets", "4.0.3" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
+gem "sprockets", "4.1.0" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 1.0"
 gem "tty-table", require: false
