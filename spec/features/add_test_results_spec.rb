@@ -46,7 +46,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
-      expect_summary_to_reflect_values(result: "Passed")
+      expect_summary_to_reflect_values(result: "Pass")
 
       expect(page).to have_text("test_result.txt")
 
@@ -100,7 +100,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
-      expect_summary_to_reflect_values(result: "Failed")
+      expect_summary_to_reflect_values(result: "Fail")
 
       expect(page).to have_text("test_result.txt")
 

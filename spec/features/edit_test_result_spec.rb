@@ -41,7 +41,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
     click_link "Activity"
 
     expect_activity_page_to_show_edited_test_result_values
-    expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Passed")
+    expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Pass")
   end
 
   context "when editing a failed test result (with validation errors)" do
@@ -66,7 +66,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       click_link "Activity"
 
       expect_activity_page_to_show_edited_test_result_values
-      expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Failed")
+      expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Fail")
     end
   end
 
@@ -137,7 +137,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
     expect(page).to have_summary_item(key: "Date of test", value: "2 June 2019")
     expect(page).to have_summary_item(key: "Legislation", value: "Consumer Protection Act 1987")
     expect(page).to have_summary_item(key: "Standards", value: "EN72, EN73")
-    expect(page).to have_summary_item(key: "Result", value: "Failed")
+    expect(page).to have_summary_item(key: "Result", value: "Fail")
     expect(page).to have_summary_item(key: "Reason for failure", value: failure_details)
     expect(page).to have_summary_item(key: "Further details", value: "Final result")
     expect(page).to have_summary_item(key: "Attachment description", value: "Final test result certificate")
