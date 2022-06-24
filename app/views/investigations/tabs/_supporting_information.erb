@@ -42,13 +42,19 @@
             <dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt">
               <% if item.try(:event_type) %>
                 <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">Type</dt>
+                  <dt class="govuk-summary-list__key"><%= supporting_information_type_id == "test-results" ? "Result" : "Type" %></dt>
                   <dd class="govuk-summary-list__value"><%= item.event_type %></dd>
                 </div>
               <% end %>
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">Title</dt>
-                  <dd class="govuk-summary-list__value"><%= link_to item.supporting_information_title, item.show_path, class: "govuk-link govuk-link--no-visited-state" %></dd>
+                  <% title = if supporting_information_type_id == "correspondence" && !policy(@investigation).view_protected_details?
+                       tag.p(I18n.t("case.protected_details", data_type: "correspondence"), class: "govuk-hint")
+                     else
+                       link_to item.supporting_information_title, item.show_path, class: "govuk-link govuk-link--no-visited-state"
+                     end
+                  %>
+                  <dd class="govuk-summary-list__value"><%= title %></dd>
                 </div>
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">Event date</dt>

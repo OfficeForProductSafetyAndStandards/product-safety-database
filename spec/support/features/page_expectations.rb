@@ -49,30 +49,33 @@ module PageExpectations
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
-  def expect_to_view_supporting_information_sections
+  def expect_to_view_supporting_information_sections(can_view_protected_details:)
     within("section#correspondence") do
+      phone_call_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
       expect(page).to have_css(".govuk-summary-list__key", text: "Type")
       expect(page).to have_css(".govuk-summary-list__value", text: "Telephone")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
-      expect(page).to have_css(".govuk-summary-list__value", text: phone_call.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__value", text: phone_call_title)
       expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
       expect(page).to have_css(".govuk-summary-list__value", text: phone_call.date_of_activity)
       expect(page).to have_css(".govuk-summary-list__key", text: "Added")
       expect(page).to have_css(".govuk-summary-list__value", text: phone_call.date_added)
 
+      meeting_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
       expect(page).to have_css(".govuk-summary-list__key", text: "Type")
       expect(page).to have_css(".govuk-summary-list__value", text: "Meeting")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
-      expect(page).to have_css(".govuk-summary-list__value", text: meeting.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__value", text: meeting_title)
       expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
       expect(page).to have_css(".govuk-summary-list__value", text: meeting.date_of_activity)
       expect(page).to have_css(".govuk-summary-list__key", text: "Added")
       expect(page).to have_css(".govuk-summary-list__value", text: meeting.date_added)
 
+      email_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
       expect(page).to have_css(".govuk-summary-list__key", text: "Type")
       expect(page).to have_css(".govuk-summary-list__value", text: "Email")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
-      expect(page).to have_css(".govuk-summary-list__value", text: email.supporting_information_title)
+      expect(page).to have_css(".govuk-summary-list__value", text: email_title)
       expect(page).to have_css(".govuk-summary-list__key", text: "Event date")
       expect(page).to have_css(".govuk-summary-list__value", text: email.date_of_activity)
       expect(page).to have_css(".govuk-summary-list__key", text: "Added")
@@ -80,7 +83,7 @@ module PageExpectations
     end
 
     within("section#test-results") do
-      expect(page).to have_css(".govuk-summary-list__key", text: "Type")
+      expect(page).to have_css(".govuk-summary-list__key", text: "Result")
       expect(page).to have_css(".govuk-summary-list__value", text: "Pass")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
       expect(page).to have_css(".govuk-summary-list__value", text: test_result.supporting_information_title)
