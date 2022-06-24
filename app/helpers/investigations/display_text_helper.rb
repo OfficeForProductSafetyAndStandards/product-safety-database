@@ -40,32 +40,32 @@ module Investigations::DisplayTextHelper
           {
             text: "Accidents and incidents",
             count: " (#{investigation.unexpected_events.size})",
-            html: link_to("Accidents and incidents (#{investigation.unexpected_events.size})", investigation_supporting_information_index_path(investigation, anchor: "accident-or-incidents"), class: "govuk-link govuk-link--no-visited-state")
+            href: investigation_supporting_information_index_path(investigation, anchor: "accident-or-incidents")
           },
           {
             text: "Corrective actions",
             count: " (#{investigation.corrective_actions.size})",
-            html: link_to("Corrective actions (#{investigation.corrective_actions.size})", investigation_supporting_information_index_path(investigation, anchor: "corrective-actions"), class: "govuk-link govuk-link--no-visited-state")
+            href: investigation_supporting_information_index_path(investigation, anchor: "corrective-actions")
           },
           {
             text: "Risk assessments",
             count: " (#{investigation.risk_assessments.size})",
-            html: link_to("Risk assessments (#{investigation.risk_assessments.size})", investigation_supporting_information_index_path(investigation, anchor: "risk-assessments"), class: "govuk-link govuk-link--no-visited-state")
+            href: investigation_supporting_information_index_path(investigation, anchor: "risk-assessments")
           },
           {
             text: "Correspondence",
             count: " (#{investigation.correspondences.size})",
-            html: link_to("Correspondence (#{investigation.correspondences.size})", investigation_supporting_information_index_path(investigation, anchor: "correspondence"), class: "govuk-link govuk-link--no-visited-state")
+            href: investigation_supporting_information_index_path(investigation, anchor: "correspondence")
           },
           {
             text: "Test results",
             count: " (#{investigation.test_results.size})",
-            html: link_to("Test results (#{investigation.test_results.size})", investigation_supporting_information_index_path(investigation, anchor: "test-results"), class: "govuk-link govuk-link--no-visited-state")
+            href: investigation_supporting_information_index_path(investigation, anchor: "test-results")
           },
           {
             text: "Other",
             count: " (#{investigation.generic_supporting_information_attachments.size})",
-            html: link_to("Other (#{investigation.generic_supporting_information_attachments.size})", investigation_supporting_information_index_path(investigation, anchor: "other"), class: "govuk-link govuk-link--no-visited-state")
+            href: investigation_supporting_information_index_path(investigation, anchor: "other")
           }
         ]
       },
