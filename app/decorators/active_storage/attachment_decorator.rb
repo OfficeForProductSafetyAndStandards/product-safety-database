@@ -15,15 +15,19 @@ module ActiveStorage
     end
 
     def date_of_activity
-      object.created_at
+      object.created_at.to_s(:govuk)
     end
 
     def date_added
-      object.created_at
+      object.created_at.to_s(:govuk)
+    end
+
+    def edit_path
+      h.edit_investigation_document_path(Investigation.find_by(id: object.record_id), object)
     end
 
     def show_path
-      h.edit_investigation_document_path(Investigation.find_by(id: object.record_id), object)
+      h.investigation_document_path(Investigation.find_by(id: object.record_id), object)
     end
   end
 end
