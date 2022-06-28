@@ -107,6 +107,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     click_button "Set risk level"
 
+    click_link "Serious risk: MyBrand washing machine model X"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Date of assessment",  value: "3 April 2020")
@@ -192,6 +194,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     click_button "Set risk level"
 
+    click_link "Medium-high risk: MyBrand washing machine model X"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Assessed by", value: "OtherCouncil Trading Standards")
@@ -252,6 +256,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     end
 
     click_button "Set risk level"
+
+    click_link "Serious risk: MyBrand washing machine model X"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
@@ -314,6 +320,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     click_button "Set risk level"
 
+    click_link "Serious risk: MyBrand washing machine model X"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Assessed by", value: "RiskAssessmentsRUs")
@@ -374,6 +382,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     end
 
     click_button "Set risk level"
+
+    click_link "High risk: MyBrand washing machine model X"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 

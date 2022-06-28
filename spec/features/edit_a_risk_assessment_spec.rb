@@ -120,6 +120,10 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
 
     click_button "Set risk level"
 
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Medium-high risk: Doll"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
 
     expect(page).to have_summary_item(key: "Risk level",          value: "Medium-high risk")
