@@ -118,9 +118,9 @@ class DocumentsController < ApplicationController
   end
 
   def show
+    @parent = get_parent
     authorize @parent, :view_protected_details? if @parent.is_a? Investigation
 
-    @parent = get_parent
     @file = @parent.documents.find(params[:id]).decorate
     @parent = @parent.decorate
   end
