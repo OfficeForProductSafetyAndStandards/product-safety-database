@@ -59,7 +59,7 @@ class Investigations::TestResultsController < ApplicationController
       return render :edit
     end
 
-    UpdateTestResult.call(
+    UpdateTestResult.call!(
       @test_result_form.serializable_hash
         .merge(test_result:,
                investigation:,
