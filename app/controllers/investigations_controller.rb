@@ -65,6 +65,7 @@ class InvestigationsController < ApplicationController
   end
 
   def team_cases
+    nil.first
     @page_name = "team_cases"
     @search = SearchParams.new({ "case_owner" => "my_team",
                                  "sort_by" => params["sort_by"],
