@@ -1,20 +1,20 @@
 <%= render "investigations/pages_top", investigation: @investigation %>
 <% content_for(:page_title, "Supporting information") %>
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
-        <span class="govuk-caption-m">Allegation 2101-0008 </span>
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
-            Supporting information
-        </h1>
-        <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-7">This is the supporting information for the case.</p>
+  <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
+    <span class="govuk-caption-m">Allegation 2101-0008 </span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
+        Supporting information
+    </h1>
+    <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-7">This is the supporting information for the case.</p>
+  </div>
+  <% if policy(@investigation).update? %>
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
+    <div class="opss-text-align-right">
+        <%= link_to "Add supporting information", new_investigation_supporting_information_path(@investigation), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
     </div>
-    <% if policy(@investigation).update? %>
-      <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
-          <div class="opss-text-align-right">
-              <%= link_to "Add supporting information", new_investigation_supporting_information_path(@investigation), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
-          </div>
-      </div>
-    <% end %>
+  </div>
+  <% end %>
 </div>
 
 <div class="govuk-grid-row govuk-!-padding-bottom-6">

@@ -21,9 +21,6 @@
 
 $std-font-family: "GDS Transport", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
-/*input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {color:  govuk-colour("mid-grey"); }
-input[type="checkbox"]:disabled + label {opacity: 1 !important; }*/
-
 /* not normalised by gds library - starts */
 figure,
 figcaption {
@@ -369,10 +366,6 @@ samp {
                 width: 36% !important;
                 @include word-wrap;
             }
-
-            /*dt + dd {    //FF dosen't like
-                text-align: center;
-            }*/
         }
     }
     .opss-3-col-flow {
@@ -391,7 +384,6 @@ samp {
 
                 span {
                     @include opss-font-size($s: 14px, $l: 1.2);
-                    /*position: relative; top: -1px;*/
                 }
             }
         }
@@ -482,10 +474,6 @@ ul.opss-left-nav {
                 }
             }
     }
-
-    /*& > li > ul.govuk-list { // 2nd nested ULs
-        padding-top: govuk-spacing(1); margin: govuk-spacing(4) 0 govuk-spacing(2) 0;
-    } */
 
     & > li:first-child {
         padding-top: 5px;
