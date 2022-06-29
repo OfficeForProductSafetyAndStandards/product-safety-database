@@ -10,7 +10,7 @@ class SupportingInformationTypeForm
     risk_assessment: "Risk assessment",
     generic_information: "Other document or attachment"
   }.freeze
-  IMAGE_TYPE = { image: "Case image", }.freeze
+  IMAGE_TYPE = { image: "Case image" }.freeze
   AVAILABLE_TYPES = MAIN_TYPES.merge(IMAGE_TYPE)
 
   attribute :type

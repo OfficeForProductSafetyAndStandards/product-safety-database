@@ -18,7 +18,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      AddEmailToCase.call(
+      AddEmailToCase.call!(
         @email_correspondence_form.attributes.except(
           "email_file_id",
           "email_attachment_id"

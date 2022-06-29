@@ -1,0 +1,39 @@
+<li>
+    <dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt"><!--  opss-summary-list-mixed--sm-font -->
+      <% if type %>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Type
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= type %>
+            </dd>
+        </div>
+      <% end %>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+              Title
+          </dt>
+          <dd class="govuk-summary-list__value">
+              <a href="/cases/2202-0005/accident_or_incidents/14" class="govuk-link govuk-link--no-visited-state"><%= title %></a>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+              Event date
+          </dt>
+          <dd class="govuk-summary-list__value">
+              <%= event_date %>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+              Added
+          </dt>
+          <dd class="govuk-summary-list__value">
+              <%= added_date %>
+          </dd>
+        </div>
+    </dl>
+
+</li>
