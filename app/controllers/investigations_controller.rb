@@ -11,6 +11,7 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
+        Rails.logger.error("Testing sentry config!")
         @answer         = search_for_investigations(20)
         @count          = count_to_display
         @investigations = InvestigationDecorator
