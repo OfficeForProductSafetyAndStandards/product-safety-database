@@ -49,7 +49,7 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     correspondence_form.load_transcript_file
 
     if correspondence_form.valid?
-      UpdatePhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
+      UpdatePhoneCall.call!(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
 
       return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
     end
