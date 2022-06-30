@@ -1,10 +1,22 @@
 <%= render "investigations/pages_top", investigation: investigation %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
-    <span class="govuk-caption-m"><%= investigation.pretty_description %></span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3"><%= case_page_heading %></h1>
-    <hr class="govuk-section-break govuk-section-break--l">
+  <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
+    <span class="govuk-caption-m"><%= current_tab == "overview" ? investigation.case_type.upcase_first : investigation.pretty_description %></span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3"><%= case_page_heading %>
+      <% if current_tab == "overview" %>
+        <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= investigation.pretty_id %></span>
+      <% end %>
+      <% if secondary_text %>
+        <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-7"><%= secondary_text %></p>
+      <% end %>
+    </h1>
+  </div>
+
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
+    <div class="opss-text-align-right">
+      <%= link_to link_text, href, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+    </div>
   </div>
 </div>
 
