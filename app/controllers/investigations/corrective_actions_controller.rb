@@ -61,7 +61,7 @@ module Investigations
 
       return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
-      UpdateCorrectiveAction.call(
+      UpdateCorrectiveAction.call!(
         @corrective_action_form
           .serializable_hash
           .merge(
