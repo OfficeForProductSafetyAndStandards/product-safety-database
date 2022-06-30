@@ -37,7 +37,7 @@
 </div>
 
 
-<%= render "components/govuk_tabs",
+<%= govukTabs(
   items: [
     {
       id: "full-detail",
@@ -60,4 +60,4 @@
       panel: { html: render("products/tabs/cases") }
     }
   ]
-%>
+) %>

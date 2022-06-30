@@ -24,7 +24,7 @@
         <% error_message = { text: @form.errors.full_messages_for(:team_id).first } %>
       <% end %>
 
-      <%= render "components/govuk_select",
+      <%= govukSelect(
         formGroup: {
           classes: "app-!-autocomplete--max-width-two-thirds"
         },
@@ -38,11 +38,11 @@
         },
         is_autocomplete: true,
         show_all_values: true
-      %>
+      ) %>
 
       <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.</p>
 
-      <%= render "form_components/govuk_radios",
+      <%= govukRadios(
         form: form,
         key: :permission_level,
         classes: "",
@@ -71,10 +71,10 @@
             }
           }
         ]
-      %>
+      ) %>
 
       <% message_html = capture do %>
-        <%= render "form_components/govuk_textarea",
+        <%= govukTextarea(
           form: form,
           key: :message,
           id: "message",
@@ -84,10 +84,10 @@
           hint: {
             text: "Message will also be included on the case timeline"
           }
-        %>
+        ) %>
       <% end %>
 
-      <%= render "form_components/govuk_radios",
+      <%= govukRadios(
         form: form,
         key: :include_message,
         classes: "",
@@ -110,7 +110,7 @@
             value: "false"
           }
         ]
-      %>
+      ) %>
 
 
       <%= govukButton(text: "Add team to this case") %>

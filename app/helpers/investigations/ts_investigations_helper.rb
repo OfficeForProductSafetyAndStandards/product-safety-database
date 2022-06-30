@@ -1,18 +1,19 @@
 module Investigations::TsInvestigationsHelper
   def why_reporting_checkboxes(form, page_heading, errors)
     base_errors = errors.full_messages_for(:base)
-    render "form_components/govuk_checkboxes",
-           form:,
-           key: :why_reporting,
-           fieldset: { legend: { html: page_heading_html(page_heading) }, classes: "js-mutually-exclusive" },
-           hint: { text: "Select all that apply" },
-           errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
-           items: [
-             reported_unsafe_checkbox(form, hazard_types),
-             reported_non_compliant_checkbox(form),
-             { key: "or", divider: "or" },
-             reported_safe_and_compliant_checkbox
-           ]
+    govukCheckboxes(
+      form:,
+      key: :why_reporting,
+      fieldset: { legend: { html: page_heading_html(page_heading) }, classes: "js-mutually-exclusive" },
+      hint: { text: "Select all that apply" },
+      errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
+      items: [
+        reported_unsafe_checkbox(form, hazard_types),
+        reported_non_compliant_checkbox(form),
+        { key: "or", divider: "or" },
+        reported_safe_and_compliant_checkbox
+      ]
+    )
   end
 
 private
@@ -26,13 +27,14 @@ private
   end
 
   def non_compliant_details_html(form)
-    render "form_components/govuk_textarea",
-           key: :non_compliant_reason,
-           form:,
-           id: "non_compliant_reason",
-           attributes: { maxlength: 10_000 },
-           label: { text: "Why is the product non-compliant?" },
-           classes: "govuk-!-width-three-quarters"
+    govukTextarea(
+      key: :non_compliant_reason,
+      form:,
+      id: "non_compliant_reason",
+      attributes: { maxlength: 10_000 },
+      label: { text: "Why is the product non-compliant?" },
+      classes: "govuk-!-width-three-quarters"
+    )
   end
 
   def reported_unsafe_checkbox(form, hazard_types)

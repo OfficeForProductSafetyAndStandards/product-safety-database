@@ -1,4 +1,4 @@
-<%= render "form_components/govuk_radios",
+<%= govukRadios(
   form: form,
   key: :case_type,
   formGroup: {
@@ -36,4 +36,4 @@
       value: "project"
     }
   ]
-%>
+) %>

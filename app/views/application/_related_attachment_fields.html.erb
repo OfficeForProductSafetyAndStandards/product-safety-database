@@ -35,13 +35,13 @@
       <% end %>
 
       <div id="attachment-description">
-        <%= render "form_components/govuk_textarea",
+        <%= govukTextarea(
           key: :description,
           value: file_blob&.metadata&.dig(:description),
           form: subform,
           label: { text: "Attachment description" },
           attributes: { maxlength: 10_000 }
-        %>
+        ) %>
       </div>
     <% end %>
   </div>

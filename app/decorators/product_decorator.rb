@@ -29,7 +29,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Customs code" }, value: { text: object.customs_code } }
     ]
     rows.compact!
-    h.render "components/govuk_summary_list", rows:
+    h.govukSummaryList rows:
   end
 
   def authenticity

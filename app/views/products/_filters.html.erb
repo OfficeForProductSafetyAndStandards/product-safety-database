@@ -7,15 +7,15 @@
   <% if ["team_products", "your_products"].exclude? @page_name %>
     <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
     <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
-    <%= render "form_components/govuk_select",
-       key: "hazard_type",
-       form: form,
-       items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
-       label: { text: "Hazard type" },
-       formGroup: { classes: "govuk-!-margin-right-1" },
-       is_autocomplete: false,
-       attributes: { "data-opss-clear-on-reset" => "element" }
-    %>
+    <%= govukSelect(
+      key: "hazard_type",
+      form: form,
+      items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+      label: { text: "Hazard type" },
+      formGroup: { classes: "govuk-!-margin-right-1" },
+      is_autocomplete: false,
+      attributes: { "data-opss-clear-on-reset" => "element" }
+    ) %>
 
     <div class="govuk-button-group">
       <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>

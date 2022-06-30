@@ -13,7 +13,7 @@
 
     <%= form_with model: @user, url: account_name_path, method: :patch, local: true do |form| %>
 
-      <%= render "form_components/govuk_input",
+      <%= govukInput(
         key: :name,
         form: form,
         classes: "app-!-max-width-two-thirds",
@@ -22,8 +22,8 @@
         },
         value: @user.name,
         autocomplete: "name",
-        id: "name"
-        %>
+        id: "name")
+      %>
 
       <%= govukButton(text: "Save") %>
     <% end %>

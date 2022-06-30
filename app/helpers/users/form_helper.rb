@@ -10,8 +10,7 @@ module Users
         errorMessage: format_errors_for(user, user.errors.full_messages_for(:email)),
         value: user.email
       }
-
-      render "components/govuk_input", options
+      govukInput options
     end
 
     def password_input(user, options = {})
@@ -23,8 +22,7 @@ module Users
         label: { text: "Password" },
         errorMessage: format_errors_for(user, user.errors.full_messages_for(:password))
       )
-
-      render "components/govuk_input", options
+      govukInput options
     end
 
   private

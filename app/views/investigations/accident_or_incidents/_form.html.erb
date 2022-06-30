@@ -9,11 +9,12 @@
 <% end %>
 
 <% other = capture do %>
-<%= render "form_components/govuk_input",
-key: :severity_other,
-form: form,
-classes: "govuk-!-width-one-third",
-label: { text: "Other type", classes: "govuk-visually-hidden" } %>
+<%= govukInput(
+  key: :severity_other,
+  form: form,
+  classes: "govuk-!-width-one-third",
+  label: { text: "Other type", classes: "govuk-visually-hidden" }
+) %>
 <% end %>
 
 <%= form.govuk_radios :usage, legend: "How was the product being used?", items: [{ text: "Normal use", value: "during_normal_use" },  { text: "Misuse", value: "during_misuse" }, { text: "With the supervision of an adult", value: "with_adult_supervision" }, { text: "Without the supervision of an adult", value: "without_adult_supervision" }, { text: "Unknown use", value: "unknown_usage" }] %>
