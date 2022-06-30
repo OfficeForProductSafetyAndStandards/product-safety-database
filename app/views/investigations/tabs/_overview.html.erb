@@ -31,8 +31,8 @@
 <h2 class="govuk-heading-m">Safety and compliance</h2>
 
 <%= govukSummaryList(
-classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-rows: safety_and_compliance_rows(@investigation, current_user)
+  classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
+  rows: safety_and_compliance_rows(@investigation, current_user)
 ) %>
 
 <% if @investigation.complainant %>
