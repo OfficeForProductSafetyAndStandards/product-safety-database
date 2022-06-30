@@ -8,8 +8,8 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def summary_list
-    psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>"
-    psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record"
+    psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
+    psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record".html_safe
     rows = [
       { key: { html: psd_ref_key_html }, value: { text: psd_ref, secondary_text: { html: psd_secondary_text_html } } },
       { key: { text: "Category" }, value: { text: category } },
