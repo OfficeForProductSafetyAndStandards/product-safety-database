@@ -65,7 +65,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      UpdateEmail.call(
+      UpdateEmail.call!(
         @email_correspondence_form.attributes.merge({
           email: @email,
           user: current_user
