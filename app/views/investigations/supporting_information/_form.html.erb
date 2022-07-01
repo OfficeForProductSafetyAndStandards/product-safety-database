@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= error_summary @supporting_information_type_form.errors %>
     <%= form_with local: true, url: investigation_supporting_information_index_path(@investigation) do |form| %>
-      <%= govuk_radios(
+      <%= govukRadios(
         form: form,
         key: :type,
         errorMessage: format_errors_for(@supporting_information_type_form,

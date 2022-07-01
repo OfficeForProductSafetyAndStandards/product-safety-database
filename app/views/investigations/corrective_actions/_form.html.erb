@@ -8,7 +8,7 @@ legend: "What date did the action come in to effect?",
 hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_weeks_from_now.month} #{two_weeks_from_now.year}." %>
 
 <% if allow_product_linking %>
-  <%= render "components/govuk_fieldset", legend: { text: "Which product is subject to action?", classes: "govuk-fieldset__legend--m" } do %>
+  <%= govukFieldset(legend: { text: "Which product is subject to action?", classes: "govuk-fieldset__legend--m" }) do %>
     <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:product].any? %>">
       <% if investigation.products.empty? %>
         <span class="govuk-hint">
@@ -33,7 +33,7 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
   <% end %>
 <% end %>
 
-<%= render "form_components/govuk_select",
+<%= govukSelect(
   choices: relevant_legislation,
   key: :legislation,
   id: "legislation",
@@ -41,10 +41,9 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
   is_autocomplete: true,
   show_all_values: true,
   label: { text: "Under which legislation?", classes: "govuk-label--m" }
-
-%>
+) %>
 <% if allow_business_linking %>
-  <%= render "components/govuk_fieldset", legend: { text: "Which business is responsible?", classes: "govuk-fieldset__legend--m" } do %>
+  <%= govukFieldset(legend: { text: "Which business is responsible?", classes: "govuk-fieldset__legend--m" }) do %>
     <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:business].any? %>">
       <% if investigation.businesses.empty? %>
         <span class="govuk-hint">There are no businesses associated with this case.</span>
