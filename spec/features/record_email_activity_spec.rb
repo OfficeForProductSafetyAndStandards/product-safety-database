@@ -67,6 +67,8 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
 
     click_button "Add email"
 
+    click_link "Test summary"
+
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
     expect(page).to have_h1("Test summary")
     expect(page).to have_summary_item(key: "Date of email", value: "1 February 2020")
@@ -132,6 +134,8 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     fill_in_record_email_details_form(summary:, subject: email_subject, body:)
 
     click_button "Add email"
+
+    click_link "Test summary"
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
 

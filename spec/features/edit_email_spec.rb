@@ -122,6 +122,8 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_opensearc
 
     click_button "Update email"
 
+    click_link "Note received from manufacturer"
+
     expect_to_be_on_email_page(case_id: investigation.pretty_id, email_id: email.id)
 
     # Page should show updated details
@@ -157,6 +159,8 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_opensearc
     end
 
     click_button "Update email"
+
+    click_link "Email on 4 March 2020"
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id, email_id: email.id)
 

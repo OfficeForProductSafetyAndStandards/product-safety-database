@@ -33,13 +33,15 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
     change_values_in_form
 
+    click_on "Failed test: MyBrand red washing machine"
+
     expect_result_page_to_show_updated_values
 
     click_link "Back to #{investigation.decorate.pretty_description.downcase}"
     click_link "Activity"
 
     expect_activity_page_to_show_edited_test_result_values
-    expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Passed")
+    expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Pass")
   end
 
   context "when editing a failed test result (with validation errors)" do
@@ -56,13 +58,15 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
       change_values_in_form
 
+      click_on "Failed test: MyBrand red washing machine"
+
       expect_result_page_to_show_updated_values
 
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
       expect_activity_page_to_show_edited_test_result_values
-      expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Failed")
+      expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result: "Fail")
     end
   end
 
@@ -79,6 +83,8 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       expect_edit_form_to_have_fields_populated_by_original_test_result_values(result: "Fail")
 
       change_values_in_form(file_path: "test/fixtures/files/test_result.txt")
+
+      click_on "Failed test: MyBrand red washing machine"
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
@@ -131,7 +137,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
     expect(page).to have_summary_item(key: "Date of test", value: "2 June 2019")
     expect(page).to have_summary_item(key: "Legislation", value: "Consumer Protection Act 1987")
     expect(page).to have_summary_item(key: "Standards", value: "EN72, EN73")
-    expect(page).to have_summary_item(key: "Result", value: "Failed")
+    expect(page).to have_summary_item(key: "Result", value: "Fail")
     expect(page).to have_summary_item(key: "Reason for failure", value: failure_details)
     expect(page).to have_summary_item(key: "Further details", value: "Final result")
     expect(page).to have_summary_item(key: "Attachment description", value: "Final test result certificate")

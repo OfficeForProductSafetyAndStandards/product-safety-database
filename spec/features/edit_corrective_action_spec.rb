@@ -48,7 +48,6 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       # check text area do not trigger changes by trimming whitespace and nullify blanks
       click_on "Update corrective action"
 
-      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
       expect(page).not_to have_css("p", text: "Corrective action updated:")
@@ -110,6 +109,8 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
 
       click_on "Update corrective action"
 
+      click_on CorrectiveAction.first.decorate.supporting_information_title
+
       expect_to_be_on_corrective_action_summary_page(is_other_action: true)
 
       expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
@@ -132,6 +133,8 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       end
 
       click_on "Update corrective action"
+
+      click_on CorrectiveAction.first.decorate.supporting_information_title
 
       expect_to_be_on_corrective_action_summary_page
 
@@ -183,6 +186,8 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
         fill_in "Attachment description", with: "Brand new attachment description"
 
         click_on "Update corrective action"
+
+        click_on CorrectiveAction.first.decorate.supporting_information_title
 
         click_link "Edit corrective action"
 

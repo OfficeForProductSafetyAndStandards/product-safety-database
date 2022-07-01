@@ -8,7 +8,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_opensearch
     let(:has_online_recall_information)      { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }
     let(:expected_rows) do
       [
-        { key: { text: "Date of action" }, value: { text: corrective_action.date_of_activity } },
+        { key: { text: "Event date" }, value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" }, value: { text: corrective_action.legislation } },
         { key: { text: "Recall information" }, value: { html: match(expected_online_recall_information) } },
         { key: { text: "Product" }, value: { html: helper.link_to(corrective_action.product.name, helper.product_path(corrective_action.product)) } },

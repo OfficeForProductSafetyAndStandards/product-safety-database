@@ -17,6 +17,10 @@ class UnexpectedEventDecorator < ApplicationDecorator
     object.type
   end
 
+  def event_type
+    supporting_information_type
+  end
+
   def date_of_activity
     return I18n.t(".accident_or_incident.date.unknown") unless object.date
 

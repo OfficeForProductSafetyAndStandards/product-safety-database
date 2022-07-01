@@ -23,7 +23,7 @@ module TestsHelper
 
     rows << {
       key: { text: "Result" },
-      value: { text: test_result.result.upcase_first }
+      value: { text: test_result.decorate.event_type }
     }
 
     if test_result.result == "failed"
