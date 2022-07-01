@@ -65,6 +65,8 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     attach_file "Upload a file", file
     click_button "Add phone call"
 
+    click_link "Phone call on 5 May 2020"
+
     expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
 
     click_on "Back to allegation: #{investigation.pretty_id}"
@@ -122,6 +124,8 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
 
     fill_in_record_phone_call_details_form(summary:, notes:)
     click_button "Add phone call"
+
+    click_link "Test summary"
 
     click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"

@@ -35,17 +35,17 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
     expect_confirmation_banner("The file was added")
 
-    within page.find("h2", text: "Other files and attachments").find(:xpath, "..") do
-      expect(page).to have_selector("h2", text: title)
-      expect(page).to have_selector("p", text: description)
+    within("section#other") do
+      expect(page).to have_css(".govuk-summary-list__key", text: "Title")
+      expect(page).to have_css(".govuk-summary-list__value", text: title)
     end
 
     change_attachment_to_have_simulate_virus(investigation.reload)
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    expect(page).not_to have_selector("h2", text: title)
-    expect(page).not_to have_selector("p", text: description)
+    expect(page).not_to have_selector("h2", text: "Title")
+    expect(page).not_to have_selector("p", text: title)
   end
 
   scenario "Adding an image" do
@@ -88,7 +88,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
       expect_to_be_on_add_supporting_information_page
 
-      choose "Other document or attachment"
+      choose "Case image"
       click_button "Continue"
 
       expect_to_be_on_add_attachment_to_a_case_page
@@ -114,7 +114,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
       expect_to_be_on_add_supporting_information_page
 
-      choose "Other document or attachment"
+      choose "Case image"
       click_button "Continue"
 
       expect_to_be_on_add_attachment_to_a_case_page
@@ -141,7 +141,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
       expect_to_be_on_add_supporting_information_page
 
-      choose "Other document or attachment"
+      choose "Case image"
       click_button "Continue"
 
       expect_to_be_on_add_attachment_to_a_case_page
@@ -160,29 +160,6 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     # rubocop:enable RSpec/AnyInstance
   end
 
-  context "when non image file too small" do
-    it "shows error" do
-      sign_in user
-      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
-
-      expect_to_be_on_add_supporting_information_page
-
-      choose "Other document or attachment"
-      click_button "Continue"
-
-      attach_file "document[document]", empty_file
-      fill_in "Document title", with: title
-      fill_in "Description",    with: description
-
-      click_button "Save attachment"
-
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
-
-      errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "The selected file could not be uploaded – try again"
-    end
-  end
-
   context "when an imagine fails the antivirus check", :with_stubbed_failing_antivirus do
     it "shows error" do
       sign_in user
@@ -190,7 +167,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
       expect_to_be_on_add_supporting_information_page
 
-      choose "Other document or attachment"
+      choose "Case image"
       click_button "Continue"
 
       expect_to_be_on_add_attachment_to_a_case_page

@@ -82,6 +82,8 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     expect(page).not_to have_error_messages
 
+    click_link "Teddy Bear: Misuse"
+
     expect(page).to have_content "Incident involving Teddy Bear"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
@@ -139,6 +141,8 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
     click_button "Update accident"
+
+    click_link "Doll: Misuse"
 
     expect(page).not_to have_error_messages
 

@@ -78,9 +78,11 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     fill_and_submit_form
 
-    expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
+    click_link CorrectiveAction.first.decorate.supporting_information_title
+
+    expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Recall information",  value: "#{online_recall_information} (opens in new tab)")
@@ -107,7 +109,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
@@ -120,7 +122,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
   def expect_confirmation_page_to_show_entered_data
     expect(page).to have_summary_item(key: "Action", value: CorrectiveAction.actions[action])
-    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Legislation", value: legislation)
     expect(page).to have_summary_item(key: "Details", value: details)
     expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))

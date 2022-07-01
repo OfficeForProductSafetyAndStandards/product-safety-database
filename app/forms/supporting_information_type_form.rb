@@ -4,15 +4,14 @@ class SupportingInformationTypeForm
 
   MAIN_TYPES = {
     accident_or_incident: "Accident or incident",
-    comment: "Comment",
     corrective_action: "Corrective action",
     correspondence: "Correspondence",
-    image: "Image",
     testing_result: "Test result",
-    risk_assessment: "Risk assessment"
+    risk_assessment: "Risk assessment",
+    generic_information: "Other document or attachment"
   }.freeze
-  GENERIC_TYPE = { generic_information: "Other document or attachment" }.freeze
-  AVAILABLE_TYPES = MAIN_TYPES.merge(GENERIC_TYPE)
+  IMAGE_TYPE = { image: "Case image" }.freeze
+  AVAILABLE_TYPES = MAIN_TYPES.merge(IMAGE_TYPE)
 
   attribute :type
   attribute :options
