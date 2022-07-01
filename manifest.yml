@@ -23,7 +23,7 @@ applications:
     - psd-pghero-env
     - psd-queue-6
     - psd-rails-env
-    - psd-sentry-env
+    - ((sentry-service-name))
     - psd-session-6
     - psd-sidekiq-env
     - psd-two-factor-auth-env
