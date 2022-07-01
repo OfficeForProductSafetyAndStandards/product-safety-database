@@ -18,7 +18,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      result = AddEmailToCase.call(
+      AddEmailToCase.call!(
         @email_correspondence_form.attributes.except(
           "email_file_id",
           "email_attachment_id"
@@ -30,7 +30,7 @@ class Investigations::RecordEmailsController < ApplicationController
         })
       )
 
-      redirect_to investigation_email_path(@investigation.pretty_id, result.email)
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
     else
 
       @email = @investigation.emails.new
@@ -65,14 +65,14 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      result = UpdateEmail.call(
+      UpdateEmail.call!(
         @email_correspondence_form.attributes.merge({
           email: @email,
           user: current_user
         })
       )
 
-      redirect_to investigation_email_path(@investigation.pretty_id, result.email)
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
     else
       @investigation = @investigation.decorate
       @email_correspondence_form.cache_files!

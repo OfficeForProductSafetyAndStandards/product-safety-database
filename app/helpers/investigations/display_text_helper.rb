@@ -35,7 +35,39 @@ module Investigations::DisplayTextHelper
         href: investigation_supporting_information_index_path(investigation),
         text: "Supporting information",
         count: " (#{investigation.supporting_information.size + investigation.generic_supporting_information_attachments.size})",
-        active: is_current_tab.supporting_information?
+        active: is_current_tab.supporting_information?,
+        sub_items: [
+          {
+            text: "Accidents and incidents",
+            count: " (#{investigation.unexpected_events.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "accident-or-incidents")
+          },
+          {
+            text: "Corrective actions",
+            count: " (#{investigation.corrective_actions.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "corrective-actions")
+          },
+          {
+            text: "Risk assessments",
+            count: " (#{investigation.risk_assessments.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "risk-assessments")
+          },
+          {
+            text: "Correspondence",
+            count: " (#{investigation.correspondences.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "correspondence")
+          },
+          {
+            text: "Test results",
+            count: " (#{investigation.test_results.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "test-results")
+          },
+          {
+            text: "Other",
+            count: " (#{investigation.generic_supporting_information_attachments.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "other")
+          }
+        ]
       },
 
       {

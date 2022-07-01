@@ -22,8 +22,7 @@ class Investigations::TestResultsController < ApplicationController
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
-      flash_message = "#{result.test_result.pretty_name.capitalize} was successfully recorded."
-      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: flash_message }
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
     end
 
     @investigation = investigation.decorate
@@ -60,7 +59,7 @@ class Investigations::TestResultsController < ApplicationController
       return render :edit
     end
 
-    result = UpdateTestResult.call(
+    UpdateTestResult.call!(
       @test_result_form.serializable_hash
         .merge(test_result:,
                investigation:,
@@ -68,10 +67,7 @@ class Investigations::TestResultsController < ApplicationController
                changes: @test_result_form.changes)
     )
 
-    return redirect_to investigation_test_result_path(investigation, test_result) if result.success?
-
-    @investigation = investigation.decorate
-    render "edit"
+    redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
   end
 
 private

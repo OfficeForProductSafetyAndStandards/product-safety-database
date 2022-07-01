@@ -20,16 +20,11 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_opensearch, :with
 
     click_link "Supporting information (1)"
 
-    expect_case_attachments_page_to_show_entered_information
+    expect(page).to have_css("dd.govuk-summary-list__value", text: new_title)
 
     click_link "Activity"
 
     expect_case_activity_page_to_show_entered_information
-  end
-
-  def expect_case_attachments_page_to_show_entered_information
-    expect(page).to have_selector("h2", text: new_title)
-    expect(page).to have_selector("p",  text: new_description)
   end
 
   def expect_case_activity_page_to_show_entered_information

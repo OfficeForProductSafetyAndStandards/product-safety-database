@@ -2,6 +2,7 @@ require "rails_helper"
 RSpec.feature "Manage supporting information", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   include_context "with read only team and user"
   let(:user)           { create(:user, :activated, has_viewed_introduction: true) }
+  let(:other_user)     { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation)  { create(:allegation, :with_document, creator: user, read_only_teams: read_only_team) }
 
   include_context "with all types of supporting information"
@@ -14,7 +15,7 @@ RSpec.feature "Manage supporting information", :with_stubbed_opensearch, :with_s
 
       click_on "Supporting information (6)"
 
-      expect_to_view_supporting_information_table
+      expect_to_view_supporting_information_sections(can_view_protected_details: true)
 
       sign_out
 
@@ -24,29 +25,19 @@ RSpec.feature "Manage supporting information", :with_stubbed_opensearch, :with_s
 
       click_on "Supporting information (6)"
 
-      expect_to_view_supporting_information_table
-
-      select "Title", from: "sort_by"
-      click_on "Sort"
-      within page.first("table") do
-        sorted_titles = find_all("tr.govuk-table__row td.govuk-table__cell a").map(&:text)
-        expected_titles = ["Corrective action: #{corrective_action.product.name}", "Email correspondence", "Meeting correspondence", "Passed test: #{product.name}", "Phone call correspondence"]
-        expect(sorted_titles).to eq expected_titles
-      end
+      expect_to_view_supporting_information_sections(can_view_protected_details: true)
     end
   end
 
-  context "when the user does not belong to any of the teams with access to the investigation" do
-    let(:other_user) { create(:user, :activated, has_viewed_introduction: true) }
+  context "when the team from the user viewing the information does not own the investigation" do
+    scenario "listing supporting information" do
+      sign_in other_user
 
-    before { sign_in other_user }
-
-    scenario "viewing the supporting information tab displays restricted information for the generic attachments" do
       visit "/cases/#{investigation.pretty_id}"
-      click_link "Supporting information"
-      expect(page).not_to have_css("h2", text: investigation.documents.first.title)
-      expect(page).to have_css("h2", text: "Attachment")
-      expect(page).to have_css("p", text: "Only teams added to the case can view these files")
+
+      click_on "Supporting information (6)"
+
+      expect_to_view_supporting_information_sections(can_view_protected_details: false)
     end
   end
 end
