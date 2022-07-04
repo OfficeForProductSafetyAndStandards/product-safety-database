@@ -30,17 +30,6 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
     end
   end
 
-  context "when user selects `comment`" do
-    it "takes user to the new comment page" do
-      within_fieldset("What are you adding to the case?") do
-        choose "Comment"
-      end
-
-      click_button "Continue"
-      expect_to_be_on_new_comment_page
-    end
-  end
-
   context "when user selects `corrective action`" do
     it "takes user to the new corrective action page" do
       within_fieldset("What are you adding to the case?") do
@@ -63,17 +52,6 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
     end
   end
 
-  context "when user selects `image`" do
-    it "takes user to the new image page" do
-      within_fieldset("What are you adding to the case?") do
-        choose "Image"
-      end
-
-      click_button "Continue"
-      expect_to_be_on_add_image_page
-    end
-  end
-
   context "when user selects `test result`" do
     it "takes user to the new test result page" do
       within_fieldset("What are you adding to the case?") do
@@ -93,17 +71,6 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
 
       click_button "Continue"
       expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
-    end
-  end
-
-  context "when user selects `other document or attachment`" do
-    it "takes user to the new document or attachment page" do
-      within_fieldset("What are you adding to the case?") do
-        choose "Other document or attachment"
-      end
-
-      click_button "Continue"
-      expect_to_be_on_add_image_page
     end
   end
 

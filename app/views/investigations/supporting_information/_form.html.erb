@@ -1,7 +1,7 @@
 <%
   radio_items = radio_items_from_hash(@supporting_information_type_form.options).tap do |items|
                   items.push divider: "or"
-                  items.push(radio_items_from_hash(SupportingInformationTypeForm::GENERIC_TYPE).first)
+                  items.push(radio_items_from_hash(SupportingInformationTypeForm::IMAGE_TYPE).first)
                 end
 %>
 

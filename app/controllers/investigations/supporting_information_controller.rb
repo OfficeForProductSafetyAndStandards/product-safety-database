@@ -2,10 +2,32 @@ module Investigations
   class SupportingInformationController < ApplicationController
     def index
       authorize investigation, :view_non_protected_details?
-
-      @supporting_information       = Investigation::SupportingInformationDecorator.new(investigation.supporting_information.map(&:decorate), params[:sort_by])
-      @other_supporting_information = investigation.virus_free_non_image_attachments.decorate
-
+      @grouped_supporting_information = {
+        "Accident or incidents" => {
+          items: investigation.unexpected_events.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_accident_or_incidents_type_path(investigation)
+        },
+        "Corrective actions" => {
+          items: investigation.corrective_actions.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_corrective_action_path(investigation)
+        },
+        "Risk assessments" => {
+          items: investigation.risk_assessments.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_risk_assessment_path(investigation)
+        },
+        "Correspondence" => {
+          items: investigation.correspondences.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_correspondence_path(investigation)
+        },
+        "Test results" => {
+          items: investigation.test_results.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_test_result_path(investigation)
+        },
+        "Other" => {
+          items: investigation.generic_supporting_information_attachments.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_document_path(investigation)
+        }
+      }
       @breadcrumbs = {
         items: [
           { text: "Cases", href: all_cases_investigations_path },

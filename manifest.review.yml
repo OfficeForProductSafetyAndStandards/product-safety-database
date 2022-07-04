@@ -28,7 +28,7 @@ applications:
     - psd-notify-env
     - psd-pghero-env
     - psd-rails-env
-    - psd-sentry-env
+    - psd-review-apps-sentry-env
     - psd-sidekiq-env
     - psd-two-factor-auth-env
     - antivirus-auth-env

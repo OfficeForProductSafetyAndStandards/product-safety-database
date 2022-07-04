@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Deleting an attachment from a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, :with_antivirus_checked_document, creator: user) }
+  let(:investigation) { create(:allegation, :with_antivirus_checked_image, creator: user) }
   let(:document) { investigation.documents.first }
 
   before { sign_in(user) }
@@ -11,16 +11,16 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_opensearch, :w
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    click_link "Images (1)"
     expect(page).to have_selector("h2", text: document.decorate.title)
     expect(page).to have_selector("p",  text: document.description)
-    click_link "Remove document"
+    click_link "Remove image"
 
-    expect_to_be_on_remove_attachment_confirmation_page
     expect_remove_attachment_confirmation_page_to_show_attachment_information
 
     click_button "Delete attachment"
 
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    expect_to_be_on_images_page
     click_link "Supporting information"
 
     expect_case_supporting_informartion_page_not_to_show_deleted_attachment
@@ -43,6 +43,6 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_opensearch, :w
   def expect_case_activity_page_to_show_deleted_document
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: document.title).find(:xpath, "..")
-    expect(item).to have_selector("p", text: "Document deleted")
+    expect(item).to have_selector("p", text: "Image deleted")
   end
 end

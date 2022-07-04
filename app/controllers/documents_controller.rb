@@ -117,6 +117,14 @@ class DocumentsController < ApplicationController
     redirect_to investigation_supporting_information_index_path(@parent)
   end
 
+  def show
+    @parent = get_parent
+    authorize @parent, :view_protected_details? if @parent.is_a? Investigation
+
+    @file = @parent.documents.find(params[:id]).decorate
+    @parent = @parent.decorate
+  end
+
 private
 
   def document_params
