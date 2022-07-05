@@ -120,6 +120,6 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   scenario "Not being able to add a business to another team’s case" do
     sign_in other_user
     visit "/cases/#{investigation.pretty_id}/businesses"
-    expect(page).not_to have_link("Add business")
+    expect(page).not_to have_link("Add a business")
   end
 end
