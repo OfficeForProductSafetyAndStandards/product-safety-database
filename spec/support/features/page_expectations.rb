@@ -424,7 +424,6 @@ module PageExpectations
   end
 
   def expect_to_be_on_product_image_page
-    expect(page).to have_content "Image files will be saved to the products page."
     expect(page).to have_current_path("/ts_investigation/product_images")
     expect(page).to have_selector("h1", text: "Upload a product image")
   end
@@ -448,6 +447,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_attachment_to_a_product_page(product_id:)
+    expect(page).to have_content "Image files will be saved to the product images page."
     expect(page).to have_current_path("/products/#{product_id}/documents/new")
     expect(page).to have_h1("Add attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
