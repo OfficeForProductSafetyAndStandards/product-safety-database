@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: f7f606ab78314b754a50af24940afe78d49ef0e9
+  revision: ff1e28869b8afce76d6bfd08b4e2d2ca78bea6b6
   branch: erb-rspec-modernisation
   specs:
     govuk-design-system-rails (0.9.0)
