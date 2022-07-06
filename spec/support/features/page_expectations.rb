@@ -552,8 +552,8 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_attachment_to_a_business_page(business_id:)
-    expect(page).to_not have_content "Image files will be saved to the case images page."
-    expect(page).to_not have_content "Image files will be saved to the product page."
+    expect(page).not_to have_content "Image files will be saved to the case images page."
+    expect(page).not_to have_content "Image files will be saved to the product page."
     expect(page).to have_current_path("/businesses/#{business_id}/documents/new")
     expect(page).to have_h1("Add attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Businesses")
