@@ -1,3 +1,8 @@
-<%= render "investigations/navigable_case_nav", investigation: @investigation, current_tab: "activity", case_page_heading: "Activity" do %>
+<%= render "investigations/navigable_case_nav", investigation: @investigation,
+                                                current_tab: "activity",
+                                                case_page_heading: "Activity",
+                                                secondary_text: "This timeline automatically records the activity and edits made to the case. You can add a comment which will appear within the timeline.",
+                                                href: new_investigation_activity_comment_path(@investigation),
+                                                link_text: "Add a comment" do %>
   <%= render "investigations/tabs/activity" %>
 <% end %>

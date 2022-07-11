@@ -1,3 +1,8 @@
-<%= render "investigations/navigable_case_nav", investigation: @investigation, current_tab: "overview", case_page_heading: "Case" do %>
+<%= render "investigations/navigable_case_nav", investigation: @investigation,
+                                                current_tab: "overview",
+                                                case_page_heading: "Case",
+                                                secondary_text: "From here you can find all the information about this case. If you have editing rights for this case, you can add products, businesses and supporting information.",
+                                                href: close_investigation_status_path(@investigation),
+                                                link_text: "Close case" do %>
   <%= render "investigations/tabs/overview" %>
 <% end %>
