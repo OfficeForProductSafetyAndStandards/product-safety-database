@@ -102,6 +102,6 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
     sign_in other_user
     visit "/cases/#{investigation.pretty_id}/products"
 
-    expect(page).not_to have_link("Add product")
+    expect(page).not_to have_link("Add a product to the case")
   end
 end

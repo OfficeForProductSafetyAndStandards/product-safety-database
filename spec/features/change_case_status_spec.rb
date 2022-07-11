@@ -27,7 +27,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
     # Navigate via the case overview table
     visit "/cases/#{investigation.pretty_id}"
-    click_link "Close"
+    first(:link, "Close").click
     expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
 
     fill_in "Why are you closing the case?", with: "Case has been resolved."
