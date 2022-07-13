@@ -9,14 +9,11 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
 
   scenario "removing a business" do
     visit "/cases/#{investigation.pretty_id}/businesses"
-
     expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
-    expect(page).to have_summary_item(key: "Registered or legal name", value: business.legal_name)
-    expect(page).to have_summary_item(key: "Company number",           value: business.company_number)
-    expect(page).to have_summary_item(key: "Address",                  value: business.primary_location&.summary)
-    expect(page).to have_summary_item(key: "Contact",                  value: business.primary_contact&.summary)
+    expect(page).to have_summary_item(key: "Legal name",               value: "#{business.legal_name} Registered name")
+    expect(page).to have_summary_item(key: "Company number",           value: "#{business.company_number} Registration number for incorporated businesses")
 
-    click_on "Remove business"
+    click_on "Remove this business"
 
     expect(page).to have_css("p.govuk-body", text: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab.")
     expect(page).to have_link("Businesses tab", href: investigation_businesses_path(investigation))
@@ -35,17 +32,15 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
 
     expect(page).to have_title("Businesses")
     expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
-    expect(page).to have_summary_item(key: "Registered or legal name", value: business.legal_name)
-    expect(page).to have_summary_item(key: "Company number",           value: business.company_number)
-    expect(page).to have_summary_item(key: "Address",                  value: business.primary_location&.summary)
-    expect(page).to have_summary_item(key: "Contact",                  value: business.primary_contact&.summary)
+    expect(page).to have_summary_item(key: "Legal name",               value: "#{business.legal_name} Registered name")
+    expect(page).to have_summary_item(key: "Company number",           value: "#{business.company_number} Registration number for incorporated businesses")
 
     click_on "Activity"
 
     expect(page).not_to have_css("h3", text: "Removed: #{business.trading_name}")
 
     click_on "Businesses (1)"
-    click_on "Remove business"
+    click_on "Remove this business"
 
     within_fieldset("Do you want to remove the business from the case?") do
       choose "Yes"
@@ -57,7 +52,7 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
     click_on "Submit"
 
     expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")
-    expect(page).to have_css("p.govuk-body", text: "No businesses")
+    expect(page).to have_css("p.govuk-body", text: "This case has not added any businesses.")
 
     click_on "Activity"
 
@@ -76,7 +71,7 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
 
     visit "/cases/#{investigation.pretty_id}/businesses"
 
-    click_on "Remove business"
+    click_on "Remove this business"
 
     expect(page).to have_css(".hmcts-banner__message", text: "Cannot remove the business from the case because it's associated with following supporting information ")
     expect(page).to have_link(supporting_information.supporting_information_title, href: supporting_information.show_path)
