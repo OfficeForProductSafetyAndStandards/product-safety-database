@@ -97,7 +97,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
       expect(page.find("dt", text: "Legal name")).to have_sibling("dd", text: business_details)
       expect(page.find("dt", text: "Company number")).to have_sibling("dd", text: company_number)
       expect(page.find("dt", text: "Address")).to have_sibling("dd", text: expected_address)
-      expect(page.find("dt", text: "Position")).to have_sibling("dd", text:job_title)
+      expect(page.find("dt", text: "Position")).to have_sibling("dd", text: job_title)
       expect(page.find("dt", text: "Name")).to have_sibling("dd", text: name)
       expect(page.find("dt", text: "Telephone")).to have_sibling("dd", text: phone_number)
       expect(page.find("dt", text: "Email")).to have_sibling("dd", text: email)

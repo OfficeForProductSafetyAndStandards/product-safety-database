@@ -7,7 +7,6 @@ RSpec.feature "Investigation business page", :with_stubbed_opensearch, :with_stu
   let!(:investigation_with_business)    { create(:allegation, :with_business, creator: user) }
   let(:business)                        { investigation_with_business.businesses.first }
 
-
   context "when user has edit permissions on the case" do
     before do
       sign_in user

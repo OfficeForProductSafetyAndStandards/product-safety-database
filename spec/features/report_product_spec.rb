@@ -349,10 +349,10 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
     expect(page).to have_selector("h1", text: "Businesses")
 
     expected_address = business.slice(:address_1, :address_2, :town, :postcode, :country).values.join(", ")
-    expected_contact = business.slice(:contact_name, :contact_job_title, :contact_phone, :contact_email).values.join(", ")
 
     within("section##{business[:trading_name].parameterize}") do
       expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: business[:trading_name])
+      expect(page.find("dt", text: "Business type")).to have_sibling("dd", text: label)
       expect(page.find("dt", text: "Legal name")).to have_sibling("dd", text: business[:legal_name])
       expect(page.find("dt", text: "Company number")).to have_sibling("dd", text: business[:company_number])
       expect(page.find("dt", text: "Address")).to have_sibling("dd", text: expected_address)
