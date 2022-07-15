@@ -20,10 +20,15 @@ module Investigations
           })
         )
 
-        flash[:success] = "Case information changed." if result.changes_made
+        if investigation.reported_reason == "safe_and_compliant"
+          flash[:success] = "Case information changed." if result.changes_made
 
-        @investigation = investigation.decorate
-        redirect_to investigation_path(@investigation)
+          @investigation = investigation.decorate
+          redirect_to investigation_path(@investigation)
+        else
+          @investigation = investigation.decorate
+          redirect_to edit_investigation_safety_and_compliance_path(@investigation)
+        end
       else
         @investigation = investigation.decorate
         render :edit
