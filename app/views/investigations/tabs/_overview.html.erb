@@ -28,7 +28,10 @@
 ) %>
 
 <%= govuk_hr %>
-<h2 class="govuk-heading-m">Safety and compliance</h2>
+<h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">Safety and compliance</h3>
+<a href="<%= edit_investigation_reported_reason_path(@investigation) %>" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
+  Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
+</a>
 
 <%= govukSummaryList(
 classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
