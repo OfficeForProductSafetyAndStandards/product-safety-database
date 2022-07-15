@@ -11,7 +11,6 @@ class ChangeSafetyAndComplianceData
     context.changes_made = false
 
     assign_attributes
-    return if investigation.changes.none?
 
     ActiveRecord::Base.transaction do
       investigation.save!
@@ -26,21 +25,41 @@ class ChangeSafetyAndComplianceData
 private
 
   def assign_attributes
-    if reported_reason == :safe_and_compliant
+    assign_reported_reason
+    assign_hazard_details
+    assign_non_compliant_reason
+  end
+
+  def assign_reported_reason
+    return unless reported_reason
+
+    if reported_reason == "safe_and_compliant"
       investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason:)
     end
 
-    if reported_reason == :unsafe_and_non_compliant
-      investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason:, reported_reason:)
+    if reported_reason == "unsafe_and_non_compliant"
+      investigation.assign_attributes(reported_reason:)
     end
 
-    if reported_reason == :unsafe
-      investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason: nil, reported_reason:)
+    if reported_reason == "unsafe"
+      investigation.assign_attributes(non_compliant_reason: nil, reported_reason:)
     end
 
-    if reported_reason == :non_compliant
-      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason:, reported_reason:)
+    if reported_reason == "non_compliant"
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, reported_reason:)
     end
+  end
+
+  def assign_hazard_details
+    return unless investigation.reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant"
+
+    investigation.assign_attributes(hazard_description:, hazard_type:)
+  end
+
+  def assign_non_compliant_reason
+    return unless investigation.reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant"
+
+    investigation.assign_attributes(non_compliant_reason:)
   end
 
   def create_audit_activity_for_safety_and_compliance_change

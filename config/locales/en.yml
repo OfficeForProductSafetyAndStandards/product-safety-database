@@ -54,6 +54,11 @@ en:
     non_compliant: "Product reported because it is non-compliant."
     unsafe_and_non_compliant: "Product reported because it is unsafe and non-compliant."
     safe_and_compliant: "Product reported because it is safe and compliant."
+    reason:
+      unsafe: "As unsafe"
+      non_compliant: "As non-compliant"
+      unsafe_and_non_compliant: "As unsafe and non-compliant"
+      safe_and_compliant: "As safe and compliant"
   invite_user_to_team:
     invite_sent: "Invite sent to %{email}"
   delete_team:
