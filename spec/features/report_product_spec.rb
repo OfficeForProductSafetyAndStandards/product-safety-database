@@ -258,7 +258,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
 
         expect_to_be_on_case_page
         expect_case_details_page_to_show_entered_information
-        expect_product_reported_unsafe_and_non_compliant
 
         click_link "Products (1)"
 
@@ -631,9 +630,5 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
 
   def skip_page
     click_button "Skip this page"
-  end
-
-  def expect_product_reported_unsafe_and_non_compliant
-    expect(page.find("h2", text: "Summary")).to have_sibling("p", text: "Product reported because it is unsafe and non-compliant.")
   end
 end
