@@ -51,13 +51,15 @@ private
   end
 
   def assign_hazard_details
-    return unless investigation.reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant"
+    return if reported_reason
+    return unless investigation.reported_reason == "unsafe" || investigation.reported_reason == "unsafe_and_non_compliant"
 
     investigation.assign_attributes(hazard_description:, hazard_type:)
   end
 
   def assign_non_compliant_reason
-    return unless investigation.reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant"
+    return if reported_reason
+    return unless investigation.reported_reason == "non_compliant" || investigation.reported_reason == "unsafe_and_non_compliant"
 
     investigation.assign_attributes(non_compliant_reason:)
   end

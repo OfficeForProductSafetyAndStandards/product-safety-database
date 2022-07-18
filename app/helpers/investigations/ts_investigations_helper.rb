@@ -15,6 +15,30 @@ module Investigations::TsInvestigationsHelper
            ]
   end
 
+  def edit_why_reporting_checkboxes(form, page_heading, errors)
+    base_errors = errors.full_messages_for(:base)
+    attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" }, disabled: "disabled" }
+
+    render "form_components/govuk_checkboxes",
+           form:,
+           key: :why_reporting,
+           fieldset: { legend: { html: page_heading_html(page_heading) }, class: "govuk-fieldset__legend govuk-fieldset__legend--l" },
+           errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
+           items: [
+             { key: "reported_reason_unsafe",
+               text: "The product is unsafe (or suspected of being)",
+               id: "base",
+               value: true,
+               conditional: { html: unsafe_details_html(form, hazard_types) },
+               attributes: attributes },
+             { key: "reported_reason_non_compliant",
+               text: "It’s non-compliant (or suspected to be)",
+               value: true,
+               conditional: { html: non_compliant_details_html(form) },
+               attributes: attributes }
+           ]
+  end
+
 private
 
   def page_heading_html(page_heading)
@@ -35,29 +59,35 @@ private
            classes: "govuk-!-width-three-quarters"
   end
 
-  def reported_unsafe_checkbox(form, hazard_types)
+  def reported_unsafe_checkbox(form, hazard_types, disabled=false)
+    attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
+    attributes.merge!({disabled: "disabled"}) if disabled
+
     {
       key: "reported_reason_unsafe",
       text: "It’s unsafe (or suspected to be)",
       id: "base",
       value: true,
       conditional: { html: unsafe_details_html(form, hazard_types) },
-      attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
+      attributes: attributes
     }
   end
 
-  def reported_non_compliant_checkbox(form)
-    {
+  def reported_non_compliant_checkbox(form, disabled=false)
+    attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
+    attributes.merge!({disabled: "disabled"}) if disabled
+
+    checkbox = {
       key: "reported_reason_non_compliant",
       text: "It’s non-compliant (or suspected to be)",
       value: true,
       conditional: { html: non_compliant_details_html(form) },
-      attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
+      attributes: attributes
     }
   end
 
   def reported_safe_and_compliant_checkbox
-    {
+    checkbox = {
       key: "reported_reason_safe_and_compliant",
       text: "It’s safe and compliant",
       hint: { text: "Help other market surveillance authorities avoid testing the same product again" },
