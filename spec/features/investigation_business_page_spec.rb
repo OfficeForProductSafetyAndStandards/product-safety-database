@@ -39,7 +39,6 @@ RSpec.feature "Investigation business page", :with_stubbed_opensearch, :with_stu
 
         expect(page).to have_link "Edit this business: #{business.trading_name}"
         expect(page).to have_link "Remove this business: #{business.trading_name}"
-        expect(page).to have_link "#{business.trading_name} has 0 file attachments"
       end
     end
   end
