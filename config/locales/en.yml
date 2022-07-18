@@ -122,6 +122,7 @@ en:
         cancel: "Cancel"
       remove:
         remove_business_warning_html: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>."
+      empty: "This case has not added any businesses."
 
     tabs:
       businesses:
