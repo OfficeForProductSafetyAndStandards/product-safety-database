@@ -79,7 +79,10 @@
           Address
         </dt>
         <dd class="govuk-summary-list__value">
-          <%= location.summary %>
+          <% [location.address_line_1, location.address_line_2, location.city, location.postal_code].compact.each do |address_line| %>
+            <%= address_line %><span class="govuk-visually-hidden">,</span> <br>
+          <% end %>
+          <%= country_from_code(location.country) unless location.country.blank? %>
         </dd>
       </div>
     <% end %>
