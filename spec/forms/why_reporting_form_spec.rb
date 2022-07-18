@@ -126,7 +126,6 @@ RSpec.describe WhyReportingForm do
         hazard_type:,
         hazard_description:,
         non_compliant_reason:,
-        description:
       }
     end
 
@@ -141,7 +140,6 @@ RSpec.describe WhyReportingForm do
 
     context "when reporting unsafe" do
       let(:reported_reason) { Investigation.reported_reasons[:unsafe] }
-      let(:description)     { "Product reported because it is unsafe." }
 
       before { why_reporting_params[:reported_reason_unsafe] = true }
 
@@ -150,7 +148,6 @@ RSpec.describe WhyReportingForm do
 
     context "when reporting non compliant to" do
       let(:reported_reason) { Investigation.reported_reasons[:non_compliant] }
-      let(:description) { "Product reported because it is non-compliant." }
 
       before { why_reporting_params[:reported_reason_non_compliant] = true }
 
@@ -159,7 +156,6 @@ RSpec.describe WhyReportingForm do
 
     context "when reporting unsafe and non compliant" do
       let(:reported_reason) { Investigation.reported_reasons[:unsafe_and_non_compliant] }
-      let(:description) { "Product reported because it is unsafe and non-compliant." }
 
       before do
         why_reporting_params[:reported_reason_unsafe]        = true
@@ -171,7 +167,6 @@ RSpec.describe WhyReportingForm do
 
     context "when reporting safe and compliant" do
       let(:reported_reason) { Investigation.reported_reasons[:safe_and_compliant] }
-      let(:description) { "Product reported because it is safe and compliant." }
 
       before { why_reporting_params[:reported_reason_safe_and_compliant] = true }
 
