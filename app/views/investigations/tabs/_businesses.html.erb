@@ -10,7 +10,7 @@
   </div>
 <% end %>
 
-<% @investigation.businesses.each do |business| %>
+<% @investigation.businesses.each_with_index do |business, index| %>
 <section id="<%= business.trading_name.parameterize %>" class="govuk-!-margin-bottom-9">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
@@ -115,7 +115,9 @@
           Attachments
         </dt>
         <dd class="govuk-summary-list__value">
-          <a href="<%= business_path(business, anchor: "attachments") %>" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden"><%= business.trading_name %> has </span> <%= business.documents.count %> file attachments</a>
+          <% unless business.documents.empty? %>
+            <a href="<%= business_path(business, anchor: "attachments") %>" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden"><%= business.trading_name %> has </span> <%= business.documents.count %> file attachments</a>
+          <% end %>
         </dd>
     </div>
   </dl>
@@ -133,8 +135,9 @@
       <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= remove_investigation_business_path(@investigation, business) %>">Remove this business<span class="govuk-visually-hidden">: <%= business.trading_name %></span></a>
     </div>
   <% end %>
-</section>
-  <% unless business == @investigation.investigation_businesses.last %>
+
+  <% unless index == @investigation.businesses.count - 1 %>
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
   <% end %>
+</section>
 <% end %>
