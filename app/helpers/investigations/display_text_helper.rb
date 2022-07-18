@@ -6,8 +6,8 @@ module Investigations::DisplayTextHelper
   def investigation_sub_nav(investigation, current_tab: "overview")
     is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
     investigation_business = investigation.businesses
-    business_sub_items = investigation_business.map do |bus|
-      { text: bus.trading_name, href: investigation_businesses_path(investigation, anchor: bus.to_param) }
+    business_sub_items = investigation_business.map do |business|
+      { text: business.trading_name, href: investigation_businesses_path(investigation, anchor: business.to_param) }
     end
     items = [
       {
