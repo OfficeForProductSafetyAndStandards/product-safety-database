@@ -25,7 +25,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     sign_in user
     visit "/cases/#{investigation.pretty_id}/businesses"
 
-    click_link "Add business"
+    click_link "Add a business"
 
     # Don't select a business type
     click_on "Continue"
@@ -90,20 +90,18 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
 
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Trading name")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: trading_name)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Registered or legal name")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: business_details)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Company number")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: company_number)
-
     expected_address = [address_line_one, address_line_two, city, postcode, country].join(", ")
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Address")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: expected_address)
 
-    expected_contact = [name, job_title, phone_number, email].join(", ")
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
+    within("section##{trading_name.parameterize}") do
+      expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
+      expect(page.find("dt", text: "Legal name")).to have_sibling("dd", text: business_details)
+      expect(page.find("dt", text: "Company number")).to have_sibling("dd", text: company_number)
+      expect(page.find("dt", text: "Address")).to have_sibling("dd", text: expected_address)
+      expect(page.find("dt", text: "Position")).to have_sibling("dd", text: job_title)
+      expect(page.find("dt", text: "Name")).to have_sibling("dd", text: name)
+      expect(page.find("dt", text: "Telephone")).to have_sibling("dd", text: phone_number)
+      expect(page.find("dt", text: "Email")).to have_sibling("dd", text: email)
+    end
 
     # Check that adding  the business was recorded in the
     # activity log for the investigation.

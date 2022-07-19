@@ -49,7 +49,7 @@ RSpec.describe TestResultForm, :with_stubbed_opensearch, :with_stubbed_mailer, :
   describe "#product_form=" do
     context "when uploading a file and a description" do
       it "caches the documents files" do
-        expect { form }.to change { ActiveStorage::Blob.count }.by(1)
+        expect { form }.to change(ActiveStorage::Blob, :count).by(1)
       end
 
       it "assigns filename and file_description and existing_signed id" do
