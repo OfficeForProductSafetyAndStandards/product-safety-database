@@ -5,7 +5,10 @@ module Investigations::DisplayTextHelper
 
   def investigation_sub_nav(investigation, current_tab: "overview")
     is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
-
+    investigation_business = investigation.businesses
+    business_sub_items = investigation_business.map do |business|
+      { text: business.trading_name, href: investigation_businesses_path(investigation, anchor: business.trading_name.parameterize) }
+    end
     items = [
       {
         href: investigation_path(investigation),
@@ -23,7 +26,8 @@ module Investigations::DisplayTextHelper
         href: investigation_businesses_path(investigation),
         text: "Businesses",
         count: " (#{investigation.businesses.size})",
-        active: is_current_tab.businesses?
+        active: is_current_tab.businesses?,
+        sub_items: business_sub_items
       },
       {
         href: investigation_images_path(investigation),
