@@ -11,6 +11,9 @@ class WhyReportingForm
   attribute :reported_reason_safe_and_compliant, :boolean, default: false
   attribute :reported_reason
 
+  validates :non_compliant_reason, presence: true, if: -> { (reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant") }
+  validates :hazard_description, :hazard_type, presence: true, if: -> { (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant") }
+
   def assign_to(investigation)
     investigation.assign_attributes(
       attributes
@@ -24,7 +27,17 @@ class WhyReportingForm
         reported_reason_safe_and_compliant: investigation.safe_and_compliant?,
         hazard_description: investigation.hazard_description,
         hazard_type: investigation.hazard_type,
-        non_compliant_reason: investigation.non_compliant_reason)
+        non_compliant_reason: investigation.non_compliant_reason,
+        reported_reason: investigation.reported_reason
+      )
+  end
+
+  def reported_reason_unsafe
+    reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant"
+  end
+
+  def reported_reason_non_compliant
+    reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant"
   end
 
 private

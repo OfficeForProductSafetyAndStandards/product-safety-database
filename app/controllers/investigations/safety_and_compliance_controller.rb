@@ -10,7 +10,7 @@ module Investigations
       investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
       authorize investigation, :update?
 
-      @why_reporting_form = WhyReportingForm.new(why_reporting_form_params)
+      @why_reporting_form = WhyReportingForm.new(why_reporting_form_params.merge({ reported_reason: investigation.reported_reason }))
 
       if @why_reporting_form.valid?
         result = ChangeSafetyAndComplianceData.call!(
