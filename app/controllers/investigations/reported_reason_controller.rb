@@ -13,7 +13,7 @@ module Investigations
       @reported_reason_form = ReportedReasonForm.new(reported_reason_form_params)
 
       if @reported_reason_form.valid?
-        result = ChangeSafetyAndComplianceData.call!(
+        result = ChangeReportedReason.call!(
           @reported_reason_form.serializable_hash.merge({
             investigation:,
             user: current_user
@@ -27,7 +27,7 @@ module Investigations
           redirect_to investigation_path(@investigation)
         else
           @investigation = investigation.decorate
-          redirect_to edit_investigation_safety_and_compliance_path(@investigation)
+          redirect_to edit_investigation_safety_and_compliance_path(@investigation, reported_reason: @reported_reason_form.reported_reason)
         end
       else
         @investigation = investigation.decorate

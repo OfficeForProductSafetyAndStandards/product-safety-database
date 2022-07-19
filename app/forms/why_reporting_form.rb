@@ -21,15 +21,18 @@ class WhyReportingForm
     )
   end
 
-  def self.from(investigation)
-    new(reported_reason_unsafe: (investigation.unsafe? || investigation.unsafe_and_non_compliant?),
-        reported_reason_non_compliant: (investigation.non_compliant? || investigation.unsafe_and_non_compliant?),
-        reported_reason_safe_and_compliant: investigation.safe_and_compliant?,
-        hazard_description: investigation.hazard_description,
-        hazard_type: investigation.hazard_type,
-        non_compliant_reason: investigation.non_compliant_reason,
-        reported_reason: investigation.reported_reason
-      )
+  def self.from(investigation, reported_reason)
+    attributes = { reported_reason: reported_reason }
+    
+    if (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant")
+      attributes.merge!({ hazard_description: investigation.hazard_description, hazard_type: investigation.hazard_type })
+    end
+
+    if (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant")
+      attributes.merge!({ non_compliant_reason: investigation.non_compliant_reason })
+    end
+
+    new(**attributes)
   end
 
   def reported_reason_unsafe

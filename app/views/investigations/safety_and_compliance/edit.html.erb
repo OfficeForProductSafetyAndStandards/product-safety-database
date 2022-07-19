@@ -11,6 +11,7 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @why_reporting_form.errors %>
       <%= edit_why_reporting_checkboxes(form, page_heading, @why_reporting_form.errors) %>
+      <%= form.hidden_field :reported_reason, value: @reported_reason %>
       <%= form.submit "Change", class: "govuk-button" %>
     </div>
   </div>

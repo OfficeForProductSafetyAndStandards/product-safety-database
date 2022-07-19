@@ -1,4 +1,4 @@
-class ChangeSafetyAndComplianceData
+class ChangeReportedReason
   include Interactor
   include EntitiesToNotify
 
@@ -12,33 +12,24 @@ class ChangeSafetyAndComplianceData
 
     assign_attributes
 
-    ActiveRecord::Base.transaction do
-      investigation.save!
-      create_audit_activity_for_safety_and_compliance_change
+    if investigation.reported_reason == "safe_and_compliant"
+      ActiveRecord::Base.transaction do
+        investigation.save!
+        create_audit_activity_for_safety_and_compliance_change
+      end
+
+      context.changes_made = true
+
+      send_notification_email(investigation, user)
     end
-
-    context.changes_made = true
-
-    send_notification_email(investigation, user)
   end
 
 private
 
   def assign_attributes
-    assign_hazard_details
-    assign_non_compliant_reason
-  end
-
-  def assign_hazard_details
-    return unless investigation.reported_reason == "unsafe" || investigation.reported_reason == "unsafe_and_non_compliant"
-
-    investigation.assign_attributes(hazard_description:, hazard_type:)
-  end
-
-  def assign_non_compliant_reason
-    return unless investigation.reported_reason == "non_compliant" || investigation.reported_reason == "unsafe_and_non_compliant"
-
-    investigation.assign_attributes(non_compliant_reason:)
+    if reported_reason == "safe_and_compliant"
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason:)
+    end
   end
 
   def create_audit_activity_for_safety_and_compliance_change
