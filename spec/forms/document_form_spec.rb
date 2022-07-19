@@ -118,7 +118,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
 
     context "with a new document" do
       it "creates the blob" do
-        expect { form.cache_file!(user) }.to change { ActiveStorage::Blob.count }.by(1)
+        expect { form.cache_file!(user) }.to change(ActiveStorage::Blob, :count).by(1)
       end
 
       it "saves the document filename metadata" do

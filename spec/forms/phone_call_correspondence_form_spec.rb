@@ -81,13 +81,13 @@ RSpec.describe PhoneCallCorrespondenceForm do
         let(:transcript) { nil }
 
         it "does not create a blob" do
-          expect { form.cache_file! }.not_to change { ActiveStorage::Blob.count }
+          expect { form.cache_file! }.not_to change(ActiveStorage::Blob, :count)
         end
       end
 
       context "when a transcript file is provided" do
         it "does not create a blob" do
-          expect { form.cache_file! }.to change { ActiveStorage::Blob.count }.by(1)
+          expect { form.cache_file! }.to change(ActiveStorage::Blob, :count).by(1)
         end
 
         it "set existing_transcript_file_id" do

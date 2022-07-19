@@ -198,7 +198,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
         describe "adding old owner as collaborator" do
           shared_examples "collaborator created" do
             it "creates collaboration with edit access" do
-              expect { result }.to change { Collaboration::Access::Edit.count }.by(1)
+              expect { result }.to change(Collaboration::Access::Edit, :count).by(1)
             end
 
             it "creates proper collaboration" do
@@ -211,7 +211,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
             subject(:result) { described_class.call(investigation:, user:, owner: new_owner, rationale:) }
 
             it "creates no collaboration" do
-              expect { result }.not_to(change { Collaboration::Access::Edit.count })
+              expect { result }.not_to(change(Collaboration::Access::Edit, :count))
             end
           end
 
