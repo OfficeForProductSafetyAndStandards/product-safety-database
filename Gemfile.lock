@@ -59,7 +59,7 @@ GEM
     activerecord (6.1.6.1)
       activemodel (= 6.1.6.1)
       activesupport (= 6.1.6.1)
-    activerecord-pg_enum (1.2.2)
+    activerecord-pg_enum (2.0.0)
       activerecord (>= 4.1.0)
       activesupport
       pg
@@ -631,7 +631,7 @@ PLATFORMS
   x86_64-darwin-19
 
 DEPENDENCIES
-  activerecord-pg_enum (~> 1.2)
+  activerecord-pg_enum (~> 2.0)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.114)
   aws-sdk-s3control (~> 1.50)
