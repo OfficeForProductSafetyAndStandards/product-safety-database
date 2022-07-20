@@ -23,12 +23,12 @@ class WhyReportingForm
 
   def self.from(investigation, reported_reason)
     attributes = { reported_reason: reported_reason }
-    
+
     if (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant")
       attributes.merge!({ hazard_description: investigation.hazard_description, hazard_type: investigation.hazard_type })
     end
 
-    if (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant")
+    if (reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant")
       attributes.merge!({ non_compliant_reason: investigation.non_compliant_reason })
     end
 

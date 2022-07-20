@@ -11,6 +11,7 @@ class ChangeSafetyAndComplianceData
     context.changes_made = false
 
     assign_attributes
+    return if investigation.changes.none?
 
     ActiveRecord::Base.transaction do
       investigation.save!
@@ -25,20 +26,21 @@ class ChangeSafetyAndComplianceData
 private
 
   def assign_attributes
-    assign_hazard_details
-    assign_non_compliant_reason
-  end
+    if reported_reason == "safe_and_compliant"
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason:)
+    end
 
-  def assign_hazard_details
-    return unless investigation.reported_reason == "unsafe" || investigation.reported_reason == "unsafe_and_non_compliant"
+    if reported_reason == "unsafe_and_non_compliant"
+      investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason:, reported_reason:)
+    end
 
-    investigation.assign_attributes(hazard_description:, hazard_type:)
-  end
+    if reported_reason == "unsafe"
+      investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason: nil, reported_reason:)
+    end
 
-  def assign_non_compliant_reason
-    return unless investigation.reported_reason == "non_compliant" || investigation.reported_reason == "unsafe_and_non_compliant"
-
-    investigation.assign_attributes(non_compliant_reason:)
+    if reported_reason == "non_compliant"
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason:, reported_reason:)
+    end
   end
 
   def create_audit_activity_for_safety_and_compliance_change

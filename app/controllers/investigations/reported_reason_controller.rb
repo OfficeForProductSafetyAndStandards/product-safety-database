@@ -20,7 +20,7 @@ module Investigations
           })
         )
 
-        if investigation.reported_reason == "safe_and_compliant"
+        if @reported_reason_form.reported_reason == "safe_and_compliant"
           flash[:success] = "Case information changed." if result.changes_made
 
           @investigation = investigation.decorate
