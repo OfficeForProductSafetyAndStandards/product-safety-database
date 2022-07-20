@@ -1,4 +1,4 @@
-<% page_heading = "Why was the product reported?" %>
+<% page_heading = "How is the product being reported?" %>
 <%= govukBackLink(
   text: "Back to #{@investigation.pretty_description.downcase}",
   href: investigation_path(@investigation)
@@ -24,14 +24,14 @@
          fieldset: {
            legend: {
              text: "How is the product being reported?",
-             is_page_heading: false,
+             isPageHeading: true,
              classes: "govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-7"
            }
          },
          items: radio_items
        %>
 
-      <%= form.submit "Change", class: "govuk-button" %>
+      <%= form.submit "Save and continue", class: "govuk-button" %>
     </div>
   </div>
 <% end %>

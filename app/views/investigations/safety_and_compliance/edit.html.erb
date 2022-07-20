@@ -1,4 +1,4 @@
-<% page_heading = "Why was the product reported?" %>
+<% page_heading = "Why is the product of concern?" %>
 <%= govukBackLink(
   text: "Back to #{@investigation.pretty_description.downcase}",
   href: investigation_path(@investigation)
@@ -12,7 +12,7 @@
       <%= error_summary @why_reporting_form.errors %>
       <%= edit_why_reporting_checkboxes(form, page_heading, @why_reporting_form.errors) %>
       <%= form.hidden_field :reported_reason, value: @reported_reason %>
-      <%= form.submit "Change", class: "govuk-button" %>
+      <%= form.submit "Save", class: "govuk-button" %>
     </div>
   </div>
 <% end %>

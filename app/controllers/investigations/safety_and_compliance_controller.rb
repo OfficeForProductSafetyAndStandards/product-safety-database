@@ -26,7 +26,8 @@ module Investigations
         redirect_to investigation_path(@investigation)
       else
         @investigation = investigation.decorate
-        redirect_to edit_investigation_safety_and_compliance_path(@investigation, reported_reason: @why_reporting_form.reported_reason)
+        @reported_reason = @why_reporting_form.reported_reason
+        render :edit
       end
     end
 
