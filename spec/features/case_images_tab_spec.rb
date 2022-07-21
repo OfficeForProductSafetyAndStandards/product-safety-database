@@ -19,7 +19,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
 
     click_link "Images"
 
-    click_link "Add image"
+    click_link "Add a case image"
 
     expect_to_be_on_add_image_page
 
@@ -60,17 +60,16 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
       InvestigationProduct.create(investigation_id: investigation.id, product_id: product.id)
     end
 
-    scenario "case images tab shows number of product images and number of case images" do
+    scenario "case images tab numbers the case images" do
       visit "/cases/#{investigation.pretty_id}"
 
       expect(page).to have_content "Images (0)"
 
       click_link "Images"
 
-      expect(page).to have_content "Case images (0)"
-      expect(page).to have_content "Product images (0)"
+      expect(page).to have_content "No case images"
 
-      click_link "Add image"
+      click_link "Add a case image"
 
       expect_to_be_on_add_image_page
 
@@ -84,29 +83,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
       expect_confirmation_banner("The image was added")
 
       expect(page).to have_content "Images (1)"
-      expect(page).to have_content "Case images (1)"
-      expect(page).to have_content "Product images (0)"
-
-      click_link "Product images"
-
-      expect(page).to have_content "No attachments"
-
-      click_link "Go to the #{product.name} product page"
-
-      click_link "Images"
-
-      click_link "Add image"
-
-      attach_and_submit_file
-
-      visit "/cases/#{investigation.pretty_id}"
-
-      expect(page).to have_content "Images (2)"
-
-      click_link "Images"
-
-      expect(page).to have_content "Case images (1)"
-      expect(page).to have_content "Product images (1)"
+      expect(page).to have_content "Case image 1"
     end
   end
 
