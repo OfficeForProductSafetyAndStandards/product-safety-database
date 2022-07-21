@@ -13,9 +13,9 @@ class Correspondence < ApplicationRecord
   has_many_attached :documents
 
   enum contact_method: {
-    email: "Email",
-    phone: "Phone call"
-  },
+         email: "Email",
+         phone: "Phone call"
+       },
        _suffix: true
 
   redacted_export_with :id, :contact_method, :correspondence_date, :correspondent_type,
