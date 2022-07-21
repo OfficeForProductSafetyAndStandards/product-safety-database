@@ -21,7 +21,7 @@ module Investigations
         )
 
         if @reported_reason_form.reported_reason == "safe_and_compliant"
-          flash[:success] = "Case information changed." if result.changes_made
+          flash[:success] = "The case information was updated" if result.changes_made
 
           @investigation = investigation.decorate
           redirect_to investigation_path(@investigation)

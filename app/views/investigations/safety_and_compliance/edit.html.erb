@@ -12,9 +12,10 @@
       <%= error_summary @edit_why_reporting_form.errors %>
       <%= edit_why_reporting_checkboxes(form, page_heading, @edit_why_reporting_form.errors) %>
       <%= form.hidden_field :reported_reason, value: @reported_reason %>
-      <%= form.submit "Save", class: "govuk-button" %>
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
     </div>
   </div>
 <% end %>
-
-<p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %></p>

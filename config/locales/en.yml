@@ -181,7 +181,7 @@ en:
         key: Safety and compliance
         reported_as: Reported as
         primary_hazard: Primary hazard
-        description: Description of hazard
+        description: Hazard description
         compliance: Compliance
         unsafe: Unsafe
         non_compliant: Non-compliant
