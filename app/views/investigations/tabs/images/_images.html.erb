@@ -1,14 +1,5 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
-    <% if policy(@investigation).update?(user: current_user) %>
-      <p class="govuk-body">
-        <%= link_to "Add image", new_investigation_document_path(@investigation) %>
-      </p>
-    <% end %>
-
-    <hr class="govuk-section-break govuk-section-break--l">
-
     <% if @investigation.images.none? %>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
