@@ -43,7 +43,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      ]
   end
 
-  def govuk_text_area(attribute, label:, label_classes: "govuk-label--m", hint: nil, attributes: {}, classes: nil, rows: 5, described_by: nil)
+  def govuk_text_area(attribute, label:, label_classes: "govuk-label--m", hint: nil, attributes: {}, hint_classes: nil, classes: nil, rows: 5, described_by: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -51,6 +51,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     hint = { text: hint } if hint
+    hint[:classes] = hint_classes if hint && hint_classes.present?
 
     @template.render "components/govuk_textarea",
                      label: {
