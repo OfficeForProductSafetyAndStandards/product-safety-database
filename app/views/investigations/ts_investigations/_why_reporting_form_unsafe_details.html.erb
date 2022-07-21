@@ -9,6 +9,6 @@
 <%= render "form_components/govuk_textarea", key: :hazard_description, form: form,
            attributes: { maxlength: 10000 },
            label: { text: "Why is the product unsafe?" },
-           hint: { text: "Also include details if it has been involved in an incident" },
+           hint: { text: "If the product has been involved in an incident include this additional information.", classes: "govuk-!-font-size-16" },
            id: "hazard_description",
            classes: "govuk-!-width-three-quarters" %>

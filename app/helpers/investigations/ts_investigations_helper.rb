@@ -22,7 +22,8 @@ module Investigations::TsInvestigationsHelper
     render "form_components/govuk_checkboxes",
            form:,
            key: :why_reporting,
-           fieldset: { legend: { html: page_heading_html(page_heading) }, class: "govuk-fieldset__legend govuk-fieldset__legend--l" },
+           fieldset: { legend: { html: page_heading_html(page_heading), classes: "govuk-fieldset__legend--l" } },
+           hint: { text: "Select one or both descriptions." },
            errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
            items: [
              { key: "reported_reason_unsafe",

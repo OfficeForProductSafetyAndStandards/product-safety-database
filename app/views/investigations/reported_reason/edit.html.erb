@@ -12,7 +12,15 @@
       <%= error_summary @reported_reason_form.errors %>
       <% radio_items = (Investigation.reported_reasons.keys - ["other"]).map do |reason|
           item = { text: t("why_reporting_form.reason.#{reason}"), value: reason, id: reason }
-          item.merge({hint: {text: "This helps other market surveillance authorities avoid testing the same product again."}}) if reason == "safe_and_compliant"
+
+          if reason == "safe_and_compliant"
+            item.merge!({
+              hint: {
+                text: "This helps other market surveillance authorities avoid testing the same product again.",
+                classes: "govuk-radios__hint govuk-!-font-size-16"
+              }
+            })
+          end
           item
          end
       %>
@@ -31,9 +39,10 @@
          items: radio_items
        %>
 
-      <%= form.submit "Save and continue", class: "govuk-button" %>
+       <div class="govuk-button-group">
+         <%= form.submit "Save and continue", class: "govuk-button" %>
+         <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
     </div>
   </div>
 <% end %>
-
-<p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %></p>
