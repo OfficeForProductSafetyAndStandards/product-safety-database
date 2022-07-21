@@ -22,14 +22,15 @@ class EditWhyReportingForm
   end
 
   def self.from(investigation, reported_reason)
-    attributes = { reported_reason: reported_reason }
+    attributes = { reported_reason: }
 
-    if (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant")
-      attributes.merge!({ hazard_description: investigation.hazard_description, hazard_type: investigation.hazard_type })
+    if %w[unsafe unsafe_and_non_compliant].include?(reported_reason)
+      attributes[:hazard_description] = investigation.hazard_description
+      attributes[:hazard_type] = investigation.hazard_type
     end
 
-    if (reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant")
-      attributes.merge!({ non_compliant_reason: investigation.non_compliant_reason })
+    if %w[non_compliant unsafe_and_non_compliant].include?(reported_reason)
+      attributes[:non_compliant_reason] = investigation.non_compliant_reason
     end
 
     new(**attributes)

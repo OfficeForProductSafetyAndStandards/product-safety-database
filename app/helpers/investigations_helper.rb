@@ -118,7 +118,7 @@ module InvestigationsHelper
     [risk_level_row, validated_row, risk_assessment_row]
   end
 
-  def safety_and_compliance_rows(investigation, user)
+  def safety_and_compliance_rows(investigation)
     rows = []
 
     reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided

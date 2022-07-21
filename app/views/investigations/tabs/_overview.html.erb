@@ -35,7 +35,7 @@
 
 <%= govukSummaryList(
 classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-rows: safety_and_compliance_rows(@investigation, current_user)
+rows: safety_and_compliance_rows(@investigation)
 ) %>
 
 <% if @investigation.complainant %>

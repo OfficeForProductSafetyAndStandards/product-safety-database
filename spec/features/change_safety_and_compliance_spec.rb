@@ -50,8 +50,8 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
         expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe")
-        expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text:  "Cuts")
-        expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd",text: "Far too sharp")
+        expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: "Cuts")
+        expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: "Far too sharp")
 
         expect(page).not_to have_css("dt", text: "Compliance")
 
@@ -126,8 +126,8 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_button "Save"
 
         expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
-        expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text:  "Cuts")
-        expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd",text: "Far too sharp")
+        expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: "Cuts")
+        expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: "Far too sharp")
 
         click_link "Activity"
         expect(page).to have_css("h3", text: "Safety and compliance status changed")

@@ -31,12 +31,12 @@ module Investigations::TsInvestigationsHelper
                id: "base",
                value: true,
                conditional: { html: edit_unsafe_details_html(form, hazard_types) },
-               attributes: attributes },
+               attributes: },
              { key: "reported_reason_non_compliant",
                text: "It’s non-compliant (or suspected to be)",
                value: true,
                conditional: { html: non_compliant_details_html(form) },
-               attributes: attributes }
+               attributes: }
            ]
   end
 
