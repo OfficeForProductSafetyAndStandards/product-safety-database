@@ -26,19 +26,19 @@ class ChangeSafetyAndComplianceData
 private
 
   def assign_attributes
-    if reported_reason == "safe_and_compliant"
+    if reported_reason.to_s == "safe_and_compliant"
       investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason:)
     end
 
-    if reported_reason == "unsafe_and_non_compliant"
+    if reported_reason.to_s == "unsafe_and_non_compliant"
       investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason:, reported_reason:)
     end
 
-    if reported_reason == "unsafe"
+    if reported_reason.to_s == "unsafe"
       investigation.assign_attributes(hazard_description:, hazard_type:, non_compliant_reason: nil, reported_reason:)
     end
 
-    if reported_reason == "non_compliant"
+    if reported_reason.to_s == "non_compliant"
       investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason:, reported_reason:)
     end
   end
