@@ -1,8 +1,4 @@
 <% page_heading = "Why is the product of concern?" %>
-<%= govukBackLink(
-  text: "Back to #{@investigation.pretty_description.downcase}",
-  href: investigation_path(@investigation)
-) %>
 
 <%= page_title page_heading, errors: @edit_why_reporting_form.errors.any? %>
 
