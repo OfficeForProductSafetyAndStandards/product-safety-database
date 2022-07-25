@@ -1,10 +1,13 @@
 <div id="hazard-type-auto-complete-container"></div>
 <div class="govuk-!-width-one-half govuk-!-margin-bottom-6">
-  <%= render "form_components/govuk_select", choices: hazard_types, key: :hazard_type, form: form,
+  <%= render "form_components/govuk_select",
+             items: hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+             key: :hazard_type,
+             form: form,
              show_all_values: true,
              aria_describedby: "hazard-type-category-hint", label: { text: "What is the primary hazard?" },
              id: "hazard_type",
-             is_autocomplete: true %>
+             is_autocomplete: false %>
 </div>
 <%= render "form_components/govuk_textarea", key: :hazard_description, form: form,
            attributes: { maxlength: 10000 },
