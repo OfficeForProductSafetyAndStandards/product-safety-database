@@ -6,7 +6,7 @@
 <li>
   <h3 class="govuk-heading-s"><%= title %></h3>
 
-  <p class="govuk-body-s timeline-details"><%= activity.subtitle(current_user) %></p>
+  <p class="govuk-body-s opss-secondary-text"><%= activity.subtitle(current_user) %></p>
 
   <% if restricted %>
     <%= render "restricted", activity: activity %>
