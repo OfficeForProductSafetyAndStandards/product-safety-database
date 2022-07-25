@@ -122,7 +122,6 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
         expect(errors_list[0].text).to eq "Non compliant reason cannot be blank"
         expect(errors_list[1].text).to eq "Hazard description cannot be blank"
-        expect(errors_list[2].text).to eq "Hazard type cannot be blank"
 
         fill_in("Why is the product non-compliant?", with: "No one really knows")
         select "Cuts", from: "What is the primary hazard?"
