@@ -9,7 +9,7 @@ module Investigations
     def update
       investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
       authorize investigation, :update?
-      @reported_reason_form = ReportedReasonForm.new(reported_reason: reported_reason)
+      @reported_reason_form = ReportedReasonForm.new(reported_reason:)
 
       if @reported_reason_form.valid?
         result = ChangeReportedReason.call!(
@@ -36,8 +36,8 @@ module Investigations
 
     def reported_reason_form_params
       params.permit(
-          investigation: [:reported_reason]
-        )
+        investigation: [:reported_reason]
+      )
     end
 
     def reported_reason
