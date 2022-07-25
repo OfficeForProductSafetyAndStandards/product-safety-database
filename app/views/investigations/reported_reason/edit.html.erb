@@ -4,8 +4,9 @@
 
 <%= form_with scope: :investigation, model: @reported_reason_form, url: investigation_reported_reason_path, html: {novalidate: true}, method: :put, local: true do |form| %>
   <%= error_summary @reported_reason_form.errors %>
-  <% radio_items = (Investigation.reported_reasons.keys - ["other"]).map do |reason|
-      item = { text: t("why_reporting_form.reason.#{reason}"), value: reason, id: reason }
+  <% radio_items = (Investigation.reported_reasons.keys - ["other"]).map.with_index do |reason, index|
+      id = index.zero? ? "reported_reason" : "reported_reason-#{index}"
+      item = { text: t("why_reporting_form.reason.#{reason}"), value: reason, id: id }
 
       if reason == "safe_and_compliant"
         item.merge!({
