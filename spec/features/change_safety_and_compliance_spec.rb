@@ -98,14 +98,19 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
     end
   end
 
-  context "when the case is safe" do
+  context "when the case safety and compliance data is not set" do
     context "when user does not fill in the appropriate fields" do
-      let(:investigation)  { create(:allegation, creator: user, reported_reason: "safe_and_compliant") }
+      let(:investigation)  { create(:allegation, creator: user) }
 
       it "raises error and does not allow user to change safety and compliance details until they are correctly filled in" do
         sign_in user
         visit "/cases/#{investigation.pretty_id}"
-        visit_change_reported_reason_page_and_expect_prefilled_values_for_safe_and_compliant
+        visit_change_reported_reason_page_with_no_values_selected
+
+        click_button "Save and continue"
+
+        errors_list = page.find(".govuk-error-summary__list").all("li")
+        expect(errors_list[0].text).to eq "Reported reason cannot be blank"
 
         choose("As unsafe and non-compliant")
 
@@ -159,14 +164,14 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
     expect(page).to have_unchecked_field("As safe and compliant")
   end
 
-  def visit_change_reported_reason_page_and_expect_prefilled_values_for_safe_and_compliant
+  def visit_change_reported_reason_page_with_no_values_selected
     click_link "Edit the safety and compliance"
 
     expect(page).to have_css("h1", text: "How is the product being reported?")
     expect(page).to have_unchecked_field("As unsafe")
     expect(page).to have_unchecked_field("As non-compliant")
     expect(page).to have_unchecked_field("As unsafe and non-compliant")
-    expect(page).to have_checked_field("As safe and compliant")
+    expect(page).to have_unchecked_field("As safe and compliant")
   end
 
   def expect_prefilled_values_for_non_compliant_product
