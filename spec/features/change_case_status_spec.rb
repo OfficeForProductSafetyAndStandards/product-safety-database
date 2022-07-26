@@ -27,7 +27,14 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
     # Navigate via the case overview table
     visit "/cases/#{investigation.pretty_id}"
-    first(:link, "Close").click
+    # x = all("div.govuk-grid-row").first
+
+    within("div.opss-text-align-right") do
+      expect(page).to have_link "Close case"
+      expect(page).not_to have_link "Re-open case"
+      click_link "Close case"
+    end
+
     expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
 
     fill_in "Why are you closing the case?", with: "Case has been resolved."
@@ -65,7 +72,13 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
     # Navigate via the case overview table
     visit "/cases/#{investigation.pretty_id}"
-    click_link "Re-open"
+
+    within("div.opss-text-align-right") do
+      expect(page).not_to have_link "Close case"
+      expect(page).to have_link "Re-open case"
+      click_link "Re-open case"
+    end
+
     expect_to_be_on_reopen_case_page(case_id: investigation.pretty_id)
 
     fill_in "Why are you re-opening the case?", with: "Case has not been resolved."
