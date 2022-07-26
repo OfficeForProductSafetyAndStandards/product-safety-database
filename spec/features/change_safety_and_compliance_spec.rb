@@ -14,7 +14,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
       it "allows user to change details and make the case safe but uncompliant" do
         choose("As non-compliant")
 
-        click_button "Save and continue"
+        click_button "Continue"
 
         expect_prefilled_values_for_non_compliant_product
 
@@ -39,7 +39,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
       it "allows user to change details and make the case unsafe but compliant" do
         choose("As unsafe")
 
-        click_button "Save and continue"
+        click_button "Continue"
 
         expect_prefilled_values_for_unsafe_product
 
@@ -66,7 +66,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
       it "allows user to change details and make the case safe and compliant" do
         choose("As safe and compliant")
 
-        click_button "Save and continue"
+        click_button "Continue"
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
         expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Safe and compliant")
@@ -86,7 +86,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
       it "does not save the changes" do
         choose("As non-compliant")
 
-        click_button "Save and continue"
+        click_button "Continue"
 
         expect_prefilled_values_for_non_compliant_product
 
@@ -107,14 +107,14 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         visit "/cases/#{investigation.pretty_id}"
         visit_change_reported_reason_page_with_no_values_selected
 
-        click_button "Save and continue"
+        click_button "Continue"
 
         errors_list = page.find(".govuk-error-summary__list").all("li")
         expect(errors_list[0].text).to eq "Reported reason cannot be blank"
 
         choose("As unsafe and non-compliant")
 
-        click_button "Save and continue"
+        click_button "Continue"
 
         click_button "Save"
 
