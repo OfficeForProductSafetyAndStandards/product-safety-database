@@ -1,44 +1,148 @@
 <%= page_title "Businesses - #{@investigation.pretty_id}" %>
 
-<% if policy(@investigation).update?(user: current_user) %>
-  <p class="govuk-body">
-    <%= link_to "Add business", new_investigation_business_path(@investigation) %>
-  </p>
-  <hr class="govuk-section-break govuk-section-break--l">
+<% if @investigation.businesses.count == 0 %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body opss-text-align-center">
+        <%= I18n.t(".investigations.businesses.empty") %>
+      </p>
+    </div>
+  </div>
 <% end %>
 
-<% @investigation.investigation_businesses.each do |ib| %>
-  <h2 class="govuk-heading-m">
-    <%= ib.decorate.pretty_relationship %>
-  </h2>
+<% @investigation.businesses.each_with_index do |business, index| %>
+<section id="<%= business.trading_name.parameterize %>" class="govuk-!-margin-bottom-9">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h3 class="govuk-heading-m">
+        <%= business.trading_name %>
+      </h3>
+    </div>
+    <% if policy(@investigation).update? %>
+      <div class="govuk-grid-column-one-quarter">
+        <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+          <a href="<%= edit_business_path(business) %>" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset">
+            Edit this business<span class="govuk-visually-hidden">: <%= business.trading_name %></span>
+          </a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Business type
+      </dt>
+      <dd class="govuk-summary-list__value">
+        <%= @investigation.investigation_businesses.find_by(business_id: business.id).relationship.capitalize %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Trading name
+      </dt>
+      <dd class="govuk-summary-list__value">
+        <%= business.trading_name %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Legal name
+      </dt>
+      <dd class="govuk-summary-list__value">
+        <% unless business.legal_name.blank? %>
+          <%= business.legal_name %> <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text">Registered name</span>
+        <% end %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Company number
+      </dt>
+      <dd class="govuk-summary-list__value">
+        <% unless business.company_number.blank? %>
+          <%= business.company_number %> <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text">Registration number for incorporated businesses</span>
+        <% end %>
+      </dd>
+    </div>
+    <% business.locations.each do |location| %>
+      <div class="govuk-summary-list__row govuk-summary-list__row--no-border">
+        <dt class="govuk-summary-list__key">
+          Location name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= location.name %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% [location.address_line_1, location.address_line_2, location.city, location.postal_code].each do |address_line| %>
+            <% unless address_line.blank? %>
+              <%= address_line %><span class="govuk-visually-hidden">,</span> <br>
+            <% end %>
+          <% end %>
+          <%= country_from_code(location.country) unless location.country.blank? %>
+        </dd>
+      </div>
+    <% end %>
+    <% business.contacts.each do |contact| %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Contact
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <dl class="opss-nested-definition-list">
+            <div>
+              <dt>Position</dt>
+              <dd><%= contact.job_title %></dd>
+            </div>
+            <div>
+              <dt>Name</dt>
+              <dd><%= contact.name %></dd>
+            </div>
+            <div>
+              <dt>Telephone</dt>
+              <dd><%= contact.phone_number %></dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd><%= contact.email %></dd>
+            </div>
+          </dl>
+        </dd>
+      </div>
+    <% end %>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Attachments
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% unless business.documents.empty? %>
+            <a href="<%= business_path(business, anchor: "attachments") %>" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden"><%= business.trading_name %> has </span> <%= business.documents.count %> file attachments</a>
+          <% end %>
+        </dd>
+    </div>
+  </dl>
 
-  <%= business_summary_list ib.business %>
+  <p class="govuk-body-s govuk-!-margin-bottom-0 opss-secondary-text opss-text-align-right">
+    <% if policy(@investigation).update? %>
+      To view and edit all the details about this business go to the full <a href="<%= business_path(business) %>" class="govuk-link govuk-link--no-visited-state">business page</a> <span class="govuk-visually-hidden">for <%= business.trading_name %></span>
+    <% else %>
+      To view all the details about this business go to the full <a href="<%= business_path(business) %>" class="govuk-link govuk-link--no-visited-state">business page</a> <span class="govuk-visually-hidden">for <%= business.trading_name %></span>
+    <% end %>
+  </p>
 
-  <%= link_with_hidden_text_to "View business",
-     "(#{ib.business.trading_name})",
-   ib.business,
-   class: "govuk-link app-block-link govuk-!-margin-right-3" %>
-
-  <%= link_with_hidden_text_to t("change_business_details"), t("change_business_details"), edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
-  <% if policy(@investigation).update?(user: current_user) %>
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        <%= t(".remove_business_hint") %>
-      </strong>
-      <br />
-      <%= link_with_hidden_text_to "Remove business",
-             "(#{ib.business.trading_name})",
-       remove_investigation_business_path(@investigation, ib.business),
-       class: "govuk-link app-block-link" %>
+  <% if policy(@investigation).update? %>
+    <div class="opss-text-align-right opss-margin-bottom-1-desktop opss-margin-top-1-mobile">
+      <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= remove_investigation_business_path(@investigation, business) %>">Remove this business<span class="govuk-visually-hidden">: <%= business.trading_name %></span></a>
     </div>
   <% end %>
 
-  <hr class="govuk-section-break govuk-section-break--m">
-
-<% end %>
-
-<% if @investigation.investigation_businesses.length.zero? %>
-  <p class="govuk-body">No businesses</p>
+  <% unless index == @investigation.businesses.count - 1 %>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
+  <% end %>
+</section>
 <% end %>

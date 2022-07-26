@@ -34,7 +34,7 @@ RSpec.feature "App navigation", :with_stubbed_mailer, :with_stubbed_opensearch, 
 
     within "main" do
       click_on "Businesses"
-      click_on "View business"
+      click_on "business page"
     end
 
     expect(page).to have_content("Back to #{investigation.decorate.pretty_description}")
