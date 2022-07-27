@@ -20,25 +20,26 @@ module Investigations::TsInvestigationsHelper
     base_errors = errors.full_messages_for(:base)
     attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" }, disabled: "disabled" }
 
-    render "form_components/govuk_checkboxes",
-           form:,
-           key: :why_reporting,
-           fieldset: { legend: { html: edit_page_heading_html(page_heading), classes: "govuk-fieldset__legend--l" } },
-           hint: { text: "Select one or both descriptions." },
-           errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
-           items: [
-             { key: "reported_reason_unsafe",
-               text: "The product is unsafe (or suspected of being)",
-               id: "base",
-               value: true,
-               conditional: { html: edit_unsafe_details_html(form, hazard_types) },
-               attributes: },
-             { key: "reported_reason_non_compliant",
-               text: "The product is non-compliant (or suspected of being)",
-               value: true,
-               conditional: { html: non_compliant_details_html(form) },
-               attributes: }
-           ]
+    govukCheckboxes(
+      form:,
+      key: :why_reporting,
+      fieldset: { legend: { html: edit_page_heading_html(page_heading), classes: "govuk-fieldset__legend--l" } },
+      hint: { text: "Select one or both descriptions." },
+      errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
+      items: [
+        { key: "reported_reason_unsafe",
+          text: "The product is unsafe (or suspected of being)",
+          id: "base",
+          value: true,
+          conditional: { html: edit_unsafe_details_html(form, hazard_types) },
+          attributes: },
+        { key: "reported_reason_non_compliant",
+          text: "The product is non-compliant (or suspected of being)",
+          value: true,
+          conditional: { html: non_compliant_details_html(form) },
+          attributes: }
+      ]
+    )
   end
 
 private
