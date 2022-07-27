@@ -97,6 +97,7 @@
     }
 
     .opss-panels__single {
+        /*width: 100%; */
         padding-bottom: govuk-spacing(2);
         margin-top: - govuk-spacing(4);
         margin-bottom: govuk-spacing(2);
@@ -173,6 +174,17 @@ ul.opss-radio-list {
     }
 }
 
+/*.opss-list-squares {
+    list-style-type: square;
+
+    ol &,
+    ul & {
+        margin-left: govuk-spacing(6);
+        padding-top: govuk-spacing(4);
+        padding-bottom: govuk-spacing(1);
+    }
+}*/
+
 .govuk-character-count__message:after {
     content: '.';
 }
@@ -222,6 +234,7 @@ ul.opss-radio-list {
         font-weight: normal;
         color: $govuk-text-colour;
         border: 1px solid $govuk-border-colour;
+        /*float: right;*/
         margin-left: 0;
         min-width: 76px;
         text-align: center;
@@ -365,6 +378,14 @@ section[data-info-number] {
 }
 section.opss-border-all[data-info-number] {
     margin-bottom: govuk-spacing(8) !important;
+
+    & > ul li:last-child dl {/* remove border bottom and margin from last row when inside a border box */
+        margin-bottom: - govuk-spacing(2);
+
+        div:last-child > * {
+            border-bottom: none;
+        }
+    }
 }
 section:not(.opss-border-all)[data-info-number="0"] {
     margin-bottom: govuk-spacing(6) !important;
