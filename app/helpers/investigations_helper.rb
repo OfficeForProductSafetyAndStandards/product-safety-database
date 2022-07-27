@@ -118,7 +118,7 @@ module InvestigationsHelper
     [risk_level_row, validated_row, risk_assessment_row]
   end
 
-  def safety_and_compliance_rows(investigation, user)
+  def safety_and_compliance_rows(investigation)
     rows = []
 
     reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided
@@ -126,20 +126,17 @@ module InvestigationsHelper
     rows << {
       key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
       value: { text: simple_format(t(reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
-      actions: safety_and_compliance_actions(investigation, user, "reported_as")
     }
 
     if investigation.unsafe_and_non_compliant? || investigation.unsafe?
       rows << {
         key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
         value: { text: simple_format(investigation.hazard_type) },
-        actions: safety_and_compliance_actions(investigation, user, "hazard_type")
       }
 
       rows << {
         key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
         value: { text: simple_format(investigation.hazard_description) },
-        actions: safety_and_compliance_actions(investigation, user, "hazard_description")
       }
     end
 
@@ -147,7 +144,6 @@ module InvestigationsHelper
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
         value: { text: simple_format(investigation.non_compliant_reason) },
-        actions: safety_and_compliance_actions(investigation, user, "non_compliant_reason")
       }
     end
 
@@ -171,20 +167,6 @@ module InvestigationsHelper
     search_result_values = search_result_values(search_terms, number_of_results)
 
     render "investigations/search_result", word: search_result_values[:word], number_of_cases_in_english: search_result_values[:number_of_cases_in_english], search_terms:
-  end
-
-  def safety_and_compliance_actions(investigation, user, field_name)
-    if policy(investigation).update?(user:)
-      {
-        items: [
-          href: edit_investigation_safety_and_compliance_path(investigation.pretty_id),
-          text: "Change",
-          visuallyHiddenText: field_name
-        ]
-      }
-    else
-      {}
-    end
   end
 
   def risk_validated_link_text(investigation)

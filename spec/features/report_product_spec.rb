@@ -308,7 +308,7 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
 
     expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: reference_number)
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
-    expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: hazard_description)
+    expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliance_details)
   end
 
