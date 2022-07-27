@@ -1,5 +1,6 @@
 <% multiple ||= false %>
 <% error_field ||= :base %>
+<% id ||= "document" %>
 <fieldset class="govuk-fieldset">
   <% if local_variables.include?(:title) %>
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -11,7 +12,8 @@
     If you have multiple files, compress them in a zip
   </div>
 
-  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: error_field) %>">
+
+  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: error_field) %>", id="<%= id %>">
 
     <%= form.fields_for attachment_name do |subform| %>
 
