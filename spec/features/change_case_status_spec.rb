@@ -27,7 +27,6 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
     # Navigate via the case overview table
     visit "/cases/#{investigation.pretty_id}"
-    # x = all("div.govuk-grid-row").first
 
     within("div.opss-text-align-right") do
       expect(page).to have_link "Close case"
