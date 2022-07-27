@@ -50,6 +50,11 @@ en:
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
     mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
+    reason:
+      unsafe: "As unsafe"
+      non_compliant: "As non-compliant"
+      unsafe_and_non_compliant: "As unsafe and non-compliant"
+      safe_and_compliant: "As safe and compliant"
   invite_user_to_team:
     invite_sent: "Invite sent to %{email}"
   delete_team:
@@ -172,7 +177,7 @@ en:
         key: Safety and compliance
         reported_as: Reported as
         primary_hazard: Primary hazard
-        description: Description of hazard
+        description: Hazard description
         compliance: Compliance
         unsafe: Unsafe
         non_compliant: Non-compliant
