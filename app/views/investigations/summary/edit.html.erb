@@ -21,7 +21,7 @@
                   builder: ApplicationFormBuilder,
                   local: true) do |form| %>
 
-      <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="10000">
+      <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="800">
         <%= form.govuk_text_area(:summary,
                                  classes: "govuk-js-character-count",
                                  rows: 11,
@@ -29,7 +29,7 @@
                                  label_classes: "govuk-label--l govuk-!-margin-bottom-2",
                                  hint: "You can add and edit a general summary about the case.",
                                  hint_classes: "govuk-!-margin-bottom-6",
-                                 attributes: { maxlength: 10_000 },
+                                 attributes: { maxlength: 800 },
                                  described_by: "summary-info") %>
         <div id="summary-info" class="govuk-hint govuk-character-count__message govuk-!-font-size-16">
           You can enter up to 800 characters
