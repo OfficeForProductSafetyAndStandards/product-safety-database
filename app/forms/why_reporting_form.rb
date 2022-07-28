@@ -20,7 +20,7 @@ class WhyReportingForm
     investigation.assign_attributes(
       attributes
         .slice("hazard_description", "hazard_type", "non_compliant_reason")
-        .merge(reported_reason:, description: reason_created)
+        .merge(reported_reason:)
     )
   end
 
@@ -41,10 +41,6 @@ class WhyReportingForm
   end
 
 private
-
-  def reason_created
-    I18n.t(reported_reason, scope: :why_reporting_form)
-  end
 
   def mutually_exclusive_checkboxes
     return unless mutually_exclusive_checkboxes_selected?
