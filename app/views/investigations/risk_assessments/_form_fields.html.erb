@@ -55,7 +55,8 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
   <%= form.govuk_checkboxes :product_ids,
      legend: "Which products were assessed?",
      hint: "You must choose at least one. Only products already added to the case are listed.",
-     items: risk_assessment_form.products
+     items: risk_assessment_form.products,
+     disable_ghost: true
   %>
 <% else %>
 

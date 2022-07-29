@@ -32,6 +32,7 @@
   <%= form.govuk_checkboxes :markings,
                             legend: "Select product marking",
                             legend_classes: "govuk-fieldset__legend--s",
+                            disable_ghost: true,
                             items: Product::MARKINGS.map { |value| { text: value, value: value} } %>
 <% end %>
 
