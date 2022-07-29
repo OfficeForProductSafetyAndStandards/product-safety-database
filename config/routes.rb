@@ -124,6 +124,7 @@ Rails.application.routes.draw do
     resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
     resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
+    resource :reported_reason, only: %i[edit update], path: "edit-reported-reason", controller: "investigations/reported_reason"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
     resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
     get "add-to-case", to: "investigations/supporting_information#add_to_case", as: "add_to_case"

@@ -27,7 +27,7 @@ class Investigation < ApplicationRecord
   validates :description, presence: true, on: :update
 
   validates :user_title, length: { maximum: 100 }
-  validates :description, length: { maximum: 10_000 }
+  validates :description, length: { maximum: 800 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
   validates :custom_risk_level, absence: true, if: -> { risk_level != "other" }
