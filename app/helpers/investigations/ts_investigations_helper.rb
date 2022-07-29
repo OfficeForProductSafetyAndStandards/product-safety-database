@@ -32,11 +32,13 @@ module Investigations::TsInvestigationsHelper
           id: "base",
           value: true,
           conditional: { html: edit_unsafe_details_html(form, hazard_types) },
+          disable_ghost: true,
           attributes: },
         { key: "reported_reason_non_compliant",
           text: "The product is non-compliant (or suspected of being)",
           value: true,
           conditional: { html: non_compliant_details_html(form) },
+          disable_ghost: true,
           attributes: }
       ]
     )
@@ -77,6 +79,7 @@ private
       text: "It’s unsafe (or suspected to be)",
       id: "base",
       value: true,
+      disable_ghost: true,
       conditional: { html: unsafe_details_html(form, hazard_types) },
       attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
     }
@@ -87,6 +90,7 @@ private
       key: "reported_reason_non_compliant",
       text: "It’s non-compliant (or suspected to be)",
       value: true,
+      disable_ghost: true,
       conditional: { html: non_compliant_details_html(form) },
       attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
     }
@@ -98,6 +102,7 @@ private
       text: "It’s safe and compliant",
       hint: { text: "Help other market surveillance authorities avoid testing the same product again" },
       value: true,
+      disable_ghost: true,
       attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "safe-set" } }
     }
   end
