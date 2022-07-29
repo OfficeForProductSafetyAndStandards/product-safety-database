@@ -74,7 +74,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     expect(page).to have_text("Currently selected file: #{File.basename(file)}")
     expect(page).to have_text("Replace this file")
-    expect(page).to have_field("Attachment description", with: "\r\n#{file_description}")
+    expect(page).to have_field("Attachment description", with: file_description)
 
     fill_and_submit_form
 

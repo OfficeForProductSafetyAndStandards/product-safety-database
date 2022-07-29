@@ -161,7 +161,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       expect(page).to have_checked_field("Pass")
     end
     within_fieldset "Test report attachment" do
-      expect(page).to have_field("Attachment description", with: "\r\ntest result file")
+      expect(page).to have_field("Attachment description", with: "test result file")
     end
   end
 

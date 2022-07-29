@@ -25,7 +25,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       corrective_action.geographic_scopes.each do |geographic_scope|
         expect(page).to have_checked_field(I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]))
       end
-      expect(page).to have_field("Further details (optional)", with: "\r\n#{corrective_action.details}", type: "textarea")
+      expect(page).to have_field("Further details (optional)", with: corrective_action.details, type: "textarea")
 
       within_fieldset("Has the business responsible published product recall information online?") do
         expect(page).to have_checked_field("Yes")
@@ -174,7 +174,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
           expect(page).to have_link(corrective_action.document_blob.filename.to_s)
         end
 
-        expect(page).to have_field("Attachment description", with: "\r\n#{corrective_action.document.description}")
+        expect(page).to have_field("Attachment description", with: corrective_action.document.description)
 
         within_fieldset "Are there any files related to the action?" do
           choose "Yes"
@@ -191,7 +191,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
 
         click_link "Edit corrective action"
 
-        expect(page).to have_field("Attachment description", with: "\r\nBrand new attachment description")
+        expect(page).to have_field("Attachment description", with: "Brand new attachment description")
       end
     end
   end
