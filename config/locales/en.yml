@@ -50,10 +50,6 @@ en:
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
     mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
-    unsafe: "Product reported because it is unsafe."
-    non_compliant: "Product reported because it is non-compliant."
-    unsafe_and_non_compliant: "Product reported because it is unsafe and non-compliant."
-    safe_and_compliant: "Product reported because it is safe and compliant."
     reason:
       unsafe: "As unsafe"
       non_compliant: "As non-compliant"
@@ -521,7 +517,7 @@ en:
           attributes:
             summary:
               blank: Enter the case summary
-              too_long: Summary must be 10,000 characters or fewer
+              too_long: Summary must be 800 characters or fewer
         change_case_status_form:
           attributes:
             new_status:
