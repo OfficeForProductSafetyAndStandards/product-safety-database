@@ -52,7 +52,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_op
 
     expect(page).to have_text "Product was successfully updated."
 
-    expect(page).to have_summary_item(key: "PSD ref", value: product.psd_ref )
+    expect(page).to have_summary_item(key: "PSD ref", value: product.psd_ref)
     expect(page).to have_summary_item(key: "Product name", value: "MyBrand dishwasher")
     expect(page).to have_summary_item(key: "Category", value: "Kitchen / cooking accessories")
     expect(page).to have_summary_item(key: "Product subcategory", value: "dishwasher")
