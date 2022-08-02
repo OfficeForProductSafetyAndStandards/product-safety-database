@@ -1,11 +1,7 @@
 <% label_class = "govuk-label--m" %>
-<% # Ideally the width class should affect the input only, not the whole form group, but we're limited by MSPSDS-1045 %>
-
-<% product_category_classes = ["app-!-autocomplete--max-width-three-quarters",
-  ("govuk-form-group--error" if product_form.errors[:category].any?)] %>
 
 <%= govukSelect(
-  formGroup: { classes: product_category_classes },
+  formGroup: { classes: class_names("govuk-form-group--error" => product_form.errors[:category].any?) },
   choices: product_categories,
   key: :category,
   form: form,
