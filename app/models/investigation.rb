@@ -24,8 +24,6 @@ class Investigation < ApplicationRecord
 
   validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
 
-  validates :description, presence: true, on: :update
-
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 800 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
