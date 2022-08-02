@@ -25,12 +25,12 @@
   <% end %>
 
   <% if activity.product_updated? %>
-    Product: <%= link_to activity.product.name, activity.product %><br>
+    Product: <%= link_to activity.product.name, activity.product, class: "govuk-link--no-visited-state" %><br>
   <% end %>
 
   <% if activity.business_updated? %>
     <% if activity.business %>
-      Business: <%= link_to activity.new_business.trading_name, activity.new_business %><br>
+      Business: <%= link_to activity.new_business.trading_name, activity.new_business, class: "govuk-link--no-visited-state" %><br>
     <% else %>
       Business: Removed
     <% end %>
@@ -63,4 +63,4 @@
   <% end %>
 </div>
 
-<%= link_to "View corrective action", investigation_corrective_action_path(activity.investigation, activity.metadata["corrective_action_id"]) %>
+<%= link_to "View corrective action", investigation_corrective_action_path(activity.investigation, activity.metadata["corrective_action_id"]), class: "govuk-link--no-visited-state" %>

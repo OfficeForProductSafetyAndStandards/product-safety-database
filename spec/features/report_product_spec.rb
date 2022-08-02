@@ -258,7 +258,6 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
 
         expect_to_be_on_case_page
         expect_case_details_page_to_show_entered_information
-        expect_product_reported_unsafe_and_non_compliant
 
         click_link "Products (1)"
 
@@ -304,11 +303,10 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
 
   def expect_case_details_page_to_show_entered_information
     expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard")
-    expect(page).to have_text("Product reported because it is unsafe and non-compliant.")
 
     expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: reference_number)
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
-    expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: hazard_description)
+    expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliance_details)
   end
 
@@ -636,9 +634,5 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
 
   def skip_page
     click_button "Skip this page"
-  end
-
-  def expect_product_reported_unsafe_and_non_compliant
-    expect(page.find("h2", text: "Summary")).to have_sibling("p", text: "Product reported because it is unsafe and non-compliant.")
   end
 end

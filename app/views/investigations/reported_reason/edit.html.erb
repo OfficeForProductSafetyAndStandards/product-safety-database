@@ -1,0 +1,41 @@
+<% page_heading = "How is the product being reported?" %>
+
+<%= page_title page_heading, errors: @reported_reason_form.errors.any? %>
+
+<%= form_with scope: :investigation, model: @reported_reason_form, url: investigation_reported_reason_path, html: {novalidate: true}, method: :put, local: true do |form| %>
+  <%= error_summary @reported_reason_form.errors %>
+  <% radio_items = (Investigation.reported_reasons.keys - ["other"]).map.with_index do |reason, index|
+      id = index.zero? ? "reported_reason" : "reported_reason-#{index}"
+      item = { text: t("why_reporting_form.reason.#{reason}"), value: reason, id: id }
+
+      if reason == "safe_and_compliant"
+        item.merge!({
+          hint: {
+            text: "This helps other market surveillance authorities avoid testing the same product again.",
+            classes: "govuk-radios__hint govuk-!-font-size-16"
+          }
+        })
+      end
+      item
+     end
+  %>
+
+   <%= render "form_components/govuk_radios",
+     form: form,
+     key: :reported_reason,
+     classes: "",
+     fieldset: {
+       legend: {
+         text: "How is the product being reported?",
+         isPageHeading: true,
+         classes: "govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-7"
+       }
+     },
+     items: radio_items
+   %>
+
+   <div class="govuk-button-group">
+     <%= form.submit "Continue", class: "govuk-button" %>
+     <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+   </div>
+<% end %>

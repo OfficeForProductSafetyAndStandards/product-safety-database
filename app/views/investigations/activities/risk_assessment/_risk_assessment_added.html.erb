@@ -9,7 +9,7 @@
 
   <% if activity.risk_assessment_file %>
     <br>
-    Attached: <strong><%= link_to activity.risk_assessment_file.filename, url_for(activity.risk_assessment_file) %></strong>
+    Attached: <strong><%= link_to activity.risk_assessment_file.filename, url_for(activity.risk_assessment_file), class: "govuk-link--no-visited-state" %></strong>
   <% end %>
 
   <% if activity.further_details %>
@@ -18,5 +18,4 @@
   <% end %>
 </div>
 
-<%= link_to "View risk assessment", investigation_risk_assessment_path(activity.investigation, activity.risk_assessment) %>
-
+<%= link_to "View risk assessment", investigation_risk_assessment_path(activity.investigation, activity.risk_assessment), class: "govuk-link--no-visited-state" %>

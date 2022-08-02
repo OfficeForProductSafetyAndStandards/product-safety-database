@@ -10,13 +10,9 @@
 <%= render "investigations/pages_top", investigation: @investigation %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
+  <div class="govuk-grid-column-two-thirds">
 
     <%= error_summary @form.errors %>
-
-    <%= render "minimal_investigation_heading",
-               investigation: @investigation,
-               title: "Edit #{@investigation.case_type} summary" %>
 
     <%= form_with(model: @form,
                   url: investigation_summary_path(@investigation),
@@ -25,15 +21,26 @@
                   builder: ApplicationFormBuilder,
                   local: true) do |form| %>
 
-      <%= form.govuk_text_area(:summary,
-                               label: "Edit summary",
-                               label_classes: "govuk-visually-hidden",
-                               attributes: { maxlength: 10_000 }) %>
+      <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="800">
+        <%= form.govuk_text_area(:summary,
+                                 classes: "govuk-js-character-count",
+                                 rows: 11,
+                                 label: "Edit the summary",
+                                 label_classes: "govuk-label--l govuk-!-margin-bottom-2",
+                                 hint: "You can add and edit a general summary about the case.",
+                                 hint_classes: "govuk-!-margin-bottom-6",
+                                 attributes: { maxlength: 800 },
+                                 described_by: "summary-info") %>
+        <div id="summary-info" class="govuk-hint govuk-character-count__message govuk-!-font-size-16">
+          You can enter up to 800 characters
+        </div>
+      </div>
 
-      <div class="govuk-form-group">
-        <%= form.submit "Update summary", class: "govuk-button" %>
-        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button govuk-link--no-visited-state" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     <% end %>
+
   </div>
 </div>

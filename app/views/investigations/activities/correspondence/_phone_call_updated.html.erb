@@ -33,7 +33,7 @@
   <% end %>
 
   <% if activity.new_transcript %>
-    Transcript: <strong><%= link_to activity.new_transcript, url_for(activity.correspondence.transcript) %></strong>
+    Transcript: <strong><%= link_to activity.new_transcript, url_for(activity.correspondence.transcript), class: "govuk-link--no-visited-state" %></strong>
     <br />
   <% end %>
 
@@ -47,5 +47,5 @@
   <% end %>
 </div>
 <p class="govuk-body">
-  <%= link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link" %>
+  <%= link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link govuk-link--no-visited-state" %>
 </p>
