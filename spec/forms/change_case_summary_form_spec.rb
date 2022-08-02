@@ -31,7 +31,14 @@ RSpec.describe ChangeCaseSummaryForm do
     context "when no summary is supplied" do
       let(:summary) { " " }
 
-      include_examples "invalid form", [:summary, "Enter the case summary"]
+      it "is valid" do
+        expect(form).to be_valid
+      end
+
+      it "does not contain error messages" do
+        form.validate
+        expect(form.errors).to be_empty
+      end
     end
 
     context "when summary is too long" do
