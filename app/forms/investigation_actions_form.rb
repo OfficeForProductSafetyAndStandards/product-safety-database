@@ -1,7 +1,7 @@
 class InvestigationActionsForm
   include ActiveModel::Model
   include ActiveModel::Attributes
-  include Pundit
+  include Pundit::Authorization
 
   attribute :investigation_action
   attribute :investigation
