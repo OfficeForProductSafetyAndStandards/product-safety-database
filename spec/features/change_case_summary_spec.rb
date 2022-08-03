@@ -15,8 +15,11 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
     fill_in "Edit the summary", with: ""
     click_on "Save"
 
-    expect(page).to have_error_messages
-    expect(page).to have_error_summary "Enter the case summary"
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+    click_link "Change summary"
+
+    expect_to_be_on_case_summary_edit_page(case_id: investigation.pretty_id)
 
     fill_in "Edit the summary", with: "new summary"
     click_on "Save"
