@@ -1,8 +1,11 @@
+<% href = @investigation.is_closed? ? reopen_investigation_status_path(@investigation) : close_investigation_status_path(@investigation) %>
+<% link_text = @investigation.is_closed? ? "Re-open case" : "Close case" %>
+
 <%= render "investigations/navigable_case_nav", investigation: @investigation,
                                                 current_tab: "overview",
                                                 case_page_heading: "Case",
                                                 secondary_text: "From here you can find all the information about this case. If you have editing rights for this case, you can add products, businesses and supporting information.",
-                                                href: close_investigation_status_path(@investigation),
-                                                link_text: "Close case" do %>
+                                                href: href,
+                                                link_text: link_text do %>
   <%= render "investigations/tabs/overview" %>
 <% end %>

@@ -1,5 +1,5 @@
 class Investigations::AlertsController < ApplicationController
-  include Pundit
+  include Pundit::Authorization
   include ActionView::Helpers::NumberHelper
 
   def about
