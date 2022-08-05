@@ -14,7 +14,7 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_opensearch, :w
     click_link "Images (1)"
     expect(page).to have_selector("figure figcaption", text: document.decorate.title)
     expect(page).to have_selector("dd.govuk-summary-list__value", text: document.description)
-    click_link "Remove image"
+    click_link "Remove this image: #{document.decorate.title}"
 
     expect_remove_attachment_confirmation_page_to_show_attachment_information
 
