@@ -86,6 +86,7 @@ class RiskAssessmentForm
       {
         text: row[0],
         value: row[1],
+        disable_ghost: true,
         checked: product_ids.to_a.include?(row[1])
       }
     end

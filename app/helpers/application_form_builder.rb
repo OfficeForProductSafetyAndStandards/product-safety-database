@@ -10,37 +10,38 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     input_classes = " govuk-input--error" if object.errors.include?(attribute)
 
-    @template.render "components/govuk_date_input",
-                     id: "#{attribute}-fieldset",
-                     errorMessage: error_message,
-                     hint:,
-                     fieldset: {
-                       legend: {
-                         classes:,
-                         text: legend
-                       }
-                     },
-                     items: [
-                       {
-                         classes: "govuk-input--width-2#{input_classes}",
-                         label: "Day",
-                         id: attribute,
-                         name: "#{input_name(attribute)}[day]",
-                         value: object.public_send(attribute)&.day
-                       },
-                       {
-                         classes: "govuk-input--width-2#{input_classes}",
-                         label: "Month",
-                         name: "#{input_name(attribute)}[month]",
-                         value: object.public_send(attribute)&.month
-                       },
-                       {
-                         classes: "govuk-input--width-4#{input_classes}",
-                         label: "Year",
-                         name: "#{input_name(attribute)}[year]",
-                         value: object.public_send(attribute)&.year
-                       }
-                     ]
+    @template.govukDateInput(
+      id: "#{attribute}-fieldset",
+      errorMessage: error_message,
+      hint:,
+      fieldset: {
+        legend: {
+          classes:,
+          text: legend
+        }
+      },
+      items: [
+        {
+          classes: "govuk-input--width-2#{input_classes}",
+          label: "Day",
+          id: attribute,
+          name: "#{input_name(attribute)}[day]",
+          value: object.public_send(attribute)&.day
+        },
+        {
+          classes: "govuk-input--width-2#{input_classes}",
+          label: "Month",
+          name: "#{input_name(attribute)}[month]",
+          value: object.public_send(attribute)&.month
+        },
+        {
+          classes: "govuk-input--width-4#{input_classes}",
+          label: "Year",
+          name: "#{input_name(attribute)}[year]",
+          value: object.public_send(attribute)&.year
+        }
+      ]
+    )
   end
 
   def govuk_text_area(attribute, label:, label_classes: "govuk-label--m", hint: nil, attributes: {}, hint_classes: nil, classes: nil, rows: 5, described_by: nil)
@@ -53,20 +54,21 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     hint = { text: hint } if hint
     hint[:classes] = hint_classes if hint && hint_classes.present?
 
-    @template.render "components/govuk_textarea",
-                     label: {
-                       text: label,
-                       classes: label_classes
-                     },
-                     hint:,
-                     name: input_name(attribute),
-                     id: attribute.to_s,
-                     value: object.public_send(attribute),
-                     errorMessage: error_message,
-                     attributes:,
-                     classes:,
-                     rows:,
-                     described_by:
+    @template.govukTextarea(
+      label: {
+        text: label,
+        classes: label_classes
+      },
+      hint:,
+      name: input_name(attribute),
+      id: attribute.to_s,
+      value: object.public_send(attribute),
+      errorMessage: error_message,
+      attributes:,
+      classes:,
+      rows:,
+      described_by:
+    )
   end
 
   def govuk_input(attribute, label:, value: nil, label_classes: nil, classes: nil, hint: nil)
@@ -78,17 +80,18 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     hint = { text: hint } if hint
 
-    @template.render "components/govuk_input",
-                     label: {
-                       text: label,
-                       classes: label_classes.to_s
-                     },
-                     hint:,
-                     name: input_name(attribute),
-                     id: attribute.to_s,
-                     classes:,
-                     value: value || object.public_send(attribute),
-                     errorMessage: error_message
+    @template.govukInput(
+      label: {
+        text: label,
+        classes: label_classes.to_s
+      },
+      hint:,
+      name: input_name(attribute),
+      id: attribute.to_s,
+      classes:,
+      value: value || object.public_send(attribute),
+      errorMessage: error_message
+    )
   end
 
   def govuk_file_upload(attribute, label:, hint: nil, label_classes: nil, classes: nil)
@@ -133,13 +136,14 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       item[:selected] = true if object.public_send(attribute).to_s == item[:value].to_s
     end
 
-    @template.render "components/govuk_select",
-                     id: attribute.to_s,
-                     name: input_name(attribute),
-                     label: { text: label, classes: label_classes.to_s },
-                     hint:,
-                     items: @items,
-                     errorMessage: error_message
+    @template.govukSelect(
+      id: attribute.to_s,
+      name: input_name(attribute),
+      label: { text: label, classes: label_classes.to_s },
+      hint:,
+      items: @items,
+      errorMessage: error_message
+    )
   end
 
   def govuk_autocomplete(attribute, label:, label_classes: "", items: nil, choices: nil, hint: nil)
@@ -159,15 +163,16 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       item[:selected] = true if object.public_send(attribute).to_s == item[:value].to_s
     end
 
-    @template.render "components/govuk_select",
-                     id: attribute.to_s,
-                     name: input_name(attribute),
-                     label: { text: label, classes: label_classes.to_s },
-                     hint:,
-                     items: @items,
-                     errorMessage: error_message,
-                     show_all_values: true,
-                     is_autocomplete: true
+    @template.govukSelect(
+      id: attribute.to_s,
+      name: input_name(attribute),
+      label: { text: label, classes: label_classes.to_s },
+      hint:,
+      items: @items,
+      errorMessage: error_message,
+      show_all_values: true,
+      is_autocomplete: true
+    )
   end
 
   def govuk_checkboxes(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", hint: nil)
@@ -235,19 +240,20 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                   end
     end
 
-    @template.render "components/govuk_radios",
-                     name: input_name(attribute),
-                     errorMessage: error_message,
-                     items: @items,
-                     classes:,
-                     hint:,
-                     fieldset: {
-                       legend: {
-                         text: legend,
-                         classes: legend_classes,
-                         isPageHeading: is_page_heading
-                       }
-                     }
+    @template.govukRadios(
+      name: input_name(attribute),
+      errorMessage: error_message,
+      items: @items,
+      classes:,
+      hint:,
+      fieldset: {
+        legend: {
+          text: legend,
+          classes: legend_classes,
+          isPageHeading: is_page_heading
+        }
+      }
+    )
   end
 
 private

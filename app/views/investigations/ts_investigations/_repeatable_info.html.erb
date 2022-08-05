@@ -16,12 +16,13 @@
       <hr  class="govuk-section-break#{' govuk-section-break--visible govuk-section-break--m' unless hide_break}" />
 
       <%= form.hidden_field further_key %>
-      <%= render "form_components/govuk_radios",
-                 form: form,
-                 key: further_key,
-                 fieldset: { legend: { text: other_text, classes: "govuk-fieldset__legend--m" } },
-                 items: [{ text: "Yes", value: "Yes", checked: @repeat_step, id: further_key.to_s },
-                         { text: "No", value: "No", checked: (@repeat_step == false) }] %>
+      <%= govukRadios(
+        form: form,
+        key: further_key,
+        fieldset: { legend: { text: other_text, classes: "govuk-fieldset__legend--m" } },
+        items: [{ text: "Yes", value: "Yes", checked: @repeat_step, id: further_key.to_s },
+                { text: "No", value: "No", checked: (@repeat_step == false) }]
+      ) %>
       <%= govukButton(text: "Continue") %>
       <div class="govuk-body">
         <%= form.submit "Skip this page", class: "button-link", role: "link" %>

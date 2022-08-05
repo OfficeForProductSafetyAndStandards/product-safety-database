@@ -1,31 +1,44 @@
 <%
-  classes ||= ""
-  dl_wrapper_class = %w(govuk-summary-list)
-  dl_wrapper_class << classes
+  any_row_has_actions = local_assigns[:rows].any? { |row| row.dig(:actions, :items)&.any? }
+  dl_attributes = {
+    class: class_names("govuk-summary-list", local_assigns[:classes]),
+  }.merge!(local_assigns[:attributes] || {})
 %>
-
-<dl class="<%= dl_wrapper_class.join(" ") %>">
-  <% rows.each do |row| %>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key <%= row[:key][:classes] %>">
-        <%= row[:key][:text] ? row[:key][:text] : sanitize(row[:key][:html]) %>
-      </dt>
-      <dd class="govuk-summary-list__value <%= row[:value][:classes] %>">
-        <%= row[:value][:text] %>
-        <% if row[:value][:secondary_text] %>
-          <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>
-            <%= row[:value][:secondary_text][:text] ? row[:value][:secondary_text][:text] : sanitize(row[:value][:secondary_text][:html]) %>
-          <span>
-        <% end %>
-      </dd>
-
-      <% if row[:actions] %>
-        <dd class="govuk-summary-list__actions">
-          <% row[:actions].each do |action| %>
-            <a class="govuk-link <%= action[:classes] %>" href="<%= action[:href] %>"><%= action[:text] %><span class="govuk-visually-hidden"> <%= action[:visually_hidden_text] %></span></a>
+<%= tag.dl **dl_attributes do %>
+  <% local_assigns[:rows].each do |row| %>
+    <% if row %>
+      <%
+        this_row_has_actions = row.dig(:actions, :items)&.any?
+        row_classes = class_names("govuk-summary-list__row", { "govuk-summary-list__row--no-actions" => (any_row_has_actions && !this_row_has_actions) }, row[:classes])
+      %>
+      <div class="<%= row_classes %>">
+        <dt class="<%= class_names("govuk-summary-list__key", row.dig(:key, :classes)) %>">
+          <%= row.dig(:key, :html).presence || row.dig(:key, :text) %>
+        </dt>
+        <dd class="<%= class_names("govuk-summary-list__value", row.dig(:value, :classes)) %>">
+          <%= row.dig(:value, :html).presence || row.dig(:value, :text) %>
+          <% if row[:value][:secondary_text] %>
+            <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>
+              <%= row[:value][:secondary_text][:text] ? row[:value][:secondary_text][:text] : sanitize(row[:value][:secondary_text][:html]) %>
+            <span>
           <% end %>
         </dd>
-      <% end %>
-    </div>
+        <% if row.dig(:actions, :items)&.any? %>
+          <dd class="<%= class_names("govuk-summary-list__actions", row.dig(:actions, :classes)) %>">
+            <% if row.dig(:actions, :items).size == 1 %>
+              <%= render "components/govuk_action_link", **row.dig(:actions, :items).first %>
+            <% else %>
+              <ul class="govuk-summary-list__actions-list">
+                <% row.dig(:actions, :items).each do |action| %>
+                  <li class="govuk-summary-list__actions-list-item">
+                    <%= render "components/govuk_action_link", **action %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </dd>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
-</dl>
+<% end %>

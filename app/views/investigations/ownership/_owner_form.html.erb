@@ -1,5 +1,5 @@
 <%= form_with(model: change_case_owner_form, method: :put, url: wizard_path, local: true) do |form| %>
-  <%= render "form_components/govuk_error_summary", form: form %>
+  <%= govukErrorSummary form: form %>
   <%= yield %>
 
   <% someone_else_in_your_team_dropdown = capture do %>
@@ -52,7 +52,7 @@
   <% end %>
   <% items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else } %>
 
-  <%= render "form_components/govuk_radios", form: form, key: :owner_id, items: items, classes: "opss-radios__divider--title" %>
+  <%= govukRadios form: form, key: :owner_id, items: items, classes: "opss-radios__divider--title" %>
 
   <div class="govuk-form-group">
     <%= form.submit "Continue", class: "govuk-button" %>

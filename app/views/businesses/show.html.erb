@@ -6,7 +6,7 @@
 
 <%= render "business_heading", business: @business %>
 
-<%= render "components/govuk_tabs",
+<%= govukTabs(
   items: [
     {
       id: "full-detail",
@@ -34,4 +34,4 @@
       panel: { html: render("businesses/tabs/cases") }
     }
   ]
-%>
+) %>

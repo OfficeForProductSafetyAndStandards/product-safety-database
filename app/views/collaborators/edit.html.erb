@@ -20,7 +20,7 @@
     <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, local: true do |form| %>
 
       <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view case details as it is restricted" :  "Will have default view rights"%>
-      <%= render "form_components/govuk_radios",
+      <%= govukRadios(
         form: form,
         key: :permission_level,
         classes: "",
@@ -58,13 +58,13 @@
             value: EditCaseCollaboratorForm::PERMISSION_LEVEL_DELETE
           }
         ]
-      %>
+      ) %>
 
       <p class="govuk-body">We’ll email <%= @collaborator.name %> to let them know that their permission level has been changed.
       </p>
 
       <% message_html = capture do %>
-        <%= render "form_components/govuk_textarea",
+        <%= govukTextarea(
           form: form,
           key: :message,
           id: "message",
@@ -74,10 +74,10 @@
           hint: {
             text: "Message will also be included on the case timeline"
           }
-        %>
+        ) %>
       <% end %>
 
-      <%= render "form_components/govuk_radios",
+      <%= govukRadios(
         form: form,
         key: :include_message,
         classes: "",
@@ -100,8 +100,7 @@
             value: "false"
           }
         ]
-      %>
-
+      ) %>
 
       <%= govukButton(text: "Update team") %>
     <% end %>

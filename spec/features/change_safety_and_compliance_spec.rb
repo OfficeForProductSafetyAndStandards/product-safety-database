@@ -175,15 +175,15 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
   def expect_prefilled_values_for_non_compliant_product
     expect(page).to have_css("h1", text: "Why is the product of concern?")
-    expect(page).not_to have_field("Why is the product unsafe?", with: "\r\nFIRE FIRE FIRE")
+    expect(page).not_to have_field("Why is the product unsafe?", with: "FIRE FIRE FIRE")
     expect(page).not_to have_select("What is the primary hazard?", selected: investigation.hazard_type)
-    expect(page).to have_field("Why is the product non-compliant?", with: "\r\nCovered in petrol")
+    expect(page).to have_field("Why is the product non-compliant?", with: "Covered in petrol")
   end
 
   def expect_prefilled_values_for_unsafe_product
     expect(page).to have_css("h1", text: "Why is the product of concern?")
-    expect(page).to have_field("Why is the product unsafe?", with: "\r\nFIRE FIRE FIRE")
+    expect(page).to have_field("Why is the product unsafe?", with: "FIRE FIRE FIRE")
     expect(page).to have_select("What is the primary hazard?", selected: investigation.hazard_type)
-    expect(page).not_to have_field("Why is the product non-compliant?", with: "\r\nCovered in petrol")
+    expect(page).not_to have_field("Why is the product non-compliant?", with: "Covered in petrol")
   end
 end

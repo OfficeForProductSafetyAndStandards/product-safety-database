@@ -1,24 +1,27 @@
-<%= render "components/govuk_fieldset", legend: { text: "Business details", classes: "govuk-fieldset__legend--m" } do %>
-  <%= render "form_components/govuk_input",
+<%= govukFieldset(legend: { text: "Business details", classes: "govuk-fieldset__legend--m" }) do %>
+  <%= govukInput(
     key: :trading_name,
+    id: "trading_name",
     form: form,
     label: { text: "Trading name" },
     hint: { text: "The name the business is known as" },
     classes: "govuk-!-width-two-thirds"
-  %>
-  <%= render "form_components/govuk_input",
+  ) %>
+  <%= govukInput(
     key: :legal_name,
+    id: "legal_name",
     form: form,
     label: { text: "Registered or legal name" },
     hint: { text: "As it appears on Companies House for UK businesses (usually ends in ‘Ltd’ or ‘Limited’)" },
     classes: "govuk-!-width-two-thirds"
-  %>
-  <%= render "form_components/govuk_input",
+  ) %>
+  <%= govukInput(
     key: :company_number,
+    id: "company_number",
     form: form,
     label: { text: "Company number" },
     classes: "govuk-!-width-one-third"
-  %>
+  ) %>
 <% end %>
 <%= form.fields_for :locations, business.primary_location do |ff| %>
   <%= render "locations/address_form", form: ff, countries: countries %>

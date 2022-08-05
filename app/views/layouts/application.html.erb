@@ -71,7 +71,7 @@
 
           <% %i[success information warning].each do |key| %>
             <% if flash[key] %>
-              <%= render "components/hmcts_banner", text: flash[key], type: key %>
+              <%= hmctsBanner text: flash[key], type: key %>
             <% end %>
           <% end %>
 

@@ -25,6 +25,7 @@
   display: inline-block;
   vertical-align: top;
   padding: 0;
+  float: right;
 }
 
 .autocomplete__clear-button:focus {
@@ -75,7 +76,7 @@
 .govuk-form-group--error {
 
   .autocomplete__input {
-    border: $govuk-border-width-form-element-error solid $govuk-error-colour;
+    border: $govuk-border-width-form-element solid $govuk-error-colour;
   }
 
   // Remove error colour when focused
@@ -89,7 +90,7 @@
 
   // Make sure hint has same border width as input
   .autocomplete__hint {
-    border-width: $govuk-border-width-form-element-error;
+    border-width: $govuk-border-width-form-element;
   }
 
   // Reposition dropdown arrow to account for thicker border

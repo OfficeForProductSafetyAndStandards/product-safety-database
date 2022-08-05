@@ -20,7 +20,7 @@
      end
   %>
 
-   <%= render "form_components/govuk_radios",
+   <%= govukRadios(
      form: form,
      key: :reported_reason,
      classes: "",
@@ -32,7 +32,7 @@
        }
      },
      items: radio_items
-   %>
+   ) %>
 
    <div class="govuk-button-group">
      <%= form.submit "Continue", class: "govuk-button" %>

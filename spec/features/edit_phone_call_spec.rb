@@ -39,7 +39,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     expect(page).to have_field("Summary", with: correspondence.overview)
 
     within_fieldset("Details") do
-      expect(page).to have_field("Notes", with: "\r\n#{correspondence.details}")
+      expect(page).to have_field("Notes", with: correspondence.details)
       expect(page).to have_link(correspondence.transcript_blob.filename.to_s)
     end
 

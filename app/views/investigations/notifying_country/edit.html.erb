@@ -16,14 +16,15 @@
       <%= error_summary @notifying_country_form.errors %>
       <%= render "minimal_investigation_heading", investigation: @investigation, title: "Change notifying country" %>
 
-      <%= render "form_components/govuk_select",
+      <%= govukSelect(
         form: form,
         key: :country,
         formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
         items: options_for_notifying_country(Country.notifying_countries, @notifying_country_form),
         include_blank: true,
         id: "notifying-country-autocomplete",
-        label: { text: "Notifying country", classes: "govuk-label--m" } %>
+        label: { text: "Notifying country", classes: "govuk-label--m" }
+      ) %>
 
       <div class="govuk-form-group">
         <%= govukButton(text: t("Change")) %>
