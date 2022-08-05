@@ -95,8 +95,8 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
   end
 
   def expect_case_images_page_to_show_entered_information
-    expect(page).to have_selector("h2", text: title)
-    expect(page).to have_selector("p", text: description)
+    expect(page).to have_selector("figure figcaption", text: title)
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
   end
 
   def attach_and_submit_file

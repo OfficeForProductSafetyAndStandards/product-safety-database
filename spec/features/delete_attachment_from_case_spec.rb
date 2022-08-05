@@ -12,8 +12,8 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_opensearch, :w
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
     click_link "Images (1)"
-    expect(page).to have_selector("h2", text: document.decorate.title)
-    expect(page).to have_selector("p",  text: document.description)
+    expect(page).to have_selector("figure figcaption", text: document.decorate.title)
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: document.description)
     click_link "Remove image"
 
     expect_remove_attachment_confirmation_page_to_show_attachment_information
@@ -36,8 +36,8 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_opensearch, :w
   end
 
   def expect_case_supporting_informartion_page_not_to_show_deleted_attachment
-    expect(page).not_to have_selector("h2", text: document.title)
-    expect(page).not_to have_selector("p",  text: document.description)
+    expect(page).not_to have_selector("figure figcaption", text: document.title)
+    expect(page).not_to have_selector("dd.govuk-summary-list__value", text: document.description)
   end
 
   def expect_case_activity_page_to_show_deleted_document

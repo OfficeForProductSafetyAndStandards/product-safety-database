@@ -5,7 +5,7 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
-          <p class="govuk-body">No images</p>
+          <p class="govuk-body">No case images</p>
         </div>
       </div>
     </div>
@@ -52,6 +52,15 @@
                    </a>
                </div>
              </div>
+             <% if !analyzed %>
+               <div class="govuk-warning-text govuk-!-margin-top-3 govuk-!-margin-bottom-3 opss-warning-text--s">
+                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                 <strong class="govuk-warning-text__text">
+                     <span class="govuk-warning-text__assistive">Warning</span>
+                     The file did not finish uploading - this may take several minutes or more. Refresh the file to confirm that the upload process has completed.
+                 </strong>
+               </div>
+             <% end %>
           <% end %>
         </dd>
       </div>
