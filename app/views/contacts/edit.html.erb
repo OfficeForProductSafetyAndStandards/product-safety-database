@@ -6,7 +6,7 @@
 <%= form_with(model: @contact, url: business_contact_path(@business, @contact), local: true) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= govukErrorSummary form: form %>
       <% heading_html = capture do %>
         <span class="govuk-caption-l"><%= "Business: #{@business.trading_name}" %></span>
         <h1 class="govuk-heading-l">Edit contact</h1>

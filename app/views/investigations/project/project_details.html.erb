@@ -7,23 +7,24 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= govukErrorSummary form: form %>
       <h1 class="govuk-heading-l">New project</h1>
 
-      <%= render "form_components/govuk_input",
+      <%= govukInput(
         key: :user_title,
         form: form,
         attributes: { maxlength: 100 },
         label: { text: "Please provide a title", classes: "govuk-label--m" },
         hint: { text: "This will help other users identify this project" }
-      %>
+      ) %>
 
-      <%= render "form_components/govuk_textarea",
+      <%= govukTextarea(
         key: :description,
         form: form,
         attributes: { maxlength: 10_000 },
         label: { text: "Project summary", classes: "govuk-label--m" }
-      %>
+      ) %>
+
       <%= govukButton text: "Create project" %>
     </div>
   </div>

@@ -20,15 +20,15 @@ class InvestigationDecorator < ApplicationDecorator
   def product_summary_list
     products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
     rows = [
-      category.present? ? { key: { text: "Category" }, value: { text: category }, actions: [] } : nil,
+      category.present? ? { key: { text: "Category" }, value: { text: category } } : nil,
       {
         key: { text: "Product details" },
         value: { text: products_details },
-        actions: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"]
+        actions: { items: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"] }
       },
     ]
     rows.compact!
-    h.render "components/govuk_summary_list", rows:, classes: "govuk-summary-list--no-border"
+    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
   end
 
   def risk_level_set?
@@ -58,7 +58,7 @@ class InvestigationDecorator < ApplicationDecorator
 
     rows.compact!
 
-    h.render "components/govuk_summary_list", rows:, classes: "govuk-summary-list--no-border"
+    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
   end
 
   def pretty_description

@@ -1,34 +1,34 @@
 <% badges = [] %>
 <% if investigation.serious? %>
   <% badges << capture do %>
-    <%= render "components/hmcts_badge",
-               text: t(:risk_level_serious, scope: "case.badges"),
-               classes: "app-badge--risk-serious app-tag--nowrap #{local_assigns[:classes]}"
-    %>
+    <%= hmctsBadge(
+      text: t(:risk_level_serious, scope: "case.badges"),
+      classes: "app-badge--risk-serious app-tag--nowrap #{local_assigns[:classes]}"
+    ) %>
   <% end %>
 <% end %>
 <% if investigation.high? %>
   <% badges << capture do %>
-    <%= render "components/hmcts_badge",
-               text: t(:risk_level_high, scope: "case.badges"),
-               classes: "app-badge--risk-high app-tag--nowrap #{local_assigns[:classes]}"
-    %>
+    <%= hmctsBadge(
+      text: t(:risk_level_high, scope: "case.badges"),
+      classes: "app-badge--risk-high app-tag--nowrap #{local_assigns[:classes]}"
+    ) %>
   <% end %>
 <% end %>
 <% if investigation.is_closed? %>
   <% badges << capture do %>
-    <%= render "components/hmcts_badge",
-               text: t(:closed, scope: "case.badges"),
-               classes: "app-badge--closed app-tag--nowrap #{local_assigns[:classes]}"
-    %>
+    <%= hmctsBadge(
+      text: t(:closed, scope: "case.badges"),
+      classes: "app-badge--closed app-tag--nowrap #{local_assigns[:classes]}"
+    ) %>
   <% end %>
 <% end %>
 <% if investigation.is_private? %>
   <% badges << capture do %>
-    <%= render "components/hmcts_badge",
-               text: t(:restricted, scope: "case.badges"),
-               classes: "app-badge--restricted app-tag--nowrap #{local_assigns[:classes]}"
-    %>
+    <%= hmctsBadge(
+      text: t(:restricted, scope: "case.badges"),
+      classes: "app-badge--restricted app-tag--nowrap #{local_assigns[:classes]}"
+    ) %>
   <% end %>
 <% end %>
 

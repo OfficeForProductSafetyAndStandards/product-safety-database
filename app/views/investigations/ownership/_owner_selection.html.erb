@@ -8,13 +8,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render "form_components/govuk_select",
+    <%= govukSelect(
       key: key,
       show_all_values: local_assigns[:show_all_values],
       items: actual_items,
       form: form,
       label: { text: label, classes: "govuk-visually-hidden" },
       is_autocomplete: true
-    %>
+    ) %>
   </div>
 </div>

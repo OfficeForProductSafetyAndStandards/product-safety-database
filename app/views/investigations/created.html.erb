@@ -12,7 +12,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= render "components/hmcts_banner", html: banner_content %>
+    <%= hmctsBanner html: banner_content %>
     <p class="govuk-body">
       <% # TODO: this should be the case owner, shown as 'you' if the case owner
          # is the case creator. %>
@@ -26,7 +26,6 @@
       text: "View case",
       href: investigation_path(@investigation)
     ) %>
-
 
     <div>
       <%= link_to "Home", root_path_for(current_user), class: "govuk-link app-block-link govuk-body" %>

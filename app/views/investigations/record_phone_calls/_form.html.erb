@@ -8,7 +8,7 @@
 
       <h1 class="govuk-heading-l">Record phone call</h1>
 
-      <%= render "components/govuk_fieldset", legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" } do %>
+      <%= govukFieldset(legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" }) do %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
             <%= form.govuk_input :correspondent_name, label: "Name" %>
@@ -22,9 +22,7 @@
 
       <%= form.govuk_input :overview, classes: "govuk-!-width-two-thirds", label: "Summary", label_classes: "govuk-label--m", hint: "Give an overview of the phone call" %>
 
-      <%= render "components/govuk_fieldset",
-                 legend: { text: "Details", classes: "govuk-fieldset__legend--m" },
-                 describedBy: "details-hint" do %>
+      <%= govukFieldset(legend: { text: "Details", classes: "govuk-fieldset__legend--m" }, describedBy: "details-hint") do %>
         <span id="details-hint" class="govuk-hint govuk-!-width-full">Upload the transcript if you have one, or enter notes below</span>
 
         <div class="govuk-form-group">

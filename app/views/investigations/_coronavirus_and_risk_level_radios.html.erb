@@ -3,7 +3,7 @@
   Coronavirus and <br class="opss-br-desktop">serious and high risk
 <% end %>
 
-<%= render "form_components/govuk_radios",
+<%= govukRadios(
    form: form,
    key: :priority,
    classes: "govuk-radios govuk-radios--small",
@@ -30,4 +30,4 @@
        value: "serious_and_high_risk_level_only"
      }
    ]
- %>
+) %>
