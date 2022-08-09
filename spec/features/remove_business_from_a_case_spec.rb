@@ -51,7 +51,7 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
 
     click_on "Submit"
 
-    expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")
+    expect_confirmation_banner("Business was successfully removed.")
     expect(page).to have_css("p.govuk-body", text: "This case has not added any businesses.")
 
     click_on "Activity"
