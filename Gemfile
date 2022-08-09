@@ -91,7 +91,7 @@ group :test do
   gem "rubocop-performance", "~> 1.14"
   gem "rubocop-rspec", "~> 2.12", require: false
   gem "scss_lint-govuk", "~> 0.2"
-  gem "selenium-webdriver", "~> 4.3"
+  gem "selenium-webdriver", "~> 4.4"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
