@@ -39,28 +39,25 @@
           <% if analyzed && safe %>
             <figure>
               <%= link_to image, class: "govuk-link govuk-link--no-visited-state", target: "_blank", title: "Opens in a new tab" do %>
-                <%= render("documents/image_tag", image: image, dimensions: "300x200", class_name: nil) %>
+                <%= render("documents/image_tag", image: image, dimensions: "300x200", class_name: "") %>
               <% end %>
               <figcaption><%= image.title %></figcaption>
             </figure>
           <% else %>
-            <div class="app-document-preview ">
-               <div class="app-document-preview__image">
-                   <a target="_blank" rel="noopener" href="#">
-                     <%= image_tag "img-icon.png", alt: "" %>
-                     <span class="govuk-visually-hidden">(opens in new tab)</span>
-                   </a>
-               </div>
-             </div>
-             <% if !analyzed %>
-               <div class="govuk-warning-text govuk-!-margin-top-3 govuk-!-margin-bottom-3 opss-warning-text--s">
-                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                 <strong class="govuk-warning-text__text">
-                     <span class="govuk-warning-text__assistive">Warning</span>
-                     The file did not finish uploading - this may take several minutes or more. Refresh the file to confirm that the upload process has completed.
-                 </strong>
-               </div>
-             <% end %>
+            <figure>
+              <a target="_blank" rel="noopener" href="#">
+                <%= image_tag "img-icon.png", alt: "Blank image" %>
+              </a>
+              <% if !analyzed %>
+                <figcaption class="govuk-warning-text govuk-!-margin-top-2 govuk-!-margin-bottom-0 opss-warning-text--s">
+                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                  <strong class="govuk-warning-text__text">
+                      <span class="govuk-warning-text__assistive">Warning</span>
+                      The image file has not finished uploading – this may take several minutes or more. Refresh the page to confirm it has finished.
+                  </strong>
+                </figcaption>
+              <% end %>
+            </figure>
           <% end %>
         </dd>
       </div>
