@@ -67,7 +67,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
 
       click_link "Images"
 
-      expect(page).to have_content "No case images"
+      expect(page).to have_content "This case does not have any case evidence images."
 
       click_link "Add a case image"
 

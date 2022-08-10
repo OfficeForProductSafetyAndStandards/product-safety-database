@@ -2,12 +2,8 @@
 
 <% if @investigation.images.none? %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds-from-desktop">
-          <p class="govuk-body">No case images</p>
-        </div>
-      </div>
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body opss-text-align-center">This case does not have any case evidence images.</p>
     </div>
   </div>
 <% end %>
@@ -48,7 +44,7 @@
           <% else %>
             <figure>
               <a target="_blank" rel="noopener" href="#">
-                <%= image_tag "img-icon.png", alt: "Blank image" %>
+                <%= image_tag "img-icon.png", alt: "Blank image", class: "opss-blank-img" %>
               </a>
               <% if !analyzed %>
                 <figcaption class="govuk-warning-text govuk-!-margin-top-2 govuk-!-margin-bottom-0 opss-warning-text--s">
