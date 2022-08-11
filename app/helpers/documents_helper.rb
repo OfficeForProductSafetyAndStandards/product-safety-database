@@ -47,7 +47,13 @@ module DocumentsHelper
 
   def formatted_file_updated_date(file)
     if file.blob.metadata[:updated]
-      "Updated #{Time.zone.parse(file.blob.metadata[:updated]).to_s(:govuk)}"
+      "Updated #{file_updated_date_in_govuk_format file}"
+    end
+  end
+
+  def file_updated_date_in_govuk_format(file)
+    if file.blob.metadata[:updated]
+      Time.zone.parse(file.blob.metadata[:updated]).to_s(:govuk)
     end
   end
 end

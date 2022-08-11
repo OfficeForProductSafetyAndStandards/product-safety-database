@@ -68,15 +68,15 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     expect_to_be_on_images_page
     expect_confirmation_banner("The image was added")
 
-    expect(page).to have_selector("h2", text: title)
-    expect(page).to have_selector("p", text: description)
+    expect(page).to have_selector("figure figcaption", text: title)
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
 
     change_attachment_to_have_simulate_virus(investigation.reload)
 
     visit "/cases/#{investigation.pretty_id}/images"
 
-    expect(page).not_to have_selector("h2", text: title)
-    expect(page).not_to have_selector("p", text: description)
+    expect(page).not_to have_selector("figure figcaption", text: title)
+    expect(page).not_to have_selector("dd.govuk-summary-list__value", text: description)
   end
 
   # rubocop:disable RSpec/AnyInstance
