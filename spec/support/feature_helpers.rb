@@ -6,7 +6,7 @@ RSpec.configure do |config|
 end
 
 def expect_confirmation_banner(msg)
-  expect(page).to have_css(".hmcts-banner__message", text: msg)
+  expect(page).to have_css(".govuk-notification-banner--success", text: msg)
 end
 
 def expect_page_to_have_h1(header)
