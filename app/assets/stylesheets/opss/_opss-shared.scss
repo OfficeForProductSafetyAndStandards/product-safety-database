@@ -298,7 +298,7 @@ samp {
     .opss-max-width-two-thirds {
         max-width: 66%;
     }
-    .opss-text-align-right {
+    .opss-text-align-right {/*this opss style is prefered to govuk-!-text-align-right because it is resolution sensitive*/
         text-align: right; display: inline-block; width: 100%;
     }
 }
@@ -328,6 +328,9 @@ samp {
 .opss-3-col-flow {
     dl div dd:last-of-type {
         margin-bottom: 0 !important;
+    }
+    li a {
+        @include word-wrap;
     }
 }
 
@@ -680,7 +683,7 @@ dl.opss-summary-list-aside {
     }
 }
 
-.opss-summary-list-mixed {
+.opss-summary-list-mixed {/* this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed  */
     & > div {/* std summary list but allows for a mixture of 2 & 3 cols in 1 list */
         display: table;
         width: 100%;
