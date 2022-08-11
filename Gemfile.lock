@@ -324,7 +324,7 @@ GEM
       tty-color (~> 0.5)
     patience_diff (1.2.0)
       optimist (~> 3.0)
-    pg (1.4.2)
+    pg (1.4.3)
     pghero (2.8.3)
       activerecord (>= 5)
     pry (0.13.1)
@@ -503,7 +503,7 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     scss_lint-govuk (0.2.0)
       scss_lint
-    selenium-webdriver (4.3.0)
+    selenium-webdriver (4.4.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -688,7 +688,7 @@ DEPENDENCIES
   sass-rails (~> 6.0)
   scout_apm (~> 5.2)
   scss_lint-govuk (~> 0.2)
-  selenium-webdriver (~> 4.3)
+  selenium-webdriver (~> 4.4)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers

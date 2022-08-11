@@ -19,7 +19,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
 
     click_link "Images"
 
-    click_link "Add image"
+    click_link "Add a case image"
 
     expect_to_be_on_add_image_page
 
@@ -60,17 +60,16 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
       InvestigationProduct.create(investigation_id: investigation.id, product_id: product.id)
     end
 
-    scenario "case images tab shows number of product images and number of case images" do
+    scenario "case images tab numbers the case images" do
       visit "/cases/#{investigation.pretty_id}"
 
       expect(page).to have_content "Images (0)"
 
       click_link "Images"
 
-      expect(page).to have_content "Case images (0)"
-      expect(page).to have_content "Product images (0)"
+      expect(page).to have_content "This case does not have any case evidence images."
 
-      click_link "Add image"
+      click_link "Add a case image"
 
       expect_to_be_on_add_image_page
 
@@ -84,29 +83,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
       expect_confirmation_banner("The image was added")
 
       expect(page).to have_content "Images (1)"
-      expect(page).to have_content "Case images (1)"
-      expect(page).to have_content "Product images (0)"
-
-      click_link "Product images"
-
-      expect(page).to have_content "No attachments"
-
-      click_link "Go to the #{product.name} product page"
-
-      click_link "Images"
-
-      click_link "Add image"
-
-      attach_and_submit_file
-
-      visit "/cases/#{investigation.pretty_id}"
-
-      expect(page).to have_content "Images (2)"
-
-      click_link "Images"
-
-      expect(page).to have_content "Case images (1)"
-      expect(page).to have_content "Product images (1)"
+      expect(page).to have_content "Case image 1"
     end
   end
 
@@ -118,8 +95,8 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
   end
 
   def expect_case_images_page_to_show_entered_information
-    expect(page).to have_selector("h2", text: title)
-    expect(page).to have_selector("p", text: description)
+    expect(page).to have_selector("figure figcaption", text: title)
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
   end
 
   def attach_and_submit_file
