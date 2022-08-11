@@ -71,7 +71,7 @@
 
           <% %i[success information warning].each do |key| %>
             <% if flash[key] %>
-              <%= hmctsBanner text: flash[key], type: key %>
+              <%= govukNotificationBanner text: flash[key], type: key %>
             <% end %>
           <% end %>
 
