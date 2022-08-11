@@ -42,7 +42,7 @@ RSpec.feature "Validate risk level", :with_stubbed_opensearch, :with_stubbed_ant
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-      expect(page).to have_css(".hmcts-banner__message", text: "Case risk level validated")
+      expect_confirmation_banner("Case risk level validated")
       expect(page).to have_css(".govuk-summary-list__value", text: "Validated by #{user.team.name} on #{investigation.risk_validated_at}")
       expect(page).not_to have_link("Validate")
 

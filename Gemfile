@@ -51,7 +51,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.4"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.9.0", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.9.1", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -97,5 +97,5 @@ group :test do
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
   gem "super_diff"
-  gem "webmock", "~> 3.16"
+  gem "webmock", "~> 3.17"
 end
