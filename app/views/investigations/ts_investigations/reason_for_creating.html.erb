@@ -1,0 +1,36 @@
+<% page_heading = "Why are you creating a case?" %>
+<%= page_title page_heading, errors: @reason_for_creating_form.errors.any? %>
+
+<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @reason_for_creating_form.errors %>
+      <%= govukRadios(
+            idPrefix: "case-is-safe",
+            name: "investigation[case_is_safe]",
+            fieldset: {
+              legend: {
+                text: "Why are you creating a case?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-7"
+              }
+            },
+            items: [
+              {
+                value: 'false',
+                text: "A product is of concern"
+              },
+              {
+                value: 'true',
+                text: "A product is safe and compliant",
+                hint: {
+                  text: "This helps other market surveillance authorities avoid testing the same product again."
+                }
+              }
+            ]
+          )
+       %>
+      <%= form.submit "Continue", class: "govuk-button" %>
+    </div>
+  </div>
+<% end %>
