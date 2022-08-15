@@ -5,5 +5,5 @@ class ReasonForCreatingForm
 
   attribute :case_is_safe, :boolean
 
-  validates :case_is_safe, presence: true
+  validates :case_is_safe, inclusion: { in: [true, false] }
 end

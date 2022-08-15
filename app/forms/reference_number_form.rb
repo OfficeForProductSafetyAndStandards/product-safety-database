@@ -6,5 +6,6 @@ class ReferenceNumberForm
   attribute :has_complainant_reference, :boolean
   attribute :complainant_reference, :string
 
-  validates :add_complainant_reference, presence: true
+  validates :has_complainant_reference, inclusion: { in: [true, false] }
+  validates :complainant_reference, presence: true, if: -> { has_complainant_reference }
 end
