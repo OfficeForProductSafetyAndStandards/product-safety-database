@@ -52,7 +52,7 @@ module Investigations
     end
 
     def preload_manually(records, associations)
-      ActiveRecord::Associations::Preloader.new(records: records, associations: associations).call
+      ActiveRecord::Associations::Preloader.new(records:, associations:).call
     end
   end
 end
