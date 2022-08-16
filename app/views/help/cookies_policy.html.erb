@@ -50,7 +50,7 @@
           <td class="govuk-table__cell">When you close your browser</td>
         </tr>
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">remember_tfa</td>
+          <td class="govuk-table__cell">two-factor-[<abbr title="Universally unique identifier">UUID</abbr>]</td>
           <td class="govuk-table__cell">This allows you to sign in without re-entering a security code.</td>
           <td class="govuk-table__cell"><%= distance_of_time_in_words(SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::DEFAULT_OPERATION]) %></td>
         </tr>
