@@ -1,6 +1,10 @@
 <% page_heading = "What is the case name?" %>
 
 <%= page_title page_heading, errors: @case_name_form.errors.any? %>
+<%= govukBackLink(
+  text: "Back",
+  href: wizard_path(:reference_number)
+) %>
 
 <%= form_with scope: :investigation, model: @case_name_form, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
