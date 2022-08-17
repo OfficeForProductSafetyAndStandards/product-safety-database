@@ -239,7 +239,10 @@ Rails.application.routes.draw do
     get :privacy_notice, path: "privacy-notice"
     get :about
     get :accessibility
+    get :cookies_policy, path: "cookies"
   end
+
+  resource :cookie_form, only: [:create]
 
   match "/404", to: "errors#not_found", via: :all
   match "/403", to: "errors#forbidden", via: :all, as: :forbidden
