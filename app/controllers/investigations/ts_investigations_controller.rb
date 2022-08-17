@@ -27,7 +27,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       @investigation = session[:investigation]
       @investigation.build_owner_collaborations_from(current_user)
       CreateCase.call(investigation: session[:investigation], user: current_user)
-      session.delete :investigation
+      clear_session
     end
 
     render_wizard
@@ -67,7 +67,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       return render_wizard unless @reference_number_form.valid?
       session[:investigation].assign_attributes(complainant_reference: @reference_number_form.complainant_reference) if @reference_number_form.has_complainant_reference
     when :case_name
-      @case_name_form = CaseNameForm.new(case_name_params)
+      @case_name_form = CaseNameForm.new(case_name_params.merge(current_user: current_user))
       return render_wizard unless @case_name_form.valid?
       session[:investigation].assign_attributes(user_title: @case_name_form.user_title)
     end
@@ -123,23 +123,5 @@ private
     if reported_reason.to_s == "non_compliant"
       session[:investigation] = investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason:, reported_reason:)
     end
-  end
-
-  def handle_reason_for_creating_step
-    @reason_for_creating_form = ReasonForCreatingForm.new(reason_for_creating_params)
-    return render_wizard unless @reason_for_creating_form.valid?
-    if @reason_for_creating_form.case_is_safe == 'true'
-      session[:investigation] = Investigation::Allegation.new(reported_reason: 'safe_and_compliant')
-    else
-      session[:investigation] = Investigation::Allegation.new
-    end
-  end
-
-  def handle_reason_for_concern_step
-    reported_reason = calculate_reported_reason(reason_for_concern_params)
-    @edit_why_reporting_form = EditWhyReportingForm.new(reason_for_concern_params.merge(reported_reason: reported_reason))
-    return render_wizard unless @edit_why_reporting_form.valid?
-    session[:investigation] = Investigation::Allegation.new(reported_reason: reported_reason, hazard_description: @edit_why_reporting_form.hazard_description,
-                                            hazard_type: @edit_why_reporting_form.hazard_type, non_compliant_reason: @edit_why_reporting_form.non_compliant_reason)
   end
 end

@@ -5,7 +5,7 @@
 <%= form_with scope: :investigation, model: @edit_why_reporting_form, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary @edit_why_reporting_form.errors %>
+      <%= error_summary @edit_why_reporting_form.errors, %i[hazard_type hazard_description anon_compliant_reason] %>
       <%= edit_why_reporting_checkboxes(form, page_heading, @edit_why_reporting_form.errors, false) %>
       <%= form.submit "Continue", class: "govuk-button" %>
     </div>

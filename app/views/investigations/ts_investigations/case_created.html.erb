@@ -7,8 +7,8 @@
       Case number<br><strong><%= @investigation.pretty_id %></strong>
     </div>
   </div>
-  <% byebug %>
-  <p class="govuk-body">The case will now appear in <a href="/cases/your-cases" class="govuk-link govuk-link--no-visited-state">your cases list</a>.</p>
+
+  <p class="govuk-body">The case will now appear in <%= link_to "your cases list.", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %></p>
 
   <h2 class="govuk-heading-m">What happens next</h2>
 
@@ -27,6 +27,6 @@
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
   <p class="govuk-body-l">
-    <a href="case-trading-stds-landing-new-case.html" class="govuk-link govuk-link--no-visited-state">View the case</a>
+    <%= link_to "View the case", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
   </p>
 </div>

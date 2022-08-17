@@ -22,7 +22,7 @@
         <%= govukInput(
           key: :complainant_reference,
           form: form,
-          label: { text: "Existing reference number" }
+          label: { text: "Reference number" }
         ) %>
       <% end %>
 
@@ -39,7 +39,7 @@
                   value: false }]
       ) %>
 
-      <%= form.submit "Create case", class: "govuk-button" %>
+      <%= form.submit "Continue", class: "govuk-button" %>
     </div>
   </div>
 <% end %>
