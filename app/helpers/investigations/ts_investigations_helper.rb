@@ -16,10 +16,10 @@ module Investigations::TsInvestigationsHelper
     )
   end
 
-  def edit_why_reporting_checkboxes(form, page_heading, errors, disabled=true)
+  def edit_why_reporting_checkboxes(form, page_heading, errors, disabled: true)
     base_errors = errors.full_messages_for(:base)
     attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
-    attributes.merge!({disabled: "disabled"}) if disabled
+    attributes[:disabled] = "disabled" if disabled
 
     govukCheckboxes(
       form:,

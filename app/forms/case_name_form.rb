@@ -11,7 +11,8 @@ class CaseNameForm
 
   def unique_user_title_within_team
     return unless user_title
-    case_with_same_title = Investigation.where(user_title: user_title, is_closed: false)
+
+    case_with_same_title = Investigation.where(user_title:, is_closed: false)
                                         .joins(:collaborations).where(collaborations: { collaborator_id: current_user.team.id })
     errors.add(:unique_title, "The case name has already been used in an open case by your team") unless case_with_same_title.empty?
   end

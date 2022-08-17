@@ -127,15 +127,15 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
       visit "/ts_investigation/case_name"
 
-      expect(page).to_not have_css("h1", text: "What is the case name?")
-      expect(page.current_path).to_not eq "ts_investigation/case_name"
+      expect(page).not_to have_css("h1", text: "What is the case name?")
+      expect(page).to have_no_current_path "ts_investigation/case_name"
 
       expect(page).to have_css("h1", text: "Why are you creating a case?")
-      expect(page.current_path).to_not eq "ts_investigation/reason_for_creating"
+      expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
     end
   end
 
   def errors_list
-    errors_list = page.find(".govuk-error-summary__list").all("li")
+    page.find(".govuk-error-summary__list").all("li")
   end
 end
