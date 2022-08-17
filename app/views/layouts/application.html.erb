@@ -23,7 +23,7 @@
 
     <%= yield :other_head_tags %>
 
-    <% if Rails.env.production? %>
+    <% if Rails.env.production? && analytics_cookies_accepted? %>
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126364208-1"></script>
       <script>
         window.dataLayer = window.dataLayer || [];
@@ -120,7 +120,15 @@
                         help_terms_and_conditions_path,
                         class: "govuk-footer__link govuk-!-margin-right-2",
                         target: "_blank"
+              %></li><li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>Cookies<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_cookies_policy_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
               %></li>
+
             </ul>
 
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
