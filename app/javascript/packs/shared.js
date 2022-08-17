@@ -7,7 +7,6 @@ import * as GOVUKFrontend from 'govuk-frontend'
 
 import 'javascripts/location_picker'
 import 'javascripts/autocomplete'
-import 'javascripts/cookie_banner'
 import 'javascripts/_menu'
 
 import 'javascripts/investigations/attachment_description'
