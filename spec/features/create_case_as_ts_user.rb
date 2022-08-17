@@ -17,7 +17,6 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
 
     within_fieldset("Why are you creating a case?") do
@@ -30,7 +29,6 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the options which are reasons for concern"
 
     within_fieldset("Why is the product of concern?") do
@@ -40,7 +38,6 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the primary hazard"
     expect(errors_list[1].text).to eq "Enter why the product is unsafe"
     expect(errors_list[2].text).to eq "Enter why the product is non-compliant"
@@ -60,7 +57,6 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select yes to add a reference number to the case"
 
     within_fieldset("Do you want to add a reference number?") do
@@ -69,7 +65,6 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a reference number"
 
     fill_in "Reference number", with: "12345"
@@ -80,13 +75,11 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a case name"
 
     find("#user_title").set(investigation_with_same_user_title.user_title)
     click_button "Continue"
 
-    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "The case name has already been used in an open case by your team"
 
     find("#user_title").set("Some other title")
@@ -116,7 +109,6 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
       click_button "Continue"
 
-      errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
 
       within_fieldset("Why are you creating a case?") do
@@ -141,5 +133,9 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
       expect(page).to have_css("h1", text: "Why are you creating a case?")
       expect(page.current_path).to_not eq "ts_investigation/reason_for_creating"
     end
+  end
+
+  def errors_list
+    errors_list = page.find(".govuk-error-summary__list").all("li")
   end
 end
