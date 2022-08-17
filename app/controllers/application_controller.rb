@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include HttpAuthConcern
   include SentryConfigurationConcern
   include SecondaryAuthenticationConcern
+  include CookiesConcern
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!

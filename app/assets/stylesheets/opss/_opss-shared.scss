@@ -21,6 +21,10 @@
 
 $std-font-family: "GDS Transport", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
+form.opss-cookie-form {/*for the cookie banner*/
+    display: flex;
+}
+
 /*input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {color:  govuk-colour("mid-grey"); }
 input[type="checkbox"]:disabled + label {opacity: 1 !important; }*/
 
