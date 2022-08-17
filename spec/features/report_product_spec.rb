@@ -600,7 +600,7 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
       select business_details[with[:business_type]][:trading_name]
     end
 
-    expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
+    expect(page.find("main .govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
 
     if page.has_css?("details summary span.govuk-details__summary-text", text: "Replace this file")
       page.find("details summary span.govuk-details__summary-text", text: "Replace this file").click
