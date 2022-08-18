@@ -29,13 +29,19 @@
                 value: 'true',
                 text: "A product is safe and compliant",
                 hint: {
-                  text: "This helps other market surveillance authorities avoid testing the same product again."
+                  text: "This helps other market surveillance authorities avoid testing the same product again.",
+                  classes: "govuk-!-font-size-16"
                 }
               }
             ]
           )
        %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+       
+       <div class="govuk-button-group">
+         <%= form.submit "Continue", class: "govuk-button" %>
+         <%= link_to "Cancel", "/", class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
+     </div>
     </div>
   </div>
 <% end %>
