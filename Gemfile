@@ -60,7 +60,7 @@ group :development, :test do
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
   gem "parallel_tests", "~> 3.11.1"
-  gem "pry", "~> 0.13"
+  gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
 end
