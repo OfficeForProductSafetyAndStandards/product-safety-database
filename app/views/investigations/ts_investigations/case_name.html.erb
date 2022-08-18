@@ -20,10 +20,16 @@
               text: 'Give the case a short descriptive title. For example, "Overheating handheld Minolta camera".'
             },
             id: "user_title",
-            name: "investigation[user_title]"
+            name: "investigation[user_title]",
+            attributes: { maxlength: 45 },
+            classes: "govuk-!-width-two-thirds"
           )
        %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+
+       <div class="govuk-button-group">
+         <%= form.submit "Save", class: "govuk-button" %>
+         <%= link_to "Cancel", "/", class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
     </div>
   </div>
 <% end %>

@@ -16,7 +16,7 @@ module Investigations::TsInvestigationsHelper
     )
   end
 
-  def edit_why_reporting_checkboxes(form, page_heading, errors, disabled: true)
+  def edit_why_reporting_checkboxes(form, page_heading, errors, disabled: true, classes: nil)
     base_errors = errors.full_messages_for(:base)
     attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
     attributes[:disabled] = "disabled" if disabled
@@ -27,6 +27,7 @@ module Investigations::TsInvestigationsHelper
       fieldset: { legend: { html: edit_page_heading_html(page_heading), classes: "govuk-fieldset__legend--l" } },
       hint: { text: "Select one or both descriptions." },
       errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
+      classes: classes,
       items: [
         { key: "reported_reason_unsafe",
           text: "The product is unsafe (or suspected of being)",
