@@ -1,3 +1,6 @@
+<% page_heading = "Do you want to add a reference number?" %>
+<%= page_title page_heading, errors: @reference_number_form.errors.any? %>
+
 <%= govukBackLink(
   text: "Back",
   href: wizard_path(:reason_for_creating)
