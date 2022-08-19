@@ -27,7 +27,7 @@ module Investigations::TsInvestigationsHelper
       fieldset: { legend: { html: edit_page_heading_html(page_heading), classes: "govuk-fieldset__legend--l" } },
       hint: { text: "Select one or both descriptions." },
       errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
-      classes: classes,
+      classes:,
       items: [
         { key: "reported_reason_unsafe",
           text: "The product is unsafe (or suspected of being)",
