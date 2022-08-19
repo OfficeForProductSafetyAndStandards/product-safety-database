@@ -6,13 +6,15 @@
   href: "/"
 ) %>
 
-<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, builder: ApplicationFormBuilder, html: {novalidate: true}, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @reason_for_creating_form.errors %>
+      <% error_message = { text: @reason_for_creating_form.errors.full_messages_for("case_is_safe").first } if @reason_for_creating_form.errors.any? %>
       <%= govukRadios(
-            idPrefix: "case-is-safe",
+            idPrefix: "case_is_safe",
             name: "investigation[case_is_safe]",
+            errorMessage: error_message,
             fieldset: {
               legend: {
                 text: "Why are you creating a case?",
@@ -23,7 +25,8 @@
             items: [
               {
                 value: 'false',
-                text: "A product is of concern"
+                text: "A product is of concern",
+                id: "case_is_safe"
               },
               {
                 value: 'true',
@@ -36,7 +39,7 @@
             ]
           )
        %>
-       
+
        <div class="govuk-button-group">
          <%= form.submit "Continue", class: "govuk-button" %>
          <%= link_to "Cancel", "/", class: "govuk-link govuk-link--no-visited-state" %>

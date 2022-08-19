@@ -10,6 +10,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @case_name_form.errors %>
+      <% error_message = { text: @case_name_form.errors.full_messages_for("user_title").first } if @case_name_form.errors.any? %>
       <%= govukInput(
             label: {
               text: "What is the case name?",
@@ -22,7 +23,8 @@
             id: "user_title",
             name: "investigation[user_title]",
             attributes: { maxlength: 45 },
-            classes: "govuk-!-width-two-thirds"
+            classes: "govuk-!-width-two-thirds",
+            errorMessage: error_message
           )
        %>
 

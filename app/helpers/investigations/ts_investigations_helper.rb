@@ -16,8 +16,8 @@ module Investigations::TsInvestigationsHelper
     )
   end
 
-  def edit_why_reporting_checkboxes(form, page_heading, errors, disabled: true, classes: nil)
-    base_errors = errors.full_messages_for(:base)
+  def edit_why_reporting_checkboxes(form, page_heading, errors, disabled: true, classes: nil, attribute: :base)
+    base_errors = errors.full_messages_for(attribute)
     attributes = { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
     attributes[:disabled] = "disabled" if disabled
 
@@ -31,7 +31,7 @@ module Investigations::TsInvestigationsHelper
       items: [
         { key: "reported_reason_unsafe",
           text: "The product is unsafe (or suspected of being)",
-          id: "base",
+          id: attribute.to_s,
           value: true,
           conditional: { html: edit_unsafe_details_html(form, hazard_types) },
           disable_ghost: true,
