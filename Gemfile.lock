@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails
-  revision: 38db331b0bf5b44f0b702b66fa260d66570806bc
+  revision: 91f6889ac30a9f2ea4bc749d0c1125f1396f802e
   branch: compatibility-with-4-3-0
   specs:
     govuk-design-system-rails (0.9.3)
