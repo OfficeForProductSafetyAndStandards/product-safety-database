@@ -3,7 +3,7 @@ class ReasonForCreatingForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  attribute :case_is_safe, :boolean
+  attribute :case_is_safe, :string
 
-  validates :case_is_safe, inclusion: { in: [true, false] }
+  validates :case_is_safe, inclusion: { in: ['yes', 'no'] }
 end

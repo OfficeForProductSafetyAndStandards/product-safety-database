@@ -24,17 +24,19 @@
             },
             items: [
               {
-                value: 'false',
+                value: 'no',
                 text: "A product is of concern",
-                id: "case_is_safe"
+                id: "case_is_safe",
+                checked: @reason_for_creating_form.case_is_safe == "no"
               },
               {
-                value: 'true',
+                value: 'yes',
                 text: "A product is safe and compliant",
                 hint: {
                   text: "This helps other market surveillance authorities avoid testing the same product again.",
                   classes: "govuk-!-font-size-16"
-                }
+                },
+                checked: @reason_for_creating_form.case_is_safe == "yes"
               }
             ]
           )

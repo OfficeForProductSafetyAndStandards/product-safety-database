@@ -12,26 +12,34 @@ class Investigations::TsInvestigationsController < ApplicationController
   def show
     case step
     when :reason_for_creating
-      @reason_for_creating_form = ReasonForCreatingForm.new
+      if session.dig(:form_answers, :case_is_safe)
+        @reason_for_creating_form = ReasonForCreatingForm.new(case_is_safe: session[:form_answers][:case_is_safe])
+      else
+        @reason_for_creating_form = ReasonForCreatingForm.new
+      end
     when :reason_for_concern
       skip_step if session[:investigation].reported_reason == "safe_and_compliant"
       @edit_why_reporting_form = EditWhyReportingForm.new
     when :reference_number
-      @reference_number_form = ReferenceNumberForm.new
+      if session.dig(:form_answers, :has_complainant_reference)
+        @reference_number_form = ReferenceNumberForm.new(has_complainant_reference: session[:form_answers][:has_complainant_reference], complainant_reference: session[:investigation].try(:complainant_reference))
+      else
+        @reference_number_form = ReferenceNumberForm.new
+      end
     when :case_name
       @case_name_form = CaseNameForm.new
     when :case_created
       @investigation = session[:investigation]
       @investigation.build_owner_collaborations_from(current_user)
       CreateCase.call(investigation: session[:investigation], user: current_user)
-      clear_investigation_from_session
+      clear_session
     end
 
     render_wizard
   end
 
   def new
-    clear_investigation_from_session
+    clear_session
     redirect_to wizard_path(steps.first)
   end
 
@@ -41,12 +49,13 @@ class Investigations::TsInvestigationsController < ApplicationController
       @reason_for_creating_form = ReasonForCreatingForm.new(reason_for_creating_params)
       return render_wizard unless @reason_for_creating_form.valid?
 
-      if @reason_for_creating_form.case_is_safe
+      if @reason_for_creating_form.case_is_safe == 'yes'
         session[:investigation] = Investigation::Allegation.new(reported_reason: "safe_and_compliant")
         skip_step
       else
         session[:investigation] = Investigation::Allegation.new
       end
+      session[:form_answers] = reason_for_creating_params
     when :reason_for_concern
       reported_reason = calculate_reported_reason(reason_for_concern_params)
       @edit_why_reporting_form = EditWhyReportingForm.new(reason_for_concern_params.merge(reported_reason:))
@@ -54,11 +63,13 @@ class Investigations::TsInvestigationsController < ApplicationController
 
       session[:investigation] = Investigation::Allegation.new(reported_reason:, hazard_description: @edit_why_reporting_form.hazard_description,
                                                               hazard_type: @edit_why_reporting_form.hazard_type, non_compliant_reason: @edit_why_reporting_form.non_compliant_reason)
+      session[:form_answers].merge!(reason_for_creating_params)
     when :reference_number
       @reference_number_form = ReferenceNumberForm.new(reference_number_params)
       return render_wizard unless @reference_number_form.valid?
 
       session[:investigation].assign_attributes(complainant_reference: @reference_number_form.complainant_reference) if @reference_number_form.has_complainant_reference
+      session[:form_answers].merge!(reference_number_params)
     when :case_name
       @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
       return render_wizard unless @case_name_form.valid?
@@ -76,7 +87,8 @@ private
     return "non_compliant"            if reason_for_concern_params["reported_reason_non_compliant"]
   end
 
-  def clear_investigation_from_session
+  def clear_session
+    session.delete :form_answers
     session.delete :investigation
   end
 
