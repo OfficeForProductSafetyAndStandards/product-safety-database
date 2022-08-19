@@ -73,18 +73,18 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     expect(page).to have_css("h1", text: "What is the case name?")
 
-    click_button "Continue"
+    click_button "Save"
 
     expect(errors_list[0].text).to eq "Enter a case name"
 
     find("#user_title").set(investigation_with_same_user_title.user_title)
-    click_button "Continue"
+    click_button "Save"
 
     expect(errors_list[0].text).to eq "The case name has already been used in an open case by your team"
 
     find("#user_title").set("Some other title")
 
-    click_button "Continue"
+    click_button "Save"
 
     expect(page).to have_css("h1", text: "Case created")
     expect(page).to have_content("Case number#{Investigation.last.pretty_id}")
