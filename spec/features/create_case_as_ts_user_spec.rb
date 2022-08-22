@@ -92,7 +92,7 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
     click_link "View the case"
 
     expect(page).to have_current_path("/cases/#{Investigation.last.pretty_id}")
-
+    expect(page).to have_css("p", text: "Some other title")
     expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: "Burns")
     expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: "It's too hot")
