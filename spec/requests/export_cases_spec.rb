@@ -298,7 +298,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
             aggregate_failures do
               expect(exported_data.cell(1, 3)).to eq "Title"
-              expect(exported_data.cell(2, 3)).to eq "Allegation (no product specified)"
+              expect(exported_data.cell(2, 3)).to eq investigation.user_title
 
               expect(exported_data.cell(1, 5)).to eq "Description"
               expect(exported_data.cell(2, 5)).to eq investigation.description
