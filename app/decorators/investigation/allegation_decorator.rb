@@ -3,7 +3,7 @@ class Investigation < ApplicationRecord
   class AllegationDecorator < InvestigationDecorator
     def title
       return user_title if user_title
-      
+
       title = build_title_from_products || "Allegation"
       title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?
       title << compliance_line                            if reported_reason&.safe_and_compliant?

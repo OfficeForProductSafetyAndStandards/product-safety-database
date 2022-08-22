@@ -7,7 +7,7 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
            creator: user,
            user_title: "title1")
   end
-  let(:hazard_type) { "Burns"}
+  let(:hazard_type) { "Burns" }
   let(:hazard_description) { "It's too hot" }
   let(:non_compliant_reason) { "does not comply with laws" }
   let(:reference_number) { "12345" }

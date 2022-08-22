@@ -68,6 +68,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_opensearch, :wi
           context "when reported unsafe" do
             let(:allegation) { create(:allegation, :reported_unsafe, user_title: nil) }
 
+            # rubocop:disable RSpec/NestedGroups
             context "with two common values" do
               before { allegation.products.build attributes_for(:product, name: "iPhone 3", subcategory: "phone") }
 
@@ -83,6 +84,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_opensearch, :wi
                 expect(decorated_allegation.title).to eq("2 products – #{allegation.hazard_type.downcase} hazard")
               end
             end
+            # rubocop:enable RSpec/NestedGroups
           end
         end
       end
