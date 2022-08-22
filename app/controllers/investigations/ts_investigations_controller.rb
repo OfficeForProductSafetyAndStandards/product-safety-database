@@ -12,20 +12,20 @@ class Investigations::TsInvestigationsController < ApplicationController
   def show
     case step
     when :reason_for_creating
-      if session.dig(:form_answers, :case_is_safe)
-        @reason_for_creating_form = ReasonForCreatingForm.new(case_is_safe: session[:form_answers][:case_is_safe])
-      else
-        @reason_for_creating_form = ReasonForCreatingForm.new
-      end
+      @reason_for_creating_form = if session.dig(:form_answers, :case_is_safe)
+                                    ReasonForCreatingForm.new(case_is_safe: session[:form_answers][:case_is_safe])
+                                  else
+                                    ReasonForCreatingForm.new
+                                  end
     when :reason_for_concern
       skip_step if session[:investigation].reported_reason == "safe_and_compliant"
       @edit_why_reporting_form = EditWhyReportingForm.new
     when :reference_number
-      if session.dig(:form_answers, :has_complainant_reference)
-        @reference_number_form = ReferenceNumberForm.new(has_complainant_reference: session[:form_answers][:has_complainant_reference], complainant_reference: session[:investigation].try(:complainant_reference))
-      else
-        @reference_number_form = ReferenceNumberForm.new
-      end
+      @reference_number_form = if session.dig(:form_answers, :has_complainant_reference)
+                                 ReferenceNumberForm.new(has_complainant_reference: session[:form_answers][:has_complainant_reference], complainant_reference: session[:investigation].try(:complainant_reference))
+                               else
+                                 ReferenceNumberForm.new
+                               end
     when :case_name
       @case_name_form = CaseNameForm.new
     when :case_created
@@ -49,7 +49,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       @reason_for_creating_form = ReasonForCreatingForm.new(reason_for_creating_params)
       return render_wizard unless @reason_for_creating_form.valid?
 
-      if @reason_for_creating_form.case_is_safe == 'yes'
+      if @reason_for_creating_form.case_is_safe == "yes"
         session[:investigation] = Investigation::Allegation.new(reported_reason: "safe_and_compliant")
         skip_step
       else

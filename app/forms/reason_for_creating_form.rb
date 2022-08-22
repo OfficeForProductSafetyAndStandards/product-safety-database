@@ -5,5 +5,5 @@ class ReasonForCreatingForm
 
   attribute :case_is_safe, :string
 
-  validates :case_is_safe, inclusion: { in: ['yes', 'no'] }
+  validates :case_is_safe, inclusion: { in: %w[yes no] }
 end
