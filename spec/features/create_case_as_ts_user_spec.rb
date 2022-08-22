@@ -7,6 +7,11 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
            creator: user,
            user_title: "title1")
   end
+  let(:hazard_type) { "Burns"}
+  let(:hazard_description) { "It's too hot" }
+  let(:non_compliant_reason) { "does not comply with laws" }
+  let(:reference_number) { "12345" }
+  let(:case_name) { "Red hot case" }
 
   scenario "Opening a new case (with validation error)" do
     sign_in(user)
@@ -47,9 +52,9 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
       check "The product is non-compliant (or suspected of being)"
     end
 
-    select "Burns", from: "hazard_type"
-    fill_in "Why is the product unsafe?", with: "It's too hot"
-    fill_in "Why is the product non-compliant?", with: "does not comply with laws"
+    select hazard_type, from: "hazard_type"
+    fill_in "Why is the product unsafe?", with: hazard_description
+    fill_in "Why is the product non-compliant?", with: non_compliant_reason
 
     click_button "Continue"
 
@@ -67,7 +72,7 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     expect(errors_list[0].text).to eq "Enter a reference number"
 
-    fill_in "Reference number", with: "12345"
+    fill_in "Reference number", with: reference_number
 
     click_button "Continue"
 
@@ -82,7 +87,7 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     expect(errors_list[0].text).to eq "The case name has already been used in an open case by your team"
 
-    find("#user_title").set("Some other title")
+    find("#user_title").set(case_name)
 
     click_button "Save"
 
@@ -92,11 +97,7 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
     click_link "View the case"
 
     expect(page).to have_current_path("/cases/#{Investigation.last.pretty_id}")
-    expect(page).to have_css("p", text: "Some other title")
-    expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
-    expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: "Burns")
-    expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: "It's too hot")
-    expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: "does not comply with laws")
+    expect_summary_page_to_contain_correct_data
   end
 
   context "when a case is safe and compliant" do
@@ -137,5 +138,14 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
   def errors_list
     page.find(".govuk-error-summary__list").all("li")
+  end
+
+  def expect_summary_page_to_contain_correct_data
+    expect(page).to have_css("p", text: case_name)
+    expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
+    expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
+    expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: hazard_description)
+    expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliant_reason)
+    expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: reference_number)
   end
 end
