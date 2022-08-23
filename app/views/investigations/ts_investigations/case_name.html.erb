@@ -8,7 +8,7 @@
 
 <%= form_with scope: :investigation, model: @case_name_form, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-two-thirds">
       <%= error_summary @case_name_form.errors %>
       <% error_message = { text: @case_name_form.errors.full_messages_for("user_title").first } if @case_name_form.errors.any? %>
       <%= govukInput(
