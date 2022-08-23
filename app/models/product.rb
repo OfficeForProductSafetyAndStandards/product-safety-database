@@ -65,6 +65,8 @@ class Product < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
+
   redacted_export_with :id, :affected_units_status, :authenticity, :barcode, :batch_number,
                        :brand, :category, :country_of_origin, :created_at, :customs_code, :description,
                        :has_markings, :markings, :name, :number_of_affected_units, :product_code,

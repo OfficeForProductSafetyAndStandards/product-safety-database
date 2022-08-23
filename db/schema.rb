@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_133518) do
+ActiveRecord::Schema.define(version: 2022_08_23_094633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(version: 2022_05_16_133518) do
     t.text "markings", array: true
     t.string "name"
     t.text "number_of_affected_units"
+    t.uuid "owning_team_id"
     t.string "product_code"
     t.string "subcategory"
     t.datetime "updated_at", null: false
@@ -450,6 +451,7 @@ ActiveRecord::Schema.define(version: 2022_05_16_133518) do
   add_foreign_key "corrective_actions", "products"
   add_foreign_key "correspondences", "investigations"
   add_foreign_key "locations", "businesses"
+  add_foreign_key "products", "teams", column: "owning_team_id"
   add_foreign_key "risk_assessed_products", "products"
   add_foreign_key "risk_assessed_products", "risk_assessments"
   add_foreign_key "risk_assessments", "businesses", column: "assessed_by_business_id"

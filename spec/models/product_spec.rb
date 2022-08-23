@@ -13,4 +13,12 @@ RSpec.describe Product do
       expect(product.psd_ref).to eq("psd-#{id}")
     end
   end
+
+  describe "#owning_team" do
+    let(:product) { build :product }
+
+    it "returns nil for a new product" do
+      expect(product.owning_team).to eq(nil)
+    end
+  end
 end
