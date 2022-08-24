@@ -163,6 +163,19 @@ module InvestigationsHelper
     end
   end
 
+  def reference_number_actions(investigation, user)
+    if policy(investigation).update?(user:)
+      {
+        items: [
+          href: edit_investigation_reference_numbers_path(investigation.pretty_id),
+          text: "Edit"
+        ]
+      }
+    else
+      {}
+    end
+  end
+
   def search_result_statement(search_terms, number_of_results)
     search_result_values = search_result_values(search_terms, number_of_results)
 
@@ -245,7 +258,8 @@ module InvestigationsHelper
     if investigation.complainant_reference.present?
       rows << {
         key: { text: "Trading Standards reference" },
-        value: { text: investigation.complainant_reference }
+        value: { text: investigation.complainant_reference },
+        actions: reference_number_actions(investigation, user)
       }
     end
 
