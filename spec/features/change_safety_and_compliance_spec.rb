@@ -120,8 +120,8 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
         errors_list = page.find(".govuk-error-summary__list").all("li")
 
-        expect(errors_list[0].text).to eq "Non compliant reason cannot be blank"
-        expect(errors_list[1].text).to eq "Hazard description cannot be blank"
+        expect(errors_list[0].text).to eq "Enter why the product is non-compliant"
+        expect(errors_list[1].text).to eq "Enter why the product is unsafe"
 
         fill_in("Why is the product non-compliant?", with: "No one really knows")
         select "Cuts", from: "What is the primary hazard?"

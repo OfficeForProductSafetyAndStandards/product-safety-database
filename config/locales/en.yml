@@ -568,6 +568,28 @@ en:
           attributes:
             hazard_type:
               blank: "Enter the primary hazard"
+            reported_reason:
+              blank: "Select the options which are reasons for concern"
+        edit_why_reporting_form:
+          attributes:
+            reported_reason:
+              blank: "Select the options which are reasons for concern"
+            non_compliant_reason:
+              blank: "Enter why the product is non-compliant"
+            hazard_type:
+              blank: "Select the primary hazard"
+            hazard_description:
+              blank: "Enter why the product is unsafe"
+        case_name_form:
+          attributes:
+            user_title:
+              blank: "Enter a case name"
+        reference_number_form:
+          attributes:
+            has_complainant_reference:
+              inclusion: "Select yes to add a reference number to the case"
+            complainant_reference:
+              blank: "Enter a reference number"
         email_correspondence_form:
           attributes:
             correspondence_date:
@@ -616,6 +638,10 @@ en:
               inclusion: "Select yes if the business responsible has published recall information online"
             online_recall_information:
               blank: "Enter the webpage where the business responsible published recall information"
+        reason_for_creating_form:
+          attributes:
+            case_is_safe:
+              inclusion: "Select a product is of concern if the product might be unsafe or non-compliant"
         risk_validation_form:
           attributes:
             risk_validation_change_rationale:

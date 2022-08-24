@@ -7,6 +7,16 @@
 @import "./opss-search";
 @import "./opss-pagination";
 
+@include govuk-media-query($from: desktop) {
+/*fix for psd while it is unable to place back links outside and before the main.govuk-main-wrapper element */
+    body > .govuk-width-container > .govuk-main-wrapper > .govuk-back-link {
+        margin-top: - govuk-spacing(8);
+        margin-bottom:  - (govuk-spacing(8) + govuk-spacing(1));
+        position: relative;
+        top: - (govuk-spacing(6) + govuk-spacing(1));
+    }
+}
+
 .opss-radios__divider--title .govuk-radios__divider {
     width: 100%;
     text-align: left;

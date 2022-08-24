@@ -9,7 +9,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
            category: "kitchen appliances",
            product_code: "W2020-10/1")
   end
-  let!(:investigation) { create(:allegation, products: [product]) }
+  let!(:investigation) { create(:allegation, products: [product], user_title: nil) }
 
   let(:mobile_phone) do
     create(:product,
@@ -35,10 +35,10 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
            category: "consumer electronics")
   end
 
-  let!(:mobile_phone_investigation) { create(:allegation, products: [mobile_phone]) }
-  let!(:mobilz_phont_investigation) { create(:allegation, products: [mobilz_phont]) }
-  let!(:thirteenproduct_investigation) { create(:allegation, products: [thirteenproduct]) }
-  let!(:eeirteenproduct_investigation) { create(:allegation, products: [eeirteenproduct]) }
+  let!(:mobile_phone_investigation) { create(:allegation, products: [mobile_phone], user_title: "mobile phone investigation") }
+  let!(:mobilz_phont_investigation) { create(:allegation, products: [mobilz_phont], user_title: "mobilz phone investigation") }
+  let!(:thirteenproduct_investigation) { create(:allegation, products: [thirteenproduct], user_title: "thirteenproduct investigation") }
+  let!(:eeirteenproduct_investigation) { create(:allegation, products: [eeirteenproduct], user_title: "eeirteenproduct investigation") }
 
   before do
     # Import products syncronously into Opensearch
@@ -232,16 +232,16 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_content "5 cases using the current filters, were found."
 
         expect(page).to have_text(thirteenproduct_investigation.pretty_id)
-        expect(page).to have_text("thirteenproduct")
+        expect(page).to have_text(thirteenproduct_investigation.user_title)
 
         expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
-        expect(page).to have_text("eeirteenproduct")
+        expect(page).to have_text(eeirteenproduct_investigation.user_title)
 
         expect(page).to have_text(mobile_phone_investigation.pretty_id)
-        expect(page).to have_text("T12 mobile phone")
+        expect(page).to have_text(mobile_phone_investigation.user_title)
 
         expect(page).to have_text(mobilz_phont_investigation.pretty_id)
-        expect(page).to have_text("T12 mobilz phont")
+        expect(page).to have_text(mobilz_phont_investigation.user_title)
 
         expect(page).to have_text(investigation.pretty_id)
         expect(page).to have_text("MyBrand washing machine")
