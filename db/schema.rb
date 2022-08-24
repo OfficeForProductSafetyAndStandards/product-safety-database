@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 2022_08_23_094633) do
     t.datetime "updated_at", null: false
     t.string "webpage"
     t.enum "when_placed_on_market", as: "when_placed_on_markets"
+    t.index ["owning_team_id"], name: "index_products_on_owning_team_id"
   end
 
   create_table "rapex_imports", id: :serial, force: :cascade do |t|
