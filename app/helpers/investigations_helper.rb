@@ -176,6 +176,19 @@ module InvestigationsHelper
     end
   end
 
+  def case_name_actions(investigation, user)
+    if policy(investigation).update?(user:)
+      {
+        items: [
+          href: edit_investigation_case_names_path(investigation.pretty_id),
+          text: "Edit"
+        ]
+      }
+    else
+      {}
+    end
+  end
+
   def search_result_statement(search_terms, number_of_results)
     search_result_values = search_result_values(search_terms, number_of_results)
 
