@@ -44,7 +44,7 @@ private
 
   def find_products(ids)
     Product
-      .includes([:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }])
+      .includes([:investigations, :test_results, :owning_team, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }])
       .find(ids)
   end
 
@@ -98,7 +98,7 @@ private
                      hazard_type
                      non_compliant_reason
                      risk_level
-                     name]
+                     owning_team]
 
     @product_info_sheet = sheet
   end
@@ -168,7 +168,8 @@ private
       product.investigations.first.try(:reported_reason),
       product.investigations.first.try(:hazard_type),
       product.investigations.first.try(:non_compliant_reason),
-      product.investigations.first.try(:risk_level)
+      product.investigations.first.try(:risk_level),
+      product.owning_team.try(:name)
     ]
   end
 
