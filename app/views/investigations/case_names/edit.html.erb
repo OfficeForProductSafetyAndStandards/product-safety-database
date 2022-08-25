@@ -1,0 +1,39 @@
+<% page_heading = "What is the case name?" %>
+
+<%= page_title page_heading, errors: @case_name_form.errors.any? %>
+<%= govukBackLink(
+  text: "Back",
+  href: investigation_path(@investigation)
+) %>
+
+<%= form_with model: @case_name_form, url: investigation_case_names_path, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= error_summary @case_name_form.errors %>
+      <% error_message = { text: @case_name_form.errors.full_messages_for("user_title").first } if @case_name_form.errors.any? %>
+      <%= govukInput(
+            form: form,
+            label: {
+              text: "What is the case name?",
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            hint: {
+              text: 'Give the case a short descriptive title. For example, "Overheating handheld Minolta camera".'
+            },
+            id: "user_title",
+            key: :user_title,
+            name: "investigation[user_title]",
+            attributes: { maxlength: 45 },
+            classes: "govuk-!-width-two-thirds",
+            errorMessage: error_message
+          )
+       %>
+
+       <div class="govuk-button-group">
+         <%= form.submit "Save", class: "govuk-button" %>
+         <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
+    </div>
+  </div>
+<% end %>
