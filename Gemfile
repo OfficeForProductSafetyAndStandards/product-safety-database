@@ -86,8 +86,8 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.31"
-  gem "rubocop-govuk", "~> 4.6"
+  gem "rubocop", "~> 1.35"
+  gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.14"
   gem "rubocop-rspec", "~> 2.12", require: false
   gem "scss_lint-govuk", "~> 0.2"
