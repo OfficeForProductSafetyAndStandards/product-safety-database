@@ -38,7 +38,7 @@ gem "redcarpet", "~> 3.5"
 gem "redis-rails", "~> 5.0"
 gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
-gem "scout_apm", "~> 5.2"
+gem "scout_apm", "~> 5.3"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.5"
@@ -61,7 +61,7 @@ group :development, :test do
   gem "dotenv-rails", "~> 2.8"
   gem "parallel_tests", "~> 3.11.1"
   gem "pry", "~> 0.13"
-  gem "pry-byebug", "~> 3.9"
+  gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
 end
 
