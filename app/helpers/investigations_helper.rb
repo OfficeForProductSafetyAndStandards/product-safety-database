@@ -168,7 +168,8 @@ module InvestigationsHelper
       {
         items: [
           href: edit_investigation_reference_numbers_path(investigation.pretty_id),
-          text: "Edit"
+          text: "Edit",
+          visuallyHiddenText: "reference number"
         ]
       }
     else
@@ -181,7 +182,8 @@ module InvestigationsHelper
       {
         items: [
           href: edit_investigation_case_names_path(investigation.pretty_id),
-          text: "Edit"
+          text: "Edit",
+          visuallyHiddenText: "case name"
         ]
       }
     else

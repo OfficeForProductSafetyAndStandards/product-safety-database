@@ -1,4 +1,4 @@
-<% page_heading = "What is the case name?" %>
+<% page_heading = "Edit the case name?" %>
 
 <%= page_title page_heading, errors: @case_name_form.errors.any? %>
 <%= govukBackLink(
@@ -14,7 +14,7 @@
       <%= govukInput(
             form: form,
             label: {
-              text: "What is the case name?",
+              text: "Edit the case name?",
               classes: "govuk-label--l",
               isPageHeading: true
             },
