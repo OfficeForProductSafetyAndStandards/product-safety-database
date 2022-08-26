@@ -180,7 +180,7 @@ GEM
     elasticsearch-transport (7.17.1)
       faraday (~> 1)
       multi_json
-    erubi (1.10.0)
+    erubi (1.11.0)
     et-orbi (1.2.7)
       tzinfo
     factory_bot (6.2.1)
@@ -509,9 +509,9 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    sentry-rails (5.4.1)
+    sentry-rails (5.4.2)
       railties (>= 5.0)
-      sentry-ruby (~> 5.4.1)
+      sentry-ruby (~> 5.4.2)
     sentry-ruby (5.4.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sentry-sidekiq (5.4.2)
