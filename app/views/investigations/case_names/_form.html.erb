@@ -1,0 +1,21 @@
+<%= error_summary @case_name_form.errors %>
+<% error_message = { text: @case_name_form.errors.full_messages_for("user_title").first } if @case_name_form.errors.any? %>
+
+<%= govukInput(
+      form: form,
+      label: {
+        text: heading,
+        classes: "govuk-label--l",
+        isPageHeading: true
+      },
+      hint: {
+        text: 'Give the case a short descriptive title. For example, "Overheating handheld Minolta camera".'
+      },
+      id: "user_title",
+      key: :user_title,
+      name: "investigation[user_title]",
+      attributes: { maxlength: 45 },
+      classes: "govuk-!-width-two-thirds",
+      errorMessage: error_message
+    )
+ %>
