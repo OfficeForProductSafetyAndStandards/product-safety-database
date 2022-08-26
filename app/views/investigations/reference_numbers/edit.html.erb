@@ -1,4 +1,5 @@
 <% page_heading = "Edit the reference number" %>
+<%= page_title page_heading, errors: @investigation.errors.any? %>
 
 <%= govukBackLink(
   text: "Back",
