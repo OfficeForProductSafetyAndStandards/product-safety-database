@@ -4,6 +4,6 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def update?
-    record.investigations.none? || Pundit.policy(user, record.investigations.first).update?
+    record.owning_team.nil? || record.owning_team == user.team
   end
 end
