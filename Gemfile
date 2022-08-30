@@ -51,7 +51,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.4"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.9.1", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.3", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -60,7 +60,7 @@ group :development, :test do
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
   gem "parallel_tests", "~> 3.11.1"
-  gem "pry", "~> 0.13"
+  gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
 end
@@ -69,7 +69,7 @@ group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "rails-erd"
-  gem "solargraph", "~> 0.44"
+  gem "solargraph", "~> 0.46"
   gem "spring", "~> 4.0"
   gem "spring-commands-rspec", "~> 1.0"
 end
@@ -86,8 +86,8 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.31"
-  gem "rubocop-govuk", "~> 4.6"
+  gem "rubocop", "~> 1.35"
+  gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.14"
   gem "rubocop-rspec", "~> 2.12", require: false
   gem "scss_lint-govuk", "~> 0.2"
@@ -97,5 +97,5 @@ group :test do
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
   gem "super_diff"
-  gem "webmock", "~> 3.17"
+  gem "webmock", "~> 3.18"
 end

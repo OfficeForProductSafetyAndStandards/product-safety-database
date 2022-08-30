@@ -2332,10 +2332,10 @@ core-js@3.2.1:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.2.1.tgz#cd41f38534da6cc59f7db050fe67307de9868b09"
   integrity sha512-Qa5XSVefSVPRxy2XfUC13WbvqkxhkwB3ve+pgCQveNgYzbM/UxZeu1dcOX/xr4UmfUd+muuvsaxilQzCyUurMw==
 
-core-js@^3.16.2, core-js@^3.24.1:
-  version "3.24.1"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.24.1.tgz#cf7724d41724154010a6576b7b57d94c5d66e64f"
-  integrity sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==
+core-js@^3.16.2, core-js@^3.25.0:
+  version "3.25.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.25.0.tgz#be71d9e0dd648ffd70c44a7ec2319d039357eceb"
+  integrity sha512-CVU1xvJEfJGhyCpBrzzzU1kjCfgsGUxhEvwUV2e/cOedYWHdmluamx+knDnmhqALddMG16fZvIqvs9aijsHHaA==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -3778,10 +3778,10 @@ govuk-country-and-territory-autocomplete@1.0.2:
     core-js "3.2.1"
     openregister-picker-engine "^1.2.1"
 
-govuk-frontend@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.1.0.tgz#d3bc3af09baba539adee31f980ac0322b9eeb949"
-  integrity sha512-xBUUarxinGWSccmXPmwa7ovg3xabEQ0+Dcv7pdq9X3F69892OFMqP2g8jvlDUrVsDVdasXLk4Jq4w8dPiaEVqQ==
+govuk-frontend@4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.3.1.tgz#d9c581aca3d23bbfe9bd27c25fee65322b276393"
+  integrity sha512-uD0KVFds7drOwLEvfp4zRBOXuHCxkWLYDQcYvlbG+2baZ9po2TGZz8WjfzhfueYjo9+Uwk+bM0NQT6g4cg/Q+A==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2:
   version "4.2.10"
