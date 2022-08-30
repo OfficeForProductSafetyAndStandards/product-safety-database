@@ -60,7 +60,7 @@ group :development, :test do
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
   gem "parallel_tests", "~> 3.11.1"
-  gem "pry", "~> 0.13"
+  gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
 end
@@ -69,7 +69,7 @@ group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "rails-erd"
-  gem "solargraph", "~> 0.44"
+  gem "solargraph", "~> 0.46"
   gem "spring", "~> 4.0"
   gem "spring-commands-rspec", "~> 1.0"
 end
