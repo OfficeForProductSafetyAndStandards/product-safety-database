@@ -12,7 +12,6 @@ class ChangeCaseName
         investigation.assign_attributes(user_title: user_title)
         return if investigation.changes.none?
 
-
         ActiveRecord::Base.transaction do
             investigation.save!
             create_audit_activity_for_user_title_changed
@@ -38,7 +37,7 @@ private
 
 
   def activity_class
-    AuditActivity::Investigation::UpdateReferenceNumber
+    AuditActivity::Investigation::UpdateCaseName
   end
 
   def send_notification_email
