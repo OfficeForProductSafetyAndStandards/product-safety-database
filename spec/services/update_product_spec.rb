@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
-  subject(:result) { described_class.call(product:, product_params:) }
+  subject(:result) { described_class.call(product:, product_params:, updating_team:) }
 
   let(:investigation)  { create(:allegation) }
   let(:product)        { create(:product, investigations: [investigation]) }
   let(:product_params) { attributes_for(:product) }
+  let(:updating_team)  { create(:team) }
 
   describe "#call" do
     context "without a product" do
@@ -16,6 +17,12 @@ RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
 
     context "without product_params" do
       let(:product_params) { nil }
+
+      it { is_expected.to be_a_failure }
+    end
+
+    context "without updating_team" do
+      let(:updating_team) { nil }
 
       it { is_expected.to be_a_failure }
     end
@@ -42,6 +49,27 @@ RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
       it "reindexes the product's investigations" do
         result
         expect(product.investigations).to have_received(:import)
+      end
+
+      it "sets the updating team as the product owner" do
+        result
+        expect(product.reload.owning_team).to eq(updating_team)
+      end
+    end
+
+    context "with a product owned by another team" do
+      let(:product) { create(:product, investigations: [investigation], owning_team: create(:team)) }
+
+      it { is_expected.to be_a_failure }
+    end
+
+    context "with a product owned by the updating team" do
+      let(:product) { create(:product, investigations: [investigation], owning_team: updating_team) }
+
+      it "updates the product", :aggregate_failures do
+        expect(result).to be_a_success
+
+        expect(product.reload).to have_attributes(product_params)
       end
     end
   end
