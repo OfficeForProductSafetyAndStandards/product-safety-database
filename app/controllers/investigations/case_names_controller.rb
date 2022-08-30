@@ -11,7 +11,7 @@ module Investigations
       @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
       authorize @investigation, :update?
 
-      @case_name_form = CaseNameForm.new(reference_number_params.merge(current_user:))
+      @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
 
       if @case_name_form.valid?
         @investigation.update!(user_title: @case_name_form.user_title)
@@ -23,7 +23,7 @@ module Investigations
 
   private
 
-    def reference_number_params
+    def case_name_params
       params.require(:investigation).permit(:user_title)
     end
   end
