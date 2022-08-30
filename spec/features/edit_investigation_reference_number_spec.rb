@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Edit an investigation's reference number", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Edit an investigation's reference number", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:original_reference_number) { "123" }
   let(:new_reference_number) { "999" }

@@ -1,0 +1,60 @@
+class ChangeCaseReferenceNumber
+    include Interactor
+    include EntitiesToNotify
+  
+    delegate :investigation, :reference_number, :user, to: :context
+
+    def call
+        context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+        context.fail!(error: "No reference number supplied") unless reference_number.is_a?(String)
+        context.fail!(error: "No user supplied") unless user.is_a?(User)
+
+        investigation.assign_attributes(complainant_reference: reference_number)
+        return if investigation.changes.none?
+
+
+        ActiveRecord::Base.transaction do
+            investigation.save!
+            create_audit_activity_for_reference_number_changed
+        end
+
+        send_notification_email
+    end
+
+private
+
+
+  def create_audit_activity_for_reference_number_changed
+    metadata = activity_class.build_metadata(investigation)
+
+    activity_class.create!(
+      source: UserSource.new(user:),
+      investigation:,
+      title: nil,
+      body: nil,
+      metadata:
+    )
+  end
+
+
+  def activity_class
+    AuditActivity::Investigation::UpdateReferenceNumber
+  end
+
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        email_body(recipient),
+        "#{investigation.case_type.upcase_first} reference number updated"
+      ).deliver_later
+    end
+  end
+
+  def email_body(viewer = nil)
+    user_name = user.decorate.display_name(viewer:)
+    "#{investigation.case_type.upcase_first} reference number was updated by #{user_name}."
+  end
+end

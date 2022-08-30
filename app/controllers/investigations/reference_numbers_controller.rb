@@ -10,11 +10,12 @@ module Investigations
       authorize @investigation, :update?
 
       if @investigation.complainant_reference == reference_number_params[:complainant_reference]
-        redirect_to investigation_path(@investigation)
-      else
-        @investigation.update!(reference_number_params)
-        redirect_to investigation_path(@investigation), flash: { success: "Reference number was successfully updated" }
+        return redirect_to investigation_path(@investigation)
       end
+      
+      ChangeCaseReferenceNumber.call!(investigation: @investigation, reference_number: reference_number_params[:complainant_reference], user: current_user)
+      # @investigation.update!(reference_number_params)
+      redirect_to investigation_path(@investigation), flash: { success: "Reference number was successfully updated" }
     end
 
   private
