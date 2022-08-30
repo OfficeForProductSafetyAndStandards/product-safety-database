@@ -14,8 +14,8 @@ module Investigations
       @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
 
       if @case_name_form.valid?
-        ChangeCaseReferenceNumber.call!(investigation: @investigation, user_title: )
-        @investigation.update!(user_title: @case_name_form.user_title)
+        ChangeCaseName.call!(investigation: @investigation, user_title: @case_name_form.user_title, user: current_user )
+        # @investigation.update!(user_title: @case_name_form.user_title)
         redirect_to investigation_path(@investigation), flash: { success: "Case name was successfully updated" }
       else
         render :edit
