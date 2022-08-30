@@ -7,6 +7,8 @@ namespace :redacted_export do
 
   desc "Batch-copy appropriate S3 objects to the export bucket"
   task copy_s3_objects: %i[environment] do
+    require "csv"
+
     source_bucket = Rails.configuration.redacted_export["source_bucket"]
     destination_arn = "arn:aws:s3:::#{Rails.configuration.redacted_export['destination_bucket']}"
     raise "Cannot determine buckets from configuration" if source_bucket.blank? || destination_arn.end_with?(":")
