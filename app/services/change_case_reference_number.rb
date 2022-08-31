@@ -40,21 +40,4 @@ private
   def activity_class
     AuditActivity::Investigation::UpdateReferenceNumber
   end
-
-  def send_notification_email
-    email_recipients_for_case_owner.each do |recipient|
-      NotifyMailer.investigation_updated(
-        investigation.pretty_id,
-        recipient.name,
-        recipient.email,
-        email_body(recipient),
-        "#{investigation.case_type.upcase_first} reference number updated"
-      ).deliver_later
-    end
-  end
-
-  def email_body(viewer = nil)
-    user_name = user.decorate.display_name(viewer:)
-    "#{investigation.case_type.upcase_first} reference number was updated by #{user_name}."
-  end
 end

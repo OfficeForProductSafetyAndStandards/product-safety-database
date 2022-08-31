@@ -32,7 +32,5 @@ RSpec.feature "Edit an investigation's reference number", :with_opensearch, :wit
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect(page).to have_css("h3", text: "Reference number updated")
     expect(page).to have_content("Reference number: #{new_reference_number}")
-
-    expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation reference number updated"
   end
 end

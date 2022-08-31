@@ -14,7 +14,6 @@ module Investigations
       end
       
       ChangeCaseReferenceNumber.call!(investigation: @investigation, reference_number: reference_number_params[:complainant_reference], user: current_user)
-      # @investigation.update!(reference_number_params)
       redirect_to investigation_path(@investigation), flash: { success: "Reference number was successfully updated" }
     end
 
