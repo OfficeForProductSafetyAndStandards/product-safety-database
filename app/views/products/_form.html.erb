@@ -8,7 +8,6 @@
   show_all_values: true,
   id: "category",
   aria_describedby: "report-product-category-hint",
-  is_autocomplete: true,
   label: { text: "Product category", classes: label_class },
   hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" }
 ) %>
@@ -40,7 +39,11 @@
   ]
 %>
 
-
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Number of units affected?", text: "The number of units affected is case related data (and has now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
 <%= form.govuk_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
 
 <%= govukInput(
@@ -50,7 +53,6 @@
   label: { text: "Product brand (if branded)", classes: label_class },
   hint: { text: "For example, ‘Dyson’ or ‘Sony’" }
 ) %>
-
 
 <%= govukInput(
   key: :name,
@@ -72,7 +74,11 @@
   hint: {text: "Normally 8, 12, or 13 digits"}
 ) %>
 
-
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Batch numbers", text: "Batch numbers are case related data (and have now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
 <%= govukInput(
   key: :batch_number,
   form: form,
@@ -107,6 +113,11 @@
   hint: { text: "Where the product was manufactured" }
 ) %>
 
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Customs codes", text: "Customs codes are case related data (and have now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
 <%= govukInput(
   key: :customs_code,
   form: form,

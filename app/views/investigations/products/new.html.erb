@@ -12,9 +12,9 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings affected_units_status number_of_affected_units name when_placed_on_market barcode]) %>
-      <%= render "investigation_heading", investigation: @investigation %>
 
-      <h2 class="govuk-heading-m">Add product</h2>
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Create a product record</h2>
+      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<abbr>PSD</abbr>), you can create a product record for the product. This will also generate a new <abbr>PSD</abbr> product record reference number.</p>
 
       <%= render "products/form", form: form, product_form: @product_form, countries: @countries, search: true %>
     </div>
