@@ -12,7 +12,7 @@ module Investigations
       if @investigation.complainant_reference == reference_number_params[:complainant_reference]
         return redirect_to investigation_path(@investigation)
       end
-      
+
       ChangeCaseReferenceNumber.call!(investigation: @investigation, reference_number: reference_number_params[:complainant_reference], user: current_user)
       redirect_to investigation_path(@investigation), flash: { success: "Reference number was successfully updated" }
     end

@@ -7,7 +7,7 @@ RSpec.feature "Edit an investigation's case name", :with_opensearch, :with_stubb
   let(:new_case_name) { "new name" }
   let(:taken_case_name) { "case name that has already been taken" }
   let(:investigation) { create(:allegation, user_title: original_case_name, creator: user) }
-  
+
   before do
     create(:allegation, user_title: taken_case_name, creator: user)
   end

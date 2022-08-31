@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateReferenceNumberDecorator < Application
   delegate_all
 
   def new_reference_number
-    return metadata.dig("updates", "complainant_reference", 1)
+    metadata.dig("updates", "complainant_reference", 1)
   end
 
   def title(_viewer)

@@ -1,27 +1,26 @@
 class ChangeCaseName
-    include Interactor
-    include EntitiesToNotify
-  
-    delegate :investigation, :user_title, :user, to: :context
+  include Interactor
+  include EntitiesToNotify
 
-    def call
-        context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
-        context.fail!(error: "No reference number supplied") unless user_title.is_a?(String)
-        context.fail!(error: "No user supplied") unless user.is_a?(User)
+  delegate :investigation, :user_title, :user, to: :context
 
-        investigation.assign_attributes(user_title: user_title)
-        return if investigation.changes.none?
+  def call
+    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No reference number supplied") unless user_title.is_a?(String)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-        ActiveRecord::Base.transaction do
-            investigation.save!
-            create_audit_activity_for_user_title_changed
-        end
+    investigation.assign_attributes(user_title:)
+    return if investigation.changes.none?
 
-        send_notification_email
+    ActiveRecord::Base.transaction do
+      investigation.save!
+      create_audit_activity_for_user_title_changed
     end
 
-private
+    send_notification_email
+  end
 
+private
 
   def create_audit_activity_for_user_title_changed
     metadata = activity_class.build_metadata(investigation)
@@ -34,7 +33,6 @@ private
       metadata:
     )
   end
-
 
   def activity_class
     AuditActivity::Investigation::UpdateCaseName

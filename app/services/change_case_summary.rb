@@ -11,6 +11,7 @@ class ChangeCaseSummary
 
     investigation.assign_attributes(description: summary)
     return if investigation.changes.none?
+
     ActiveRecord::Base.transaction do
       investigation.save!
       create_audit_activity_for_case_summary_changed

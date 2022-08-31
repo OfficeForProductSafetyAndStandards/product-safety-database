@@ -1,28 +1,26 @@
 class ChangeCaseReferenceNumber
-    include Interactor
-    include EntitiesToNotify
-  
-    delegate :investigation, :reference_number, :user, to: :context
+  include Interactor
+  include EntitiesToNotify
 
-    def call
-        context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
-        context.fail!(error: "No reference number supplied") unless reference_number.is_a?(String)
-        context.fail!(error: "No user supplied") unless user.is_a?(User)
+  delegate :investigation, :reference_number, :user, to: :context
 
-        investigation.assign_attributes(complainant_reference: reference_number)
-        return if investigation.changes.none?
+  def call
+    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No reference number supplied") unless reference_number.is_a?(String)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
 
+    investigation.assign_attributes(complainant_reference: reference_number)
+    return if investigation.changes.none?
 
-        ActiveRecord::Base.transaction do
-            investigation.save!
-            create_audit_activity_for_reference_number_changed
-        end
-
-        send_notification_email
+    ActiveRecord::Base.transaction do
+      investigation.save!
+      create_audit_activity_for_reference_number_changed
     end
 
-private
+    send_notification_email
+  end
 
+private
 
   def create_audit_activity_for_reference_number_changed
     metadata = activity_class.build_metadata(investigation)
@@ -35,7 +33,6 @@ private
       metadata:
     )
   end
-
 
   def activity_class
     AuditActivity::Investigation::UpdateReferenceNumber

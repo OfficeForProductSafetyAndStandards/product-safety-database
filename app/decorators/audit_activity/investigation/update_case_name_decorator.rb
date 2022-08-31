@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateCaseNameDecorator < ApplicationDecorat
   delegate_all
 
   def new_case_name
-    return metadata.dig("updates", "user_title", 1)
+    metadata.dig("updates", "user_title", 1)
   end
 
   def title(_viewer)
