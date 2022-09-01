@@ -9,13 +9,16 @@
         isPageHeading: true
       },
       hint: {
-        text: 'Give the case a short descriptive title. For example, "Overheating handheld Minolta camera".'
+        text: 'Give the case a short descriptive title. For example, "Overheating handheld Minolta camera".',
+        classes: "govuk-!-margin-bottom-5"
       },
       id: "user_title",
       key: :user_title,
       name: "investigation[user_title]",
       attributes: { maxlength: 45 },
       classes: "govuk-!-width-two-thirds",
-      errorMessage: error_message
+      formGroup: {
+        errorMessage: error_message
+      }
     )
  %>

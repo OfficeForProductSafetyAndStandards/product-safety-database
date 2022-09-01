@@ -5,51 +5,54 @@
   text: "Back",
   href: wizard_path(:reason_for_creating)
 ) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with scope: :investigation, model: @reference_number_form, url: wizard_path, method: :put, local: true do |form| %>
+      <%= error_summary @reference_number_form.errors %>
+      <% has_complainant_reference_error_message = { text: @reference_number_form.errors.full_messages_for("has_complainant_reference").first } if @reference_number_form.errors.any? %>
+      <% complainant_reference_error_message = { text: @reference_number_form.errors.full_messages_for("complainant_reference").first } if @reference_number_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: @reference_number_form, url: wizard_path, method: :put, local: true do |form| %>
-  <%= error_summary @reference_number_form.errors %>
-  <% has_complainant_reference_error_message = { text: @reference_number_form.errors.full_messages_for("has_complainant_reference").first } if @reference_number_form.errors.any? %>
-  <% complainant_reference_error_message = { text: @reference_number_form.errors.full_messages_for("complainant_reference").first } if @reference_number_form.errors.any? %>
+      <% existing_reference_field_html = capture do %>
+        <%= govukInput(
+          key: :complainant_reference,
+          id: "complainant_reference",
+          form: form,
+          label: { text: "Reference number" },
+          classes: "govuk-input--width-20",
+          error_message: complainant_reference_error_message
+        ) %>
+      <% end %>
 
-  <% existing_reference_field_html = capture do %>
-    <%= govukInput(
-      key: :complainant_reference,
-      id: "complainant_reference",
-      form: form,
-      label: { text: "Reference number" },
-      classes: "govuk-input--width-20",
-      error_message: complainant_reference_error_message
-    ) %>
-  <% end %>
+      <% hint_html = capture do %>
+        <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this case.</div>
 
-  <% hint_html = capture do %>
-    <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this case.</div>
+        <%= govukDetails(summaryText: "Help with adding a number", classes: "govuk-!-margin-bottom-8 opss-details--sm") do %>
+          <p class="govuk-body-s">
+            This might be a number already created in a different internal system for your case, or a number you intend to use globally across different systems to reference your case.
+            The reference number will be searchable in the <abbr title="Product Safety Database">PSD</abbr> case search page. (You can add or edit this number later).
+          </p>
+        <% end %>
+      <% end %>
 
-    <%= govukDetails(summaryText: "Help with adding a number", classes: "govuk-!-margin-bottom-8 opss-details--sm") do %>
-      <p class="govuk-body-s">
-        This might be a number already created in a different internal system for your case, or a number you intend to use globally across different systems to reference your case.
-        The reference number will be searchable in the <abbr title="Product Safety Database">PSD</abbr> case search page. (You can add or edit this number later).
-      </p>
+      <%= govukRadios(
+        form: form,
+        error_message: has_complainant_reference_error_message,
+        key: :has_complainant_reference,
+        fieldset: { legend: { text: "Do you want to add a reference number?",
+                            classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-4",
+                            isPageHeading: true
+                          } },
+        hint: { html: hint_html},
+        items: [{ text: "Yes",
+                  value: true,
+                  checked: @has_reference_number == "Yes",
+                  id: "has_complainant_reference",
+                  conditional: { html: existing_reference_field_html } },
+                { text: "No",
+                  value: false }]
+      ) %>
+
+      <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
-  <% end %>
-
-  <%= govukRadios(
-    form: form,
-    error_message: has_complainant_reference_error_message,
-    key: :has_complainant_reference,
-    fieldset: { legend: { text: "Do you want to add a reference number?",
-                         classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-4",
-                         isPageHeading: true
-                       } },
-    hint: { html: hint_html},
-    items: [{ text: "Yes",
-              value: true,
-              checked: @has_reference_number == "Yes",
-              id: "has_complainant_reference",
-              conditional: { html: existing_reference_field_html } },
-            { text: "No",
-              value: false }]
-  ) %>
-
-  <%= form.submit "Continue", class: "govuk-button" %>
-<% end %>
+  </div>
+</div>
