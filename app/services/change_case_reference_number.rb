@@ -16,8 +16,6 @@ class ChangeCaseReferenceNumber
       investigation.save!
       create_audit_activity_for_reference_number_changed
     end
-
-    send_notification_email
   end
 
 private
