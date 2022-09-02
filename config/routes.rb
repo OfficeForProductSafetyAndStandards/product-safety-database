@@ -123,6 +123,8 @@ Rails.application.routes.draw do
     resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
     resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
     resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
+    resource :reference_numbers, only: %i[edit update], controller: "investigations/reference_numbers"
+    resource :case_names, only: %i[edit update], controller: "investigations/case_names"
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resource :reported_reason, only: %i[edit update], path: "edit-reported-reason", controller: "investigations/reported_reason"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"

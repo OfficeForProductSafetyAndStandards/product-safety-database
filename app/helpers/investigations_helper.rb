@@ -163,6 +163,34 @@ module InvestigationsHelper
     end
   end
 
+  def reference_number_actions(investigation, user)
+    if policy(investigation).update?(user:)
+      {
+        items: [
+          href: edit_investigation_reference_numbers_path(investigation.pretty_id),
+          text: "Edit",
+          visuallyHiddenText: "reference number"
+        ]
+      }
+    else
+      {}
+    end
+  end
+
+  def case_name_actions(investigation, user)
+    if policy(investigation).update?(user:)
+      {
+        items: [
+          href: edit_investigation_case_names_path(investigation.pretty_id),
+          text: "Edit",
+          visuallyHiddenText: "case name"
+        ]
+      }
+    else
+      {}
+    end
+  end
+
   def search_result_statement(search_terms, number_of_results)
     search_result_values = search_result_values(search_terms, number_of_results)
 
@@ -213,6 +241,11 @@ module InvestigationsHelper
 
     rows = [
       {
+        key: { text: "Case name" },
+        value: { text: investigation.title },
+        actions: case_name_actions(investigation, user)
+      },
+      {
         key: { text: "Status" },
         value: { text: investigation.status },
         actions: status_actions
@@ -245,7 +278,8 @@ module InvestigationsHelper
     if investigation.complainant_reference.present?
       rows << {
         key: { text: "Trading Standards reference" },
-        value: { text: investigation.complainant_reference }
+        value: { text: investigation.complainant_reference },
+        actions: reference_number_actions(investigation, user)
       }
     end
 
