@@ -58,6 +58,10 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
         expect(result.product.investigation_products.where(investigation:)).to exist
       end
 
+      it "sets the product's owning team to be the case's owner" do
+        expect(result.product.owning_team).to eq(investigation.owner_team)
+      end
+
       it "creates an audit activity", :aggregate_failures do
         result
         product = investigation.products.first

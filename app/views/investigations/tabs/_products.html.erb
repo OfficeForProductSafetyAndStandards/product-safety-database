@@ -16,7 +16,7 @@
       product,
       class: "app-block-link govuk-link govuk-!-margin-right-3"
     %>
-    <% if product.investigations.first == nil || policy(product.investigations.first).update? %>
+    <% if policy(product).update? %>
       <%= link_with_hidden_text_to "Change product details",
         "(#{product.name})",
         edit_product_path(product),

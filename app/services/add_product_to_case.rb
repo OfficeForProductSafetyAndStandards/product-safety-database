@@ -50,7 +50,8 @@ class AddProductToCase
         affected_units_status:,
         number_of_affected_units:,
         when_placed_on_market:,
-        customs_code:
+        customs_code:,
+        owning_team: investigation.owner_team
       )
 
       context.activity = create_audit_activity_for_product_added
