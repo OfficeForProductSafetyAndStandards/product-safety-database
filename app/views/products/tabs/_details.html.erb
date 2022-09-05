@@ -4,7 +4,7 @@
     <h2 class="govuk-heading-m">Full detail</h2>
 
     <p class="govuk-body">
-      <% if @product.investigations.first == nil || policy(@product.investigations.first).update? %>
+      <% if policy(@product).update? %>
         <%= link_to "Edit details", edit_product_path(@product), class: "govuk-link" %>
       <% end %>
     </p>
