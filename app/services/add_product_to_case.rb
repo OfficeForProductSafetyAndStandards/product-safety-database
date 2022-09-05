@@ -18,10 +18,6 @@ class AddProductToCase
            :category,
            :user,
            :product,
-           :affected_units_status,
-           :number_of_affected_units,
-           :exact_units,
-           :approx_units,
            :when_placed_on_market,
            :customs_code,
            to: :context

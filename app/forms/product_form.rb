@@ -7,7 +7,6 @@ class ProductForm
 
   attribute :id
   attribute :authenticity
-  attribute :batch_number
   attribute :brand
   attribute :category
   attribute :country_of_origin
@@ -18,13 +17,8 @@ class ProductForm
   attribute :subcategory
   attribute :webpage
   attribute :created_at, :datetime
-  attribute :affected_units_status
-  attribute :number_of_affected_units
   attribute :has_markings
   attribute :markings
-  attribute :customs_code
-
-  attr_accessor :approx_units, :exact_units
 
   attribute :when_placed_on_market
 
@@ -38,9 +32,6 @@ class ProductForm
   validates :category, presence: true
   validates :subcategory, presence: true
   validates :name, presence: true
-  validates :affected_units_status, inclusion: { in: Product.affected_units_statuses.keys }
-  validates :approx_units, presence: true, if: -> { affected_units_status == "approx" }
-  validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
   validates :when_placed_on_market, presence: true
   validates :description, length: { maximum: 10_000 }
 
