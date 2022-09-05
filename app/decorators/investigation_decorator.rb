@@ -67,12 +67,7 @@ class InvestigationDecorator < ApplicationDecorator
 
   def created_by
     return if creator_user.nil?
-
-    out = []
-    out << h.escape_once(creator_user.full_name)
-    out << h.escape_once(creator_user.team.name)
-
-    out.join("<br />").html_safe
+    "#{creator_user.full_name} - #{creator_user.team.name}"
   end
 
   def products_list
