@@ -240,6 +240,8 @@ ul.opss-radio-list {
         margin-left: govuk-spacing(1);
         &:last-child {
             margin-bottom: 0;
+
+            /*&.opss-tag--risk4 {position: relative; right: 33%; }*/
         }
             @include govuk-media-query($from: desktop) {
             &:nth-of-type(n+11) {
@@ -260,6 +262,20 @@ ul.opss-radio-list {
         border-color: govuk-colour("black");
         background-color: govuk-colour("black");
         color: govuk-colour("white");
+    }
+    &.opss-tag--risk4 {
+        /*border-radius: govuk-spacing(2); border-width: 0.5px; border-color: govuk-colour("red"); padding-left: govuk-spacing(2); padding-right: govuk-spacing(2);*/
+
+        border-width: 0;
+        margin-top: 0.2rem;
+        float: left;
+
+        background-color: govuk-colour("white");
+        color: govuk-colour("red");
+        text-transform: none;
+
+        /* &::before {content: '*** '; vertical-align: middle; }
+        &::after {content: ' ***'; vertical-align: middle; } */
     }
     &.opss-tag--plain {
         @include opss-font-size($s: 14px, $l: 1.3);

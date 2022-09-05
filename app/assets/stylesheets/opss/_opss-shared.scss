@@ -297,6 +297,9 @@ samp {
 .opss-text-align-center {
     text-align: center;
 }
+*[class^="govuk-heading"].opss-text-align-center {
+    width: 100%;
+}
 
 @include govuk-media-query($from: tablet) {
     .opss-max-width-two-thirds {
@@ -535,7 +538,12 @@ ul.opss-left-nav {
     .opss-border-all {border-width: 1px; }
     /*.opss-border-all--padding-sm {padding: govuk-spacing(1); }
     a.opss-border-all--padding-sm {padding: 7px 13px 8px 11px; }*/
+
+    a[class*="font-size-14"].opss-border-all {
+        line-height: 1.2 !important;
+    }
 }
+
 .opss-details--sm {
     @include govuk-media-query($from: desktop) {
         summary {
@@ -745,26 +753,36 @@ dl.opss-summary-list-aside {
         }
     }
 
-    &.opss-summary-list-mixed--image > div:first-child dt {
-        vertical-align: bottom;
+    &.opss-summary-list-mixed--image {
+        margin-bottom: govuk-spacing(8);
+        border-bottom: 1px solid $govuk-input-border-colour;
 
-        & + dd {
-            padding-right: govuk-spacing(0);
+        .opss-tabs li:last-child & {
+            margin-bottom: govuk-spacing(0);
+            border-bottom: none 0;
+        }
 
-            figure {
-                img {
-                    max-width: 100%;
-                }
+        & > div:first-child dt {
+            vertical-align: bottom;
 
-                a {
-                    display: block;
-                    margin-top: - govuk-spacing(5);
-                    margin-bottom: govuk-spacing(1);
+            & + dd {
+                padding-right: govuk-spacing(0);
 
+                figure {
                     img {
-                        margin-top: -2px;
-                        margin-bottom: -2px;
-                        border: 0;
+                        max-width: 100%;
+                    }
+
+                    a {
+                        display: block;
+                        margin-top: - govuk-spacing(5);
+                        margin-bottom: govuk-spacing(1);
+
+                        img {
+                            margin-top: -2px;
+                            margin-bottom: -2px;
+                            border: 0;
+                        }
                     }
                 }
             }
