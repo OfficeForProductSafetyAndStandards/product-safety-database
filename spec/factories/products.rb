@@ -5,7 +5,7 @@ FactoryBot.define do
     category { Rails.application.config.product_constants["product_category"].sample }
     subcategory { "subcategory" }
     barcode { "9781529034523" }
-    authenticity { Product.authenticities.keys.sample }
+    authenticity { [Product.authenticities.keys - "unsure"].sample }
     brand { Faker::Company.name }
     has_markings { Product.has_markings.keys.sample }
     markings { [Product::MARKINGS.sample] }

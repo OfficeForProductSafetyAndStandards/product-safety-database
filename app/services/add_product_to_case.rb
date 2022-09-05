@@ -5,7 +5,6 @@ class AddProductToCase
   delegate :authenticity,
            :has_markings,
            :markings,
-           :batch_number,
            :brand,
            :country_of_origin,
            :description,
@@ -19,7 +18,6 @@ class AddProductToCase
            :user,
            :product,
            :when_placed_on_market,
-           :customs_code,
            to: :context
 
   def call
@@ -32,7 +30,6 @@ class AddProductToCase
         authenticity:,
         has_markings:,
         markings:,
-        batch_number:,
         brand:,
         country_of_origin:,
         description:,
@@ -43,10 +40,7 @@ class AddProductToCase
         category:,
         webpage:,
         source: build_user_source,
-        affected_units_status:,
-        number_of_affected_units:,
         when_placed_on_market:,
-        customs_code:,
         owning_team: investigation.owner_team
       )
 
