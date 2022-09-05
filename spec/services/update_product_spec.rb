@@ -60,7 +60,11 @@ RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
     context "with a product owned by another team" do
       let(:product) { create(:product, investigations: [investigation], owning_team: create(:team)) }
 
-      it { is_expected.to be_a_failure }
+      it "updates the product", :aggregate_failures do
+        expect(result).to be_a_success
+
+        expect(product.reload).to have_attributes(product_params)
+      end
     end
 
     context "with a product owned by the updating team" do

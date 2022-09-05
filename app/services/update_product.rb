@@ -8,7 +8,6 @@ class UpdateProduct
     context.fail!(error: "No product params supplied") unless product_params.is_a?(Hash)
     context.fail!(error: "No updating team supplied") unless updating_team.is_a?(Team)
     context.fail!(error: "You can not explicitly set a Product's owning team during update") if product_params.key?("owning_team") || product_params.key?("owning_team_id")
-    context.fail!(error: "The updating team does not own the product") unless product.owning_team.nil? || product.owning_team == updating_team
 
     Product.transaction do
       product_params[:owning_team] = updating_team if product.owning_team.nil?
