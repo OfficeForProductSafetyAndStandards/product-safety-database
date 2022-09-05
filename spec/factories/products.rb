@@ -6,9 +6,7 @@ FactoryBot.define do
     subcategory { "subcategory" }
     barcode { "9781529034523" }
     authenticity { Product.authenticities.keys.sample }
-    batch_number { "123123123" }
     brand { Faker::Company.name }
-    affected_units_status { "unknown" }
     has_markings { Product.has_markings.keys.sample }
     markings { [Product::MARKINGS.sample] }
     when_placed_on_market { "before_2021" }
@@ -21,7 +19,6 @@ FactoryBot.define do
       category { "Communication and media equipment" }
       description { "iphone description" }
       country_of_origin { "United States" }
-      batch_number { "1234" }
     end
 
     factory :product_iphone_3g do
