@@ -1,7 +1,8 @@
 require "rails_helper"
 
-RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:team_mate) { create(:user, :activated, has_viewed_introduction: true, team: user.team) }
   let(:original_case_name) { "the original case name" }
   let(:new_case_name) { "new name" }
   let(:taken_case_name) { "case name that has already been taken" }
@@ -12,7 +13,7 @@ RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :wi
   end
 
   it "allows user to edit reference number" do
-    sign_in(user)
+    sign_in(team_mate)
     visit "/cases/#{investigation.pretty_id}"
 
     click_link "Edit case name"
@@ -44,5 +45,13 @@ RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :wi
     expect(page).to have_content "Case name was successfully updated"
 
     expect(page.find("dt", text: "Case name")).to have_sibling("dd", text: new_case_name)
+
+    click_link "Activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect(page).to have_css("h3", text: "Case name updated")
+    expect(page).to have_content("Case name: #{new_case_name}")
+
+    expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation case name updated"
   end
 end
