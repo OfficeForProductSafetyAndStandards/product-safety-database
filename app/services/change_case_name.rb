@@ -6,7 +6,7 @@ class ChangeCaseName
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
-    context.fail!(error: "No reference number supplied") unless user_title.is_a?(String)
+    context.fail!(error: "No case name supplied") unless user_title.is_a?(String)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     investigation.assign_attributes(user_title:)
