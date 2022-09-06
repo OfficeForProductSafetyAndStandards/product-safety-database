@@ -203,19 +203,98 @@ module InvestigationsHelper
       }
     }
 
+    status_link = investigation.is_closed? ? reopen_investigation_status_path(@investigation) : close_investigation_status_path(@investigation)
+    status_link_text = investigation.is_closed? ? "Re-open" : "Close"
+
     rows << {
-      key: { text: "Summary" },
+      key: { text: "Status" },
       value: {
-        text: investigation.description
+        text: investigation.status
       },
       actions: {
         items: [
-          href: edit_investigation_summary_path(@investigation.pretty_id),
-          text: "Edit",
-          visuallyHiddenText: " the summary"
+          href: status_link,
+          text: status_link_text,
+          visuallyHiddenText: " this case"
         ]
       }
     }
+    
+    rows << {
+      key: { text: "Last updated" },
+      value: {
+        text:  "#{time_ago_in_words(@investigation.updated_at)} ago"
+      }
+    }
+
+    rows << {
+      key: { text: "Created by" },
+      value: {
+        text: investigation.created_by
+      }
+    }
+
+    rows << {
+      key: { text: "Case owner" },
+      value: {
+        text: investigation_owner(investigation)
+      },
+      actions: {
+        items: [
+          href: new_investigation_ownership_path(investigation),
+          text: "Change",
+          visuallyHiddenText: " the case owner"
+        ]
+      }
+    }
+
+    case_restriction_html = @investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : 'Unrestricted'
+    case_restriction_path = investigation.is_private ? unrestrict_investigation_visibility_path(investigation) : restrict_investigation_visibility_path(investigation)
+
+    rows << {
+      key: { text: "Case restriction" },
+      value: {
+        html: case_restriction_html
+      },
+      actions: {
+        items: [
+          href: case_restriction_path,
+          text: "Change",
+          visuallyHiddenText: " the case restriction"
+        ]
+      }
+    }
+
+    case_risk_level_value = investigation.risk_level == "serious" ? '<span class="opss-tag opss-tag--risk1 opss-tag--lrg">Serious risk<span class="opss-tag opss-tag--risk1 opss-tag--lrg">'.html_safe : investigation.risk_level_description
+
+    rows << {
+      key: { text: "Case risk level" },
+      value: {
+        html: case_risk_level_value
+      },
+      actions: {
+        items: [
+          href: investigation_risk_level_path(investigation),
+          text: "Change",
+          visuallyHiddenText: " the risk level"
+        ]
+      }
+    }
+
+    if investigation.coronavirus_related
+        rows << {
+        key: { text: "COVID-19" },
+        value: {
+          html: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe
+        },
+        actions: {
+          items: [
+          ]
+        }
+      }
+    end
+
+    rows
   end
 
   def risk_validation_actions(investigation, user)
