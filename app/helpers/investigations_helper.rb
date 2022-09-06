@@ -150,6 +150,74 @@ module InvestigationsHelper
     rows
   end
 
+  def case_rows(investigation)
+    rows = []
+
+    rows << {
+      key: { text: "Case name"},
+      value: { text: investigation.title },
+      actions: {
+        items: [
+          href: edit_investigation_case_names_path(@investigation.pretty_id),
+          text: "Edit",
+          visuallyHiddenText: " the case name"
+        ]
+      }
+    }
+
+    rows << {
+      key: { text: investigation.type },
+      value: { 
+        text: investigation.pretty_id,
+        secondary_text: { html: '<span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><span class="govuk-visually-hidden"> - </span>Case number</span>' }
+      },
+      actions: {}
+    }
+
+    rows << {
+      key: { text: "Reference" },
+      value: {
+        text: investigation.complainant_reference,
+        secondary_text: { text: "Trading standards reference" }
+      },
+      actions: {
+        items: [
+          href: edit_investigation_reference_numbers_path(@investigation.pretty_id),
+          text: "Edit",
+          visuallyHiddenText: " the reference number"
+        ]
+      }
+    }
+
+    rows << {
+      key: { text: "Summary" },
+      value: {
+        text: investigation.description
+      },
+      actions: {
+        items: [
+          href: edit_investigation_summary_path(@investigation.pretty_id),
+          text: "Edit",
+          visuallyHiddenText: " the summary"
+        ]
+      }
+    }
+
+    rows << {
+      key: { text: "Summary" },
+      value: {
+        text: investigation.description
+      },
+      actions: {
+        items: [
+          href: edit_investigation_summary_path(@investigation.pretty_id),
+          text: "Edit",
+          visuallyHiddenText: " the summary"
+        ]
+      }
+    }
+  end
+
   def risk_validation_actions(investigation, user)
     if policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
       {

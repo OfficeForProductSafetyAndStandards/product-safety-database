@@ -1,56 +1,4 @@
 <%= render 'investigations/actions', investigation: @investigation %>
-<dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions">
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-        Case name
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <%= @investigation.title %>
-    </dd>
-    <dd class="govuk-summary-list__actions">
-      <%= link_to edit_investigation_case_names_path(@investigation.pretty_id), class: "govuk-link govuk-link--no-visited-state" do %>
-        Edit<span class="govuk-visually-hidden"> the case name</span>
-      <% end %>
-    </dd>
-  </div>
-  <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-    <dt class="govuk-summary-list__key">
-      <%= @investigation.type %> <!--span class="opss-numero" title="Number">&numero;</span-->   <!-- or Enquiry / Project -->
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <%= @investigation.pretty_id %> <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text">
-          <span class="govuk-visually-hidden"> - </span>Case number 
-      </span>
-    </dd>
-  </div>
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-        Reference <!--span class="opss-numero" title="Number">&numero;</span-->
-    </dt>
-    <dd class="govuk-summary-list__value">
-        <%= @investigation.complainant_reference %> <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text">Trading standards reference</span>
-    </dd>
-    <dd class="govuk-summary-list__actions">
-      <%= link_to edit_investigation_reference_numbers_path(@investigation.pretty_id), class: "govuk-link govuk-link--no-visited-state" do %>
-        Edit<span class="govuk-visually-hidden"> the reference number</span>
-      <% end %>
-    </dd>
-  </div>
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Summary
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <span class="opss-text-limit-scroll-s">
-        <%= @investigation.description %>
-      </span>
-    </dd>
-    <dd class="govuk-summary-list__actions">
-      <%= link_to edit_investigation_summary_path(@investigation.pretty_id), class: "govuk-link govuk-link--no-visited-state" do %>
-        Edit<span class="govuk-visually-hidden"> the summary</span>
-      <% end %>
-    </dd>
-  </div>            
   <div class="govuk-summary-list__row opss-summary-list__row--split">
     <dt class="govuk-summary-list__key">
         Status
@@ -163,10 +111,6 @@
         </a>
     </dd>
   </div>
-  <!--div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">Risk level validated</dt>
-    <dd class="govuk-summary-list__value">No</dd>
-  </div-->
   <% if @investigation.coronavirus_related %>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
@@ -183,3 +127,19 @@
     </div>
   <% end %>
 </dl>
+
+<%= govukSummaryList(
+        classes: "app-summary-list--actions-on-own-line",
+        rows: case_rows(@investigation)
+) %>
+
+<h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">
+  Safety and compliance
+</h3>
+<a href="edit-why-are-you-creating-a-case" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
+  Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
+</a>
+<%= govukSummaryList(
+  classes: "app-summary-list--actions-on-own-line",
+  rows: safety_and_compliance_rows(@investigation)
+) %>
