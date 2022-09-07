@@ -26,8 +26,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       webpage: Faker::Internet.url,
       country_of_origin: Country.all.sample.first,
       description: Faker::Lorem.sentence,
-      authenticity: Product.authenticities.keys.without("missing").sample,
-      affected_units_status: "approx",
+      authenticity: Product.authenticities.keys.without("missing", "unsure").sample,
       has_markings: %w[Yes No Unknown].sample,
       markings: [Product::MARKINGS.sample],
       when_placed_on_market: Product.when_placed_on_markets.keys.without("missing").sample
@@ -91,7 +90,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       click_link "Products (0)"
       click_link "Add product"
 
-      expect(page).to have_css(".govuk-heading-m", text: "Add product")
+      expect(page).to have_css("h1", text: "Create a product record")
 
       enter_product_details(**product_details)
 
@@ -99,7 +98,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
 
       click_link "Products (1)"
 
-      expect_page_to_show_entered_product_details(**product_details.except(:affected_units_status))
+      expect_page_to_show_entered_product_details(**product_details)
 
       click_link "Activity"
       expect_details_on_activity_page(contact_details, allegation_details)
@@ -146,7 +145,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:, when_placed_on_market:)
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:, when_placed_on_market:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
     within_fieldset("Was the product placed on the market before 1 January 2021?") { choose when_placed_on_market_answer(when_placed_on_market) }
@@ -161,15 +160,11 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       markings.each { |marking| check(marking) } if has_markings == "Yes"
     end
 
-    within_fieldset("How many units are affected?") do
-      choose affected_units_status_answer(affected_units_status)
-      find("#approx_units").set(21)
-    end
     fill_in "Product name",               with: name
     fill_in "Other product identifiers",  with: barcode
     fill_in "Webpage",                    with: webpage
     fill_in "Description of product",     with: description
-    click_button "Save product"
+    click_button "Save"
   end
 
   def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:, when_placed_on_market:)
@@ -188,7 +183,6 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
-    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21")
     expect(page.find("dt", text: "When placed on market")).to have_sibling("dd", text: I18n.t(when_placed_on_market, scope: Product.model_name.i18n_key))
   end
 

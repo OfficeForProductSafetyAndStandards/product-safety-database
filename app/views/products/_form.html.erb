@@ -6,17 +6,17 @@
   key: :category,
   form: form,
   show_all_values: true,
+  include_blank: true,
   id: "category",
   aria_describedby: "report-product-category-hint",
   label: { text: "Product category", classes: label_class },
-  hint: { text: "The product category will be permanent for this product record" }
+  hint: { text: "The product category will be permanent for this product record", classes: "govuk-!-font-size-16" }
 ) %>
 
 <%= govukInput(
   key: :subcategory,
   form: form,
   id: "subcategory",
-  classes: "app-!-max-width-one-half",
   label: { text: "Product subcategory", classes: label_class },
   hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" }
 ) %>
@@ -48,7 +48,6 @@
 <%= govukInput(
   key: :brand,
   form: form,
-  classes: "app-!-max-width-one-half",
   label: { text: "Manufacturer's brand name", classes: label_class },
   hint: { html: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe }
 ) %>
@@ -56,7 +55,6 @@
 <%= govukInput(
   key: :name,
   form: form,
-  classes: "app-!-max-width-three-quarters",
   label: { text: "Product name", classes: label_class },
   id: "name",
   hint: { html: 'Include model name and model number, for example \'PlayStation 5\'<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The product name will be permanent for this product record</span>'.html_safe }
@@ -68,7 +66,6 @@
   key: :barcode,
   id: "barcode",
   form: form,
-  classes: "app-!-max-width-one-half",
   label: { text: "Barcode number (GTIN, EAN or UPC)", classes: label_class },
   hint: {text: "Normally 8, 12, or 13 digits"}
 ) %>
@@ -82,7 +79,6 @@
 <%= govukTextarea(
   key: :product_code,
   form: form,
-  classes: "app-!-max-width-one-half",
   label: { text: "Other product identifiers", classes: label_class },
   hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." }
 ) %>
@@ -90,7 +86,6 @@
 <%= govukInput(
   key: :webpage,
   form: form,
-  classes: "app-!-max-width-three-quarters",
   label: { text: "Webpage", classes: label_class },
   hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" }
 ) %>
@@ -114,9 +109,8 @@
   key: :description,
   form: form,
   attributes: { maxlength: 10_000 },
-  classes: "app-!-max-width-three-quarters",
   label: { text: "Description of product", classes: label_class },
   hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. Do not include details of damage or incidents" }
 ) %>
 
-<%= form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button" %>
+<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button" %>

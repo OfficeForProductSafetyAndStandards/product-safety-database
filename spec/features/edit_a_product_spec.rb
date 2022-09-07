@@ -26,7 +26,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
   let(:new_product_category)  { (Rails.application.config.product_constants["product_category"] - [product.category]).sample }
   let(:new_subcategory) { Faker::Hipster.word }
   let(:new_barcode)           { Faker::Barcode.ean(13) }
-  let(:new_authenticity)      { (Product.authenticities.keys - [product.authenticity]).sample }
+  let(:new_authenticity)      { Product.authenticities.keys.without(product.authenticity, "unsure").sample }
   let(:new_has_markings)      { Product.has_markings.keys.sample }
   let(:new_markings)          { [Product::MARKINGS.sample] }
   let(:new_product_code)      { Faker::Barcode.issn }
@@ -66,7 +66,6 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       within_fieldset "Is the product counterfeit?" do
         expect(page).not_to have_checked_field("Yes")
         expect(page).not_to have_checked_field("No")
-        expect(page).not_to have_checked_field("Unsure")
       end
 
       within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
@@ -85,7 +84,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       expect(page).to have_select("Country of origin",        selected: "France")
       expect(page).to have_field("Description of product",    with: product.description)
 
-      click_on "Save product"
+      click_on "Save"
 
       expect(page).to have_error_messages
       expect(page).to have_error_summary "You must state whether the product is a counterfeit"
@@ -118,7 +117,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       select new_country_of_origin,       from: "Country of origin"
       fill_in "Description of product",   with: new_description
 
-      click_on "Save product"
+      click_on "Save"
 
       expect_to_be_on_product_page(product_id: product.id, product_name: new_name)
 
@@ -132,7 +131,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
       expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
       expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
-      expect(page).to have_summary_item(key: "Manufacturer's brand name", value: new_brand)
+      expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
       expect(page).to have_summary_item(key: "Product name",              value: new_name)
       expect(page).to have_summary_item(key: "Barcode number",            value: new_barcode)
       expect(page).to have_summary_item(key: "Other product identifiers", value: new_product_code)
@@ -197,7 +196,6 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       within_fieldset "Is the product counterfeit?" do
         expect(page).not_to have_checked_field("Yes")
         expect(page).not_to have_checked_field("No")
-        expect(page).not_to have_checked_field("Unsure")
       end
 
       within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
@@ -216,7 +214,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       expect(page).to have_select("Country of origin",        selected: "France")
       expect(page).to have_field("Description of product",    with: product.description)
 
-      click_on "Save product"
+      click_on "Save"
 
       expect(page).to have_error_messages
       expect(page).to have_error_summary "You must state whether the product is a counterfeit"
@@ -249,7 +247,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       select new_country_of_origin,        from: "Country of origin"
       fill_in "Description of product",    with: new_description
 
-      click_on "Save product"
+      click_on "Save"
 
       expect_to_be_on_product_page(product_id: product.id, product_name: new_name)
 
@@ -265,7 +263,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       expect(page).to have_summary_item(key: "Product subcategory", value: new_subcategory)
       expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
       expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
-      expect(page).to have_summary_item(key: "Manufacturer's brand name", value: new_brand)
+      expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
       expect(page).to have_summary_item(key: "Product name",              value: new_name)
       expect(page).to have_summary_item(key: "Barcode number",            value: new_barcode)
       expect(page).to have_summary_item(key: "Other product identifiers", value: new_product_code)

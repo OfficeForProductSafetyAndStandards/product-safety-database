@@ -4,7 +4,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
   let(:user)          { create(:user, :activated) }
   let(:investigation) { create(:enquiry, creator: user) }
   let(:attributes)    do
-    attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample)
+    attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
   let(:other_user) { create(:user, :activated) }
 
@@ -18,7 +18,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
 
     fill_in "Barcode number (GTIN, EAN or UPC)", with: "invalid"
 
-    click_button "Save product"
+    click_button "Save"
 
     # Expected validation errors
     expect(page).to have_error_messages
@@ -27,10 +27,9 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
     expect(errors_list[1].text).to eq "Subcategory cannot be blank"
     expect(errors_list[2].text).to eq "You must state whether the product is a counterfeit"
     expect(errors_list[3].text).to eq "Select yes if the product has UKCA, UKNI or CE marking"
-    expect(errors_list[4].text).to eq "You must state how many units are affected"
-    expect(errors_list[5].text).to eq "Name cannot be blank"
-    expect(errors_list[6].text).to eq "Select yes if the product was placed on the market before 1 January 2021"
-    expect(errors_list[7].text).to eq "Enter a valid barcode number"
+    expect(errors_list[4].text).to eq "Name cannot be blank"
+    expect(errors_list[5].text).to eq "Select yes if the product was placed on the market before 1 January 2021"
+    expect(errors_list[6].text).to eq "Enter a valid barcode number"
 
     select attributes[:category], from: "Product category"
 
@@ -61,7 +60,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
 
     fill_in "Description of product", with: attributes[:description]
 
-    click_on "Save product"
+    click_on "Save"
 
     expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
@@ -72,7 +71,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
                         when "markings_unknown" then "Unknown"
                         end
 
-    expect(page).to have_summary_item(key: "Manufacturer's brand name", value: attributes[:brand])
+    expect(page).to have_summary_item(key: "Product brand",             value: attributes[:brand])
     expect(page).to have_summary_item(key: "Product name",              value: attributes[:name])
     expect(page).to have_summary_item(key: "Category",                  value: attributes[:category])
     expect(page).to have_summary_item(key: "Product subcategory",       value: attributes[:subcategory])

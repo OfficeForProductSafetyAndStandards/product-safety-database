@@ -49,7 +49,7 @@ RSpec.describe ProductForm do
       end
 
       context "when an authenticity was given" do
-        let(:authenticity) { Product.authenticities.keys.sample }
+        let(:authenticity) { Product.authenticities.keys.sample.without("unsure") }
 
         it { is_expected.not_to be_authenticity_not_provided }
       end
