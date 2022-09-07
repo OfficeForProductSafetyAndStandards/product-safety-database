@@ -214,13 +214,12 @@ module InvestigationsHelper
 
   def case_restriction_actions(investigation, user)
     return {} unless policy(investigation).change_owner_or_status?
-    case_restriction_path = investigation.is_private ? unrestrict_investigation_visibility_path(investigation) : restrict_investigation_visibility_path(investigation)
 
     {
       items: [
-        href: case_restriction_path,
+        href: investigation_visibility_path(investigation),
         text: "Change",
-        visuallyHiddenText: " the case owner"
+        visuallyHiddenText: " the case restriction"
       ]
     }
   end

@@ -166,10 +166,10 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
   end
 
   def click_change_risk_level_link
-    click_link "Change risk level"
+    click_link "Change the risk level"
   end
 
   def click_set_risk_level_link
-    click_link "Set risk level"
+    click_link "Change the risk level"
   end
 end

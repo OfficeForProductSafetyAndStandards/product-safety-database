@@ -16,7 +16,7 @@ RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :wi
     sign_in(team_mate)
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Edit case name"
+    click_link "Edit the case name"
 
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}/case_names/edit", ignore_query: true
     expect(page).to have_css("h1", text: "Edit the case name")

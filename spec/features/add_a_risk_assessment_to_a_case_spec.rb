@@ -41,9 +41,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     visit "/cases/#{investigation.pretty_id}"
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Risk assessments", value: "No risk assessments")
-
-    click_link "Add risk assessment"
+    click_link "Add a risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
 
@@ -126,8 +124,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     within('nav[aria-label="Secondary"]') { click_link "Case" }
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Risk assessment", value: "1 risk assessment\nCompleted by MyCouncil Trading Standards on 3 April 2020\nAssessed risk: Serious risk")
-
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
@@ -206,8 +202,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     within('nav[aria-label="Secondary"]') { click_link "Case" }
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_summary_item(key: "Risk assessment", value: "1 risk assessment\nCompleted by OtherCouncil Trading Standards on 3 April 2020\nAssessed risk: Medium-high risk")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

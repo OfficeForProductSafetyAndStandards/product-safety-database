@@ -76,13 +76,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add new"
-
-    expect_to_be_on_add_to_case_page
-
-    choose "Accident or incident"
-
-    click_button "Continue"
+    click_link "Add Accident or incidents"
 
     expect_to_be_on_accident_or_incident_type_page
 
@@ -173,12 +167,8 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add new"
+    click_link "Add Accident or incidents"
 
-    expect_to_be_on_add_to_case_page
-
-    choose "Accident or incident"
-
-    click_button "Continue"
+    expect_to_be_on_accident_or_incident_type_page
   end
 end
