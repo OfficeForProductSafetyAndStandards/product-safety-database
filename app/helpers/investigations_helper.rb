@@ -340,7 +340,7 @@ module InvestigationsHelper
       actions: case_restriction_actions(investigation, user)
     }
 
-    case_risk_level_value = investigation.risk_level == "serious" ? '<span class="opss-tag opss-tag--risk1 opss-tag--lrg">Serious risk<span class="opss-tag opss-tag--risk1 opss-tag--lrg">'.html_safe : investigation.risk_level_description
+    case_risk_level_value = investigation.risk_level == "serious" ? '<span class="opss-tag opss-tag--risk1 opss-tag--lrg">Serious risk</span>'.html_safe : investigation.risk_level_description
 
     rows << {
       key: { text: "Case risk level" },
