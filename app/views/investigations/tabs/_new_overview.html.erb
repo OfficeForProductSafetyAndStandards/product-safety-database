@@ -1,7 +1,21 @@
 <%= render 'investigations/actions', investigation: @investigation %>
+<% team_list_html = capture do %>
+  <% if @investigation.teams_with_access.length > 1 %>
+    <ul class="govuk-list govuk-list--bullet">
+      <% @investigation.teams_with_access.each do |team| %>
+        <li><%= team.name %></li>
+      <% end %>
+    </ul>
+  <% elsif @investigation.teams_with_access.length == 1 %>
+    <%= @investigation.teams_with_access.first.name %>
+  <% else %>
+    No teams added
+  <% end %>
+<% end %>
+
 <%= govukSummaryList(
         classes: "app-summary-list--actions-on-own-line",
-        rows: case_rows(@investigation, current_user)
+        rows: case_rows(@investigation, current_user, team_list_html)
 ) %>
 
 <% if policy(@investigation).send_email_alert? %>

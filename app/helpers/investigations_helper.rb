@@ -212,6 +212,18 @@ module InvestigationsHelper
     }
   end
 
+  def case_teams_actions(investigation, user)
+    return {} unless policy(investigation).manage_collaborators?
+
+    {
+      items: [
+        href: investigation_collaborators_path(investigation),
+        text: "Change",
+        visuallyHiddenText: " the teams added"
+      ]
+    }
+  end
+
   def case_restriction_actions(investigation, user)
     return {} unless policy(investigation).change_owner_or_status?
 
@@ -236,7 +248,7 @@ module InvestigationsHelper
       }
   end
 
-  def case_rows(investigation, user)
+  def case_rows(investigation, user, team_list_html)
     rows = []
 
     rows << {
@@ -310,6 +322,14 @@ module InvestigationsHelper
       actions: case_owner_actions(investigation, user)
     }
 
+    rows << {
+      key: { text: "Teams added" },
+      value: {
+        html: team_list_html
+      },
+      actions: case_teams_actions(investigation, user)
+    }
+
     case_restriction_html = @investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : 'Unrestricted'
 
     rows << {
@@ -337,8 +357,7 @@ module InvestigationsHelper
           html: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe
         },
         actions: {
-          items: [
-          ]
+          items: []
         }
       }
     end
