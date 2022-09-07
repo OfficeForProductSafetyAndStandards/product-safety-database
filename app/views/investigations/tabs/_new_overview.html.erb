@@ -1,16 +1,18 @@
 <%= render 'investigations/actions', investigation: @investigation %>
 <%= govukSummaryList(
         classes: "app-summary-list--actions-on-own-line",
-        rows: case_rows(@investigation)
+        rows: case_rows(@investigation, current_user)
 ) %>
 
 <h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">
   Safety and compliance
 </h3>
-<a href="edit-why-are-you-creating-a-case" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
-  Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
-</a>
+<% if policy(@investigation).update?(user: current_user) %>
+  <a href="<%= edit_investigation_reported_reason_path(@investigation) %>" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
+    Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
+  </a>
+<% end %>
 <%= govukSummaryList(
   classes: "app-summary-list--actions-on-own-line",
-  rows: safety_and_compliance_rows(@investigation)
+  rows: safety_and_compliance_rows(@investigation, current_user)
 ) %>

@@ -118,7 +118,7 @@ module InvestigationsHelper
     [risk_level_row, validated_row, risk_assessment_row]
   end
 
-  def safety_and_compliance_rows(investigation)
+  def safety_and_compliance_rows(investigation, user)
     rows = []
 
     reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided
@@ -150,23 +150,104 @@ module InvestigationsHelper
     rows
   end
 
-  def case_rows(investigation)
+  def case_name_actions(investigation, user)
+    return {} unless policy(investigation).update?(user:)
+    
+    {
+      items: [
+        href: edit_investigation_case_names_path(investigation.pretty_id),
+        text: "Edit",
+        visuallyHiddenText: " the case name"
+      ]
+    }
+  end
+
+  def reference_actions(investigation, user)
+    return {} unless policy(investigation).update?(user:)
+    
+    {
+      items: [
+        href: edit_investigation_reference_numbers_path(investigation.pretty_id),
+        text: "Edit",
+        visuallyHiddenText: " the reference number"
+      ]
+    }
+  end
+
+  def summary_actions(investigation, user)
+    return {} unless policy(investigation).update?(user:)
+
+    {
+      items: [
+        href: edit_investigation_summary_path(investigation.pretty_id),
+        text: "Edit",
+        visuallyHiddenText: " the summary"
+      ]
+    }
+  end
+
+  def status_actions(investigation, user)
+    return {} unless policy(investigation).change_owner_or_status?
+    status_path = investigation.is_closed ? reopen_investigation_status_path(investigation) : close_investigation_status_path(investigation)
+    status_link_text = investigation.is_closed? ? "Re-open" : "Close"
+
+    {
+      items: [
+        href: status_path,
+        text: status_link_text,
+        visuallyHiddenText: " the case"
+      ]
+    }
+  end
+
+  def case_owner_actions(investigation, user)
+    return {} unless policy(investigation).change_owner_or_status?
+
+    {
+      items: [
+        href: new_investigation_ownership_path(investigation),
+        text: "Change",
+        visuallyHiddenText: " the case owner"
+      ]
+    }
+  end
+
+  def case_restriction_actions(investigation, user)
+    return {} unless policy(investigation).change_owner_or_status?
+    case_restriction_path = investigation.is_private ? unrestrict_investigation_visibility_path(investigation) : restrict_investigation_visibility_path(investigation)
+
+    {
+      items: [
+        href: case_restriction_path,
+        text: "Change",
+        visuallyHiddenText: " the case owner"
+      ]
+    }
+  end
+
+  def risk_level_actions(investigation, user)
+    return {} unless policy(investigation).update?(user:)
+
+    {
+        items: [
+          href: investigation_risk_level_path(investigation),
+          text: "Change",
+          visuallyHiddenText: " the risk level"
+        ]
+      }
+  end
+
+  def case_rows(investigation, user)
     rows = []
 
     rows << {
       key: { text: "Case name"},
       value: { text: investigation.title },
-      actions: {
-        items: [
-          href: edit_investigation_case_names_path(@investigation.pretty_id),
-          text: "Edit",
-          visuallyHiddenText: " the case name"
-        ]
-      }
+      actions: case_name_actions(investigation, user)
     }
 
     rows << {
-      key: { text: investigation.type },
+      key: { text: investigation.case_type.capitalize },
       value: { 
         text: investigation.pretty_id,
         secondary_text: { html: '<span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><span class="govuk-visually-hidden"> - </span>Case number</span>' }
@@ -180,13 +261,7 @@ module InvestigationsHelper
         text: investigation.complainant_reference,
         secondary_text: { text: "Trading standards reference" }
       },
-      actions: {
-        items: [
-          href: edit_investigation_reference_numbers_path(@investigation.pretty_id),
-          text: "Edit",
-          visuallyHiddenText: " the reference number"
-        ]
-      }
+      actions: reference_actions(investigation, user)
     }
 
     rows << {
@@ -194,30 +269,24 @@ module InvestigationsHelper
       value: {
         text: investigation.description
       },
-      actions: {
-        items: [
-          href: edit_investigation_summary_path(@investigation.pretty_id),
-          text: "Edit",
-          visuallyHiddenText: " the summary"
-        ]
-      }
+      actions: summary_actions(investigation, user)
     }
 
-    status_link = investigation.is_closed? ? reopen_investigation_status_path(@investigation) : close_investigation_status_path(@investigation)
-    status_link_text = investigation.is_closed? ? "Re-open" : "Close"
+    status_value = if investigation.is_closed?
+      status_value = {
+        html: '<span class="opss-tag opss-tag--risk3">Case closed</span>'.html_safe,
+        secondary_text: {text: investigation.date_closed.to_s(:govuk)}
+      }
+    else
+      {
+        text: "Open"
+      }
+    end
 
     rows << {
       key: { text: "Status" },
-      value: {
-        text: investigation.status
-      },
-      actions: {
-        items: [
-          href: status_link,
-          text: status_link_text,
-          visuallyHiddenText: " this case"
-        ]
-      }
+      value: status_value,
+      actions: status_actions(investigation, user)
     }
     
     rows << {
@@ -239,30 +308,17 @@ module InvestigationsHelper
       value: {
         text: investigation_owner(investigation)
       },
-      actions: {
-        items: [
-          href: new_investigation_ownership_path(investigation),
-          text: "Change",
-          visuallyHiddenText: " the case owner"
-        ]
-      }
+      actions: case_owner_actions(investigation, user)
     }
 
     case_restriction_html = @investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : 'Unrestricted'
-    case_restriction_path = investigation.is_private ? unrestrict_investigation_visibility_path(investigation) : restrict_investigation_visibility_path(investigation)
 
     rows << {
       key: { text: "Case restriction" },
       value: {
         html: case_restriction_html
       },
-      actions: {
-        items: [
-          href: case_restriction_path,
-          text: "Change",
-          visuallyHiddenText: " the case restriction"
-        ]
-      }
+      actions: case_restriction_actions(investigation, user)
     }
 
     case_risk_level_value = investigation.risk_level == "serious" ? '<span class="opss-tag opss-tag--risk1 opss-tag--lrg">Serious risk<span class="opss-tag opss-tag--risk1 opss-tag--lrg">'.html_safe : investigation.risk_level_description
@@ -272,13 +328,7 @@ module InvestigationsHelper
       value: {
         html: case_risk_level_value
       },
-      actions: {
-        items: [
-          href: investigation_risk_level_path(investigation),
-          text: "Change",
-          visuallyHiddenText: " the risk level"
-        ]
-      }
+      actions: risk_level_actions(investigation, user)
     }
 
     if investigation.coronavirus_related
@@ -317,20 +367,6 @@ module InvestigationsHelper
           href: edit_investigation_reference_numbers_path(investigation.pretty_id),
           text: "Edit",
           visuallyHiddenText: "reference number"
-        ]
-      }
-    else
-      {}
-    end
-  end
-
-  def case_name_actions(investigation, user)
-    if policy(investigation).update?(user:)
-      {
-        items: [
-          href: edit_investigation_case_names_path(investigation.pretty_id),
-          text: "Edit",
-          visuallyHiddenText: "case name"
         ]
       }
     else
