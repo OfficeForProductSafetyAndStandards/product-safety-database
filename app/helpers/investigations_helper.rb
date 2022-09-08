@@ -149,6 +149,11 @@ module InvestigationsHelper
           html: case_risk_level_value(investigation)
         },
         actions: risk_level_actions(investigation, user)
+      },
+      {
+        key: { text: t("investigations.risk_validation.page_title") },
+        value: { text: risk_validated_value(investigation) },
+        actions: risk_validation_actions(investigation, user)
       }
     ]
 
@@ -305,6 +310,18 @@ private
     }
   end
 
+  def risk_validation_actions(investigation, user)
+    return {} unless policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
+
+    {
+      items: [
+        href: edit_investigation_risk_validations_path(investigation.pretty_id),
+        text: risk_validated_link_text(investigation)
+      ]
+    }
+  end
+
+
   def status_value(investigation)
     if investigation.is_closed?
       {
@@ -324,5 +341,13 @@ private
 
   def case_risk_level_value(investigation)
     investigation.risk_level == "serious" ? '<span class="opss-tag opss-tag--risk1 opss-tag--lrg">Serious risk</span>'.html_safe : investigation.risk_level_description
+  end
+
+  def risk_validated_value(investigation)
+    if investigation.risk_validated_by
+                          t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at.strftime("%d %B %Y"))
+                        else
+                          t("investigations.risk_validation.not_validated")
+                        end
   end
 end
