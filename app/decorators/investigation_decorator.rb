@@ -67,6 +67,7 @@ class InvestigationDecorator < ApplicationDecorator
 
   def created_by
     return if creator_user.nil?
+
     "#{creator_user.full_name} - #{creator_user.team.name}"
   end
 

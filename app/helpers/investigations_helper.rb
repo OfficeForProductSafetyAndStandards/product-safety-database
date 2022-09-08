@@ -43,7 +43,7 @@ module InvestigationsHelper
     }
   end
 
-  def safety_and_compliance_rows(investigation, user)
+  def safety_and_compliance_rows(investigation)
     rows = []
 
     reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided
@@ -78,7 +78,7 @@ module InvestigationsHelper
   def case_rows(investigation, user, team_list_html)
     rows = [
       {
-        key: { text: "Case name"},
+        key: { text: "Case name" },
         value: { text: investigation.title },
         actions: case_name_actions(investigation, user)
       },
@@ -113,7 +113,7 @@ module InvestigationsHelper
       {
         key: { text: "Last updated" },
         value: {
-          text:  "#{time_ago_in_words(@investigation.updated_at)} ago"
+          text: "#{time_ago_in_words(@investigation.updated_at)} ago"
         }
       },
       {
@@ -134,7 +134,7 @@ module InvestigationsHelper
         value: {
           html: team_list_html
         },
-        actions: case_teams_actions(investigation, user)
+        actions: case_teams_actions(investigation)
       },
       {
         key: { text: "Case restriction" },
@@ -153,7 +153,7 @@ module InvestigationsHelper
     ]
 
     if investigation.coronavirus_related
-        rows << {
+      rows << {
         key: { text: "COVID-19" },
         value: {
           html: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe
@@ -243,7 +243,8 @@ private
   end
 
   def status_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?
+    return {} unless policy(investigation).change_owner_or_status?(user:)
+
     status_path = investigation.is_closed ? reopen_investigation_status_path(investigation) : close_investigation_status_path(investigation)
     status_link_text = investigation.is_closed? ? "Re-open" : "Close"
 
@@ -257,7 +258,7 @@ private
   end
 
   def case_owner_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?
+    return {} unless policy(investigation).change_owner_or_status?(user:)
 
     {
       items: [
@@ -268,7 +269,7 @@ private
     }
   end
 
-  def case_teams_actions(investigation, user)
+  def case_teams_actions(investigation)
     return {} unless policy(investigation).manage_collaborators?
 
     {
@@ -281,7 +282,7 @@ private
   end
 
   def case_restriction_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?
+    return {} unless policy(investigation).change_owner_or_status?(user:)
 
     {
       items: [
@@ -296,19 +297,19 @@ private
     return {} unless policy(investigation).update?(user:)
 
     {
-        items: [
-          href: investigation_risk_level_path(investigation),
-          text: "Change",
-          visuallyHiddenText: " the risk level"
-        ]
-      }
+      items: [
+        href: investigation_risk_level_path(investigation),
+        text: "Change",
+        visuallyHiddenText: " the risk level"
+      ]
+    }
   end
 
   def status_value(investigation)
     if investigation.is_closed?
       {
         html: '<span class="opss-tag opss-tag--risk3">Case closed</span>'.html_safe,
-        secondary_text: {text: investigation.date_closed.to_s(:govuk)}
+        secondary_text: { text: investigation.date_closed.to_s(:govuk) }
       }
     else
       {
@@ -318,7 +319,7 @@ private
   end
 
   def case_restriction_value(investigation)
-    investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : 'Unrestricted'
+    investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : "Unrestricted"
   end
 
   def case_risk_level_value(investigation)

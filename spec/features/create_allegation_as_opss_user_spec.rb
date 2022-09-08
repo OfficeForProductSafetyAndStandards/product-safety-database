@@ -198,9 +198,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   end
 
   def expect_protected_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
-  #   expect(page).to have_css("p", text: contact_name)
-  #   expect(page).to have_css("p", text: contact_email)
-  #   expect(page).to have_css("p", text: contact_phone)
+    #   expect(page).to have_css("p", text: contact_name)
+    #   expect(page).to have_css("p", text: contact_email)
+    #   expect(page).to have_css("p", text: contact_phone)
   end
 
   def expect_protected_details_not_on_summary_page(contact_name:, contact_email:, contact_phone:)
