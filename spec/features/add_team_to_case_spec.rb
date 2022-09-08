@@ -17,7 +17,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
 
     visit "/cases/#{investigation.pretty_id}"
 
-    expect(page).not_to have_link("Change teams added to the case")
+    expect(page).not_to have_link("Change the teams added")
     expect(page).to have_link("View teams added to the case")
   end
 
@@ -26,7 +26,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
 
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Change teams added to the case"
+    click_link "Change the teams added"
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
