@@ -8,6 +8,7 @@ RSpec.feature "Changing the notifying country of a case", :with_stubbed_mailer, 
     before do
       user.roles.create!(name: "notifying_country_editor")
     end
+
     # skipping until the notifying country change is carried out on the new case page work.
     xit "can succesfully change pre-populated notifying_country" do
       investigation.update!(notifying_country: "country:GB-ENG")

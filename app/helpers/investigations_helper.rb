@@ -321,7 +321,6 @@ private
     }
   end
 
-
   def status_value(investigation)
     if investigation.is_closed?
       {
@@ -345,9 +344,9 @@ private
 
   def risk_validated_value(investigation)
     if investigation.risk_validated_by
-                          t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at.strftime("%d %B %Y"))
-                        else
-                          t("investigations.risk_validation.not_validated")
-                        end
+      t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at.strftime("%d %B %Y"))
+    else
+      t("investigations.risk_validation.not_validated")
+    end
   end
 end
