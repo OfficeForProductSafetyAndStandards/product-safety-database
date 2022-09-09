@@ -21,7 +21,7 @@
   hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" }
 ) %>
 
-<%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", hint: { text: "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required" }, items: items_for_authenticity(product_form) %>
+<%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", hint: { text: "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", classes: "govuk-!-font-size-16" }, items: items_for_authenticity(product_form) %>
 
 <% product_marking_fields = capture do %>
   <%= form.govuk_checkboxes :markings,
