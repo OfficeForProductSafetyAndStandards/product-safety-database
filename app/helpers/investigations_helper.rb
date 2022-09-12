@@ -101,7 +101,7 @@ module InvestigationsHelper
       {
         key: { text: "Summary" },
         value: {
-          text: investigation.description
+          html: summary_html(investigation)
         },
         actions: summary_actions(investigation, user)
       },
@@ -348,5 +348,9 @@ private
     else
       t("investigations.risk_validation.not_validated")
     end
+  end
+
+  def summary_html(investigation)
+    "<span class='opss-text-limit-scroll-s'>#{investigation.object.description}</span>".html_safe
   end
 end
