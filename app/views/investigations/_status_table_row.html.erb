@@ -34,6 +34,10 @@
   </th>
   <td headers="<%= dom_id investigation, :item %> <%= dom_id investigation, :status %>" colspan="4" class="govuk-table__cell">
     <%= tag.span investigation.case_type.upcase_first, class: class_names("opss-tag", "opss-tag--std", investigation.is_closed? && "opss-cross-through") %>
+    <% if investigation.products.count.zero? %>
+      <span class="govuk-visually-hidden"> | </span>
+      <span class="opss-tag opss-tag--risk4">This case has no product</span>
+    <% end %>
     <% badges.each do |badge| %>
       <span class="govuk-visually-hidden"> | </span>
       <%= badge %>
