@@ -151,7 +151,7 @@ module Investigations::DisplayTextHelper
     owner_names.uniq!
     owner_names.compact!
 
-    safe_join(owner_names, " - ".html_safe)
+    safe_join(owner_names, " - ")
   end
 
   def business_summary_list(business)
