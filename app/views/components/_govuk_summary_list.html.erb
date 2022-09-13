@@ -24,6 +24,7 @@
           <% end %>
         </dd>
         <% if row.dig(:actions, :items)&.any? %>
+          <% row.dig(:actions, :items).each {|action| action.merge!(classes: "govuk-link--no-visited-state") } %>
           <dd class="<%= class_names("govuk-summary-list__actions", row.dig(:actions, :classes)) %>">
             <% if row.dig(:actions, :items).size == 1 %>
               <%= render "components/govuk_action_link", **row.dig(:actions, :items).first %>

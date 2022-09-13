@@ -14,14 +14,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
     sign_in user
     visit "/cases/#{investigation.pretty_id}"
 
-    # Navigate via the action bar
-    click_link "Actions"
-    expect_to_be_on_case_actions_page(case_id: investigation.pretty_id)
-
-    within_fieldset "Select an action" do
-      choose "Close case"
-    end
-    click_button "Continue"
+    click_link "Close the case"
 
     expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
 
@@ -42,7 +35,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect_confirmation_banner("Allegation was closed")
-    expect(page).to have_summary_item(key: "Status", value: "Closed")
+    expect(page).to have_summary_item(key: "Status", value: "Case closed #{Date.current.to_s(:govuk)}")
 
     click_link "Activity"
 
@@ -55,20 +48,6 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
     expect(page).to have_css("h1", text: "Close case")
     expect(page).to have_css("p", text: "The allegation is already closed. Do you want to re-open it?")
 
-    visit "/cases/#{investigation.pretty_id}"
-
-    # Navigate via the action bar
-    click_link "Actions"
-    expect_to_be_on_case_actions_page(case_id: investigation.pretty_id)
-
-    within_fieldset "Select an action" do
-      choose "Re-open case"
-    end
-    click_button "Continue"
-
-    expect_to_be_on_reopen_case_page(case_id: investigation.pretty_id)
-
-    # Navigate via the case overview table
     visit "/cases/#{investigation.pretty_id}"
 
     within("div.opss-text-align-right") do

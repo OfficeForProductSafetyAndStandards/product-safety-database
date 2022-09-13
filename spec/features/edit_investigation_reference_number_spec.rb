@@ -11,7 +11,7 @@ RSpec.feature "Edit an investigation's reference number", :with_stubbed_opensear
     sign_in(team_mate)
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Edit reference number"
+    click_link "Edit the reference number"
 
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}/reference_numbers/edit", ignore_query: true
     expect(page).to have_css("h1", text: "Edit the reference number")
@@ -25,12 +25,6 @@ RSpec.feature "Edit an investigation's reference number", :with_stubbed_opensear
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}", ignore_query: true
     expect(page).to have_content "Reference number was successfully updated"
 
-    expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: new_reference_number)
-
-    click_link "Activity"
-
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Reference number updated")
-    expect(page).to have_content("Reference number: #{new_reference_number}")
+    expect(page.find("dt", text: "Reference")).to have_sibling("dd", text: new_reference_number)
   end
 end

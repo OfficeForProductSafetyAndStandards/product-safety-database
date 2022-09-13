@@ -141,11 +141,11 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
   end
 
   def expect_summary_page_to_contain_correct_data
-    expect(page).to have_css("p", text: case_name)
-    expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
+    expect(page.find("dt", text: "Case name")).to have_sibling("dd", text: case_name)
+    expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as unsafe and non-compliant")
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
     expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliant_reason)
-    expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: reference_number)
+    expect(page.find("dt", text: "Reference")).to have_sibling("dd", text: reference_number)
   end
 end

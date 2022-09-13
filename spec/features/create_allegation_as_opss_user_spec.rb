@@ -84,8 +84,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       })
       expect(delivered_emails.last.template).to eq "b5457546-9633-4a9c-a844-b61f2e818c24"
 
-      expect_details_on_summary_page
-      expect_protected_details_on_summary_page(**contact_details)
+      # TODO: e-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_on_summary_page(**contact_details)
 
       click_link "Products (0)"
       click_link "Add product"
@@ -112,8 +113,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
 
       visit "/cases/#{investigation.pretty_id}"
 
-      expect_details_on_summary_page
-      expect_protected_details_not_on_summary_page(**contact_details)
+      # TODO: e-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_not_on_summary_page(**contact_details)
 
       click_link "Activity"
 
@@ -127,8 +129,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
 
       visit "/cases/#{investigation.pretty_id}"
 
-      expect_details_on_summary_page
-      expect_protected_details_on_summary_page(**contact_details)
+      # TODO: e-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_on_summary_page(**contact_details)
 
       click_link "Activity"
 

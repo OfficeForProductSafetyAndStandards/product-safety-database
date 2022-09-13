@@ -23,7 +23,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_button "Save"
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Non-compliant")
+        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as non-compliant")
         expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text:  "No one really knows")
 
         expect(page).not_to have_css("dt", text: "Primary hazard")
@@ -49,7 +49,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_button "Save"
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe")
+        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as unsafe")
         expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: "Cuts")
         expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: "Far too sharp")
 
@@ -69,7 +69,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_button "Continue"
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Safe and compliant")
+        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as safe and compliant")
 
         expect(page).not_to have_css("dt", text: "Primary hazard")
         expect(page).not_to have_css("dt", text: "Hazard description")
@@ -93,7 +93,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_link "Cancel"
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
+        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as unsafe and non-compliant")
       end
     end
   end
@@ -129,7 +129,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
         click_button "Save"
 
-        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
+        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as unsafe and non-compliant")
         expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: "Cuts")
         expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: "Far too sharp")
 
@@ -147,7 +147,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
   def sign_in_and_visit_investigation_page
     sign_in user
     visit "/cases/#{investigation.pretty_id}"
-    expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
+    expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as unsafe and non-compliant")
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: investigation.hazard_type)
     expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: investigation.hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: investigation.non_compliant_reason)

@@ -9,7 +9,7 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
 
       it "displays their team name as well as their name" do
         result = helper.investigation_owner(investigation)
-        expect(result).to eq("John Doe<br>Southampton Council")
+        expect(result).to eq("John Doe - Southampton Council")
       end
     end
 

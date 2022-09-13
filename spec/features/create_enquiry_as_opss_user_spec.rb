@@ -67,8 +67,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
 
       expect_page_to_have_h1("Case")
 
-      expect_details_on_summary_page
-      expect_protected_details_on_summary_page(**contact_details)
+      # TODO: re-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_on_summary_page(**contact_details)
 
       click_on "Activity"
       expect_details_on_activity_page(contact_details, enquiry_details)
@@ -82,8 +83,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
 
       visit "/cases/#{investigation.pretty_id}"
 
-      expect_details_on_summary_page
-      expect_protected_details_not_on_summary_page(**contact_details)
+      # TODO: re-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_not_on_summary_page(**contact_details)
 
       click_on "Activity"
 
@@ -97,8 +99,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
 
       visit "/cases/#{investigation.pretty_id}"
 
-      expect_details_on_summary_page
-      expect_protected_details_on_summary_page(**contact_details)
+      # TODO: re-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_on_summary_page(**contact_details)
 
       click_on "Activity"
 

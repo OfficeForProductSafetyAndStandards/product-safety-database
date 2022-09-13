@@ -52,7 +52,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     expect_confirmation_banner("Case risk level set to serious risk")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Serious risk")
-    expect(page).to have_css(".app-badge--risk-serious", text: "Serious risk case")
+    expect(page).to have_css("span.opss-tag--risk1", text: "Serious risk")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
@@ -166,10 +166,10 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
   end
 
   def click_change_risk_level_link
-    click_link "Change risk level"
+    click_link "Change the risk level"
   end
 
   def click_set_risk_level_link
-    click_link "Set risk level"
+    click_link "Change the risk level"
   end
 end

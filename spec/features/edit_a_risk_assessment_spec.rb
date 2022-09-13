@@ -31,7 +31,8 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     sign_in(user)
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "View risk assessment"
+    click_link "Supporting information (1)"
+    click_link "Serious risk: Teddy Bear"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
 

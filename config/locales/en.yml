@@ -179,10 +179,16 @@ en:
         primary_hazard: Primary hazard
         description: Hazard description
         compliance: Compliance
-        unsafe: Unsafe
-        non_compliant: Non-compliant
-        unsafe_and_non_compliant: Unsafe and non-compliant
-        safe_and_compliant: Safe and compliant
+        activity_log:
+          unsafe: Unsafe
+          non_compliant: Non-compliant
+          unsafe_and_non_compliant: Unsafe and non-compliant
+          safe_and_compliant: Safe and compliant
+          not_provided: Not provided
+        unsafe: Product reported as unsafe
+        non_compliant: Product reported as non-compliant
+        unsafe_and_non_compliant: Product reported as unsafe and non-compliant
+        safe_and_compliant: Product reported as safe and compliant
         not_provided: Not provided
       risk_assessments:
         key:
