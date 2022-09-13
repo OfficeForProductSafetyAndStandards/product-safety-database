@@ -158,7 +158,7 @@ module PageExpectations
 
   def expect_to_be_on_add_product_to_investigation_page(investigation)
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products/new")
-    expect(page).to have_selector("h1", text: investigation.user_title)
+    expect(page).to have_selector("h1", text: "Create a product record")
   end
 
   def expect_to_be_on_case_products_page

@@ -457,12 +457,6 @@ en:
               too_short: "The barcode must be between 5 and 15 digits"
               only_integer: "Enter a valid barcode number"
               not_a_number: "Enter a valid barcode number"
-            affected_units_status:
-              inclusion: "You must state how many units are affected"
-            approx_units:
-              not_a_number: "Give the number of units affected"
-            exact_units:
-              not_a_number: "Give the number of units affected"
             has_markings:
               inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
             markings:
