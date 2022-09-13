@@ -25,7 +25,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
     click_on "Save"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("p", text: "new summary")
+    expect(page).to have_css("span", text: "new summary")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
