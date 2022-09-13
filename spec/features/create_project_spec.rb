@@ -35,6 +35,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
       expect_page_to_have_h1("Case")
       expect(page.find("dt", text: "Case name")).to have_sibling("dd", text: title)
       expect(page.find("dt", text: "Summary")).to have_sibling("dd", text: summary)
+      # TODO: Re-introduce this test when notifying country is re-introduced into the summary page.
       # expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
 
       click_on "Activity"

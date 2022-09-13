@@ -85,8 +85,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       })
       expect(delivered_emails.last.template).to eq "b5457546-9633-4a9c-a844-b61f2e818c24"
 
-      expect_details_on_summary_page
-      expect_protected_details_on_summary_page(**contact_details)
+      # TODO: e-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_on_summary_page(**contact_details)
 
       click_link "Products (0)"
       click_link "Add product"
@@ -113,8 +114,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
 
       visit "/cases/#{investigation.pretty_id}"
 
-      expect_details_on_summary_page
-      expect_protected_details_not_on_summary_page(**contact_details)
+      # TODO: e-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_not_on_summary_page(**contact_details)
 
       click_link "Activity"
 
@@ -128,8 +130,9 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
 
       visit "/cases/#{investigation.pretty_id}"
 
-      expect_details_on_summary_page
-      expect_protected_details_on_summary_page(**contact_details)
+      # TODO: e-introduce these assertions when source type and notifying country info is re-introduced on summary page
+      # expect_details_on_summary_page
+      # expect_protected_details_on_summary_page(**contact_details)
 
       click_link "Activity"
 
@@ -193,14 +196,14 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
   end
 
   def expect_details_on_summary_page
-    # expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
-    # expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
+    expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
+    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
   end
 
   def expect_protected_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
-    #   expect(page).to have_css("p", text: contact_name)
-    #   expect(page).to have_css("p", text: contact_email)
-    #   expect(page).to have_css("p", text: contact_phone)
+      expect(page).to have_css("p", text: contact_name)
+      expect(page).to have_css("p", text: contact_email)
+      expect(page).to have_css("p", text: contact_phone)
   end
 
   def expect_protected_details_not_on_summary_page(contact_name:, contact_email:, contact_phone:)

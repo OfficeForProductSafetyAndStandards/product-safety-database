@@ -39,7 +39,7 @@ RSpec.feature "Changing the notifying country of a case", :with_stubbed_mailer, 
   def sign_in_and_visit_change_notifying_country_page(country)
     sign_in user
     visit "/cases/#{investigation.pretty_id}"
-    # expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: country)
+    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: country)
     click_link "Change notifying_country"
     expect(page).to have_css("h1", text: "Change notifying country")
     expect(page).to have_select("Notifying country", selected: country)
