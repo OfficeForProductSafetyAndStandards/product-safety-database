@@ -99,7 +99,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
 
       visit "/cases/#{investigation.pretty_id}"
 
-
       # TODO: re-introduce these assertions when source type and notifying country info is re-introduced on summary page
       # expect_details_on_summary_page
       # expect_protected_details_on_summary_page(**contact_details)
