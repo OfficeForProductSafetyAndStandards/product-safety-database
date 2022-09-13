@@ -273,8 +273,6 @@ ul.opss-radio-list {
         color: govuk-colour("red");
         text-transform: none;
 
-        /* &::before {content: '*** '; vertical-align: middle; }
-        &::after {content: ' ***'; vertical-align: middle; } */
     }
     &.opss-tag--plain {
         @include opss-font-size($s: 14px, $l: 1.3);
