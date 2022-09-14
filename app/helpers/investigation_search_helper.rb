@@ -74,7 +74,7 @@ private
   end
 
   def get_hazard_type_filter
-    return unless @search.hazard_type
+    return if @search.hazard_type.blank?
 
     { term: { hazard_type: @search.hazard_type } }
   end
