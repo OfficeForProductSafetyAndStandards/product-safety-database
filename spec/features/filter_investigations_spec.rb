@@ -11,10 +11,10 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation:, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
-  let!(:investigation)                       { create(:allegation, creator: user) }
-  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
+  let!(:investigation)                       { create(:allegation, creator: user, hazard_type: "Fire") }
+  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team, hazard_type: "Fire" ) }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
-  let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team) }
+  let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team, hazard_type: "Fire") }
   let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
 
   let!(:closed_investigation) { create(:allegation, :closed) }
@@ -303,6 +303,24 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
           expect(find("details#filter-details")["open"]).to eq("open")
         end
+      end
+    end
+
+    describe "Hazard type" do
+      scenario "filtering by a hazard type" do
+        select "Fire", from: "Hazard type"
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
+
+        number_of_total_cases = Investigation.where(hazard_type: "Fire").count
+        expect(page).to have_content("#{number_of_total_cases} cases using the current filters, were found.")
+
+        expect(find("details#filter-details")["open"]).to eq(nil)
       end
     end
 
