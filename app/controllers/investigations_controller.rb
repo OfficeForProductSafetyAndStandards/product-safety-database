@@ -122,7 +122,7 @@ private
 
   def default_params
     [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access], params[:hazard_type]].each do |param_value|
-      return false unless ["all", nil].include? param_value
+      return false unless ["all", nil, ""].include? param_value
     end
 
     params["case_status"] == "all" && params[:q].blank?
