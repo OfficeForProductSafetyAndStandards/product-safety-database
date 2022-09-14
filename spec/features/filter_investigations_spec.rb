@@ -12,7 +12,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
   let!(:investigation)                       { create(:allegation, creator: user, hazard_type: "Fire") }
-  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team, hazard_type: "Fire" ) }
+  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team, hazard_type: "Fire") }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
   let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team, hazard_type: "Fire") }
   let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
