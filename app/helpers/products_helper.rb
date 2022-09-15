@@ -20,7 +20,7 @@ module ProductsHelper
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
-    params.require(:product).permit(ALLOWED_PARAMS_FOR_CREATE).with_defaults(markings: [])
+    params.require(:product).permit(PARAMS_FOR_CREATE).with_defaults(markings: [])
   end
 
   def product_params_for_update
