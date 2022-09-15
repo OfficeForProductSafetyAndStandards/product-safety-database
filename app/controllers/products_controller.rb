@@ -44,7 +44,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       @product_form = ProductForm.from(product)
-      @product_form.attributes = product_params
+      @product_form.attributes = product_params_for_update
 
       if @product_form.valid?
         format.html do
@@ -54,7 +54,7 @@ class ProductsController < ApplicationController
             updating_team: current_user.team
           )
 
-          redirect_to product_path(product), flash: { success: "Product was successfully updated." }
+          redirect_to product_path(product), flash: { success: "The product record was updated" }
         end
         format.json { render :show, status: :ok, location: product }
       else

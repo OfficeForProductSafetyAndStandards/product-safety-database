@@ -59,6 +59,10 @@ class ProductForm
     super
   end
 
+  def authenticity_unsure?
+    authenticity == "unsure"
+  end
+
 private
 
   def markings_validity
