@@ -43,7 +43,8 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
   context "when there are cases" do
     let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: }
-    let!(:user_case) { create(:allegation, creator: user) }
+    let!(:user_case) { create(:allegation, :with_products, creator: user) }
+    let!(:user_case_without_products) { create(:allegation, creator: user) }
     let!(:other_case) { create(:allegation) }
     let!(:team_case) { create(:allegation, creator: other_user_same_team) }
 
@@ -58,8 +59,19 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       it "shows cases that are owned by the user" do
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: user_case_without_products.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
+      end
+
+      it 'indicates which cases do not have a product attached' do
+        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case.id}) do
+          expect(page).not_to have_content("This case has no product")
+        end
+
+        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case_without_products.id}) do
+          expect(page).to have_content("This case has no product")
+        end
       end
 
       context "when less than 12 cases" do
@@ -100,6 +112,18 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
         expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
+      end
+
+      it 'indicates which cases do not have a product attached' do
+        click_on "All cases"
+        click_on "Team cases"
+        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case.id}) do
+          expect(page).not_to have_content("This case has no product")
+        end
+
+        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case_without_products.id}) do
+          expect(page).to have_content("This case has no product")
+        end
       end
 
       context "when less than 12 cases" do
