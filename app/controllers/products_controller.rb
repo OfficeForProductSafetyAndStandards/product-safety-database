@@ -64,16 +64,6 @@ class ProductsController < ApplicationController
     end
   end
 
-  # DELETE /products/1
-  # DELETE /products/1.json
-  def destroy
-    @product.destroy!
-    respond_to do |format|
-      format.html { redirect_to products_path, flash: { success: "Product was successfully deleted." } }
-      format.json { head :no_content }
-    end
-  end
-
   def your_products
     @search = SearchParams.new({ "case_owner" => "me",
                                  "case_status" => "open_only",
