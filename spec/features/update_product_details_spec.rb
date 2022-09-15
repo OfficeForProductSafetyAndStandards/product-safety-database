@@ -24,7 +24,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_op
 
     expect_to_be_on_edit_product_page(product_id: product.id, product_name: "Washing machine")
 
-    expect(page).to have_field("Product category", with: "Electrical appliances and equipment")
+    expect(page).to have_field("Product category", with: "Electrical appliances and equipment", disabled: true)
     expect(page).to have_field("Product subcategory", with: "washing machine")
     expect(page).to have_field("Manufacturer's brand name", with: "MyBrand", disabled: true)
     expect(page).to have_field("Product name", with: "Washing machine", disabled: true)
