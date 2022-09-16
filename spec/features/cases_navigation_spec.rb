@@ -64,12 +64,12 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).not_to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
       end
 
-      it 'indicates which cases do not have a product attached' do
-        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case.id}) do
+      it "indicates which cases do not have a product attached" do
+        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case.id)) do
           expect(page).not_to have_content("This case has no product")
         end
 
-        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case_without_products.id}) do
+        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case_without_products.id)) do
           expect(page).to have_content("This case has no product")
         end
       end
@@ -114,14 +114,14 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
       end
 
-      it 'indicates which cases do not have a product attached' do
+      it "indicates which cases do not have a product attached" do
         click_on "All cases"
         click_on "Team cases"
-        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case.id}) do
+        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case.id)) do
           expect(page).not_to have_content("This case has no product")
         end
 
-        within('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]' % {id: user_case_without_products.id}) do
+        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case_without_products.id)) do
           expect(page).to have_content("This case has no product")
         end
       end
