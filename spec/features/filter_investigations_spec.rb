@@ -319,8 +319,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
         number_of_total_cases = Investigation.where(hazard_type: "Fire").count
         expect(page).to have_content("#{number_of_total_cases} cases using the current filters, were found.")
-
-        expect(find("details#filter-details")["open"]).to eq(nil)
       end
     end
 
