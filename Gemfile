@@ -29,7 +29,7 @@ gem "net-pop"
 gem "net-smtp"
 
 gem "pg", "~> 1.4"
-gem "pghero", "~> 2.8"
+gem "pghero", "~> 3.0"
 gem "puma", "~> 5.6"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2.4"
