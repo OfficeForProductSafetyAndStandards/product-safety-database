@@ -59,7 +59,7 @@ group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
-  gem "parallel_tests", "~> 3.11.1"
+  gem "parallel_tests", "~> 3.12.1"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
@@ -88,7 +88,7 @@ group :test do
   gem "rspec-rails"
   gem "rubocop", "~> 1.35"
   gem "rubocop-govuk", "~> 4.7"
-  gem "rubocop-performance", "~> 1.14"
+  gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.12", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "selenium-webdriver", "~> 4.4"
