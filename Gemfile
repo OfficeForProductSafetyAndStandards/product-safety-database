@@ -49,7 +49,7 @@ gem "strong_migrations", "~> 1.3"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
-gem "wicked", "~> 1.4"
+gem "wicked", "~> 2.0"
 
 gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.3", require: "govuk_design_system"
 

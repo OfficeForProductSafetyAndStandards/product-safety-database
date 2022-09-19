@@ -267,7 +267,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     m (1.6.0)
@@ -613,7 +613,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    wicked (1.4.0)
+    wicked (2.0.0)
       railties (>= 3.0.7)
     xpath (3.2.0)
       nokogiri (~> 1.8)
@@ -708,7 +708,7 @@ DEPENDENCIES
   validate_email (~> 0.1)
   webmock (~> 3.18)
   webpacker (~> 5.4)
-  wicked (~> 1.4)
+  wicked (~> 2.0)
 
 RUBY VERSION
    ruby 3.1.1p18
