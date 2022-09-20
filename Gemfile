@@ -29,7 +29,7 @@ gem "net-pop"
 gem "net-smtp"
 
 gem "pg", "~> 1.4"
-gem "pghero", "~> 2.8"
+gem "pghero", "~> 3.0"
 gem "puma", "~> 5.6"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2.4"
@@ -51,7 +51,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 2.0"
 
-gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.3", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.4", require: "govuk_design_system"
 
 gem "bootsnap"
 
