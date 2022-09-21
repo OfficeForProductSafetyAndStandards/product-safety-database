@@ -45,85 +45,85 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(2, 2)).to eq product.id.to_s
       expect(product_sheet.cell(3, 2)).to eq other_product.id.to_s
 
-      expect(product_sheet.cell(1, 4)).to eq "authenticity"
-      expect(product_sheet.cell(2, 4)).to eq product.authenticity
-      expect(product_sheet.cell(3, 4)).to eq other_product.authenticity
+      expect(product_sheet.cell(1, 3)).to eq "authenticity"
+      expect(product_sheet.cell(2, 3)).to eq product.authenticity
+      expect(product_sheet.cell(3, 3)).to eq other_product.authenticity
 
-      expect(product_sheet.cell(1, 5)).to eq "barcode"
-      expect(product_sheet.cell(2, 5)).to eq product.barcode
-      expect(product_sheet.cell(3, 5)).to eq other_product.barcode
+      expect(product_sheet.cell(1, 4)).to eq "barcode"
+      expect(product_sheet.cell(2, 4)).to eq product.barcode
+      expect(product_sheet.cell(3, 4)).to eq other_product.barcode
 
-      expect(product_sheet.cell(1, 6)).to eq "brand"
-      expect(product_sheet.cell(2, 6)).to eq product.brand
-      expect(product_sheet.cell(3, 6)).to eq other_product.brand
+      expect(product_sheet.cell(1, 5)).to eq "brand"
+      expect(product_sheet.cell(2, 5)).to eq product.brand
+      expect(product_sheet.cell(3, 5)).to eq other_product.brand
 
-      expect(product_sheet.cell(1, 7)).to eq "case_ids"
-      expect(product_sheet.cell(2, 7)).to eq product.case_ids.to_s
-      expect(product_sheet.cell(3, 7)).to eq other_product.case_ids.to_s
+      expect(product_sheet.cell(1, 6)).to eq "case_ids"
+      expect(product_sheet.cell(2, 6)).to eq product.case_ids.to_s
+      expect(product_sheet.cell(3, 6)).to eq other_product.case_ids.to_s
 
-      expect(product_sheet.cell(1, 8)).to eq "category"
-      expect(product_sheet.cell(2, 8)).to eq product.category
-      expect(product_sheet.cell(3, 8)).to eq other_product.category
+      expect(product_sheet.cell(1, 7)).to eq "category"
+      expect(product_sheet.cell(2, 7)).to eq product.category
+      expect(product_sheet.cell(3, 7)).to eq other_product.category
 
-      expect(product_sheet.cell(1, 9)).to eq "country_of_origin"
-      expect(product_sheet.cell(2, 9)).to eq product.country_of_origin
-      expect(product_sheet.cell(3, 9)).to eq other_product.country_of_origin
+      expect(product_sheet.cell(1, 8)).to eq "country_of_origin"
+      expect(product_sheet.cell(2, 8)).to eq product.country_of_origin
+      expect(product_sheet.cell(3, 8)).to eq other_product.country_of_origin
 
-      expect(product_sheet.cell(1, 10)).to eq "created_at"
-      expect(product_sheet.cell(2, 10)).to eq product.created_at.to_s
-      expect(product_sheet.cell(3, 10)).to eq other_product.created_at.to_s
+      expect(product_sheet.cell(1, 9)).to eq "created_at"
+      expect(product_sheet.cell(2, 9)).to eq product.created_at.to_s
+      expect(product_sheet.cell(3, 9)).to eq other_product.created_at.to_s
 
-      expect(product_sheet.cell(1, 12)).to eq "description"
-      expect(product_sheet.cell(2, 12)).to eq product.description
-      expect(product_sheet.cell(3, 12)).to eq other_product.description
+      expect(product_sheet.cell(1, 10)).to eq "description"
+      expect(product_sheet.cell(2, 10)).to eq product.description
+      expect(product_sheet.cell(3, 10)).to eq other_product.description
 
-      expect(product_sheet.cell(1, 13)).to eq "has_markings"
-      expect(product_sheet.cell(2, 13)).to eq product.has_markings
-      expect(product_sheet.cell(3, 13)).to eq other_product.has_markings
+      expect(product_sheet.cell(1, 11)).to eq "has_markings"
+      expect(product_sheet.cell(2, 11)).to eq product.has_markings
+      expect(product_sheet.cell(3, 11)).to eq other_product.has_markings
 
-      expect(product_sheet.cell(1, 14)).to eq "markings"
-      expect(product_sheet.cell(2, 14)).to eq product.markings
-      expect(product_sheet.cell(3, 14)).to eq other_product.markings
+      expect(product_sheet.cell(1, 12)).to eq "markings"
+      expect(product_sheet.cell(2, 12)).to eq product.markings
+      expect(product_sheet.cell(3, 12)).to eq other_product.markings
 
-      expect(product_sheet.cell(1, 15)).to eq "name"
-      expect(product_sheet.cell(2, 15)).to eq product.name
-      expect(product_sheet.cell(3, 15)).to eq other_product.name
+      expect(product_sheet.cell(1, 13)).to eq "name"
+      expect(product_sheet.cell(2, 13)).to eq product.name
+      expect(product_sheet.cell(3, 13)).to eq other_product.name
 
-      expect(product_sheet.cell(1, 17)).to eq "product_code"
-      expect(product_sheet.cell(2, 17)).to eq product.product_code
-      expect(product_sheet.cell(3, 17)).to eq other_product.product_code
+      expect(product_sheet.cell(1, 14)).to eq "product_code"
+      expect(product_sheet.cell(2, 14)).to eq product.product_code
+      expect(product_sheet.cell(3, 14)).to eq other_product.product_code
 
-      expect(product_sheet.cell(1, 18)).to eq "subcategory"
-      expect(product_sheet.cell(2, 18)).to eq product.subcategory
-      expect(product_sheet.cell(3, 18)).to eq other_product.subcategory
+      expect(product_sheet.cell(1, 15)).to eq "subcategory"
+      expect(product_sheet.cell(2, 15)).to eq product.subcategory
+      expect(product_sheet.cell(3, 15)).to eq other_product.subcategory
 
-      expect(product_sheet.cell(1, 19)).to eq "updated_at"
-      expect(product_sheet.cell(2, 19)).to eq product.updated_at.to_s
-      expect(product_sheet.cell(3, 19)).to eq other_product.updated_at.to_s
+      expect(product_sheet.cell(1, 16)).to eq "updated_at"
+      expect(product_sheet.cell(2, 16)).to eq product.updated_at.to_s
+      expect(product_sheet.cell(3, 16)).to eq other_product.updated_at.to_s
 
-      expect(product_sheet.cell(1, 20)).to eq "webpage"
-      expect(product_sheet.cell(2, 20)).to eq product.webpage
-      expect(product_sheet.cell(3, 20)).to eq other_product.webpage
+      expect(product_sheet.cell(1, 17)).to eq "webpage"
+      expect(product_sheet.cell(2, 17)).to eq product.webpage
+      expect(product_sheet.cell(3, 17)).to eq other_product.webpage
 
-      expect(product_sheet.cell(1, 21)).to eq "when_placed_on_market"
-      expect(product_sheet.cell(2, 21)).to eq product.when_placed_on_market
-      expect(product_sheet.cell(3, 21)).to eq other_product.when_placed_on_market
+      expect(product_sheet.cell(1, 18)).to eq "when_placed_on_market"
+      expect(product_sheet.cell(2, 18)).to eq product.when_placed_on_market
+      expect(product_sheet.cell(3, 18)).to eq other_product.when_placed_on_market
 
-      expect(product_sheet.cell(1, 22)).to eq "reported_reason"
-      expect(product_sheet.cell(2, 22)).to eq product.investigations.first.reported_reason
-      expect(product_sheet.cell(3, 22)).to eq other_product.investigations.first.reported_reason
+      expect(product_sheet.cell(1, 19)).to eq "reported_reason"
+      expect(product_sheet.cell(2, 19)).to eq product.investigations.first.reported_reason
+      expect(product_sheet.cell(3, 19)).to eq other_product.investigations.first.reported_reason
 
-      expect(product_sheet.cell(1, 23)).to eq "hazard_type"
-      expect(product_sheet.cell(2, 23)).to eq product.investigations.first.hazard_type
-      expect(product_sheet.cell(3, 23)).to eq other_product.investigations.first.hazard_type
+      expect(product_sheet.cell(1, 20)).to eq "hazard_type"
+      expect(product_sheet.cell(2, 20)).to eq product.investigations.first.hazard_type
+      expect(product_sheet.cell(3, 20)).to eq other_product.investigations.first.hazard_type
 
-      expect(product_sheet.cell(1, 24)).to eq "non_compliant_reason"
-      expect(product_sheet.cell(2, 24)).to eq product.investigations.first.non_compliant_reason
-      expect(product_sheet.cell(3, 24)).to eq other_product.investigations.first.non_compliant_reason
+      expect(product_sheet.cell(1, 21)).to eq "non_compliant_reason"
+      expect(product_sheet.cell(2, 21)).to eq product.investigations.first.non_compliant_reason
+      expect(product_sheet.cell(3, 21)).to eq other_product.investigations.first.non_compliant_reason
 
-      expect(product_sheet.cell(1, 25)).to eq "risk_level"
-      expect(product_sheet.cell(2, 25)).to eq product.investigations.first.risk_level
-      expect(product_sheet.cell(3, 25)).to eq other_product.investigations.first.risk_level
+      expect(product_sheet.cell(1, 22)).to eq "risk_level"
+      expect(product_sheet.cell(2, 22)).to eq product.investigations.first.risk_level
+      expect(product_sheet.cell(3, 22)).to eq other_product.investigations.first.risk_level
 
       expect(test_result_sheet.cell(1, 1)).to eq "psd_ref"
       expect(test_result_sheet.cell(2, 1)).to eq product.psd_ref
