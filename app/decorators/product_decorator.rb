@@ -59,21 +59,6 @@ class ProductDecorator < ApplicationDecorator
     end
   end
 
-  def units_affected
-    case object.affected_units_status
-    when "exact"
-      object.number_of_affected_units
-    when "approx"
-      object.number_of_affected_units
-    when "unknown"
-      I18n.t(".product.unknown")
-    when "not_relevant"
-      I18n.t(".product.not_relevant")
-    else
-      I18n.t(".product.not_provided")
-    end
-  end
-
   def markings
     return I18n.t(".product.not_provided") unless object.has_markings
     return I18n.t(".product.unknown") if object.markings_unknown?

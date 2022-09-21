@@ -50,7 +50,7 @@ module InvestigationOpensearch
             only: %i[legal_name trading_name company_number]
           },
           products: {
-            only: %i[category description brand name product_code subcategory batch_number barcode]
+            only: %i[category description brand name product_code subcategory barcode]
           },
           complainant: {
             only: %i[name phone_number email_address other_details]

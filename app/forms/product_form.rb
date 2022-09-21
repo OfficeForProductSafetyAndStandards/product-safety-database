@@ -39,7 +39,7 @@ class ProductForm
   validate :markings_validity, if: -> { has_markings == "markings_yes" }
 
   def self.from(product)
-    new(product.serializable_hash(except: %i[affected_units_status batch_number customs_code number_of_affected_units owning_team_id updated_at]))
+    new(product.serializable_hash(except: %i[owning_team_id updated_at]))
   end
 
   def authenticity_not_provided?

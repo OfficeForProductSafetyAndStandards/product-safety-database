@@ -74,21 +74,17 @@ private
     sheet = package.workbook.add_worksheet name: "product_info"
     sheet.add_row %w[psd_ref
                      ID
-                     affected_units_status
                      authenticity
                      barcode
-                     batch_number
                      brand
                      case_ids
                      category
                      country_of_origin
                      created_at
-                     customs_code
                      description
                      has_markings
                      markings
                      name
-                     number_of_affected_units
                      product_code
                      subcategory
                      updated_at
@@ -145,21 +141,17 @@ private
     [
       product.psd_ref,
       product.id,
-      product.affected_units_status,
       product.authenticity,
       product.barcode,
-      product.batch_number,
       product.brand,
       product.case_ids,
       product.category,
       product.country_of_origin,
       product.created_at,
-      product.customs_code,
       product.description,
       product.has_markings,
       product.markings,
       product.name,
-      product.number_of_affected_units,
       product.product_code,
       product.subcategory,
       product.updated_at,

@@ -55,7 +55,6 @@ module DataImportHelper
       name: "#{brand(notification)}, #{name}, #{field_from_notification(notification, 'type_numberOfModel')}",
       description: field_from_notification(notification, "description"),
       category: field_from_notification(notification, "category"),
-      batch_number: field_from_notification(notification, "batchNumber_barcode"),
       country_of_origin: field_from_notification(notification, "countryOfOrigin"),
       source: ReportSource.new(name: "RAPEX")
     )
