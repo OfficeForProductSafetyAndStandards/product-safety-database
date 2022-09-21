@@ -1,4 +1,5 @@
 class MoveInvestigationProductFields < ActiveRecord::Migration[6.1]
+  # rubocop:disable Rails/BulkChangeTable
   def up
     add_column :investigation_products, :batch_number, :string
     add_column :investigation_products, :customs_code, :text
@@ -35,7 +36,8 @@ class MoveInvestigationProductFields < ActiveRecord::Migration[6.1]
               WHERE products.id = investigation_products.product_id")
 
     safety_assured do
-     remove_columns :investigation_products, :batch_number, :customs_code, :number_of_affected_units, :affected_units_status
+      remove_columns :investigation_products, :batch_number, :customs_code, :number_of_affected_units, :affected_units_status
     end
   end
+  # rubocop:enable Rails/BulkChangeTable
 end

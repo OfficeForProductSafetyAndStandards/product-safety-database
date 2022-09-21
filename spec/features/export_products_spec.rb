@@ -41,7 +41,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
 
     expect(spreadsheet.last_row).to eq(4)
     expect(spreadsheet.cell(2, 13)).to eq(product_1.name)
-    expect(spreadsheet.cell(3,13)).to eq(product_2.name)
+    expect(spreadsheet.cell(3, 13)).to eq(product_2.name)
     expect(spreadsheet.cell(4, 13)).to eq(hazardous_product.name)
   end
 

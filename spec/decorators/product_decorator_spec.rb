@@ -9,7 +9,6 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
     specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
   end
 
-
   describe "#summary_list" do
     include CountriesHelper
 
