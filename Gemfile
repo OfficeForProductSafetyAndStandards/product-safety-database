@@ -70,7 +70,7 @@ group :development do
   gem "m", "~> 1.6"
   gem "rails-erd"
   gem "solargraph", "~> 0.46"
-  gem "spring", "~> 4.0"
+  gem "spring", "~> 4.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
 
