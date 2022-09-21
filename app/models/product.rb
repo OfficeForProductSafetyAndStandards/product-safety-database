@@ -4,6 +4,8 @@ class Product < ApplicationRecord
   include Searchable
   include AttachmentConcern
 
+  self.ignored_columns = ["batch_number", "customs_code", "number_of_affected_units", "affected_units_status"]
+
   enum authenticity: {
     "counterfeit" => "counterfeit",
     "genuine" => "genuine",
