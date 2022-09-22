@@ -38,7 +38,8 @@ private
       get_status_filter,
       get_creator_filter(user),
       get_owner_filter(user),
-      get_serious_and_high_risk_filter
+      get_serious_and_high_risk_filter,
+      get_hazard_type_filter
     ].compact
 
     { must: filters_to_apply }
@@ -70,6 +71,12 @@ private
     end
 
     { terms: { type: types } }
+  end
+
+  def get_hazard_type_filter
+    return if @search.hazard_type.blank?
+
+    { term: { hazard_type: @search.hazard_type } }
   end
 
   def get_owner_filter(user)
