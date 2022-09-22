@@ -6,3 +6,6 @@ attributes:
   - content
 indirect: false
 cluster: true
+prepend_primary: true
+splines: ortho
+notation: uml
