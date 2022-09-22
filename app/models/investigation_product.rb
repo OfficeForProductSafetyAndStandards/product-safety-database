@@ -11,5 +11,7 @@ class InvestigationProduct < ApplicationRecord
 
   default_scope { order(created_at: :asc) }
 
-  redacted_export_with :affected_units_status, :batch_number, :customs_code, :investigation_id, :number_of_affected_units, :product_id
+  redacted_export_with :id, :affected_units_status, :batch_number, :created_at,
+                       :customs_code, :investigation_id, :number_of_affected_units,
+                       :product_id, :updated_at
 end

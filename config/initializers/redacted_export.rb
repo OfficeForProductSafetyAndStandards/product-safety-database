@@ -33,13 +33,3 @@ RedactedExport.register_table_attributes(
   "active_storage_variant_records",
   :id, :blob_id
 )
-
-RedactedExport.register_table_attributes(
-  "investigation_businesses",
-  :business_id, :created_at, :investigation_id, :relationship, :updated_at
-)
-
-RedactedExport.register_table_attributes(
-  "investigation_products",
-  :created_at, :investigation_id, :product_id, :updated_at
-)
