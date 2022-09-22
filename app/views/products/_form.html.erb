@@ -23,7 +23,10 @@
 ) %>
 
 <% if product_form.authenticity_unsure?  %>
-  <p class="govuk-body">The original record was recorded as 'unsure'</p>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is the product counterfeit?</legend>
+    <p class="govuk-body">The original record was recorded as 'unsure'</p>
+  </fieldset>
 <% else %>
   <%= form.govuk_radios :authenticity,
                         legend: "Is the product counterfeit?",
