@@ -76,6 +76,27 @@ module InvestigationsHelper
     rows
   end
 
+  def investigation_product_rows(investigation)
+    if investigation.products.empty?
+      rows = [
+        {
+          key: { text: "Batch numbers" },
+          value: { text: ""}
+        },
+        {
+          key: { text: "Customs codes" },
+          value: { text: ""}
+        },
+        {
+          key: { text: "Units affected" },
+          value: { text: ""}
+        }
+      ]
+
+      return rows
+    end
+  end
+
   def case_rows(investigation, user, team_list_html)
     rows = [
       {

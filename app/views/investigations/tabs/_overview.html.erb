@@ -36,3 +36,18 @@
   classes: "app-summary-list--actions-on-own-line",
   rows: safety_and_compliance_rows(@investigation)
 ) %>
+
+<h3 id="product-info-1" class="govuk-heading-m govuk-!-margin-top-9">
+  Case specific product information
+</h3>
+
+<% if @investigation.products.empty? %>
+  <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
+    You can add this information after a product has been added to the case
+  </h4>
+<% end %>
+
+<%= govukSummaryList(
+  classes: "app-summary-list--actions-on-own-line",
+  rows: investigation_product_rows(@investigation)
+) %>
