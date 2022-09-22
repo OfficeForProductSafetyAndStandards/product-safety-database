@@ -8,15 +8,6 @@ RSpec.shared_context "with product form helpers", shared_context: :metadata do
     }[authenticity]
   end
 
-  def affected_units_status_answer(affected_units_status)
-    {
-      "exact" => "Exact number known",
-      "approx" => "Approximate number known",
-      "unknown" => "Unknown",
-      "not_relevant" => "Not relevant"
-    }[affected_units_status]
-  end
-
   def when_placed_on_market_answer(when_placed_on_market)
     {
       "before_2021" => "Yes",

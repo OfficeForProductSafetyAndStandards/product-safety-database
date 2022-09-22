@@ -4,17 +4,12 @@ class Product < ApplicationRecord
   include Searchable
   include AttachmentConcern
 
+  self.ignored_columns = %w[batch_number customs_code number_of_affected_units affected_units_status]
+
   enum authenticity: {
     "counterfeit" => "counterfeit",
     "genuine" => "genuine",
     "unsure" => "unsure"
-  }
-
-  enum affected_units_status: {
-    "exact" => "exact",
-    "approx" => "approx",
-    "unknown" => "unknown",
-    "not_relevant" => "not_relevant"
   }
 
   enum has_markings: {
@@ -67,9 +62,9 @@ class Product < ApplicationRecord
 
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
 
-  redacted_export_with :id, :affected_units_status, :authenticity, :barcode, :batch_number,
-                       :brand, :category, :country_of_origin, :created_at, :customs_code, :description,
-                       :has_markings, :markings, :name, :number_of_affected_units, :product_code,
+  redacted_export_with :id, :authenticity, :barcode,
+                       :brand, :category, :country_of_origin, :created_at, :description,
+                       :has_markings, :markings, :name, :product_code,
                        :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id
 
   def supporting_information

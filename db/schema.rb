@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_23_094633) do
+ActiveRecord::Schema.define(version: 2022_09_21_095355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -197,8 +197,12 @@ ActiveRecord::Schema.define(version: 2022_08_23_094633) do
   end
 
   create_table "investigation_products", id: :serial, force: :cascade do |t|
+    t.enum "affected_units_status", as: "affected_units_statuses"
+    t.string "batch_number"
     t.datetime "created_at", null: false
+    t.text "customs_code"
     t.integer "investigation_id"
+    t.text "number_of_affected_units"
     t.integer "product_id"
     t.datetime "updated_at", null: false
     t.index ["investigation_id", "product_id"], name: "index_investigation_products_on_investigation_id_and_product_id", unique: true
@@ -265,20 +269,16 @@ ActiveRecord::Schema.define(version: 2022_08_23_094633) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
-    t.enum "affected_units_status", as: "affected_units_statuses"
     t.enum "authenticity", as: "authenticities"
     t.string "barcode", limit: 15
-    t.string "batch_number"
     t.text "brand"
     t.string "category"
     t.string "country_of_origin"
     t.datetime "created_at", null: false
-    t.text "customs_code"
     t.text "description"
     t.enum "has_markings", as: "has_markings_values"
     t.text "markings", array: true
     t.string "name"
-    t.text "number_of_affected_units"
     t.uuid "owning_team_id"
     t.string "product_code"
     t.string "subcategory"

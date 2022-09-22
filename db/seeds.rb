@@ -58,7 +58,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "",
     country_of_origin: "country:CN",
     description: "Plastic doll (5 different models) with long blonde hair.",
     product_code: "NO.DY807",
@@ -139,7 +138,6 @@ if run_seeds
   AuditActivity::Document::Add.from(blob, investigation)
 
   product_params = {
-    batch_number: "Unknown",
     country_of_origin: "country:CN",
     description: "Purple magnetic putty with small plastic accessories (eyes and a nose).",
     product_code: "Unknown",
@@ -186,7 +184,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "Unknown",
     country_of_origin: "territory:TW",
     description: "",
     product_code: "Unknown",
@@ -228,7 +225,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "Batch 105R sold between February and May 2018",
     country_of_origin: "territory:TW",
     description: "",
     product_code: "749266006615",
@@ -270,7 +266,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "",
     country_of_origin: "",
     description: "White Christmas tree shaped candle, 4 inches high, unstable base.",
     product_code: "8719202753615",
@@ -310,7 +305,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "",
     country_of_origin: "country:CN",
     description: "",
     product_code: "",
@@ -381,7 +375,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "8710447348123 (LynxThe Golden Year); 8710522349168 (Lynx Black)",
     country_of_origin: "country:CN",
     description: "",
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
@@ -426,7 +419,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "X00076P3WF",
     country_of_origin: "country:CN",
     description: "",
     product_code: "PN 2124531316474, TJ-65-195334",
@@ -482,7 +474,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "3105 & 1109",
     country_of_origin: "country:ES",
     description: "",
     product_code: "",
@@ -521,7 +512,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "11",
     country_of_origin: "country:ES",
     description: "",
     product_code: "",

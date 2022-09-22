@@ -45,7 +45,7 @@ module DataImportHelper
     investigation = create_investigation(notification, date, name)
     product = create_product(notification, name)
     create_product_attachments(notification, product) unless product.nil?
-    create_investigation_product(investigation, product) unless investigation.nil? || investigation.id.nil? || product.nil?
+    create_investigation_product(notification, investigation, product) unless investigation.nil? || investigation.id.nil? || product.nil?
     create_activity(notification, investigation, date) unless investigation.nil?
   end
 
@@ -55,7 +55,6 @@ module DataImportHelper
       name: "#{brand(notification)}, #{name}, #{field_from_notification(notification, 'type_numberOfModel')}",
       description: field_from_notification(notification, "description"),
       category: field_from_notification(notification, "category"),
-      batch_number: field_from_notification(notification, "batchNumber_barcode"),
       country_of_origin: field_from_notification(notification, "countryOfOrigin"),
       source: ReportSource.new(name: "RAPEX")
     )
@@ -85,10 +84,11 @@ module DataImportHelper
     end
   end
 
-  def create_investigation_product(investigation, product)
+  def create_investigation_product(notification, investigation, product)
     InvestigationProduct.create(
       investigation:,
-      product:
+      product:,
+      batch_number: field_from_notification(notification, "batchNumber_barcode"),
     )
   end
 
