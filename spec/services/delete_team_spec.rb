@@ -86,7 +86,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       context "when a user is attributed to historic activity on a case" do
         it "retains the user attribution" do
           activity = team_case.activities.find_by!(type: team_case.case_created_audit_activity_class.to_s)
-          expect { delete_team }.not_to change { activity.source.user }
+          expect { delete_team }.not_to change { activity.added_by_user }
         end
       end
 

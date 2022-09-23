@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::Investigation::TeamPermissionChangedDecorator, :wi
     AuditActivity::Investigation::TeamPermissionChanged.create!(
       investigation:,
       metadata: described_class.build_metadata(team, old_permission, new_permission, message),
-      source: UserSource.new(user:)
+      added_by_user: user
     ).decorate
   end
 

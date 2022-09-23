@@ -37,7 +37,7 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
           activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Destroy.name)
           expect(activity)
             .to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "reason" => reason })
-          expect(activity.source.user).to eq(user)
+          expect(activity.added_by_user).to eq(user)
         end
 
         it_behaves_like "a service which notifies the case owner"

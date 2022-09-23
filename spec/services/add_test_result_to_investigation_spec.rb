@@ -27,7 +27,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
   end
 
   def expected_email_body(user, viewing_user)
-    "Test result was added to the #{investigation.case_type} by #{UserSource.new(user:).show(viewing_user)}."
+    "Test result was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: viewing_user)}."
   end
 
   def expected_email_subject
@@ -50,7 +50,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
     it "creates an audit log", :aggregate_failures do
       test_result = command.test_result
       audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", product_id:)
-      expect(audit.source.user).to eq(user)
+      expect(audit.added_by_user).to eq(user)
       expect(audit.metadata["test_result"]["id"]).to eq(test_result.id)
     end
 
