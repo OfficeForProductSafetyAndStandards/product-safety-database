@@ -2,12 +2,29 @@ module ProductsHelper
   include ProductSearchHelper
 
   SUGGESTED_PRODUCTS_LIMIT = 4
+  PARAMS_FOR_CREATE = [:brand,
+                       :name,
+                       :subcategory,
+                       :category,
+                       :product_code,
+                       :webpage,
+                       :description,
+                       :country_of_origin,
+                       :barcode,
+                       :authenticity,
+                       :when_placed_on_market,
+                       :has_markings,
+                       { markings: [] }].freeze
+  PARAMS_FOR_UPDATE = PARAMS_FOR_CREATE.without(:category, :authenticity,
+                                                :brand, :name)
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
-    params.require(:product).permit(
-      :brand, :name, :subcategory, :category, :product_code, :webpage, :description, :country_of_origin, :barcode, :authenticity, :when_placed_on_market, :has_markings, markings: []
-    ).with_defaults(markings: [])
+    params.require(:product).permit(PARAMS_FOR_CREATE).with_defaults(markings: [])
+  end
+
+  def product_params_for_update
+    params.require(:product).permit(PARAMS_FOR_UPDATE).with_defaults(markings: [])
   end
 
   def search_for_products(page_size = Product.count, user = current_user)
@@ -49,6 +66,13 @@ module ProductsHelper
 
   def set_product
     @product = Product.find(params[:id]).decorate
+  end
+
+  def conditionally_disabled_items_for_authenticity(product_form, disable_all_items: false)
+    items = items_for_authenticity product_form
+    return items unless disable_all_items
+
+    items.map { |item| item.merge(disabled: true) }
   end
 
   def items_for_authenticity(product_form)

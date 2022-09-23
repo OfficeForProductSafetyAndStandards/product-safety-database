@@ -10,7 +10,8 @@
   id: "category",
   aria_describedby: "report-product-category-hint",
   label: { text: "Product category", classes: label_class },
-  hint: { text: "The product category will be permanent for this product record", classes: "govuk-!-font-size-16" }
+  hint: { text: "The product category will be permanent for this product record", classes: "govuk-!-font-size-16" },
+  attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
 <%= govukInput(
@@ -21,7 +22,17 @@
   hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" }
 ) %>
 
-<%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", hint: { text: "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", classes: "govuk-!-font-size-16" }, items: items_for_authenticity(product_form) %>
+<% if product_form.authenticity_unsure?  %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is the product counterfeit?</legend>
+    <p class="govuk-body">The original record was recorded as 'unsure'</p>
+  </fieldset>
+<% else %>
+  <%= form.govuk_radios :authenticity,
+                        legend: "Is the product counterfeit?",
+                        hint: { text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", classes: "govuk-!-font-size-16" },
+                        items: conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]) %>
+<% end %>
 
 <% product_marking_fields = capture do %>
   <%= form.govuk_checkboxes :markings,
@@ -49,7 +60,8 @@
   key: :brand,
   form: form,
   label: { text: "Manufacturer's brand name", classes: label_class },
-  hint: { html: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe }
+  hint: { html: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe },
+  attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
 <%= govukInput(
@@ -57,7 +69,8 @@
   form: form,
   label: { text: "Product name", classes: label_class },
   id: "name",
-  hint: { html: 'Include model name and model number, for example \'PlayStation 5\'<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The product name will be permanent for this product record</span>'.html_safe }
+  hint: { html: 'Include model name and model number, for example \'PlayStation 5\'<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The product name will be permanent for this product record</span>'.html_safe },
+  attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
 <%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
