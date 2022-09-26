@@ -743,6 +743,11 @@ en:
     before_2021: "Before 1 January 2021"
     on_or_after_2021: "On or after 1 January 2021"
     unknown_date: "Unable to ascertain"
+    affected_units_status:
+      exact: "Exact"
+      approx: "Approximate"
+      unknown: "Unknown"
+      not_relevant: "Not relevant"
   accident_or_incident:
     usage:
       during_normal_use: "Normal use"

@@ -51,12 +51,12 @@
     rows: investigation_product_rows(nil)
   ) %>
 <% else %>
-  <% @investigation.investigation_products.each do |investigation_product| %>
+  <% @investigation.investigation_products.each_with_index do |investigation_product, index| %>
     <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
       <%= investigation_product.product.name %>
     </h4>
     <%= govukSummaryList(
-      classes: "app-summary-list--actions-on-own-line",
+      classes: "app-summary-list--actions-on-own-line product-#{index}",
       rows: investigation_product_rows(investigation_product)
     ) %>
   <% end %>

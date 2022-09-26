@@ -99,7 +99,7 @@ module InvestigationsHelper
     [
       {
         key: { text: "Batch numbers" },
-        value: { text: investigation_product.batch_number }
+        value: { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")}
       },
       {
         key: { text: "Customs codes" },
@@ -114,9 +114,9 @@ module InvestigationsHelper
 
   def units_affected(investigation_product)
     if investigation_product.number_of_affected_units.blank?
-      { text: investigation_product.number_of_affected_units }
+      { text: investigation_product.affected_units_status }
     else
-      { html: "#{investigation_product.number_of_affected_units} <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>#{investigation_product.affected_units_status} number</span>".html_safe }
+      { html: "#{investigation_product.number_of_affected_units} <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>#{I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")} number</span>".html_safe }
     end
   end
 
