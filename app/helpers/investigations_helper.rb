@@ -81,15 +81,15 @@ module InvestigationsHelper
       rows = [
         {
           key: { text: "Batch numbers" },
-          value: { text: ""}
+          value: { text: "" }
         },
         {
           key: { text: "Customs codes" },
-          value: { text: ""}
+          value: { text: "" }
         },
         {
           key: { text: "Units affected" },
-          value: { text: ""}
+          value: { text: "" }
         }
       ]
 
@@ -99,7 +99,7 @@ module InvestigationsHelper
     [
       {
         key: { text: "Batch numbers" },
-        value: { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")}
+        value: { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}") }
       },
       {
         key: { text: "Customs codes" },
