@@ -406,7 +406,7 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.9.1)
       redis (>= 4, < 5)
-    regexp_parser (2.5.0)
+    regexp_parser (2.6.0)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.0.1)
@@ -539,7 +539,7 @@ GEM
     simplecov-html (0.12.3)
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
-    solargraph (0.46.0)
+    solargraph (0.47.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -592,7 +592,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
-    unicode-display_width (2.2.0)
+    unicode-display_width (2.3.0)
     unicode_utils (1.4.0)
     validate_email (0.1.6)
       activemodel (>= 3.0)
@@ -697,7 +697,7 @@ DEPENDENCIES
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
-  solargraph (~> 0.46)
+  solargraph (~> 0.47)
   spring (~> 4.0)
   spring-commands-rspec (~> 1.0)
   sprockets (~> 4.1.1)
