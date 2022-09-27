@@ -29,7 +29,7 @@ private
     metadata = activity_class.build_metadata(investigation, risk_validation_change_rationale)
 
     activity_class.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       metadata:
     )

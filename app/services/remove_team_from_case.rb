@@ -35,7 +35,7 @@ private
     metadata = activity_class.build_metadata(team, message)
 
     activity_class.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       metadata:
     )

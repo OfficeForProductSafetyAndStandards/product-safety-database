@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) do
     described_class.create!(
-      source: UserSource.new(user: risk_assessment.added_by_user),
+      added_by_user: risk_assessment.added_by_user,
       investigation: risk_assessment.investigation,
       metadata:
     )

@@ -30,7 +30,7 @@ private
     metadata = activity_class.build_metadata(investigation.owner)
 
     activity_class.create!(
-      source: nil, # DeleteUser is called from rake user:delete where no user source is available
+      added_by_user: nil, # DeleteUser is called from rake user:delete where no user source is available
       investigation:,
       title: nil,
       body: nil,
