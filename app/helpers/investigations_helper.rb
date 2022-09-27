@@ -113,7 +113,7 @@ module InvestigationsHelper
   end
 
   def units_affected(investigation_product)
-    return { text: '' } unless investigation_product.affected_units_status
+    return { text: "" } unless investigation_product.affected_units_status
 
     if investigation_product.number_of_affected_units.blank?
       { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}") }
