@@ -56,8 +56,11 @@
       <%= investigation_product.product.name %>
     </h4>
     <%= govukSummaryList(
-      classes: "app-summary-list--actions-on-own-line product-#{index}",
-      rows: investigation_product_rows(investigation_product)
+      classes: "app-summary-list--actions-on-own-line",
+      rows: investigation_product_rows(investigation_product),
+      attributes: {
+        id: "product-#{index}"
+      }
     ) %>
   <% end %>
 <% end %>

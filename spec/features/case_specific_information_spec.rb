@@ -23,7 +23,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
 
       expect_investigation_products_to_be_listed_with_oldest_first
 
-      within("dl.product-0") do
+      within("dl#product-0") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Batch numbers")
         expect(page).to have_css("dd.govuk-summary-list__value", text: product_1.investigation_products.first.batch_number)
 
@@ -34,17 +34,17 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         expect(page).to have_css("dd.govuk-summary-list__value", text: "Unknown")
       end
 
-      within("dl.product-1") do
+      within("dl#product-1") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
         expect(page).to have_css("dd.govuk-summary-list__value", text: "91 Exact number")
       end
 
-      within("dl.product-2") do
+      within("dl#product-2") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
         expect(page).to have_css("dd.govuk-summary-list__value", text: "10000 Approximate number")
       end
 
-      within("dl.product-3") do
+      within("dl#product-3") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
         expect(page).to have_css("dd.govuk-summary-list__value", text: "Not relevant")
       end
