@@ -14,8 +14,8 @@
 <% end %>
 
 <%= govukSummaryList(
-        classes: "app-summary-list--actions-on-own-line",
-        rows: case_rows(@investigation, current_user, team_list_html)
+      classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
+      rows: case_rows(@investigation, current_user, team_list_html)
 ) %>
 
 <% if policy(@investigation).send_email_alert? %>
@@ -33,7 +33,7 @@
   </a>
 <% end %>
 <%= govukSummaryList(
-  classes: "app-summary-list--actions-on-own-line",
+  classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
   rows: safety_and_compliance_rows(@investigation)
 ) %>
 
@@ -47,7 +47,7 @@
   </h4>
 
   <%= govukSummaryList(
-    classes: "app-summary-list--actions-on-own-line",
+    classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
     rows: investigation_product_rows(nil)
   ) %>
 <% else %>
@@ -56,7 +56,7 @@
       <%= investigation_product.product.name %>
     </h4>
     <%= govukSummaryList(
-      classes: "app-summary-list--actions-on-own-line",
+      classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
       rows: investigation_product_rows(investigation_product),
       attributes: {
         id: "product-#{index}"
