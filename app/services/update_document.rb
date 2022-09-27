@@ -51,7 +51,7 @@ private
   def create_audit_activity
     activity = AuditActivity::Document::Update.create!(
       metadata: audit_activity_metadata,
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:
     )
 
@@ -60,10 +60,6 @@ private
 
   def investigation
     parent if parent.is_a?(Investigation)
-  end
-
-  def source
-    UserSource.new(user:)
   end
 
   def send_notification_email
@@ -79,7 +75,7 @@ private
   end
 
   def email_update_text(viewer = nil)
-    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show(viewer)}."
+    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{user&.decorate&.display_name(viewer:)}."
   end
 
   def email_subject

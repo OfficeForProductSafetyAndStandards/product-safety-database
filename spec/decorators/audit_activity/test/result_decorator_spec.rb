@@ -6,7 +6,7 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :
       investigation: test_result.investigation,
       product: test_result.product,
       metadata: described_class.build_metadata(test_result),
-      source: UserSource.new(user:)
+      added_by_user: user
     ).decorate
   end
 

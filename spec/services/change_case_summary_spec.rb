@@ -79,7 +79,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_opensearch, :with_test_queue_ada
         expect { result }.to change(Activity, :count).by(1)
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Investigation::UpdateSummary)
-        expect(activity.source.user).to eq(user)
+        expect(activity.added_by_user).to eq(user)
         expect(activity.metadata).to eq({ "updates" => { "description" => ["Old summary", "New summary"] } })
       end
 

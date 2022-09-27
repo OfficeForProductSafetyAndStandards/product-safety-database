@@ -47,7 +47,7 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       title: nil,
       body: nil,
@@ -57,7 +57,7 @@ private
 
   def create_audit_activity_for_product_added(product)
     AuditActivity::Product::Add.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       title: product.name,
       product:

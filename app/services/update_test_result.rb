@@ -38,7 +38,7 @@ private
     metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, changes)
 
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation: test_result.investigation,
       product: test_result.product,
       metadata:
@@ -51,7 +51,7 @@ private
         test_result.investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{UserSource.new(user:).show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
+        "#{user.decorate.display_name(viewer: recipient)} edited a test result on the #{test_result.investigation.case_type}.",
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later
     end
