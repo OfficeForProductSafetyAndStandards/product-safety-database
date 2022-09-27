@@ -76,11 +76,12 @@ module InvestigationsHelper
     rows
   end
 
-  def investigation_product_rows(investigation_product = nil)
+  def investigation_product_rows(investigation_product = nil, user = nil)
     [
       {
         key: { text: "Batch numbers" },
-        value: { text: investigation_product&.batch_number || "" }
+        value: { text: investigation_product&.batch_number || "" },
+        actions: batch_number_actions(investigation_product, user)
       },
       {
         key: { text: "Customs codes" },
@@ -334,6 +335,18 @@ private
         href: investigation_risk_level_path(investigation),
         text: "Change",
         visuallyHiddenText: " the risk level"
+      ]
+    }
+  end
+
+  def batch_number_actions(investigation_product, user)
+    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+
+    {
+      items: [
+        href: edit_investigation_product_batch_numbers_path(investigation_product),
+        text: "Edit",
+        visuallyHiddenText: "  the batch numbers for #{investigation_product.product.name}"
       ]
     }
   end
