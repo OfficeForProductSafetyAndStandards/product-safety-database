@@ -207,6 +207,10 @@ Rails.application.routes.draw do
     get "all-businesses", to: "businesses#index", as: "all"
   end
 
+  resources :investigation_products, only: %i[], param: :id do
+    resource :batch_numbers, only: %i[edit update], path: "edit-batch-numbers", controller: "investigation_products/batch_numbers"
+  end
+
   resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
