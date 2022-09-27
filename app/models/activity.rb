@@ -1,7 +1,6 @@
 class Activity < ApplicationRecord
   belongs_to :investigation, touch: true
-
-  has_one :source, as: :sourceable, dependent: :destroy
+  belongs_to :added_by_user, class_name: :User, optional: true
 
   redacted_export_with :id, :business_id, :correspondence_id, :created_at,
                        :investigation_id, :product_id, :type, :updated_at
@@ -19,8 +18,9 @@ class Activity < ApplicationRecord
     super()
   end
 
+  # TODO: Should be moved to the decorator
   def subtitle(viewer)
-    "#{subtitle_slug} by #{source&.show(viewer)}, #{pretty_date_stamp}"
+    "#{subtitle_slug} by #{added_by_user&.decorate&.display_name(viewer:)}, #{pretty_date_stamp}"
   end
 
   def search_index; end

@@ -24,10 +24,10 @@ class Business < ApplicationRecord
   has_many :corrective_actions, dependent: :destroy
   has_many :risk_assessments, dependent: :destroy, foreign_key: :assessed_by_business_id
 
+  belongs_to :added_by_user, class_name: :User, optional: true
+
   accepts_nested_attributes_for :locations, reject_if: :all_blank
   accepts_nested_attributes_for :contacts, reject_if: :all_blank
-
-  has_one :source, as: :sourceable, dependent: :destroy
 
   redacted_export_with :id, :company_number, :created_at, :legal_name, :trading_name, :updated_at
 

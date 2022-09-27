@@ -1,8 +1,7 @@
 class Contact < ApplicationRecord
   default_scope { order(created_at: :asc) }
   belongs_to :business
-
-  has_one :source, as: :sourceable, dependent: :destroy
+  belongs_to :added_by_user, class_name: :User, optional: true
 
   redacted_export_with :id, :business_id, :created_at, :updated_at
 

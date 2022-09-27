@@ -32,7 +32,7 @@ module Investigations
     end
 
     def preload_activities(investigation)
-      @activities = investigation.activities.eager_load(:source)
+      @activities = investigation.activities.eager_load(:added_by_user)
       preload_manually(
         @activities.select { |a| a.respond_to?("attachment") },
         [{ attachment_attachment: :blob }]

@@ -38,7 +38,7 @@ private
   def create_audit_activity(correspondence, investigation)
     activity = AuditActivity::Correspondence::AddEmail.create!(
       metadata: audit_activity_metadata,
-      source:,
+      added_by_user: user,
       investigation:,
       title: nil,
       correspondence:
@@ -51,10 +51,6 @@ private
   def update_attachment_description!
     context.email.email_attachment.blob.metadata[:description] = attachment_description
     context.email.email_attachment.blob.save!
-  end
-
-  def source
-    UserSource.new(user:)
   end
 
   def send_notification_email(investigation, _user)
@@ -70,6 +66,6 @@ private
   end
 
   def email_update_text(viewer = nil)
-    "Email details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
+    "Email details added to the #{investigation.case_type.upcase_first} by #{user&.decorate&.display_name(viewer:)}."
   end
 end

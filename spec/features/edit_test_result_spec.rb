@@ -96,7 +96,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
-      expect(page).not_to have_content(page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, ".."))
+      expect(page).not_to have_content(page.find("p", text: "Edited by #{investigation.creator_user.decorate.display_name(viewer: user)}").find(:xpath, ".."))
     end
   end
 
@@ -145,7 +145,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   end
 
   def expect_activity_page_to_show_edited_test_result_values
-    activity_card_body = page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, "..")
+    activity_card_body = page.find("p", text: "Edited by #{investigation.creator_user.decorate.display_name(viewer: user)}").find(:xpath, "..")
     expect(activity_card_body).to have_text("Date of test: 2 June 2019")
     expect(activity_card_body).to have_text("Legislation: Consumer Protection Act 1987")
     expect(activity_card_body).to have_text("Standards: EN72, EN73")
@@ -156,7 +156,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   end
 
   def expect_activity_page_to_show_original_details_from_when_test_result_was_created(original_result:)
-    activity_card_body = page.find("p", text: "Test result recorded by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, "..")
+    activity_card_body = page.find("p", text: "Test result recorded by #{investigation.creator_user.decorate.display_name(viewer: user)}").find(:xpath, "..")
     expect(activity_card_body).to have_text("Date of test: 1 May 2019")
     expect(activity_card_body).to have_text("Legislation: General Product Safety Regulations 2005")
     expect(activity_card_body).to have_text("Standards: test")
