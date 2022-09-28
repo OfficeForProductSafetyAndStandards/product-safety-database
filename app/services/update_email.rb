@@ -100,17 +100,13 @@ private
 
   def create_audit_activity
     AuditActivity::Correspondence::EmailUpdated.create!(
-      source: user_source,
+      added_by_user: user,
       investigation: email.investigation,
       metadata: audit_activity_metadata,
       correspondence: email,
       title: nil,
       body: nil
     )
-  end
-
-  def user_source
-    @user_source ||= UserSource.new(user:)
   end
 
   def audit_activity_metadata
@@ -130,7 +126,7 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user_source.show(recipient)} edited an email on the #{investigation.case_type}.",
+        "#{user.decorate.display_name(viewer: recipient)} edited an email on the #{investigation.case_type}.",
         "Email edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end

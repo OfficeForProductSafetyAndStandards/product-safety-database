@@ -58,7 +58,7 @@ private
   def set_alert
     @alert = Alert.new alert_params.merge(
       investigation_id: @investigation.id,
-      source: UserSource.new(user: current_user),
+      added_by_user: current_user,
       investigation_url: investigation_url(@investigation)
     )
   end

@@ -30,7 +30,7 @@ private
 
   def create_audit_activity_for_risk_level_update
     AUDIT_ACTIVITY_CLASS.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       metadata: AUDIT_ACTIVITY_CLASS.build_metadata(investigation, change_action)
     )

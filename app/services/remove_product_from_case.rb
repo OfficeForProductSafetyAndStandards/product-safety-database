@@ -23,7 +23,7 @@ private
 
   def create_audit_activity_for_product_removed
     AuditActivity::Product::Destroy.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       product:,
       metadata: AuditActivity::Product::Destroy.build_metadata(product, reason)
@@ -36,7 +36,7 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Product was removed from the #{investigation.case_type} by #{context.activity.source.show(recipient)}.",
+        "Product was removed from the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end

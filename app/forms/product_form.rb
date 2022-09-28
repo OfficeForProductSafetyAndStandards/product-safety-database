@@ -23,6 +23,7 @@ class ProductForm
   attribute :has_markings
   attribute :markings
   attribute :customs_code
+  attribute :added_by_user_id
 
   attr_accessor :approx_units, :exact_units
 

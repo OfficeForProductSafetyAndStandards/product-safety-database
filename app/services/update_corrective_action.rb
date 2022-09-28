@@ -94,7 +94,7 @@ private
     metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, changes)
 
     AuditActivity::CorrectiveAction::Update.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       product: corrective_action.product,
       business: corrective_action.business,

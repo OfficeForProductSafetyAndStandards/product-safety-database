@@ -48,16 +48,12 @@ private
 
   def create_audit_activity
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.create!(
-      source: user_source,
+      added_by_user: user,
       investigation:,
       metadata: audit_activity_metadata,
       title: nil,
       body: nil
     )
-  end
-
-  def user_source
-    @user_source ||= UserSource.new(user:)
   end
 
   def audit_activity_metadata
@@ -75,7 +71,7 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user_source.show(recipient)} edited a risk assessment on the #{investigation.case_type}.",
+        "#{user.decorate.display_name(viewer: recipient)} edited a risk assessment on the #{investigation.case_type}.",
         "Risk assessment edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end

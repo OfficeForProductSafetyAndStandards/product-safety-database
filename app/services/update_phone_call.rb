@@ -41,7 +41,7 @@ private
         investigation.pretty_id,
         entity.name,
         entity.email,
-        email_update_text,
+        email_update_text(entity),
         email_subject
       ).deliver_later
     end
@@ -49,7 +49,7 @@ private
 
   def create_audit_activity
     context.activity = AuditActivity::Correspondence::PhoneCallUpdated.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation: correspondence.investigation,
       correspondence:,
       metadata: AuditActivity::Correspondence::PhoneCallUpdated.build_metadata(correspondence)
@@ -64,8 +64,8 @@ private
     investigation.case_type.upcase_first
   end
 
-  def email_update_text
-    "Phone call details updated on the #{email_case_type} by #{activity.source.show}."
+  def email_update_text(recipient)
+    "Phone call details updated on the #{email_case_type} by #{user.decorate.display_name(viewer: recipient)}."
   end
 
   def any_changes?
