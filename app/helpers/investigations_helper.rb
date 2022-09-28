@@ -76,6 +76,33 @@ module InvestigationsHelper
     rows
   end
 
+  def investigation_product_rows(investigation_product = nil)
+    [
+      {
+        key: { text: "Batch numbers" },
+        value: { text: investigation_product&.batch_number || "" }
+      },
+      {
+        key: { text: "Customs codes" },
+        value: { text: investigation_product&.customs_code || "" }
+      },
+      {
+        key: { text: "Units affected" },
+        value: units_affected(investigation_product)
+      }
+    ]
+  end
+
+  def units_affected(investigation_product)
+    return { text: "" } unless investigation_product&.affected_units_status
+
+    if investigation_product.number_of_affected_units.blank?
+      { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}") }
+    else
+      { html: "#{investigation_product.number_of_affected_units} <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>#{I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")} number</span>".html_safe }
+    end
+  end
+
   def case_rows(investigation, user, team_list_html)
     rows = [
       {
