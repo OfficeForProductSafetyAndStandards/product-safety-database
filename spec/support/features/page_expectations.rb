@@ -667,4 +667,9 @@ module PageExpectations
   def expect_to_be_on_case_summary_edit_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/summary/edit")
   end
+
+  def expect_to_be_on_edit_batch_numbers_page(product_id:)
+    expect(page).to have_current_path("/investigation_products/#{product_id}/edit-batch-numbers/edit")
+    expect(page).to have_css("h1", text: "Edit the batch numbers")
+  end
 end
