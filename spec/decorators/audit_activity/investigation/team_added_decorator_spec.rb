@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::Investigation::TeamAddedDecorator, :with_stubbed_o
     AuditActivity::Investigation::TeamAdded.create!(
       investigation:,
       metadata: described_class.build_metadata(collaboration, message),
-      source: UserSource.new(user:)
+      added_by_user: user
     ).decorate
   end
 

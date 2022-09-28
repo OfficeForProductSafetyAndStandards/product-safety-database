@@ -102,7 +102,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Investigation::UpdateOwner)
-          expect(activity.source.user).to eq(user)
+          expect(activity.added_by_user).to eq(user)
           expect(activity.metadata).to eq(AuditActivity::Investigation::UpdateOwner.build_metadata(new_owner, rationale).deep_stringify_keys)
         end
 

@@ -42,7 +42,7 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_opensearch, :with_stubbed_maile
       activity = result.correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall")
 
       expect(activity.investigation).to eq(investigation)
-      expect(activity.source.user).to eq(user)
+      expect(activity.added_by_user).to eq(user)
       expect(activity.correspondence).to eq(result.correspondence)
     end
 
@@ -51,7 +51,7 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_opensearch, :with_stubbed_maile
         investigation.pretty_id,
         investigation.owner_team.name,
         investigation.owner_team.email,
-        "Phone call details added to the Allegation by #{result.correspondence.activities.find_by!(type: 'AuditActivity::Correspondence::AddPhoneCall').source.show}.",
+        "Phone call details added to the Allegation by #{user.decorate.display_name(viewer: user)}.",
         "Allegation updated"
       )
     end

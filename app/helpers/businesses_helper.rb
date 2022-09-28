@@ -3,7 +3,7 @@ module BusinessesHelper
 
   def defaults_on_primary_location(business)
     business.primary_location.name ||= "Registered office address"
-    business.primary_location.source ||= UserSource.new(user: current_user)
+    business.primary_location.added_by_user = current_user
     business
   end
 

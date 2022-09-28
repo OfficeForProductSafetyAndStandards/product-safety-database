@@ -30,7 +30,7 @@ class UpdateAccidentOrIncident
 
   def create_audit_activity
     AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated.create!(
-      source: user_source,
+      added_by_user: user,
       investigation:,
       metadata: audit_activity_metadata,
       title: nil,
@@ -41,10 +41,6 @@ class UpdateAccidentOrIncident
 
   def audit_activity_metadata
     AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated.build_metadata(accident_or_incident)
-  end
-
-  def user_source
-    @user_source ||= UserSource.new(user:)
   end
 
   def no_changes?
@@ -65,7 +61,7 @@ class UpdateAccidentOrIncident
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user_source.show(recipient)} edited an #{type} on the #{investigation.case_type}.",
+        "#{user.decorate.display_name(viewer: recipient)} edited an #{type} on the #{investigation.case_type}.",
         "#{type} edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end

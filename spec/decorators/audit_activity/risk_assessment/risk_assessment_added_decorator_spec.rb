@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) do
     AuditActivity::RiskAssessment::RiskAssessmentAdded.create!(
-      source: UserSource.new(user: risk_assessment.added_by_user),
+      added_by_user: risk_assessment.added_by_user,
       investigation: risk_assessment.investigation,
       metadata: described_class.build_metadata(risk_assessment)
     ).decorate
