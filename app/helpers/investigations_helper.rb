@@ -76,34 +76,15 @@ module InvestigationsHelper
     rows
   end
 
-  def investigation_product_rows(investigation_product)
-    unless investigation_product
-      rows = [
-        {
-          key: { text: "Batch numbers" },
-          value: { text: "" }
-        },
-        {
-          key: { text: "Customs codes" },
-          value: { text: "" }
-        },
-        {
-          key: { text: "Units affected" },
-          value: { text: "" }
-        }
-      ]
-
-      return rows
-    end
-
+  def investigation_product_rows(investigation_product = nil)
     [
       {
         key: { text: "Batch numbers" },
-        value: { text: investigation_product.batch_number }
+        value: { text: investigation_product&.batch_number || "" }
       },
       {
         key: { text: "Customs codes" },
-        value: { text: investigation_product.customs_code }
+        value: { text: investigation_product&.customs_code || "" }
       },
       {
         key: { text: "Units affected" },
@@ -113,7 +94,7 @@ module InvestigationsHelper
   end
 
   def units_affected(investigation_product)
-    return { text: "" } unless investigation_product.affected_units_status
+    return { text: "" } unless investigation_product&.affected_units_status
 
     if investigation_product.number_of_affected_units.blank?
       { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}") }
