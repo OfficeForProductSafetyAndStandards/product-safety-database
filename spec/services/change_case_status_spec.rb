@@ -77,7 +77,7 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
         expect { result }.to change(Activity, :count).by(1)
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Investigation::UpdateStatus)
-        expect(activity.source.user).to eq(user)
+        expect(activity.added_by_user).to eq(user)
         expect(activity.metadata).to include("updates" => { "is_closed" => [false, true], "date_closed" => [nil, kind_of(String)] })
         expect(activity.metadata).to include("rationale" => rationale)
       end

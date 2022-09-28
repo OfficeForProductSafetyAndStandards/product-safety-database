@@ -5,8 +5,7 @@ class Alert < ApplicationRecord
   attr_accessor :investigation_url
 
   belongs_to :investigation
-
-  has_one :source, as: :sourceable, dependent: :destroy
+  belongs_to :added_by_user, class_name: :User, optional: true
 
   redacted_export_with :id, :created_at, :description, :investigation_id, :summary, :updated_at
 end

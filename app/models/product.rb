@@ -63,7 +63,7 @@ class Product < ApplicationRecord
   has_many :risk_assessed_products
   has_many :risk_assessments, through: :risk_assessed_products
 
-  has_one :source, as: :sourceable, dependent: :destroy
+  belongs_to :added_by_user, class_name: :User, optional: true
 
   redacted_export_with :id, :affected_units_status, :authenticity, :barcode, :batch_number,
                        :brand, :category, :country_of_origin, :created_at, :customs_code, :description,

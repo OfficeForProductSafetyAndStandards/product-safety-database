@@ -90,7 +90,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
         result
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Investigation::AddEnquiry)
-        expect(activity.source.user).to eq(user)
+        expect(activity.added_by_user).to eq(user)
         expect(activity.metadata).to eq(AuditActivity::Investigation::AddEnquiry.build_metadata(investigation).deep_stringify_keys)
       end
 
@@ -102,7 +102,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
           result
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Product::Add)
-          expect(activity.source.user).to eq(user)
+          expect(activity.added_by_user).to eq(user)
           expect(activity.product).to eq(product)
           expect(activity.title(user)).to eq(product.name)
         end

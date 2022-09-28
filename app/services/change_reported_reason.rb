@@ -36,7 +36,7 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: user_source,
+      added_by_user: user,
       investigation:,
       metadata:
     )
@@ -44,10 +44,6 @@ private
 
   def activity_class
     AuditActivity::Investigation::ChangeSafetyAndComplianceData
-  end
-
-  def user_source
-    @user_source ||= UserSource.new(user:)
   end
 
   def send_notification_email(investigation, user)

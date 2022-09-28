@@ -38,13 +38,9 @@ private
       investigation:,
       business_id:,
       product_id:,
-      source:,
+      added_by_user: user,
       metadata:
     )
-  end
-
-  def source
-    @source ||= UserSource.new(user:)
   end
 
   def send_notification_email
@@ -53,7 +49,7 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source.show(recipient)}.",
+        "Corrective action was added to the #{investigation.case_type.upcase_first} by #{user.decorate.display_name(viewer: recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
