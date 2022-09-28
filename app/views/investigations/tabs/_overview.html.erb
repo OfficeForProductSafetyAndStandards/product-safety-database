@@ -48,7 +48,7 @@
 
   <%= govukSummaryList(
     classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
-    rows: investigation_product_rows(nil)
+    rows: investigation_product_rows
   ) %>
 <% else %>
   <% @investigation.investigation_products.each_with_index do |investigation_product, index| %>
