@@ -8,6 +8,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
   let(:product_2) { create :product }
   let(:product_3) { create :product }
   let(:product_4) { create :product }
+  let(:new_batch_numbers) { "abc, def, 999" }
 
   context "when investigation has multiple linked products" do
     before do
@@ -15,12 +16,12 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
       InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_2.id, customs_code: "XYZ987", batch_number: "2", affected_units_status: "exact", number_of_affected_units: "91")
       InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_3.id, customs_code: "ZZZ999", batch_number: "3", affected_units_status: "approx", number_of_affected_units: "10000")
       InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_4.id, customs_code: "BBB222", batch_number: "1000", affected_units_status: "not_relevant")
+
+      sign_in user
+      visit investigation_path(investigation)
     end
 
     it "shows all info on case specific info section of case page" do
-      sign_in user
-      visit investigation_path(investigation)
-
       expect_investigation_products_to_be_listed_with_oldest_first
 
       within("dl#product-0") do
@@ -48,6 +49,35 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
         expect(page).to have_css("dd.govuk-summary-list__value", text: "Not relevant")
       end
+    end
+
+    it "allows editing of batch numbers" do
+      within("dl#product-0") do
+        click_link "Edit the batch numbers for #{product_1.name}"
+      end
+
+      expect_to_be_on_edit_batch_numbers_page(product_id: product_1.id)
+
+      expect(page).to have_field("batch_number",   with: product_1.investigation_products.first.batch_number)
+
+      fill_in "batch_number", with: new_batch_numbers
+
+      click_button "Save"
+
+      expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+      expect(page).to have_content("The case information was updated")
+
+      within("dl#product-0") do
+        expect(page).to have_css("dt.govuk-summary-list__key", text: "Batch numbers")
+        expect(page).to have_css("dd.govuk-summary-list__value", text: new_batch_numbers)
+      end
+
+      click_link "Activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect(page).to have_css("h3", text: "Batch number updated")
+      expect(page).to have_content("Batch number: #{new_batch_numbers}")
     end
   end
 
