@@ -9,7 +9,7 @@ class ChangeBatchNumber
     context.fail!(error: "No batch number supplied") unless batch_number.is_a?(String)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation_product.assign_attributes(batch_number: batch_number)
+    investigation_product.assign_attributes(batch_number:)
     return if investigation_product.changes.none?
 
     ActiveRecord::Base.transaction do
@@ -27,7 +27,7 @@ private
 
     activity_class.create!(
       source: UserSource.new(user:),
-      investigation: investigation,
+      investigation:,
       title: nil,
       body: nil,
       metadata:
