@@ -47,7 +47,7 @@ private
     metadata = update_owner_activity_class.build_metadata(new_team, change_case_owner_rationale)
 
     update_owner_activity_class.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation: collaboration.investigation,
       title: nil,
       body: nil,

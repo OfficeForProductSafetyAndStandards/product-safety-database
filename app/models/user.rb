@@ -26,7 +26,6 @@ class User < ApplicationRecord
   has_many :owner_user_collaborations, class_name: "Collaboration::Access::OwnerUser", foreign_key: "collaborator_id"
   has_many :investigations, through: :owner_user_collaborations, dependent: :nullify, as: :user
   has_many :activities, through: :investigations
-  has_many :user_sources, dependent: :destroy
   has_many :roles, dependent: :destroy, as: :entity
   has_many :collaborations, dependent: :destroy, as: :collaborator
   has_many :case_exports

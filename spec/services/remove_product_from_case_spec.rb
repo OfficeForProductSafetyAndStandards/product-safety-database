@@ -66,7 +66,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           result
           activity = investigation.reload.activities.find_by!(type: AuditActivity::Product::Destroy.name)
           expect(activity).to have_attributes(title: nil, body: nil, product_id: product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.attributes.to_json) })
-          expect(activity.source.user).to eq(user)
+          expect(activity.added_by_user).to eq(user)
         end
 
         it_behaves_like "a service which notifies the case owner"

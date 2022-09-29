@@ -25,7 +25,7 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: user_source,
+      added_by_user: user,
       investigation:,
       metadata:
     )
@@ -37,10 +37,6 @@ private
 
   def assign_country
     investigation.assign_attributes(notifying_country: country)
-  end
-
-  def user_source
-    @user_source ||= UserSource.new(user:)
   end
 
   def send_notification_email(investigation, user)

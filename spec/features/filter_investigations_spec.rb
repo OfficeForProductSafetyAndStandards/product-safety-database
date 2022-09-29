@@ -70,10 +70,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
   context "when there are multiple pages of cases" do
     before do
-      20.times do
-        create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious])
-        Investigation.import refresh: :wait_for
-      end
+      20.times { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
+      Investigation.import refresh: :wait_for
     end
 
     it "maintains the filters when clicking on additional pages" do

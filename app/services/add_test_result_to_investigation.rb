@@ -29,7 +29,7 @@ private
 
   def create_audit_activity
     AuditActivity::Test::Result.create!(
-      source:,
+      added_by_user: user,
       investigation:,
       product: context.test_result.product,
       metadata: AuditActivity::Test::Result.build_metadata(context.test_result)
@@ -42,13 +42,9 @@ private
         investigation.pretty_id,
         entity.name,
         entity.email,
-        "Test result was added to the #{investigation.case_type} by #{source.show(entity)}.",
+        "Test result was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: entity)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
-  end
-
-  def source
-    @source ||= UserSource.new(user:)
   end
 end

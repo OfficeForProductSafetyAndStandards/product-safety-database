@@ -58,7 +58,7 @@ class Product < ApplicationRecord
   has_many :risk_assessed_products
   has_many :risk_assessments, through: :risk_assessed_products
 
-  has_one :source, as: :sourceable, dependent: :destroy
+  belongs_to :added_by_user, class_name: :User, optional: true
 
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
 

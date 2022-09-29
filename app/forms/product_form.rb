@@ -19,7 +19,7 @@ class ProductForm
   attribute :created_at, :datetime
   attribute :has_markings
   attribute :markings
-
+  attribute :added_by_user_id
   attribute :when_placed_on_market
 
   before_validation { trim_line_endings(:description) }

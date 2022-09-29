@@ -119,7 +119,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
         activity = result.correspondence.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
 
         expect(activity.investigation).to eq(investigation)
-        expect(activity.source.user).to eq(user_same_team)
+        expect(activity.added_by_user).to eq(user_same_team)
         expect(activity.correspondence).to eq(result.correspondence)
       end
 
@@ -130,7 +130,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
               investigation.pretty_id,
               investigation.owner_team.name,
               investigation.owner_team.email,
-              "Phone call details updated on the Allegation by #{UserSource.new(user: user_same_team).show}.",
+              "Phone call details updated on the Allegation by #{user_same_team.decorate.display_name(viewer: user_same_team)}.",
               "Allegation updated"
             )
           end
@@ -144,7 +144,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
               investigation.pretty_id,
               investigation.owner_user.name,
               investigation.owner_user.email,
-              "Phone call details updated on the Allegation by #{UserSource.new(user: user_same_team).show}.",
+              "Phone call details updated on the Allegation by #{user_same_team.decorate.display_name(viewer: user_same_team)}.",
               "Allegation updated"
             )
           end

@@ -6,7 +6,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
 gem "aws-sdk-s3", "~> 1.114"
-gem "aws-sdk-s3control", "~> 1.50"
+gem "aws-sdk-s3control", "~> 1.51"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -59,7 +59,7 @@ group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
-  gem "parallel_tests", "~> 3.12.1"
+  gem "parallel_tests", "~> 3.13.0"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
@@ -70,7 +70,7 @@ group :development do
   gem "m", "~> 1.6"
   gem "rails-erd"
   gem "solargraph", "~> 0.46"
-  gem "spring", "~> 4.0"
+  gem "spring", "~> 4.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
 
