@@ -16,6 +16,8 @@ class ChangeBatchNumber
       investigation_product.save!
       create_audit_activity_for_batch_number_changed
     end
+
+    send_notification_email
   end
 
 private
@@ -25,7 +27,7 @@ private
 
     activity_class.create!(
       source: UserSource.new(user:),
-      investigation: investigation_product.investigation,
+      investigation: investigation,
       title: nil,
       body: nil,
       metadata:
@@ -34,5 +36,26 @@ private
 
   def activity_class
     AuditActivity::Investigation::UpdateBatchNumber
+  end
+
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        email_body(recipient),
+        "#{investigation.case_type.upcase_first} batch number updated"
+      ).deliver_later
+    end
+  end
+
+  def investigation
+    investigation_product.investigation
+  end
+
+  def email_body(viewer = nil)
+    user_name = user.decorate.display_name(viewer:)
+    "#{investigation.case_type.upcase_first} batch number was updated by #{user_name}."
   end
 end
