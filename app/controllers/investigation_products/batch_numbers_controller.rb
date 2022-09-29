@@ -13,7 +13,7 @@ module InvestigationProducts
         return redirect_to investigation_path(@investigation_product.investigation)
       end
 
-      ChangeBatchNumber.call!(investigation_product:@investigation_product, batch_number: batch_number_params[:batch_number], user: current_user)
+      ChangeBatchNumber.call!(investigation_product: @investigation_product, batch_number: batch_number_params[:batch_number], user: current_user)
       redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The case information was updated" }
     end
 

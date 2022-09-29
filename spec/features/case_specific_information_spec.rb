@@ -5,7 +5,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
   let(:other_team) { create :team }
   let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
   let(:team_mate) { create :user, :activated, has_viewed_introduction: true, team: }
-  let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team}
+  let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team }
   let(:investigation) { create :allegation, creator: user }
   let(:product_1) { create :product }
   let(:product_2) { create :product }
@@ -28,7 +28,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
 
       within("dl#product-0") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Batch numbers")
-        expect(page).to have_css("dd.govuk-summary-list__value", text:InvestigationProduct.first.batch_number)
+        expect(page).to have_css("dd.govuk-summary-list__value", text: InvestigationProduct.first.batch_number)
 
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Customs codes")
         expect(page).to have_css("dd.govuk-summary-list__value", text: InvestigationProduct.first.customs_code)
@@ -53,7 +53,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
       end
     end
 
-    context 'when user has permission to update the investigation' do
+    context "when user has permission to update the investigation" do
       before do
         sign_in team_mate
         visit investigation_path(investigation)
@@ -66,7 +66,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
 
         expect_to_be_on_edit_batch_numbers_page(product_id: InvestigationProduct.first.id)
 
-        expect(page).to have_field("batch_number",   with: InvestigationProduct.first.batch_number)
+        expect(page).to have_field("batch_number", with: InvestigationProduct.first.batch_number)
 
         fill_in "batch_number", with: new_batch_numbers
 
@@ -91,14 +91,14 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
       end
     end
 
-    context 'when user does not have permissions to update the investigation' do
+    context "when user does not have permissions to update the investigation" do
       before do
         sign_in other_user
         visit investigation_path(investigation)
       end
 
-      it 'does not allow editing of the batch numbers' do
-        expect(page).to_not have_link("Edit the batch numbers for #{product_1.name}")
+      it "does not allow editing of the batch numbers" do
+        expect(page).not_to have_link("Edit the batch numbers for #{product_1.name}")
       end
     end
   end
