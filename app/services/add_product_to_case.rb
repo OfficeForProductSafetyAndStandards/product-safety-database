@@ -39,7 +39,7 @@ class AddProductToCase
         subcategory:,
         category:,
         webpage:,
-        source: build_user_source,
+        added_by_user: user,
         when_placed_on_market:,
         owning_team: investigation.owner_team
       )
@@ -54,7 +54,7 @@ private
 
   def create_audit_activity_for_product_added
     AuditActivity::Product::Add.create!(
-      source: build_user_source,
+      added_by_user: user,
       investigation:,
       title: product.name,
       product:
@@ -67,13 +67,9 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Product was added to the #{investigation.case_type} by #{context.activity.source.show(recipient)}.",
+        "Product was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
-  end
-
-  def build_user_source
-    UserSource.new(user:)
   end
 end

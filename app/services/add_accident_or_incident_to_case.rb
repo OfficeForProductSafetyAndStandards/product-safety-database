@@ -21,7 +21,7 @@ private
 
   def create_audit_activity
     AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       metadata: audit_activity_metadata,
       title: nil,

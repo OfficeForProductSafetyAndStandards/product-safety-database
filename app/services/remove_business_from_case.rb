@@ -24,20 +24,20 @@ private
 
   def create_audit_activity_for_business_removed
     AuditActivity::Business::Destroy.create!(
-      source: UserSource.new(user:),
+      added_by_user: user,
       investigation:,
       business:,
       metadata: AuditActivity::Business::Destroy.build_metadata(business, reason)
     )
   end
 
-  def send_notification_email(activity)
+  def send_notification_email(_activity)
     email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Business was removed from the #{investigation.case_type} by #{activity.source.show(recipient)}.",
+        "Business was removed from the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end

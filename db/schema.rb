@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_21_095355) do
+ActiveRecord::Schema.define(version: 2022_09_22_141443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
   end
 
   create_table "activities", id: :serial, force: :cascade do |t|
+    t.uuid "added_by_user_id"
     t.text "body"
     t.bigint "business_id"
     t.bigint "correspondence_id"
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
   end
 
   create_table "alerts", id: :serial, force: :cascade do |t|
+    t.uuid "added_by_user_id"
     t.datetime "created_at", null: false
     t.text "description"
     t.integer "investigation_id"
@@ -93,6 +95,7 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
   end
 
   create_table "businesses", id: :serial, force: :cascade do |t|
+    t.uuid "added_by_user_id"
     t.string "company_number"
     t.datetime "created_at", null: false
     t.string "legal_name"
@@ -135,6 +138,7 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
   end
 
   create_table "contacts", force: :cascade do |t|
+    t.uuid "added_by_user_id"
     t.integer "business_id"
     t.datetime "created_at", null: false
     t.string "email"
@@ -240,6 +244,7 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
   end
 
   create_table "locations", id: :serial, force: :cascade do |t|
+    t.uuid "added_by_user_id"
     t.string "address_line_1"
     t.string "address_line_2"
     t.integer "business_id"
@@ -269,6 +274,7 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
+    t.uuid "added_by_user_id"
     t.enum "authenticity", as: "authenticities"
     t.string "barcode", limit: 15
     t.text "brand"
@@ -286,12 +292,6 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
     t.string "webpage"
     t.enum "when_placed_on_market", as: "when_placed_on_markets"
     t.index ["owning_team_id"], name: "index_products_on_owning_team_id"
-  end
-
-  create_table "rapex_imports", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "reference", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "risk_assessed_products", force: :cascade do |t|
@@ -327,18 +327,6 @@ ActiveRecord::Schema.define(version: 2022_09_21_095355) do
     t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
     t.index ["entity_id"], name: "index_roles_on_entity_id"
     t.index ["name", "entity_type", "entity_id"], name: "index_roles_on_name_and_entity_type_and_entity_id", unique: true
-  end
-
-  create_table "sources", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "name"
-    t.integer "sourceable_id"
-    t.string "sourceable_type"
-    t.string "type"
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["sourceable_id", "sourceable_type"], name: "index_sources_on_sourceable_id_and_sourceable_type"
-    t.index ["user_id"], name: "index_sources_on_user_id"
   end
 
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
