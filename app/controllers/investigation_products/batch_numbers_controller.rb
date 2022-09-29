@@ -2,6 +2,7 @@ module InvestigationProducts
   class BatchNumbersController < ApplicationController
     def edit
       @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
+      authorize @investigation_product.investigation, :update?
     end
 
     def update
