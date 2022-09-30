@@ -42,6 +42,7 @@ applications:
     - type: worker
       env:
         RAILS_MAX_THREADS: ((worker-max-threads))
+        STATEMENT_TIMEOUT: 60s
       command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
       health-check-type: process
       instances: ((worker-instances))
