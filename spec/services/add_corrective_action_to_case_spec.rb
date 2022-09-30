@@ -23,7 +23,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
   end
 
   def expected_email_body(user, user_with_edit_access)
-    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{UserSource.new(user:)&.show(user_with_edit_access)}."
+    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{user&.decorate&.display_name(viewer: user_with_edit_access)}."
   end
 
   def expected_email_subject
@@ -44,7 +44,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
     result
 
     audit = investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Add")
-    expect(audit.source.user).to eq(user)
+    expect(audit.added_by_user).to eq(user)
 
     expect(audit.metadata)
       .to eq("corrective_action" => result.corrective_action.as_json, "document" => result.corrective_action.document.attributes)

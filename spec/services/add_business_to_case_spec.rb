@@ -56,7 +56,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
           result
 
           expect(Business.last.primary_location.name).to eq("Registered office address")
-          expect(Business.last.primary_location.source.user).to eq(creator)
+          expect(Business.last.primary_location.added_by_user).to eq(creator)
         end
       end
 
@@ -66,7 +66,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
         business = Business.last
         activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
         expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
-        expect(activity.source.user).to eq(user)
+        expect(activity.added_by_user).to eq(user)
       end
 
       it_behaves_like "a service which notifies the case owner"

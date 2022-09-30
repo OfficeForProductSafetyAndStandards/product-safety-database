@@ -76,8 +76,7 @@ private
 
   def create_location
     business = Business.find(params[:business_id])
-    @location = business.locations.create!(location_params)
-    @location.source = UserSource.new(user: current_user)
+    @location = business.locations.create!(location_params.merge({ added_by_user: current_user }))
   end
 
   # Use callbacks to share common setup or constraints between actions.
