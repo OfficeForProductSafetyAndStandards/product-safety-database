@@ -17,7 +17,6 @@ class ChangeBatchNumber
       create_audit_activity_for_batch_number_changed
     end
 
-
     send_notification_email
   end
 
