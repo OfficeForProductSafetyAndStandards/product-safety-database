@@ -2,7 +2,7 @@ class ChangeBatchNumber
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation_product, :batch_number, :user, :source, to: :context
+  delegate :investigation_product, :batch_number, :user, to: :context
 
   def call
     context.fail!(error: "No investigation product supplied") unless investigation_product.is_a?(InvestigationProduct)
@@ -27,7 +27,7 @@ private
     metadata = activity_class.build_metadata(investigation_product)
 
     activity_class.create!(
-      source: source,
+      source: UserSource.new(user:),
       investigation:,
       title: nil,
       body: nil,
