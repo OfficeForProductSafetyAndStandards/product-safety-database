@@ -2,11 +2,10 @@ class ChangeBatchNumber
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation_product, :investigation, :batch_number, :user, to: :context
+  delegate :investigation_product, :batch_number, :user, to: :context
 
   def call
     context.fail!(error: "No investigation product supplied") unless investigation_product.is_a?(InvestigationProduct)
-    context.fail!(error: "No investigation product supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No batch number supplied") unless batch_number.is_a?(String)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
@@ -49,6 +48,10 @@ private
         "#{investigation.case_type.upcase_first} batch number updated"
       ).deliver_later
     end
+  end
+
+  def investigation
+    investigation_product.investigation
   end
 
   def email_body(viewer = nil)
