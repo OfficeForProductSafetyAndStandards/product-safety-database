@@ -27,7 +27,6 @@ private
     metadata = activity_class.build_metadata(investigation_product)
 
     activity_class.create!(
-      source: UserSource.new(user:),
       investigation:,
       title: nil,
       body: nil,
