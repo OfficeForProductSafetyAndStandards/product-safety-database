@@ -9,7 +9,7 @@ module InvestigationProducts
       @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
       authorize @investigation_product.investigation, :update?
 
-      if @investigation_product.batch_number == batch_number_params[:batch_number]
+      if @investigation_product.batch_number.to_s == batch_number_params[:batch_number]
         return redirect_to investigation_path(@investigation_product.investigation)
       end
 
