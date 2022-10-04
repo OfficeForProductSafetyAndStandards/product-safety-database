@@ -11,15 +11,13 @@
     <div class="govuk-grid-column-two-thirds">
 
       <% hint_html = capture do %>
-        <div id="batch-numbers-hint" class="govuk-hint govuk-!-margin-bottom-5">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-2">
-              You can add and edit batch numbers for <% @investigation_product.product.name %>
-          </span>
+        <span class="govuk-!-display-block govuk-!-margin-bottom-2">
+            You can add and edit batch numbers for <%= @investigation_product.product.name %>
+        </span>
 
-          <span class="govuk-!-display-block govuk-!-font-size-16">
-              Use a comma and a space to separate multiple batch numbers. For example, <br class="opss-br-desktop">37364361, 98774776<span class="govuk-visually-hidden">.</span>
-          </span>
-        </div>
+        <span class="govuk-!-display-block govuk-!-font-size-16">
+            Use a comma and a space to separate multiple batch numbers. For example, <br class="opss-br-desktop">37364361, 98774776<span class="govuk-visually-hidden">.</span>
+        </span>
       <% end %>
 
       <%= govukInput(
@@ -30,7 +28,8 @@
               isPageHeading: true
             },
             hint: {
-              html: hint_html
+              html: hint_html,
+              classes: "govuk-hint govuk-!-margin-bottom-5"
             },
             id: "batch_number",
             key: :batch_number,
