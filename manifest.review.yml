@@ -14,6 +14,8 @@ applications:
     SENTRY_CURRENT_ENV: ((sentry-current-env))
     LOCK_MAXIMUM_ATTEMPTS: 3
     OS_NAMESPACE: ((app-name))
+    STATEMENT_TIMEOUT: 60s
+    RAILS_MAX_THREADS: ((web-max-threads))
   timeout: 180
   services:
     - ((psd-db-name))
@@ -36,17 +38,11 @@ applications:
     - psd-redacted-export-env
   processes:
     - type: web
-      env:
-        RAILS_MAX_THREADS: ((web-max-threads))
-        STATEMENT_TIMEOUT: 60s
       command: export $(./env/get-env-from-vcap.sh) && bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
       instances: 1
       memory: 2G
     - type: worker
-      env:
-        RAILS_MAX_THREADS: ((worker-max-threads))
-        STATEMENT_TIMEOUT: 60s
-      command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
+      command: export $(./env/get-env-from-vcap.sh) && RAILS_MAX_THREADS=((worker-max-threads)) bin/sidekiq -C config/sidekiq.yml
       health-check-type: process
       instances: 1
       memory: 500M
