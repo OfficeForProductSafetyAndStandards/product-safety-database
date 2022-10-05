@@ -82,8 +82,8 @@ GEM
     attr_extras (6.2.5)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.634.0)
-    aws-sdk-core (3.152.0)
+    aws-partitions (1.642.0)
+    aws-sdk-core (3.158.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -95,10 +95,10 @@ GEM
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sdk-s3control (1.51.0)
+    aws-sdk-s3control (1.52.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sigv4 (1.5.1)
+    aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     backport (1.2.0)
     bcrypt (3.1.18)
@@ -151,7 +151,6 @@ GEM
     devise-encryptable (0.2.0)
       devise (>= 2.1.0)
     diff-lcs (1.5.0)
-    digest (3.1.0)
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -288,20 +287,14 @@ GEM
     msgpack (1.5.4)
     multi_json (1.15.0)
     multipart-post (2.2.3)
-    net-imap (0.2.3)
-      digest
+    net-imap (0.3.1)
       net-protocol
-      strscan
-    net-pop (0.1.1)
-      digest
+    net-pop (0.1.2)
       net-protocol
-      timeout
     net-protocol (0.1.3)
       timeout
-    net-smtp (0.3.1)
-      digest
+    net-smtp (0.3.2)
       net-protocol
-      timeout
     netrc (0.11.0)
     nio4r (2.5.8)
     nokogiri (1.13.8)
@@ -406,7 +399,7 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.9.1)
       redis (>= 4, < 5)
-    regexp_parser (2.5.0)
+    regexp_parser (2.6.0)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.0.1)
@@ -503,19 +496,19 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     scss_lint-govuk (0.2.0)
       scss_lint
-    selenium-webdriver (4.4.0)
+    selenium-webdriver (4.5.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    sentry-rails (5.4.2)
+    sentry-rails (5.5.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.4.2)
-    sentry-ruby (5.4.2)
+      sentry-ruby (~> 5.5.0)
+    sentry-ruby (5.5.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.4.2)
-      sentry-ruby (~> 5.4.2)
+    sentry-sidekiq (5.5.0)
+      sentry-ruby (~> 5.5.0)
       sidekiq (>= 3.0)
     shoulda-matchers (5.2.0)
       activesupport (>= 5.2.0)
@@ -539,7 +532,7 @@ GEM
     simplecov-html (0.12.3)
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
-    solargraph (0.46.0)
+    solargraph (0.47.2)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -571,7 +564,6 @@ GEM
     strings-ansi (0.2.0)
     strong_migrations (1.3.1)
       activerecord (>= 5.2)
-    strscan (3.0.4)
     super_diff (0.9.0)
       attr_extras (>= 6.2.4)
       diff-lcs
@@ -592,7 +584,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
-    unicode-display_width (2.2.0)
+    unicode-display_width (2.3.0)
     unicode_utils (1.4.0)
     validate_email (0.1.6)
       activemodel (>= 3.0)
@@ -619,7 +611,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.28)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.1)
 
 PLATFORMS
   ruby
@@ -630,7 +622,7 @@ DEPENDENCIES
   activerecord-pg_enum (~> 2.0)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.114)
-  aws-sdk-s3control (~> 1.51)
+  aws-sdk-s3control (~> 1.52)
   bootsnap
   byebug (~> 11.1)
   capybara (~> 3.36)
@@ -688,7 +680,7 @@ DEPENDENCIES
   sass-rails (~> 6.0)
   scout_apm (~> 5.3)
   scss_lint-govuk (~> 0.2)
-  selenium-webdriver (~> 4.4)
+  selenium-webdriver (~> 4.5)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
@@ -697,7 +689,7 @@ DEPENDENCIES
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
-  solargraph (~> 0.46)
+  solargraph (~> 0.47)
   spring (~> 4.1)
   spring-commands-rspec (~> 1.0)
   sprockets (~> 4.1.1)
@@ -711,7 +703,7 @@ DEPENDENCIES
   wicked (~> 2.0)
 
 RUBY VERSION
-   ruby 3.1.1p18
+   ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.8
+   2.3.22
