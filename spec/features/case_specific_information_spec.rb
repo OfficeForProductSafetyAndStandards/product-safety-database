@@ -2,12 +2,16 @@ require "rails_helper"
 
 RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with_stubbed_mailer do
   let(:team) { create :team }
+  let(:other_team) { create :team }
   let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
+  let(:team_mate) { create :user, :activated, has_viewed_introduction: true, team: }
+  let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team }
   let(:investigation) { create :allegation, creator: user }
   let(:product_1) { create :product }
   let(:product_2) { create :product }
   let(:product_3) { create :product }
   let(:product_4) { create :product }
+  let(:new_batch_numbers) { "abc, def, 999" }
 
   context "when investigation has multiple linked products" do
     before do
@@ -20,15 +24,14 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
     it "shows all info on case specific info section of case page" do
       sign_in user
       visit investigation_path(investigation)
-
       expect_investigation_products_to_be_listed_with_oldest_first
 
       within("dl#product-0") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Batch numbers")
-        expect(page).to have_css("dd.govuk-summary-list__value", text: product_1.investigation_products.first.batch_number)
+        expect(page).to have_css("dd.govuk-summary-list__value", text: InvestigationProduct.first.batch_number)
 
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Customs codes")
-        expect(page).to have_css("dd.govuk-summary-list__value", text: product_1.investigation_products.first.customs_code)
+        expect(page).to have_css("dd.govuk-summary-list__value", text: InvestigationProduct.first.customs_code)
 
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
         expect(page).to have_css("dd.govuk-summary-list__value", text: "Unknown")
@@ -47,6 +50,55 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
       within("dl#product-3") do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
         expect(page).to have_css("dd.govuk-summary-list__value", text: "Not relevant")
+      end
+    end
+
+    context "when user has permission to update the investigation" do
+      before do
+        sign_in team_mate
+        visit investigation_path(investigation)
+      end
+
+      it "allows editing of batch numbers" do
+        within("dl#product-0") do
+          click_link "Edit the batch numbers for #{InvestigationProduct.first.product.name}"
+        end
+
+        expect_to_be_on_edit_batch_numbers_page(product_id: InvestigationProduct.first.id)
+
+        expect(page).to have_field("batch_number", with: InvestigationProduct.first.batch_number)
+
+        fill_in "batch_number", with: new_batch_numbers
+
+        click_button "Save"
+
+        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+        expect(page).to have_content("The case information was updated")
+
+        within("dl#product-0") do
+          expect(page).to have_css("dt.govuk-summary-list__key", text: "Batch numbers")
+          expect(page).to have_css("dd.govuk-summary-list__value", text: new_batch_numbers)
+        end
+
+        click_link "Activity"
+
+        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect(page).to have_css("h3", text: "Batch number updated")
+        expect(page).to have_content("Batch number: #{new_batch_numbers}")
+
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation batch number updated"
+      end
+    end
+
+    context "when user does not have permissions to update the investigation" do
+      before do
+        sign_in other_user
+        visit investigation_path(investigation)
+      end
+
+      it "does not allow editing of the batch numbers" do
+        expect(page).not_to have_link("Edit the batch numbers for #{product_1.name}")
       end
     end
   end
