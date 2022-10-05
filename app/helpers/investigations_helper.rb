@@ -85,7 +85,8 @@ module InvestigationsHelper
       },
       {
         key: { text: "Customs codes" },
-        value: { text: investigation_product&.customs_code || "" }
+        value: { text: investigation_product&.customs_code || "" },
+        actions: customs_code_actions(investigation_product, user)
       },
       {
         key: { text: "Units affected" },
@@ -347,6 +348,18 @@ private
         href: edit_investigation_product_batch_numbers_path(investigation_product),
         text: "Edit",
         visuallyHiddenText: "  the batch numbers for #{investigation_product.product.name}"
+      ]
+    }
+  end
+
+  def customs_code_actions(investigation_product, user)
+    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+
+    {
+      items: [
+        href: edit_investigation_product_customs_code_path(investigation_product),
+        text: "Edit",
+        visuallyHiddenText: "  the customs codes for #{investigation_product.product.name}"
       ]
     }
   end
