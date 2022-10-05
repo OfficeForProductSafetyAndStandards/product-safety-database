@@ -12,9 +12,9 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
     ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
   end
 
-  scenario "Adding a product to a case" do
+  scenario "Adding a product" do
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/products/new"
+    visit "/products/new"
 
     fill_in "Barcode number (GTIN, EAN or UPC)", with: "invalid"
 
@@ -62,8 +62,11 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
 
     click_on "Save"
 
-    expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
+    expect(page).to have_current_path("/products")
     expect(page).not_to have_error_messages
+    expect(page).to have_selector("h1", text: "Product record created")
+
+    click_on "View the product record"
 
     expected_markings = case attributes[:has_markings]
                         when "markings_yes" then attributes[:markings].join(", ")

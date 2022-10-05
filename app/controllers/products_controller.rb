@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
 
   before_action :set_search_params, only: %i[index]
   before_action :set_product, only: %i[show edit update]
-  before_action :set_countries, only: %i[update edit]
+  before_action :set_countries, only: %i[new update edit]
   before_action :build_breadcrumbs, only: %i[show]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
 
@@ -27,6 +27,29 @@ class ProductsController < ApplicationController
   def show
     respond_to do |format|
       format.html
+    end
+  end
+
+  # GET /products/new
+  def new
+    @product_form = ProductForm.new
+  end
+
+  # POST /products
+  def create
+    @product_form = ProductForm.new product_params
+
+    respond_to do |format|
+      if @product_form.valid?
+        context = CreateProduct.call!(
+          @product_form.serializable_hash.merge(user: current_user)
+        )
+        @product = context.product
+        format.html { render :confirmation }
+      else
+        set_countries
+        format.html { render :new }
+      end
     end
   end
 

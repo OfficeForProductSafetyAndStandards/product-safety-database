@@ -141,7 +141,7 @@ Rails.application.routes.draw do
       resource :update_case_risk_level, only: %i[show update], path: "update-case-risk-level", controller: "investigations/update_case_risk_level_from_risk_assessment"
     end
 
-    resources :products, only: %i[new create index], controller: "investigations/products" do
+    resources :products, only: %i[new index], controller: "investigations/products" do
       member do
         put :link, path: ""
         get :remove
@@ -194,7 +194,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # yo
   resource :products, only: [], path: "products" do
     get "your-products", to: "products#your_products", as: "your"
     get "team-products", to: "products#team_products", as: "team"
@@ -207,7 +206,7 @@ Rails.application.routes.draw do
     get "all-businesses", to: "businesses#index", as: "all"
   end
 
-  resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
+  resources :products, except: %i[destroy], concerns: %i[document_attachable]
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do
