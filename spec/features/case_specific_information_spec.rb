@@ -65,7 +65,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
           click_link "Edit the batch numbers for #{InvestigationProduct.first.product.name}"
         end
 
-        expect_to_be_on_edit_batch_numbers_page(product_id: InvestigationProduct.first.id)
+        expect_to_be_on_edit_batch_numbers_page(investigation_product_id: InvestigationProduct.first.id)
 
         expect(page).to have_field("batch_number", with: InvestigationProduct.first.batch_number)
 
@@ -96,7 +96,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
           click_link "Edit the customs codes for #{InvestigationProduct.first.product.name}"
         end
 
-        expect_to_be_on_edit_customs_code_page(product_id: InvestigationProduct.first.id)
+        expect_to_be_on_edit_customs_code_page(investigation_product_id: InvestigationProduct.first.id)
 
         expect(page).to have_field("customs_code", with: InvestigationProduct.first.customs_code)
 
@@ -120,6 +120,40 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         expect(page).to have_content("Customs code: #{new_customs_code}")
 
         expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation customs code updated"
+      end
+
+      it "allows editing of units affected" do
+        within("dl#product-0") do
+          click_link "Edit the units affected for #{InvestigationProduct.first.product.name}"
+        end
+
+        expect_to_be_on_edit_units_affected_page(investigation_product_id: InvestigationProduct.first.id)
+
+        expect(page).to have_checked_field("Unknown")
+
+        choose "Exact number"
+
+        fill_in "exact_units", with: "100"
+
+        click_button "Save"
+
+        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+        expect(page).to have_content("The case information was updated")
+
+        within("dl#product-0") do
+          expect(page).to have_css("dt.govuk-summary-list__key", text: "Units affected")
+          expect(page).to have_css("dd.govuk-summary-list__value", text: "100 Exact number")
+        end
+
+        click_link "Activity"
+
+        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect(page).to have_css("h3", text: "Case specific product information updated")
+        expect(page).to have_content("Affected units status: exact")
+        expect(page).to have_content("Number of affected units: 100")
+
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation units affected updated"
       end
     end
 
