@@ -3,6 +3,10 @@ class ProductDecorator < ApplicationDecorator
   delegate_all
   decorates_association :investigations
 
+  def name_with_brand
+    [brand, name].compact.join(" ")
+  end
+
   def pretty_description
     "Product: #{name}"
   end

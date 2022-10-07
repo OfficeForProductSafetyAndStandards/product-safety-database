@@ -1,0 +1,78 @@
+<%= page_title "Is this the product?" %>
+<% content_for :back_link do %>
+  <%= govukBackLink text: "Back", href: new_investigation_product_path(@investigation) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
+  <%= form.hidden_field :product_id %>
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">Is this the correct product record to add to your case?</h1>
+      </legend>
+      <div class="govuk-grid-row">
+        <section class="govuk-grid-column-three-quarters opss-panels">
+          <div class="opss-panels__single">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
+            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
+                <dd class="govuk-summary-list__value"><%= @product.psd_ref %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Brand name</dt>
+                <dd class="govuk-summary-list__value"><%= @product.brand %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Product name</dt>
+                <dd class="govuk-summary-list__value"><%= @product.name %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Barcode</dt>
+                <dd id="barNumber" class="govuk-summary-list__value"><%= @product.barcode %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Counterfeit</dt>
+                <dd class="govuk-summary-list__value"><%= @product.authenticity %></dd>
+              </div>
+            </dl>
+            <% if @product.images.any? %>
+              <details class="govuk-details govuk-!-margin-bottom-3" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">Product image</span>
+                </summary>
+                <div class="govuk-details__text">
+                  <%= render "documents/document_preview",
+                    document: @product.images.first,
+                    dimensions: "300x500",
+                    hide_link: true,
+                    class_name: 'app-document-preview--small' %>
+                </div>
+              </details>
+            <% end %>
+          </div>
+        </section>
+      </div>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1">
+          <%= form.govuk_radios(
+            :correct,
+            legend: nil,
+            items: [
+              { value: "yes", text: "Yes" },
+              { value: "no", html: "No - Enter the #{psd_abbr} reference number again".html_safe }
+            ]
+          ) %>
+        </div>
+      </div>
+
+    </fieldset>
+  </div>
+  <div class="govuk-button-group">
+    <button class="govuk-button" data-module="govuk-button">Save and continue</button>
+    <%= link_to "Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+  </div>
+<% end %>
