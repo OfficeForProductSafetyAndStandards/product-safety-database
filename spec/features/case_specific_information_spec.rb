@@ -129,8 +129,9 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         visit investigation_path(investigation)
       end
 
-      it "does not allow editing of the batch numbers" do
+      it "does not allow editing of the case specific information" do
         expect(page).not_to have_link("Edit the batch numbers for #{product_1.name}")
+        expect(page).not_to have_link("Edit the customs codes for #{product_1.name}")
       end
     end
   end
