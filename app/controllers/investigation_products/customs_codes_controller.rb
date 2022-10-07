@@ -13,8 +13,9 @@ module InvestigationProducts
         return redirect_to investigation_path(@investigation_product.investigation)
       end
 
-      ChangeCustomsCode.call!(investigation_product: @investigation_product, customs_code: customs_code_params[:customs_code], user: current_user)
-      redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The case information was updated" }
+      result = ChangeCustomsCode.call!(investigation_product: @investigation_product, customs_code: customs_code_params[:customs_code], user: current_user)
+
+      redirect_to investigation_path(@investigation_product.investigation), flash: result.changed ? { success: "The case information was updated" } : nil
     end
 
     def customs_code_params

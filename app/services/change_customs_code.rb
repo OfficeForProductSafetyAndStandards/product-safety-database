@@ -10,12 +10,14 @@ class ChangeCustomsCode
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     investigation_product.assign_attributes(customs_code:)
+
     return if investigation_product.changes.none?
 
     ActiveRecord::Base.transaction do
       investigation_product.save!
       create_audit_activity_for_customs_code_changed
     end
+    context.changed = true
 
     send_notification_email
   end
