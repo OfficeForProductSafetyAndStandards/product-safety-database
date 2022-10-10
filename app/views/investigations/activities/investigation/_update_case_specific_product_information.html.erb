@@ -1,0 +1,8 @@
+<div class="govuk-body">
+  <p>Changes:</p>
+  <% if activity.new_batch_number %>
+    <%= "Batch number:" %> <b><%= activity.new_batch_number %></b><br>
+  <% end %>
+  <% if activity.new_customs_code %>
+    <%= "Customs code:" %> <b><%= activity.new_customs_code %></b><br>
+  <% end %>

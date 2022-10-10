@@ -672,4 +672,9 @@ module PageExpectations
     expect(page).to have_current_path("/investigation_products/#{product_id}/edit-batch-numbers/edit")
     expect(page).to have_css("h1", text: "Edit the batch numbers")
   end
+
+  def expect_to_be_on_edit_customs_code_page(product_id:)
+    expect(page).to have_current_path("/investigation_products/#{product_id}/edit-customs-code/edit")
+    expect(page).to have_css("h1", text: "Edit the customs code")
+  end
 end
