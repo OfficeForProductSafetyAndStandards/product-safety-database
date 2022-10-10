@@ -142,6 +142,10 @@ Rails.application.routes.draw do
     end
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
+      collection do
+        post :link
+      end
+
       member do
         get :remove
         delete :unlink, path: ""

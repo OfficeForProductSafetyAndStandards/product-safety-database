@@ -5,6 +5,8 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
+<%= error_summary @find_product_form.errors %>
+
 <%= form_with model: @find_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

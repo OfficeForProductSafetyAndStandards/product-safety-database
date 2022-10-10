@@ -17,7 +17,7 @@ class FindProductForm
     product_id = reference.presence && reference.try(:to_i)
     return nil unless product_id && product_id.positive?
 
-    Product.find product_id
+    Product.find_by id: product_id
   end
 
 private

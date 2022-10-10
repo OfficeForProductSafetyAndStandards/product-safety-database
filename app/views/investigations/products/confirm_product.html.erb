@@ -5,7 +5,9 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
+<%= error_summary @confirm_product_form.errors %>
+
+<%= form_with model: @confirm_product_form, url: link_investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
   <%= form.hidden_field :product_id %>
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
