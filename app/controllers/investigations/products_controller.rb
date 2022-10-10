@@ -31,8 +31,12 @@ class Investigations::ProductsController < ApplicationController
     @product = @confirm_product_form.product.decorate
     return render(:confirm_product) if @confirm_product_form.invalid?
 
-    AddProductToCase.call! user: current_user, investigation: @investigation, product: @confirm_product_form.product
-    redirect_to investigation_products_path(@investigation), flash: { success: "The product record was added to the case" }
+    if @confirm_product_form.confirmed?
+      AddProductToCase.call! user: current_user, investigation: @investigation, product: @confirm_product_form.product
+      redirect_to investigation_products_path(@investigation), flash: { success: "The product record was added to the case" }
+    else
+      redirect_to new_investigation_product_path
+    end
   end
 
   def remove
@@ -75,7 +79,7 @@ private
   end
 
   def confirm_product_params
-    params.require(:confirm_product_form).permit(:product_id, :confirm)
+    params.require(:confirm_product_form).permit(:product_id, :correct)
   end
 
   def remove_product_params
