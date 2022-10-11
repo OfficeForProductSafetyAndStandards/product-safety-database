@@ -1,15 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch, :with_product_form_helper do
-  let(:user)          { create(:user, :activated) }
-  let(:investigation) { create(:enquiry, creator: user) }
-  let(:attributes)    do
+  let(:user)       { create(:user, :activated) }
+  let(:attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
-  end
-  let(:other_user) { create(:user, :activated) }
-
-  before do
-    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
   end
 
   scenario "Adding a product" do
@@ -86,12 +80,5 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
     expect(page).to have_summary_item(key: "Country of origin",         value: attributes[:country])
     expect(page).to have_summary_item(key: "Description",               value: attributes[:description])
     expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key))
-  end
-
-  scenario "Not being able to add a product to another team’s case" do
-    sign_in other_user
-    visit "/cases/#{investigation.pretty_id}/products"
-
-    expect(page).not_to have_link("Add a product to the case")
   end
 end
