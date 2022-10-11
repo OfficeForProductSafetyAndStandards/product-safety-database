@@ -318,7 +318,7 @@ GEM
     patience_diff (1.2.0)
       optimist (~> 3.0)
     pg (1.4.3)
-    pghero (3.0.0)
+    pghero (3.0.1)
       activerecord (>= 6)
     pry (0.14.1)
       coderay (~> 1.1)
