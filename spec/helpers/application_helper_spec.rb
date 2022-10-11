@@ -86,4 +86,10 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#psd_abbr" do
+    it "returns the correct abbreviation for PSD" do
+      expect(helper.psd_abbr).to eq("<abbr title=\"Product Safety Database\">PSD</abbr>")
+    end
+  end
 end

@@ -17,12 +17,18 @@ class AddProductToCase
       investigation.products << product
     end
 
+    change_product_owner_if_unowned
+
     context.activity = create_audit_activity_for_product_added
 
     send_notification_email
   end
 
 private
+
+  def change_product_owner_if_unowned
+    product.update!(owning_team: investigation.owner_team) if product.owning_team.nil?
+  end
 
   def create_audit_activity_for_product_added
     AuditActivity::Product::Add.create!(

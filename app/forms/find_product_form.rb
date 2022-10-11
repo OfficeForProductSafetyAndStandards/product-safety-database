@@ -9,7 +9,7 @@ class FindProductForm
 
   before_validation :tidy_reference
 
-  validates :reference, presence: { message: "Enter a PSD product record reference number" }, numericality: { only_integer: true, greater_than: 0, message: "Enter a PSD product record reference number" }
+  validates :reference, numericality: { only_integer: true, greater_than: 0, message: "Enter a PSD product record reference number" }
   validate :must_find_a_product
   validate :must_not_find_a_product_already_linked
 
@@ -30,10 +30,14 @@ private
   end
 
   def must_find_a_product
+    return if errors.include?(:reference)
+
     errors.add(:reference, "An active product record matching psd-#{reference} does not exist") if product.blank?
   end
 
   def must_not_find_a_product_already_linked
+    return if errors.include?(:reference)
+
     errors.add(:reference, "Enter a product record which has not already been added to the case") if product.present? && investigation.products.include?(product)
   end
 end

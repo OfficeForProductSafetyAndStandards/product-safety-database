@@ -18,46 +18,46 @@
         <section class="govuk-grid-column-three-quarters opss-panels">
           <div class="opss-panels__single">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
-            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
-                <dd class="govuk-summary-list__value"><%= @product.psd_ref %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Brand name</dt>
-                <dd class="govuk-summary-list__value"><%= @product.brand %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product name</dt>
-                <dd class="govuk-summary-list__value"><%= @product.name %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Barcode</dt>
-                <dd id="barNumber" class="govuk-summary-list__value"><%= @product.barcode %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Counterfeit</dt>
-                <dd class="govuk-summary-list__value"><%= @product.authenticity %></dd>
-              </div>
-            </dl>
+            <%= govukSummaryList(
+              classes: "govuk-summary-list--no-border govuk-!-margin-bottom-6",
+              rows: [
+                {
+                  key: { html: "#{psd_abbr} <span title=\"reference\">ref</span>".html_safe },
+                  value: { text: @product.psd_ref }
+                },
+                {
+                  key: { text: "Brand name" },
+                  value: { text: @product.brand }
+                },
+                {
+                  key: { text: "Product name" },
+                  value: { text: @product.name }
+                },
+                {
+                  key: { text: "Barcode" },
+                  value: { text: @product.barcode }
+                },
+                {
+                  key: { text: "Counterfeit" },
+                  value: { html: render("product_authenticity", authenticity: @product.object.authenticity) }
+                }
+              ]
+            ) %>
             <% if @product.images.any? %>
-              <details class="govuk-details govuk-!-margin-bottom-3" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text">Product image</span>
-                </summary>
-                <div class="govuk-details__text">
-                  <%= render "documents/document_preview",
+              <%= govukDetails(
+                summaryText: "Product image",
+                html: capture {
+                  render "documents/document_preview",
                     document: @product.images.first,
                     dimensions: "300x500",
                     hide_link: true,
-                    class_name: 'app-document-preview--small' %>
-                </div>
-              </details>
+                    class_name: 'app-document-preview--small'
+                }
+              ) %>
             <% end %>
           </div>
         </section>
       </div>
-
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1">
           <%= form.govuk_radios(
@@ -74,7 +74,7 @@
     </fieldset>
   </div>
   <div class="govuk-button-group">
-    <button class="govuk-button" data-module="govuk-button">Save and continue</button>
+    <%= govukButton(text: "Save and continue") %>
     <%= link_to "Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
   </div>
 <% end %>

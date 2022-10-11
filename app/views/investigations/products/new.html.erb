@@ -18,19 +18,17 @@
       </div>
     </div>
     <div class="govuk-grid-column-two-thirds">
-      <details class="govuk-details govuk-!-margin-bottom-9 opss-details--sm" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">Help with adding a product to the case</span>
-        </summary>
-        <div class="govuk-details__text">
-          <p class="govuk-body-s">
-            Use the <%= link_to "Products area", your_products_path, class: "govuk-link govuk-link--no-visited-state" %> to find a product and its product record reference number. For example, psd-301. Using an existing <%= psd_abbr %> product record to add to your case avoids the need to create a new one and highlights other cases investigating the same product.
-          </p>
-          <p class="govuk-body-s">
-            After checking that the product does not already exist within the <%= psd_abbr %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr %> reference number to add it to your case.
-          </p>
-        </div>
-      </details>
+      <%= govukDetails(
+        classes: "govuk-!-margin-bottom-9 opss-details--sm",
+        summaryText: "Help with adding a product to the case"
+      ) do %>
+        <p class="govuk-body-s">
+          Use the <%= link_to "Products area", your_products_path, class: "govuk-link govuk-link--no-visited-state" %> to find a product and its product record reference number. For example, psd-301. Using an existing <%= psd_abbr %> product record to add to your case avoids the need to create a new one and highlights other cases investigating the same product.
+        </p>
+        <p class="govuk-body-s">
+          After checking that the product does not already exist within the <%= psd_abbr %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr %> reference number to add it to your case.
+        </p>
+      <% end %>
       <div class="govuk-form-group">
         <div class="govuk-input__wrapper">
           <div class="govuk-input__prefix" aria-hidden="true">psd-</div>
@@ -38,9 +36,7 @@
         </div>
       </div>
       <div class="govuk-button-group">
-        <button class="govuk-button" data-module="govuk-button">
-          Continue
-        </button>
+        <%= govukButton(text: "Continue") %>
         <%= link_to "Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     </div>
