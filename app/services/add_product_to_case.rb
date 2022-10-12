@@ -13,6 +13,7 @@ class AddProductToCase
     context.fail!(error: "No product supplied") unless product.is_a?(Product)
 
     InvestigationProduct.transaction do
+      # TODO: Only check existing links on active products once product retirement is implemented
       (context.fail!(error: "The product is already linked to the case") and return false) if investigation.products.include?(product)
       investigation.products << product
     end
