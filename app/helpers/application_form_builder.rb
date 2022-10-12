@@ -71,26 +71,24 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_input(attribute, label:, value: nil, label_classes: nil, classes: nil, hint: nil)
+  def govuk_input(attribute, label: nil, value: nil, label_classes: nil, hint: nil, **kwargs)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
       }
     end
 
-    hint = { text: hint } if hint
+    label = { text: label, classes: label_classes.to_s } if label.is_a?(String)
+    hint = { text: hint } if hint.is_a?(String)
 
     @template.govukInput(
-      label: {
-        text: label,
-        classes: label_classes.to_s
-      },
-      hint:,
-      name: input_name(attribute),
       id: attribute.to_s,
-      classes:,
+      name: input_name(attribute),
       value: value || object.public_send(attribute),
-      errorMessage: error_message
+      errorMessage: error_message,
+      label:,
+      hint:,
+      **kwargs
     )
   end
 
