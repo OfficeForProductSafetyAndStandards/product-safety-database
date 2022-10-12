@@ -90,7 +90,8 @@ module InvestigationsHelper
       },
       {
         key: { text: "Units affected" },
-        value: units_affected(investigation_product)
+        value: units_affected(investigation_product),
+        actions: number_of_affected_units_actions(investigation_product, user)
       }
     ]
   end
@@ -360,6 +361,18 @@ private
         href: edit_investigation_product_customs_code_path(investigation_product),
         text: "Edit",
         visuallyHiddenText: "  the customs codes for #{investigation_product.product.name}"
+      ]
+    }
+  end
+
+  def number_of_affected_units_actions(investigation_product, user)
+    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+
+    {
+      items: [
+        href: edit_investigation_product_number_of_affected_units_path(investigation_product),
+        text: "Edit",
+        visuallyHiddenText: " the units affected for #{investigation_product.product.name}"
       ]
     }
   end
