@@ -12,6 +12,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
   let(:product_3) { create :product }
   let(:product_4) { create :product }
   let(:new_batch_numbers) { "abc, def, 999" }
+  let(:new_customs_code) { "eng98989" }
 
   context "when investigation has multiple linked products" do
     before do
@@ -84,10 +85,41 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         click_link "Activity"
 
         expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-        expect(page).to have_css("h3", text: "Batch number updated")
+        expect(page).to have_css("h3", text: "Case specific product information updated")
         expect(page).to have_content("Batch number: #{new_batch_numbers}")
 
         expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation batch number updated"
+      end
+
+      it "allows editing of customs code" do
+        within("dl#product-0") do
+          click_link "Edit the customs codes for #{InvestigationProduct.first.product.name}"
+        end
+
+        expect_to_be_on_edit_customs_code_page(product_id: InvestigationProduct.first.id)
+
+        expect(page).to have_field("customs_code", with: InvestigationProduct.first.customs_code)
+
+        fill_in "customs_code", with: new_customs_code
+
+        click_button "Save"
+
+        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+        expect(page).to have_content("The case information was updated")
+
+        within("dl#product-0") do
+          expect(page).to have_css("dt.govuk-summary-list__key", text: "Customs code")
+          expect(page).to have_css("dd.govuk-summary-list__value", text: new_customs_code)
+        end
+
+        click_link "Activity"
+
+        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect(page).to have_css("h3", text: "Case specific product information updated")
+        expect(page).to have_content("Customs code: #{new_customs_code}")
+
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation customs code updated"
       end
     end
 
@@ -97,8 +129,9 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         visit investigation_path(investigation)
       end
 
-      it "does not allow editing of the batch numbers" do
+      it "does not allow editing of the case specific information" do
         expect(page).not_to have_link("Edit the batch numbers for #{product_1.name}")
+        expect(page).not_to have_link("Edit the customs codes for #{product_1.name}")
       end
     end
   end
