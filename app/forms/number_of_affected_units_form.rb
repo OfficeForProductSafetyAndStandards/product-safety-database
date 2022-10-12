@@ -8,9 +8,9 @@ class NumberOfAffectedUnitsForm
   attribute :affected_units_status
   attribute :number_of_affected_units
 
-  validates :affected_units_status, inclusion: {  in: InvestigationProduct.affected_units_statuses.keys }
-  validates :approx_units, presence: true, if: -> { affected_units_status == "approx" }
-  validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
+  validates :affected_units_status, inclusion: { in: InvestigationProduct.affected_units_statuses.keys }
+  validates :approx_units, presence: { message: "Enter how many units are affected" }, if: -> { affected_units_status == "approx" }
+  validates :exact_units, presence: { message: "Enter how many units are affected" }, if: -> { affected_units_status == "exact" }
 
   def self.from(investigation_product)
     new(investigation_product.serializable_hash.slice("number_of_affected_units", "affected_units_status")).tap do |investigation_product_form|

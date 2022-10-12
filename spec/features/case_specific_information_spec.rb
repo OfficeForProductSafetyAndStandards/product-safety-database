@@ -133,6 +133,15 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
 
         choose "Exact number"
 
+        fill_in "exact_units", with: ""
+
+        click_button "Save"
+
+        errors_list = page.find(".govuk-error-summary__list").all("li")
+        expect(errors_list[0].text).to eq "Enter how many units are affected"
+
+        choose "Exact number"
+
         fill_in "exact_units", with: "100"
 
         click_button "Save"
