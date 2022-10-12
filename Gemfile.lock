@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails
-  revision: 9f34e5e5050f6fb1308c6289addcabf68102fc77
-  tag: 0.9.4
+  revision: 5490201a035cb66ce6cf92109a00036151f8415b
+  tag: 0.9.5
   specs:
-    govuk-design-system-rails (0.9.4)
+    govuk-design-system-rails (0.9.5)
 
 GEM
   remote: https://rubygems.org/
@@ -194,7 +194,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.0)
     ffi (1.15.5)
-    fugit (1.5.3)
+    fugit (1.7.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.0.0)
@@ -496,10 +496,10 @@ GEM
       connection_pool (>= 2.2.5)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
-    sidekiq-scheduler (4.0.2)
+    sidekiq-scheduler (4.0.3)
       redis (>= 4.2.0)
       rufus-scheduler (~> 3.2)
-      sidekiq (>= 4)
+      sidekiq (>= 4, < 7)
       tilt (>= 1.4.0)
     simplecov (0.21.2)
       docile (~> 1.1)
@@ -665,7 +665,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers
   sidekiq (~> 6.5)
-  sidekiq-scheduler (~> 4.0.2)
+  sidekiq-scheduler (~> 4.0.3)
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
