@@ -372,7 +372,7 @@ private
       items: [
         href: edit_investigation_product_number_of_affected_units_path(investigation_product),
         text: "Edit",
-        visuallyHiddenText: "  the units affected for #{investigation_product.product.name}"
+        visuallyHiddenText: " the units affected for #{investigation_product.product.name}"
       ]
     }
   end
