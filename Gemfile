@@ -42,7 +42,7 @@ gem "scout_apm", "~> 5.3"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.5"
-gem "sidekiq-scheduler", "~> 4.0.2"
+gem "sidekiq-scheduler", "~> 4.0.3"
 gem "sprockets", "~> 4.1.1"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 1.3"
@@ -51,7 +51,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 2.0"
 
-gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.4", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.5", require: "govuk_design_system"
 
 gem "bootsnap"
 
