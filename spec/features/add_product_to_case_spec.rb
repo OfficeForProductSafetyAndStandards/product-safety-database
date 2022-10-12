@@ -21,7 +21,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a PSD product record reference number"
 
-    fill_in "find_product_form_reference", with: "invalid"
+    fill_in "reference", with: "invalid"
 
     click_button "Continue"
 
@@ -29,7 +29,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a PSD product record reference number"
 
-    fill_in "find_product_form_reference", with: "PsD-#{wrong_product.id}"
+    fill_in "reference", with: "PsD-#{wrong_product.id}"
 
     click_button "Continue"
 
@@ -47,7 +47,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
 
     expect(page).to have_text("Enter a PSD product record reference number")
 
-    fill_in "find_product_form_reference", with: right_product.id
+    fill_in "reference", with: right_product.id
     click_button "Continue"
 
     expect(page).to have_text("Is this the correct product record to add to your case?")
@@ -61,7 +61,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
 
     click_link "Add a product to the case"
 
-    fill_in "find_product_form_reference", with: right_product.id
+    fill_in "reference", with: right_product.id
     click_button "Continue"
 
     expect(page).to have_error_summary
