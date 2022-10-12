@@ -25,6 +25,7 @@ private
   def tidy_reference
     return if reference.blank?
 
+    reference.strip!
     reference.sub!(/\Apsd-/i, "")
     reference.strip!
   end
