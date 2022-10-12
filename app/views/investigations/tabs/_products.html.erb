@@ -1,50 +1,21 @@
-<%= page_title "Products - #{@investigation.pretty_id}" %>
+<section id="page-content" role="region" class="govuk-grid-column-three-quarters">
 
-<% if policy(@investigation).update?(user: current_user) %>
-  <p class="govuk-body">
-    <%= link_to "Add product", new_investigation_product_url(@investigation) %>
-  </p>
-  <hr class="govuk-section-break govuk-section-break--l">
-<% end %>
+  <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
 
-<% @investigation.products.each do |product| %>
-
-  <%= render "product_summary", product: product do %>
-    <% # Add visually hidden product name to make links unique %>
-    <%= link_with_hidden_text_to "View product",
-      "(#{product.name})",
-      product,
-      class: "app-block-link govuk-link govuk-!-margin-right-3"
-    %>
-    <% if policy(product).update? %>
-      <%= link_with_hidden_text_to "Change product details",
-        "(#{product.name})",
-        edit_product_path(product),
-        class: "app-block-link govuk-link govuk-!-margin-right-3"
-      %>
-    <% end %>
-    <% if policy(@investigation).update?(user: current_user) %>
-      <br>
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          Removing a product from a case cannot be undone
-        </strong>
+  <% @investigation.products.each_with_index do |product, index| %>
+    <section>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+          <h3 id=<%="prod-#{index + 1}" %> class="govuk-heading-m"><%= product.name %></h3>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+          <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+            <%= link_to edit_product_path(product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset"  do %>
+              Edit this <span class="govuk-visually-hidden">Asda dishwashing liquid </span>product
+            <% end %>
+          </div>
+        </div>
       </div>
-      <%= link_with_hidden_text_to "Remove product",
-        "(#{product.name})",
-        remove_investigation_product_path(@investigation, product),
-        class: "app-block-link govuk-link"
-      %>
-    <% end %>
+    </section>
   <% end %>
-<% end %>
-
-<% if @investigation.products.length.zero? %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <p class="govuk-body">No products</p>
-    </div>
-  </div>
-<% end %>
+</section>
