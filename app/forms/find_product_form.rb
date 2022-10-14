@@ -7,25 +7,30 @@ class FindProductForm
   attribute :reference, :string
   attribute :investigation
 
-  before_validation :tidy_reference
+  before_validation :unset_product
+  before_validation :tidy_reference, if: -> { reference.present? }
 
   validates :reference, numericality: { only_integer: true, greater_than: 0, message: "Enter a PSD product record reference number" }
   validate :must_find_a_product
   validate :must_not_find_a_product_already_linked
 
   def product
+    return @product if @product.present?
+
     product_id = reference.presence && reference.try(:to_i)
     return nil unless product_id && product_id.positive?
 
     # TODO: Find only active products once product retirement is implemented
-    Product.find_by id: product_id
+    @product = Product.find_by id: product_id
   end
 
 private
 
-  def tidy_reference
-    return if reference.blank?
+  def unset_product
+    @product = nil
+  end
 
+  def tidy_reference
     reference.strip!
     reference.sub!(/\Apsd-/i, "")
     reference.strip!

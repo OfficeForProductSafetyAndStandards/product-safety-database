@@ -15,21 +15,21 @@ class Investigations::ProductsController < ApplicationController
     @find_product_form = FindProductForm.new
   end
 
-  def create
+  def find
     authorize @investigation, :update?
     @find_product_form = FindProductForm.new(find_product_params.merge(investigation: @investigation))
     return render(:new) if @find_product_form.invalid?
 
     @confirm_product_form = ConfirmProductForm.from_find_product_form(@find_product_form)
     @product = @confirm_product_form.product.decorate
-    render :confirm_product
+    render :confirm
   end
 
-  def link
+  def create
     authorize @investigation, :update?
     @confirm_product_form = ConfirmProductForm.new(confirm_product_params)
     @product = @confirm_product_form.product.decorate
-    return render(:confirm_product) if @confirm_product_form.invalid?
+    return render(:confirm) if @confirm_product_form.invalid?
 
     if @confirm_product_form.confirmed?
       AddProductToCase.call! user: current_user, investigation: @investigation, product: @confirm_product_form.product

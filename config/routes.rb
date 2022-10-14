@@ -143,7 +143,7 @@ Rails.application.routes.draw do
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
       collection do
-        post :link
+        post :find
       end
 
       member do
