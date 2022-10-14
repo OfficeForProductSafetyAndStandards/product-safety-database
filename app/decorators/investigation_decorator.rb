@@ -28,7 +28,6 @@ class InvestigationDecorator < ApplicationDecorator
       },
     ]
     rows.compact!
-    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
   end
 
   def risk_level_set?

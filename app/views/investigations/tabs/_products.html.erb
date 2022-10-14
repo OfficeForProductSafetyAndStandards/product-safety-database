@@ -1,21 +1,77 @@
-<section id="page-content" role="region" class="govuk-grid-column-three-quarters">
-
+<% if @investigation.investigation_products.empty? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body opss-text-align-center">
+        This case has not added any products.
+      </p>
+    </div>
+  </div>
+<% else %>
   <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
 
-  <% @investigation.products.each_with_index do |product, index| %>
+  <% @investigation.investigation_products.reverse.each_with_index do |investigation_product, index| %>
+    <% @product = investigation_product.product.decorate %>
     <section>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-          <h3 id=<%="prod-#{index + 1}" %> class="govuk-heading-m"><%= product.name %></h3>
+          <h3 id=<%="prod-#{@product.id}" %> class="govuk-heading-m"><%= @product.name %></h3>
         </div>
         <div class="govuk-grid-column-one-quarter">
           <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-            <%= link_to edit_product_path(product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset"  do %>
+            <%= link_to edit_product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset"  do %>
               Edit this <span class="govuk-visually-hidden">Asda dishwashing liquid </span>product
             <% end %>
           </div>
         </div>
       </div>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <%= govukSummaryList(
+            classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
+            rows: product_overview_rows(@product)
+            )
+          %>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <% unless @product.virus_free_images.empty? %>
+            <figure class="opss-margin-bottom-1-desktop">
+              <%= image_tag(@product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop") %>
+              <figcaption class="govuk-visually-hidden"> @product.images.first.title< /figcaption>
+            </figure>
+          <% end %>
+        </div>
+      </div>
+
+      <%= govukTabs(
+        items: [
+          {
+            id: "details-#{index}",
+            label: "Details",
+            panel: { html: render("products/case_product_info_tabs/details") }
+          },
+          {
+            id: "images-#{index}",
+            label: "Images (#{@product.virus_free_images.count})",
+            panel: { html: render("products/case_product_info_tabs/images") }
+          },
+          {
+            id: "cases-#{index}",
+            label: "Cases (#{@product.investigation_products.count})",
+            panel: { html: render("products/case_product_info_tabs/cases") }
+          }
+        ]
+      ) %>
+
+      <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+        <%=
+          link_with_hidden_text_to "Remove product",
+          "(#{@product.name})",
+          remove_investigation_product_path(@investigation, @product),
+          class: "govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset"
+        %>
+      </div>
     </section>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
   <% end %>
-</section>
+<% end %>

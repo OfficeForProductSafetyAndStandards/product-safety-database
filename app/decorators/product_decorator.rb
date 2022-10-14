@@ -11,6 +11,30 @@ class ProductDecorator < ApplicationDecorator
     "Product: #{name}"
   end
 
+  def details_list
+    psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
+    psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record".html_safe
+    webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
+
+    rows = [
+      { key: { html: psd_ref_key_html }, value: { text: psd_ref, secondary_text: { html: psd_secondary_text_html } } },
+      { key: { text: "Brand name" }, value: { text: object.brand } },
+      { key: { text: "Product name" }, value: { text: object.name } },
+      { key: { text: "Category" }, value: { text: category } },
+      { key: { text: "Subcategory" }, value: { text: subcategory } },
+      { key: { text: "Barcode" }, value: { text: barcode } },
+      { key: { text: "Description" }, value: { text: description } },
+      { key: { text: "Webpage" }, value: { html: webpage_html } },
+      { key: { text: "Market date" }, value: { text: when_placed_on_market }, secondary_text: { text: "Placed on the market"} },
+      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
+      { key: { text: "Counterfeit" }, value: counterfeit_value },
+      { key: { text: "Product marking" }, value: { text: markings } },
+      { key: { text: "Other product identifiers" }, value: { text: product_code } },
+    ]
+    rows.compact!
+    h.govukSummaryList rows:
+  end
+
   def summary_list
     psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
     psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record".html_safe
@@ -70,5 +94,17 @@ class ProductDecorator < ApplicationDecorator
 
   def case_ids
     object.investigations.map(&:pretty_id)
+  end
+
+  def counterfeit_value
+    if product.counterfeit?
+      return { html: "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe, secondary_text: { text: "This is a product record for a counterfeit product" } }
+    end
+
+    if product.genuine?
+      return { text: "No", secondary_text: { text: "This product record is about a genuine product" } }
+    end
+
+    { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }
   end
 end
