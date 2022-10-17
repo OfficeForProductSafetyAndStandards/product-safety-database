@@ -163,8 +163,9 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
     end
 
     it "allows the user to edit the product, and their team becomes the owner" do
-      visit "/cases/#{investigation.pretty_id}/products"
-      expect(page).to have_link "Change product details"
+      # TODO: Reinstate these lines of code when the investigation products page has a link to edit products again
+      # visit "/cases/#{investigation.pretty_id}/products"
+      # expect(page).to have_link "Change product details"
 
       visit "/products/#{product.id}"
 

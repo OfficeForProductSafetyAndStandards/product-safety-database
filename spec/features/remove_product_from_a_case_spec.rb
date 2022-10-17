@@ -38,7 +38,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
       expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
 
       expect(page).not_to have_css("h2", text: product.name)
-      expect(page).to have_css("p.govuk-body", text: "No products")
+      expect(page).to have_css("p.govuk-body", text: "This case has not added any products.")
 
       click_link "Activity"
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
