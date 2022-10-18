@@ -21,7 +21,7 @@
                   classes: "govuk-summary-list--no-border govuk-!-margin-bottom-6",
                   rows: [
                     {
-                      key: { html: "#{psd_abbr} <span title=\"reference\">ref</span>".html_safe },
+                      key: { html: "#{psd_abbr title: false} <span title=\"reference\">ref</span>".html_safe },
                       value: { text: @product.psd_ref }
                     },
                     {
@@ -65,7 +65,7 @@
                 fieldset: false,
                 items: [
                   { value: "yes", text: "Yes" },
-                  { value: "no", html: "No - Enter the #{psd_abbr} reference number again".html_safe }
+                  { value: "no", html: "No - Enter the #{psd_abbr title: false} reference number again".html_safe }
                 ]
               ) %>
             </div>

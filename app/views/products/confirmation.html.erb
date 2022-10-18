@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title">Product record created</h1>
-      <div class="govuk-panel__body"><%= psd_abbr %> reference number<br><strong><%= @product.psd_ref %></strong></div>
+      <div class="govuk-panel__body"><%= psd_abbr title: false %> reference number<br><strong><%= @product.psd_ref %></strong></div>
     </div>
 
     <p class="govuk-body">The product record will now appear in search results for <%= link_to "all products", all_products_path, class: "govuk-link govuk-link--no-visited-state" %>.</p>
@@ -21,7 +21,7 @@
       </span>
     </div>
 
-    <p class="govuk-body-s">By using the <%= psd_abbr %> reference number you can also add this product record to pre-existing cases. You add a product record to a case directly from the case page.</p>
+    <p class="govuk-body-s">By using the <%= psd_abbr title: false %> reference number you can also add this product record to pre-existing cases. You add a product record to a case directly from the case page.</p>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
