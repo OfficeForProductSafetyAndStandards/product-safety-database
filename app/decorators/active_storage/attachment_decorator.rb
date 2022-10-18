@@ -27,7 +27,7 @@ module ActiveStorage
     end
 
     def updated_at
-      DateTime.parse(object.metadata[:updated]).to_s(:govuk)
+      Time.zone.parse(object.metadata[:updated]).to_s(:govuk)
     end
 
     def edit_path

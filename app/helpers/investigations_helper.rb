@@ -108,7 +108,7 @@ module InvestigationsHelper
       },
       {
         key: { text: "Product record owner" },
-        value: {text: ""}
+        value: { text: "" }
       }
     ]
   end
@@ -125,12 +125,12 @@ module InvestigationsHelper
 
   def details_for_products_tab(investigation)
     title_link = link_to investigation.title, investigation_path(investigation), classes: "govuk-link--no-visited-state"
-    rows = [
-      { key: { text: "Case" }, value: { text: investigation.pretty_id }},
-      { key: { text: "Name" }, value: { html: title_link }},
-      { key: { text: "Team" }, value: { text: investigation.owner_team.name }},
-      { key: { text: "Created" }, value: { text: investigation.created_at.to_s(:govuk) }},
-      { key: { text: "Status" }, value: { text: investigation.status }},
+    [
+      { key: { text: "Case" }, value: { text: investigation.pretty_id } },
+      { key: { text: "Name" }, value: { html: title_link } },
+      { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
+      { key: { text: "Created" }, value: { text: investigation.created_at.to_s(:govuk) } },
+      { key: { text: "Status" }, value: { text: investigation.status } },
     ]
   end
 

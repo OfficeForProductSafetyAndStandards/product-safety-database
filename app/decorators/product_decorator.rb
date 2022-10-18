@@ -25,7 +25,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Barcode" }, value: { text: barcode } },
       { key: { text: "Description" }, value: { text: description } },
       { key: { text: "Webpage" }, value: { html: webpage_html } },
-      { key: { text: "Market date" }, value: { text: when_placed_on_market }, secondary_text: { text: "Placed on the market"} },
+      { key: { text: "Market date" }, value: { text: when_placed_on_market }, secondary_text: { text: "Placed on the market" } },
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
       { key: { text: "Counterfeit" }, value: counterfeit_value },
       { key: { text: "Product marking" }, value: { text: markings } },
