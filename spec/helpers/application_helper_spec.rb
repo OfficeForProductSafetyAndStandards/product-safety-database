@@ -91,5 +91,9 @@ describe ApplicationHelper do
     it "returns the correct abbreviation for PSD" do
       expect(helper.psd_abbr).to eq("<abbr title=\"Product Safety Database\">PSD</abbr>")
     end
+
+    it "does not add a title attribute when title is false" do
+      expect(helper.psd_abbr(title: false)).to eq("<abbr>PSD</abbr>")
+    end
   end
 end

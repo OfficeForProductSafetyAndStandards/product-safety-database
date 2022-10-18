@@ -56,7 +56,7 @@ module ApplicationHelper
     24.hours.ago < datetime ? "#{time_ago_in_words(datetime)} ago" : datetime.to_s(:govuk)
   end
 
-  def psd_abbr
-    tag.abbr "PSD", title: "Product Safety Database"
+  def psd_abbr(title: true)
+    tag.abbr "PSD", title: title ? "Product Safety Database" : nil
   end
 end
