@@ -1,16 +1,13 @@
 <%= page_title "Add a product to the case", errors: @find_product_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink text: "Back", href: investigation_products_path(@investigation) %>
-<% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
+<%= govukBackLink text: "Back", href: investigation_products_path(@investigation) %>
 
 <%= error_summary @find_product_form.errors %>
 
 <%= form_with model: @find_product_form, url: find_investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h1 class="govuk-label-wrapper">
+      <h1 class="govuk-label-wrapper opss-label-wrapper">
         <label class="govuk-label govuk-label--l" for="add-product">Enter a <%= psd_abbr %> product record reference number</label>
       </h1>
       <div id="add-product-hint" class="govuk-hint">
@@ -29,10 +26,10 @@
           After checking that the product does not already exist within the <%= psd_abbr %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr %> reference number to add it to your case.
         </p>
       <% end %>
-      <%= form.govuk_input(:reference, prefix: { text: "psd-" }, classes: "govuk-input--width-5", spellcheck: false) %>
+      <%= form.govuk_input(:reference, prefix: { text: "psd-" }, classes: "govuk-input--width-5", spellcheck: false, describedBy: "add-product-hint") %>
       <div class="govuk-button-group">
         <%= govukButton(text: "Continue") %>
-        <%= link_to "Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     </div>
   </div>

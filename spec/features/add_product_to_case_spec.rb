@@ -70,7 +70,9 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
 
     click_link "Cancel"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+
+    visit "/cases/#{investigation.pretty_id}/products"
 
     expect(page).to have_selector("h2", text: right_product.name)
     expect(investigation.reload.products.count).to eq(1)
