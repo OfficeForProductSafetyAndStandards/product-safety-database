@@ -32,9 +32,7 @@
             target: '_blank',
             rel: 'noopener' %>
 
-        <% if policy(parent).update?(user: current_user) %>
-          <%= render "documents/document_card_links", document: document, parent: parent %>
-        <% end %>
+        <%= render "documents/document_card_links", document: document, parent: parent %>
       <% end %>
     </div>
 

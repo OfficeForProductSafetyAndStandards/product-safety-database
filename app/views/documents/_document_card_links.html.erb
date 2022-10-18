@@ -1,8 +1,8 @@
-<%= link_with_hidden_text_to "Edit #{image_document_text(document)}",
+<%= link_with_hidden_text_to("Edit #{image_document_text(document)}",
   "(#{document.title})",
   edit_associated_document_path(parent, document),
-  class: "govuk-link app-block-link govuk-!-margin-right-3 govuk-link--no-visited-state" %>
-<%= link_with_hidden_text_to "Remove #{image_document_text(document)}",
+  class: "govuk-link app-block-link govuk-!-margin-right-3 govuk-link--no-visited-state") if documentable_policy(parent).update? %>
+<%= link_with_hidden_text_to("Remove #{image_document_text(document)}",
   "(#{document.title})",
   remove_associated_document_path(parent, document),
-  class: "govuk-link app-block-link govuk-link--no-visited-state" %>
+  class: "govuk-link app-block-link govuk-link--no-visited-state") if documentable_policy(parent).remove? %>

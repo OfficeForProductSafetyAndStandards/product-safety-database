@@ -3,9 +3,11 @@
 
     <h2 class="govuk-heading-m">Images</h2>
 
-    <p class="govuk-body">
-      <%= link_to "Add image", new_product_document_path(@product), class: "govuk-link" %>
-    </p>
+    <% if documentable_policy(@product).create? %>
+      <p class="govuk-body">
+        <%= link_to "Add image", new_product_document_path(@product), class: "govuk-link" %>
+      </p>
+    <% end %>
 
     <hr class="govuk-section-break govuk-section-break--l">
 
