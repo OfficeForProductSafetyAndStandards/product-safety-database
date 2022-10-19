@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails
-  revision: 9f34e5e5050f6fb1308c6289addcabf68102fc77
-  tag: 0.9.4
+  revision: 5490201a035cb66ce6cf92109a00036151f8415b
+  tag: 0.9.5
   specs:
-    govuk-design-system-rails (0.9.4)
+    govuk-design-system-rails (0.9.5)
 
 GEM
   remote: https://rubygems.org/
@@ -213,7 +213,7 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
-    fugit (1.5.3)
+    fugit (1.7.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.0.0)
@@ -297,12 +297,12 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.8)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-darwin)
+    nokogiri (1.13.9-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-linux)
+    nokogiri (1.13.9-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
@@ -317,8 +317,8 @@ GEM
       tty-color (~> 0.5)
     patience_diff (1.2.0)
       optimist (~> 3.0)
-    pg (1.4.3)
-    pghero (3.0.0)
+    pg (1.4.4)
+    pghero (3.0.1)
       activerecord (>= 6)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -330,7 +330,7 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (4.0.7)
-    puma (5.6.5)
+    puma (6.0.0)
       nio4r (~> 2.0)
     pundit (2.2.0)
       activesupport (>= 3.0.0)
@@ -422,21 +422,21 @@ GEM
       rspec-mocks (~> 3.11.0)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
-    rspec-expectations (3.11.0)
+    rspec-expectations (3.11.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-mocks (3.11.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
-    rspec-rails (5.1.2)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
-      railties (>= 5.2)
-      rspec-core (~> 3.10)
-      rspec-expectations (~> 3.10)
-      rspec-mocks (~> 3.10)
-      rspec-support (~> 3.10)
-    rspec-support (3.11.0)
+    rspec-rails (6.0.1)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.11)
+      rspec-expectations (~> 3.11)
+      rspec-mocks (~> 3.11)
+      rspec-support (~> 3.11)
+    rspec-support (3.11.1)
     rubocop (1.35.0)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -490,7 +490,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scout_apm (5.3.1)
+    scout_apm (5.3.2)
       parser
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
@@ -516,10 +516,10 @@ GEM
       connection_pool (>= 2.2.5)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
-    sidekiq-scheduler (4.0.2)
+    sidekiq-scheduler (4.0.3)
       redis (>= 4.2.0)
       rufus-scheduler (~> 3.2)
-      sidekiq (>= 4)
+      sidekiq (>= 4, < 7)
       tilt (>= 1.4.0)
     simplecov (0.21.2)
       docile (~> 1.1)
@@ -562,7 +562,7 @@ GEM
       unicode-display_width (>= 1.5, < 3.0)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
-    strong_migrations (1.3.1)
+    strong_migrations (1.3.2)
       activerecord (>= 5.2)
     super_diff (0.9.0)
       attr_extras (>= 6.2.4)
@@ -660,7 +660,7 @@ DEPENDENCIES
   pry (~> 0.14)
   pry-byebug (~> 3.10)
   pry-doc (~> 1.3)
-  puma (~> 5.6)
+  puma (~> 6.0)
   pundit (~> 2.1)
   rack (~> 2.2.4)
   rails (~> 6.1.7)
@@ -685,7 +685,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers
   sidekiq (~> 6.5)
-  sidekiq-scheduler (~> 4.0.2)
+  sidekiq-scheduler (~> 4.0.3)
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
