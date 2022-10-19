@@ -317,7 +317,7 @@ GEM
       tty-color (~> 0.5)
     patience_diff (1.2.0)
       optimist (~> 3.0)
-    pg (1.4.3)
+    pg (1.4.4)
     pghero (3.0.1)
       activerecord (>= 6)
     pry (0.14.1)
