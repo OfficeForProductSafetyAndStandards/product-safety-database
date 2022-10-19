@@ -33,6 +33,8 @@ RSpec.feature "Search smoke test" do
 
     attempts = 0
     loop do
+      puts "Attempting 2FA (#{attempts + 1})..."
+
       code = get_code
       break unless code && @session.has_current_path?(/\/two-factor/) && attempts < 4
 
@@ -42,7 +44,9 @@ RSpec.feature "Search smoke test" do
       sleep attempts * 10
     end
 
-    @session.click_link "Cases"
+    expect(@session).to have_current_path("/cases/your-cases")
+
+    @session.click_link "Cases", wait: 60
     @session.click_link "All cases"
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(3)")
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(13)")
