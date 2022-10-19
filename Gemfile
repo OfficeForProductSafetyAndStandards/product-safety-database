@@ -30,7 +30,7 @@ gem "net-smtp"
 
 gem "pg", "~> 1.4"
 gem "pghero", "~> 3.0"
-gem "puma", "~> 5.6"
+gem "puma", "~> 6.0"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2.4"
 gem "rails", "~> 6.1.7"
