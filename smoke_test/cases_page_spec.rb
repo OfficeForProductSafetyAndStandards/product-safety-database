@@ -44,10 +44,10 @@ RSpec.feature "Search smoke test" do
       sleep attempts * 10
     end
 
-    expect(@session).to have_current_path("/cases/your-cases")
+    expect(@session).to have_current_path("/")
 
-    @session.click_link "Cases", wait: 60
-    @session.click_link "All cases"
+    @session.click_link "All cases", wait: 60
+
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(3)")
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(13)")
   end
