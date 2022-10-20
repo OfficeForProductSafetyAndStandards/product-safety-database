@@ -100,11 +100,11 @@ module InvestigationsHelper
     [
       {
         key: { text: "Last updated" },
-        value: { text: date_or_recent_time_ago(product.updated_at.to_s(:govuk)) },
+        value: { text: date_or_recent_time_ago(product.updated_at) },
       },
       {
         key: { text: "Created" },
-        value: { text: date_or_recent_time_ago(product.created_at.to_s(:govuk)) },
+        value: { text: date_or_recent_time_ago(product.created_at) },
       },
       {
         key: { text: "Product record owner" },
