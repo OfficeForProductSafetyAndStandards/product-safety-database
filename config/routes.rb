@@ -141,9 +141,12 @@ Rails.application.routes.draw do
       resource :update_case_risk_level, only: %i[show update], path: "update-case-risk-level", controller: "investigations/update_case_risk_level_from_risk_assessment"
     end
 
-    resources :products, only: %i[new index], controller: "investigations/products" do
+    resources :products, only: %i[new create index], controller: "investigations/products" do
+      collection do
+        post :find
+      end
+
       member do
-        put :link, path: ""
         get :remove
         delete :unlink, path: ""
       end

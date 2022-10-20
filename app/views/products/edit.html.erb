@@ -13,7 +13,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l govuk-!-margin-bottom-2"><%= @product_form.name %></h1>
-      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<abbr>PSD</abbr>), you can create a product record for the product. This will also generate a new <abbr>PSD</abbr> product record reference number.</p>
+      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<%= psd_abbr title: false %>), you can create a product record for the product. This will also generate a new <%= psd_abbr %> product record reference number.</p>
     </div>
   </div>
 
