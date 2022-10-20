@@ -70,6 +70,9 @@
         %>
       </div>
     </section>
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
+    
+    <% unless @investigation.investigation_products.length == index + 1 %>
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
+    <% end %>
   <% end %>
 <% end %>
