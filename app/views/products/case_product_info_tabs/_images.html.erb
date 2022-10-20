@@ -21,7 +21,7 @@
                     <%= image_tag(image) %>
                     <span class="govuk-visually-hidden">(opens in new tab)</span>
                   <% end %>
-                  <%= link_to link_content, image, target: "_blank", rel: 'noopener' %>
+                  <%= link_to link_content, image, target: "_blank", rel: 'noopener', title: "Opens in a new tab" %>
                   <figcaption><%= image.title %></figcaption>
                 </figure>
               </dd>
@@ -45,8 +45,9 @@
       </dl>
     </li>
 
-    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-      To edit the images for this product go to the full <a href="/psd-revised-flow/product-page.html" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">psd-122</span> product record page <span class="govuk-visually-hidden">to access its images</span></a>
-    </p>
   </ul>
 <% end %>
+
+<p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+  To edit the images for this product go to the full <a href="/psd-revised-flow/product-page.html" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">psd-122</span> product record page <span class="govuk-visually-hidden">to access its images</span></a>
+</p>

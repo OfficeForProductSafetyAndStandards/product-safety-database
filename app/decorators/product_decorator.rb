@@ -15,6 +15,7 @@ class ProductDecorator < ApplicationDecorator
     psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
     psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record".html_safe
     webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
+    when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
 
     rows = [
       { key: { html: psd_ref_key_html }, value: { text: psd_ref, secondary_text: { html: psd_secondary_text_html } } },
@@ -25,7 +26,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Barcode" }, value: { text: barcode } },
       { key: { text: "Description" }, value: { text: description } },
       { key: { text: "Webpage" }, value: { html: webpage_html } },
-      { key: { text: "Market date" }, value: { text: when_placed_on_market }, secondary_text: { text: "Placed on the market" } },
+      { key: { text: "Market date" }, value: { text: when_placed_on_market_value }, secondary_text: { text: "Placed on the market" } },
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
       { key: { text: "Counterfeit" }, value: counterfeit_value },
       { key: { text: "Product marking" }, value: { text: markings } },
