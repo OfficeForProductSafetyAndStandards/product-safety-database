@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails
-  revision: 5490201a035cb66ce6cf92109a00036151f8415b
-  tag: 0.9.5
+  revision: 78d74f03891347f69ec7bde3bd5d01c90b0d2f21
+  tag: 0.9.6
   specs:
-    govuk-design-system-rails (0.9.5)
+    govuk-design-system-rails (0.9.6)
 
 GEM
   remote: https://rubygems.org/
