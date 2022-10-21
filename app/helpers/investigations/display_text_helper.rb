@@ -86,7 +86,7 @@ module Investigations::DisplayTextHelper
 
   def products_sub_items(investigation)
     products = investigation.investigation_products.reverse.map(&:product)
-    
+
     products.map do |product|
       {
         text: product.name,
