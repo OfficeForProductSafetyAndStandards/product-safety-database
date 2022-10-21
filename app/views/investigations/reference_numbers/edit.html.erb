@@ -12,7 +12,7 @@
   <%= govukDetails(summaryText: "Help with adding a number", classes: "govuk-!-margin-bottom-8 opss-details--sm") do %>
     <p class="govuk-body-s">
       This might be a number already created in a different internal system for your case, or a number you intend to use globally across different systems to reference your case.
-      The reference number will be searchable in the <abbr title="Product Safety Database">PSD</abbr> case search page. (You can add or edit this number later).
+      The reference number will be searchable in the <%= psd_abbr %> case search page. (You can add or edit this number later).
     </p>
   <% end %>
 <% end %>
@@ -25,7 +25,7 @@
         id: "complainant_reference",
         form: form,
         hint: { html: hint_html},
-        label: { 
+        label: {
           text: "Edit the reference number",
           isPageHeading: true,
           classes: "govuk-label--l govuk-!-margin-bottom-2"

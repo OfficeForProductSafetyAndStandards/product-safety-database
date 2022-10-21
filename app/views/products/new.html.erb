@@ -13,7 +13,7 @@
       <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings name when_placed_on_market barcode]) %>
 
       <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Create a product record</h1>
-      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<abbr>PSD</abbr>), you can create a product record for the product. This will also generate a new <abbr>PSD</abbr> product record reference number.</p>
+      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<%= psd_abbr title: false %>), you can create a product record for the product. This will also generate a new <%= psd_abbr %> product record reference number.</p>
 
       <%= render "form", form: form, product_form: @product_form, countries: @countries, search: true %>
     </div>
