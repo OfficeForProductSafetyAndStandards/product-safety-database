@@ -124,7 +124,7 @@ module InvestigationsHelper
   end
 
   def details_for_products_tab(investigation)
-    title_link = link_to investigation.title, investigation_path(investigation), classes: "govuk-link govuk-link--no-visited-state"
+    title_link = link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state"
 
     [
       { key: { text: "Case" }, value: { text: investigation.pretty_id } },
