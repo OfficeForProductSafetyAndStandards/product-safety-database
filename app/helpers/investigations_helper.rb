@@ -125,20 +125,13 @@ module InvestigationsHelper
 
   def details_for_products_tab(investigation)
     title_link = link_to investigation.title, investigation_path(investigation), classes: "govuk-link govuk-link--no-visited-state"
-    status_value = if investigation.status == "open"
-                     { text: investigation.status}
-                   else
-                     {
-                       html: "<span class='opss-tag opss-tag--risk3'>Case closed</span>".html_safe,
-                       secondary_text: investigation.date_closed.to_s(:govuk)
-                     }
-                   end
+
     [
       { key: { text: "Case" }, value: { text: investigation.pretty_id } },
       { key: { text: "Name" }, value: { html: title_link } },
       { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
       { key: { text: "Created" }, value: { text: investigation.created_at.to_s(:govuk) } },
-      { key: { text: "Status" }, value: status_value }
+      { key: { text: "Status" }, value: status_value(investigation) }
     ]
   end
 
