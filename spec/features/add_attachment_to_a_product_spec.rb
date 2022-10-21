@@ -104,6 +104,58 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_opensearch, :with_
     end
   end
 
+  context "when the product is owned by another team" do
+    let(:owning_team) { create(:team) }
+    let(:owning_user) { create(:user, :activated, has_viewed_introduction: true, team: owning_team) }
+    let(:product) { create(:product, owning_team:) }
+
+    it "does not allow the user to add attachments" do
+      sign_in user
+      visit "/products/#{product.id}"
+
+      expect(page).not_to have_link("Add image")
+
+      expect { visit("/products/#{product.id}/documents/new") }.to raise_error(Pundit::NotAuthorizedError)
+    end
+
+    it "does not allow the user to edit attachments" do
+      sign_in owning_user
+      visit "/products/#{product.id}"
+
+      expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
+
+      click_link "Add image"
+
+      attach_file "document[document]", image
+      fill_in "Document title", with: title
+      fill_in "Description",    with: description
+
+      click_button "Save attachment"
+
+      expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
+      expect_confirmation_banner("The image was added")
+
+      expect(page).to have_link("Edit image")
+      expect(page).to have_link("Remove image")
+
+      click_on "Sign out", match: :first
+
+      expect(page).to have_current_path("/")
+
+      sign_in user
+      visit "/products/#{product.id}"
+
+      expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
+
+      expect(page).not_to have_link("Add image")
+      expect(page).not_to have_link("Edit image")
+      expect(page).not_to have_link("Remove image")
+
+      expect { visit("/products/#{product.id}/documents/#{product.images.last.id}/edit") }.to raise_error(Pundit::NotAuthorizedError)
+      expect { visit("/products/#{product.id}/documents/#{product.images.last.id}/remove") }.to raise_error(Pundit::NotAuthorizedError)
+    end
+  end
+
   def change_attachment_to_have_simulate_virus(product)
     blob = product.documents.first.blob
     blob.update!(metadata: blob.metadata.merge(safe: false))
