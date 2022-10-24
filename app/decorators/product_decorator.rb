@@ -32,7 +32,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Product marking" }, value: { text: markings } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
-    rows.compact!
+
     h.govukSummaryList rows:
   end
 
