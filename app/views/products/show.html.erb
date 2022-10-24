@@ -28,7 +28,7 @@
                document: @product.images.first,
                dimensions: "400x300",
                class_name: "product-image app-document-preview--inherit" %>
-    <% else %>
+    <% elsif documentable_policy(@product).create? %>
       <div class="app-document-preview__image-without-preview app-document-preview--add-image-prompt">
         <p class="govuk-body"><%= link_to "Add an image of this product", new_product_document_path(@product) %></p>
       </div>

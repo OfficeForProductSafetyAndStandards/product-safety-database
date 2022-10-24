@@ -1,19 +1,14 @@
 class DocumentsController < ApplicationController
   include DocumentsHelper
 
+  before_action :set_and_authorise_parent
+
   def new
-    @parent = get_parent
-    authorize_if_attached_to_investigation
-
     @document_form = DocumentForm.new
-
     @parent = @parent.decorate
   end
 
   def create
-    @parent = get_parent
-    authorize_if_attached_to_investigation
-
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
@@ -50,21 +45,13 @@ class DocumentsController < ApplicationController
 
   # GET /documents/1/edit
   def edit
-    @parent = get_parent
-    authorize_if_attached_to_investigation
-
     @file = @parent.documents.find(params[:id])
-
     @document_form = DocumentForm.from(@file)
-
     @parent = @parent.decorate
   end
 
   # PATCH/PUT /documents/1
   def update
-    @parent = get_parent
-    authorize_if_attached_to_investigation
-
     @file = @parent.documents.find(params[:id])
 
     @document_form = DocumentForm.from(@file)
@@ -90,17 +77,11 @@ class DocumentsController < ApplicationController
   end
 
   def remove
-    @parent = get_parent
-    authorize_if_attached_to_investigation
-
     @file = @parent.documents.find(params[:id])
   end
 
   # DELETE /documents/1
   def destroy
-    @parent = get_parent
-    authorize_if_attached_to_investigation
-
     @file = @parent.documents.find(params[:id])
 
     DeleteDocument.call!(
@@ -118,14 +99,16 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    @parent = get_parent
-    authorize @parent, :view_protected_details? if @parent.is_a? Investigation
-
     @file = @parent.documents.find(params[:id]).decorate
     @parent = @parent.decorate
   end
 
 private
+
+  def set_and_authorise_parent
+    @parent = get_parent
+    authorize @parent, policy_class: DocumentablePolicy
+  end
 
   def document_params
     params.require(:document).permit(:existing_document_file_id, :document, :title, :description)
@@ -138,10 +121,6 @@ private
 
     return Product.find(params[:product_id]) if params[:product_id]
     return Business.find(params[:business_id]) if params[:business_id]
-  end
-
-  def authorize_if_attached_to_investigation
-    authorize @parent, :update? if @parent.is_a? Investigation
   end
 
   def is_a_product_image?
