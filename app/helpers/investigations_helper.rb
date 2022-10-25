@@ -96,6 +96,23 @@ module InvestigationsHelper
     ]
   end
 
+  def product_overview_rows(product)
+    [
+      {
+        key: { text: "Last updated" },
+        value: { text: date_or_recent_time_ago(product.updated_at) },
+      },
+      {
+        key: { text: "Created" },
+        value: { text: date_or_recent_time_ago(product.created_at) },
+      },
+      {
+        key: { text: "Product record owner" },
+        value: { text: "" }
+      }
+    ]
+  end
+
   def units_affected(investigation_product)
     return { text: "" } unless investigation_product&.affected_units_status
 
@@ -104,6 +121,18 @@ module InvestigationsHelper
     else
       { html: "#{investigation_product.number_of_affected_units} <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>#{I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")} number</span>".html_safe }
     end
+  end
+
+  def details_for_products_tab(investigation)
+    title_link = link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state"
+
+    [
+      { key: { text: "Case" }, value: { text: investigation.pretty_id } },
+      { key: { text: "Name" }, value: { html: title_link } },
+      { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
+      { key: { text: "Created" }, value: { text: investigation.created_at.to_s(:govuk) } },
+      { key: { text: "Status" }, value: status_value(investigation) }
+    ]
   end
 
   def case_rows(investigation, user, team_list_html)

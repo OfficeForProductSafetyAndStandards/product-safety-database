@@ -1,0 +1,10 @@
+<h4 class="govuk-heading-m">Related cases</h4>
+
+<p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">This product record has also been added to these <%= @product.investigations.count %> cases.</p>
+<% @product.investigation_products.each do |investigation_product| %>
+  <%= govukSummaryList(
+    classes: "govuk-summary-list govuk-!-padding-bottom-6 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt",
+    rows: details_for_products_tab(investigation_product.investigation.decorate)
+    )
+  %>
+<% end %>

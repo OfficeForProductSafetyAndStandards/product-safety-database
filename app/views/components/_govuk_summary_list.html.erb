@@ -20,7 +20,7 @@
           <% if row[:value][:secondary_text] %>
             <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>
               <%= row[:value][:secondary_text][:text] ? row[:value][:secondary_text][:text] : sanitize(row[:value][:secondary_text][:html]) %>
-            <span>
+            </span>
           <% end %>
         </dd>
         <% if row.dig(:actions, :items)&.any? %>

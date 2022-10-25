@@ -73,8 +73,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
 
     visit "/cases/#{investigation.pretty_id}/products"
-
-    expect(page).to have_selector("h2", text: right_product.name)
+    expect(page).to have_selector("h3", text: right_product.name)
     expect(investigation.reload.products.count).to eq(1)
     expect(investigation.products.first).to eq(right_product)
     expect(right_product.reload.owning_team).to eq(investigation.owner_team)

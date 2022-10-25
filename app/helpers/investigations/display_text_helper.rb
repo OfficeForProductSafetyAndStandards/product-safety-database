@@ -20,7 +20,8 @@ module Investigations::DisplayTextHelper
         href: investigation_products_path(investigation),
         text: "Products",
         count: " (#{investigation.products.size})",
-        active: is_current_tab.products?
+        active: is_current_tab.products?,
+        sub_items: products_sub_items(investigation)
       },
       {
         href: investigation_businesses_path(investigation),
@@ -81,6 +82,17 @@ module Investigations::DisplayTextHelper
       }
     ]
     render "investigations/sub_nav", items:
+  end
+
+  def products_sub_items(investigation)
+    products = investigation.investigation_products.reverse.map(&:product)
+
+    products.map do |product|
+      {
+        text: product.name,
+        href: investigation_products_path(investigation, anchor: "prod-#{product.id}")
+      }
+    end
   end
 
   def get_displayable_highlights(highlights, investigation)
