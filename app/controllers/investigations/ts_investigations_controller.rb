@@ -30,6 +30,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       @case_name_form = CaseNameForm.new
     when :case_created
       @investigation = session[:investigation]
+      @product = Product.find(session[:product_id])
       @investigation.build_owner_collaborations_from(current_user)
       CreateCase.call(investigation: session[:investigation], user: current_user, product: Product.find(session[:product_id]))
       clear_session
