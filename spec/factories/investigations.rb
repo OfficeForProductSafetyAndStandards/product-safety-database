@@ -110,7 +110,11 @@ FactoryBot.define do
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
     before(:create) do |investigation, options|
-      CreateCase.call(investigation:, user: options.creator)
+      if options.creator.is_opss?
+        CreateCase.call(investigation:, user: options.creator)
+      else
+        CreateCase.call(investigation:, user: options.creator, product: create(:product))
+      end
     end
 
     after(:create) do |investigation, evaluator|

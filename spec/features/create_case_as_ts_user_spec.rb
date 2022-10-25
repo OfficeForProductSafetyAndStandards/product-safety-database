@@ -12,11 +12,14 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
   let(:non_compliant_reason) { "does not comply with laws" }
   let(:reference_number) { "12345" }
   let(:case_name) { "Red hot case" }
+  let(:product) { create(:product) }
 
   scenario "Opening a new case (with validation error)" do
     sign_in(user)
 
-    click_link "Create a case"
+    visit "/products/#{product.id}"
+
+    click_link "Create a new case for this product"
 
     expect(page).to have_css("h1", text: "Why are you creating a case?")
 
@@ -98,6 +101,9 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
 
     expect(page).to have_current_path("/cases/#{Investigation.last.pretty_id}")
     expect_summary_page_to_contain_correct_data
+
+    click_link "Products (1)"
+    expect(page.find("dt", text: "PSD ref")).to have_sibling("dd", text: product.psd_ref)
   end
 
   context "when a case is safe and compliant" do
