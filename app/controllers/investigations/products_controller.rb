@@ -43,7 +43,7 @@ class Investigations::ProductsController < ApplicationController
     authorize @investigation, :remove_product?
 
     @supporting_information = @product.supporting_information.select { |si| si.investigation == @investigation }
-    render "supporting_information_warning" and return if @product.supporting_information.any?
+    render "supporting_information_warning" and return if @supporting_information.any?
 
     @remove_product_form = RemoveProductForm.new
   end
