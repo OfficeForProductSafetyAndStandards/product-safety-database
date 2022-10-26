@@ -40,13 +40,17 @@ class Investigations::ProductsController < ApplicationController
   end
 
   def remove
-    authorize @investigation, :update?
+    authorize @investigation, :remove_product?
+
+    @supporting_information = @product.supporting_information.select { |si| si.investigation == @investigation }
+    render "supporting_information_warning" and return if @product.supporting_information.any?
+
     @remove_product_form = RemoveProductForm.new
   end
 
   # DELETE /cases/1/products
   def unlink
-    authorize @investigation, :update?
+    authorize @investigation, :remove_product?
     @remove_product_form = RemoveProductForm.new(remove_product_params)
     return render(:remove) if @remove_product_form.invalid?
 

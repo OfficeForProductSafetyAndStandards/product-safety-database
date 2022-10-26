@@ -9,7 +9,13 @@ class RemoveProductFromCase
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.products.delete(product)
+    # TODO: Versioned/historic products can't be removed from a case. Ensure
+    #   this is caught once product versioning is implemented.
+
+    InvestigationProduct.transaction do
+      investigation.products.delete product
+      change_product_ownership
+    end
 
     investigation.__elasticsearch__.update_document
     product.__elasticsearch__.update_document
@@ -21,7 +27,17 @@ class RemoveProductFromCase
 
 private
 
+  def change_product_ownership
+    # If the product was owned by the team who owns this case, and is not linked
+    # to any other cases owned by this team, it become unowned.
+    if product.owning_team == investigation.owner_team && product.investigations.none? { |inv| inv.owner_team == product.owning_team }
+      product.update! owning_team: nil
+    end
+  end
+
   def create_audit_activity_for_product_removed
+    # TODO: Refer to the correct version of the product record once versioning
+    #   is implemented.
     AuditActivity::Product::Destroy.create!(
       added_by_user: user,
       investigation:,
