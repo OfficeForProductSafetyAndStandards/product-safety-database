@@ -4,8 +4,8 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   let!(:organisation) { create(:organisation) }
   let!(:team) { create(:team, organisation:) }
   let!(:other_team) { create(:team, organisation:) }
-  let!(:user) { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
-  let!(:other_user_other_team) { create(:user, :activated, name: "other user same team", organisation:, team: other_team) }
+  let!(:user) { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
+  let!(:other_user_other_team) { create(:user, :activated, :opss_user, name: "other user same team", organisation:, team: other_team) }
   let!(:investigation) { create(:allegation, creator: user).decorate }
   let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
   let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }

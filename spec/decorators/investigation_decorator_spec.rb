@@ -8,7 +8,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
   let(:organisation)  { create :organisation }
   let(:user)          { create(:user, organisation:).decorate }
   let(:team)          { create(:team) }
-  let(:creator)       { create(:user, organisation:, team:) }
+  let(:creator)       { create(:user, :opss_user, organisation:, team:) }
   let(:products)      { [] }
   let(:risk_level)    { :serious }
   let(:coronavirus_related) { false }

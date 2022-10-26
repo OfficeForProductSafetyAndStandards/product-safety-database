@@ -1,5 +1,5 @@
 RSpec.shared_context "with add corrective action setup" do
-  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:products) { [product] }
   let(:investigation) { create(:allegation, :with_business, products:, creator: user, read_only_teams: read_only_team) }
