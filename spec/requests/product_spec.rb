@@ -3,12 +3,10 @@ require "rails_helper"
 RSpec.describe "Viewing a product", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user) { create(:user, :activated) }
   let(:creation_time) { 1.day.ago }
-  let(:product) { create(:product) }
+  let(:product) { create(:product, :with_versions) }
 
   before do
     travel_to creation_time { product }
-    product.update!(description: "new description")
-
     sign_in user
   end
 

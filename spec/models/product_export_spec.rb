@@ -5,7 +5,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let!(:other_investigation) { create(:allegation).decorate }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
-  let!(:product)             { create(:product, investigations: [investigation], description: initial_product_description).decorate }
+  # Create a new product version to ensure only the current version is rendered
+  let!(:product)             { create(:product, :with_versions, investigations: [investigation], description: initial_product_description, new_description: new_product_description).decorate }
   let!(:other_product)       { create(:product, investigations: [other_investigation]).decorate }
   let!(:risk_assessment)     { create(:risk_assessment, investigation:, products: [product]).decorate }
   let!(:risk_assessment_2)   { create(:risk_assessment, investigation:, products: [product]).decorate }
@@ -17,13 +18,7 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let(:params)               { {} }
   let(:product_export)       { described_class.create!(user:, params:) }
 
-  before do
-    # Create a new product version to ensure only the current version is rendered
-    product.description = new_product_description
-    product.save!
-
-    Product.__elasticsearch__.import force: true, refresh: :wait
-  end
+  before { Product.import force: true, refresh: :wait }
 
   describe "#export!" do
     let(:result) { product_export.export! }

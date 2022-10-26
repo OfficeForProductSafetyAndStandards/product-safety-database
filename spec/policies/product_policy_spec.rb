@@ -46,8 +46,7 @@ RSpec.describe ProductPolicy do
 
     context "with an old version", :with_stubbed_opensearch do
       let(:product) do
-        product = create(:product)
-        product.update!(description: "new description")
+        product = create(:product, :with_versions)
         product.paper_trail.previous_version
       end
 
