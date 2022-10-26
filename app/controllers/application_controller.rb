@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!
+  before_action :set_paper_trail_whodunnit
   before_action :check_current_user_status
   before_action :set_user_last_activity_time
   before_action :ensure_secondary_authentication

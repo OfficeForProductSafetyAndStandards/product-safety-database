@@ -22,11 +22,14 @@ class ProductsController < ApplicationController
     end
   end
 
-  # GET /products/1
-  # GET /products/1.json
   def show
-    respond_to do |format|
-      format.html
+    # Only allow the show action to retrieve previous versions to prevent modifications
+    if params[:timestamp]
+      begin
+        @product = @product.paper_trail.version_at(Time.zone.at(params[:timestamp].to_i)).decorate
+      rescue NoMethodError
+        render_404_page
+      end
     end
   end
 

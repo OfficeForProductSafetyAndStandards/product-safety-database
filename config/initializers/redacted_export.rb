@@ -33,3 +33,8 @@ RedactedExport.register_table_attributes(
   "active_storage_variant_records",
   :id, :blob_id
 )
+
+RedactedExport.register_table_attributes(
+  "versions",
+  :created_at, :event, :item_id, :item_type, :object, :object_changes, :whodunnit
+)
