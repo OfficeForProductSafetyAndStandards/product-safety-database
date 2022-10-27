@@ -86,7 +86,7 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.35"
+  gem "rubocop", "~> 1.37"
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.12", require: false
