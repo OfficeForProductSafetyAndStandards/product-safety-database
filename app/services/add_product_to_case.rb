@@ -5,6 +5,7 @@ class AddProductToCase
   delegate :investigation,
            :user,
            :product,
+           :skip_email,
            to: :context
 
   def call
@@ -22,7 +23,7 @@ class AddProductToCase
 
     context.activity = create_audit_activity_for_product_added
 
-    send_notification_email
+    send_notification_email unless skip_email
   end
 
 private

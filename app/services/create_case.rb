@@ -25,19 +25,9 @@ class CreateCase
 
       investigation.save!
 
-      if !user.is_opss?
-        InvestigationProduct.create(investigation_id: investigation.id, product_id: product.id)
-      end
+      AddProductToCase.call!(investigation: investigation, product: product, user: user, skip_email: true) if product
 
-      product.update!(owning_team_id: user.team.id) if (product && product.owning_team_id.nil?)
-      
       create_audit_activity_for_case_added
-
-      # When a case is created we don't want to send notification emails as in
-      # the AddProductToCase service
-      investigation.products.each do |product|
-        create_audit_activity_for_product_added(product)
-      end
     end
 
     send_confirmation_email
@@ -59,15 +49,6 @@ private
       title: nil,
       body: nil,
       metadata:
-    )
-  end
-
-  def create_audit_activity_for_product_added(product)
-    AuditActivity::Product::Add.create!(
-      added_by_user: user,
-      investigation:,
-      title: product.name,
-      product:
     )
   end
 
