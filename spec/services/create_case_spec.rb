@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
-  let(:investigation) { build(:enquiry, creator: user) }
+  let(:investigation) { build(:enquiry) }
   let(:user) { create(:user) }
   let(:product) { create(:product) }
   let(:other_team) { create(:team) }
@@ -89,7 +89,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
       end
 
       context "with previous investigations" do
-        let(:investigations) { build_list(:enquiry, 3, creator: user) }
+        let(:investigations) { build_list(:enquiry, 3) }
 
         before { investigations.each { |i| described_class.call(investigation: i, user:, product:) } }
 
@@ -111,7 +111,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
 
       it "creates an audit activity for case created", :aggregate_failures do
         result
-        activity = investigation.reload.activities.last
+        activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Investigation::AddEnquiry)
         expect(activity.added_by_user).to eq(user)
         expect(activity.metadata).to eq(AuditActivity::Investigation::AddEnquiry.build_metadata(investigation).deep_stringify_keys)
@@ -122,7 +122,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
 
         it "creates an audit activity for product added", :aggregate_failures do
           result
-          activity = investigation.reload.activities.first
+          activity = investigation.reload.activities.last
           expect(activity).to be_a(AuditActivity::Product::Add)
           expect(activity.added_by_user).to eq(user)
           expect(activity.product).to eq(product)
