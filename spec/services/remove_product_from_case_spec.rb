@@ -4,7 +4,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
   subject(:result) { described_class.call(investigation:, product:, user:, reason:) }
 
   let(:investigation) { create(:allegation, products: [product], creator:) }
-  let(:product)       { create(:product_washing_machine) }
+  let(:product)       { create(:product_washing_machine, owning_team: creator.team) }
   let(:reason)        { Faker::Hipster.sentence }
   let(:user)          { create(:user) }
   let(:creator)       { user }
@@ -69,7 +69,34 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           expect(activity.added_by_user).to eq(user)
         end
 
+        it "sets the product to unowned" do
+          result
+          expect(product.reload.owning_team).to eq(nil)
+        end
+
         it_behaves_like "a service which notifies the case owner"
+
+        context "when the product is owned by another team" do
+          let(:product) { create(:product_washing_machine, owning_team: create(:team)) }
+
+          it "does not change the product's ownership", :aggregate_failures do
+            result
+            product.reload
+            expect(product.owning_team).not_to eq(investigation.owner_team)
+            expect(product.owning_team).not_to eq(nil)
+          end
+        end
+
+        context "when the product is linked to another of its owning team's cases" do
+          before do
+            create :allegation, products: [product], creator:
+          end
+
+          it "does not change the product's ownership" do
+            result
+            expect(product.reload.owning_team).to eq(investigation.owner_team)
+          end
+        end
       end
     end
 

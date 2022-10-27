@@ -13,6 +13,7 @@ class RemoveProductFromCase
     #   this is caught once product versioning is implemented.
 
     InvestigationProduct.transaction do
+      product.reload
       investigation.products.delete product
       change_product_ownership
     end
