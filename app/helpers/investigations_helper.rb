@@ -97,7 +97,7 @@ module InvestigationsHelper
   end
 
   def product_overview_rows(product)
-    product_record_owner_value = product.owning_team_id ? Team.find_by(owning_team_id: product.owning_team_id).name : nil
+    product_record_owner_value = product.owning_team_id ? Team.find_by(id: product.owning_team_id).name : nil
     [
       {
         key: { text: "Last updated" },
