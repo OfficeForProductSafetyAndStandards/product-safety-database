@@ -10,6 +10,6 @@
 
 <%= govukErrorSummary(
   titleText: "Cannot remove the product from the case",
-  descriptionText: "This is because the product is associated with following supporting information:",
+  descriptionText: "This is because the product is associated with the following supporting information:",
   errorList: @supporting_information.map { |si| si = si.decorate; { text: si.supporting_information_title, href: si.show_path } }
 ) %>

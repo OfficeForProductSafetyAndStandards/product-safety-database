@@ -61,7 +61,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
       expect(page).not_to have_css("h1", text: "Remove #{product.name}")
 
       expect(page).to have_css("h2", text: "Cannot remove the product from the case")
-      expect(page).to have_css("p", text: "This is because the product is associated with following supporting information:")
+      expect(page).to have_css("p", text: "This is because the product is associated with the following supporting information:")
       expect(page).to have_css("a", text: accident.decorate.supporting_information_title)
       expect(page).to have_css("a", text: risk_assessment.decorate.supporting_information_title)
 
