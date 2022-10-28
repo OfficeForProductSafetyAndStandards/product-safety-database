@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_opensearch do
-  let(:user)          { create(:user, :activated) }
+  let(:user)          { create(:user, :opss_user, :activated) }
   let(:investigation) { create(:enquiry, creator: user) }
   let(:other_user)    { create(:user, :activated) }
   let(:right_product) { create(:product) }
