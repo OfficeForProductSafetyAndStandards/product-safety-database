@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with_stubbed_mailer do
   let(:team) { create :team }
   let(:other_team) { create :team }
-  let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
+  let(:user) { create :user, :opss_user, :activated, has_viewed_introduction: true, team: }
   let(:team_mate) { create :user, :activated, has_viewed_introduction: true, team: }
   let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team }
   let(:investigation) { create :allegation, creator: user }

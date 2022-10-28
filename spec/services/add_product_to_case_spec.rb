@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adapter do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :opss_user) }
   let(:investigation) { create(:allegation, creator: user) }
   let(:product) { create(:product) }
 

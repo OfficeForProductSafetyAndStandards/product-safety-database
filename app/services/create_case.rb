@@ -1,11 +1,12 @@
 class CreateCase
   include Interactor
 
-  delegate :investigation, :user, to: :context
+  delegate :investigation, :user, :product, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+    context.fail!(error: "Product must be supplied for non opss users") if !user.is_opss? && !product.is_a?(Product)
     team = user.team
 
     investigation.creator_user = user
@@ -24,13 +25,9 @@ class CreateCase
 
       investigation.save!
 
-      create_audit_activity_for_case_added
+      AddProductToCase.call!(investigation:, product:, user:, skip_email: true) if product
 
-      # When a case is created we don't want to send notification emails as in
-      # the AddProductToCase service
-      investigation.products.each do |product|
-        create_audit_activity_for_product_added(product)
-      end
+      create_audit_activity_for_case_added
     end
 
     send_confirmation_email
@@ -52,15 +49,6 @@ private
       title: nil,
       body: nil,
       metadata:
-    )
-  end
-
-  def create_audit_activity_for_product_added(product)
-    AuditActivity::Product::Add.create!(
-      added_by_user: user,
-      investigation:,
-      title: product.name,
-      product:
     )
   end
 

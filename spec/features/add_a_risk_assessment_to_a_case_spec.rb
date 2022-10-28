@@ -4,7 +4,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
   let(:risk_assessment_file) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
 
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, team:, name: "Jo Bloggs") }
+  let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, team:, name: "Jo Bloggs") }
 
   let(:product1) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }

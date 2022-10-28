@@ -20,6 +20,10 @@
         <%= "Updated: " + @product.updated_at.to_s(:govuk) %>
       <% end %>
     </p>
+
+    <% unless current_user.is_opss? %>
+      <%= link_to "Create a new case for this product", new_investigation_ts_investigation_path(product_id: @product.id) %>
+    <% end %>
   </div>
 
   <div class="govuk-grid-column-one-third govuk-!-margin-top-7">
