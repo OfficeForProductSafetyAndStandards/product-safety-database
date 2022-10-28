@@ -36,7 +36,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
         let(:result) { described_class.call(investigation:, user:) }
 
         it "does not return a failure" do
-          allow(user).to receive(:is_opss?) { true }
+          allow(user).to receive(:is_opss?).and_return(true)
           expect(result).to be_success
         end
       end

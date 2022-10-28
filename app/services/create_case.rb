@@ -6,7 +6,7 @@ class CreateCase
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-    context.fail!(error: "Product must be supplied for non opss users") if (!user.is_opss? && !product.is_a?(Product))
+    context.fail!(error: "Product must be supplied for non opss users") if !user.is_opss? && !product.is_a?(Product)
     team = user.team
 
     investigation.creator_user = user
@@ -25,7 +25,7 @@ class CreateCase
 
       investigation.save!
 
-      AddProductToCase.call!(investigation: investigation, product: product, user: user, skip_email: true) if product
+      AddProductToCase.call!(investigation:, product:, user:, skip_email: true) if product
 
       create_audit_activity_for_case_added
     end
