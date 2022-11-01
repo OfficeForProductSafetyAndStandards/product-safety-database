@@ -65,6 +65,8 @@ Rails.application.routes.draw do
     get :skip
   end
 
+  resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
+
   resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
   resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
   resources :project, controller: "investigations/project", only: %i[show new create update]

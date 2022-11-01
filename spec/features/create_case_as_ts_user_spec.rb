@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Creating a case as a TS user", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
   let(:investigation_with_same_user_title) do
     create(:allegation,
@@ -12,12 +12,20 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
   let(:non_compliant_reason) { "does not comply with laws" }
   let(:reference_number) { "12345" }
   let(:case_name) { "Red hot case" }
-  let(:product) { create(:product) }
+  let!(:product) { create(:product) }
+
+  before do
+    Product.import force: true, refresh: :wait_for
+  end
 
   scenario "Opening a new case (with validation error)" do
     sign_in(user)
 
-    visit "/products/#{product.id}"
+    click_link "Create a case"
+
+    click_link "Go to the products search page"
+
+    click_link product.name
 
     click_link "Create a new case for this product"
 
@@ -111,6 +119,12 @@ RSpec.feature "Creating a case as a TS user", :with_stubbed_opensearch, :with_st
       sign_in(user)
 
       click_link "Create a case"
+
+      click_link "Go to the products search page"
+
+      click_link product.name
+
+      click_link "Create a new case for this product"
 
       expect(page).to have_css("h1", text: "Why are you creating a case?")
 

@@ -1,0 +1,55 @@
+<%= page_title "Create a case" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-!-margin-top-4 govuk-!-padding-bottom-4">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+
+          <h1 class="govuk-heading-l govuk-!-margin-bottom-7">
+              Create a case
+          </h1>
+
+          <% inset_html = capture do %>
+              <p class="govuk-body-l govuk-!-margin-bottom-4">
+                  Creating a case starts from a product record page.
+              </p>
+
+              <p class="govuk-body">
+                  Find a product and create the case from there.
+              </p>
+
+              <%= govukDetails(summaryText: "How to create a case") do %>
+                <ol class="govuk-list govuk-list--number govuk-list--spaced">
+                  <li>
+                    In the products area <%= link_to "search for your product", products_path, class: "govuk-link govuk-link--no-visited-state" %>
+                  </li>
+                  <li>
+                    Select a product record to view the product record page
+                  </li>
+                  <li>
+                    Select the '<span class="govuk-!-font-weight-bold">Create a new case for this product</span>' option
+                  </li>
+                </ol>
+
+                <p class="govuk-body">
+                  When you have finished creating the case, the product record will automatically be included.
+                </p>
+
+                <p class="govuk-body">
+                  If a suitable product record does not already exist, create a new product record and then create your case from that product record.
+                </p>
+              <% end %>
+          <% end %>
+
+          <%= govukInsetText({
+            html: inset_html,
+            classes: "govuk-!-margin-bottom-7"
+          }) %>
+
+          <%= link_to "Go to the products search page", products_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-24" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
