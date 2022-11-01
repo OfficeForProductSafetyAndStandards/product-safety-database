@@ -58,7 +58,7 @@ class Investigations::ProductsController < ApplicationController
       RemoveProductFromCase.call!(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
       respond_to do |format|
         format.html do
-          redirect_to_investigation_products_tab success: "Product was successfully removed."
+          redirect_to_investigation_products_tab success: "The product record was removed from the case"
         end
         format.json { head :no_content }
       end

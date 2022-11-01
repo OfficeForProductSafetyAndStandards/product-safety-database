@@ -1,7 +1,7 @@
 <%= page_title "Remove #{@product.name}" %>
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
+    text: "Back",
     href: investigation_products_path(@investigation)
   ) %>
 <% end %>
@@ -9,19 +9,22 @@
 <%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= error_summary @remove_product_form.errors %>
-<h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
-<p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
 
 <%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+  <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" aria-describedby="remove-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">Do you want to remove this product?</h1>
+          </legend>
 
-      <%= form.govuk_radios :remove_product, legend: "Do you want to remove the product from the case?", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, label_classes: "govuk-label", label: "Reason for removing the product from the case")} },  { text: "No", value: "false" }] %>
+          <div class="govuk-hint" id="remove-hint">The product record '<%= @product.name %>' (<%= @product.psd_ref %>) will be removed from the case.</div>
 
-      <div class="govuk-form-group">
-        <%= form.submit "Submit", class: "govuk-button govuk-button--warning" %>
-        <p><%= link_to "Cancel", investigation_products_path(@investigation), class: "govuk-link--no-visited-state" %></p>
-      </div>
-    </div>
+          <%= govukWarningText(iconFallbackText: "Warning", text: "Related Batch numbers, Customs codes and Units affected will be deleted from the case.") %>
+          <%= form.govuk_radios :remove_product, legend: nil, fieldset: false, classes: "govuk-!-padding-bottom-1", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, label_classes: "govuk-label", label: "Reason for removing the product from the case")} },  { text: "No", value: "false" }] %>
+      </fieldset>
+  </div>
+  <div class="govuk-button-group">
+    <%= govukButton(text: "Save and continue") %>
+    <%= link_to("Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state") %>
   </div>
 <% end %>
