@@ -9,7 +9,7 @@ The `-k 2G` option specifies a disk quota of 2GB, as the default of 1GB is not c
 ## Create a new organisation, team, and team admin user
 
 ```bash
-cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && ORG_NAME=<name> ADMIN_EMAIL=<email address> bin/rake organisation:create" --name <task name> -k 2G
+cf run-task psd-web --command "ORG_NAME=<name> ADMIN_EMAIL=<email address> bin/rake organisation:create" --name <task name> -k 2G
 ```
 
 Where `ORG_NAME` is the name of the organisation and team to be created, `ADMIN_EMAIL` is the email address of the new team admin user to be created and `COUNTRY` is the country in which the team is based. ( For countries use the ISO codes found [here] (https://github.com/alphagov/govuk-country-and-territory-autocomplete/blob/master/dist/location-autocomplete-canonical-list.json) or the following: England = "country:GB-ENG", Scotland = "country:GB-SCT", Wales = "country:GB-WLS", Northern Ireland = "country:GB-NIR") They will receive an invitation email to create their account. Task name can be set to anything you like.
@@ -17,13 +17,13 @@ Where `ORG_NAME` is the name of the organisation and team to be created, `ADMIN_
 ## Deleting a User
 
 ```bash
-cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && EMAIL=<email address> rake user:delete" --name <task name> -k 2G
+cf run-task psd-web --command "EMAIL=<email address> bin/rake user:delete" --name <task name> -k 2G
 ```
 
 or
 
 ```bash
-cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && ID=<user ID> rake user:delete" --name <task name> -k 2G
+cf run-task psd-web --command "ID=<user ID> bin/rake user:delete" --name <task name> -k 2G
 ```
 
 Where `EMAIL` or `ID` is the e-mail address or ID of the user to be deleted. Task name can be set to anything you like.
@@ -31,7 +31,7 @@ Where `EMAIL` or `ID` is the e-mail address or ID of the user to be deleted. Tas
 ## Deleting a Team
 
 ```bash
-cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && ID=<id> NEW_TEAM_ID=<id> EMAIL=<email address> rake team:delete" --name <task name> -k 2G
+cf run-task psd-web --command "ID=<id> NEW_TEAM_ID=<id> EMAIL=<email address> bin/rake team:delete" --name <task name> -k 2G
 ```
 
 Case collaborations and users which belong to the team identified by `ID` will be migrated to another team identified by `NEW_TEAM_ID`. The user identified by `EMAIL` will be attributed to the change on all relevant audit activity.
@@ -41,7 +41,7 @@ Case collaborations and users which belong to the team identified by `ID` will b
 Sometimes we need to update the structure of metadata stored against an activity type. We provide a task which can be used instead of ActiveRecord migrations to more safely migrate the data asynchronously to avoid problems with deployment timeouts and multiple versions of the code resulting in errors.
 
 ```bash
-cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && CLASS_NAME=<activity class name> rake activities:update_metadata" --name <task name> -k 2G
+cf run-task psd-web --command "CLASS_NAME=<activity class name> bin/rake activities:update_metadata" --name <task name> -k 2G
 ```
 
 To implement a conversion, override the `metadata` getter method on the class being changed to return legacy activity metadata in the new format. This task will invoke the overridden getter method and update each instance with the new structure.
@@ -67,7 +67,7 @@ The way to do this on the deployed service is a little different and it's best d
 Risk Assessment and Test Result user uploads are also exported to S3. These are copied to a separate bucket using an S3 Batch Operation job. This is usually done as part of the [same workflow which exports the database](/.github/workflows/publish-staging-redacted-export.yml), however it can be triggered manually:
 
 ```bash
-cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && bin/rails redacted_export:copy_s3_objects" --name <task name> -k 2G --wait
+cf run-task psd-web --command "bin/rails redacted_export:copy_s3_objects" --name <task name> -k 2G --wait
 cf logs psd-web --recent
 ```
 
