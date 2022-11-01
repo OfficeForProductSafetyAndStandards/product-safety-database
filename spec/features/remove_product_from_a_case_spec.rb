@@ -29,9 +29,9 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       expect(page).to have_error_messages
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Enter the reason for removing the product from the case"
+      expect(errors_list[0].text).to eq "Enter the reason for why you are removing the product"
 
-      fill_in "Reason for removing the product from the case", with: removal_reason
+      fill_in "Enter the reason for why you are removing the product", with: removal_reason
       click_on "Save and continue"
 
       expect_confirmation_banner("The product record was removed from the case")
