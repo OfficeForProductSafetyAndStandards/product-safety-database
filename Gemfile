@@ -5,8 +5,8 @@ ruby "~> 3.0"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
-gem "aws-sdk-s3", "~> 1.116"
-gem "aws-sdk-s3control", "~> 1.53"
+gem "aws-sdk-s3", "~> 1.117"
+gem "aws-sdk-s3control", "~> 1.54"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -45,13 +45,13 @@ gem "sidekiq", "~> 6.5"
 gem "sidekiq-scheduler", "~> 4.0.3"
 gem "sprockets", "~> 4.1.1"
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "~> 1.3"
+gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 2.0"
 
-gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.5", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.6", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -86,7 +86,7 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.35"
+  gem "rubocop", "~> 1.37"
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.12", require: false

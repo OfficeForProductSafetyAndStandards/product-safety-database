@@ -169,7 +169,7 @@ You'll need an account for [GOV.UK PaaS](https://admin.london.cloud.service.gov.
 
 We're using [user-provided services](https://docs.cloudfoundry.org/devguide/services/user-provided.html#deliver-service-credentials-to-an-app) to load environment variables into our applications.
 
-Running [get-env-from-vcap.sh](./infrastructure/env/get-env-from-vcap.sh) as part of the application startup will add credentials from any service named `*-env` to the current environment.
+The app's `.profile` [automatically initialises](https://docs.cloudfoundry.org/devguide/deploy-apps/deploy-app.html#profile) environment variables using [get-env-from-vcap.sh](./infrastructure/env/get-env-from-vcap.sh) as part of the application startup. This will add credentials from any service named `*-env` to the current environment.
 
 #### Domains
 
