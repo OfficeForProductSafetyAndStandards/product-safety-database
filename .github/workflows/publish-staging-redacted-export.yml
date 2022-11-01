@@ -124,7 +124,7 @@ jobs:
           cf delete-service $TEMP_DB_SERVICE_NAME -f
 
           echo "Exporting files..."
-          cf run-task $APP_NAME --name 'redacted-export-s3-copy' --command 'export $(./env/get-env-from-vcap.sh) && bin/rails redacted_export:copy_s3_objects' --wait
+          cf run-task $APP_NAME --name 'redacted-export-s3-copy' --command 'bin/rails redacted_export:copy_s3_objects' --wait
 
           cf logout
 
