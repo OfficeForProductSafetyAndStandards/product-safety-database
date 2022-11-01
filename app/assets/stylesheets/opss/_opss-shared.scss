@@ -32,14 +32,13 @@
 $std-font-family: "GDS Transport", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
 form.opss-cookie-form {
-    /*for the cookie banner*/
+
     display: flex;
 }
 
-/*input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {color:  govuk-colour("mid-grey"); }
-input[type="checkbox"]:disabled + label {opacity: 1 !important; }*/
 
-/* not normalised by gds library - starts */
+
+
 figure,
 figcaption {
     margin: 0;
@@ -47,7 +46,7 @@ figcaption {
     display: block;
 }
 
-/* not normalised by gds library - ends */
+
 
 @include govuk-media-query($from: desktop) {
     .govuk-width-container>main.govuk-main-wrapper {
@@ -86,7 +85,7 @@ main.govuk-main-wrapper {
     @include word-wrap;
 }
 
-/*tbody th  {-webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto; }*/
+
 .govuk-summary-list .govuk-link,
 .opss-table td a,
 .opss-table tbody tr th:first-child,
@@ -105,14 +104,9 @@ h1.govuk-label-wrapper label.govuk-label--l {
     hyphens: unset;
 }
 
-/*.opss-secondary-text-colour {color: $govuk-secondary-text-colour; }
-.opss-weight-normal {font-weight: normal;
-    *[class^="govuk-heading"] & {
-        font-weight: 400;
-    }
-}*/
+
 main a.govuk-link:hover {
-    /*recreate new hover styles of latest gds*/
+
     //text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
     text-decoration-skip-ink: none;
 }
@@ -138,7 +132,7 @@ body.js-enabled .opss-nojs-hide {
 .js-enabled {
     .opss-js-enabled-hidden {
         display: none;
-        /* @include govuk-visually-hidden; */
+
     }
 }
 
@@ -240,7 +234,7 @@ body.js-enabled .opss-nojs-hide {
 }
 
 .opss-document-icon-std {
-    /*   A CSS FOR ICON ON MOBILE - REQUIRES DESKTOP ONLY CSS TO SNAP IN FULL SIZE DIMS. And update HTML to figcaption   */
+
     position: relative;
     padding: 2px;
     margin: 0 0 govuk-spacing(2) 0;
@@ -317,7 +311,7 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-warning-text--s {
 
-    /* make warning text smaller and allow several in succession */
+
     strong {
         @include opss-font-size($s: 16px, $l: 1.3);
     }
@@ -370,7 +364,7 @@ samp {
     }
 
     .opss-text-align-right {
-        /*this opss style is prefered to govuk-!-text-align-right because it is resolution sensitive*/
+
         text-align: right;
         display: inline-block;
         width: 100%;
@@ -464,9 +458,7 @@ samp {
                 @include word-wrap;
             }
 
-            /*dt + dd {    //FF dosen't like
-                text-align: center;
-            }*/
+
         }
     }
 
@@ -489,7 +481,7 @@ samp {
 
                 span {
                     @include opss-font-size($s: 14px, $l: 1.2);
-                    /*position: relative; top: -1px;*/
+
                 }
             }
         }
@@ -497,7 +489,7 @@ samp {
 
     @-moz-document url-prefix() {
 
-        /*firefox only: col flow bug */
+
         .opss-2-col-flow,
         .opss-3-col-flow {
             .govuk-summary-list {
@@ -563,7 +555,7 @@ ul.opss-left-nav {
         }
 
         ul li.opss-left-nav__active {
-            /* 3rd nested ULs */
+
             @include menu-inset-anchors;
         }
 
@@ -571,11 +563,7 @@ ul.opss-left-nav {
             text-decoration: none !important;
             text-underline-offset: 0.1em;
 
-            /*&:hover {//styles supersede by gds upgrade to 4.2
-                    text-decoration: underline !important; text-decoration-thickness: 0.2em !important;
-                    text-decoration-thickness: 3px !important; -webkit-text-decoration-skip-ink: none;
-                    text-decoration-skip-ink: none; -webkit-text-decoration-skip: none; text-decoration-skip: none;
-                }*/
+
 
             span {
                 font-size: 90%;
@@ -583,9 +571,7 @@ ul.opss-left-nav {
         }
     }
 
-    /*& > li > ul.govuk-list { // 2nd nested ULs
-        padding-top: govuk-spacing(1); margin: govuk-spacing(4) 0 govuk-spacing(2) 0;
-    } */
+
 
     &>li:first-child {
         padding-top: 5px;
@@ -664,8 +650,7 @@ a[class*="link--no-underline"] sup {
         border-width: 1px;
     }
 
-    /*.opss-border-all--padding-sm {padding: govuk-spacing(1); }
-    a.opss-border-all--padding-sm {padding: 7px 13px 8px 11px; }*/
+
 
     a[class*="font-size-14"].opss-border-all {
         line-height: 1.2 !important;
@@ -800,7 +785,7 @@ dl.opss-summary-list-aside {
     }
 
     dt+dd+dd+dd {
-        /* image */
+
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -843,9 +828,9 @@ dl.opss-summary-list-aside {
 
 .opss-summary-list-mixed {
 
-    /* this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed  */
+
     &>div {
-        /* std summary list but allows for a mixture of 2 & 3 cols in 1 list */
+
         display: table;
         width: 100%;
 
@@ -857,7 +842,7 @@ dl.opss-summary-list-aside {
             dt+dd {
                 min-width: 40%;
                 width: auto;
-                /* 1. protects against rogue legacy psd invalid html */
+
             }
         }
 
@@ -867,11 +852,11 @@ dl.opss-summary-list-aside {
             -ms-word-break: break-all;
             word-break: break-all;
             word-break: break-word;
-            /*no adding hypens*/
+
         }
 
         dd[class*="summary-list__actions"] a {
-            /*don't wrap the short "edit" type action links*/
+
             white-space: nowrap;
         }
 
@@ -879,7 +864,7 @@ dl.opss-summary-list-aside {
             display: none !important;
         }
 
-        /* 2. protects against rogue legacy psd invalid html */
+
     }
 
     @include govuk-media-query($from: desktop) {
@@ -964,14 +949,14 @@ dl.opss-summary-list-aside {
 
     @-moz-document url-prefix() {
 
-        /*firefox only: align 1st dd (without a 2nd) correctly */
+
         .govuk-summary-list__row dd:last-child {
             width: inherit;
         }
 
         &.opss-summary-list-mixed--narrow-actions>div {
 
-            /*firefox only: col flow bug */
+
             dd[class$="__actions"] {
                 width: auto;
             }
@@ -982,7 +967,7 @@ dl.opss-summary-list-aside {
 @include govuk-media-query($from: desktop) {
     .opss-summary-list-mixed.opss-summary-list-mixed--sm {
 
-        /*a narrow and small font version */
+
         dt {
             width: 25% !important;
         }
@@ -995,7 +980,7 @@ dl.opss-summary-list-aside {
     }
 
     .opss-summary-list-mixed.opss-summary-list-mixed--sm-font {
-        /* a mixed and small font version */
+
         margin-bottom: govuk-spacing(4);
 
         dt,
@@ -1041,7 +1026,7 @@ dl.opss-summary-list-aside {
     }
 }
 
-/* bespoke styles for Cases accordian section on a product page ... starts */
+
 .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt {
     width: 35%;
 }
@@ -1055,7 +1040,7 @@ dl.opss-summary-list-aside {
     width: 15%;
 }
 
-/* bespoke styles for Cases accordian section on a product page ... ends */
+
 
 dd dl.opss-nested-definition-list {
     margin: 0;
@@ -1110,7 +1095,7 @@ dd dl.opss-nested-definition-list {
         padding: 0 govuk-spacing(4) govuk-spacing(2) govuk-spacing(4);
         margin: govuk-spacing(5) 0 0 0;
 
-        /* not all style options to match GDS styles are added - you may need to add more when required: e.g, opss-grouping__legend--l */
+
         .opss-grouping__heading-l,
         .opss-grouping__heading-m,
         .opss-grouping__heading-s,
@@ -1150,9 +1135,7 @@ dd dl.opss-nested-definition-list {
             }
         }
 
-        /*& > dl > div:last-child {
-            border-bottom: none;
-        }*/
+
 
         & dl:last-of-type>div:last-child {
             border-bottom: none;
@@ -1163,14 +1146,14 @@ dd dl.opss-nested-definition-list {
 
 @include govuk-media-query($from: tablet) {
     .opss-equal-height-container {
-        /* on a .govuk-grid-row div */
+
         margin-left: 0;
         margin-right: 0;
         display: -webkit-flex;
         display: flex;
 
         .opss-equal-height__col {
-            /* on a .govuk-grid-column-one-half */
+
             margin-right: 0;
             margin-left: govuk-spacing(3);
             -webkit-flex: 1 auto;
@@ -1202,9 +1185,9 @@ dd dl.opss-nested-definition-list {
 }
 
 .opss-table {
-    /* not .opss-table-items */
+
     border-collapse: initial !important;
-    /*stops 1px border issues on laptops using 150% text scale*/
+
 
     tbody tr:last-child th,
     tbody tr:last-child td {
@@ -1269,7 +1252,7 @@ dd dl.opss-nested-definition-list {
 
 .opss-table-items {
     border-collapse: initial !important;
-    /*stops 1px border issues on laptops using 150% text scale*/
+
 
     thead th:nth-child(2) {
         width: auto;
@@ -1321,10 +1304,8 @@ dd dl.opss-nested-definition-list {
         @include govuk-font($size: 19);
     }
 
-    /*tbody tr:last-child td a {
-        @include govuk-font($size: 16);
-    }*/
-    /*tbody tr:not(:first-child):not(:last-child) td, tbody tr:not(:first-child):not(:last-child) th, */
+
+
     tbody tr:nth-child(2) th,
     tbody tr:nth-child(2) td {
         padding-top: govuk-spacing(0);
@@ -1342,7 +1323,7 @@ dd dl.opss-nested-definition-list {
         padding-top: govuk-spacing(0);
     }
 
-    /*th[colspan="3"], tfoot th {padding-top: govuk-spacing(7); }*/
+
     tbody tr:first-child th,
     tbody tr:not(:last-child)>*,
     tfoot tr th {
@@ -1362,7 +1343,7 @@ dd dl.opss-nested-definition-list {
 
     &.opss-table--borders {
 
-        /* add horizontal lines to simple single rows table in one parent tbody */
+
         tbody tr {
 
             th,
@@ -1408,7 +1389,7 @@ dd dl.opss-nested-definition-list {
 
     &.opss-table-items--first-col-50 {
 
-        /*no hidden 1st col */
+
         @include govuk-media-query($from: tablet) {
             thead th:nth-child(1) {
                 width: 50%;
@@ -1480,18 +1461,18 @@ dd dl.opss-nested-definition-list {
 
     .opss-desktop-margin-bottom-240px {
         margin-bottom: 240px !important;
-        /* aligns bottom of tbody */
+
     }
 
     .opss-desktop-margin-bottom-220px {
         margin-bottom: 220px !important;
-        /* aligns bottom of tbody */
+
     }
 }
 
 @media only screen and (min-width:641px) and (max-width: 961px) {
 
-    /* jump to mobile sizing at tablet size for tight cols */
+
     .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
         @include govuk-font($size: 16);
     }
