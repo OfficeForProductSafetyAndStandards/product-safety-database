@@ -420,7 +420,7 @@ en:
             remove_product:
               inclusion: Select yes if you want to remove the product from the case
             reason:
-              blank: Enter the reason for why you are removing the product
+              blank: Enter the reason for removing the product
         notifying_country_form:
           attributes:
             country:
