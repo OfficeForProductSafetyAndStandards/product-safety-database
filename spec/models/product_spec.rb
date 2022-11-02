@@ -5,12 +5,33 @@ RSpec.describe Product do
     let(:factory_name) { :product }
   end
 
-  describe "#psd_ref" do
+  describe "#psd_ref", :with_stubbed_opensearch do
     let(:id) { 123 }
-    let(:product) { build :product, id: }
+    let(:product) { create :product, :with_versions, id: }
 
     it "returns a reference formed with 'psd-' and the product's ID" do
       expect(product.psd_ref).to eq("psd-#{id}")
+    end
+
+    context "with timestamp" do
+      let(:creation_time) { 1.day.ago }
+      let(:timestamp) { creation_time.to_i }
+
+      before do
+        travel_to(creation_time) { product }
+      end
+
+      context "with a current instance" do
+        it "does not append the timestamp" do
+          expect(product.psd_ref(timestamp)).to eq("psd-#{id}")
+        end
+      end
+
+      context "with a versioned instance" do
+        it "appends the timestamp" do
+          expect(product.paper_trail.previous_version.psd_ref(timestamp)).to eq("psd-#{id}_#{timestamp}")
+        end
+      end
     end
   end
 

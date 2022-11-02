@@ -6,6 +6,8 @@ class Product < ApplicationRecord
 
   self.ignored_columns = %w[batch_number customs_code number_of_affected_units affected_units_status]
 
+  has_paper_trail
+
   enum authenticity: {
     "counterfeit" => "counterfeit",
     "genuine" => "genuine",
@@ -91,7 +93,14 @@ class Product < ApplicationRecord
     name
   end
 
-  def psd_ref
-    "psd-#{id}"
+  def psd_ref(timestamp = nil)
+    ref = "psd-#{id}"
+
+    # Timestamp to append is not necessarily the same as when the version was created.
+    if version.present? && timestamp.present?
+      ref << "_#{timestamp}"
+    end
+
+    ref
   end
 end

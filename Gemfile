@@ -28,6 +28,7 @@ gem "net-imap"
 gem "net-pop"
 gem "net-smtp"
 
+gem "paper_trail"
 gem "pg", "~> 1.4"
 gem "pghero", "~> 3.0"
 gem "puma", "~> 6.0"
