@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_26_151928) do
+ActiveRecord::Schema.define(version: 2022_11_02_152440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 2022_10_26_151928) do
     t.string "batch_number"
     t.datetime "created_at", null: false
     t.text "customs_code"
+    t.datetime "investigation_closed_at"
     t.integer "investigation_id"
     t.text "number_of_affected_units"
     t.integer "product_id"
