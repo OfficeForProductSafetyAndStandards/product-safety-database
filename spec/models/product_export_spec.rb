@@ -3,7 +3,10 @@ require "rails_helper"
 RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:investigation)       { create(:allegation).decorate }
   let!(:other_investigation) { create(:allegation).decorate }
-  let!(:product)             { create(:product, investigations: [investigation]).decorate }
+  let(:initial_product_description) { "Widget" }
+  let(:new_product_description) { "Sausage" }
+  # Create a new product version to ensure only the current version is rendered
+  let!(:product)             { create(:product, :with_versions, investigations: [investigation], description: initial_product_description, new_description: new_product_description).decorate }
   let!(:other_product)       { create(:product, investigations: [other_investigation]).decorate }
   let!(:risk_assessment)     { create(:risk_assessment, investigation:, products: [product]).decorate }
   let!(:risk_assessment_2)   { create(:risk_assessment, investigation:, products: [product]).decorate }
@@ -15,7 +18,7 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let(:params)               { {} }
   let(:product_export)       { described_class.create!(user:, params:) }
 
-  before { Product.__elasticsearch__.import force: true, refresh: :wait }
+  before { Product.import force: true, refresh: :wait }
 
   describe "#export!" do
     let(:result) { product_export.export! }
@@ -74,7 +77,7 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(3, 9)).to eq other_product.created_at.to_s
 
       expect(product_sheet.cell(1, 10)).to eq "description"
-      expect(product_sheet.cell(2, 10)).to eq product.description
+      expect(product_sheet.cell(2, 10)).to eq "<p>#{new_product_description}</p>"
       expect(product_sheet.cell(3, 10)).to eq other_product.description
 
       expect(product_sheet.cell(1, 11)).to eq "has_markings"

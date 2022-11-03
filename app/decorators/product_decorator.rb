@@ -36,11 +36,11 @@ class ProductDecorator < ApplicationDecorator
     h.govukSummaryList rows:
   end
 
-  def summary_list
+  def summary_list(timestamp = nil)
     psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
     psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record".html_safe
     rows = [
-      { key: { html: psd_ref_key_html }, value: { text: psd_ref, secondary_text: { html: psd_secondary_text_html } } },
+      { key: { html: psd_ref_key_html }, value: { text: psd_ref(timestamp), secondary_text: { html: psd_secondary_text_html } } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },

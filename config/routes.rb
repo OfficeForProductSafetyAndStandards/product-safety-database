@@ -65,6 +65,8 @@ Rails.application.routes.draw do
     get :skip
   end
 
+  resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
+
   resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
   resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
   resources :project, controller: "investigations/project", only: %i[show new create update]
@@ -203,6 +205,9 @@ Rails.application.routes.draw do
     get "all-products", to: "products#index", as: "all"
   end
 
+  resources :products, except: %i[destroy], concerns: %i[document_attachable]
+  get "products/:id(/:timestamp)", to: "products#show", as: :product_version
+
   resource :businesses, only: [], path: "businesses" do
     get "your-businesses", to: "businesses#your_businesses", as: "your"
     get "team-businesses", to: "businesses#team_businesses", as: "team"
@@ -214,8 +219,6 @@ Rails.application.routes.draw do
     resource :customs_code, only: %i[edit update], path: "edit-customs-code", controller: "investigation_products/customs_codes"
     resource :number_of_affected_units, only: %i[edit update], path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
   end
-
-  resources :products, except: %i[destroy], concerns: %i[document_attachable]
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do

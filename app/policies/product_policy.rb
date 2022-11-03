@@ -4,6 +4,6 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def update?
-    record.owning_team.nil? || record.owning_team == user.team
+    record.version.nil? && (record.owning_team.nil? || record.owning_team == user.team)
   end
 end

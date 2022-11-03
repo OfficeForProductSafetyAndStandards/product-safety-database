@@ -11,6 +11,16 @@ FactoryBot.define do
     markings { [Product::MARKINGS.sample] }
     when_placed_on_market { "before_2021" }
 
+    trait :with_versions do
+      transient do
+        new_description { "new product description" }
+      end
+
+      after(:create) do |product, evaluator|
+        product.update!(description: evaluator.new_description)
+      end
+    end
+
     factory :product_iphone do
       product_code { 234 }
       name { "iPhone XS MAX" }
