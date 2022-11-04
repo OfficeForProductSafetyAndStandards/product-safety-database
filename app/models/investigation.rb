@@ -191,6 +191,46 @@ class Investigation < ApplicationRecord
     !risk_validated_by.nil?
   end
 
+  def product_subcategories
+    investigation_products.map do |ip|
+      if ip.investigation_closed_at
+        ip.product.paper_trail.version_at(ip.investigation_closed_at).subcategory
+      else
+        ip.product.subcategory
+      end
+    end
+  end
+
+  def product_barcodes
+    investigation_products.map do |ip|
+      if ip.investigation_closed_at
+        ip.product.paper_trail.version_at(ip.investigation_closed_at).barcode
+      else
+        ip.product.barcode
+      end
+    end
+  end
+
+  def product_descriptions
+    investigation_products.map do |ip|
+      if ip.investigation_closed_at
+        ip.product.paper_trail.version_at(ip.investigation_closed_at).description
+      else
+        ip.product.description
+      end
+    end
+  end
+
+  def product_codes
+    investigation_products.map do |ip|
+      if ip.investigation_closed_at
+        ip.product.paper_trail.version_at(ip.investigation_closed_at).product_code
+      else
+        ip.product.product_code
+      end
+    end
+  end
+
 private
 
   def creator_id

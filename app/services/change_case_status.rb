@@ -10,13 +10,13 @@ class ChangeCaseStatus
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     investigation.is_closed = closed?
-    investigation.date_closed = closed? ? Date.current : nil
+    investigation.date_closed = closed? ? Time.current : nil
 
     return if investigation.changes.none?
 
     ActiveRecord::Base.transaction do
       investigation.save!
-      investigation.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: investigation.date_closed)
+      investigation.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: investigation.date_closed) if closed?
       create_audit_activity_for_case_status_changed
     end
 
