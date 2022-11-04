@@ -6,7 +6,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
 gem "aws-sdk-s3", "~> 1.117"
-gem "aws-sdk-s3control", "~> 1.54"
+gem "aws-sdk-s3control", "~> 1.55"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -80,7 +80,7 @@ group :test do
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.2"
-  gem "faker", "~> 2.23"
+  gem "faker", "~> 3.0"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.9"
