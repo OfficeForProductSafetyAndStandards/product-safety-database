@@ -16,6 +16,7 @@ class ChangeCaseStatus
 
     ActiveRecord::Base.transaction do
       investigation.save!
+      investigation.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: investigation.date_closed)
       create_audit_activity_for_case_status_changed
     end
 
