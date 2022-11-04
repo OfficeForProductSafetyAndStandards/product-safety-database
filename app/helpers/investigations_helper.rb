@@ -213,7 +213,7 @@ module InvestigationsHelper
         actions: risk_level_actions(investigation, user)
       },
       {
-        key: { text: t("investigations.risk_validation.page_title") },
+        key: { html: 'Risk <span class="govuk-visually-hidden">level</span> validated'.html_safe },
         value: { text: risk_validated_value(investigation) },
         actions: risk_validation_actions(investigation, user)
       }
