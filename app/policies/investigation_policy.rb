@@ -58,4 +58,8 @@ class InvestigationPolicy < ApplicationPolicy
   def change_notifying_country?(user: @user)
     user.notifying_country_editor?
   end
+
+  def remove_product?
+    !record.is_closed && update?
+  end
 end

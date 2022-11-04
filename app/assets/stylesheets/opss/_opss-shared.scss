@@ -1,42 +1,60 @@
-@mixin down-load-link($color,$size) {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="'+ $size +'px" viewBox="0 0 24 24" width="'+ $size +'px" fill="'+ $color +'"><g><rect fill="none" height="'+ $size +'" width="'+ $size +'"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
+//$opss-error-colour: #d4351c;
+@mixin down-load-link($color, $size) {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="' + $size +'px" viewBox="0 0 24 24" width="' + $size +'px" fill="' + $color +'"><g><rect fill="none" height="' + $size +'" width="' + $size +'"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
     background-position: center;
     background-repeat: no-repeat;
     display: inline-block;
 }
+
 @function calculateRem($s) {
-  $remSize: $s / 16px;
-  @return #{$remSize}rem;
+    $remSize: $s / 16px;
+    @return #{$remSize}rem;
 }
+
 @mixin opss-font-size($s, $l) {
     font-size: $s !important;
     font-size: calculateRem($s) !important;
     line-height: $l !important;
 }
+
 @mixin word-wrap() {
-  overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-all;
-  word-break: break-word; -ms-hyphens: auto; -moz-hyphens: auto; -webkit-hyphens: auto; hyphens: auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 $std-font-family: "GDS Transport", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
-form.opss-cookie-form {/*for the cookie banner*/
+form.opss-cookie-form {
+
     display: flex;
 }
 
-/* not normalised by gds library - starts */
+
+
+
 figure,
 figcaption {
-    margin: 0; padding: 0; display: block;
+    margin: 0;
+    padding: 0;
+    display: block;
 }
-/* not normalised by gds library - ends */
+
+
 
 @include govuk-media-query($from: desktop) {
-    .govuk-width-container > main.govuk-main-wrapper {
+    .govuk-width-container>main.govuk-main-wrapper {
         padding-top: govuk-spacing(8);
     }
-    .govuk-width-container > .govuk-breadcrumbs + main.govuk-main-wrapper,
-    .govuk-width-container > .govuk-back-link + main.govuk-main-wrapper {
+
+    .govuk-width-container>.govuk-breadcrumbs+main.govuk-main-wrapper,
+    .govuk-width-container>.govuk-back-link+main.govuk-main-wrapper {
         padding-top: govuk-spacing(2);
     }
 }
@@ -45,15 +63,18 @@ main.govuk-main-wrapper {
     @include govuk-media-query($from: desktop) {
         min-height: 500px;
     }
+
     @include govuk-clearfix;
 }
 
-#main-content > div > div div {
+#main-content>div>div div {
+
     .govuk-heading-xl,
     .govuk-heading-l {
-      @include word-wrap;
+        @include word-wrap;
     }
 }
+
 .govuk-heading-m,
 .govuk-heading-s,
 .govuk-heading-l a,
@@ -64,6 +85,7 @@ main.govuk-main-wrapper {
     @include word-wrap;
 }
 
+
 .govuk-summary-list .govuk-link,
 .opss-table td a,
 .opss-table tbody tr th:first-child,
@@ -73,25 +95,36 @@ tbody td a[href^="mailto:"],
 .govuk-list *[class^="govuk-heading"] .govuk-link {
     @include word-wrap;
 }
+
 h1.govuk-fieldset__heading,
 h1.govuk-label-wrapper label.govuk-label--l {
-    overflow-wrap: normal; word-wrap: normal; word-break: normal; hyphens: unset;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: unset;
 }
 
-main a.govuk-link:hover {/*recreate new hover styles of latest gds*/
+
+main a.govuk-link:hover {
+
+    //text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
     text-decoration-skip-ink: none;
 }
+
 .opss-no-wrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
+
 @include govuk-media-query($from: desktop) {
     .opss-no-wrap-desktop {
         white-space: nowrap;
     }
 }
+
 .opss-nojs-hide {
     display: none;
 }
+
 body.js-enabled .opss-nojs-hide {
     display: inline;
 }
@@ -99,8 +132,10 @@ body.js-enabled .opss-nojs-hide {
 .js-enabled {
     .opss-js-enabled-hidden {
         display: none;
+
     }
 }
+
 .opss-br-desktop {
     display: none;
 
@@ -120,10 +155,11 @@ body.js-enabled .opss-nojs-hide {
 .opss-float-left {
     float: left;
 }
+
 .opss-float-right {
     float: right;
 
-    & + .opss-float-right {
+    &+.opss-float-right {
         clear: right;
     }
 }
@@ -132,10 +168,11 @@ body.js-enabled .opss-nojs-hide {
     .opss-float-left-desktop {
         float: left;
     }
+
     .opss-float-right-desktop {
         float: right;
 
-        & + .opss-float-right-desktop {
+        &+.opss-float-right-desktop {
             clear: right;
         }
     }
@@ -144,15 +181,19 @@ body.js-enabled .opss-nojs-hide {
 .opss-responsive-margin-top-6 {
     @include govuk-responsive-margin(6, "top");
 }
+
 .opss-responsive-margin-top-9 {
     @include govuk-responsive-margin(9, "top");
 }
+
 .opss-responsive-margin-bottom-6 {
     @include govuk-responsive-margin(6, "bottom");
 }
+
 .opss-responsive-margin-bottom-9 {
     @include govuk-responsive-margin(9, "bottom");
 }
+
 .opss-skip-link {
     position: absolute;
     left: -10000px;
@@ -161,6 +202,7 @@ body.js-enabled .opss-nojs-hide {
     height: 1px;
     overflow: hidden;
 }
+
 .opss-margin-bottom-1-desktop {
     margin-bottom: govuk-spacing(4);
 
@@ -168,6 +210,7 @@ body.js-enabled .opss-nojs-hide {
         margin-bottom: govuk-spacing(1);
     }
 }
+
 .opss-margin-top-1-mobile {
     margin-top: govuk-spacing(4);
 
@@ -175,18 +218,23 @@ body.js-enabled .opss-nojs-hide {
         margin-top: govuk-spacing(1);
     }
 }
+
 .opss-skip-link:focus {
     &.opss-skip-link--mb {
         margin-bottom: govuk-spacing(4) !important;
     }
 }
+
 .opss-error-colour {
     color: $govuk-error-colour;
 }
+
 .opss-grey-bg {
     background-color: govuk-colour("light-grey");
 }
-.opss-document-icon-std {    /*   A CSS FOR ICON ON MOBILE - REQUIRES DESKTOP ONLY CSS TO SNAP IN FULL SIZE DIMS. And update HTML to figcaption   */
+
+.opss-document-icon-std {
+
     position: relative;
     padding: 2px;
     margin: 0 0 govuk-spacing(2) 0;
@@ -205,7 +253,7 @@ body.js-enabled .opss-nojs-hide {
         position: absolute;
         left: -10000px;
 
-        abbr[title]{
+        abbr[title] {
             border-bottom: none;
         }
     }
@@ -231,7 +279,9 @@ body.js-enabled .opss-nojs-hide {
     }
 }
 
-@include govuk-media-query($from: desktop) {//use on
+@include govuk-media-query($from: desktop) {
+
+    //use on
     .opss-right-box-arrow {
         position: relative;
         background-color: govuk-colour("light-grey");
@@ -239,7 +289,7 @@ body.js-enabled .opss-nojs-hide {
         border-radius: 5px;
         padding-left: govuk-spacing(3);
 
-        .govuk-grid-column-one-quarter > & {
+        .govuk-grid-column-one-quarter>& {
             margin-right: govuk-spacing(7) + govuk-spacing(1) !important;
         }
     }
@@ -259,20 +309,33 @@ body.js-enabled .opss-nojs-hide {
     }
 }
 
-.opss-warning-text--s {/* make warning text smaller and allow several in succession */
+.opss-warning-text--s {
+
+
     strong {
         @include opss-font-size($s: 16px, $l: 1.3);
     }
 
-    & + .opss-warning-text--s > span {
+    &+.opss-warning-text--s>span {
         display: none;
     }
 }
 
-abbr[title]{
+.opss-warning-text--normal {
+    strong {
+        font-weight: normal;
+    }
+}
+
+.opss-warning-text--s+.opss-warning-text--s.opss-warning-text--normal {
+    padding: govuk-spacing(0);
+}
+
+abbr[title] {
     text-decoration: none;
 
     @include govuk-media-query($from: desktop) {
+
         .opss-switch-cols &,
         .govuk-summary-list__row & {
             border-bottom: 1px dotted $govuk-secondary-text-colour;
@@ -290,6 +353,7 @@ samp {
 .opss-text-align-center {
     text-align: center;
 }
+
 *[class^="govuk-heading"].opss-text-align-center {
     width: 100%;
 }
@@ -298,8 +362,12 @@ samp {
     .opss-max-width-two-thirds {
         max-width: 66%;
     }
-    .opss-text-align-right {/*this opss style is prefered to govuk-!-text-align-right because it is resolution sensitive*/
-        text-align: right; display: inline-block; width: 100%;
+
+    .opss-text-align-right {
+
+        text-align: right;
+        display: inline-block;
+        width: 100%;
     }
 }
 
@@ -329,6 +397,7 @@ samp {
     dl div dd:last-of-type {
         margin-bottom: 0 !important;
     }
+
     li a {
         @include word-wrap;
     }
@@ -338,26 +407,33 @@ samp {
     .opss-desktop-min-height--xs {
         min-height: 130px;
     }
+
     .opss-desktop-min-height--s {
         min-height: 180px;
     }
+
     .opss-desktop-min-height--s2 {
         min-height: 230px;
     }
+
     .opss-desktop-min-height--s3 {
         min-height: 275px;
     }
+
     .opss-desktop-min-height--m {
         min-height: 300px;
     }
+
     .opss-desktop-padding-0 {
-        padding: 0 !important ;
+        padding: 0 !important;
     }
+
     .opss-desktop-padding-top-3 {
-        padding-top: govuk-spacing(3) !important ;
+        padding-top: govuk-spacing(3) !important;
     }
+
     .opss-desktop-padding-bottom-4 {
-        padding-bottom: govuk-spacing(4) !important ;
+        padding-bottom: govuk-spacing(4) !important;
     }
 
     .opss-summary-list__row--split {
@@ -365,12 +441,15 @@ samp {
     }
 
     .opss-2-col-flow {
-        -moz-column-count: 2; -webkit-column-count: 2; column-count: 2;
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
         column-gap: 80px;
 
-        .opss-summary-list-mixed > div {
+        .opss-summary-list-mixed>div {
             break-inside: avoid-column;
         }
+
         .opss-summary-list-mixed.opss-summary-list-mixed--sm {
             margin-bottom: 0;
 
@@ -378,15 +457,21 @@ samp {
                 width: 36% !important;
                 @include word-wrap;
             }
+
+
         }
     }
+
     .opss-3-col-flow {
-        -moz-column-count: 3; -webkit-column-count: 3; column-count: 3;
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
         column-gap: govuk-spacing(3);
 
-        .opss-summary-list-mixed > div {
+        .opss-summary-list-mixed>div {
             break-inside: avoid-column;
         }
+
         .opss-summary-list-mixed.opss-summary-list-mixed--sm {
             margin-bottom: 0;
 
@@ -396,17 +481,21 @@ samp {
 
                 span {
                     @include opss-font-size($s: 14px, $l: 1.2);
+
                 }
             }
         }
     }
 
-    @-moz-document url-prefix() {/*firefox only: col flow bug */
+    @-moz-document url-prefix() {
+
+
         .opss-2-col-flow,
         .opss-3-col-flow {
             .govuk-summary-list {
                 display: unset;
             }
+
             .govuk-summary-list__row {
                 display: table;
                 width: 100%;
@@ -422,6 +511,7 @@ samp {
                 display: inline-block;
                 margin-left: govuk-spacing(1);
             }
+
             li:first-child {
                 margin-left: 0;
             }
@@ -449,7 +539,7 @@ ul.opss-left-nav {
         margin-top: 0;
     }
 
-    & > li.opss-left-nav__active {
+    &>li.opss-left-nav__active {
         @include menu-inset-anchors;
     }
 
@@ -459,26 +549,31 @@ ul.opss-left-nav {
         @include opss-font-size($s: 17px, $l: 1.2);
         @include word-wrap;
 
-            ul {
-                padding-left: govuk-spacing(4);
-                margin-bottom: 0;
-            }
+        ul {
+            padding-left: govuk-spacing(4);
+            margin-bottom: 0;
+        }
 
-            ul li.opss-left-nav__active {/* 3rd nested ULs */
-                @include menu-inset-anchors;
-            }
+        ul li.opss-left-nav__active {
 
-            a {
-                text-decoration: none !important;
-                text-underline-offset: 0.1em;
+            @include menu-inset-anchors;
+        }
 
-                span {
-                    font-size: 90%;
-                }
+        a {
+            text-decoration: none !important;
+            text-underline-offset: 0.1em;
+
+
+
+            span {
+                font-size: 90%;
             }
+        }
     }
 
-    & > li:first-child {
+
+
+    &>li:first-child {
         padding-top: 5px;
     }
 
@@ -487,7 +582,7 @@ ul.opss-left-nav {
             padding-left: govuk-spacing(6);
         }
 
-        & > a {
+        &>a {
             font-weight: bold;
             margin-left: govuk-spacing(2);
         }
@@ -502,28 +597,60 @@ ul.opss-left-nav {
 .opss-primary-text {
     color: $govuk-text-colour;
 }
+
 .opss-secondary-text {
     color: $govuk-secondary-text-colour;
 }
+
 a[class*="link--no-underline"] sup {
     color: $govuk-text-colour;
 }
 
-.opss-border-top, .opss-border-bottom, .opss-border-left, .opss-border-right, .opss-border-all {
+.opss-border-top,
+.opss-border-bottom,
+.opss-border-left,
+.opss-border-right,
+.opss-border-all {
     border-color: $govuk-border-colour;
     border-style: solid;
     border-width: 0;
 }
-.opss-border-top {border-top-width: 1px; }
-.opss-border-bottom {border-bottom-width: 1px; }
-.opss-border-left {border-left-width: 1px; }
-.opss-border-right {border-right-width: 1px; }
-.opss-border-none {border-width: 0; }
+
+.opss-border-top {
+    border-top-width: 1px;
+}
+
+.opss-border-bottom {
+    border-bottom-width: 1px;
+}
+
+.opss-border-left {
+    border-left-width: 1px;
+}
+
+.opss-border-right {
+    border-right-width: 1px;
+}
+
+.opss-border-none {
+    border-width: 0;
+}
 
 @include govuk-media-query($from: tablet) {
-    .opss-rounded-corners {border-radius: 5px; }
-    .opss-drop-shadow {box-shadow: 3px 4px 6px 0px #ebebeb; }
-    .opss-border-all {border-width: 1px; }
+    .opss-rounded-corners {
+        border-radius: 5px;
+    }
+
+    .opss-drop-shadow {
+        box-shadow: 3px 4px 6px 0px #ebebeb;
+    }
+
+    //2px 2px 10px govuk-colour("mid-grey");
+    .opss-border-all {
+        border-width: 1px;
+    }
+
+
 
     a[class*="font-size-14"].opss-border-all {
         line-height: 1.2 !important;
@@ -534,7 +661,7 @@ a[class*="link--no-underline"] sup {
     .opss-border-all {
         padding: govuk-spacing(0) !important;
     }
- }
+}
 
 .opss-details--sm {
     @include govuk-media-query($from: desktop) {
@@ -547,7 +674,7 @@ a[class*="link--no-underline"] sup {
             }
         }
 
-        &[open] > summary::before {
+        &[open]>summary::before {
             border-width: 10px 6px 0px 6px !important;
         }
 
@@ -556,7 +683,7 @@ a[class*="link--no-underline"] sup {
 }
 
 .opss-details--plain {
-    & > div {
+    &>div {
         padding: govuk-spacing(3) 0;
         border-left: none;
     }
@@ -579,7 +706,8 @@ a[class*="link--no-underline"] sup {
         text-decoration: underline;
     }
 
-    &:focus, &:active {
+    &:focus,
+    &:active {
         outline: 3px solid transparent !important;
         color: govuk-colour("black") !important;
         background-color: govuk-colour("yellow") !important;
@@ -606,7 +734,7 @@ a[class*="link--no-underline"] sup {
         max-height: 110px;
     }
 
-    &.opss-details-img--thumbnail + .opss-img-caption {
+    &.opss-details-img--thumbnail+.opss-img-caption {
         max-width: 174px;
         white-space: nowrap;
         overflow: hidden;
@@ -627,11 +755,13 @@ dl.opss-summary-list-aside {
         content: counter(img) ". ";
     }
 
-    dt, dd {
+    dt,
+    dd {
         display: block;
         margin-left: 0;
         width: 100%;
     }
+
     dt {
         font-weight: 700;
         border-top: 1px solid $govuk-border-colour;
@@ -644,6 +774,7 @@ dl.opss-summary-list-aside {
             padding-top: 0;
         }
     }
+
     dd {
         img {
             max-height: 140px;
@@ -652,16 +783,21 @@ dl.opss-summary-list-aside {
             margin-bottom: govuk-spacing(1);
         }
     }
-    dt + dd + dd + dd  {/* image */
+
+    dt+dd+dd+dd {
+
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
     @media only screen and (max-width: 600px) {
-        dt, dd {
+
+        dt,
+        dd {
             @include govuk-font($size: 16);
         }
+
         dt {
             font-weight: 700;
         }
@@ -673,22 +809,28 @@ dl.opss-summary-list-aside {
     .opss-summary-list-vertical {
         margin-bottom: govuk-spacing(1);
 
-        dt, dd {
+        dt,
+        dd {
             display: block;
             width: inherit !important;
             padding: 0 !important;
         }
+
         dt {
             margin-top: govuk-spacing(3);
         }
+
         div:first-of-type dt {
             margin-top: govuk-spacing(0);
         }
     }
 }
 
-.opss-summary-list-mixed {/* this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed  */
-    & > div {/* std summary list but allows for a mixture of 2 & 3 cols in 1 list */
+.opss-summary-list-mixed {
+
+
+    &>div {
+
         display: table;
         width: 100%;
 
@@ -696,9 +838,11 @@ dl.opss-summary-list-aside {
             dt {
                 width: 39%;
             }
-            dt + dd {
+
+            dt+dd {
                 min-width: 40%;
-                width: auto; /* 1. protects against rogue legacy psd invalid html */
+                width: auto;
+
             }
         }
 
@@ -707,39 +851,48 @@ dl.opss-summary-list-aside {
             word-wrap: break-word;
             -ms-word-break: break-all;
             word-break: break-all;
-            word-break: break-word; /*no adding hypens*/
+            word-break: break-word;
+
         }
 
-        dd[class*="summary-list__actions"] a { /*don't wrap the short "edit" type action links*/
+        dd[class*="summary-list__actions"] a {
+
             white-space: nowrap;
         }
 
-        & > span.govuk-summary-list__actions {display: none !important; }/* 2. protects against rogue legacy psd invalid html */
+        &>span.govuk-summary-list__actions {
+            display: none !important;
+        }
+
+
     }
 
     @include govuk-media-query($from: desktop) {
-        &.opss-summary-list-mixed--narrow-dt + .opss-text-align-right {
+        &.opss-summary-list-mixed--narrow-dt+.opss-text-align-right {
             position: relative;
             top: - govuk-spacing(4);
         }
 
-        &.opss-summary-list-mixed--narrow-dt > div {
+        &.opss-summary-list-mixed--narrow-dt>div {
             dt {
                 width: 25%;
             }
-            dt + dd {
+
+            dt+dd {
                 min-width: 50%;
             }
         }
 
-        &.opss-summary-list-mixed--narrow-actions > div {
+        &.opss-summary-list-mixed--narrow-actions>div {
             dd[class$="__actions"] {
                 width: 10%;
             }
         }
 
-        &.opss-summary-list-mixed--compact > div {
-            dt, dd {
+        &.opss-summary-list-mixed--compact>div {
+
+            dt,
+            dd {
                 margin-top: 0;
                 margin-bottom: 0;
                 padding-top: 0;
@@ -759,10 +912,10 @@ dl.opss-summary-list-aside {
             border-bottom: none 0;
         }
 
-        & > div:first-child dt {
+        &>div:first-child dt {
             vertical-align: bottom;
 
-            & + dd {
+            &+dd {
                 padding-right: govuk-spacing(0);
 
                 figure {
@@ -794,12 +947,16 @@ dl.opss-summary-list-aside {
         }
     }
 
-    @-moz-document url-prefix() {/*firefox only: align 1st dd (without a 2nd) correctly */
+    @-moz-document url-prefix() {
+
+
         .govuk-summary-list__row dd:last-child {
             width: inherit;
         }
 
-        &.opss-summary-list-mixed--narrow-actions > div {/*firefox only: col flow bug */
+        &.opss-summary-list-mixed--narrow-actions>div {
+
+
             dd[class$="__actions"] {
                 width: auto;
             }
@@ -808,19 +965,26 @@ dl.opss-summary-list-aside {
 }
 
 @include govuk-media-query($from: desktop) {
-    .opss-summary-list-mixed.opss-summary-list-mixed--sm {/*a narrow and small font version */
+    .opss-summary-list-mixed.opss-summary-list-mixed--sm {
+
+
         dt {
             width: 25% !important;
         }
-        dt, dd {
+
+        dt,
+        dd {
             @include opss-font-size($s: 16px, $l: 1.2);
             padding-bottom: govuk-spacing(0);
         }
     }
-    .opss-summary-list-mixed.opss-summary-list-mixed--sm-font {/* a mixed and small font version */
+
+    .opss-summary-list-mixed.opss-summary-list-mixed--sm-font {
+
         margin-bottom: govuk-spacing(4);
 
-        dt, dd {
+        dt,
+        dd {
             @include opss-font-size($s: 16px, $l: 1.2);
             padding-top: govuk-spacing(1);
             padding-bottom: govuk-spacing(1);
@@ -830,24 +994,31 @@ dl.opss-summary-list-aside {
             margin-bottom: govuk-spacing(7);
 
             div:last-child {
-                dt, dd {
+
+                dt,
+                dd {
                     border-bottom: none;
                 }
             }
         }
     }
+
     .opss-summary-list-mixed.opss-summary-list--equal-widths {
         div {
-            dt,  dd {
+
+            dt,
+            dd {
                 width: 33%;
             }
         }
     }
+
     .opss-summary-list-mixed.opss-summary-list--equal-last-2-wide {
         div {
             dt {
                 width: 20%;
             }
+
             dd {
                 width: 40%;
             }
@@ -855,18 +1026,27 @@ dl.opss-summary-list-aside {
     }
 }
 
-/* bespoke styles for Cases accordian section on a product page ... starts */
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt {width: 35%; }
+
+.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt {
+    width: 35%;
+}
+
 .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd,
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd + dd {width: 25%; }
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd:last-of-type {width: 15%; }
-/* bespoke styles for Cases accordian section on a product page ... ends */
+.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd+dd {
+    width: 25%;
+}
+
+.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd:last-of-type {
+    width: 15%;
+}
+
+
 
 dd dl.opss-nested-definition-list {
     margin: 0;
     @include opss-font-size($s: 16px, $l: 1.6);
 
-    & > div {
+    &>div {
         width: 100%;
     }
 
@@ -898,7 +1078,7 @@ dd dl.opss-nested-definition-list {
     }
 
     @include govuk-media-query($from: desktop) {
-        & > div {
+        &>div {
             display: inline-block;
             width: 100%;
         }
@@ -914,7 +1094,8 @@ dd dl.opss-nested-definition-list {
         border: 1px solid $govuk-border-colour;
         padding: 0 govuk-spacing(4) govuk-spacing(2) govuk-spacing(4);
         margin: govuk-spacing(5) 0 0 0;
-        /* not all style options to match GDS styles are added - you may need to add more when required: e.g, opss-grouping__legend--l */
+
+
         .opss-grouping__heading-l,
         .opss-grouping__heading-m,
         .opss-grouping__heading-s,
@@ -927,21 +1108,25 @@ dd dl.opss-nested-definition-list {
             left: - govuk-spacing(2);
             top: - govuk-spacing(3);
         }
+
         .opss-grouping__heading-l {
             top: - govuk-spacing(4);
         }
+
         .opss-grouping__heading-s {
             top: - govuk-spacing(2) - 3;
         }
+
         .opss-grouping__legend--s {
             top: govuk-spacing(0);
             padding-right: 0;
         }
+
         .opss-grouping__heading--norm {
             font-weight: normal;
         }
 
-        & > dl {
+        &>dl {
             margin-bottom: 0;
 
             dt {
@@ -950,7 +1135,9 @@ dd dl.opss-nested-definition-list {
             }
         }
 
-        & dl:last-of-type > div:last-child {
+
+
+        & dl:last-of-type>div:last-child {
             border-bottom: none;
         }
     }
@@ -958,19 +1145,22 @@ dd dl.opss-nested-definition-list {
 }
 
 @include govuk-media-query($from: tablet) {
-    .opss-equal-height-container {/* on a .govuk-grid-row div */
+    .opss-equal-height-container {
+
         margin-left: 0;
         margin-right: 0;
         display: -webkit-flex;
         display: flex;
 
-        .opss-equal-height__col {/* on a .govuk-grid-column-one-half */
+        .opss-equal-height__col {
+
             margin-right: 0;
             margin-left: govuk-spacing(3);
             -webkit-flex: 1 auto;
             -ms-flex: 1 auto;
             flex: 1 auto;
         }
+
         .opss-equal-height__col:first-child {
             margin-right: govuk-spacing(3);
             margin-left: 0;
@@ -987,20 +1177,23 @@ dd dl.opss-nested-definition-list {
             display: flex;
             flex-direction: column;
 
-                & > .opss-full-height__col--bottom {
-                    margin-top: auto;
-                }
+            &>.opss-full-height__col--bottom {
+                margin-top: auto;
+            }
         }
     }
 }
 
-.opss-table {/* not .opss-table-items */
-    border-collapse: initial !important;/*stops 1px border issues on laptops using 150% text scale*/
+.opss-table {
+
+    border-collapse: initial !important;
+
 
     tbody tr:last-child th,
     tbody tr:last-child td {
         border-bottom: none;
     }
+
     tbody tr td:last-child a {
         white-space: nowrap;
     }
@@ -1014,7 +1207,9 @@ dd dl.opss-nested-definition-list {
     tbody tr th:first-child {
         width: 33%;
     }
+
     @include govuk-media-query($from: tablet) {
+
         thead tr th:first-child,
         tbody tr th:first-child {
             width: auto;
@@ -1024,12 +1219,14 @@ dd dl.opss-nested-definition-list {
 }
 
 .opss-table--last-col-right {
+
     thead tr .govuk-table__header:last-child,
     tbody tr .govuk-table__cell:last-child,
     tfoot tr .govuk-table__header:last-child {
         text-align: right;
     }
 }
+
 .opss-table--first-col-normal {
     tbody tr th:first-child {
         font-weight: normal;
@@ -1038,29 +1235,45 @@ dd dl.opss-nested-definition-list {
 
 .opss-table--2-row-groups {
     tbody tr:first-child {
-        & > * {
+        &>* {
             border-bottom: none 0;
         }
-        & + tr > * {
+
+        &+tr>* {
             border-bottom: 1px solid $govuk-border-colour;
         }
     }
-    tbody:last-of-type tr > th,
-    tbody:last-of-type tr > td {
+
+    tbody:last-of-type tr>th,
+    tbody:last-of-type tr>td {
         border-bottom: none 0;
     }
 }
 
 .opss-table-items {
-    border-collapse: initial !important;/*stops 1px border issues on laptops using 150% text scale*/
+    border-collapse: initial !important;
 
-    thead th:nth-child(2) {width: auto; }
-    thead th:nth-child(3) {width: auto; }
-    thead th:nth-child(4) {width: auto; }
-    thead th:nth-child(5) {width: auto; }
+
+    thead th:nth-child(2) {
+        width: auto;
+    }
+
+    thead th:nth-child(3) {
+        width: auto;
+    }
+
+    thead th:nth-child(4) {
+        width: auto;
+    }
+
+    thead th:nth-child(5) {
+        width: auto;
+    }
 
     @include govuk-media-query($from: tablet) {
-        thead th:nth-child(2) {width: 20%; }
+        thead th:nth-child(2) {
+            width: 20%;
+        }
     }
 
     thead th:last-child,
@@ -1069,50 +1282,72 @@ dd dl.opss-nested-definition-list {
         text-align: right;
     }
 
-    tbody td:nth-child(4)::first-letter {text-transform: uppercase; }
+    tbody td:nth-child(4)::first-letter {
+        text-transform: uppercase;
+    }
 
     thead th,
     tfoot th {
         @include govuk-font($size: 19);
         font-weight: 700;
     }
+
     thead th {
         vertical-align: bottom;
     }
+
     tfoot th {
         vertical-align: top;
     }
+
     tbody td {
         @include govuk-font($size: 19);
     }
-    tbody tr:nth-child(2) th, tbody tr:nth-child(2) td {
+
+
+
+    tbody tr:nth-child(2) th,
+    tbody tr:nth-child(2) td {
         padding-top: govuk-spacing(0);
         padding-bottom: govuk-spacing(2);
     }
-    tbody tr:nth-child(3) th, tbody tr:nth-child(3) td {
+
+    tbody tr:nth-child(3) th,
+    tbody tr:nth-child(3) td {
         padding-top: govuk-spacing(1);
         padding-bottom: govuk-spacing(2);
     }
-    tbody tr:nth-child(4) th, tbody tr:nth-child(4) td {
+
+    tbody tr:nth-child(4) th,
+    tbody tr:nth-child(4) td {
         padding-top: govuk-spacing(0);
     }
+
+
     tbody tr:first-child th,
-    tbody tr:not(:last-child) > *,
+    tbody tr:not(:last-child)>*,
     tfoot tr th {
         border-bottom: 0 none;
     }
 
-    tbody th, tbody td {
+    tbody th,
+    tbody td {
         transition: all 0.5s ease;
         background-color: transparent;
     }
-    tbody.opss-bg th, tbody.opss-bg td {
+
+    tbody.opss-bg th,
+    tbody.opss-bg td {
         background-color: govuk-colour("light-grey");
     }
 
-    &.opss-table--borders {/* add horizontal lines to simple single rows table in one parent tbody */
+    &.opss-table--borders {
+
+
         tbody tr {
-            th, td {
+
+            th,
+            td {
                 border-bottom: 1px solid $govuk-border-colour;
                 padding-top: govuk-spacing(2);
                 padding-bottom: govuk-spacing(2);
@@ -1122,31 +1357,43 @@ dd dl.opss-nested-definition-list {
     }
 
     &.opss-table-items--sm {
+
         thead th,
         tfoot th {
             @include govuk-font($size: 16);
             font-weight: 700;
         }
+
         tbody td {
             @include govuk-font($size: 16);
         }
-        tbody tr:nth-child(2) th, tbody tr:nth-child(2) td {
+
+        tbody tr:nth-child(2) th,
+        tbody tr:nth-child(2) td {
             padding-bottom: govuk-spacing(1);
         }
-        tbody tr:last-child th, tbody tr:last-child td {
+
+        tbody tr:last-child th,
+        tbody tr:last-child td {
             padding-bottom: govuk-spacing(2) + 2;
         }
     }
 
     &.opss-table-items--first-col-33 {
         @include govuk-media-query($from: tablet) {
-            thead th:nth-child(2) {width: 33%; }
+            thead th:nth-child(2) {
+                width: 33%;
+            }
         }
     }
 
-    &.opss-table-items--first-col-50 {/*no hidden 1st col */
+    &.opss-table-items--first-col-50 {
+
+
         @include govuk-media-query($from: tablet) {
-            thead th:nth-child(1) {width: 50%; }
+            thead th:nth-child(1) {
+                width: 50%;
+            }
         }
     }
 }
@@ -1154,7 +1401,8 @@ dd dl.opss-nested-definition-list {
 .opss-table,
 .opss-table-items {
     tbody td {
-        span > em,
+
+        span>em,
         mark {
             font-style: normal;
             font-weight: bold;
@@ -1166,20 +1414,27 @@ dd dl.opss-nested-definition-list {
 
 .opss-table-stripes {
     tbody tr {
-        th, td {
+
+        th,
+        td {
             border-top: 1px solid govuk-colour("light-grey");
         }
     }
+
     tbody tr:first-child,
     tbody tr:last-child {
-        th, td {
+
+        th,
+        td {
             border-bottom: none;
         }
     }
 
     &.opss-table-items--sm {
         tbody tr {
-            th, td {
+
+            th,
+            td {
                 padding-top: govuk-spacing(2);
                 padding-bottom: govuk-spacing(2);
             }
@@ -1199,18 +1454,25 @@ dd dl.opss-nested-definition-list {
     .opss-desktop-padding-left-0 {
         padding-left: 0;
     }
+
     .opss-desktop-padding-bottom-8 {
         padding-bottom: govuk-spacing(8);
     }
+
     .opss-desktop-margin-bottom-240px {
-        margin-bottom: 240px !important;/* aligns bottom of tbody */
+        margin-bottom: 240px !important;
+
     }
+
     .opss-desktop-margin-bottom-220px {
-        margin-bottom: 220px !important;/* aligns bottom of tbody */
+        margin-bottom: 220px !important;
+
     }
 }
 
-@media only screen and (min-width:641px) and (max-width: 961px) {/* jump to mobile sizing at tablet size for tight cols */
+@media only screen and (min-width:641px) and (max-width: 961px) {
+
+
     .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
         @include govuk-font($size: 16);
     }
@@ -1219,9 +1481,11 @@ dd dl.opss-nested-definition-list {
 .opss-icon--tick {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABQUlEQVQ4jZXSMWhTURTG8V/SYkrpEwkiHZyapU4dOwkd8hydrLNL1xZ08EIo4iC8FkRwsODoLILzDbh0a8dCFaFooZuIcKGVIKVDEgivT5Kc7X7nfv/zcTgzpqisyJcb7dZeo9362euenEFtCjN8wRou8QHP61MEeDwwQx1PcDBRgqzI5/ENd0ut95Mm6FSY/6AzFpAV+RKeVrRepBB/TZLgDeZK2hHe0V/GcFKzYvoDPKyAbqUQ/8HM4OMj7DfarWaj3TrsdU8usiK/gc+4XTJ/TCHuDh+1rMhv4RiLA+03XmEBL0vmc9xLIZ4OhVnsjJihidcVsWFn1Ex/B3X9yxpXP7BbFuspxA2sYn8M4FkK8e81AKQQD3Ef64NJ5eriUxX12ilnRT6HTf3ru4keVlKIXycCjIDuYBvfU4hv//fvCi1WUVpTllRdAAAAAElFTkSuQmCC');
 }
+
 .opss-icon--alert {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA4klEQVQ4jaXTP0oDQRgF8B/DFlaeQYJYiIhnkFxFPImEYB1yjBwgKLZbppBgl9ZSJAQJQQu/hGV2lvXPg9fse9/33sywtHGCO9R4DdYYYVDwH1CF6QOfHdxiHN7W8Cwzb/Ac3GTaLF8yLqQtGvqioN/vxdOo9tsFW5wl3JbO9ANUuEkY/mF4j2HS8zQ9GKR/DENKWHWJOA52Ba0qPOGyIF7grafBI5xjp/1Ma1wH3wv6LkLApGCoG0l1QZ80qxxhXkgY+f6x8oYPMSNfMu04TnPptDTcxFXUW8Y9rPES31qX/QVUY2XWKh7oRgAAAABJRU5ErkJggg==');
 }
+
 .opss-icon {
     background-position: center center;
     background-size: contain;

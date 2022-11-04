@@ -15,9 +15,9 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       click_link "Remove product"
 
-      expect(page).to have_css("h1", text: "Remove #{product.name}")
+      expect(page).to have_content("The product record '#{product.name}' (#{product.psd_ref}) will be removed from the case.")
 
-      click_on "Submit"
+      click_on "Save and continue"
 
       expect(page).to have_error_messages
 
@@ -25,16 +25,16 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
       expect(errors_list[0].text).to eq "Select yes if you want to remove the product from the case"
 
       choose("Yes")
-      click_on "Submit"
+      click_on "Save and continue"
 
       expect(page).to have_error_messages
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Enter the reason for removing the product from the case"
+      expect(errors_list[0].text).to eq "Enter the reason for removing the product"
 
-      fill_in "Reason for removing the product from the case", with: removal_reason
-      click_on "Submit"
+      fill_in "Enter the reason for removing the product", with: removal_reason
+      click_on "Save and continue"
 
-      expect_confirmation_banner("Product was successfully removed.")
+      expect_confirmation_banner("The product record was removed from the case")
       expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
 
       expect(page).not_to have_css("h2", text: product.name)
@@ -49,11 +49,9 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
   end
 
   context "when product has linked supporting information" do
-    before do
-      create(:accident, product:)
-      create(:risk_assessment, products: [product])
-      create(:corrective_action, product:)
-    end
+    let!(:accident) { create :accident, product:, investigation: }
+    let!(:risk_assessment) { create :risk_assessment, products: [product], investigation: }
+    let!(:corrective_action) { create :corrective_action, product: }
 
     it "does not allow user to remove product from investigation" do
       sign_in user
@@ -61,7 +59,14 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
       click_link "Remove product"
 
       expect(page).not_to have_css("h1", text: "Remove #{product.name}")
-      expect(page).to have_css(".hmcts-banner__message", text: "Cannot remove the product from the case because it's associated with following supporting information")
+
+      expect(page).to have_css("h2", text: "Cannot remove the product from the case")
+      expect(page).to have_css("p", text: "This is because the product is associated with the following supporting information:")
+      expect(page).to have_css("a", text: accident.decorate.supporting_information_title)
+      expect(page).to have_css("a", text: risk_assessment.decorate.supporting_information_title)
+
+      # NOTE: corrective_action belongs to another investigation
+      expect(page).not_to have_css("a", text: corrective_action.decorate.supporting_information_title)
     end
   end
 end
