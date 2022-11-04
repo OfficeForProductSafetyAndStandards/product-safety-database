@@ -14,8 +14,11 @@ cf login -a api.london.cloud.service.gov.uk -u some@email.com
 
 ```
 cf ssh APP-NAME
+/tmp/lifecycle/launcher /home/vcap/app 'bin/rails c' ''
 
-cd app && export $(./env/get-env-from-vcap.sh) && /tmp/lifecycle/launcher /home/vcap/app 'rails c' ''
+# There is a shorthand alias:
+cd app
+bin/tll bin/rails c
 ```
 
 #### List apps
