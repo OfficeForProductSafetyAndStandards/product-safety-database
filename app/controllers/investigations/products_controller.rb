@@ -54,8 +54,10 @@ class Investigations::ProductsController < ApplicationController
     @remove_product_form = RemoveProductForm.new(remove_product_params)
     return render(:remove) if @remove_product_form.invalid?
 
-    if @remove_product_form.remove_product
-      RemoveProductFromCase.call!(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
+    investigation_product = InvestigationProduct.find_by(investigation_id: @investigation.id, product_id: @product.id, investigation_closed_at: nil)
+
+    if @remove_product_form.remove_product && investigation_product
+      RemoveProductFromCase.call!(investigation: @investigation, investigation_product: investigation_product, user: current_user, reason: @remove_product_form.reason)
       respond_to do |format|
         format.html do
           redirect_to_investigation_products_tab success: "The product record was removed from the case"
