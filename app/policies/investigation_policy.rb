@@ -9,19 +9,22 @@ class InvestigationPolicy < ApplicationPolicy
   # changing the case owner, its status (eg 'open' or 'closed'), and whether
   # or not it is 'restricted'.
   def update?(user: @user)
+    return false if record.is_closed?
+
     record.teams_with_edit_access.include?(user.team)
   end
 
   # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),
   # and whether or not it is 'restricted'.
   def change_owner_or_status?(user: @user)
-    @record.owner.in_same_team_as?(user) || @record.owner == user
+    record.owner.in_same_team_as?(user) || record.owner == user
   end
 
   # Ability to add and remove other teams as collaborators, and to set their
   # permission levels.
   def manage_collaborators?
-    return false if @record.owner.nil?
+    return false if record.is_closed?
+    return false if record.owner.nil?
 
     @record.owner.in_same_team_as?(user)
   end
@@ -60,6 +63,8 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def remove_product?
-    !record.is_closed && update?
+    return false if record.is_closed?
+
+    update?
   end
 end

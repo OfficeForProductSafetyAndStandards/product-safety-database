@@ -319,7 +319,7 @@ private
       items: [
         href: status_path,
         text: status_link_text,
-        visuallyHiddenText: " the case"
+        visuallyHiddenText: " this case"
       ]
     }
   end
