@@ -62,7 +62,7 @@ module InvestigationsHelper
 
       rows << {
         key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
-        value: { text: simple_format(investigation.hazard_description) },
+        value: { text: "<span class='govuk-!-font-size-16'>#{investigation.hazard_description}</span>".html_safe }
       }
     end
 
@@ -147,7 +147,7 @@ module InvestigationsHelper
         key: { text: investigation.case_type.capitalize },
         value: {
           text: investigation.pretty_id,
-          secondary_text: { html: '<span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><span class="govuk-visually-hidden"> - </span>Case number</span>' }
+          secondary_text: { html: '<span class="govuk-visually-hidden"> - </span>Case number' }
         },
         actions: {}
       },
@@ -169,7 +169,8 @@ module InvestigationsHelper
       {
         key: { text: "Status" },
         value: status_value(investigation),
-        actions: status_actions(investigation, user)
+        actions: status_actions(investigation, user),
+        classes: "opss-summary-list__row--split"
       },
       {
         key: { text: "Last updated" },
@@ -212,7 +213,7 @@ module InvestigationsHelper
         actions: risk_level_actions(investigation, user)
       },
       {
-        key: { text: t("investigations.risk_validation.page_title") },
+        key: { html: 'Risk <span class="govuk-visually-hidden">level</span> validated'.html_safe },
         value: { text: risk_validated_value(investigation) },
         actions: risk_validation_actions(investigation, user)
       }
