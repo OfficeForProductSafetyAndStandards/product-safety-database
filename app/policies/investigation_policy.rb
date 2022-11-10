@@ -67,4 +67,10 @@ class InvestigationPolicy < ApplicationPolicy
 
     update?
   end
+
+  def comment?
+    return false if record.is_closed?
+
+    show?
+  end
 end

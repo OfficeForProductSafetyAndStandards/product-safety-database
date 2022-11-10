@@ -38,10 +38,18 @@ RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer
     it "redirects to the case activities page" do
       expect(response).to redirect_to(investigation_activity_path(investigation))
     end
+
+    context "with an investigation owned by someone else" do
+      let(:investigation) { create(:allegation) }
+
+      it "redirects to the case activities page" do
+        expect(response).to redirect_to(investigation_activity_path(investigation))
+      end
+    end
   end
 
-  context "with an investigation owned by someone else" do
-    let(:investigation) { create(:allegation) }
+  context "with a closed investigation" do
+    let(:investigation) { create(:allegation, :closed) }
 
     it "does not allow a comment to be added" do
       expect {

@@ -1,4 +1,4 @@
-<% display_link = local_assigns[:display_link] || policy(@investigation).update? %>
+<% display_link = local_assigns[:display_link].nil? ? policy(@investigation).update? : local_assigns[:display_link] %>
 <%= render "investigations/pages_top", investigation: investigation %>
 
 <div class="govuk-grid-row">
