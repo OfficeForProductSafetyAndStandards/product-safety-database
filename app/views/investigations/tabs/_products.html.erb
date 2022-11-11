@@ -60,7 +60,7 @@
           },
           {
             id: "cases-#{index}",
-            label: "Cases (#{@product.investigation_products.count})",
+            label: "Cases (#{@product.unique_investigation_products.count})",
             panel: { html: render("products/case_product_info_tabs/cases") }
           }
         ]

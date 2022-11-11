@@ -103,4 +103,8 @@ class Product < ApplicationRecord
 
     ref
   end
+
+  def unique_investigation_products
+    investigation_products.group_by(&:investigation_id).values.map(&:first)
+  end
 end
