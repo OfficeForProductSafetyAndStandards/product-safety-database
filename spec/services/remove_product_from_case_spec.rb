@@ -12,6 +12,13 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
   let(:owner)         { user }
 
   describe ".call" do
+    def expected_email_subject
+      "Allegation updated"
+    end
+
+    def expected_email_body(name)
+      "Product was removed from the allegation by #{name}."
+    end
     context "with stubbed opensearch", :with_stubbed_opensearch do
       context "with no parameters" do
         let(:result) { described_class.call }
@@ -47,14 +54,6 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
 
       context "with required parameters" do
         context "if case has not been closed while product was linked to it" do
-          def expected_email_subject
-            "Allegation updated"
-          end
-
-          def expected_email_body(name)
-            "Product was removed from the allegation by #{name}."
-          end
-
           it "returns success" do
             expect(result).to be_success
           end

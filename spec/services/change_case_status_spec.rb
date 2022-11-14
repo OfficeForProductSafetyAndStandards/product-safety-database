@@ -75,13 +75,14 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
 
       it "changes investigation_closed_at for previously unclosed investigation_products" do
         result
-        expect(investigation.investigation_products.first.investigation_closed_at).to eq investigation.date_closed
+        expect(investigation.reload.investigation_products.first.investigation_closed_at).to eq investigation.date_closed
       end
 
       it "does not change investigation_closed_at for previously closed investigation_products" do
-        investigation.investigation_products.first.update(investigation_closed_at: Date.yesterday)
+        described_class.call!(investigation:, new_status: "closed", rationale:, user:)
+        described_class.call!(investigation:, new_status: "open", rationale:, user:)
         result
-        expect(investigation.investigation_products.first.investigation_closed_at).not_to eq investigation.date_closed
+        expect(investigation.reload.investigation_products.first.investigation_closed_at).not_to eq investigation.date_closed
       end
 
       it "creates a new activity for the change", :aggregate_failures do

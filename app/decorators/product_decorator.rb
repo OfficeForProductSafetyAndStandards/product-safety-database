@@ -11,7 +11,8 @@ class ProductDecorator < ApplicationDecorator
     "Product: #{name}"
   end
 
-  def details_list(timestamp = nil, date_case_closed: nil)
+  def details_list(date_case_closed: nil)
+    timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = '<span class="govuk-visually-hidden"> - </span>The <abbr>PSD</abbr> reference for this version of the product record'.html_safe
     psd_secondary_text_html << " - as recorded when the case was closed: #{date_case_closed.to_s(:govuk)}.".html_safe if date_case_closed.present?
@@ -112,6 +113,6 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def activity_view_link(timestamp)
-    object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : product_path(object)
+    object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : Rails.application.routes.url_helpers.product_path(object)
   end
 end
