@@ -865,6 +865,10 @@ dl.opss-summary-list-aside {
         }
 
 
+
+        dd br+span.opss-secondary-text {
+            padding-left: govuk-spacing(0) !important;
+        }
     }
 
     @include govuk-media-query($from: desktop) {

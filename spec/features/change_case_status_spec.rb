@@ -14,7 +14,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
     sign_in user
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Close the case"
+    click_link "Close this case"
 
     expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
 

@@ -1,3 +1,4 @@
+<% display_link = local_assigns[:display_link].nil? ? policy(@investigation).update? : local_assigns[:display_link] %>
 <%= render "investigations/pages_top", investigation: investigation %>
 
 <div class="govuk-grid-row">
@@ -15,7 +16,7 @@
 
   <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
     <div class="opss-text-align-right">
-      <% if policy(@investigation).update? %>
+      <% if display_link %>
         <%= link_to link_text, href, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
       <% end %>
     </div>

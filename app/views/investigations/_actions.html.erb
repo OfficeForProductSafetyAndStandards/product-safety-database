@@ -1,4 +1,4 @@
-<% if investigation.products.size.zero? %>
+<% if investigation.products.none? %>
   <%= govukWarningText(iconFallbackText: "Warning", text: "A product has not been added to this case.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-0 opss-warning-text--s") %>
   <%= govukWarningText(iconFallbackText: "Warning", text: "Cases without products are subject to deletion during case audits.", classes: "govuk-!-display-inline-block govuk-!-margin-top-0 govuk-!-margin-bottom-4 opss-warning-text--s opss-warning-text--normal") %>
 <% end %>
@@ -61,7 +61,9 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Comment</dt>
-      <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_activity_comment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a comment</span></a></dd>
+      <% if policy(@investigation).comment? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_activity_comment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a comment</span></a></dd>
+      <% end %>
     </div>
   </dl>
 </section>

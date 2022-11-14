@@ -1,4 +1,4 @@
-<%= render 'investigations/actions', investigation: @investigation %>
+<%= render('investigations/actions', investigation: @investigation) unless @investigation.is_closed? %>
 <% team_list_html = capture do %>
   <% if @investigation.teams_with_access.length > 1 %>
     <ul class="govuk-list govuk-list--bullet">
