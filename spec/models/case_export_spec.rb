@@ -133,9 +133,13 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 25)).to eq "England"
       expect(sheet.cell(3, 25)).to eq "England"
 
-      expect(sheet.cell(1, 26)).to eq "Reported_as"
+      expect(sheet.cell(1, 26)).to eq "Reported_As"
       expect(sheet.cell(2, 26)).to eq investigation.reported_reason
       expect(sheet.cell(3, 26)).to eq other_team_investigation.reported_reason
+
+      expect(sheet.cell(1, 27)).to eq "Complainant_Reference"
+      expect(sheet.cell(2, 27)).to eq investigation.complainant_reference
+      expect(sheet.cell(3, 27)).to eq other_team_investigation.complainant_reference
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength
