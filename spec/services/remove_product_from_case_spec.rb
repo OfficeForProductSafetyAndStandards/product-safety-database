@@ -53,7 +53,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
       end
 
       context "with required parameters" do
-        context "if case has not been closed while product was linked to it" do
+        context "when case has not been closed while product was linked to it" do
           it "returns success" do
             expect(result).to be_success
           end
@@ -73,9 +73,9 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           it_behaves_like "a service which notifies the case owner"
         end
 
-        context "if case has been closed while product was linked to it" do
+        context "when case has been closed while product was linked to it" do
           before do
-            ChangeCaseStatus.call!(investigation: investigation, new_status: "closed", user: user)
+            ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
           end
 
           it "returns failure" do

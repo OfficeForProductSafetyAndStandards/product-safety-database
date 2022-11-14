@@ -18,8 +18,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
            subcategory: "telephone",
            barcode: "11111",
            description: "Original",
-           product_code: "AAAAA"
-         )
+           product_code: "AAAAA")
   end
 
   let(:mobilz_phont) do
@@ -270,11 +269,11 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
     end
 
-    context "searching by product subcategory" do
+    context "when searching by product subcategory" do
       context "when case is closed" do
         before do
-          ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user: user)
-          mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB" )
+          ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
+          mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
           Investigation.__elasticsearch__.import refresh: :wait_for
 
           sign_in(user)
@@ -284,7 +283,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           end
         end
 
-        it "it only shows the case when searching by product details from the time the case was closed" do
+        it "only shows the case when searching by product details from the time the case was closed" do
           fill_in "Search", with: "telephone"
           click_button "Submit search"
 
