@@ -3,5 +3,6 @@
 </p>
 
 <% if activity.product_id %>
-  <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
+  <% product = Product.find(activity.product_id) %>
+  <%= link_to "View product details", product.decorate.activity_view_link(activity.created_at.to_i), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
 <% end %>

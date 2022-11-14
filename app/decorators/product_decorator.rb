@@ -110,4 +110,8 @@ class ProductDecorator < ApplicationDecorator
 
     { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }
   end
+
+  def activity_view_link(timestamp)
+    object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : product_path(object)
+  end
 end
