@@ -192,43 +192,19 @@ class Investigation < ApplicationRecord
   end
 
   def product_subcategories
-    investigation_products.map do |ip|
-      if ip.investigation_closed_at
-        ip.product.paper_trail.version_at(ip.investigation_closed_at).subcategory
-      else
-        ip.product.subcategory
-      end
-    end
+    investigation_products.map(&:versioned_product_subcategory)
   end
 
   def product_barcodes
-    investigation_products.map do |ip|
-      if ip.investigation_closed_at
-        ip.product.paper_trail.version_at(ip.investigation_closed_at).barcode
-      else
-        ip.product.barcode
-      end
-    end
+    investigation_products.map(&:versioned_product_barcode)
   end
 
   def product_descriptions
-    investigation_products.map do |ip|
-      if ip.investigation_closed_at
-        ip.product.paper_trail.version_at(ip.investigation_closed_at).description
-      else
-        ip.product.description
-      end
-    end
+    investigation_products.map(&:versioned_product_description)
   end
 
   def product_codes
-    investigation_products.map do |ip|
-      if ip.investigation_closed_at
-        ip.product.paper_trail.version_at(ip.investigation_closed_at).product_code
-      else
-        ip.product.product_code
-      end
-    end
+    investigation_products.map(&:versioned_product_code)
   end
 
 private
