@@ -6,6 +6,38 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
   let(:removal_reason) { "I made a mistake" }
   let(:product)        { investigation.products.first }
 
+  context "when investigation is closed" do
+    before do
+      ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+    end
+
+    it "does not allow user to remove product" do
+      sign_in user
+      visit "/cases/#{investigation.pretty_id}/products"
+
+      have_css("h2", text: product.name)
+
+      expect(page).to have_no_link('Remove product')
+    end
+  end
+
+  context "when trying to remove a versioned product" do
+    before do
+      ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+      product.update(subcategory: "changed")
+      ChangeCaseStatus.call!(investigation:, new_status: "open", user:)
+    end
+
+    it "does not allow user to remove product" do
+      sign_in user
+      visit "/cases/#{investigation.pretty_id}/products"
+
+      have_css("h2", text: product.name)
+
+      expect(page).to have_no_link('Remove product')
+    end
+  end
+
   context "when product does not have any linked supporting information" do
     it "allows user to remove product from investigation" do
       sign_in user

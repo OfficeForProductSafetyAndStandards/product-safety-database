@@ -147,7 +147,9 @@ Rails.application.routes.draw do
       collection do
         post :find
       end
+    end
 
+    resources :investigation_products, controller: "investigations/investigation_products" do
       member do
         get :remove
         delete :unlink, path: ""
