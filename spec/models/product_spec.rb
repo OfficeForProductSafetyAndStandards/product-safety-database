@@ -42,4 +42,25 @@ RSpec.describe Product do
       expect(product.owning_team).to eq(nil)
     end
   end
+
+  describe "#unique_investigation_products", :with_stubbed_opensearch, :with_stubbed_mailer do
+    let(:investigation) { create(:allegation) }
+    let(:investigation_2) { create(:allegation) }
+    let(:product) { create(:product) }
+
+    context "when a product has multiple investigation_products that share the same investigation_product" do
+      before do
+        create(:investigation_product, investigation_id: investigation.id, product_id: product.id, investigation_closed_at: Time.current)
+        create(:investigation_product, investigation_id: investigation.id, product_id: product.id, investigation_closed_at: Time.current)
+        create(:investigation_product, investigation_id: investigation.id, product_id: product.id, investigation_closed_at: nil)
+        create(:investigation_product, investigation_id: investigation_2.id, product_id: product.id, investigation_closed_at: nil)
+      end
+
+      it "returns only one investigation_product per investigation" do
+        expect(product.investigation_products.count).to eq 4
+        expect(product.unique_investigation_products.count).to eq 2
+        expect(product.unique_investigation_products.map(&:investigation_id)).to eq [investigation.id, investigation_2.id]
+      end
+    end
+  end
 end

@@ -82,9 +82,8 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     expect(page).to have_text("The product record was added to the case")
 
     expect(page).to have_selector("h3", text: right_product.name)
-    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref} - The PSD reference for this version of the product record")
-    "psd-2 - The PSD reference for this version of the product record - as recorded when the case was closed: #{investigation.reload.investigation_products.first.investigation_closed_at.to_s(:govuk)}."
-    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref}_#{investigation.reload.investigation_products.first.investigation_closed_at.to_i} - The PSD reference for this version of the product record - as recorded when the case was closed: #{investigation.reload.investigation_products.first.investigation_closed_at.to_s(:govuk)}.")
+    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref} - The PSD reference for this version of the product record", exact: true)
+    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref}_#{investigation.reload.investigation_products.first.investigation_closed_at.to_i}")
     expect(investigation.reload.products.count).to eq(2)
     expect(investigation.products.first).to eq(right_product)
     expect(right_product.reload.owning_team).to eq(investigation.owner_team)
