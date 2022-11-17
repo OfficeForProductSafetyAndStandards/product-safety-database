@@ -6,7 +6,7 @@ module Investigations
 
     def remove
       authorize @investigation, :update?
-      authorize @investigation_product, :remove_product?
+      authorize @investigation_product, :remove?
 
       @supporting_information = @product.supporting_information.select { |si| si.investigation == @investigation }
       render "supporting_information_warning" and return if @supporting_information.any?
@@ -16,7 +16,7 @@ module Investigations
 
     # DELETE /cases/1/products
     def unlink
-      authorize @investigation_product, :remove_product?
+      authorize @investigation_product, :remove?
       @remove_product_form = RemoveProductForm.new(remove_product_params)
       return render(:remove) if @remove_product_form.invalid?
 
