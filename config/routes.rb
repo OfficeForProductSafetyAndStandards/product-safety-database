@@ -149,7 +149,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :investigation_products, controller: "investigations/investigation_products" do
+    resources :investigation_products, only: %i[remove unlink], controller: "investigations/investigation_products" do
       member do
         get :remove
         delete :unlink, path: ""

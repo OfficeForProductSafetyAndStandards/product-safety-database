@@ -17,14 +17,14 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       have_css("h2", text: product.name)
 
-      expect(page).to have_no_link('Remove product')
+      expect(page).to have_no_link("Remove product")
     end
   end
 
   context "when trying to remove a versioned product" do
     before do
       ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
-      product.update(subcategory: "changed")
+      product.update!(subcategory: "changed")
       ChangeCaseStatus.call!(investigation:, new_status: "open", user:)
     end
 
@@ -34,7 +34,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       have_css("h2", text: product.name)
 
-      expect(page).to have_no_link('Remove product')
+      expect(page).to have_no_link("Remove product")
     end
   end
 

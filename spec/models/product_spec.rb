@@ -57,8 +57,6 @@ RSpec.describe Product do
       end
 
       it "returns only one investigation_product per investigation" do
-        expect(product.investigation_products.count).to eq 4
-        expect(product.unique_investigation_products.count).to eq 2
         expect(product.unique_investigation_products.map(&:investigation_id)).to eq [investigation.id, investigation_2.id]
       end
     end

@@ -4,7 +4,6 @@ class Investigations::ProductsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_investigation
-  before_action :set_product, only: %i[remove unlink]
 
   def index
     @breadcrumbs = build_breadcrumb_structure
@@ -48,10 +47,6 @@ private
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     @investigation = investigation.decorate
-  end
-
-  def set_investigation_product
-    @investigation_product = InvestigationProduct.find_by(investigation_id: @investigation.id, product_id: @product.id, investigation_closed_at:  )
   end
 
   def find_product_params

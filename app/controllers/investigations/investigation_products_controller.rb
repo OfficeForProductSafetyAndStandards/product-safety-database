@@ -14,7 +14,6 @@ module Investigations
       @remove_product_form = RemoveProductForm.new
     end
 
-    # DELETE /cases/1/products
     def unlink
       authorize @investigation_product, :remove?
       @remove_product_form = RemoveProductForm.new(remove_product_params)
@@ -33,7 +32,7 @@ module Investigations
       end
     end
 
-    private
+  private
 
     def set_investigation
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
