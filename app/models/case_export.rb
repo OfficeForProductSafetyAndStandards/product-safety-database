@@ -104,7 +104,8 @@ private
                      Date_Validated
                      Case_Creator_Team
                      Notifying_Country
-                     Reported_as]
+                     Reported_As
+                     Complainant_Reference]
   end
 
   def find_cases(ids)
@@ -144,7 +145,8 @@ private
       investigation.risk_validated_at,
       investigation.creator_user&.team&.name,
       country_from_code(investigation.notifying_country, Country.notifying_countries),
-      investigation.reported_reason
+      investigation.reported_reason,
+      investigation.complainant_reference
     ]
   end
 
@@ -175,7 +177,8 @@ private
       investigation.risk_validated_at,
       investigation.creator_user&.team&.name,
       country_from_code(investigation.notifying_country, Country.notifying_countries),
-      investigation.reported_reason
+      investigation.reported_reason,
+      "Restricted"
     ]
   end
 end
