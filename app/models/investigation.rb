@@ -192,19 +192,19 @@ class Investigation < ApplicationRecord
   end
 
   def product_subcategories
-    investigation_products.map(&:versioned_product_subcategory)
+    investigation_products.map {|investigation_product| investigation_product.product.subcategory }
   end
 
   def product_barcodes
-    investigation_products.map(&:versioned_product_barcode)
+    investigation_products.map {|investigation_product| investigation_product.product.barcode }
   end
 
   def product_descriptions
-    investigation_products.map(&:versioned_product_description)
+    investigation_products.map {|investigation_product| investigation_product.product.description }
   end
 
   def product_codes
-    investigation_products.map(&:versioned_product_code)
+    investigation_products.map {|investigation_product| investigation_product.product.product_code }
   end
 
 private
