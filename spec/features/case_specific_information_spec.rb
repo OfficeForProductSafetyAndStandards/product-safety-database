@@ -193,5 +193,5 @@ def product_titles
 end
 
 def expect_investigation_products_to_be_listed_with_oldest_first
-  expect(product_titles).to eq([product_1.name, product_2.name, product_3.name, product_4.name])
+  expect(product_titles).to eq(["#{product_1.name} (#{product_1.psd_ref})", "#{product_2.name} (#{product_2.psd_ref})", "#{product_3.name} (#{product_3.psd_ref})", "#{product_4.name} (#{product_4.psd_ref})"])
 end
