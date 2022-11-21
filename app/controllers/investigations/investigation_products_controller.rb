@@ -5,7 +5,6 @@ module Investigations
     before_action :set_product
 
     def remove
-      authorize @investigation, :update?
       authorize @investigation_product, :remove?
 
       @supporting_information = @product.supporting_information.select { |si| si.investigation == @investigation }
