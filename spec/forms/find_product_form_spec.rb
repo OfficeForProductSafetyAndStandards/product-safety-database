@@ -120,20 +120,37 @@ RSpec.describe FindProductForm, :with_stubbed_opensearch, :with_stubbed_mailer d
     end
 
     context "with the product already added to the case" do
-      before do
-        investigation.products << product
-      end
-
-      context "when reference is the product id" do
-        let(:reference) { product.id.to_s }
-
-        it "is invalid" do
-          expect(form).to be_invalid
+      context "when the investigation_products share the same investigation_closed_at date" do
+        before do
+          investigation.products << product
         end
 
-        it "provides an error message" do
-          form.valid?
-          expect(form.errors.full_messages_for(:reference)).to eq ["Enter a product record which has not already been added to the case"]
+        context "when reference is the product id" do
+          let(:reference) { product.id.to_s }
+
+          it "is invalid" do
+            expect(form).to be_invalid
+          end
+
+          it "provides an error message" do
+            form.valid?
+            expect(form.errors.full_messages_for(:reference)).to eq ["Enter a product record which has not already been added to the case"]
+          end
+        end
+      end
+
+      context "when the investigation_products have different investigation_closed_at date" do
+        before do
+          investigation.products << product
+          investigation.investigation_products.first.update(investigation_closed_at: Time.current)
+        end
+
+        context "when reference is the product id" do
+          let(:reference) { product.id.to_s }
+
+          it "is valid" do
+            expect(form).to be_valid
+          end
         end
       end
     end
