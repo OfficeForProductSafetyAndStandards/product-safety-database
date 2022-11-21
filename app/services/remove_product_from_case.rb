@@ -38,8 +38,6 @@ private
   end
 
   def create_audit_activity_for_product_removed
-    # TODO: Refer to the correct version of the product record once versioning
-    #   is implemented.
     AuditActivity::Product::Destroy.create!(
       added_by_user: user,
       investigation:,
