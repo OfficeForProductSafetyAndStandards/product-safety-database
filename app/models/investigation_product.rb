@@ -15,7 +15,7 @@ class InvestigationProduct < ApplicationRecord
                        :customs_code, :investigation_id, :number_of_affected_units,
                        :product_id, :updated_at
 
-   def product
-     investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) : super
-   end
+  def product
+    investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) : super
+  end
 end

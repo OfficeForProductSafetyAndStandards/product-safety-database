@@ -142,7 +142,7 @@ RSpec.describe FindProductForm, :with_stubbed_opensearch, :with_stubbed_mailer d
       context "when the investigation_products have different investigation_closed_at date" do
         before do
           investigation.products << product
-          investigation.investigation_products.first.update(investigation_closed_at: Time.current)
+          investigation.investigation_products.first.update!(investigation_closed_at: Time.current)
         end
 
         context "when reference is the product id" do

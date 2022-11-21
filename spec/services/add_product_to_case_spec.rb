@@ -89,8 +89,9 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
         context "when an existing investigation_product exists but does not share the same investigation_closed_at" do
           before do
             investigation.products << product
-            investigation.investigation_products.first.update(investigation_closed_at: Time.current)
+            investigation.investigation_products.first.update!(investigation_closed_at: Time.current)
           end
+
           it "returns a success" do
             expect(result).to be_success
           end
