@@ -25,7 +25,6 @@ module Investigations
           format.html do
             redirect_to_investigation_products_tab success: "The product record was removed from the case"
           end
-          format.json { head :no_content }
         end
       else
         redirect_to_investigation_products_tab
