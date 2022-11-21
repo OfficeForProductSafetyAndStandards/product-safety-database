@@ -10,7 +10,7 @@ class ChangeCaseStatus
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     investigation.is_closed = closed?
-    investigation.date_closed = closed? ? Time.current : nil
+    investigation.date_closed = closed? ? Time.zone.now : nil
 
     return if investigation.changes.none?
 
