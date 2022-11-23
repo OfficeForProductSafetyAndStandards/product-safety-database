@@ -21,15 +21,23 @@ RSpec.describe Product do
         travel_to(creation_time) { product }
       end
 
-      context "with a current instance" do
-        it "does not append the timestamp" do
-          expect(product.psd_ref(timestamp)).to eq("psd-#{id}")
+      context "when case has been closed" do
+        it "appends the timestamp" do
+          expect(product.paper_trail.previous_version.psd_ref(timestamp:, investigation_was_closed: true)).to eq("psd-#{id}_#{timestamp}")
         end
       end
 
-      context "with a versioned instance" do
-        it "appends the timestamp" do
-          expect(product.paper_trail.previous_version.psd_ref(timestamp)).to eq("psd-#{id}_#{timestamp}")
+      context "when case has not been closed" do
+        context "with a current instance" do
+          it "does not append the timestamp" do
+            expect(product.psd_ref(timestamp:)).to eq("psd-#{id}")
+          end
+        end
+
+        context "with a versioned instance" do
+          it "appends the timestamp" do
+            expect(product.paper_trail.previous_version.psd_ref(timestamp:)).to eq("psd-#{id}_#{timestamp}")
+          end
         end
       end
     end

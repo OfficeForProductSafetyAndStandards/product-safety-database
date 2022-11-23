@@ -93,11 +93,11 @@ class Product < ApplicationRecord
     name
   end
 
-  def psd_ref(timestamp = nil)
+  def psd_ref(timestamp: nil, investigation_was_closed: false)
     ref = "psd-#{id}"
 
     # Timestamp to append is not necessarily the same as when the version was created.
-    if version.present? && timestamp.present?
+    if (version.present? && timestamp.present?) || investigation_was_closed
       ref << "_#{timestamp}"
     end
 
