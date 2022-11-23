@@ -30,7 +30,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       @case_name_form = CaseNameForm.new
     when :case_created
       @investigation = session[:investigation]
-      @product = Product.find(session[:product_id])
+      @product = authorize_product
       @investigation.build_owner_collaborations_from(current_user)
       CreateCase.call(investigation: session[:investigation], user: current_user, product: Product.find(session[:product_id]))
       clear_session
@@ -42,6 +42,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   def new
     clear_session
     session[:product_id] = params[:product_id]
+    authorize_product
     redirect_to wizard_path(steps.first)
   end
 
@@ -82,6 +83,14 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
 
 private
+
+  def authorize_product
+    return if session[:product_id].blank?
+
+    product = Product.find session[:product_id]
+    authorize product, :can_spawn_case?
+    product
+  end
 
   def calculate_reported_reason(reason_for_concern_params)
     return "unsafe_and_non_compliant" if reason_for_concern_params["reported_reason_unsafe"] && reason_for_concern_params["reported_reason_non_compliant"]

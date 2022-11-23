@@ -13,7 +13,7 @@ class ConfirmProductForm
   end
 
   def product
-    Product.find product_id
+    Product.not_retired.find product_id
   end
 
   def confirmed?

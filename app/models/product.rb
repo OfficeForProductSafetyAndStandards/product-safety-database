@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   include Documentable
   include Searchable
   include AttachmentConcern
+  include Retireable
 
   self.ignored_columns = %w[batch_number customs_code number_of_affected_units affected_units_status]
 
@@ -50,6 +51,8 @@ class Product < ApplicationRecord
 
   has_many_attached :documents
 
+  has_many :activities
+
   has_many :investigation_products, dependent: :destroy
   has_many :investigations, through: :investigation_products
 
@@ -66,8 +69,24 @@ class Product < ApplicationRecord
 
   redacted_export_with :id, :authenticity, :barcode,
                        :brand, :category, :country_of_origin, :created_at, :description,
-                       :has_markings, :markings, :name, :product_code,
+                       :has_markings, :markings, :name, :product_code, :retired_at,
                        :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id
+
+  def self.retire_stale_products!
+    Product.not_retired.where("created_at < ?", 18.months.ago).select(:stale?).each do |stale_product|
+      stale_product.mark_as_retirted!
+      logger.debug "Marked product #{stale_product.id} as retired"
+    end
+  end
+
+  def stale?
+    return false if created_at > 18.months.ago
+    return false if investigations.where(date_closed: nil).any?
+    return false if investigations.where("date_closed > ?", 18.months.ago).any?
+    return true if investigations.none? && activities.where("type IN ? AND created_at > ?", ["AuditActivity::Product::Add", "AuditActivity::Product::Destroy"], 18.months.ago).none?
+
+    false
+  end
 
   def supporting_information
     tests + corrective_actions + unexpected_events + risk_assessments

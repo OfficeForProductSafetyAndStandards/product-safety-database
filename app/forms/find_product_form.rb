@@ -20,8 +20,7 @@ class FindProductForm
     product_id = reference.presence && reference.try(:to_i)
     return nil unless product_id && product_id.positive?
 
-    # TODO: Find only active products once product retirement is implemented
-    @product = Product.find_by id: product_id
+    @product = Product.not_retired.find_by id: product_id
   end
 
 private

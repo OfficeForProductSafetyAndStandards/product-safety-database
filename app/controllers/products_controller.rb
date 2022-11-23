@@ -30,6 +30,9 @@ class ProductsController < ApplicationController
       rescue NoMethodError
         render_404_page
       end
+    else
+      # Anyone can view timestamped products, but only certain people can view live [retired] products
+      authorize @product
     end
   end
 
