@@ -30,7 +30,7 @@
         <div class="govuk-grid-column-two-thirds">
           <%= govukSummaryList(
             classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-            rows: product_overview_rows(@product)
+            rows: product_overview_rows(@product.reload)
             )
           %>
         </div>

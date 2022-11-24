@@ -2,8 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let!(:investigation) { create(:allegation, creator: creator_user, is_closed: false) }
-  let(:user) { create(:user, :activated, name: "Jane Jones") }
+  let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }
   let(:creator_user) { create(:user, email: "test@example.com") }
+  let(:other_team) { create(:team) }
 
   before do
     ChangeCaseOwner.call!(investigation:, owner: user, user:)
@@ -77,5 +78,49 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
     visit "/cases/#{investigation.pretty_id}/status/reopen"
     expect(page).to have_css("h1", text: "Re-open case")
     expect(page).to have_css("p", text: "The allegation is already open. Do you want to close it?")
+  end
+
+  context "when closing the case with a product attached to it" do
+    let(:other_investigation) { create(:allegation, creator: user, is_closed: false, products: [product]) }
+
+    context "when the product is owned by the user's team" do
+      let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
+
+      it "makes the case unowned" do
+        sign_in user
+        visit "/cases/#{other_investigation.pretty_id}"
+
+        click_link "Close this case"
+
+        fill_in "Why are you closing the case?", with: "Case has been resolved."
+
+        click_button "Close case"
+
+        click_link "Products (1)"
+
+        expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
+      end
+    end
+
+    context "when the product is owned by another team" do
+      let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
+
+      it "does not change the product owner" do
+        sign_in user
+        visit "/cases/#{other_investigation.pretty_id}"
+
+        click_link "Close this case"
+
+        fill_in "Why are you closing the case?", with: "Case has been resolved."
+
+        click_button "Close case"
+
+        click_link "Products (1)"
+
+        expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
+
+        expect(page).to have_content other_team.name
+      end
+    end
   end
 end

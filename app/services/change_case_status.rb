@@ -17,6 +17,18 @@ class ChangeCaseStatus
     ActiveRecord::Base.transaction do
       investigation.save!
       investigation.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: investigation.date_closed) if closed?
+      investigation.products.each do |product|
+        next if product.owning_team_id != user.team.id
+        next if product.owning_team_id.blank?
+
+        next unless product.owning_team_id == user.team.id
+
+        number_of_other_investigations_owned_by_users_team_linked_to_product = product.investigation_products.map(&:investigation).count { |investigation| investigation.owner_team == user.team }
+        next if number_of_other_investigations_owned_by_users_team_linked_to_product > 1
+
+        product.update!(owning_team_id: nil)
+      end
+
       create_audit_activity_for_case_status_changed
     end
 
