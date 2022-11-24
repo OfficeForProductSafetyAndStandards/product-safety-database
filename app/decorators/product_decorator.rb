@@ -11,13 +11,14 @@ class ProductDecorator < ApplicationDecorator
     "Product: #{name}"
   end
 
-  def details_list(timestamp = nil, date_case_closed: nil)
+  def details_list(date_case_closed: nil)
+    timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = '<span class="govuk-visually-hidden"> - </span>The <abbr>PSD</abbr> reference for this version of the product record'.html_safe
     psd_secondary_text_html << " - as recorded when the case was closed: #{date_case_closed.to_s(:govuk)}.".html_safe if date_case_closed.present?
     webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
     when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
-    psd_ref_value_html = h.safe_join([psd_ref(timestamp), "<br>".html_safe])
+    psd_ref_value_html = h.safe_join([psd_ref(timestamp:, investigation_was_closed: date_case_closed.present?), "<br>".html_safe])
 
     rows = [
       { key: { html: psd_ref_key_html }, value: { html: psd_ref_value_html, secondary_text: { html: psd_secondary_text_html } } },
@@ -42,7 +43,7 @@ class ProductDecorator < ApplicationDecorator
     psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
     psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record".html_safe
     rows = [
-      { key: { html: psd_ref_key_html }, value: { text: psd_ref(timestamp), secondary_text: { html: psd_secondary_text_html } } },
+      { key: { html: psd_ref_key_html }, value: { text: psd_ref(timestamp:, investigation_was_closed: timestamp.present?), secondary_text: { html: psd_secondary_text_html } } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
@@ -109,5 +110,9 @@ class ProductDecorator < ApplicationDecorator
     end
 
     { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }
+  end
+
+  def activity_view_link(timestamp)
+    object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : Rails.application.routes.url_helpers.product_path(object)
   end
 end

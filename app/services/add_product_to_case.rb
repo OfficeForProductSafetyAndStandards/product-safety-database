@@ -15,7 +15,7 @@ class AddProductToCase
 
     InvestigationProduct.transaction do
       # TODO: Only check existing links on active products once product retirement is implemented
-      (context.fail!(error: "The product is already linked to the case") and return false) if investigation.products.include?(product)
+      (context.fail!(error: "The product is already linked to the case") and return false) if duplicate_investigation_product
       investigation.products << product
     end
 
@@ -51,5 +51,9 @@ private
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
+  end
+
+  def duplicate_investigation_product
+    InvestigationProduct.find_by(product_id: product.id, investigation_id: investigation.id, investigation_closed_at: investigation.date_closed)
   end
 end

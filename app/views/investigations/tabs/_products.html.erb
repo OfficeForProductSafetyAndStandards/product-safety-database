@@ -10,7 +10,10 @@
   <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
 
   <% @investigation.investigation_products.reverse.each_with_index do |investigation_product, index| %>
-    <% @product = investigation_product.product.decorate %>
+    <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at) : investigation_product.product %>
+    <% @product = product.decorate %>
+    <% @investigation_product = investigation_product %>
+
     <section>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
@@ -57,18 +60,18 @@
           },
           {
             id: "cases-#{index}",
-            label: "Cases (#{@product.investigation_products.count})",
+            label: "Cases (#{@product.unique_investigation_products.count})",
             panel: { html: render("products/case_product_info_tabs/cases") }
           }
         ]
       ) %>
 
-      <% if policy(@investigation).remove_product? %>
+      <% if policy(@investigation_product).remove? %>
         <div class="opss-text-align-right opss-margin-bottom-1-desktop">
           <%=
             link_with_hidden_text_to "Remove product",
             "(#{@product.name})",
-            remove_investigation_product_path(@investigation, @product),
+            remove_investigation_investigation_product_path(@investigation, @investigation_product),
             class: "govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset"
           %>
         </div>
