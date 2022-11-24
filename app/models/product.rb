@@ -97,6 +97,8 @@ class Product < ApplicationRecord
     ref = "psd-#{id}"
 
     # Timestamp to append is not necessarily the same as when the version was created.
+    # Passing investigation_was_closed: true allows us add a timestamp to the psd_ref even if it is the live product version. Useful to
+    # illustrate to users why they can't edit/remove a product that was attached when the case was closed even if it is the live version.
     if (version.present? && timestamp.present?) || investigation_was_closed
       ref << "_#{timestamp}"
     end
