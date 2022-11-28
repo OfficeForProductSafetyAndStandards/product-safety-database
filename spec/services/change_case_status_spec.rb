@@ -96,9 +96,20 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
         expect(activity.metadata).to include("rationale" => rationale)
       end
 
-      context "when the attached product is attached to another case owned by the same team" do
+      context "when the attached product is attached to another open case owned by the same team" do
         before do
           create(:enquiry, is_closed: false, creator: user, products: [product])
+        end
+
+        it "does not change product owner" do
+          result
+          expect(product.owning_team_id).to eq user.team.id
+        end
+      end
+
+      context "when the attached product is attached to another closed case owned by the same team" do
+        before do
+          create(:enquiry, is_closed: true, creator: user, products: [product])
         end
 
         it "does not change product owner" do

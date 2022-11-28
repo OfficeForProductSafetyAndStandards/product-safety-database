@@ -97,7 +97,8 @@ module InvestigationsHelper
   end
 
   def product_overview_rows(product)
-    product_record_owner_value = product.owning_team_id ? Team.find_by(id: product.owning_team_id).name : "Product is not currently owned"
+    live_product = Product.find(product.id)
+    product_record_owner_value = live_product.owning_team_id ? Team.find_by(id: live_product.owning_team_id).name : "Product is not currently owned"
     [
       {
         key: { text: "Last updated" },

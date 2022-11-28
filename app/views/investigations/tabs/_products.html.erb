@@ -25,12 +25,11 @@
           </div>
         </div>
       </div>
-
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <%= govukSummaryList(
             classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-            rows: product_overview_rows(@product.reload)
+            rows: product_overview_rows(@product)
             )
           %>
         </div>
@@ -43,7 +42,6 @@
           <% end %>
         </div>
       </div>
-
       <%= govukTabs(
         classes: "opss-tabs govuk-!-margin-bottom-2 opss-tabs--min-height-m",
         title: "Information related to this PSD product record",
