@@ -21,6 +21,10 @@ FactoryBot.define do
       end
     end
 
+    trait :retired do
+      retired_at { rand(10.years.ago..1.second.ago) }
+    end
+
     factory :product_iphone do
       product_code { 234 }
       name { "iPhone XS MAX" }

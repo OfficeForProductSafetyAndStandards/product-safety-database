@@ -73,8 +73,8 @@ class Product < ApplicationRecord
                        :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id
 
   def self.retire_stale_products!
-    Product.not_retired.where("created_at < ?", 18.months.ago).select(:stale?).each do |stale_product|
-      stale_product.mark_as_retirted!
+    Product.not_retired.where("created_at < ?", 18.months.ago).select(&:stale?).each do |stale_product|
+      stale_product.mark_as_retired!
       logger.debug "Marked product #{stale_product.id} as retired"
     end
   end
@@ -82,8 +82,8 @@ class Product < ApplicationRecord
   def stale?
     return false if created_at > 18.months.ago
     return false if investigations.where(date_closed: nil).any?
-    return false if investigations.where("date_closed > ?", 18.months.ago).any?
-    return true if investigations.none? && activities.where("type IN ? AND created_at > ?", ["AuditActivity::Product::Add", "AuditActivity::Product::Destroy"], 18.months.ago).none?
+    return false if investigations.where(date_closed: (18.months.ago..)).any?
+    return true if investigations.none? && activities.where(type: ["AuditActivity::Product::Add", "AuditActivity::Product::Destroy"], created_at: (18.months.ago..)).none?
 
     false
   end
