@@ -107,7 +107,7 @@ GEM
       msgpack (~> 1.2)
     builder (3.2.4)
     byebug (11.1.3)
-    capybara (3.37.1)
+    capybara (3.38.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -496,24 +496,24 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     scss_lint-govuk (0.2.0)
       scss_lint
-    selenium-webdriver (4.5.0)
+    selenium-webdriver (4.6.1)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    sentry-rails (5.5.0)
+    sentry-rails (5.6.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.5.0)
-    sentry-ruby (5.5.0)
+      sentry-ruby (~> 5.6.0)
+    sentry-ruby (5.6.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.5.0)
-      sentry-ruby (~> 5.5.0)
+    sentry-sidekiq (5.6.0)
+      sentry-ruby (~> 5.6.0)
       sidekiq (>= 3.0)
     shoulda-matchers (5.2.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.7)
-      connection_pool (>= 2.2.5)
+    sidekiq (6.5.8)
+      connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
     sidekiq-scheduler (4.0.3)
@@ -611,7 +611,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.28)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.3)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
@@ -625,7 +625,7 @@ DEPENDENCIES
   aws-sdk-s3control (~> 1.56)
   bootsnap
   byebug (~> 11.1)
-  capybara (~> 3.36)
+  capybara (~> 3.38)
   capybara-screenshot (~> 1.0)
   caxlsx
   caxlsx_rails
@@ -680,7 +680,7 @@ DEPENDENCIES
   sass-rails (~> 6.0)
   scout_apm (~> 5.3)
   scss_lint-govuk (~> 0.2)
-  selenium-webdriver (~> 4.5)
+  selenium-webdriver (~> 4.6)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
