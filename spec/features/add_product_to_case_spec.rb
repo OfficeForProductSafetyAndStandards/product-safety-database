@@ -68,15 +68,26 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a product record which has not already been added to the case"
 
-    click_link "Cancel"
+    close_case_change_product_then_reopen_it
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+    click_button "Continue"
 
-    visit "/cases/#{investigation.pretty_id}/products"
+    expect(page).to have_text("Is this the correct product record to add to your case?")
+    expect(page).to have_text("#{right_product.brand} #{right_product.name}")
+
+    choose "Yes"
+    click_button "Save and continue"
+
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
+    expect(page).to have_text("The product record was added to the case")
+
     expect(page).to have_selector("h3", text: right_product.name)
-    expect(investigation.reload.products.count).to eq(1)
+    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref} - The PSD reference for this version of the product record", exact: true)
+    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref}_#{investigation.reload.investigation_products.first.investigation_closed_at.to_i}")
+    expect(investigation.reload.products.count).to eq(2)
     expect(investigation.products.first).to eq(right_product)
     expect(right_product.reload.owning_team).to eq(investigation.owner_team)
+    expect(page).to have_content "This product record has also been added to these 1 cases."
 
     click_link "Activity"
 
@@ -89,5 +100,11 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     visit "/cases/#{investigation.pretty_id}/products"
 
     expect(page).not_to have_link("Add a product to the case")
+  end
+
+  def close_case_change_product_then_reopen_it
+    ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+    right_product.update!(description: "wowthisisnew!")
+    ChangeCaseStatus.call!(investigation:, new_status: "open", user:)
   end
 end

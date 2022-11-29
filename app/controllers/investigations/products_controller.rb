@@ -4,7 +4,6 @@ class Investigations::ProductsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_investigation
-  before_action :set_product, only: %i[remove unlink]
 
   def index
     @breadcrumbs = build_breadcrumb_structure
@@ -36,34 +35,6 @@ class Investigations::ProductsController < ApplicationController
       redirect_to investigation_products_path(@investigation), flash: { success: "The product record was added to the case" }
     else
       redirect_to new_investigation_product_path
-    end
-  end
-
-  def remove
-    authorize @investigation, :remove_product?
-
-    @supporting_information = @product.supporting_information.select { |si| si.investigation == @investigation }
-    render "supporting_information_warning" and return if @supporting_information.any?
-
-    @remove_product_form = RemoveProductForm.new
-  end
-
-  # DELETE /cases/1/products
-  def unlink
-    authorize @investigation, :remove_product?
-    @remove_product_form = RemoveProductForm.new(remove_product_params)
-    return render(:remove) if @remove_product_form.invalid?
-
-    if @remove_product_form.remove_product
-      RemoveProductFromCase.call!(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
-      respond_to do |format|
-        format.html do
-          redirect_to_investigation_products_tab success: "The product record was removed from the case"
-        end
-        format.json { head :no_content }
-      end
-    else
-      redirect_to_investigation_products_tab
     end
   end
 

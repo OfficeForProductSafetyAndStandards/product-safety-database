@@ -86,18 +86,36 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
       end
 
       context "with a product that is already added to the case" do
-        before do
-          investigation.products << product
+        context "when an existing investigation_product exists but does not share the same investigation_closed_at" do
+          before do
+            investigation.products << product
+            investigation.investigation_products.first.update!(investigation_closed_at: Time.current)
+          end
+
+          it "returns a success" do
+            expect(result).to be_success
+          end
+
+          it "adds the product" do
+            result
+            expect(investigation.investigation_products.count).to eq(2)
+          end
         end
 
-        it "returns a failure", :aggregate_failures do
-          expect(result).to be_failure
-          expect(result.error).to eq("The product is already linked to the case")
-        end
+        context "when an existing investigation_product exists which shares the same investigation_closed_at" do
+          before do
+            investigation.products << product
+          end
 
-        it "does not add the product twice" do
-          result
-          expect(investigation.products.count).to eq(1)
+          it "returns a failure", :aggregate_failures do
+            expect(result).to be_failure
+            expect(result.error).to eq("The product is already linked to the case")
+          end
+
+          it "does not add the product twice" do
+            result
+            expect(investigation.investigation_products.count).to eq(1)
+          end
         end
       end
     end

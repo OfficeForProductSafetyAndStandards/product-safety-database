@@ -62,12 +62,6 @@ class InvestigationPolicy < ApplicationPolicy
     user.notifying_country_editor?
   end
 
-  def remove_product?
-    return false if record.is_closed?
-
-    update?
-  end
-
   def comment?
     return false if record.is_closed?
 

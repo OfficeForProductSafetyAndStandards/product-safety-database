@@ -14,4 +14,8 @@ class InvestigationProduct < ApplicationRecord
   redacted_export_with :id, :affected_units_status, :batch_number, :created_at,
                        :customs_code, :investigation_id, :number_of_affected_units,
                        :product_id, :updated_at
+
+  def product
+    investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) : super
+  end
 end

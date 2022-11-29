@@ -112,14 +112,20 @@ class Product < ApplicationRecord
     name
   end
 
-  def psd_ref(timestamp = nil)
+  def psd_ref(timestamp: nil, investigation_was_closed: false)
     ref = "psd-#{id}"
 
     # Timestamp to append is not necessarily the same as when the version was created.
-    if version.present? && timestamp.present?
+    # Passing investigation_was_closed: true allows us add a timestamp to the psd_ref even if it is the live product version. Useful to
+    # illustrate to users why they can't edit/remove a product that was attached when the case was closed even if it is the live version.
+    if (version.present? && timestamp.present?) || investigation_was_closed
       ref << "_#{timestamp}"
     end
 
     ref
+  end
+
+  def unique_investigation_products
+    investigation_products.group_by(&:investigation_id).values.map(&:first)
   end
 end

@@ -6,7 +6,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= render "investigations_summary", investigations: @product.investigations %>
+    <%= render "investigations_summary", investigations: @product.unique_investigation_products.map(&:investigation) %>
   </div>
 </div>
-

@@ -217,8 +217,20 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 26)).to eq "Reported_as"
+          expect(exported_data.cell(1, 26)).to eq "Reported_As"
           expect(exported_data.cell(2, 26)).to eq "unsafe"
+        end
+      end
+
+      it "exports complainant_reference" do
+        create(:allegation, complainant_reference: "testing")
+        Investigation.import refresh: true, force: true
+
+        get generate_case_exports_path
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 27)).to eq "Complainant_Reference"
+          expect(exported_data.cell(2, 27)).to eq "testing"
         end
       end
 
@@ -310,7 +322,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         end
 
         context "when user is not on the team that owns the case" do
-          it "does not show description, title and user owner name" do
+          it "does not show description, title, user owner name, or complainant reference" do
             other_team = create(:team)
             other_user = create(:user, team: other_team)
             create(:allegation, creator: other_user, is_private: true)
@@ -328,6 +340,9 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
               expect(exported_data.cell(1, 11)).to eq "Case_Owner_User"
               expect(exported_data.cell(2, 11)).to eq "Restricted"
+
+              expect(exported_data.cell(1, 27)).to eq "Complainant_Reference"
+              expect(exported_data.cell(2, 27)).to eq "Restricted"
             end
           end
         end

@@ -6,7 +6,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
 gem "aws-sdk-s3", "~> 1.117"
-gem "aws-sdk-s3control", "~> 1.55"
+gem "aws-sdk-s3control", "~> 1.56"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -60,7 +60,7 @@ group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
-  gem "parallel_tests", "~> 3.13.0"
+  gem "parallel_tests", "~> 4.0.0"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
@@ -76,7 +76,7 @@ group :development do
 end
 
 group :test do
-  gem "capybara", "~> 3.36"
+  gem "capybara", "~> 3.38"
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.2"
@@ -92,7 +92,7 @@ group :test do
   gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.12", require: false
   gem "scss_lint-govuk", "~> 0.2"
-  gem "selenium-webdriver", "~> 4.5"
+  gem "selenium-webdriver", "~> 4.6"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"

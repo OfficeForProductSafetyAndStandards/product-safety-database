@@ -205,11 +205,12 @@ ActiveRecord::Schema.define(version: 2022_11_17_160717) do
     t.string "batch_number"
     t.datetime "created_at", null: false
     t.text "customs_code"
+    t.datetime "investigation_closed_at"
     t.integer "investigation_id"
     t.text "number_of_affected_units"
     t.integer "product_id"
     t.datetime "updated_at", null: false
-    t.index ["investigation_id", "product_id"], name: "index_investigation_products_on_investigation_id_and_product_id", unique: true
+    t.index ["investigation_id", "product_id", "investigation_closed_at"], name: "index_investigation_products_on_inv_id_product_id_closed_at", unique: true
     t.index ["investigation_id"], name: "index_investigation_products_on_investigation_id"
     t.index ["product_id"], name: "index_investigation_products_on_product_id"
   end

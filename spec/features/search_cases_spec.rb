@@ -14,7 +14,11 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
   let(:mobile_phone) do
     create(:product,
            name: "T12 mobile phone",
-           category: "consumer electronics")
+           category: "consumer electronics",
+           subcategory: "telephone",
+           barcode: "11111",
+           description: "Original",
+           product_code: "AAAAA")
   end
 
   let(:mobilz_phont) do
@@ -261,6 +265,80 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           click_button "Apply"
 
           expect(page).to have_content "10001 cases using the current filters, were found."
+        end
+      end
+    end
+
+    context "when searching by product subcategory" do
+      context "when case is closed" do
+        before do
+          ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
+          mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
+          Investigation.__elasticsearch__.import refresh: :wait_for
+
+          sign_in(user)
+          visit "/cases"
+          within_fieldset "Case status" do
+            choose "All"
+          end
+        end
+
+        it "only shows the case when searching by product details from the time the case was closed" do
+          fill_in "Search", with: "telephone"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) telephone, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "11111"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) 11111, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "original"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) original, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "AAAAA"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) AAAAA, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "handset"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) handset, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "22222"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) 22222, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "anewone"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) anewone, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "BBBBB"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) BBBBB, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
         end
       end
     end
