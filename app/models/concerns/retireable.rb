@@ -6,10 +6,6 @@ module Retireable
     scope :not_retired, -> { where retired_at: nil }
   end
 
-  def self.mark_all_as_retired
-    update_all retired_at: Time.zone.now
-  end
-
   def retired?
     retired_at.present?
   end
