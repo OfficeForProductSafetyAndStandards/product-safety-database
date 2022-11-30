@@ -80,6 +80,10 @@ private
     new_status == "closed"
   end
 
+  def email_status
+    closed? ? "closed" : "re-opened"
+  end
+
   def email_update_text_key
     closed? ? "email_update_text_closed" : "email_update_text_reopened"
   end
