@@ -89,7 +89,7 @@ group :test do
   gem "rubocop", "~> 1.39"
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.15"
-  gem "rubocop-rspec", "~> 2.12", require: false
+  gem "rubocop-rspec", "~> 2.15", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "selenium-webdriver", "~> 4.6"
   gem "shoulda-matchers"

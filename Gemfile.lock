@@ -676,7 +676,7 @@ DEPENDENCIES
   rubocop (~> 1.39)
   rubocop-govuk (~> 4.7)
   rubocop-performance (~> 1.15)
-  rubocop-rspec (~> 2.12)
+  rubocop-rspec (~> 2.15)
   sass-rails (~> 6.0)
   scout_apm (~> 5.3)
   scss_lint-govuk (~> 0.2)
