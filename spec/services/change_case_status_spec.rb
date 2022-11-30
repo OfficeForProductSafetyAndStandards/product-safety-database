@@ -82,8 +82,8 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
         expect(activity.metadata).to include("rationale" => rationale)
       end
 
-      it_behaves_like "a service which notifies the case owner"
-      it_behaves_like "a service which notifies the case creator"
+      it_behaves_like "a service which notifies the case owner", even_when_the_case_is_closed: true
+      it_behaves_like "a service which notifies the case creator", even_when_the_case_is_closed: true
     end
   end
 end
