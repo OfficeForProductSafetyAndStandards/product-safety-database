@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show created]
+  before_action :set_investigation, only: %i[show created cannot_close confirm_deletion]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -74,6 +74,12 @@ class InvestigationsController < ApplicationController
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
 
     render "investigations/index.html.erb"
+  end
+
+  def cannot_close
+  end
+
+  def confirm_deletion
   end
 
 private

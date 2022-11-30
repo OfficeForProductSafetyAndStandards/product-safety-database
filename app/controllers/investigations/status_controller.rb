@@ -14,6 +14,8 @@ module Investigations
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize investigation, :change_owner_or_status?
 
+      return redirect_to cannot_close_investigation_path(investigation) if investigation.products.count.zero? && new_status == "closed"
+
       @change_case_status_form = ChangeCaseStatusForm.from(investigation)
       @change_case_status_form.assign_attributes(change_case_status_form_params.merge(new_status:))
 

@@ -95,11 +95,13 @@ Rails.application.routes.draw do
 
   resources :investigations,
             path: "cases",
-            only: %i[show new index],
+            only: %i[show new index destroy],
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
       get :created
+      get :cannot_close
+      get :confirm_deletion
     end
 
     resource :status, only: %i[], controller: "investigations/status" do
