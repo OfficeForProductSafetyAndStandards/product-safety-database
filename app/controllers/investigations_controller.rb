@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show created cannot_close confirm_deletion]
+  before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -80,6 +80,19 @@ class InvestigationsController < ApplicationController
   end
 
   def confirm_deletion
+  end
+
+  def destroy
+    authorize @investigation, :update?
+
+    @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation, deleting_user: current_user)
+
+    if @delete_investigation_form.valid?
+      @investigation.mark_as_deleted!
+      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
+    else
+      redirect_to your_cases_investigations_path, flash: { notice: "The case could not be deleted" }
+    end
   end
 
 private

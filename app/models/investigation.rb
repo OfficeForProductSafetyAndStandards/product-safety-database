@@ -2,6 +2,7 @@ class Investigation < ApplicationRecord
   include Documentable
   include SanitizationHelper
   include InvestigationOpensearch
+  include Deletable
 
   attr_accessor :visibility_rationale, :owner_rationale
 
@@ -80,6 +81,7 @@ class Investigation < ApplicationRecord
   has_many :incidents
   has_many :unexpected_events
 
+  default_scope { where(deleted_at: nil) }
   scope :not_private, -> { where(is_private: false) }
 
   redacted_export_with :id, :complainant_reference, :coronavirus_related, :created_at, :custom_risk_level,

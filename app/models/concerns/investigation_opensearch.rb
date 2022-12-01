@@ -13,6 +13,7 @@ module InvestigationOpensearch
         indexes :owner_id, type: :keyword
         indexes :creator_id, type: :keyword
         indexes :hazard_type, type: :keyword
+        indexes :deleted_at, type: :keyword
         indexes :teams_with_access, type: :nested do
           indexes :id, type: :keyword
         end
