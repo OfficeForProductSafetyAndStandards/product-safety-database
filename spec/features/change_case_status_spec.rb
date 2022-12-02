@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_mailer, type: :feature do
-  let!(:investigation) { create(:allegation, creator: creator_user, is_closed: false) }
+  let!(:investigation) { create(:allegation, :with_products, creator: creator_user, is_closed: false) }
   let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }
-  let(:creator_user) { create(:user, email: "test@example.com") }
+  let(:creator_user) { create(:user, :opss_user, :activated, email: "test@example.com") }
   let(:other_team) { create(:team) }
 
   before do
@@ -11,139 +11,157 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
     delivered_emails.clear
   end
 
-  scenario "Closing and re-opening a case via different routes" do
-    sign_in user
-    visit "/cases/#{investigation.pretty_id}"
+  context "when closing a case with no products associated with it" do
+    let!(:no_product_investigation) { create(:allegation, creator: creator_user, is_closed: false) }
 
-    click_link "Close this case"
+    it "does not allow closing of case" do
+      sign_in creator_user
+      visit "/cases/#{no_product_investigation.pretty_id}"
 
-    expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
-
-    # Navigate via the case overview table
-    visit "/cases/#{investigation.pretty_id}"
-
-    within("div.opss-text-align-right") do
-      expect(page).to have_link "Close case"
-      expect(page).not_to have_link "Re-open case"
       click_link "Close case"
+
+      expect_to_be_on_cannot_close_case_page(case_id: no_product_investigation.pretty_id)
     end
-
-    expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
-
-    fill_in "Why are you closing the case?", with: "Case has been resolved."
-
-    click_button "Close case"
-
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect_confirmation_banner("Allegation was closed")
-    expect(page).to have_summary_item(key: "Status", value: "Case closed #{Date.current.to_s(:govuk)}")
-
-    click_link "Activity"
-
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Allegation closed")
-    expect(page).to have_css("p", text: "Case has been resolved.")
-
-    # Check the close page shows an error if trying to revisit it
-    visit "/cases/#{investigation.pretty_id}/status/close"
-    expect(page).to have_css("h1", text: "Close case")
-    expect(page).to have_css("p", text: "The allegation is already closed. Do you want to re-open it?")
-
-    visit "/cases/#{investigation.pretty_id}"
-
-    within("div.opss-text-align-right") do
-      expect(page).not_to have_link "Close case"
-      expect(page).to have_link "Re-open case"
-      click_link "Re-open case"
-    end
-
-    expect_to_be_on_reopen_case_page(case_id: investigation.pretty_id)
-
-    fill_in "Why are you re-opening the case?", with: "Case has not been resolved."
-
-    click_button "Re-open case"
-
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
-    expect_confirmation_banner("Allegation was re-opened")
-    expect(page).to have_summary_item(key: "Status", value: "Open")
-
-    click_link "Activity"
-
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Allegation re-opened")
-    expect(page).to have_css("p", text: "Case has not been resolved.")
-
-    # Check the close page shows an error if trying to revisit it
-    visit "/cases/#{investigation.pretty_id}/status/reopen"
-    expect(page).to have_css("h1", text: "Re-open case")
-    expect(page).to have_css("p", text: "The allegation is already open. Do you want to close it?")
   end
 
-  context "when closing the case with a product with another open investigation attached to it" do
-    let(:other_investigation) { create(:allegation, creator: user, is_closed: false, products: [product]) }
+  context "when case has products associated with it" do
+    let(:product) { create(:product) }
 
-    before do
+    scenario "Closing and re-opening a case via different routes" do
       sign_in user
-      visit "/cases/#{other_investigation.pretty_id}"
+      visit "/cases/#{investigation.pretty_id}"
 
       click_link "Close this case"
+
+      expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
+
+      # Navigate via the case overview table
+      visit "/cases/#{investigation.pretty_id}"
+
+      within("div.opss-text-align-right") do
+        expect(page).to have_link "Close case"
+        expect(page).not_to have_link "Re-open case"
+        click_link "Close case"
+      end
+
+      expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
 
       fill_in "Why are you closing the case?", with: "Case has been resolved."
 
       click_button "Close case"
 
-      click_link "Products (1)"
+      expect_to_be_on_case_page(case_id: investigation.pretty_id)
+      expect_confirmation_banner("Allegation was closed")
+      expect(page).to have_summary_item(key: "Status", value: "Case closed #{Date.current.to_s(:govuk)}")
+
+      click_link "Activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect(page).to have_css("h3", text: "Allegation closed")
+      expect(page).to have_css("p", text: "Case has been resolved.")
+
+      # Check the close page shows an error if trying to revisit it
+      visit "/cases/#{investigation.pretty_id}/status/close"
+      expect(page).to have_css("h1", text: "Close case")
+      expect(page).to have_css("p", text: "The allegation is already closed. Do you want to re-open it?")
+
+      visit "/cases/#{investigation.pretty_id}"
+
+      within("div.opss-text-align-right") do
+        expect(page).not_to have_link "Close case"
+        expect(page).to have_link "Re-open case"
+        click_link "Re-open case"
+      end
+
+      expect_to_be_on_reopen_case_page(case_id: investigation.pretty_id)
+
+      fill_in "Why are you re-opening the case?", with: "Case has not been resolved."
+
+      click_button "Re-open case"
+
+      expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+      expect_confirmation_banner("Allegation was re-opened")
+      expect(page).to have_summary_item(key: "Status", value: "Open")
+
+      click_link "Activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect(page).to have_css("h3", text: "Allegation re-opened")
+      expect(page).to have_css("p", text: "Case has not been resolved.")
+
+      # Check the close page shows an error if trying to revisit it
+      visit "/cases/#{investigation.pretty_id}/status/reopen"
+      expect(page).to have_css("h1", text: "Re-open case")
+      expect(page).to have_css("p", text: "The allegation is already open. Do you want to close it?")
     end
 
-    context "when the product is owned by the user's team" do
-      let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
+    context "when closing the case with a product with another open investigation attached to it" do
+      let(:other_investigation) { create(:allegation, creator: user, is_closed: false, products: [product]) }
 
-      it "makes the case unowned" do
-        expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
+      before do
+        sign_in user
+        visit "/cases/#{other_investigation.pretty_id}"
+
+        click_link "Close this case"
+
+        fill_in "Why are you closing the case?", with: "Case has been resolved."
+
+        click_button "Close case"
+
+        click_link "Products (1)"
+      end
+
+      context "when the product is owned by the user's team" do
+        let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
+
+        it "makes the case unowned" do
+          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
+        end
+      end
+
+      context "when the product is owned by another team" do
+        let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
+
+        it "does not change the product owner" do
+          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
+        end
       end
     end
 
-    context "when the product is owned by another team" do
-      let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
+    context "when closing the case with a product with a closed investigation attached to it" do
+      let(:other_investigation) { create(:allegation, creator: user, products: [product]) }
 
-      it "does not change the product owner" do
-        expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
+      before do
+        ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+        sign_in user
+        visit "/cases/#{other_investigation.pretty_id}"
+
+        click_link "Close this case"
+
+        fill_in "Why are you closing the case?", with: "Case has been resolved."
+
+        click_button "Close case"
+
+        click_link "Products (1)"
+      end
+
+      context "when the product is owned by the user's team" do
+        let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
+
+        it "makes the case unowned" do
+          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
+        end
+      end
+
+      context "when the product is owned by another team" do
+        let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
+
+        it "does not change the product owner" do
+          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
+        end
       end
     end
   end
 
-  context "when closing the case with a product with a closed investigation attached to it" do
-    let(:other_investigation) { create(:allegation, creator: user, products: [product]) }
-
-    before do
-      ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
-      sign_in user
-      visit "/cases/#{other_investigation.pretty_id}"
-
-      click_link "Close this case"
-
-      fill_in "Why are you closing the case?", with: "Case has been resolved."
-
-      click_button "Close case"
-
-      click_link "Products (1)"
-    end
-
-    context "when the product is owned by the user's team" do
-      let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
-
-      it "makes the case unowned" do
-        expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
-      end
-    end
-
-    context "when the product is owned by another team" do
-      let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
-
-      it "does not change the product owner" do
-        expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
-      end
-    end
-  end
 end
