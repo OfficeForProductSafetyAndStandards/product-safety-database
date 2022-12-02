@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_08_123932) do
+ActiveRecord::Schema.define(version: 2022_12_02_150919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -222,6 +222,8 @@ ActiveRecord::Schema.define(version: 2022_11_08_123932) do
     t.string "custom_risk_level"
     t.datetime "date_closed"
     t.date "date_received"
+    t.datetime "deleted_at"
+    t.string "deleted_by"
     t.text "description"
     t.text "hazard_description"
     t.string "hazard_type"
@@ -432,8 +434,9 @@ ActiveRecord::Schema.define(version: 2022_11_08_123932) do
     t.string "event", null: false
     t.bigint "item_id", null: false
     t.string "item_type", null: false
-    t.text "object"
+    t.jsonb "object"
     t.text "object_changes"
+    t.text "old_object"
     t.string "whodunnit"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
