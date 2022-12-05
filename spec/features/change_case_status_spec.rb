@@ -163,5 +163,4 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       end
     end
   end
-
 end

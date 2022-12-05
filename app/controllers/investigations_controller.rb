@@ -76,11 +76,9 @@ class InvestigationsController < ApplicationController
     render "investigations/index.html.erb"
   end
 
-  def cannot_close
-  end
+  def cannot_close; end
 
-  def confirm_deletion
-  end
+  def confirm_deletion; end
 
   def destroy
     authorize @investigation, :update?

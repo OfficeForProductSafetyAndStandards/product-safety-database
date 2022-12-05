@@ -18,6 +18,7 @@ RSpec.describe "Deleting a case", :with_stubbed_opensearch, :with_stubbed_mailer
 
   context "when case does not have products associated with it" do
     let!(:investigation) { create(:allegation, creator: user, is_closed: false) }
+
     it "allows user to delete case" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}"
