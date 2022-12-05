@@ -11,12 +11,12 @@ class ProductPolicy < ApplicationPolicy
 
   def update?
     return false if record.version.present?
-    return false if record.retired? && !user.is_opss?
+    return false if record.retired?
 
     record.owning_team.nil? || record.owning_team == user.team
   end
 
   def can_spawn_case?
-    !user.is_opss? && record.not_retired?
+    record.not_retired?
   end
 end
