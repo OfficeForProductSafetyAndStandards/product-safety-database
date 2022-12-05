@@ -12,7 +12,7 @@ module PageExpectations
     if case_id
       expect(page).to have_current_path("/cases/#{case_id}")
     else
-      expect(page).to have_current_path(/\/cases\/[\d\-]+$/)
+      expect(page).to have_current_path(/\/cases\/[\d-]+$/)
     end
     expect(page).to have_selector("h1", text: "Case")
   end
@@ -279,7 +279,7 @@ module PageExpectations
     if case_id
       expect(page).to have_current_path("/cases/#{case_id}/activity")
     else
-      expect(page).to have_current_path(/\/cases\/[\d\-]+\/activity/)
+      expect(page).to have_current_path(/\/cases\/[\d-]+\/activity/)
     end
     expect(page).to have_selector("h1", text: "Activity")
   end
