@@ -46,6 +46,8 @@ private
   end
 
   def send_notification_email
+    return unless test_result.investigation.sends_notifications?
+
     email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         test_result.investigation.pretty_id,

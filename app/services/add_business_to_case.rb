@@ -32,6 +32,7 @@ private
   end
 
   def send_notification_email(_activity)
+    return unless investigation.sends_notifications?
     return if skip_email
 
     email_recipients_for_case_owner.each do |recipient|

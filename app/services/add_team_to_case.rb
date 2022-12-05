@@ -37,6 +37,8 @@ private
   end
 
   def send_notification_email
+    return unless investigation.sends_notifications?
+
     entities_to_notify.each do |entity|
       NotifyMailer.team_added_to_case_email(
         investigation:,
