@@ -81,7 +81,7 @@ class InvestigationsController < ApplicationController
   def confirm_deletion; end
 
   def destroy
-    authorize @investigation, :update?
+    authorize @investigation, :change_owner_or_status?
 
     @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation, deleting_user: current_user)
 
