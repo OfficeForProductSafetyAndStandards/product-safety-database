@@ -1,4 +1,4 @@
-RSpec.shared_examples "a service which notifies the case owner", :with_test_queue_adapter do
+RSpec.shared_examples "a service which notifies the case owner", :with_test_queue_adapter do |even_when_the_case_is_closed: false|
   context "when the user is the case owner" do
     before { ChangeCaseOwner.call!(investigation:, owner: user, user:) }
 
@@ -29,6 +29,16 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
         expected_email_subject
       )
     end
+
+    unless even_when_the_case_is_closed
+      context "when the case is closed" do
+        before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
+
+        it "does not send an email" do
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+        end
+      end
+    end
   end
 
   context "when the user is on a different team to the case owner" do
@@ -47,6 +57,16 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
           expected_email_subject
         )
       end
+
+      unless even_when_the_case_is_closed
+        context "when the case is closed" do
+          before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
+
+          it "does not send an email" do
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          end
+        end
+      end
     end
 
     context "when the owner is a team" do
@@ -60,6 +80,16 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
           expected_email_body("#{user.name} (#{user.team.name})"),
           expected_email_subject
         )
+      end
+
+      unless even_when_the_case_is_closed
+        context "when the case is closed" do
+          before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
+
+          it "does not send an email" do
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          end
+        end
       end
 
       context "when the owner team does not have an email address" do
@@ -79,6 +109,16 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
             expected_email_body("#{user.name} (#{user.team.name})"),
             expected_email_subject
           )
+        end
+
+        unless even_when_the_case_is_closed
+          context "when the case is closed" do
+            before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
+
+            it "does not send an email" do
+              expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+            end
+          end
         end
       end
     end

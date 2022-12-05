@@ -60,7 +60,7 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
       end
 
       def expected_email_body(name)
-        "Enquiry was closed by #{name}."
+        "Enquiry was closed by #{name}. Email notifications about edits made to cases are not sent when edits are made to closed cases."
       end
 
       it "succeeds" do
@@ -135,6 +135,9 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
           expect(product.owning_team_id).to eq nil
         end
       end
+
+      it_behaves_like "a service which notifies the case owner", even_when_the_case_is_closed: true
+      it_behaves_like "a service which notifies the case creator", even_when_the_case_is_closed: true
     end
   end
 end
