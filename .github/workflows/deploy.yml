@@ -88,9 +88,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ runner.os }}-new-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
+          ${{ runner.os }}-new-gems-
 
     - name: Install RubyGems
       if: success()
