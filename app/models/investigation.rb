@@ -191,6 +191,10 @@ class Investigation < ApplicationRecord
     !risk_validated_by.nil?
   end
 
+  def sends_notifications?
+    !is_closed
+  end
+
 private
 
   def creator_id
