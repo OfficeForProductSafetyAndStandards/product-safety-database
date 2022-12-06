@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Retired proeducts", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:opss_user) { create(:user, :activated, :opss_user) }
   let(:non_opss_user) { create(:user, :activated) }
   let(:live_product) { create(:product) }
