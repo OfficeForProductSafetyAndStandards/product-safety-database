@@ -5,6 +5,7 @@ class DeleteInvestigation
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "Cannot delete investigation with products") unless investigation.products.count.zero?
 
     ActiveRecord::Base.transaction do
       investigation.mark_as_deleted!

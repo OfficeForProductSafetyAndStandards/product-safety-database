@@ -11,6 +11,6 @@ class DeleteInvestigationForm
   validate :investigation_has_no_products
 
   def investigation_has_no_products
-    errors.add(:has_products, "Cannot delete a case with products") unless investigation.products.count.zero?
+    errors.add(:has_products, "Cannot delete a case with products") unless investigation && investigation.products.count.zero?
   end
 end
