@@ -89,7 +89,7 @@ class InvestigationsController < ApplicationController
       DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
       redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
     else
-      redirect_to your_cases_investigations_path, flash: { notice: "The case could not be deleted" }
+      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
     end
   end
 

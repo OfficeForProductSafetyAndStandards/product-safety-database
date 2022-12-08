@@ -14,6 +14,16 @@ RSpec.describe "Deleting a case", :with_stubbed_opensearch, :with_stubbed_mailer
 
       expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
     end
+
+    it "does not allow user to delete the case" do
+      sign_in user
+      visit "cases/#{investigation.pretty_id}/confirm_deletion"
+
+      click_link "Delete the case"
+
+      expect(page).to have_current_path("/cases/your-cases")
+      expect(page).to have_css(".govuk-notification-banner", text: "The case could not be deleted")
+    end
   end
 
   context "when case does not have products associated with it" do

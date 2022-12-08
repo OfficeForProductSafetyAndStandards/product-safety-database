@@ -9,6 +9,10 @@ def expect_confirmation_banner(msg)
   expect(page).to have_css(".govuk-notification-banner--success", text: msg)
 end
 
+def expect_warning_banner(msg)
+  expect(page).to have_css(".govuk-notification-banner", text: msg)
+end
+
 def expect_page_to_have_h1(header)
   expect(page).to have_css("h1", text: header)
 end
