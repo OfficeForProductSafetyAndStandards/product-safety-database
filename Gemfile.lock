@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails
-  revision: 78d74f03891347f69ec7bde3bd5d01c90b0d2f21
-  tag: 0.9.6
+  revision: 03acb680418465e1a29cb93477248e71f66bc018
+  tag: 0.9.7
   specs:
-    govuk-design-system-rails (0.9.6)
+    govuk-design-system-rails (0.9.7)
 
 GEM
   remote: https://rubygems.org/
@@ -296,12 +296,12 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.9)
+    nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.9-x86_64-darwin)
+    nokogiri (1.13.10-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.9-x86_64-linux)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -337,7 +337,7 @@ GEM
     pundit (2.2.0)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
-    racc (1.6.0)
+    racc (1.6.1)
     rack (2.2.4)
     rack-proxy (0.7.4)
       rack
