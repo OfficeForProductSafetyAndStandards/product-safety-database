@@ -1,3 +1,7 @@
+<% page_heading = "Delete the case" %>
+
+<%= page_title page_heading %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <div class="govuk-!-margin-top-4 govuk-!-padding-bottom-4">
@@ -9,9 +13,9 @@
 
           <%= govukWarningText(iconFallbackText: "Warning", text: "Case #{@investigation.pretty_id} – including its images and supporting information – will be deleted.") %>
 
-          <div class="govuk-button-group">
+          <div class="govuk-button-group govuk-!-margin-top-8">
             <%= link_to "Delete the case", investigation_path(@investigation), method: :delete, class: "govuk-button govuk-link--no-underline govuk-button--warning" %>
-            <%= link_to "Go back to the case page", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+            <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
           </div>
         </div>
       </div>
