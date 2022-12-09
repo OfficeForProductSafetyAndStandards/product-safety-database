@@ -6,7 +6,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
 gem "aws-sdk-s3", "~> 1.117"
-gem "aws-sdk-s3control", "~> 1.56"
+gem "aws-sdk-s3control", "~> 1.58"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -21,7 +21,7 @@ gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
 gem "lograge", "~> 0.12"
-gem "mini_magick", "~> 4.11"
+gem "mini_magick", "~> 4.12"
 
 # ActionMailer dependencies
 gem "net-imap"
@@ -51,7 +51,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 2.0"
 
-gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.6", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.7", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -59,7 +59,7 @@ group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.8"
-  gem "parallel_tests", "~> 3.13.0"
+  gem "parallel_tests", "~> 4.0.0"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.3"
@@ -86,12 +86,12 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.11"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.37"
+  gem "rubocop", "~> 1.39"
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.15"
-  gem "rubocop-rspec", "~> 2.12", require: false
+  gem "rubocop-rspec", "~> 2.15", require: false
   gem "scss_lint-govuk", "~> 0.2"
-  gem "selenium-webdriver", "~> 4.6"
+  gem "selenium-webdriver", "~> 4.7"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"

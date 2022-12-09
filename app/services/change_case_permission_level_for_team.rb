@@ -66,6 +66,8 @@ private
   end
 
   def send_notification_email
+    return unless investigation.sends_notifications?
+
     entities_to_notify.each do |entity|
       NotifyMailer.case_permission_changed_for_team(
         message:,
