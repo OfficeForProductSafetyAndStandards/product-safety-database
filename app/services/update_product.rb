@@ -14,7 +14,7 @@ class UpdateProduct
 
       product.update!(product_params)
 
-      product.investigations.import
+      product.investigations.not_deleted.import
     end
   end
 end

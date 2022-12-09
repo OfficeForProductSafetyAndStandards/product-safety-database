@@ -11,7 +11,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }
   let(:case_export) { described_class.create!(user:, params:) }
 
-  before { Investigation.__elasticsearch__.import force: true, refresh: :wait }
+  before { Investigation.__elasticsearch__.import scope: "not_deleted", force: true, refresh: :wait }
 
   describe "#export!" do
     let(:result) { case_export.export! }

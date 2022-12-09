@@ -3,6 +3,10 @@ require "rails_helper"
 RSpec.describe "Deleting a case", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }
 
+  before do
+    Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for
+  end
+
   context "when case has products associated with it" do
     let!(:investigation) { create(:allegation, :with_products, creator: user, is_closed: false) }
 
@@ -29,14 +33,8 @@ RSpec.describe "Deleting a case", :with_opensearch, :with_stubbed_mailer, type: 
   context "when case does not have products associated with it" do
     let!(:investigation) { create(:allegation, creator: user, is_closed: false) }
 
-    it "does not allow user to close case, redirects to a delete case page" do
+    it "does not allow user to close case, allows user to delete case" do
       sign_in user
-      Investigation.__elasticsearch__.import refresh: :wait_for
-
-      visit "/cases"
-
-      expect(page).to have_content "1 case using the current filters, was found."
-      expect(page).to have_content investigation.pretty_id
 
       visit "/cases/#{investigation.pretty_id}"
 
@@ -52,12 +50,6 @@ RSpec.describe "Deleting a case", :with_opensearch, :with_stubbed_mailer, type: 
 
       expect(page).to have_current_path("/cases/your-cases")
       expect_confirmation_banner("The case was deleted")
-
-      Investigation.__elasticsearch__.import refresh: :wait_for
-
-      visit "/cases"
-
-      expect(page).to have_content "0 cases using the current filters, were found."
     end
   end
 end

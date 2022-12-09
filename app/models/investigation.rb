@@ -81,14 +81,13 @@ class Investigation < ApplicationRecord
   has_many :incidents
   has_many :unexpected_events
 
-  default_scope { where(deleted_at: nil) }
   scope :not_private, -> { where(is_private: false) }
 
   redacted_export_with :id, :complainant_reference, :coronavirus_related, :created_at, :custom_risk_level,
                        :date_closed, :date_received, :description, :hazard_description, :hazard_type,
                        :is_closed, :is_private, :non_compliant_reason, :notifying_country, :pretty_id,
                        :product_category, :received_type, :reported_reason, :risk_level, :risk_validated_at,
-                       :risk_validated_by, :type, :updated_at, :user_title
+                       :risk_validated_by, :type, :updated_at, :user_title, :deleted_at, :deleted_by
 
   # All sub-classes share this policy class
   def self.policy_class

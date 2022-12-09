@@ -704,7 +704,7 @@ if run_seeds
   end
 
   Investigation.__elasticsearch__.create_index! force: true
-  Investigation.import
+  Investigation.import scope: 'not_deleted'
 
   Product.__elasticsearch__.create_index! force: true
   Product.import

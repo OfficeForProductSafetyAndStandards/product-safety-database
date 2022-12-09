@@ -19,7 +19,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
 
   before do
     Product.import force: true, refresh: :wait_for
-    Investigation.import force: true, refresh: :wait_for
+    Investigation.import scope: 'not_deleted', force: true, refresh: :wait_for
 
     sign_in(user)
   end

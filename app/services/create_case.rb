@@ -67,7 +67,7 @@ private
   end
 
   def latest_case_number_this_month
-    case_number = Investigation.unscope(:where).select(:pretty_id)
+    case_number = Investigation.select(:pretty_id)
       .where("created_at < ? AND created_at > ?", date, date.beginning_of_month)
       .order(:id).last&.pretty_id
 

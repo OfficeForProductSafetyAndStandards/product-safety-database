@@ -11,7 +11,7 @@ class DeleteInvestigation
       investigation.mark_as_deleted!
       investigation.update!(deleted_by: deleted_by.id)
 
-      investigation.reload.__elasticsearch__.delete_document
+      investigation.__elasticsearch__.delete_document
     end
   end
 end

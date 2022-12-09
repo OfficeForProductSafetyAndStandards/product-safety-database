@@ -83,7 +83,7 @@ class InvestigationsController < ApplicationController
   def destroy
     authorize @investigation, :change_owner_or_status?
 
-    @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation, deleting_user: current_user)
+    @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
 
     if @delete_investigation_form.valid?
       DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
@@ -134,7 +134,7 @@ private
   end
 
   def count_to_display
-    default_params ? Investigation.count : @answer.total_count
+    default_params ? Investigation.not_deleted.count : @answer.total_count
   end
 
   def default_params

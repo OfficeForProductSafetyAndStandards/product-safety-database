@@ -1,9 +1,8 @@
 require "rails_helper"
 
 RSpec.describe DeleteInvestigationForm, :with_stubbed_opensearch, :with_stubbed_mailer do
-  subject(:form) { described_class.new(investigation:, deleting_user:) }
+  subject(:form) { described_class.new(investigation:) }
 
-  let(:deleting_user) { create(:user) }
   let(:investigation) { create(:allegation) }
 
   describe "validations" do
@@ -15,14 +14,6 @@ RSpec.describe DeleteInvestigationForm, :with_stubbed_opensearch, :with_stubbed_
 
     context "with no investigation" do
       let(:investigation) { nil }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
-    context "with no deleteing_user" do
-      let(:deleting_user) { nil }
 
       it "is not valid" do
         expect(form).not_to be_valid

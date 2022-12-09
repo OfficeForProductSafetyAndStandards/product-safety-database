@@ -15,7 +15,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     create(:allegation, products: [other_product])
     create(:allegation, creator: other_user_same_team, products: [team_product])
     create(:allegation, creator: user, products: [closed_product], is_closed: true)
-    Investigation.import refresh: true, force: true
+    Investigation.import scope: 'not_deleted', refresh: true, force: true
     Product.import refresh: true, force: true
   end
 
