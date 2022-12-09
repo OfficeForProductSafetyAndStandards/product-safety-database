@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Deleting a case", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.describe "Deleting a case", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }
 
   context "when case has products associated with it" do
@@ -31,6 +31,13 @@ RSpec.describe "Deleting a case", :with_stubbed_opensearch, :with_stubbed_mailer
 
     it "does not allow user to close case, redirects to a delete case page" do
       sign_in user
+      Investigation.__elasticsearch__.import refresh: :wait_for
+
+      visit "/cases"
+
+      expect(page).to have_content "1 case using the current filters, was found."
+      expect(page).to have_content investigation.pretty_id
+
       visit "/cases/#{investigation.pretty_id}"
 
       click_link "Close case"
@@ -45,6 +52,12 @@ RSpec.describe "Deleting a case", :with_stubbed_opensearch, :with_stubbed_mailer
 
       expect(page).to have_current_path("/cases/your-cases")
       expect_confirmation_banner("The case was deleted")
+
+      Investigation.__elasticsearch__.import refresh: :wait_for
+
+      visit "/cases"
+
+      expect(page).to have_content "0 cases using the current filters, were found."
     end
   end
 end
