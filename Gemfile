@@ -52,7 +52,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 2.0"
 
-gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.6", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.7", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -92,7 +92,7 @@ group :test do
   gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.15", require: false
   gem "scss_lint-govuk", "~> 0.2"
-  gem "selenium-webdriver", "~> 4.6"
+  gem "selenium-webdriver", "~> 4.7"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"

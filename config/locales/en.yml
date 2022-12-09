@@ -62,7 +62,8 @@ en:
     add_remove_team_message: "%{team} was merged into %{new_team} by %{user}. %{team} previously had access to this case."
   change_case_status:
     email_subject_text: "%{case_type} was %{status}"
-    email_update_text: "%{case_type} was %{status} by %{name}."
+    email_update_text_closed: "%{case_type} was closed by %{name}. Email notifications about edits made to cases are not sent when edits are made to closed cases."
+    email_update_text_reopened: "%{case_type} was re-opened by %{name}."
   change_case_visibility:
     email_subject_text: "%{case_type} was %{visibility}"
     email_update_text: "%{case_type} was %{visibility} by %{name}."

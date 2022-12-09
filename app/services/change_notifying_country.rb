@@ -40,6 +40,8 @@ private
   end
 
   def send_notification_email(investigation, user)
+    return unless investigation.sends_notifications?
+
     email_recipients_for_team_with_access(investigation, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.investigation_updated(

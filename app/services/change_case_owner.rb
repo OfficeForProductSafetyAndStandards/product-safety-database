@@ -57,6 +57,8 @@ private
   end
 
   def send_notification_email
+    return unless investigation.sends_notifications?
+
     entities_to_notify.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,

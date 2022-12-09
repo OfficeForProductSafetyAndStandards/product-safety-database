@@ -207,6 +207,10 @@ class Investigation < ApplicationRecord
     investigation_products.map { |investigation_product| investigation_product.product.product_code }
   end
 
+  def sends_notifications?
+    !is_closed
+  end
+
 private
 
   def creator_id

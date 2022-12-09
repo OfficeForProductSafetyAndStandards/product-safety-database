@@ -71,10 +71,9 @@ private
   def email_body(viewer = nil)
     user_name = user.decorate.display_name(viewer:)
     I18n.t(
-      "change_case_status.email_update_text",
+      "change_case_status.#{email_update_text_key}",
       case_type: email_case_type,
-      name: user_name,
-      status: email_status
+      name: user_name
     )
   end
 
@@ -104,5 +103,9 @@ private
 
   def mark_investigation_products_as_closed
     investigation.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: investigation.date_closed)
+  end
+
+  def email_update_text_key
+    closed? ? "email_update_text_closed" : "email_update_text_reopened"
   end
 end
