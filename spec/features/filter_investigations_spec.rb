@@ -479,7 +479,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   end
 
   describe "Sorting" do
-    let(:default_filtered_cases) { Investigation.where(is_closed: false) }
+    let(:default_filtered_cases) { Investigation.not_deleted.where(is_closed: false) }
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
     def select_sorting_option(option)

@@ -256,10 +256,14 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
 
       context "when over 10k cases exist" do
+        # rubocop:disable RSpec/VerifiedDoubles
         before do
-          allow(Investigation).to receive(:count).and_return(10_001)
+          spy = spy("not_deleted")
+          allow(Investigation).to receive(:not_deleted).and_return(spy)
+          allow(spy).to receive(:count).and_return(10_001)
           sign_in(user)
         end
+        # rubocop:enable RSpec/VerifiedDoubles
 
         it "shows total number of cases" do
           visit "/cases"
