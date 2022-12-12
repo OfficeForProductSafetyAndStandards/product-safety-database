@@ -14,7 +14,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let!(:drowning_product) { create(:product, name: "Dangerous life vest", investigations: [drowning_investigation]) }
 
   before do
-    Investigation.import scope: 'not_deleted', refresh: :wait_for
+    Investigation.import scope: "not_deleted", refresh: :wait_for
     Product.import refresh: :wait_for
     sign_in(user)
     visit products_path

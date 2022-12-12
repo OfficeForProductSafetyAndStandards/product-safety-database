@@ -12,7 +12,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
   let!(:investigation)                       { create(:allegation, creator: user, hazard_type: "Fire") }
-  let!(:deleted_investigation)               { create(:allegation, creator: user, hazard_type: "Fire", deleted_at: Time.now) }
+  let!(:deleted_investigation)               { create(:allegation, creator: user, hazard_type: "Fire", deleted_at: Time.zone.now) }
   let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team, hazard_type: "Fire") }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
   let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team, hazard_type: "Fire") }
@@ -38,7 +38,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   before do
     create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
     other_team_investigation.touch # Tests sort order
-    Investigation.import scope: 'not_deleted', refresh: :wait_for, force: true
+    Investigation.import scope: "not_deleted", refresh: :wait_for, force: true
     sign_in(user)
     visit all_cases_investigations_path
   end
@@ -73,7 +73,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   context "when there are multiple pages of cases" do
     before do
       20.times { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
-      Investigation.import scope: 'not_deleted', refresh: :wait_for, force: true
+      Investigation.import scope: "not_deleted", refresh: :wait_for, force: true
     end
 
     it "maintains the filters when clicking on additional pages" do

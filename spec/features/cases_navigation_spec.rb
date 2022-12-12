@@ -49,7 +49,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     let!(:team_case) { create(:allegation, creator: other_user_same_team) }
 
     before do
-      Investigation.import scope: 'not_deleted', refresh: true, force: true
+      Investigation.import scope: "not_deleted", refresh: true, force: true
     end
 
     context "when the user is on the your cases page" do
@@ -83,7 +83,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       context "when more than 11 cases" do
         before do
           create_list(:allegation, 11, creator: user)
-          Investigation.import scope: 'not_deleted', refresh: true, force: true
+          Investigation.import scope: "not_deleted", refresh: true, force: true
           visit "/cases/your-cases"
         end
 
@@ -135,7 +135,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       context "when more than 11 cases" do
         before do
           create_list(:allegation, 11, creator: other_user_same_team)
-          Investigation.import scope: 'not_deleted', refresh: true, force: true
+          Investigation.import scope: "not_deleted", refresh: true, force: true
           visit "/cases/team-cases"
         end
 
@@ -181,7 +181,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       context "when more than 11 cases" do
         before do
           create_list(:allegation, 11)
-          Investigation.import scope: 'not_deleted', refresh: true, force: true
+          Investigation.import scope: "not_deleted", refresh: true, force: true
           visit "/cases/all-cases"
         end
 
