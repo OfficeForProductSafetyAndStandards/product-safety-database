@@ -9,6 +9,7 @@ class RemoveProductFromCase
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
     context.fail!(error: "Cannot remove a product from a previously closed case") if investigation_product.investigation_closed_at
+
     InvestigationProduct.transaction do
       product.reload
       investigation.products.delete product

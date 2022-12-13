@@ -2,7 +2,7 @@ module InvestigationsHelper
   include InvestigationSearchHelper
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)
-    result = Investigation.full_search(search_query(user))
+    result = Investigation.not_deleted.full_search(search_query(user))
     result.page(page_number).per(page_size)
   end
 

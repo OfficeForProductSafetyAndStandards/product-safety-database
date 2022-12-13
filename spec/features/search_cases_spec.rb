@@ -10,6 +10,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
            product_code: "W2020-10/1")
   end
   let!(:investigation) { create(:allegation, products: [product], user_title: nil) }
+  let!(:deleted_investigation) { create(:allegation, products: [product], user_title: "DeletedCase", deleted_at: Time.zone.now) }
 
   let(:mobile_phone) do
     create(:product,
@@ -46,7 +47,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
   before do
     # Import products syncronously into Opensearch
-    Investigation.__elasticsearch__.import refresh: :wait_for
+    Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for, force: true
   end
 
   scenario "searching for a case using a keyword from a product name" do
@@ -226,7 +227,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     context "when no search term is used" do
-      it "shows all results if no word is searched for" do
+      it " does not show any deleted cases, but does show all none deleted cases if no word is searched for" do
         sign_in(user)
         visit "/cases"
 
@@ -247,15 +248,22 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_text(mobilz_phont_investigation.pretty_id)
         expect(page).to have_text(mobilz_phont_investigation.user_title)
 
+        expect(page).not_to have_text(deleted_investigation.pretty_id)
+        expect(page).not_to have_text(deleted_investigation.user_title)
+
         expect(page).to have_text(investigation.pretty_id)
         expect(page).to have_text("MyBrand washing machine")
       end
 
       context "when over 10k cases exist" do
+        # rubocop:disable RSpec/VerifiedDoubles
         before do
-          allow(Investigation).to receive(:count).and_return(10_001)
+          spy = spy("not_deleted")
+          allow(Investigation).to receive(:not_deleted).and_return(spy)
+          allow(spy).to receive(:count).and_return(10_001)
           sign_in(user)
         end
+        # rubocop:enable RSpec/VerifiedDoubles
 
         it "shows total number of cases" do
           visit "/cases"
@@ -269,12 +277,17 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
     end
 
+    context "when searching for a case that has been deleted" do
+      it "does not show the deleted case in the results" do
+      end
+    end
+
     context "when searching by product subcategory" do
       context "when case is closed" do
         before do
           ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
           mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
-          Investigation.__elasticsearch__.import refresh: :wait_for
+          Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for
 
           sign_in(user)
           visit "/cases"

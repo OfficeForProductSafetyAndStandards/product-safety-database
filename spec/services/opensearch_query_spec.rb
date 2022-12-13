@@ -18,7 +18,7 @@ RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
   let(:sorting_params) { {} }
 
   def perform_search
-    Investigation.full_search(os_query)
+    Investigation.not_deleted.full_search(os_query)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
