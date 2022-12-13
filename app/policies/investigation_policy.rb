@@ -67,4 +67,8 @@ class InvestigationPolicy < ApplicationPolicy
 
     show?
   end
+
+  def can_be_deleted?
+    record.products.none?
+  end
 end
