@@ -21,7 +21,7 @@ gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
 gem "lograge", "~> 0.12"
-gem "mini_magick", "~> 4.11"
+gem "mini_magick", "~> 4.12"
 
 # ActionMailer dependencies
 gem "net-imap"
@@ -85,7 +85,7 @@ group :test do
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.9"
   gem "rspec"
-  gem "rspec-mocks", "~> 3.11"
+  gem "rspec-mocks", "~> 3.12"
   gem "rspec-rails"
   gem "rubocop", "~> 1.39"
   gem "rubocop-govuk", "~> 4.7"
