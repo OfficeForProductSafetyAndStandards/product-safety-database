@@ -17,7 +17,11 @@ RSpec.shared_context "with Opensearch", shared_context: :metadata do
 
   def create_opensearch_indices!
     opensearch_models.each do |model|
-      model.__elasticsearch__.import force: true, refresh: :wait
+      if model == Investigation
+        model.__elasticsearch__.import scope: "not_deleted", force: true, refresh: :wait
+      else
+        model.__elasticsearch__.import force: true, refresh: :wait
+      end
     end
   end
 

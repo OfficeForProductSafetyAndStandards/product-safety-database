@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show created]
+  before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -76,6 +76,23 @@ class InvestigationsController < ApplicationController
     render "investigations/index.html.erb"
   end
 
+  def cannot_close; end
+
+  def confirm_deletion; end
+
+  def destroy
+    authorize @investigation, :change_owner_or_status?
+
+    @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
+
+    if @delete_investigation_form.valid?
+      DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
+      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
+    else
+      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
+    end
+  end
+
 private
 
   def update!
@@ -117,7 +134,7 @@ private
   end
 
   def count_to_display
-    default_params ? Investigation.count : @answer.total_count
+    default_params ? Investigation.not_deleted.count : @answer.total_count
   end
 
   def default_params

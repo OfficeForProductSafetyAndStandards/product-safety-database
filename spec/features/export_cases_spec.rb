@@ -21,7 +21,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
   let!(:allegation_closed) { create(:allegation, :closed, creator: user) }
 
   before do
-    Investigation.import force: true, refresh: :wait_for
+    Investigation.import scope: "not_deleted", force: true, refresh: :wait_for
 
     sign_in(user)
     visit investigations_path

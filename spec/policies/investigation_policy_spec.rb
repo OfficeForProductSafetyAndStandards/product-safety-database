@@ -176,4 +176,20 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
       end
     end
   end
+
+  describe "#can_be_deleted?" do
+    context "when investigation has products" do
+      let(:investigation) { create(:allegation, :with_products, is_private: false) }
+
+      it "returns false" do
+        expect(policy.can_be_deleted?).to be false
+      end
+    end
+
+    context "when investigation does not have products" do
+      it "returns true" do
+        expect(policy.can_be_deleted?).to be true
+      end
+    end
+  end
 end

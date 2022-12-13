@@ -211,6 +211,16 @@ module PageExpectations
     expect(page).to have_h1("Why are you closing the case?")
   end
 
+  def expect_to_be_on_cannot_close_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/cannot_close")
+    expect(page).to have_h1("A product has not been added to this case")
+  end
+
+  def expect_to_be_on_confirm_case_deletion_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/confirm_deletion")
+    expect(page).to have_h1("Delete the case")
+  end
+
   def expect_to_be_on_reopen_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/status/reopen")
     expect(page).to have_h1("Why are you re-opening the case?")

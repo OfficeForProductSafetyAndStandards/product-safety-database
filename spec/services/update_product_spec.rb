@@ -46,10 +46,14 @@ RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
         expect(product.__elasticsearch__).to have_received(:update_document)
       end
 
+      # rubocop:disable RSpec/VerifiedDoubles
       it "reindexes the product's investigations" do
+        not_deleted = spy("investigations")
+        allow(product.investigations).to receive(:not_deleted) { not_deleted }
         result
-        expect(product.investigations).to have_received(:import)
+        expect(not_deleted).to have_received(:import)
       end
+      # rubocop:enable RSpec/VerifiedDoubles
 
       it "sets the updating team as the product owner" do
         result
