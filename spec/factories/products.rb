@@ -22,7 +22,9 @@ FactoryBot.define do
     end
 
     trait :retired do
-      retired_at { rand(10.years.ago..1.second.ago) }
+      after(:create) do |product, _|
+        product.mark_as_retired!
+      end
     end
 
     factory :product_iphone do
