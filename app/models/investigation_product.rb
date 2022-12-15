@@ -16,6 +16,6 @@ class InvestigationProduct < ApplicationRecord
                        :product_id, :updated_at
 
   def product
-    investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) : super
+    investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) || super : super
   end
 end
