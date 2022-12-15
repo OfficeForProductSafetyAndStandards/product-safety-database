@@ -21,7 +21,7 @@
       <% end %>
     </p>
 
-    <% unless current_user.is_opss? %>
+    <% if policy(@product).can_spawn_case? %>
       <%= link_to "Create a new case for this product", new_investigation_ts_investigation_path(product_id: @product.id) %>
     <% end %>
   </div>

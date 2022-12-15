@@ -21,6 +21,12 @@ FactoryBot.define do
       end
     end
 
+    trait :retired do
+      after(:create) do |product, _|
+        product.mark_as_retired!
+      end
+    end
+
     factory :product_iphone do
       product_code { 234 }
       name { "iPhone XS MAX" }

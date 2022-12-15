@@ -12,6 +12,7 @@ class AddProductToCase
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
     context.fail!(error: "No product supplied") unless product.is_a?(Product)
+    context.fail!(error: "The product is retired") if product.retired?
 
     InvestigationProduct.transaction do
       # TODO: Only check existing links on active products once product retirement is implemented

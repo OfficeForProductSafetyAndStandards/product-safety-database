@@ -69,4 +69,109 @@ RSpec.describe Product do
       end
     end
   end
+
+  describe "#stale?", :with_stubbed_opensearch, :with_stubbed_notify, :with_stubbed_mailer do
+    context "when the product is less than 18 months old" do
+      let(:product) { build :product, created_at: 1.day.ago }
+
+      it "returns false" do
+        expect(product.stale?).to be(false)
+      end
+    end
+
+    context "when the product has an open case" do
+      let(:investigation) { create :allegation, :with_products }
+      let(:product) { investigation.products.first }
+
+      it "returns false" do
+        expect(product.stale?).to be(false)
+      end
+    end
+
+    context "when the product has an closed case within 18 months" do
+      let(:investigation) { create :allegation, :with_products, :closed, date_closed: 3.months.ago }
+      let(:product) { investigation.products.first }
+
+      it "returns false" do
+        expect(product.stale?).to be(false)
+      end
+    end
+
+    context "when the product had a case unlinked within the last 18 months" do
+      let(:investigation) { create :allegation, created_at: 2.years.ago }
+      let(:product) { create :product }
+      let(:user) { create :user }
+
+      before do
+        travel(-6.months) do
+          AddProductToCase.call! user: user, investigation: investigation, product: product
+          RemoveProductFromCase.call! user:, investigation_product: product.investigation_products.find_by(investigation:), investigation:
+        end
+      end
+
+      it "returns false" do
+        expect(product.stale?).to be(false)
+      end
+    end
+
+    context "when the product had a case unlinked outside the last 18 months" do
+      let(:investigation) { create :allegation, created_at: 2.years.ago }
+      let(:product) { create :product }
+      let(:user) { create :user }
+
+      before do
+        travel(-20.months) do
+          AddProductToCase.call! user: user, investigation: investigation, product: product
+          RemoveProductFromCase.call! user:, investigation_product: product.investigation_products.find_by(investigation:), investigation:
+        end
+      end
+
+      it "returns true" do
+        expect(product.stale?).to be(true)
+      end
+    end
+  end
+
+  describe ".retire_stale_products!", :with_stubbed_opensearch, :with_stubbed_notify, :with_stubbed_mailer do
+    let!(:young_product) { create :product, created_at: 1.day.ago }
+    let(:open_case) { create :allegation, :with_products }
+    let!(:product_with_open_case) { open_case.products.first }
+    let(:newly_closed_case) { create :allegation, :with_products, :closed, date_closed: 3.months.ago }
+    let!(:product_with_newly_closed_case) { newly_closed_case.products.first }
+    let(:older_case_1) { create :allegation, created_at: 2.years.ago }
+    let(:older_case_2) { create :allegation, created_at: 3.years.ago }
+    let(:product_unlinked_recently) { create :product }
+    let(:product_unlinked_in_the_past) { create :product }
+    let!(:old_product_never_linked) { create :product, created_at: (18.months + 1.day).ago }
+    let(:user) { create :user }
+
+    before do
+      travel(-6.months) do
+        AddProductToCase.call! user: user, investigation: older_case_1, product: product_unlinked_recently
+        RemoveProductFromCase.call! user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_case_1), investigation: older_case_1
+      end
+
+      travel(-19.months) do
+        AddProductToCase.call! user: user, investigation: older_case_1, product: product_unlinked_in_the_past
+        RemoveProductFromCase.call! user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_case_1), investigation: older_case_1
+      end
+
+      travel(-20.months) do
+        AddProductToCase.call! user: user, investigation: older_case_2, product: product_unlinked_in_the_past
+        RemoveProductFromCase.call! user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_case_2), investigation: older_case_2
+      end
+    end
+
+    it "retires any stale products", :aggregate_failures do
+      described_class.retire_stale_products!
+
+      expect(young_product.reload.retired_at).to be(nil)
+      expect(product_with_open_case.reload.retired_at).to be(nil)
+      expect(product_with_newly_closed_case.reload.retired_at).to be(nil)
+      expect(product_unlinked_recently.reload.retired_at).to be(nil)
+
+      expect(product_unlinked_in_the_past.reload.retired_at).not_to be(nil)
+      expect(old_product_never_linked.reload.retired_at).not_to be(nil)
+    end
+  end
 end

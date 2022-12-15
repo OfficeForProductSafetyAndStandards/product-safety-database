@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_30_153756) do
+ActiveRecord::Schema.define(version: 2022_12_14_100702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -291,11 +291,13 @@ ActiveRecord::Schema.define(version: 2022_11_30_153756) do
     t.string "name"
     t.uuid "owning_team_id"
     t.string "product_code"
+    t.datetime "retired_at"
     t.string "subcategory"
     t.datetime "updated_at", null: false
     t.string "webpage"
     t.enum "when_placed_on_market", as: "when_placed_on_markets"
     t.index ["owning_team_id"], name: "index_products_on_owning_team_id"
+    t.index ["retired_at"], name: "index_products_on_retired_at"
   end
 
   create_table "risk_assessed_products", force: :cascade do |t|

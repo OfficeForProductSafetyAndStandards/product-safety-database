@@ -13,3 +13,6 @@
   lock_inactive_users_job:
     cron: "0 1 * * *"
     class: "LockInactiveUsersJob"
+  retire_stale_products_job:
+    cron: "0 2 * * *"
+    class: "RetireStaleProductsJob"
