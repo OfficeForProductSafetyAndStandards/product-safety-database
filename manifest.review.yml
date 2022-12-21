@@ -5,7 +5,7 @@ applications:
     - https://github.com/cloudfoundry/apt-buildpack.git#v0.2.11
     - https://github.com/cloudfoundry/ruby-buildpack.git#v1.9.0
   path: .
-  stack: cflinuxfs4
+  stack: cflinuxfs3
   routes:
     - route: ((route))
   env:

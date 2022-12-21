@@ -5,7 +5,7 @@ applications:
     - https://github.com/cloudfoundry/apt-buildpack.git#v0.2.11
     - https://github.com/cloudfoundry/binary-buildpack.git#v1.0.46
   path: .
-  stack: cflinuxfs4
+  stack: cflinuxfs3
   timeout: 180
   services:
     - ((db-name))
