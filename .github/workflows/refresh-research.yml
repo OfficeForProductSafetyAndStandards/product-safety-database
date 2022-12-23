@@ -1,0 +1,19 @@
+name: Refresh User Research Environment
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+concurrency: research_environment
+
+jobs:
+  refresh:
+    name: Refresh the data
+    runs-on: ubuntu-latest
+
+    steps:
+      # TODO: Refresh seed data/research scenarios by:
+      #   - Restoring the data to Postgres
+      #   - Refreshing the OpenSearch indexes
+      run: |
+        echo TODO
