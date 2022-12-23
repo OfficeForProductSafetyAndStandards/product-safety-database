@@ -15,5 +15,6 @@ jobs:
       # TODO: Refresh seed data/research scenarios by:
       #   - Restoring the data to Postgres
       #   - Refreshing the OpenSearch indexes
-      run: |
-        echo TODO
+      - name: TODO
+        run: |
+          echo TODO

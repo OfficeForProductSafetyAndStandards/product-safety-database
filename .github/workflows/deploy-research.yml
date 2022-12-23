@@ -78,4 +78,4 @@ jobs:
           curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"User Research deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK
 
   refresh:
-    uses: .github/workflows/refresh-research.yml
+    uses: ./.github/workflows/refresh-research.yml
