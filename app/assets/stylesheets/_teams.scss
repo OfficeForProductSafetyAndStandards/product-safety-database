@@ -62,12 +62,12 @@ $semi-transparent-white: rgba(govuk-colour("white"), 0.6);
 
 .tick-cross-tick {
   @extend %tick-cross;
-  background-image: url('../images/tick.png');
+  background-image: image-url("tick.png");
 }
 
 .tick-cross-cross {
   @extend %tick-cross;
   color: $govuk-secondary-text-colour;
-  background-image: url('../images/cross-grey.png');
+  background-image: image-url("cross-grey.png");
   box-shadow: inset 20px 0 0 0 $semi-transparent-white;
 }

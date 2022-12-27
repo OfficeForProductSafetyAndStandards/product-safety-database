@@ -7,19 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="blue" />
 
-    <link rel="shortcut icon" type="image/x-icon" href="<%= asset_pack_path("media/images/favicon.ico") %>" />
-    <link rel="mask-icon" color="#0b0c0c" href="<%= asset_pack_path("media/images/govuk-mask-icon.svg") %>" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<%= asset_pack_path("media/images/govuk-apple-touch-icon-180x180.png") %>" />
-    <link rel="apple-touch-icon" sizes="167x167" href="<%= asset_pack_path("media/images/govuk-apple-touch-icon-167x167.png") %>" />
-    <link rel="apple-touch-icon" sizes="152x152" href="<%= asset_pack_path("media/images/govuk-apple-touch-icon-152x152.png") %>" />
-    <link rel="apple-touch-icon" href="<%= asset_pack_path("media/images/govuk-apple-touch-icon.png") %>" />
+    <link rel="shortcut icon" type="image/x-icon" href="<%= image_path("favicon.ico") %>" />
+    <link rel="mask-icon" color="#0b0c0c" href="<%= image_path("govuk-mask-icon.svg") %>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= image_path("govuk-apple-touch-icon-180x180.png") %>" />
+    <link rel="apple-touch-icon" sizes="167x167" href="<%= image_path("govuk-apple-touch-icon-167x167.png") %>" />
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= image_path("govuk-apple-touch-icon-152x152.png") %>" />
+    <link rel="apple-touch-icon" href="<%= image_path("govuk-apple-touch-icon.png") %>" />
 
-    <%= javascript_pack_tag "application" %>
-    <%= stylesheet_pack_tag "application" %>
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag "application" %>
 
     <%= csrf_meta_tags %>
 
-    <meta property="og:image" content="<%= asset_pack_path("media/images/govuk-opengraph-image.png") %>" />
+    <meta property="og:image" content="<%= image_path("govuk-opengraph-image.png") %>" />
 
     <%= yield :other_head_tags %>
 
@@ -32,6 +32,7 @@
         gtag('config', 'UA-126364208-1');
       </script>
     <% end %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body class="govuk-template__body app-body-class">
@@ -155,12 +156,5 @@
         </div>
       </div>
     </footer>
-
-    <script type="text/javascript">
-      if (typeof window.GOVUKFrontend === 'undefined') {
-          document.body.className = document.body.className.replace('js-enabled', '')
-      }
-      window.GOVUKFrontend.initAll()
-    </script>
   </body>
 </html>

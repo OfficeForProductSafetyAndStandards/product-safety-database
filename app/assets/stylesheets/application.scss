@@ -1,0 +1,78 @@
+// Use the Rails helpers to load images and fonts
+$govuk-font-url-function: "image-url";
+$govuk-image-url-function: "font-url";
+$govuk-page-width: 960px;
+$govuk-global-styles: true;
+
+@import "govuk-frontend/govuk/all";
+@import "accessible-autocomplete/src/autocomplete";
+
+$hmcts-page-width: $govuk-page-width;
+$hmcts-gutter: $govuk-gutter;
+$hmcts-gutter-half: $govuk-gutter-half;
+$hmcts-images-path: '/assets/images/';
+@import "@hmcts/frontend/objects/width-container";
+@import "@hmcts/frontend/components/hmcts-badge/badge";
+@import "@hmcts/frontend/components/hmcts-banner/banner";
+@import "@hmcts/frontend/components/hmcts-identity-bar/identity-bar";
+@import "@hmcts/frontend/components/hmcts-sub-navigation/sub-navigation";
+
+@import "colours";
+
+@import "autocomplete";
+@import "badge";
+@import "summary_list";
+@import "permission_notice";
+@import "./text";
+@import "./remove-default-button-styling";
+@import "./banner";
+@import "./button";
+@import "./block-link";
+@import "./case-card";
+@import "./documents";
+@import "./email_display";
+@import "./footer";
+@import "./form";
+@import "./header";
+@import "./helpers/js-only";
+@import "./helpers/field-widths";
+@import "./helpers/media-queries";
+@import "./helpers/password-manager-hidden";
+@import "./identity-bar";
+@import "./images";
+@import "./inverted";
+@import "./table";
+@import "./teams";
+@import "./search-box";
+@import "./shared";
+@import "./timeline";
+@import "./psd_header";
+@import "./menu";
+
+@import "./opss/opss-psd";
+
+// Pages
+@import "./investigation";
+
+* {
+  box-sizing: border-box;
+}
+
+@media print {
+  .no-print {
+    display: none !important; // sass-lint:disable-line no-important
+  }
+}
+
+.right {
+  float: right;
+  margin-left: 2em;
+}
+
+.app-tag--nowrap {
+  white-space: nowrap;
+}
+
+// TODO: This is a transitional step as we revert back to a 960px page width.
+//   Once transition is complete this import can be deleted.
+@import "./width_overrides";
