@@ -15,5 +15,6 @@ import './mutually_exclusive'
 import './close_page_button'
 import './date_input'
 import './clear_on_reset'
+import './govuk_frontend'
 
 window.GOVUKFrontend = GOVUKFrontend
