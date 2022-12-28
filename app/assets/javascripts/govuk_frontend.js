@@ -1,5 +1,5 @@
-"use strict";
+'use strict'
 
 window.onload = function () {
-  window.GOVUKFrontend.initAll();
-};
+  window.GOVUKFrontend.initAll()
+}
