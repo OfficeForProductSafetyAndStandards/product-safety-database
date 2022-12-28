@@ -59,4 +59,9 @@ Rails.application.configure do
   config.active_job.queue_adapter = :inline
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Avoid sassc-rails errors when compressing CSS.
+  # See https://github.com/alphagov/govuk-frontend/issues/1350
+  config.assets.css_compressor = nil
+  config.sass.style = :compressed
 end

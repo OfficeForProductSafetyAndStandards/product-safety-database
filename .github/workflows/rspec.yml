@@ -100,14 +100,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
 
-    - name: Install Node.js dependencies
-      run: yarn install
-
-    - name: Compile assets
-      run: yarn build
-
     - name: Prepare database
       run: bin/rails parallel:load_schema
+
+    - name: Prepare assets for tests
+      run: bundle exec rails test:prepare
 
     - name: Run Specs
       run: |
