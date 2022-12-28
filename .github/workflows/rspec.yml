@@ -104,7 +104,7 @@ jobs:
       run: bin/rails parallel:load_schema
 
     - name: Prepare assets for tests
-      run: bundle exec rails test:prepare
+      run: bin/rails test:prepare
 
     - name: Run Specs
       run: |
