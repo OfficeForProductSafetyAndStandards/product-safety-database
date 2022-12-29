@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
     - name: Install cf client
       env:
         CF_CLI_VERSION: v7

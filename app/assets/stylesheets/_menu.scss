@@ -28,7 +28,7 @@
 
   &:after {
     background-repeat: no-repeat;
-    background-image: url(#{$app-images-path}icon-arrow-white-down.svg);
+    background-image: image-url("icon-arrow-white-down.svg");
     content: '';
     display: inline-block;
     height: 5px;
@@ -40,7 +40,7 @@
 
 .app-menu__toggle-button[aria-expanded="true"] {
   &:after {
-    background-image: url(#{$app-images-path}icon-arrow-white-up.svg);
+    background-image: image-url("icon-arrow-white-up.svg");
   }
 }
 
@@ -49,13 +49,13 @@
   margin-right: 0;
 
   &:after {
-    background-image: url(#{$app-images-path}icon-arrow-black-down.svg);
+    background-image: image-url("icon-arrow-black-down.svg");
   }
 }
 
 .app-menu__toggle-button--secondary[aria-expanded="true"] {
   &:after {
-    background-image: url(#{$app-images-path}icon-arrow-black-up.svg);
+    background-image: image-url("icon-arrow-black-up.svg");
   }
 }
 
