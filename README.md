@@ -13,7 +13,7 @@ For enquiries, contact [opss.enquiries@beis.gov.uk](opss.enquiries@beis.gov.uk)
 
 The application is written in [Ruby on Rails](https://rubyonrails.org/).
 
-We're using ERB as our HTML templating language, ES6 JavaScript and [Sass](https://sass-lang.com/) for styling compiled with webpacker.
+We're using ERB as our HTML templating language, ES6 JavaScript and [Sass](https://sass-lang.com/) for styling.
 
 We're using [Sidekiq](https://github.com/mperham/sidekiq) as our background processor to do things like send emails and handle attachments.
 

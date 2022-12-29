@@ -15,9 +15,6 @@ updates:
     interval: daily
   open-pull-requests-limit: 10
   ignore:
-  - dependency-name: webpacker
-    versions:
-    - 5.2.2
   - dependency-name: mimemagic
     versions:
     - 0.3.7

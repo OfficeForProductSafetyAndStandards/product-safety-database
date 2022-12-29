@@ -58,5 +58,10 @@ module ProductSafetyDatabase
     config.two_factor_attempts = 10
 
     config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
+    # Avoid sassc-rails errors when compressing CSS.
+    # See https://github.com/alphagov/govuk-frontend/issues/1350
+    config.assets.css_compressor = nil
+    config.sass.style = :compressed
   end
 end

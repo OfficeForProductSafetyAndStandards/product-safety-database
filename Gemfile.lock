@@ -102,7 +102,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     backport (1.2.0)
     bcrypt (3.1.18)
-    benchmark (0.2.0)
+    benchmark (0.2.1)
     bootsnap (1.15.0)
       msgpack (~> 1.2)
     builder (3.2.4)
@@ -141,6 +141,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    date (3.3.3)
     devise (4.8.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -186,7 +187,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (3.0.0)
+    faker (3.1.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.2)
       faraday-em_http (~> 1.0)
@@ -237,7 +238,9 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    json (2.6.2)
+    jsbundling-rails (1.1.1)
+      railties (>= 6.0.0)
+    json (2.6.3)
     jwt (2.5.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -265,7 +268,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.19.0)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     m (1.6.1)
@@ -286,11 +289,12 @@ GEM
     msgpack (1.6.0)
     multi_json (1.15.0)
     multipart-post (2.2.3)
-    net-imap (0.3.1)
+    net-imap (0.3.4)
+      date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.1.3)
+    net-protocol (0.2.1)
       timeout
     net-smtp (0.3.3)
       net-protocol
@@ -329,15 +333,13 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (5.0.0)
-    puma (6.0.0)
+    puma (6.0.1)
       nio4r (~> 2.0)
-    pundit (2.2.0)
+    pundit (2.3.0)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.1)
-    rack (2.2.4)
-    rack-proxy (0.7.4)
-      rack
+    rack (2.2.5)
     rack-test (2.0.2)
       rack (>= 1.3)
     rails (6.1.7)
@@ -367,8 +369,8 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.4.3)
-      loofah (~> 2.3)
+    rails-html-sanitizer (1.4.4)
+      loofah (~> 2.19, >= 2.19.1)
     railties (6.1.7)
       actionpack (= 6.1.7)
       activesupport (= 6.1.7)
@@ -424,7 +426,7 @@ GEM
     rspec-expectations (3.12.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.0)
+    rspec-mocks (3.12.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-rails (6.0.1)
@@ -479,8 +481,6 @@ GEM
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -489,7 +489,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scout_apm (5.3.2)
+    scout_apm (5.3.3)
       parser
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
@@ -499,7 +499,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_range (3.0.0)
     sentry-rails (5.7.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.7.0)
@@ -508,7 +507,7 @@ GEM
     sentry-sidekiq (5.7.0)
       sentry-ruby (~> 5.7.0)
       sidekiq (>= 3.0)
-    shoulda-matchers (5.2.0)
+    shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
     sidekiq (6.5.8)
       connection_pool (>= 2.2.5, < 3)
@@ -519,7 +518,7 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 4, < 7)
       tilt (>= 1.4.0)
-    simplecov (0.21.2)
+    simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
@@ -530,7 +529,7 @@ GEM
     simplecov-html (0.12.3)
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
-    solargraph (0.47.2)
+    solargraph (0.48.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -548,9 +547,9 @@ GEM
     spring (4.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    sprockets (4.1.1)
+    sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
-      rack (> 1, < 3)
+      rack (>= 2.2.4, < 4)
     sprockets-rails (3.4.2)
       actionpack (>= 5.2)
       activesupport (>= 5.2)
@@ -570,7 +569,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.2.1)
     tilt (2.0.11)
-    timeout (0.3.0)
+    timeout (0.3.1)
     tty-color (0.6.0)
     tty-screen (0.8.1)
     tty-table (0.12.0)
@@ -593,11 +592,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.4.3)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     webrick (1.7.0)
     websocket (1.2.9)
     websocket-driver (0.7.5)
@@ -637,12 +631,13 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
-  faker (~> 3.0)
+  faker (~> 3.1)
   govuk-design-system-rails!
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)
   jbuilder (~> 2.11)
+  jsbundling-rails
   kaminari (~> 1.2)
   launchy (~> 2.5)
   listen (~> 3.7)
@@ -659,8 +654,8 @@ DEPENDENCIES
   pry-byebug (~> 3.10)
   pry-doc (~> 1.3)
   puma (~> 6.0)
-  pundit (~> 2.1)
-  rack (~> 2.2.4)
+  pundit (~> 2.3)
+  rack (~> 2.2.5)
   rails (~> 6.1.7)
   rails-controller-testing (~> 1.0)
   rails-erd
@@ -669,13 +664,13 @@ DEPENDENCIES
   rest-client (~> 2.1)
   roo (~> 2.9)
   rspec
-  rspec-mocks (~> 3.11)
+  rspec-mocks (~> 3.12)
   rspec-rails
   rubocop (~> 1.39)
   rubocop-govuk (~> 4.7)
   rubocop-performance (~> 1.15)
   rubocop-rspec (~> 2.15)
-  sass-rails (~> 6.0)
+  sassc-rails
   scout_apm (~> 5.3)
   scss_lint-govuk (~> 0.2)
   selenium-webdriver (~> 4.7)
@@ -687,21 +682,20 @@ DEPENDENCIES
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
-  solargraph (~> 0.47)
+  solargraph (~> 0.48)
   spring (~> 4.1)
   spring-commands-rspec (~> 1.0)
-  sprockets (~> 4.1.1)
+  sprockets (~> 4.2.0)
   sprockets-rails
   strong_migrations (~> 1.4)
   super_diff
   tty-table
   validate_email (~> 0.1)
   webmock (~> 3.18)
-  webpacker (~> 5.4)
   wicked (~> 2.0)
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.1.3p185
 
 BUNDLED WITH
-   2.3.22
+   2.3.26
