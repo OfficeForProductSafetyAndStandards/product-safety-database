@@ -68,7 +68,7 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v2
       with:
-        node-version: 16.17.x
+        node-version: 18.12.x
 
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
@@ -100,11 +100,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
 
-    - name: Install Node.js dependencies
-      run: yarn install
-
     - name: Prepare database
       run: bin/rails parallel:load_schema
+
+    - name: Prepare assets for tests
+      run: bin/rails test:prepare
 
     - name: Run Specs
       run: |

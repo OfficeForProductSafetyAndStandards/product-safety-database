@@ -79,17 +79,8 @@ bundle exec bin/rake db:setup
 
 ## Running the application
 
-To compile the front-end assets (and have them re-compile as you make changes), run:
-
 ```bash
-bundle exec bin/webpack-dev-server
-```
-
-Start the application:
-
-```bash
-bundle exec bin/rails server
-bundle exec bin/sidekiq
+bundle exec bin/dev
 ```
 
 ## Running the tests
