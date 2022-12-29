@@ -9,7 +9,7 @@
   "dependencies": {
     "@hmcts/frontend": "^0.0.41-alpha",
     "accessible-autocomplete": "2.0.4",
-    "core-js": "^3.26.1",
+    "core-js": "^3.27.0",
     "css-loader": "^6.7.3",
     "file-loader": "^6.2.0",
     "govuk-country-and-territory-autocomplete": "1.0.2",
