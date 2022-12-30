@@ -210,7 +210,10 @@ Rails.application.routes.draw do
   end
 
   resources :products, except: %i[destroy], concerns: %i[document_attachable]
-  get "products/:id(/:timestamp)", to: "products#show", as: :product_version
+  constraints(timestamp: /\d{9,11}/) do
+    get "products/:id(/:timestamp)/owner", to: "products#owner", as: :product_owner
+    get "products/:id(/:timestamp)", to: "products#show", as: :product_version
+  end
 
   resource :businesses, only: [], path: "businesses" do
     get "your-businesses", to: "businesses#your_businesses", as: "your"
