@@ -45,7 +45,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
     )
   end
 
-  it { expect(decorated_activity.new_date).to eq(new_date.to_s(:govuk)) }
+  it { expect(decorated_activity.new_date).to eq(new_date.to_formatted_s(:govuk)) }
   it { expect(decorated_activity.new_severity).to eq(I18n.t(".accident_or_incident.severity.#{new_severity}")) }
   it { expect(decorated_activity.new_usage).to eq(I18n.t(".accident_or_incident.usage.#{new_usage}")) }
 

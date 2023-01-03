@@ -11,7 +11,7 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
   end
 
   def date_decided
-    @date_decided ||= Date.parse(metadata.dig("corrective_action", "date_decided")).to_s(:govuk)
+    @date_decided ||= Date.parse(metadata.dig("corrective_action", "date_decided")).to_formatted_s(:govuk)
   end
 
   def legislation

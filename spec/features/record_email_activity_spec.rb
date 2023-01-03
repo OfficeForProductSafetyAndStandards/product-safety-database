@@ -205,7 +205,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     item = page.find("p", text: "Email recorded by #{user_name}").find(:xpath, "..")
     expect(item).to have_text("Email address: #{email}")
     expect(item).to have_text("Contact: #{name}")
-    expect(item).to have_text("Date of email: #{date.to_s(:govuk)}")
+    expect(item).to have_text("Date of email: #{date.to_formatted_s(:govuk)}")
 
     if file
       expect(item).to have_text("Email: #{File.basename(file)}")

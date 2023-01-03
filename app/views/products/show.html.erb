@@ -14,10 +14,10 @@
     <% end %>
 
     <p class="govuk-caption-m">
-      <%= "Created: " + @product.created_at.to_s(:govuk) %>
+      <%= "Created: " + @product.created_at.to_formatted_s(:govuk) %>
       <% if @product.updated_at != @product.created_at %>
         <br>
-        <%= "Updated: " + @product.updated_at.to_s(:govuk) %>
+        <%= "Updated: " + @product.updated_at.to_formatted_s(:govuk) %>
       <% end %>
     </p>
   </div>

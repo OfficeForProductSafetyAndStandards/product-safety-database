@@ -60,7 +60,7 @@ class BusinessesController < ApplicationController
     @businesses = BusinessDecorator.decorate_collection(@results)
     @page_name = "your_businesses"
 
-    render "businesses/index.html.erb"
+    render "businesses/index"
   end
 
   def team_businesses
@@ -74,7 +74,7 @@ class BusinessesController < ApplicationController
     @businesses = BusinessDecorator.decorate_collection(@results)
     @page_name = "team_businesses"
 
-    render "businesses/index.html.erb"
+    render "businesses/index"
   end
 
 private
