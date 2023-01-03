@@ -7,6 +7,7 @@
 
 class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
+  include ActiveStorage::Streaming
   include HttpAuthConcern
   include SentryConfigurationConcern
   include SetSentryBlobContext
