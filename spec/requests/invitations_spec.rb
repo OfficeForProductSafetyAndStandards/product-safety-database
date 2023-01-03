@@ -61,14 +61,9 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
     end
 
     context "when the form is invalid" do
-      # rubocop:disable RSpec/VerifiedDoubles
-      let(:form_double) { double(InviteUserToTeamForm, valid?: false, errors: form_errors_double).as_null_object }
-      # rubocop:enable RSpec/VerifiedDoubles
+      let(:email) { nil }
 
-      before do
-        allow(InviteUserToTeamForm).to receive(:new).and_return(form_double)
-        post team_invitations_path(team), params:
-      end
+      before { post team_invitations_path(team), params: }
 
       it "returns 403 status" do
         expect(response).to have_http_status(:bad_request)
