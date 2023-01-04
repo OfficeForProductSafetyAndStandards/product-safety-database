@@ -5,6 +5,7 @@
 # We use "rails storage proxy" through ActiveStorage::Blobs::ProxyController
 
 class ActiveStorage::Representations::ProxyController < ActiveStorage::Representations::BaseController
+  include ActiveStorage::Streaming
   include HttpAuthConcern
   include SentryConfigurationConcern
   include SetSentryBlobContext
