@@ -24,11 +24,15 @@
       summary_rows = [
         {
           key: { text: "Product record" },
-          value: { text: @product.psd_ref }
+          value: { text: @product.psd_ref(timestamp: params[:timestamp]) }
         },
         {
           key: { text: "Record owner" },
           value: { text: @product.owning_team.name }
+        },
+        {
+          key: { text: "Organisation" },
+          value: { text: @product.owning_team.organisation.name }
         }
       ]
       if contact_html.present?
