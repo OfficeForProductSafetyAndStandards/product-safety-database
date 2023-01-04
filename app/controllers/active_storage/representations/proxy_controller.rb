@@ -23,8 +23,4 @@ private
   def authorize_blob
     redirect_to "/sign-in" unless user_signed_in?
   end
-
-  def representation
-    @blob.representation(params[:variation_key]).processed
-  end
 end
