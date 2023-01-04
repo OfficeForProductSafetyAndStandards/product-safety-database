@@ -60,12 +60,13 @@ jobs:
 
           cf conduit psd-database -- psql < ${{ inputs.stateFile }}
 
+          cf stop psd-web
           cf unbind-service psd-web psd-database-old
           cf bind-service psd-web psd-database
-          cf delete-service -f psd-database-old
 
           cf restage psd-web
-
           cf run-task psd-web --command 'bin/rails db:migrate opensearch:index' -k 2G --wait
+
+          cf delete-service -f psd-database-old
 
           cf logout
