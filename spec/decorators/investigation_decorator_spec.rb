@@ -130,7 +130,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
     let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details:) }
 
     it "does not display the Received date" do
-      expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_s(:govuk))
+      expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_formatted_s(:govuk))
     end
 
     it "does not display the Received by" do

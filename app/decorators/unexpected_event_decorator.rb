@@ -24,11 +24,11 @@ class UnexpectedEventDecorator < ApplicationDecorator
   def date_of_activity
     return I18n.t(".accident_or_incident.date.unknown") unless object.date
 
-    object.date.to_s(:govuk)
+    object.date.to_formatted_s(:govuk)
   end
 
   def date_added
-    created_at.to_s(:govuk)
+    created_at.to_formatted_s(:govuk)
   end
 
   def product_description

@@ -115,7 +115,7 @@ module PageExpectations
       expect(page).to have_summary_item(key: "Action",              value: new_action)
     end
 
-    expect(page).to have_summary_item(key: "Event date", value: new_date_decided.to_s(:govuk))
+    expect(page).to have_summary_item(key: "Event date", value: new_date_decided.to_formatted_s(:govuk))
     expect(page).to have_summary_item(key: "Product",             value: product_two.name)
     expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
     expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)

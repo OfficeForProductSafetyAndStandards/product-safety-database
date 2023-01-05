@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::Investigation::TeamAddedDecorator, :with_stubbed_o
 
   describe "#subtitle" do
     it "returns a generated String" do
-      expect(activity.subtitle(user)).to eq("Team added by #{user.name}, #{Time.zone.today.to_s(:govuk)}")
+      expect(activity.subtitle(user)).to eq("Team added by #{user.name}, #{Time.zone.today.to_formatted_s(:govuk)}")
     end
   end
 

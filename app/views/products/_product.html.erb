@@ -3,7 +3,7 @@
   <% if product.images.any? %>
     <%= render "documents/document_preview",
       document: product.images.first,
-      dimensions: "300x500",
+      dimensions: [300, 500],
       hide_link: true,
       class_name: 'app-document-preview--small' %>
   <% end %>

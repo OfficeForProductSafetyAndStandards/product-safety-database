@@ -11,7 +11,7 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def date_of_activity
-    correspondence_date.to_s(:govuk)
+    correspondence_date.to_formatted_s(:govuk)
   end
 
   def date_of_activity_for_sorting
@@ -19,7 +19,7 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def date_added
-    created_at.to_s(:govuk)
+    created_at.to_formatted_s(:govuk)
   end
 
   def supporting_information_type

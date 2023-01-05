@@ -84,7 +84,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
 
     click_on new_overview
 
-    expect(page).to have_summary_item(key: "Date of call", value: new_correspondence_date.to_s(:govuk))
+    expect(page).to have_summary_item(key: "Date of call", value: new_correspondence_date.to_formatted_s(:govuk))
     expect(page).to have_summary_item(key: "Call with",    value: "#{new_correspondent_name} (#{new_phone_number})")
     expect(page).to have_summary_item(key: "Transcript",   value: "#{new_transcript.basename} (30 Bytes)")
     expect(page).to have_summary_item(key: "Notes",        value: new_details)
@@ -98,7 +98,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
 
     expect(item).to have_text("Name: #{new_correspondent_name}")
     expect(item).to have_text("Phone number: #{new_phone_number}")
-    expect(item).to have_text("Date of call: #{new_correspondence_date.to_s(:govuk)}")
+    expect(item).to have_text("Date of call: #{new_correspondence_date.to_formatted_s(:govuk)}")
     expect(item).to have_text("Summary: #{new_overview}")
     expect(item).to have_text("Notes: #{new_details}")
   end

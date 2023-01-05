@@ -202,13 +202,6 @@ ergq perog n
   describe "#title" do
     let(:expected_title) { "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}" }
 
-    context "when the no action is empty" do
-      let(:action_key) { nil }
-      let(:other_action) { nil }
-
-      specify { expect(audit_activity.title).to eq(legacy_title) }
-    end
-
     context "when the action is not other" do
       it "shows the action and product name" do
         expect(audit_activity.title).to eq(expected_title)

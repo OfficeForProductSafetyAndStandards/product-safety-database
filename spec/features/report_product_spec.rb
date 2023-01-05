@@ -389,7 +389,7 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
     expect(item).to have_text("Product: #{product_details[:name]}")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text(/Recall information: #{action[:online_recall_information]}/)
-    expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk)}")
+    expect(item).to have_text("Date came into effect: #{action[:date].to_formatted_s(:govuk)}")
     measure = CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")
     expect(item).to have_text("Type of measure: #{measure}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
@@ -411,7 +411,7 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
-    expect(item).to have_text("Date of test: #{test[:date].to_s(:govuk)}")
+    expect(item).to have_text("Date of test: #{test[:date].to_formatted_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end

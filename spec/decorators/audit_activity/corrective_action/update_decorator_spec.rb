@@ -55,7 +55,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_o
     end
   end
 
-  it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_s(:govuk)) }
+  it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_formatted_s(:govuk)) }
 
   describe "#new_online_recall_information" do
     context "when previously has online recall information was nil" do

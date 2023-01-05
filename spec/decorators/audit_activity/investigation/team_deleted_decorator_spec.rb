@@ -22,7 +22,7 @@ RSpec.describe AuditActivity::Investigation::TeamDeletedDecorator, :with_stubbed
 
   describe "#subtitle" do
     it "returns a generated String" do
-      expect(activity.subtitle(user)).to eq("Team removed by #{user.name}, #{Time.zone.today.to_s(:govuk)}")
+      expect(activity.subtitle(user)).to eq("Team removed by #{user.name}, #{Time.zone.today.to_formatted_s(:govuk)}")
     end
   end
 end

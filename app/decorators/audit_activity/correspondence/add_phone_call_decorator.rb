@@ -9,7 +9,7 @@ module AuditActivity
       end
 
       def correspondence_date
-        object.correspondence_date.to_s(:govuk)
+        object.correspondence_date.to_formatted_s(:govuk)
       end
 
       def attached

@@ -128,13 +128,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data(date.to_s(:govuk), product1.name, "Test", "Normal use")
+    expect_case_activity_page_to_show_entered_data(date.to_formatted_s(:govuk), product1.name, "Test", "Normal use")
 
     click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: date.to_s(:govuk), product_name: product1.name, severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
+    expect_summary_list_to_have(date: date.to_formatted_s(:govuk), product_name: product1.name, severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
   end
 
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
