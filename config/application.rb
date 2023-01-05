@@ -22,7 +22,7 @@ Bundler.require(*Rails.groups)
 module ProductSafetyDatabase
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -58,6 +58,12 @@ module ProductSafetyDatabase
     config.two_factor_attempts = 10
 
     config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
+    # vips 8.6+ is the minimum required version to use vips as an variant
+    # processor
+    # Because GOV.UK PaaS is currently tied to Ubuntu 18, there is no apt
+    # package available for this, so we need to use mini_magick for now
+    config.active_storage.variant_processor = :mini_magick
 
     # Avoid sassc-rails errors when compressing CSS.
     # See https://github.com/alphagov/govuk-frontend/issues/1350

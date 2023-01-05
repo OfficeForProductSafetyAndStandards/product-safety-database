@@ -30,7 +30,7 @@
 
       <%= render "page_heading", title: "Edit attachment" %>
 
-      <%= render "documents/document_preview", document: @file, dimensions: "480x320" %>
+      <%= render "documents/document_preview", document: @file, dimensions: [480, 320] %>
 
       <%= form.govuk_input :title, label_classes: "govuk-label--m", label: "Document title" %>
       <%= form.govuk_text_area :description, label: "Description", attributes: { maxlength: 10_000 } %>

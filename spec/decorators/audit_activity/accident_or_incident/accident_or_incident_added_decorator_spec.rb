@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorat
       let(:date) { Date.current }
 
       it "returns formatted date" do
-        expect(decorated_accident.date).to eq date.to_s(:govuk)
+        expect(decorated_accident.date).to eq date.to_formatted_s(:govuk)
       end
     end
 

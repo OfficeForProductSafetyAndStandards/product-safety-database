@@ -37,7 +37,7 @@
           <% if analyzed && safe %>
             <figure>
               <%= link_to image, class: "govuk-link govuk-link--no-visited-state", target: "_blank", title: "Opens in a new tab" do %>
-                <%= render("documents/image_tag", image: image, dimensions: "300x200", class_name: "") %>
+                <%= render("documents/image_tag", image: image, dimensions: [300, 200], class_name: "") %>
               <% end %>
               <figcaption><%= image_title %></figcaption>
             </figure>

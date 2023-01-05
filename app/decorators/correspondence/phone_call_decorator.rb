@@ -2,7 +2,7 @@ class Correspondence < ApplicationRecord
   require_dependency "correspondence"
   class PhoneCallDecorator < CorrespondenceDecorator
     def title
-      super || "Phone call on #{correspondence_date.to_s(:govuk)}"
+      super || "Phone call on #{correspondence_date.to_formatted_s(:govuk)}"
     end
 
     def show_path

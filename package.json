@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@hmcts/frontend": "^0.0.41-alpha",
+    "@hotwired/stimulus": "^3.0.1",
     "accessible-autocomplete": "2.0.4",
     "core-js": "^3.27.1",
     "css-loader": "^6.7.3",
