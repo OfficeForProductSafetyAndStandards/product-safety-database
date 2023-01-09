@@ -144,7 +144,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       expect(page).not_to have_content(fire_product_2.name)
       expect(page).not_to have_content(chemical_product.name)
       expect(page).not_to have_content(drowning_product.name)
-      expect(page).to have_content(retired_drowning_product.name)
+      expect(page).to have_content(retired_drowning_product.name + "(Retired product record)")
       expect(page).to have_content("1 product using the current filters, was found.")
     end
 
@@ -156,7 +156,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       expect(page).to have_content(fire_product_2.name)
       expect(page).to have_content(chemical_product.name)
       expect(page).to have_content(drowning_product.name)
-      expect(page).to have_content(retired_drowning_product.name)
+      expect(page).to have_content(retired_drowning_product.name + "(Retired product record)")
       expect(page).to have_content("5 products using the current filters, were found.")
     end
   end

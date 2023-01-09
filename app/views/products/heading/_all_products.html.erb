@@ -10,6 +10,9 @@
       </p>
       <p class="govuk-body-s govuk-!-margin-bottom-1">
         You can filter the results by hazard type.
+        <% if current_user.is_opss? %>
+          As an OPSS user you can also include 'retired' product records in your search. (These are records which are no longer active and are now considered less relevant).
+        <% end %>
       </p>
       <p class="govuk-body-s govuk-visually-hidden">
         Search results appear within the following <code>form</code> and within the <code>role = region</code>.
