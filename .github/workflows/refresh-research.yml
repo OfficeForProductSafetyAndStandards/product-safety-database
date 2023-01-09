@@ -38,6 +38,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWSAccessKeyId }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSecretAccessKey }}
+          AWS_REGION: eu-west-2
           CF_USERNAME: ${{ secrets.PaaSUsernameResearch }}
           CF_PASSWORD: ${{ secrets.PaaSPasswordResearch }}
         run: |
