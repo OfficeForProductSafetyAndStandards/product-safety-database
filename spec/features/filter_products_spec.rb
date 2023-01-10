@@ -13,7 +13,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let!(:fire_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation]) }
   let!(:chemical_product) { create(:product, name: "Some lab stuff", investigations: [chemical_investigation]) }
   let!(:drowning_product) { create(:product, name: "Dangerous life vest", investigations: [drowning_investigation]) }
-  let!(:retired_drowning_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.now) }
+  let!(:retired_drowning_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.zone.now) }
 
   before do
     Investigation.import scope: "not_deleted", refresh: :wait_for
@@ -25,6 +25,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       sign_in(user)
       visit products_path
     end
+
     scenario "no filters applied shows all non-retired products" do
       expect(page).to have_content(fire_product_1.name)
       expect(page).to have_content(fire_product_2.name)
@@ -144,7 +145,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       expect(page).not_to have_content(fire_product_2.name)
       expect(page).not_to have_content(chemical_product.name)
       expect(page).not_to have_content(drowning_product.name)
-      expect(page).to have_content(retired_drowning_product.name + "(Retired product record)")
+      expect(page).to have_content("#{retired_drowning_product.name}(Retired product record)")
       expect(page).to have_content("1 product using the current filters, was found.")
     end
 
@@ -156,7 +157,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       expect(page).to have_content(fire_product_2.name)
       expect(page).to have_content(chemical_product.name)
       expect(page).to have_content(drowning_product.name)
-      expect(page).to have_content(retired_drowning_product.name + "(Retired product record)")
+      expect(page).to have_content("#{retired_drowning_product.name}(Retired product record)")
       expect(page).to have_content("5 products using the current filters, were found.")
     end
   end
