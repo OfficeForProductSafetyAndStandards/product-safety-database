@@ -1,12 +1,6 @@
 name: Refresh User Research Environment
 
 on:
-  workflow_call:
-    inputs:
-      stateFile:
-        required: true
-        default: populated.sql
-        type: string
   workflow_dispatch:
     inputs:
       stateFile:
