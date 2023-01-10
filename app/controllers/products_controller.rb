@@ -104,7 +104,7 @@ class ProductsController < ApplicationController
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "your_products"
 
-    render "products/index.html.erb"
+    render "products/index"
   end
 
   def team_products
@@ -118,7 +118,7 @@ class ProductsController < ApplicationController
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "team_products"
 
-    render "products/index.html.erb"
+    render "products/index"
   end
 
 private

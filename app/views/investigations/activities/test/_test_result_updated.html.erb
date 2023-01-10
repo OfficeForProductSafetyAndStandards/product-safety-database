@@ -3,7 +3,7 @@
   <p>Changes:</p>
 
   <% if activity.new_date_of_test %>
-    Date of test: <strong><%= activity.new_date_of_test.to_s(:govuk) %></strong><br>
+    Date of test: <strong><%= activity.new_date_of_test.to_formatted_s(:govuk) %></strong><br>
   <% end %>
 
   <% if activity.new_result %>

@@ -45,7 +45,7 @@ If you need to create a new environment, you can run `cf create-space SPACE-NAME
 
 To create a database for the current space:
 
-    cf marketplace -s postgres
+    cf marketplace -e postgres
     cf enable-service-access postgres
     cf create-service postgres small-ha-11 psd-database -c '{"enable_extensions": ["pgcrypto"]}'
 
@@ -178,7 +178,7 @@ This also enables a CDN for the URL so it's important that the `Cache-Control` h
 
 For each domain, we define a `<<SPACE>>` and `<<SPACE>>-temp` subdomain for hosting and blue-green deployments.
 
-It's important that we also allow the `Authorization` header through the CDN for the basic auth on non-production environments.
+It's important that we also allow the `Authorization` header through the CDN for the basic auth on non-production environments, `Accept` for content-type negotiation, and the `Referer` header for Rails' `redirect_back`.
 The following command can be used to create the `cdn-route` service:
 
-    cf create-service cdn-route cdn-route opss-cdn-route -c '{"domain": "<<domain1>>,<<domain2>>", "headers": ["Authorization"]}'
+    cf create-service cdn-route cdn-route opss-cdn-route -c '{"domain": "<<domain1>>,<<domain2>>", "headers": ["Accept", "Authorization", "Referer"]}'

@@ -41,8 +41,10 @@ applications:
       command: bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
       instances: 1
       memory: 2G
+      disk_quota: 1.5G
     - type: worker
       command: RAILS_MAX_THREADS=((worker-max-threads)) bin/sidekiq -C config/sidekiq.yml
       health-check-type: process
       instances: 1
       memory: 500M
+      disk_quota: 1.5G

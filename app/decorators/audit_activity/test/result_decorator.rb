@@ -15,7 +15,7 @@ class AuditActivity::Test::ResultDecorator < ApplicationDecorator
   end
 
   def date
-    super.to_s(:govuk)
+    super.to_formatted_s(:govuk)
   end
 
   def result

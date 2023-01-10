@@ -29,7 +29,7 @@ RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_opense
   end
 
   describe "#correspondence_date" do
-    it { expect(decorated_activity.correspondence_date).to eq(correspondence.correspondence_date.to_s(:govuk)) }
+    it { expect(decorated_activity.correspondence_date).to eq(correspondence.correspondence_date.to_formatted_s(:govuk)) }
   end
 
   describe "#attached" do

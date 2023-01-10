@@ -102,11 +102,11 @@ module InvestigationsHelper
     [
       {
         key: { text: "Last updated" },
-        value: { text: date_or_recent_time_ago(product.updated_at) },
+        value: { text: date_or_recent_time_ago(product.updated_at) }
       },
       {
         key: { text: "Created" },
-        value: { text: date_or_recent_time_ago(product.created_at) },
+        value: { text: date_or_recent_time_ago(product.created_at) }
       },
       {
         key: { text: "Product record owner" },
@@ -132,7 +132,7 @@ module InvestigationsHelper
       { key: { text: "Case" }, value: { text: investigation.pretty_id } },
       { key: { text: "Name" }, value: { html: title_link } },
       { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
-      { key: { text: "Created" }, value: { text: investigation.created_at.to_s(:govuk) } },
+      { key: { text: "Created" }, value: { text: investigation.created_at.to_formatted_s(:govuk) } },
       { key: { text: "Status" }, value: status_value(investigation) }
     ]
   end
@@ -424,7 +424,7 @@ private
     if investigation.is_closed?
       {
         html: '<span class="opss-tag opss-tag--risk3">Case closed</span>'.html_safe,
-        secondary_text: { text: investigation.date_closed.to_s(:govuk) }
+        secondary_text: { text: investigation.date_closed.to_formatted_s(:govuk) }
       }
     else
       {

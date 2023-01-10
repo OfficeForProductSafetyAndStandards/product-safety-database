@@ -57,7 +57,7 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_open
   end
 
   describe "#date_decided" do
-    specify { expect(decorated_activity.date_decided).to eq(corrective_action.date_decided.to_s(:govuk)) }
+    specify { expect(decorated_activity.date_decided).to eq(corrective_action.date_decided.to_formatted_s(:govuk)) }
   end
 
   describe "#measure_type" do

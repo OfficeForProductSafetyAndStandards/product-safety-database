@@ -15,11 +15,11 @@ module ActiveStorage
     end
 
     def date_of_activity
-      object.created_at.to_s(:govuk)
+      object.created_at.to_formatted_s(:govuk)
     end
 
     def date_added
-      object.created_at.to_s(:govuk)
+      object.created_at.to_formatted_s(:govuk)
     end
 
     def description
@@ -27,7 +27,7 @@ module ActiveStorage
     end
 
     def updated_at
-      Time.zone.parse(object.metadata[:updated]).to_s(:govuk)
+      Time.zone.parse(object.metadata[:updated]).to_formatted_s(:govuk)
     end
 
     def edit_path
