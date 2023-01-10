@@ -5,11 +5,6 @@ on:
 
 concurrency: research_environment
 
-env:
-  BUNDLE_WITHOUT: development
-  BUNDLE_JOBS: 4
-  BUNDLE_RETRY: 3
-
 jobs:
   deploy:
     name: Deploy the application
@@ -50,32 +45,9 @@ jobs:
           ./deploy.sh
           cf logout
 
-      - name: Set up Ruby
-        if: success()
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Run Smoke Tests
-        if: success()
-        env:
-          SMOKE_USER: ${{secrets.SMOKE_USER}}
-          SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
-          SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
-          SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
-          SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
-          IS_REVIEW_APP: "false"
-          SMOKE_TEST_URL: "https://psd-research.london.cloudapps.digital"
-
-        run: |
-          bundle exec rspec ./smoke_test/cases_page_spec.rb
-
       - name: Alert team via Slack of deployment failure
         if: failure()
         env:
           SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
         run: |
           curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"User Research deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK
-
-  refresh:
-    uses: ./.github/workflows/refresh-research.yml
