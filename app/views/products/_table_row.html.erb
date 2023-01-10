@@ -5,7 +5,10 @@
           Product
       </th>
       <th id="item-<%= index %>" colspan="4" scope="colgroup" class="govuk-table__header">
-        <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %><%= '<span class="govuk-!-font-size-14 govuk-!-font-weight-regular opss-no-wrap">(Retired product record)</span>'.html_safe if product.is_retired %>
+        <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %>
+        <% if product.is_retired %>
+          <span class="govuk-!-font-size-14 govuk-!-font-weight-regular opss-no-wrap">(Retired product record)</span>
+        <% end %>
       </th>
   </tr>
   <tr class="govuk-table__row">
