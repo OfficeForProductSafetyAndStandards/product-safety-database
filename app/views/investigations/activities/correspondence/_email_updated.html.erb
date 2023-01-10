@@ -7,7 +7,7 @@
   <% end %>
 
   <% if activity.new_correspondence_date %>
-    Date of email: <%= updated_field(activity.new_correspondence_date.to_s(:govuk)) %><br>
+    Date of email: <%= updated_field(activity.new_correspondence_date.to_formatted_s(:govuk)) %><br>
   <% end %>
 
   <% if activity.new_correspondent_name %>

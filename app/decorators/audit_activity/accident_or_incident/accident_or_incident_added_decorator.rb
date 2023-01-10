@@ -1,6 +1,6 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorator < ActivityDecorator
   def date
-    activity.metadata["date"] ? Date.parse(activity.metadata["date"]).to_s(:govuk) : "Unknown"
+    activity.metadata["date"] ? Date.parse(activity.metadata["date"]).to_formatted_s(:govuk) : "Unknown"
   end
 
   def severity

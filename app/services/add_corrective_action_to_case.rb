@@ -44,6 +44,8 @@ private
   end
 
   def send_notification_email
+    return unless investigation.sends_notifications?
+
     email_recipients_for_team_with_access(investigation, user).each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,

@@ -36,9 +36,6 @@ config/master.key
 /.bundle
 /vendor/bundle
 
-# Ignore Byebug command history file.
-.byebug_history
-
 # Ignore precompiled javascript packs
 /public/packs
 /public/packs-test
@@ -49,6 +46,9 @@ config/master.key
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
 
 ### Ruby ###
 *.gem
@@ -67,3 +67,8 @@ config/master.key
 
 # Entity relationship diagram
 erd.pdf
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+/node_modules

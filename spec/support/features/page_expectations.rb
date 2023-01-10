@@ -12,7 +12,7 @@ module PageExpectations
     if case_id
       expect(page).to have_current_path("/cases/#{case_id}")
     else
-      expect(page).to have_current_path(/\/cases\/[\d\-]+$/)
+      expect(page).to have_current_path(/\/cases\/[\d-]+$/)
     end
     expect(page).to have_selector("h1", text: "Case")
   end
@@ -115,7 +115,7 @@ module PageExpectations
       expect(page).to have_summary_item(key: "Action",              value: new_action)
     end
 
-    expect(page).to have_summary_item(key: "Event date", value: new_date_decided.to_s(:govuk))
+    expect(page).to have_summary_item(key: "Event date", value: new_date_decided.to_formatted_s(:govuk))
     expect(page).to have_summary_item(key: "Product",             value: product_two.name)
     expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
     expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
@@ -279,7 +279,7 @@ module PageExpectations
     if case_id
       expect(page).to have_current_path("/cases/#{case_id}/activity")
     else
-      expect(page).to have_current_path(/\/cases\/[\d\-]+\/activity/)
+      expect(page).to have_current_path(/\/cases\/[\d-]+\/activity/)
     end
     expect(page).to have_selector("h1", text: "Activity")
   end

@@ -6,7 +6,7 @@ class AuditActivity::Investigation::TeamAddedDecorator < ApplicationDecorator
   end
 
   def subtitle(viewer)
-    I18n.t(".subtitle", scope: object.class.i18n_scope, user_name: added_by_user&.decorate&.display_name(viewer:), date: created_at.to_s(:govuk))
+    I18n.t(".subtitle", scope: object.class.i18n_scope, user_name: added_by_user&.decorate&.display_name(viewer:), date: created_at.to_formatted_s(:govuk))
   end
 
   def permission

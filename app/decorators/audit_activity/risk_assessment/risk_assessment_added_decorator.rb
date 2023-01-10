@@ -6,7 +6,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator < ApplicationD
   end
 
   def assessed_on
-    object.assessed_on.to_s(:govuk)
+    object.assessed_on.to_formatted_s(:govuk)
   end
 
   def risk_level

@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
+
     - name: Install cf client
       env:
         CF_CLI_VERSION: v7
@@ -45,8 +46,8 @@ jobs:
         SPACE: staging
         APP_NAME: psd-web
         DOMAIN: staging.product-safety-database.service.gov.uk
-        WEB_DISK_QUOTA: 2G
-        WORKER_DISK_QUOTA: 2G
+        WEB_DISK_QUOTA: 2.5G
+        WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 2G
         WORKER_MEMORY: 1G
         WEB_INSTANCES: 1
@@ -83,9 +84,7 @@ jobs:
 
     - name: Set up Ruby
       if: success()
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 3.0.x
+      uses: ruby/setup-ruby@v1
 
     - uses: actions/cache@v1
       with:
@@ -138,8 +137,8 @@ jobs:
         SPACE: prod
         APP_NAME: psd-web
         DOMAIN: www.product-safety-database.service.gov.uk
-        WEB_DISK_QUOTA: 2G
-        WORKER_DISK_QUOTA: 2G
+        WEB_DISK_QUOTA: 2.5G
+        WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 2G
         WORKER_MEMORY: 1G
         WEB_INSTANCES: 4

@@ -11,7 +11,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def new_date_decided
-    Date.parse(metadata.dig("updates", "date_decided", 1)).to_s(:govuk) rescue nil # rubocop:disable Style/RescueModifier
+    Date.parse(metadata.dig("updates", "date_decided", 1)).to_formatted_s(:govuk) rescue nil # rubocop:disable Style/RescueModifier
   end
 
   def new_legislation

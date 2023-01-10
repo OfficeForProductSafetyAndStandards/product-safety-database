@@ -165,7 +165,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
     corrective_action_title = "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}"
     item = page.find("h3", text: corrective_action_title).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{legislation}")
-    expect(item).to have_text("Date came into effect: #{date_decided.to_s(:govuk)}")
+    expect(item).to have_text("Date came into effect: #{date_decided.to_formatted_s(:govuk)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
     expect(item).to have_text("Geographic scopes: #{geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence}")

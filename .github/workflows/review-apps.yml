@@ -15,7 +15,7 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' }}
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 
     - name: Create GitHub deployment
       env:
@@ -100,9 +100,7 @@ jobs:
 
     - name: Set up Ruby
       if: success()
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 3.0.x
+      uses: ruby/setup-ruby@v1
 
     - uses: actions/cache@v1
       with:

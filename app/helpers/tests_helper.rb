@@ -3,7 +3,7 @@ module TestsHelper
     rows = [
       {
         key: { text: "Date of test" },
-        value: { text: test_result.date.to_s(:govuk) }
+        value: { text: test_result.date.to_formatted_s(:govuk) }
       },
       {
         key: { text: "Product tested" },

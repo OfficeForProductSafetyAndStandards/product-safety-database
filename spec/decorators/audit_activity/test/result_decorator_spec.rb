@@ -22,7 +22,7 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :
 
   describe "#date" do
     it "returns a formatted string" do
-      expect(activity.date).to eq(test_result.date.to_s(:govuk))
+      expect(activity.date).to eq(test_result.date.to_formatted_s(:govuk))
     end
   end
 
