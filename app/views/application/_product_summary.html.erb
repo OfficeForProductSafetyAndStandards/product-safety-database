@@ -11,7 +11,7 @@
       <% if product.images.any? %>
         <%= render "documents/document_preview",
                    document: product.images.first,
-                   dimensions: "300x500",
+                   dimensions: [300, 500],
                    class_name: "product-image app-document-preview--medium" %>
       <% else %>
         <p class="govuk-body">No images</p>

@@ -60,7 +60,7 @@ class InvestigationsController < ApplicationController
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
 
-    render "investigations/index.html.erb"
+    render "investigations/index"
   end
 
   def team_cases
@@ -73,7 +73,7 @@ class InvestigationsController < ApplicationController
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
 
-    render "investigations/index.html.erb"
+    render "investigations/index"
   end
 
   def cannot_close; end

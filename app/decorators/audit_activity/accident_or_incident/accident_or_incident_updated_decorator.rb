@@ -25,7 +25,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
     return "Unknown" if return_unknown_date?
 
     new_date = metadata.dig("updates", "date", 1)
-    Date.parse(new_date).to_s(:govuk)
+    Date.parse(new_date).to_formatted_s(:govuk)
   end
 
   def severity_changed?

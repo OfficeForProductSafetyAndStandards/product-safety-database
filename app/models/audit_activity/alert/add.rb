@@ -1,5 +1,5 @@
 class AuditActivity::Alert::Add < AuditActivity::Base
-  belongs_to :investigation
+  belongs_to :investigation, class_name: "::Investigation"
 
   def self.build_metadata(alert)
     {

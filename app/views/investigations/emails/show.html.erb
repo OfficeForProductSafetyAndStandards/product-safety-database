@@ -18,14 +18,14 @@
 
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
-        Added <%= @email.created_at.to_s(:govuk) %>
+        Added <%= @email.created_at.to_formatted_s(:govuk) %>
       </p>
     </div>
 
     <% rows = [
       {
         key: { text: "Date of email" },
-        value: { text: @email.correspondence_date.to_s(:govuk) }
+        value: { text: @email.correspondence_date.to_formatted_s(:govuk) }
       }
     ]
 

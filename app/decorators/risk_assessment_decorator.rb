@@ -24,7 +24,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def date_of_activity
-    object.assessed_on.to_s(:govuk)
+    object.assessed_on.to_formatted_s(:govuk)
   end
 
   def date_of_activity_for_sorting
@@ -32,7 +32,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def date_added
-    created_at.to_s(:govuk)
+    created_at.to_formatted_s(:govuk)
   end
 
   def activity_cell_partial(_viewing_user)

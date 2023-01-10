@@ -16,7 +16,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  # These are custom enum types that must be created before they can be used in the schema definition
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_locked_reasons", ["failed_attempts", "inactivity"]
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
@@ -158,7 +159,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
     t.string "duration"
     t.string "geographic_scope"
     t.string "geographic_scopes", default: [], array: true
-    t.enum "has_online_recall_information", as: "has_online_recall_information"
+    t.enum "has_online_recall_information", enum_type: "has_online_recall_information"
     t.integer "investigation_id"
     t.string "legislation"
     t.string "measure_type"
@@ -201,7 +202,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
   end
 
   create_table "investigation_products", id: :serial, force: :cascade do |t|
-    t.enum "affected_units_status", as: "affected_units_statuses"
+    t.enum "affected_units_status", enum_type: "affected_units_statuses"
     t.string "batch_number"
     t.datetime "created_at", null: false
     t.text "customs_code"
@@ -234,8 +235,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
-    t.enum "reported_reason", as: "reported_reasons"
-    t.enum "risk_level", as: "risk_levels"
+    t.enum "reported_reason", enum_type: "reported_reasons"
+    t.enum "risk_level", enum_type: "risk_levels"
     t.datetime "risk_validated_at"
     t.string "risk_validated_by"
     t.string "type", null: false
@@ -279,14 +280,14 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
 
   create_table "products", id: :serial, force: :cascade do |t|
     t.uuid "added_by_user_id"
-    t.enum "authenticity", as: "authenticities"
+    t.enum "authenticity", enum_type: "authenticities"
     t.string "barcode", limit: 15
     t.text "brand"
     t.string "category"
     t.string "country_of_origin"
     t.datetime "created_at", null: false
     t.text "description"
-    t.enum "has_markings", as: "has_markings_values"
+    t.enum "has_markings", enum_type: "has_markings_values"
     t.text "markings", array: true
     t.string "name"
     t.uuid "owning_team_id"
@@ -295,7 +296,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
     t.string "subcategory"
     t.datetime "updated_at", null: false
     t.string "webpage"
-    t.enum "when_placed_on_market", as: "when_placed_on_markets"
+    t.enum "when_placed_on_market", enum_type: "when_placed_on_markets"
     t.index ["owning_team_id"], name: "index_products_on_owning_team_id"
     t.index ["retired_at"], name: "index_products_on_retired_at"
   end
@@ -319,7 +320,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
     t.text "custom_risk_level"
     t.text "details"
     t.integer "investigation_id", null: false
-    t.enum "risk_level", as: "risk_levels"
+    t.enum "risk_level", enum_type: "risk_levels"
     t.datetime "updated_at", null: false
   end
 
@@ -371,11 +372,11 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
     t.integer "investigation_id", null: false
     t.boolean "is_date_known"
     t.integer "product_id", null: false
-    t.enum "severity", as: "severities"
+    t.enum "severity", enum_type: "severities"
     t.string "severity_other"
     t.string "type", null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.enum "usage", as: "usages"
+    t.enum "usage", enum_type: "usages"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -405,7 +406,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_100702) do
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.datetime "locked_at"
-    t.enum "locked_reason", as: "account_locked_reasons"
+    t.enum "locked_reason", enum_type: "account_locked_reasons"
     t.text "mobile_number"
     t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"

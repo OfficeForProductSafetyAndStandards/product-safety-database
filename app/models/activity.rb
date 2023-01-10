@@ -46,7 +46,7 @@ class Activity < ApplicationRecord
 private
 
   def pretty_date_stamp
-    created_at.to_s(:govuk)
+    created_at.to_formatted_s(:govuk)
   end
 
   def subtitle_slug; end

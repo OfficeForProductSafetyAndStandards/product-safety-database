@@ -3,7 +3,7 @@
   <p>Changes:</p>
 
   <% if activity.new_assessed_on %>
-    Date of assessment: <b><%= activity.new_assessed_on.to_s(:govuk) %></b><br>
+    Date of assessment: <b><%= activity.new_assessed_on.to_formatted_s(:govuk) %></b><br>
   <% end %>
 
   <% if activity.risk_level_changed? %>
