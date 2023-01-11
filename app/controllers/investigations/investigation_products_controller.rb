@@ -4,6 +4,10 @@ module Investigations
     before_action :set_investigation_product
     before_action :set_product
 
+    def owner
+      render_404_page and return if @product.owning_team.blank?
+    end
+
     def remove
       authorize @investigation_product, :remove?
 

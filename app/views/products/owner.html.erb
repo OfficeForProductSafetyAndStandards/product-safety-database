@@ -6,43 +6,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">Contact the product record owner</h1>
-    <p class="govuk-body-s opss-secondary-text govuk-!-margin-bottom-8">
-      You can contact the current product record owner with editorial requests, amendments, or additional information or general enquiries.
-    </p>
-
-    <% contact_html = capture do %>
-      <% if @product.owning_team.team_recipient_email.present? %>
-        <p class="govuk-body">
-          <span class="govuk-visually-hidden">Email: </span>
-          <%= mail_to @product.owning_team.team_recipient_email, nil, class: "govuk-link govuk-link--no-visited-state" %>
-        </p>
-      <% end %>
-    <% end %>
-    <%
-      summary_rows = [
-        {
-          key: { text: "Product record" },
-          value: { text: @product.psd_ref(timestamp: params[:timestamp]) }
-        },
-        {
-          key: { text: "Record owner" },
-          value: { text: @product.owning_team.name }
-        },
-        {
-          key: { text: "Organisation" },
-          value: { text: @product.owning_team.organisation.name }
-        }
-      ]
-      if contact_html.present?
-        summary_rows << {
-          key: { text: "Contact details" },
-          value: { html: contact_html }
-        }
-      end
-    %>
-    <%= govukSummaryList rows: summary_rows %>
-
+    <%= render "owner_contact_details", product: @product %>
   </div>
 </div>

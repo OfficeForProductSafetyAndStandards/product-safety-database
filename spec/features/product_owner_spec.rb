@@ -2,16 +2,16 @@ require "rails_helper"
 
 RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
-  let(:product) { create(:product, subcategory: "Lamp", owning_team: nil) }
+  let(:product) { create(:product, subcategory: "Lamp", owning_team_id: nil) }
+  let(:first_investigation) { create(:allegation, creator: user) }
+  let(:second_investigation) { create(:allegation, creator: user) }
   let(:first_owning_team) { create(:team, team_recipient_email: "team@example.com") }
-  let(:creation_time) { 3.weeks.ago }
-  let(:first_owned_time) { 2.weeks.ago }
-  let(:first_unowned_time) { 1.week.ago }
 
   before do
-    travel_to creation_time { product }
-    travel_to first_owned_time { product.update owning_team: first_owning_team }
-    travel_to first_unowned_time { product.update owning_team: nil }
+    product.update! owning_team: first_owning_team
+    AddProductToCase.call! product: product, investigation: first_investigation, user: user
+    ChangeCaseStatus.call! investigation: first_investigation, new_status: "closed", user: user
+    product.update! owning_team: nil
     sign_in user
   end
 
@@ -35,22 +35,23 @@ RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_m
     expect(page).to have_summary_item(key: "Record owner", value: user.team.name)
     expect(page).to have_summary_item(key: "Organisation", value: user.team.organisation.name)
 
-    # The original version has no owner, so visiting the versioned record should produce a 404
-    visit "/products/#{product.id}/#{creation_time.to_i}/owner"
-    expect(page).to have_http_status(:not_found)
-    expect(page).to have_text("Page not found")
-
-    # The the second version has another team as owner, so expect their details
-    visit "/products/#{product.id}/#{first_owned_time.to_i}/owner"
+    # The version linked to the case has the first_owning_team as an owner at the time
+    # the case was closed
+    investigation_product_id = first_investigation.investigation_products.find_by(product:).id
+    visit "/cases/#{first_investigation.pretty_id}/investigation_products/#{investigation_product_id}/owner"
     expect(page).to have_http_status(:ok)
-    expect(page).to have_summary_item(key: "Product record", value: "psd-#{product.id}_#{first_owned_time.to_i}")
-    expect(page).to have_summary_item(key: "Record owner", value: first_owning_team.name)
-    expect(page).to have_summary_item(key: "Organisation", value: first_owning_team.organisation.name)
-    expect(page).to have_summary_item(key: "Contact details", value: "Email: #{first_owning_team.team_recipient_email}")
+    expect(page).to have_summary_item(key: "Product record", value: "psd-#{product.id}_#{first_investigation.date_closed.to_i}")
+    expect(page).to have_summary_item(key: "Record owner", value: first_owning_team.team.name)
+    expect(page).to have_summary_item(key: "Organisation", value: first_owning_team.team.organisation.name)
 
-    # The third version has no owner, so visiting the versioned record should produce a 404
-    visit "/products/#{product.id}/#{first_unowned_time.to_i}/owner"
-    expect(page).to have_http_status(:not_found)
-    expect(page).to have_text("Page not found")
+    # Adding the live product to a case will show the live owner (our team)
+    AddProductToCase.call! product: product.reload, investigation: second_investigation, user: user
+
+    investigation_product_id = second_investigation.investigation_products.find_by(product:).id
+    visit "/cases/#{second_investigation.pretty_id}/investigation_products/#{investigation_product_id}/owner"
+    expect(page).to have_http_status(:ok)
+    expect(page).to have_summary_item(key: "Product record", value: "psd-#{product.id}")
+    expect(page).to have_summary_item(key: "Record owner", value: user.team.name)
+    expect(page).to have_summary_item(key: "Organisation", value: user.team.organisation.name)
   end
 end

@@ -153,6 +153,7 @@ Rails.application.routes.draw do
 
     resources :investigation_products, only: %i[remove unlink], controller: "investigations/investigation_products" do
       member do
+        get :owner
         get :remove
         delete :unlink, path: ""
       end
@@ -209,9 +210,13 @@ Rails.application.routes.draw do
     get "all-products", to: "products#index", as: "all"
   end
 
-  resources :products, except: %i[destroy], concerns: %i[document_attachable]
+  resources :products, except: %i[destroy], concerns: %i[document_attachable] do
+    member do
+      get :owner
+    end
+  end
+
   constraints(timestamp: /\d{9,11}/) do
-    get "products/:id(/:timestamp)/owner", to: "products#owner", as: :product_owner
     get "products/:id(/:timestamp)", to: "products#show", as: :product_version
   end
 

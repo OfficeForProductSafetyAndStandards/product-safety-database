@@ -4,8 +4,7 @@ class ProductsController < ApplicationController
   include UrlHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_product, only: %i[edit update]
-  before_action :version_and_authorize_product, only: %i[show owner]
+  before_action :set_product, only: %i[show edit update owner]
   before_action :set_countries, only: %i[new update edit]
   before_action :build_breadcrumbs, only: %i[show]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
@@ -23,12 +22,21 @@ class ProductsController < ApplicationController
     end
   end
 
+  def show
+    if params[:timestamp].present?
+      @product = @product.paper_trail.version_at(Time.zone.at(params[:timestamp].to_i))&.decorate
+      # Only allow the show action to retrieve previous versions to prevent modifications
+      render_404_page and return unless @product
+    else
+      # Anyone can view timestamped products, but only certain people can view live [retired] products
+      authorize @product
+    end
+  end
+
   # GET /products/new
   def new
     @product_form = ProductForm.new
   end
-
-  def show; end
 
   def owner
     render_404_page and return if @product.owning_team.blank?
@@ -115,19 +123,6 @@ class ProductsController < ApplicationController
   end
 
 private
-
-  def version_and_authorize_product
-    set_product
-
-    if params[:timestamp].present?
-      @product = @product.paper_trail.version_at(Time.zone.at(params[:timestamp].to_i))&.decorate
-      # Only allow the show action to retrieve previous versions to prevent modifications
-      render_404_page and return unless @product
-    else
-      # Anyone can view timestamped products, but only certain people can view live [retired] products
-      authorize @product
-    end
-  end
 
   def build_breadcrumbs
     @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
