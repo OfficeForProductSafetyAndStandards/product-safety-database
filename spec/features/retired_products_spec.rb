@@ -43,13 +43,17 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
       expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference for this product record")
     end
 
-    scenario "the user can view a live product's owner" do
-      visit owner_product_path(live_product)
-      expect(page).to have_summary_item(key: "Record owner", value: owning_team.name)
-    end
+    context "when user tries to view a retired product" do
+      before do
+        create(:allegation, products: [retired_product])
+        retired_product.reload.decorate
+      end
 
-    scenario "the user can not view a retired product" do
-      expect { visit product_path(retired_product) }.to raise_error(Pundit::NotAuthorizedError)
+      it "shows retired product page and links to the investigations related to the product" do
+        visit product_path(retired_product)
+        expect(page).to have_css("h1", text: "The product record does not exist")
+        expect(page).to have_link(retired_product.investigations.first.title, href: "/cases/#{retired_product.investigations.first.pretty_id}")
+      end
     end
 
     scenario "the user can not view a retired product's owner" do
