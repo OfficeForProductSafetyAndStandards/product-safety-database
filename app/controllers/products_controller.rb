@@ -29,7 +29,7 @@ class ProductsController < ApplicationController
       render_404_page and return unless @product
     else
       # Anyone can view timestamped products, but only certain people can view live [retired] products
-      authorize @product
+      return render "/products/retired" unless Pundit.policy(current_user, @product).show?
     end
   end
 
