@@ -39,6 +39,7 @@ class ProductsController < ApplicationController
   end
 
   def owner
+    authorize @product
     render_404_page and return if @product.owning_team.blank?
   end
 
