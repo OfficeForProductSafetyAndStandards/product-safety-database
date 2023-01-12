@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
   include UrlHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_product, only: %i[show edit update]
+  before_action :set_product, only: %i[show edit update owner]
   before_action :set_countries, only: %i[new update edit]
   before_action :build_breadcrumbs, only: %i[show]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
@@ -23,13 +23,10 @@ class ProductsController < ApplicationController
   end
 
   def show
-    # Only allow the show action to retrieve previous versions to prevent modifications
-    if params[:timestamp]
-      begin
-        @product = @product.paper_trail.version_at(Time.zone.at(params[:timestamp].to_i)).decorate
-      rescue NoMethodError
-        render_404_page
-      end
+    if params[:timestamp].present?
+      @product = @product.paper_trail.version_at(Time.zone.at(params[:timestamp].to_i))&.decorate
+      # Only allow the show action to retrieve previous versions to prevent modifications
+      render_404_page and return unless @product
     else
       # Anyone can view timestamped products, but only certain people can view live [retired] products
       authorize @product
@@ -39,6 +36,10 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product_form = ProductForm.new
+  end
+
+  def owner
+    render_404_page and return if !policy(@product).show? || @product.owning_team.blank?
   end
 
   # POST /products

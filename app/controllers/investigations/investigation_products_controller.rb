@@ -4,6 +4,11 @@ module Investigations
     before_action :set_investigation_product
     before_action :set_product
 
+    def owner
+      # Anyone can view timestamped products, but only certain people can view live [retired] products
+      render_404_page and return if (@product.version.blank? && !policy(@product).show?) || @product.owning_team.blank?
+    end
+
     def remove
       authorize @investigation_product, :remove?
 
