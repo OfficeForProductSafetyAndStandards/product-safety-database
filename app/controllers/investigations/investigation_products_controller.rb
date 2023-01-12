@@ -6,8 +6,7 @@ module Investigations
 
     def owner
       # Anyone can view timestamped products, but only certain people can view live [retired] products
-      authorize @product if @product.version.blank?
-      render_404_page and return if @product.owning_team.blank?
+      render_404_page and return if (@product.version.blank? && !policy(@product).show?) || @product.owning_team.blank?
     end
 
     def remove

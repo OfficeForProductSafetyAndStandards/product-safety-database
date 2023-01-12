@@ -19,8 +19,4 @@ class ProductPolicy < ApplicationPolicy
   def can_spawn_case?
     record.not_retired?
   end
-
-  def owner?
-    show?
-  end
 end

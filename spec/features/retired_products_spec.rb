@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:opss_user) { create(:user, :activated, :opss_user) }
   let(:non_opss_user) { create(:user, :activated) }
-  let(:live_product) { create(:product) }
-  let(:retired_product) { create(:product, :retired) }
+  let(:owning_team) { create(:team) }
+  let(:live_product) { create(:product, owning_team:) }
+  let(:retired_product) { create(:product, :retired, owning_team:) }
 
   context "when signed in as an opss user" do
     before do
@@ -16,9 +17,19 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
       expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference for this product record")
     end
 
+    scenario "the user can view a live product's owner" do
+      visit owner_product_path(live_product)
+      expect(page).to have_summary_item(key: "Record owner", value: owning_team.name)
+    end
+
     scenario "the user can view a retired product" do
       visit product_path(retired_product)
       expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{retired_product.id} - The PSD reference for this product record")
+    end
+
+    scenario "the user can view a retired product's owner" do
+      visit owner_product_path(retired_product)
+      expect(page).to have_summary_item(key: "Record owner", value: owning_team.name)
     end
   end
 
@@ -32,8 +43,19 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
       expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference for this product record")
     end
 
+    scenario "the user can view a live product's owner" do
+      visit owner_product_path(live_product)
+      expect(page).to have_summary_item(key: "Record owner", value: owning_team.name)
+    end
+
     scenario "the user can not view a retired product" do
       expect { visit product_path(retired_product) }.to raise_error(Pundit::NotAuthorizedError)
+    end
+
+    scenario "the user can not view a retired product's owner" do
+      visit owner_product_path(retired_product)
+      expect(page).to have_http_status(:not_found)
+      expect(page).to have_text("Page not found")
     end
   end
 
