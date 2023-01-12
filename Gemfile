@@ -32,7 +32,7 @@ gem "net-smtp"
 
 gem "paper_trail"
 gem "pg", "~> 1.4"
-gem "pghero", "~> 3.0"
+gem "pghero", "~> 3.1"
 gem "puma", "~> 6.0"
 gem "pundit", "~> 2.3"
 gem "rack", "~> 2.2.5"
@@ -64,7 +64,7 @@ group :development, :test do
   gem "parallel_tests", "~> 4.0.0"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
-  gem "pry-doc", "~> 1.3"
+  gem "pry-doc", "~> 1.4"
 end
 
 group :development do
