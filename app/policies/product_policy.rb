@@ -19,4 +19,8 @@ class ProductPolicy < ApplicationPolicy
   def can_spawn_case?
     record.not_retired?
   end
+
+  def can_view_retired_products?
+    user.is_opss?
+  end
 end

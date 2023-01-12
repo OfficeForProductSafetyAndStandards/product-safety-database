@@ -84,7 +84,9 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
 
     context "when over 10k cases exist" do
       before do
-        allow(Product).to receive(:count).and_return(10_001)
+        not_retired_products_double = instance_double("not_retired_products")
+        allow(Product).to receive(:not_retired).and_return(not_retired_products_double)
+        allow(not_retired_products_double).to receive(:count).and_return(10_001)
       end
 
       it "shows total number of cases" do

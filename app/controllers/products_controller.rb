@@ -147,6 +147,6 @@ private
   end
 
   def count_to_display
-    params[:hazard_type].blank? && params[:q].blank? ? Product.count : @results.total_count
+    params[:hazard_type].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @results.total_count
   end
 end

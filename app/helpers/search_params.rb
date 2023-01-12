@@ -22,6 +22,7 @@ class SearchParams
   attribute :teams_with_access_other_id
   attribute :hazard_type
   attribute :page_name
+  attribute :retired_status
 
   def selected_sort_by
     if sort_by.blank?

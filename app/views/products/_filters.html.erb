@@ -17,6 +17,43 @@
       attributes: { "data-opss-clear-on-reset" => "element" }
     ) %>
 
+    <% if policy(Product).can_view_retired_products? %>
+      <%= govukRadios(
+      form: form,
+      key: :retired_status,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
+      fieldset: {
+        legend: {
+          text: "Product record status",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+        }
+      },
+      attributes: { "data-opss-reset-to-default" => "element" },
+      items: [
+      {
+        id: "active",
+        text: "Active",
+        value: "active",
+        checked: true
+      },
+      {
+        id: "retired",
+        text: "Retired",
+        value: "retired"
+      },
+      {
+        id: "all",
+        text: "All",
+        value: "all"
+      }
+      ]
+      ) %>
+    <% end %>
+
     <div class="govuk-button-group">
       <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
       <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>

@@ -45,7 +45,7 @@ class Product < ApplicationRecord
           methods: :owner_id
         }
       },
-      methods: %i[tiebreaker_id name_for_sorting psd_ref]
+      methods: %i[tiebreaker_id name_for_sorting psd_ref retired?]
     )
   end
 
@@ -71,6 +71,8 @@ class Product < ApplicationRecord
                        :brand, :category, :country_of_origin, :created_at, :description,
                        :has_markings, :markings, :name, :product_code, :retired_at,
                        :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id
+
+  scope :not_retired, -> { where(retired_at: nil) }
 
   def self.retire_stale_products!
     Product.not_retired.where("created_at < ?", 18.months.ago).select(&:stale?).each do |stale_product|
