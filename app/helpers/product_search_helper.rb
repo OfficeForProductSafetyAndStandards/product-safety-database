@@ -31,11 +31,11 @@ module ProductSearchHelper
     return if @search.retired_status == "all"
 
     if @search.retired_status == "active" || @search.retired_status.blank?
-      return { term: { "is_retired" => false } }
+      return { term: { "retired?" => false } }
     end
 
     if @search.retired_status == "retired"
-      { term: { "is_retired" => true } }
+      { term: { "retired?" => true } }
     end
   end
 end

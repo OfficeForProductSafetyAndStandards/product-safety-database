@@ -45,7 +45,7 @@ class Product < ApplicationRecord
           methods: :owner_id
         }
       },
-      methods: %i[tiebreaker_id name_for_sorting psd_ref is_retired]
+      methods: %i[tiebreaker_id name_for_sorting psd_ref retired?]
     )
   end
 
@@ -129,9 +129,5 @@ class Product < ApplicationRecord
 
   def unique_investigation_products
     investigation_products.group_by(&:investigation_id).values.map(&:first)
-  end
-
-  def is_retired
-    retired_at ? true : false
   end
 end
