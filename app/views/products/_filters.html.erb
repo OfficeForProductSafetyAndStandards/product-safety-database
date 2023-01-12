@@ -17,7 +17,7 @@
       attributes: { "data-opss-clear-on-reset" => "element" }
     ) %>
 
-    <% if current_user.is_opss? %>
+    <% if policy(Product).can_view_retired_products? %>
       <%= govukRadios(
       form: form,
       key: :retired_status,
