@@ -180,6 +180,12 @@ module InvestigationsHelper
         }
       },
       {
+        key: { text: "Created" },
+        value: {
+          text: "#{time_ago_in_words(@investigation.created_at)} ago"
+        }
+      },
+      {
         key: { text: "Created by" },
         value: {
           text: investigation.created_by
@@ -220,6 +226,8 @@ module InvestigationsHelper
       }
     ]
 
+    rows.insert(7, notifying_country_section(investigation, user)) if policy(investigation).view_notifying_country?(user:)
+
     if investigation.coronavirus_related
       rows << {
         key: { text: "COVID-19" },
@@ -233,6 +241,16 @@ module InvestigationsHelper
     end
 
     rows
+  end
+
+  def notifying_country_section(investigation, user)
+    {
+      key: { text: "Notifying country" },
+      value: {
+        text: country_from_code(investigation.notifying_country, Country.notifying_countries)
+      },
+      actions: notifying_country_actions(investigation, user)
+    }
   end
 
   def search_result_statement(search_terms, number_of_results)
@@ -321,6 +339,18 @@ private
         href: status_path,
         text: status_link_text,
         visuallyHiddenText: " this case"
+      ]
+    }
+  end
+
+  def notifying_country_actions(investigation, user)
+    return {} unless policy(investigation).change_notifying_country?(user:)
+
+    {
+      items: [
+        href: edit_investigation_notifying_country_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "notifying_country"
       ]
     }
   end
