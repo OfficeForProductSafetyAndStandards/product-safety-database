@@ -46,8 +46,8 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list(view_protected_details: false)
-    contact_details = view_protected_details ? h.tag.p(complainant.contact_details) : h.tag.p("")
-    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
+    contact_details = view_protected_details ? contact_details_list : h.tag.p("")
+    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right")
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_formatted_s(:govuk) } } : nil,
@@ -58,7 +58,18 @@ class InvestigationDecorator < ApplicationDecorator
 
     rows.compact!
 
-    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
+    h.govukSummaryList rows:, classes: "govuk-summary-list govuk-summary-list--no-border opss-summary-list-mixed opss-summary-list-mixed--narrow-dt"
+  end
+
+  def contact_details_list
+    h.tag.ul(class: "govuk-list govuk-list--bullet govuk-list--spaced") do
+      lis = []
+      lis << h.tag.li(complainant.name) if complainant.name.present?
+      lis << h.tag.li("Telephone: #{complainant.phone_number}") if complainant.phone_number.present?
+      lis << "<li>Email: #{helpers.mail_to(complainant.email_address)}</li>"
+      lis << h.tag.li(complainant.other_details) if complainant.other_details.present?
+      lis.join.html_safe
+    end
   end
 
   def pretty_description

@@ -64,3 +64,11 @@
     ) %>
   <% end %>
 <% end %>
+
+<% if @investigation.complainant %>
+  <%= govuk_hr %>
+  <section class="govuk-!-margin-top-9 opss-grouping">
+    <h3 id="source" class="govuk-heading-m opss-grouping__heading-m">Case source</h3>
+    <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
+  </section>
+<% end %>
