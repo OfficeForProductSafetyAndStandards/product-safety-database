@@ -66,7 +66,7 @@ class InvestigationDecorator < ApplicationDecorator
       lis = []
       lis << h.tag.li(complainant.name) if complainant.name.present?
       lis << h.tag.li("Telephone: #{complainant.phone_number}") if complainant.phone_number.present?
-      lis << "<li>Email: #{helpers.mail_to(complainant.email_address)}</li>"
+      lis << "<li>Email: #{helpers.mail_to(complainant.email_address)}</li>" if complainant.email_address.present?
       lis << h.tag.li(complainant.other_details) if complainant.other_details.present?
       lis.join.html_safe
     end

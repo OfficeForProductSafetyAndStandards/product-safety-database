@@ -72,3 +72,7 @@
     <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
   </section>
 <% end %>
+
+<% unless policy(@investigation).update?(user: current_user) %>
+  <p class="govuk-body-s govuk-!-margin-top-7 govuk-!-margin-bottom-2 opss-secondary-text opss-text-align-right">Only teams added to the case with editing rights can edit the case.</p>
+<% end %>
