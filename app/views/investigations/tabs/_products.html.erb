@@ -9,15 +9,15 @@
 <% else %>
   <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
 
-  <% @investigation.investigation_products.reverse.each_with_index do |investigation_product, index| %>
-    <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at) : investigation_product.product %>
-    <% @product = product.decorate %>
+  <% @investigation.investigation_products.decorate.reverse.each.with_index(1) do |investigation_product, index| %>
+    <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).decorate : investigation_product.product %>
+    <% @product = product %>
     <% @investigation_product = investigation_product %>
 
     <section>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-          <h3 id=<%="prod-#{@product.id}" %> class="govuk-heading-m"><%= @product.name %></h3>
+          <h3 id="<%= "prod-#{@product.id}" %>" class="govuk-heading-m"><%= @product.name %></h3>
         </div>
         <div class="govuk-grid-column-one-quarter">
           <div class="opss-text-align-right opss-margin-bottom-1-desktop">
@@ -27,17 +27,13 @@
       </div>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-          <%= govukSummaryList(
-            classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-            rows: product_overview_rows(@product)
-            )
-          %>
+          <%= @investigation_product.product_overview_summary_list %>
         </div>
         <div class="govuk-grid-column-one-third">
           <% unless @product.virus_free_images.empty? %>
             <figure class="opss-margin-bottom-1-desktop">
-              <%= image_tag(@product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop") %>
-              <figcaption class="govuk-visually-hidden">@product.images.first.title</figcaption>
+              <%= image_tag @product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+              <figcaption class="govuk-visually-hidden"><%= @product.images.first.title %></figcaption>
             </figure>
           <% end %>
         </div>
@@ -76,7 +72,7 @@
       <% end %>
     </section>
 
-    <% unless @investigation.investigation_products.length == index + 1 %>
+    <% unless index == @investigation.investigation_products.size %>
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
     <% end %>
   <% end %>

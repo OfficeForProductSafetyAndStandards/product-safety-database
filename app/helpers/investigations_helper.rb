@@ -96,25 +96,6 @@ module InvestigationsHelper
     ]
   end
 
-  def product_overview_rows(product)
-    live_product = Product.find(product.id)
-    product_record_owner_value = live_product.owning_team_id ? Team.find_by(id: live_product.owning_team_id).name : "Product is not currently owned"
-    [
-      {
-        key: { text: "Last updated" },
-        value: { text: date_or_recent_time_ago(product.updated_at) }
-      },
-      {
-        key: { text: "Created" },
-        value: { text: date_or_recent_time_ago(product.created_at) }
-      },
-      {
-        key: { text: "Product record owner" },
-        value: { text: product_record_owner_value }
-      }
-    ]
-  end
-
   def units_affected(investigation_product)
     return { text: "" } unless investigation_product&.affected_units_status
 
