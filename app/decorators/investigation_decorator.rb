@@ -1,5 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   include FormattedDescription
+  include ActionView::Helpers::OutputSafetyHelper
   delegate_all
   decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities, :risk_assessments
 
@@ -66,9 +67,9 @@ class InvestigationDecorator < ApplicationDecorator
       lis = []
       lis << h.tag.li(complainant.name) if complainant.name.present?
       lis << h.tag.li("Telephone: #{complainant.phone_number}") if complainant.phone_number.present?
-      lis << "<li>Email: #{helpers.mail_to(complainant.email_address)}</li>" if complainant.email_address.present?
+      lis << h.tag.li("Email: ".html_safe + h.mail_to(complainant.email_address, class: "govuk-link govuk-link--no-visited-state")) if complainant.email_address.present?
       lis << h.tag.li(complainant.other_details) if complainant.other_details.present?
-      lis.join.html_safe
+      safe_join(lis)
     end
   end
 
