@@ -9,11 +9,11 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
   let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
 
-  let!(:fire_product_1)   { create(:product, name: "Hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation]) }
-  let!(:chemical_product) { create(:product, name: "Some lab stuff", investigations: [chemical_investigation]) }
-  let!(:drowning_product) { create(:product, name: "Dangerous life vest", investigations: [drowning_investigation]) }
-  let!(:retired_drowning_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.zone.now) }
+  let!(:lift_product_1)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Lifts") }
+  let!(:lift_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation], category: "Lifts") }
+  let!(:furniture_product) { create(:product, name: "Hot product1", investigations: [chemical_investigation], category: "Furniture") }
+  let!(:sanitiser_product) { create(:product, name: "SoapForHandz", investigations: [drowning_investigation], category: "Hand sanitiser") }
+  let!(:retired_sanitiser_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.zone.now, category: "Hand sanitiser") }
 
   before do
     Investigation.import scope: "not_deleted", refresh: :wait_for
@@ -27,10 +27,10 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     end
 
     scenario "no filters applied shows all non-retired products" do
-      expect(page).to have_content(fire_product_1.name)
-      expect(page).to have_content(fire_product_2.name)
-      expect(page).to have_content(chemical_product.name)
-      expect(page).to have_content(drowning_product.name)
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(furniture_product.name)
+      expect(page).to have_content(sanitiser_product.name)
       expect(page).to have_content("There are currently 4 products.")
     end
 
@@ -46,67 +46,75 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       end
     end
 
-    scenario "filtering by hazard type" do
-      select "Fire", from: "Hazard type"
+    scenario "filtering by category" do
+      select "Lifts", from: "Category"
       click_button "Apply"
 
-      expect(page).to have_content(fire_product_1.name)
-      expect(page).to have_content(fire_product_2.name)
-      expect(page).not_to have_content(chemical_product.name)
-      expect(page).not_to have_content(drowning_product.name)
-      expect(page).not_to have_content(retired_drowning_product.name)
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
       expect(page).to have_content("2 products using the current filters, were found.")
     end
 
-    scenario "filtering by hazard type and a keyword" do
-      select "Fire", from: "Hazard type"
-      fill_in "Search", with: "Fire"
+    scenario "filtering by category and a keyword" do
+      select "Lifts", from: "Category"
+      fill_in "Search", with: "Elevator"
       click_button "Apply"
 
-      expect(page).to have_content(fire_product_1.name)
-      expect(page).to have_content(fire_product_2.name)
-      expect(page).not_to have_content(chemical_product.name)
-      expect(page).not_to have_content(drowning_product.name)
-      expect(page).not_to have_content(retired_drowning_product.name)
-      expect(page).to have_content("2 products matching keyword(s) Fire, using the current filters, were found.")
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
+      expect(page).to have_content("1 product matching keyword(s) Elevator, using the current filters, was found.")
     end
 
     scenario "filtering by a keyword" do
-      fill_in "Search", with: "Dangerous"
+      fill_in "Search", with: "SoapForHandz"
       click_button "Apply"
 
-      expect(page).to have_content(drowning_product.name)
-      expect(page).not_to have_content(retired_drowning_product.name)
-      expect(page).not_to have_content(fire_product_1.name)
-      expect(page).not_to have_content(fire_product_2.name)
-      expect(page).not_to have_content(chemical_product.name)
-      expect(page).to have_content("1 product matching keyword(s) Dangerous, was found.")
+      expect(page).not_to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
+      expect(page).to have_content("1 product matching keyword(s) SoapForHandz, was found.")
     end
 
     scenario "filtering by a keyword with whitespaces" do
-      fill_in "Search", with: "   Dangerous    "
+      fill_in "Search", with: "   SoapForHandz    "
       click_button "Apply"
 
-      expect(page).to have_content(drowning_product.name)
-      expect(page).not_to have_content(retired_drowning_product.name)
-      expect(page).not_to have_content(fire_product_1.name)
-      expect(page).not_to have_content(fire_product_2.name)
-      expect(page).not_to have_content(chemical_product.name)
-      expect(page).to have_content("1 product matching keyword(s) Dangerous, was found.")
+      expect(page).not_to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
+      expect(page).to have_content("1 product matching keyword(s) SoapForHandz, was found.")
     end
 
     scenario "filtering by an ID" do
-      fill_in "Search", with: chemical_product.id
+      fill_in "Search", with: furniture_product.id
       click_button "Apply"
 
-      expect(page).to have_content(chemical_product.name)
+      expect(page).not_to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
     end
 
     scenario "filtering by a PSD ref" do
-      fill_in "Search", with: chemical_product.psd_ref
+      fill_in "Search", with: lift_product_2.psd_ref
       click_button "Apply"
 
-      expect(page).to have_content(chemical_product.name)
+      expect(page).not_to have_content(lift_product_1.name)
+      expect(page).to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
     end
   end
 
@@ -117,11 +125,11 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     end
 
     scenario "no filters applied shows all non-retired products" do
-      expect(page).to have_content(fire_product_1.name)
-      expect(page).to have_content(fire_product_2.name)
-      expect(page).to have_content(chemical_product.name)
-      expect(page).to have_content(drowning_product.name)
-      expect(page).not_to have_content(retired_drowning_product.name)
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(furniture_product.name)
+      expect(page).to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
       expect(page).to have_content("There are currently 4 products.")
     end
 
@@ -129,11 +137,11 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       within_fieldset("Product record status") { choose "Active" }
       click_button "Apply"
 
-      expect(page).to have_content(fire_product_1.name)
-      expect(page).to have_content(fire_product_2.name)
-      expect(page).to have_content(chemical_product.name)
-      expect(page).to have_content(drowning_product.name)
-      expect(page).not_to have_content(retired_drowning_product.name)
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(furniture_product.name)
+      expect(page).to have_content(sanitiser_product.name)
+      expect(page).not_to have_content(retired_sanitiser_product.name)
       expect(page).to have_content("4 products using the current filters, were found.")
     end
 
@@ -141,11 +149,11 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       within_fieldset("Product record status") { choose "Retired" }
       click_button "Apply"
 
-      expect(page).not_to have_content(fire_product_1.name)
-      expect(page).not_to have_content(fire_product_2.name)
-      expect(page).not_to have_content(chemical_product.name)
-      expect(page).not_to have_content(drowning_product.name)
-      expect(page).to have_content("#{retired_drowning_product.name} (Retired product record)")
+      expect(page).not_to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).to have_content("#{retired_sanitiser_product.name} (Retired product record)")
       expect(page).to have_content("1 product using the current filters, was found.")
     end
 
@@ -153,11 +161,11 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       within_fieldset("Product record status") { choose "All" }
       click_button "Apply"
 
-      expect(page).to have_content(fire_product_1.name)
-      expect(page).to have_content(fire_product_2.name)
-      expect(page).to have_content(chemical_product.name)
-      expect(page).to have_content(drowning_product.name)
-      expect(page).to have_content("#{retired_drowning_product.name} (Retired product record)")
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(furniture_product.name)
+      expect(page).to have_content(sanitiser_product.name)
+      expect(page).to have_content("#{retired_sanitiser_product.name} (Retired product record)")
       expect(page).to have_content("5 products using the current filters, were found.")
     end
   end
