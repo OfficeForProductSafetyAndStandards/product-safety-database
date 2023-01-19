@@ -21,6 +21,7 @@ class SearchParams
   attribute :teams_with_access, default: "all"
   attribute :teams_with_access_other_id
   attribute :hazard_type
+  attribute :category
   attribute :page_name
   attribute :retired_status
 

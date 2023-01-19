@@ -3,7 +3,7 @@ module ProductSearchHelper
 
   def filter_params(user)
     must_match_filters = [
-      get_hazard_filter,
+      get_category_filter,
       get_status_filter,
       get_retired_filter
     ].compact
@@ -15,9 +15,9 @@ module ProductSearchHelper
     { must: must_match_filters, should: should_match_filters }
   end
 
-  def get_hazard_filter
-    if params[:hazard_type].present?
-      { match: { "investigations.hazard_type" => @search.hazard_type } }
+  def get_category_filter
+    if params[:category].present?
+      { match: { "category" => @search.category } }
     end
   end
 
