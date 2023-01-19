@@ -112,22 +112,6 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(2, 18)).to eq product.when_placed_on_market
       expect(product_sheet.cell(3, 18)).to eq other_product.when_placed_on_market
 
-      expect(product_sheet.cell(1, 19)).to eq "reported_reason"
-      expect(product_sheet.cell(2, 19)).to eq product.investigations.first.reported_reason
-      expect(product_sheet.cell(3, 19)).to eq other_product.investigations.first.reported_reason
-
-      expect(product_sheet.cell(1, 20)).to eq "hazard_type"
-      expect(product_sheet.cell(2, 20)).to eq product.investigations.first.hazard_type
-      expect(product_sheet.cell(3, 20)).to eq other_product.investigations.first.hazard_type
-
-      expect(product_sheet.cell(1, 21)).to eq "non_compliant_reason"
-      expect(product_sheet.cell(2, 21)).to eq product.investigations.first.non_compliant_reason
-      expect(product_sheet.cell(3, 21)).to eq other_product.investigations.first.non_compliant_reason
-
-      expect(product_sheet.cell(1, 22)).to eq "risk_level"
-      expect(product_sheet.cell(2, 22)).to eq product.investigations.first.risk_level
-      expect(product_sheet.cell(3, 22)).to eq other_product.investigations.first.risk_level
-
       expect(test_result_sheet.cell(1, 1)).to eq "psd_ref"
       expect(test_result_sheet.cell(2, 1)).to eq product.psd_ref
       expect(test_result_sheet.cell(3, 1)).to eq product.psd_ref

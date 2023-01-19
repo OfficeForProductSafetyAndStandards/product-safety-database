@@ -90,10 +90,6 @@ private
                      updated_at
                      webpage
                      when_placed_on_market
-                     reported_reason
-                     hazard_type
-                     non_compliant_reason
-                     risk_level
                      owning_team]
 
     @product_info_sheet = sheet
@@ -157,10 +153,6 @@ private
       product.updated_at,
       product.webpage,
       product.when_placed_on_market,
-      product.investigations.first.try(:reported_reason),
-      product.investigations.first.try(:hazard_type),
-      product.investigations.first.try(:non_compliant_reason),
-      product.investigations.first.try(:risk_level),
       product.owning_team.try(:name)
     ]
   end
