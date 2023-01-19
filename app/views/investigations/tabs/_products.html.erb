@@ -21,7 +21,7 @@
         </div>
         <div class="govuk-grid-column-one-quarter">
           <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-            <!-- TODO: Add edit link -->
+            <%= link_to("Edit this product", product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset") if policy(@investigation_product).edit_product? %>
           </div>
         </div>
       </div>

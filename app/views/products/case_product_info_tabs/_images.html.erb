@@ -48,6 +48,18 @@
   </ul>
 <% end %>
 
-<p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-  To edit the images for this product go to the full <a href="/psd-revised-flow/product-page.html" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">psd-122</span> product record page <span class="govuk-visually-hidden">to access its images</span></a>
-</p>
+<% if @product.owning_team.nil? || @product.owning_team == current_user.team %>
+  <% if policy(@investigation_product).edit_product? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      To edit the images for this product go to the full <%= link_to(product_path(@product), class: "govuk-link govuk-link--no-visited-state") do %><span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record page <span class="govuk-visually-hidden">to access its images</span><% end %>
+    </p>
+  <% end %>
+<% else %>
+  <% if @investigation_product.investigation_closed_at.blank? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      You cannot edit these images, but you can <%= link_to(product_path(@product), class: "govuk-link govuk-link--no-visited-state") do %>contact the <span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record owner <span class="opss-hidden-desktop">about its images</span><% end %>
+      <br class="opss-br-desktop">
+      with additional product information or corrections
+    </p>
+  <% end %>
+<% end %>
