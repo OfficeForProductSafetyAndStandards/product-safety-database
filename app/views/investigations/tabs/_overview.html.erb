@@ -64,3 +64,14 @@
     ) %>
   <% end %>
 <% end %>
+
+<% if @investigation.complainant %>
+  <section class="govuk-!-margin-top-9 opss-grouping">
+    <h3 id="source" class="govuk-heading-m opss-grouping__heading-m">Case source</h3>
+    <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
+  </section>
+<% end %>
+
+<% unless policy(@investigation).update?(user: current_user) %>
+  <p class="govuk-body-s govuk-!-margin-top-7 govuk-!-margin-bottom-2 opss-secondary-text opss-text-align-right">Only teams added to the case with editing rights can edit the case.</p>
+<% end %>

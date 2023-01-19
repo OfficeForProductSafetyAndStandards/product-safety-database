@@ -1,5 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   include FormattedDescription
+  include ActionView::Helpers::OutputSafetyHelper
   delegate_all
   decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities, :risk_assessments
 
@@ -46,8 +47,8 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list(view_protected_details: false)
-    contact_details = view_protected_details ? h.tag.p(complainant.contact_details) : h.tag.p("")
-    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
+    contact_details = view_protected_details ? contact_details_list : h.tag.p("")
+    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right")
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_formatted_s(:govuk) } } : nil,
@@ -58,7 +59,18 @@ class InvestigationDecorator < ApplicationDecorator
 
     rows.compact!
 
-    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
+    h.govukSummaryList rows:, classes: "govuk-summary-list govuk-summary-list--no-border opss-summary-list-mixed opss-summary-list-mixed--narrow-dt"
+  end
+
+  def contact_details_list
+    h.tag.ul(class: "govuk-list govuk-list--bullet govuk-list--spaced") do
+      lis = []
+      lis << h.tag.li(complainant.name) if complainant.name.present?
+      lis << h.tag.li("Telephone: #{complainant.phone_number}") if complainant.phone_number.present?
+      lis << h.tag.li("Email: ".html_safe + h.mail_to(complainant.email_address, class: "govuk-link govuk-link--no-visited-state")) if complainant.email_address.present?
+      lis << h.tag.li(complainant.other_details) if complainant.other_details.present?
+      safe_join(lis)
+    end
   end
 
   def pretty_description

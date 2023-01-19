@@ -71,4 +71,8 @@ class InvestigationPolicy < ApplicationPolicy
   def can_be_deleted?
     record.products.none?
   end
+
+  def view_notifying_country?(user: @user)
+    record.notifying_country.present? || user.is_opss?
+  end
 end
