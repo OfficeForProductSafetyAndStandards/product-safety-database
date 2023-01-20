@@ -20,25 +20,29 @@
         <div class="govuk-grid-column-three-quarters">
           <h3 id="<%= "prod-#{@product.id}" %>" class="govuk-heading-m"><%= @product.name %></h3>
         </div>
-        <div class="govuk-grid-column-one-quarter">
-          <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-            <%= link_to("Edit this product", product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset") if policy(@investigation_product).edit_product? %>
+        <% if policy(@investigation_product).edit_product? %>
+          <div class="govuk-grid-column-one-quarter">
+            <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+              <%= link_to("Edit this product", product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <% unless @investigation_product.investigation_closed_at.present? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <%= @investigation_product.product_overview_summary_list %>
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <% unless @product.virus_free_images.empty? %>
+              <figure class="opss-margin-bottom-1-desktop">
+                <%= image_tag @product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+                <figcaption class="govuk-visually-hidden"><%= @product.images.first.title %></figcaption>
+              </figure>
+            <% end %>
           </div>
         </div>
-      </div>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <%= @investigation_product.product_overview_summary_list %>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <% unless @product.virus_free_images.empty? %>
-            <figure class="opss-margin-bottom-1-desktop">
-              <%= image_tag @product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
-              <figcaption class="govuk-visually-hidden"><%= @product.images.first.title %></figcaption>
-            </figure>
-          <% end %>
-        </div>
-      </div>
+      <% end %>
       <%= govukTabs(
         classes: "opss-tabs govuk-!-margin-bottom-2 opss-tabs--min-height-m",
         title: "Information related to this PSD product record",
