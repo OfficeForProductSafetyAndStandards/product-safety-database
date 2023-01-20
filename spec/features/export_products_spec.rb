@@ -11,11 +11,9 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     end
   end
 
-  let!(:product_1) { create(:product, name: "ABC") }
-  let!(:product_2) { create(:product, name: "XYZ") }
-  let!(:hazardous_product) { create(:product, name: "STU") }
-  let!(:investigation) { create(:allegation, :reported_unsafe, :with_products, products: [hazardous_product]) }
-  let(:hazard_type) { investigation.hazard_type }
+  let!(:product_1) { create(:product, name: "ABC", category: "Lifts") }
+  let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser") }
+  let!(:hazardous_product) { create(:product, name: "STU", category: "Waste") }
 
   before do
     Product.import force: true, refresh: :wait_for
@@ -61,10 +59,10 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     expect(spreadsheet.cell(2, 13)).to eq(product_2.name)
   end
 
-  scenario "with hazard type filter" do
+  scenario "with category filter" do
     visit products_path
 
-    select hazard_type, from: "Hazard type"
+    select hazardous_product.category, from: "Category"
     click_button "Submit search"
 
     expect(page).not_to have_text product_1.name

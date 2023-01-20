@@ -31,7 +31,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Webpage" }, value: { html: webpage_html } },
       { key: { text: "Market date" }, value: { text: when_placed_on_market_value }, secondary_text: { text: "Placed on the market" } },
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
-      { key: { text: "Counterfeit" }, value: counterfeit_value },
+      { key: { text: "Counterfeit" }, value: counterfeit_row_value },
       { key: { text: "Product marking" }, value: { text: markings } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
@@ -100,7 +100,7 @@ class ProductDecorator < ApplicationDecorator
     object.investigations.map(&:pretty_id)
   end
 
-  def counterfeit_value
+  def counterfeit_row_value
     if product.counterfeit?
       return { html: "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe, secondary_text: { text: "This is a product record for a counterfeit product" } }
     end
@@ -110,6 +110,12 @@ class ProductDecorator < ApplicationDecorator
     end
 
     { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }
+  end
+
+  def counterfeit_value
+    return "Unsure" if product.unsure?
+
+    product.counterfeit? ? "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe : "No"
   end
 
   def activity_view_link(timestamp)

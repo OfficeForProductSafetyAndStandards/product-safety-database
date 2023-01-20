@@ -24,12 +24,8 @@
       <td headers="prodtype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
         <%= product.subcategory %>
       </td>
-      <td headers="haztype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
-        <% if product.counterfeit? %>
-          <span class="opss-tag opss-tag--risk2 opss-tag--lrg">Yes</span>
-        <% else %>
-          No
-        <% end %>
+      <td headers="counterfeit item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.counterfeit_value %>
       </td>
   </tr>
 </tbody>

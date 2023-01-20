@@ -33,7 +33,7 @@ module ProductsHelper
   end
 
   def product_export_params
-    params.permit(:q, :hazard_type)
+    params.permit(:q, :category)
   end
 
   def sorting_params
