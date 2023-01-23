@@ -4,6 +4,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   let(:organisation)          { create(:organisation) }
   let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }
 
+  # rubocop:disable RSpec/LetSetup
   let!(:fire_product_1)   { create(:product, name: "Hot product", category: "Lifts") }
   let!(:fire_product_2)   { create(:product, name: "Xtra hot product", category: "Lifts") }
   let!(:fire_product_3)   { create(:product, name: "Very very hot product", category: "Lifts") }
@@ -20,6 +21,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   let!(:drowning_product) { create(:product, name: "Dangerous life vest") }
   let!(:another_drowning_product) { create(:product, name: "Another dangerous life vest") }
   let!(:zebra_product) { create(:product, name: "Zebra print jacket") }
+  # rubocop:enable RSpec/LetSetup
 
   before do
     Investigation.import scope: "not_deleted", refresh: :wait_for
