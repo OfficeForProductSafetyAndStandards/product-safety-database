@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails
+  remote: https://github.com/govuk-ruby/govuk-design-system-rails
   revision: 900341cf07f9a4670ee239b730dabb87035c7d2a
   tag: 0.9.8
   specs:
