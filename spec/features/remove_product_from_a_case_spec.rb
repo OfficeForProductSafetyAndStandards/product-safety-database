@@ -17,7 +17,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       have_css("h2", text: product.name)
 
-      expect(page).to have_no_link("Remove product")
+      expect(page).to have_no_link("Remove this #{product.name} product from the case")
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       have_css("h2", text: product.name)
 
-      expect(page).to have_no_link("Remove product")
+      expect(page).to have_no_link("Remove this #{product.name} product from the case")
     end
   end
 
@@ -45,7 +45,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
       have_css("h2", text: product.name)
 
-      click_link "Remove product"
+      click_link "Remove this #{product.name} product from the case"
 
       expect(page).to have_content("The product record '#{product.name}' (#{product.psd_ref}) will be removed from the case.")
 
@@ -88,7 +88,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
     it "does not allow user to remove product from investigation" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}/products"
-      click_link "Remove product"
+      click_link "Remove this #{product.name} product from the case"
 
       expect(page).not_to have_css("h1", text: "Remove #{product.name}")
 
