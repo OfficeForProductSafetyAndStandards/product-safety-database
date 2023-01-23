@@ -17,7 +17,7 @@ module ProductSearchHelper
 
   def get_category_filter
     if params[:category].present?
-      { match: { "category" => @search.category } }
+      { match_phrase: { "category" => @search.category } }
     end
   end
 
