@@ -9,10 +9,10 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
   let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
 
-  let!(:lift_product_1)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Lifts") }
-  let!(:lift_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation], category: "Lifts") }
+  let!(:lift_product_1)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Clothing, textiles and fashion items") }
+  let!(:lift_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation], category: "Clothing, textiles and fashion items") }
   let!(:furniture_product) { create(:product, name: "Hot product1", investigations: [chemical_investigation], category: "Furniture") }
-  let!(:sanitiser_product) { create(:product, name: "SoapForHandz", investigations: [drowning_investigation], category: "Hand sanitiser") }
+  let!(:sanitiser_product) { create(:product, name: "SoapForHandz", investigations: [drowning_investigation], category: "Communication and media equipment") }
   let!(:retired_sanitiser_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.zone.now, category: "Hand sanitiser") }
 
   before do
@@ -47,7 +47,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     end
 
     scenario "filtering by category" do
-      select "Lifts", from: "Category"
+      select "Clothing, textiles and fashion items", from: "Category"
       click_button "Apply"
 
       expect(page).to have_content(lift_product_1.name)
@@ -59,7 +59,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     end
 
     scenario "filtering by category and a keyword" do
-      select "Lifts", from: "Category"
+      select "Clothing, textiles and fashion items", from: "Category"
       fill_in "Search", with: "Elevator"
       click_button "Apply"
 
