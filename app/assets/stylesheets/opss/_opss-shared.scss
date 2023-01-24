@@ -114,7 +114,8 @@ h1.govuk-label-wrapper label.govuk-label--l {
 main a.govuk-link:hover {
     /*recreate new hover styles of latest gds*/
     text-decoration-skip-ink: none;
-    text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+    /*text-decoration-thickness: max(3px, 0.1875rem, 0.12em);*/
+    text-decoration-thickness: max(0.1875rem);
 }
 
 .opss-no-wrap {
@@ -178,6 +179,16 @@ body.js-enabled .opss-nojs-hide {
 
     @include govuk-media-query($from: desktop) {
         visibility: hidden;
+    }
+}
+
+
+
+@include govuk-media-query($from: mobile, $until: desktop, $and: false, $media-type: "all") {
+
+    /* for desktop only */
+    .opss-keep-for-desktop {
+        display: none;
     }
 }
 
@@ -383,7 +394,8 @@ abbr[title] {
         h1.govuk-label-wrapper+p &,
         legend.govuk-fieldset__legend--l+p &,
         .opss-switch-cols &,
-        .govuk-summary-list__row & {
+        .govuk-summary-list__row &,
+        .govuk-main-wrapper p & {
             border-bottom: 1px dotted $govuk-secondary-text-colour;
             cursor: help;
         }
@@ -664,6 +676,13 @@ ul.opss-left-nav {
     }
 }
 
+a.opss-secondary-text sup[class$="font-size-14"] {
+    color: $govuk-secondary-text-colour;
+}
+
+div[class$="inset-text"]>ol li:last-child {
+    margin-bottom: govuk-spacing(1);
+}
 
 .opss-border-top,
 .opss-border-bottom,
