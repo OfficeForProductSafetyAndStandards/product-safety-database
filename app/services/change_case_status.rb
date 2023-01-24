@@ -24,12 +24,12 @@ class ChangeCaseStatus
       create_audit_activity_for_case_status_changed
     end
 
-    investigation.products.each do |product|
-      Product.find(product.id).__elasticsearch__.update_document
+    investigation.reload.products.each do |product|
+      product.reload.__elasticsearch__.update_document
     end
 
-    investigation.businesses.each do |business|
-      Business.find(business.id).__elasticsearch__.update_document
+    investigation.reload.businesses.each do |business|
+      business.reload.__elasticsearch__.update_document
     end
 
     send_notification_email
