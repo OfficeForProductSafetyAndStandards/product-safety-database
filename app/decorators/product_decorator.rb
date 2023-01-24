@@ -36,7 +36,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
 
-    h.govukSummaryList rows:
+    h.govukSummaryList classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt", rows:
   end
 
   def summary_list(timestamp = nil)
