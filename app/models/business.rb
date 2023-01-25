@@ -29,7 +29,8 @@ class Business < ApplicationRecord
   accepts_nested_attributes_for :locations, reject_if: :all_blank
   accepts_nested_attributes_for :contacts, reject_if: :all_blank
 
-  redacted_export_with :id, :company_number, :created_at, :legal_name, :trading_name, :updated_at, :added_by_user_id
+  redacted_export_with :id, :added_by_user_id, :company_number, :created_at,
+                       :legal_name, :trading_name, :updated_at
 
   settings do
     mappings do
