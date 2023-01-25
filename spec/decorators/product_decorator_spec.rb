@@ -136,4 +136,37 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
       end
     end
   end
+
+  describe "#owning_team_link" do
+    let(:user) { create(:user) }
+    let(:product) { create(:product, owning_team:) }
+
+    before do
+      allow(helper).to receive(:current_user).and_return(user)
+    end
+
+    context "when the product is not owned" do
+      let(:owning_team) { nil }
+
+      it "returns 'No owner'" do
+        expect(decorated_product.owning_team_link).to eq("No owner")
+      end
+    end
+
+    context "when the product is owned by the user's team" do
+      let(:owning_team) { user.team }
+
+      it "returns 'Your team is the product record owner'" do
+        expect(decorated_product.owning_team_link).to eq("Your team is the product record owner")
+      end
+    end
+
+    context "when the product is owned by another team" do
+      let(:owning_team) { build(:team, name: "Other Team") }
+
+      it "returns a link to the other team's contact details" do
+        expect(decorated_product.owning_team_link).to have_link("Other Team", href: owner_product_path(product))
+      end
+    end
+  end
 end

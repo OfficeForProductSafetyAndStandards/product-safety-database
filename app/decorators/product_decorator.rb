@@ -36,7 +36,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
 
-    h.govukSummaryList rows:
+    h.govukSummaryList classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt", rows:
   end
 
   def summary_list(timestamp = nil)
@@ -114,5 +114,12 @@ class ProductDecorator < ApplicationDecorator
 
   def activity_view_link(timestamp)
     object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : Rails.application.routes.url_helpers.product_path(object)
+  end
+
+  def owning_team_link
+    return "No owner" if owning_team.nil?
+    return "Your team is the product record owner" if owning_team == h.current_user.team
+
+    h.link_to owning_team.name, h.owner_product_path(object), class: "govuk-link govuk-link--no-visited-state"
   end
 end

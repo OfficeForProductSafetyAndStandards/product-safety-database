@@ -14,11 +14,13 @@
     <% end %>
 
     <p class="govuk-caption-m">
-      <%= "Created: " + @product.created_at.to_formatted_s(:govuk) %>
       <% if @product.updated_at != @product.created_at %>
+        Last updated: <%= @product.updated_at.to_formatted_s :govuk %>
         <br>
-        <%= "Updated: " + @product.updated_at.to_formatted_s(:govuk) %>
       <% end %>
+      Created: <%= @product.created_at.to_formatted_s :govuk %>
+      <br>
+      Product record owner: <%= @product.owning_team_link %>
     </p>
 
     <% if policy(@product).can_spawn_case? %>

@@ -8,40 +8,41 @@
   </div>
 <% else %>
   <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
+  <%= govukInsetText(text: "This case has reported any included products as safe and compliant.") if @investigation.safe_and_compliant? %>
 
-  <% @investigation.investigation_products.reverse.each_with_index do |investigation_product, index| %>
-    <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at) : investigation_product.product %>
-    <% @product = product.decorate %>
+  <% @investigation.investigation_products.decorate.reverse.each.with_index(1) do |investigation_product, index| %>
+    <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).decorate : investigation_product.product %>
+    <% @product = product %>
     <% @investigation_product = investigation_product %>
 
     <section>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-          <h3 id=<%="prod-#{@product.id}" %> class="govuk-heading-m"><%= @product.name %></h3>
+          <h3 id="<%= "prod-#{@product.id}" %>" class="govuk-heading-m"><%= @product.name %></h3>
         </div>
-        <div class="govuk-grid-column-one-quarter">
-          <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-            <!-- TODO: Add edit link -->
+        <% if policy(@investigation_product).edit_product? %>
+          <div class="govuk-grid-column-one-quarter">
+            <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+              <%= link_to("Edit this product", product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <% unless @investigation_product.investigation_closed_at.present? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <%= @investigation_product.product_overview_summary_list %>
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <% unless @product.virus_free_images.empty? %>
+              <figure class="opss-margin-bottom-1-desktop">
+                <%= image_tag @product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+                <figcaption class="govuk-visually-hidden"><%= @product.images.first.title %></figcaption>
+              </figure>
+            <% end %>
           </div>
         </div>
-      </div>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <%= govukSummaryList(
-            classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-            rows: product_overview_rows(@product)
-            )
-          %>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <% unless @product.virus_free_images.empty? %>
-            <figure class="opss-margin-bottom-1-desktop">
-              <%= image_tag(@product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop") %>
-              <figcaption class="govuk-visually-hidden">@product.images.first.title</figcaption>
-            </figure>
-          <% end %>
-        </div>
-      </div>
+      <% end %>
       <%= govukTabs(
         classes: "opss-tabs govuk-!-margin-bottom-2 opss-tabs--min-height-m",
         title: "Information related to this PSD product record",
@@ -66,17 +67,12 @@
 
       <% if policy(@investigation_product).remove? %>
         <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-          <%=
-            link_with_hidden_text_to "Remove product",
-            "(#{@product.name})",
-            remove_investigation_investigation_product_path(@investigation, @investigation_product),
-            class: "govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset"
-          %>
+          <%= link_to(remove_investigation_investigation_product_path(@investigation, @investigation_product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset") do %>Remove this <span class="govuk-visually-hidden"><%= @product.name %></span> product <span class="govuk-visually-hidden">from the case</span><% end %>
         </div>
       <% end %>
     </section>
 
-    <% unless @investigation.investigation_products.length == index + 1 %>
+    <% unless index == @investigation.investigation_products.size %>
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
     <% end %>
   <% end %>

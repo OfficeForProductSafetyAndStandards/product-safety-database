@@ -109,14 +109,14 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
         click_button "Close case"
 
-        click_link "Products (1)"
+        visit "/products/#{product.id}"
       end
 
       context "when the product is owned by the user's team" do
         let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
 
         it "makes the case unowned" do
-          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
+          expect(page).to have_text("Product record owner: No owner")
         end
       end
 
@@ -124,7 +124,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
         let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
 
         it "does not change the product owner" do
-          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
+          expect(page).to have_text("Product record owner: #{other_team.name}")
         end
       end
     end
@@ -143,14 +143,14 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
         click_button "Close case"
 
-        click_link "Products (1)"
+        visit "/products/#{product.id}"
       end
 
       context "when the product is owned by the user's team" do
         let(:product) { create(:product, name: "blahblahblah", owning_team_id: user.team.id) }
 
         it "makes the case unowned" do
-          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: "Product is not currently owned")
+          expect(page).to have_text("Product record owner: No owner")
         end
       end
 
@@ -158,7 +158,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
         let(:product) { create(:product, owning_team_id: other_team.id, name: "helloworld") }
 
         it "does not change the product owner" do
-          expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: other_team.name)
+          expect(page).to have_text("Product record owner: #{other_team.name}")
         end
       end
     end
