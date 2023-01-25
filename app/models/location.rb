@@ -8,8 +8,9 @@ class Location < ApplicationRecord
   belongs_to :business
   belongs_to :added_by_user, class_name: :User, optional: true
 
-  redacted_export_with :id, :address_line_1, :address_line_2, :business_id, :city, :country,
-                       :county, :created_at, :name, :phone_number, :postal_code, :updated_at
+  redacted_export_with :id, :added_by_user_id, :address_line_1, :address_line_2,
+                       :business_id, :city, :country, :county, :created_at,
+                       :name, :phone_number, :postal_code, :updated_at
 
   def summary
     [
