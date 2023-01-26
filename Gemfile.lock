@@ -220,7 +220,7 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
-    fugit (1.7.1)
+    fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.0.1)
@@ -502,7 +502,7 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     scss_lint-govuk (0.2.0)
       scss_lint
-    selenium-webdriver (4.7.1)
+    selenium-webdriver (4.8.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -520,10 +520,9 @@ GEM
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
-    sidekiq-scheduler (4.0.3)
-      redis (>= 4.2.0)
+    sidekiq-scheduler (5.0.0)
       rufus-scheduler (~> 3.2)
-      sidekiq (>= 4, < 7)
+      sidekiq (>= 4, < 8)
       tilt (>= 1.4.0)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -695,12 +694,12 @@ DEPENDENCIES
   sassc-rails
   scout_apm (~> 5.3)
   scss_lint-govuk (~> 0.2)
-  selenium-webdriver (~> 4.7)
+  selenium-webdriver (~> 4.8)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
   sidekiq (~> 6.5)
-  sidekiq-scheduler (~> 4.0.3)
+  sidekiq-scheduler (~> 5.0.0)
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
