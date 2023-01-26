@@ -28,7 +28,7 @@ class ChangeCaseStatus
       product.reload.__elasticsearch__.update_document
     end
 
-    investigation.reload.businesses.each do |business|
+    investigation.businesses.each do |business|
       business.reload.__elasticsearch__.update_document
     end
 
