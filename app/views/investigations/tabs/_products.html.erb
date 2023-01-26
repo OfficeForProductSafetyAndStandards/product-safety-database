@@ -50,7 +50,7 @@
           {
             id: "details-#{index}",
             label: "Details",
-            panel: { html: render("products/case_product_info_tabs/cases") }
+            panel: { html: render("products/case_product_info_tabs/details") }
           },
           {
             id: "images-#{index}",
@@ -60,7 +60,7 @@
           {
             id: "cases-#{index}",
             label: "Cases (#{@product.unique_cases_except(@investigation).count})",
-            panel: { html: render("products/case_product_info_tabs/details")}
+            panel: { html: render("products/case_product_info_tabs/cases")}
           }
         ]
       ) %>

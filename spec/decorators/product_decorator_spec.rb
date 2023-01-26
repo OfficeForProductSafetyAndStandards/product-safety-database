@@ -165,24 +165,27 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
       let(:owning_team) { build(:team, name: "Other Team") }
 
       it "returns a link to the other team's contact details" do
-        expect(decorated_product.owning_team_link).to have_link("Other Team", href: owner_product_path(product))      end
+        expect(decorated_product.owning_team_link).to have_link("Other Team", href: owner_product_path(product))
+      end
     end
+  end
 
-    describe "#unique_investigations_except", :with_stubbed_mailer do
-      context "when product is linked to multiple investigations" do
-        before do
-          create(:allegation, user_title: "investigation 1", products: [product])
-          create(:allegation, user_title: "investigation 2", products: [product])
-          create(:allegation, user_title: "investigation 3", products: [product])
-          create(:allegation, user_title: "investigation 4", products: [product])
-        end
+  describe "#unique_investigations_except", :with_stubbed_mailer do
+    context "when product is linked to multiple investigations" do
+      let(:product) { create(:product) }
 
-        it "returns each unique linked investigation excluding the investigation that the is currently being viewed" do
-          investigation = Investigation.find_by(user_title: "investigation 1")
-          unique_cases = decorated_product.unique_cases_except(investigation)
+      before do
+        create(:allegation, user_title: "investigation 1", products: [product])
+        create(:allegation, user_title: "investigation 2", products: [product])
+        create(:allegation, user_title: "investigation 3", products: [product])
+        create(:allegation, user_title: "investigation 4", products: [product])
+      end
 
-          expect(unique_cases.map(&:user_title)).to eq ["investigation 4", "investigation 3", "investigation 2"]
-        end
+      it "returns each unique linked investigation excluding the investigation that the is currently being viewed" do
+        investigation = Investigation.find_by(user_title: "investigation 1")
+        unique_cases = decorated_product.unique_cases_except(investigation)
+
+        expect(unique_cases.map(&:user_title)).to eq ["investigation 4", "investigation 3", "investigation 2"]
       end
     end
   end
