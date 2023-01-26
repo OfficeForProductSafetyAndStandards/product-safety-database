@@ -18,14 +18,14 @@
       <td headers="psdref item-<%= index %> meta-<%= index %>" class="govuk-table__cell opss-no-wrap">
         <%= product.psd_ref %>
       </td>
+      <td headers="cat item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.category %>
+      </td>
       <td headers="prodtype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
         <%= product.subcategory %>
       </td>
-      <td headers="haztype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
-        <%= product.investigations.first.try(:hazard_type) %>
-      </td>
-      <td headers="cat item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
-        <%= product.category %>
+      <td headers="counterfeit item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.counterfeit_value %>
       </td>
   </tr>
 </tbody>

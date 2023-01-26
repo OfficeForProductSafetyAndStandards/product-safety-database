@@ -41,7 +41,7 @@ class Product < ApplicationRecord
     as_json(
       include: {
         investigations: {
-          only: %i[hazard_type is_closed],
+          only: %i[category is_closed],
           methods: :owner_id
         }
       },

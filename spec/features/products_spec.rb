@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user)             { create :user, :activated, has_viewed_introduction: true }
-  let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago) }
-  let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago) }
-  let!(:washing_machine) { create(:product_washing_machine, created_at: 3.days.ago) }
+  let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago, authenticity: "counterfeit") }
+  let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago, authenticity: "genuine") }
+  let!(:washing_machine) { create(:product_washing_machine, created_at: 3.days.ago, authenticity: "unsure") }
   let!(:investigation)    { create(:allegation, products: [iphone], hazard_type: "Cuts") }
 
   context "with less than 12 products" do
@@ -41,7 +41,7 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       expect(psd_ref.text).to eq iphone.psd_ref
       expect(subcategory.text).to eq iphone.subcategory
       expect(category.text).to eq iphone.category
-      expect(hazard_type.text).to eq investigation.hazard_type
+      expect_correct_counterfeit_values
 
       within "#item-1" do
         expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
@@ -103,12 +103,18 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       find('[headers="prodtype item-0 meta-0"]')
     end
 
-    def hazard_type
-      find('[headers="haztype item-0 meta-0"]')
+    def counterfeit(product_index)
+      find("[headers='counterfeit item-#{product_index} meta-#{product_index}']")
     end
 
     def category
-      find('[headers="cat item-0 meta-0"]')
+      find("[headers='cat item-0 meta-0']")
+    end
+
+    def expect_correct_counterfeit_values
+      expect(counterfeit(0).text).to eq "Yes"
+      expect(counterfeit(1).text).to eq "No"
+      expect(counterfeit(2).text).to eq "Unsure"
     end
   end
 end
