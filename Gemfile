@@ -48,7 +48,7 @@ gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
-gem "govuk-design-system-rails", git: "https://github.com/govuk-ruby/govuk-design-system-rails", tag: "0.9.9"
+gem "govuk-design-system-rails", git: "https://github.com/govuk-ruby/govuk-design-system-rails", tag: "0.10.0"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
