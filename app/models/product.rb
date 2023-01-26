@@ -64,13 +64,15 @@ class Product < ApplicationRecord
   has_many :risk_assessments, through: :risk_assessed_products
 
   belongs_to :added_by_user, class_name: :User, optional: true
-
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
 
-  redacted_export_with :id, :authenticity, :barcode,
-                       :brand, :category, :country_of_origin, :created_at, :description,
-                       :has_markings, :markings, :name, :product_code, :retired_at,
-                       :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id
+  redacted_export_with :id, :added_by_user_id, :affected_units_status,
+                       :authenticity, :barcode, :batch_number, :brand,
+                       :category, :country_of_origin, :created_at,
+                       :customs_code, :description, :has_markings, :markings,
+                       :name, :number_of_affected_units, :product_code,
+                       :subcategory, :updated_at, :webpage,
+                       :when_placed_on_market
 
   scope :not_retired, -> { where(retired_at: nil) }
 
