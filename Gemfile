@@ -5,7 +5,7 @@ ruby "~> 3.0"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
-gem "aws-sdk-s3", "~> 1.118"
+gem "aws-sdk-s3", "~> 1.119"
 gem "aws-sdk-s3control", "~> 1.60"
 gem "bootsnap", require: false
 gem "caxlsx"
@@ -17,6 +17,7 @@ gem "draper", "~> 4.0"
 gem "elasticsearch"
 gem "elasticsearch-model"
 gem "elasticsearch-rails"
+gem "govuk-design-system-rails", "~> 0.10.1"
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
@@ -54,8 +55,6 @@ gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
-
-gem "govuk-design-system-rails", git: "https://github.com/govuk-ruby/govuk-design-system-rails", tag: "0.9.9"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
