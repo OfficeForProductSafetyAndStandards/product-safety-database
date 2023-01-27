@@ -130,6 +130,8 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def unique_cases_except(investigation)
-    unique_investigation_products.map(&:investigation).reject { |inv| inv.id == investigation.id }.sort_by(&:created_at).reverse!
+    unique_investigations = unique_investigation_products.map { |investigation_product| investigation_product.investigation unless investigation_product.investigation.id == investigation.id }
+
+    unique_investigations.compact.sort_by(&:created_at).reverse!
   end
 end
