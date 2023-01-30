@@ -78,9 +78,12 @@ class InvestigationsController < ApplicationController
 
   def cannot_close; end
 
-  def confirm_deletion; end
+  def confirm_deletion
+    # render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+  end
 
   def destroy
+    byebug
     authorize @investigation, :change_owner_or_status?
 
     @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
@@ -115,6 +118,7 @@ private
   end
 
   def set_investigation
+    byebug
     investigation = Investigation.includes(:owner_team, :owner_user, :products, :teams_with_access).find_by!(pretty_id: params[:pretty_id])
     @investigation = investigation.decorate
   end
