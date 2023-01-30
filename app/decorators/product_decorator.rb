@@ -128,4 +128,10 @@ class ProductDecorator < ApplicationDecorator
 
     h.link_to owning_team.name, h.owner_product_path(object), class: "govuk-link govuk-link--no-visited-state"
   end
+
+  def unique_cases_except(investigation)
+    unique_investigations = unique_investigation_products.map { |investigation_product| investigation_product.investigation unless investigation_product.investigation.id == investigation.id }
+
+    unique_investigations.compact.sort_by(&:created_at).reverse!
+  end
 end

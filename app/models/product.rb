@@ -128,6 +128,6 @@ class Product < ApplicationRecord
   end
 
   def unique_investigation_products
-    investigation_products.group_by(&:investigation_id).values.map(&:first)
+    investigation_products.uniq(&:investigation_id)
   end
 end

@@ -59,8 +59,8 @@
           },
           {
             id: "cases-#{index}",
-            label: "Cases (#{@product.unique_investigation_products.count})",
-            panel: { html: render("products/case_product_info_tabs/cases") }
+            label: "Cases (#{@product.unique_cases_except(@investigation).count})",
+            panel: { html: render("products/case_product_info_tabs/cases")}
           }
         ]
       ) %>

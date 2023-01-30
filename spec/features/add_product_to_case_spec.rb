@@ -87,7 +87,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     expect(investigation.reload.products.count).to eq(2)
     expect(investigation.products.first).to eq(right_product)
     expect(right_product.reload.owning_team).to eq(investigation.owner_team)
-    expect(page).to have_content "This product record has also been added to these 1 cases."
+    expect(page).to have_content "The original product record has not been included in any other cases."
 
     click_link "Activity"
 
