@@ -14,7 +14,9 @@
           <%= govukWarningText(iconFallbackText: "Warning", text: "Case #{@investigation.pretty_id} – including its images and supporting information – will be deleted.") %>
 
           <div class="govuk-button-group govuk-!-margin-top-8">
-            <%= button_to "Delete the case", investigation_path(@investigation), method: :delete, class: "govuk-button govuk-link--no-underline govuk-button--warning" %>
+            <%= form_with url: investigation_path(@investigation), method: :delete, local: true do |form| %>
+              <%= form.submit  "Delete the case", class: "govuk-button govuk-link--no-underline govuk-button--warning" %>
+            <% end %>
             <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
           </div>
         </div>

@@ -83,16 +83,15 @@ class InvestigationsController < ApplicationController
   end
 
   def destroy
-    byebug
     authorize @investigation, :change_owner_or_status?
 
     @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
 
     if @delete_investigation_form.valid?
       DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
-      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
+      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }, status: :see_other
     else
-      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
+      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }, status: :see_other
     end
   end
 
@@ -118,7 +117,6 @@ private
   end
 
   def set_investigation
-    byebug
     investigation = Investigation.includes(:owner_team, :owner_user, :products, :teams_with_access).find_by!(pretty_id: params[:pretty_id])
     @investigation = investigation.decorate
   end
