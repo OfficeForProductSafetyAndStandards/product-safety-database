@@ -76,10 +76,12 @@ class InvestigationsController < ApplicationController
     render "investigations/index"
   end
 
-  def cannot_close; end
+  def cannot_close
+    render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+  end
 
   def confirm_deletion
-    # render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+    render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
   end
 
   def destroy
@@ -89,9 +91,9 @@ class InvestigationsController < ApplicationController
 
     if @delete_investigation_form.valid?
       DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
-      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }, status: :see_other
+      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
     else
-      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }, status: :see_other
+      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
     end
   end
 
