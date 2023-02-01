@@ -72,3 +72,9 @@ erd.pdf
 !/app/assets/builds/.keep
 
 /node_modules
+
+.DS_Store
+
+.idea/
+
+.tool-versions
