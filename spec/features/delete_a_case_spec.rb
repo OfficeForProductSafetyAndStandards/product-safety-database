@@ -50,7 +50,7 @@ RSpec.describe "Deleting a case", :with_opensearch, :with_stubbed_mailer, type: 
 
       expect_to_be_on_confirm_case_deletion_page(case_id: investigation.pretty_id)
 
-      click_link "Delete the case"
+      click_button "Delete the case"
 
       expect(page).to have_current_path("/cases/your-cases")
       expect_confirmation_banner("The case was deleted")
