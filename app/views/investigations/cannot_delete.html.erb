@@ -11,7 +11,13 @@
             This case cannot be deleted
           </h1>
 
-          <%= govukInsetText(text: "The status of this case prohibits its deletion.") %>
+          <% inset_html = capture do %>
+            <p class="govuk-body">
+              The status of this case prohibits its deletion.
+            </p>
+          <% end %>
+
+          <%= govukInsetText(html: inset_html,) %>
 
           <div class="govuk-!-margin-top-8">
             <p class="govuk-body">
