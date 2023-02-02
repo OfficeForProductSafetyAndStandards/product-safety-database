@@ -1,0 +1,22 @@
+<nav class="govuk-grid-column-one-quarter govuk-!-padding-right-0" aria-label="Secondary">
+  <a href="#page-content" class="govuk-skip-link opss-skip-link">Skip to the main content</a>
+  <ul class="govuk-list opss-left-nav">
+    <li><%= link_to "My products", your_products_path, class: "govuk-link govuk-link--no-visited-state" %></li>
+    <li><%= link_to "Team products", team_products_path, class: "govuk-link govuk-link--no-visited-state" %></li>
+    <li><%= link_to "All products – Search", all_products_path, class: "govuk-link govuk-link--no-visited-state" %></li>
+  </ul>
+  <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-6 govuk-!-margin-right-6">
+  <ul class="govuk-list opss-left-nav">
+    <li class="opss-left-nav__active">
+      <a href="#page-content" class="govuk-link govuk-link--no-visited-state" aria-current="page">Product <span class="govuk-!-font-weight-regular">&nbsp;<%= product.psd_ref %></span></a>
+      <ul class="govuk-list">
+        <li>
+          <a href="#product-accordion-heading-1" class="govuk-link govuk-link--no-visited-state">Images <span>(<%= product.virus_free_images.size %>)</span></a>
+        </li>
+        <li>
+          <a href="#product-accordion-heading-2" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Related</span> Cases <span>(<%= product.unique_investigation_products.size %>)</span></a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
