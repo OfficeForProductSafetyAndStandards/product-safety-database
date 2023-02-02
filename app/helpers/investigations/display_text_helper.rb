@@ -86,7 +86,7 @@ module Investigations::DisplayTextHelper
   end
 
   def investigation_sub_items(investigation)
-    [
+    rows = [
       {
         text: "Safety and compliance",
         href: investigation_path(investigation, anchor: "safety")
@@ -94,12 +94,17 @@ module Investigations::DisplayTextHelper
       {
         text: "Case specific product information",
         href: investigation_path(investigation, anchor: "product-info-1")
-      },
-      {
+      }
+    ]
+
+    if investigation.complainant
+      rows << {
         text: "Case source",
         href: investigation_path(investigation, anchor: "source")
       }
-    ]
+    end
+
+    rows
   end
 
   def products_sub_items(investigation)
