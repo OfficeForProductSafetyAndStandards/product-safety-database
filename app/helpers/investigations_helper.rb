@@ -119,6 +119,9 @@ module InvestigationsHelper
   end
 
   def case_rows(investigation, user, team_list_html)
+    reference_value = { text: investigation.complainant_reference }
+    reference_value[:secondary_text] = {text: "Optional reference number"} if investigation.complainant_reference
+
     rows = [
       {
         key: { text: "Case name" },
@@ -135,10 +138,7 @@ module InvestigationsHelper
       },
       {
         key: { text: "Reference" },
-        value: {
-          text: investigation.complainant_reference,
-          secondary_text: { text: "Trading standards reference" }
-        },
+        value: reference_value,
         actions: reference_actions(investigation, user)
       },
       {
