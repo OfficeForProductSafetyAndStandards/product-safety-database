@@ -122,6 +122,13 @@ class ProductDecorator < ApplicationDecorator
     object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : Rails.application.routes.url_helpers.product_path(object)
   end
 
+  def owning_team_text
+    return "No owner" if owning_team.nil?
+    return "Your team is the product record owner" if owning_team == h.current_user.team
+
+    owning_team.name
+  end
+
   def owning_team_link
     return "No owner" if owning_team.nil?
     return "Your team is the product record owner" if owning_team == h.current_user.team
@@ -135,7 +142,7 @@ class ProductDecorator < ApplicationDecorator
     unique_investigations.compact.sort_by(&:created_at).reverse!
   end
 
-  def overview_summary_list
+  def overview_summary_list(link_to_owner: true)
     h.govukSummaryList(
       classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
       rows: [
@@ -149,7 +156,7 @@ class ProductDecorator < ApplicationDecorator
         },
         {
           key: { text: "Product record owner" },
-          value: { html: owning_team_link }
+          value: link_to_owner ? { html: owning_team_link } : { text: owning_team_text }
         }
       ]
     )
