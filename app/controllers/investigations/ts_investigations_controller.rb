@@ -28,6 +28,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                                end
     when :case_name
       @case_name_form = CaseNameForm.new
+      @product = authorize_product
     when :case_created
       @investigation = session[:investigation]
       @product = authorize_product
