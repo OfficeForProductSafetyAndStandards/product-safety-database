@@ -157,13 +157,13 @@ module InvestigationsHelper
       {
         key: { text: "Last updated" },
         value: {
-          text: "#{time_ago_in_words(@investigation.updated_at)} ago"
+          text: "#{time_ago_in_words(@investigation.updated_at).capitalize} ago"
         }
       },
       {
         key: { text: "Created" },
         value: {
-          text: "#{time_ago_in_words(@investigation.created_at)} ago"
+          text: "#{time_ago_in_words(@investigation.created_at).capitalize} ago"
         }
       },
       {
