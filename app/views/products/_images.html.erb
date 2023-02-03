@@ -8,14 +8,12 @@
       <% end %>
     </p>
   </div>
-  <% unless local_assigns[:show_add_link] == false %>
-    <% if documentable_policy(@product).create? %>
-      <div class="govuk-grid-column-one-third">
-        <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-          <%= link_to "Add an image", new_product_document_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
-        </div>
+  <% if documentable_policy(@product).create? %>
+    <div class="govuk-grid-column-one-third">
+      <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+        <%= link_to "Add an image", new_product_document_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
       </div>
-    <% end %>
+    </div>
   <% end %>
 </div>
 

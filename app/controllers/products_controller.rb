@@ -23,17 +23,8 @@ class ProductsController < ApplicationController
   end
 
   def show
-    timestamp = nil
-    if params[:timestamp].present?
-      timestamp = params[:timestamp].to_i
-      @product = @product.paper_trail.version_at(Time.zone.at(timestamp))&.decorate
-      # Only allow the show action to retrieve previous versions to prevent modifications
-      render_404_page and return unless @product
-    else
-      # Anyone can view timestamped products, but only certain people can view live [retired] products
-      return render "/products/retired" unless policy(@product).show?
-    end
-    @psd_ref_for_display = @product.psd_ref timestamp:, investigation_was_closed: params[:timestamp].present?
+    # Anyone can view timestamped products, but only certain people can view live [retired] products
+    return render "/products/retired" unless policy(@product).show?
   end
 
   # GET /products/new
@@ -83,8 +74,7 @@ class ProductsController < ApplicationController
         format.html do
           UpdateProduct.call!(
             product: @product.object,
-            product_params: @product_form.serializable_hash,
-            updating_team: current_user.team
+            product_params: @product_form.serializable_hash
           )
 
           redirect_to product_path(@product), flash: { success: "The product record was updated" }
