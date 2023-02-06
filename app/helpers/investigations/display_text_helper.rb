@@ -14,7 +14,8 @@ module Investigations::DisplayTextHelper
         href: investigation_path(investigation),
         html: safe_join(["Case ", tag.span(" #{investigation.pretty_id}", class: "govuk-!-font-weight-regular")]),
         text: "Case",
-        active: is_current_tab.overview?
+        active: is_current_tab.overview?,
+        sub_items: investigation_sub_items(investigation)
       },
       {
         href: investigation_products_path(investigation),
@@ -82,6 +83,28 @@ module Investigations::DisplayTextHelper
       }
     ]
     render "investigations/sub_nav", items:
+  end
+
+  def investigation_sub_items(investigation)
+    rows = [
+      {
+        text: "Safety and compliance",
+        href: investigation_path(investigation, anchor: "safety")
+      },
+      {
+        text: "Case specific product information",
+        href: investigation_path(investigation, anchor: "product-info-1")
+      }
+    ]
+
+    if investigation.complainant
+      rows << {
+        text: "Case source",
+        href: investigation_path(investigation, anchor: "source")
+      }
+    end
+
+    rows
   end
 
   def products_sub_items(investigation)
