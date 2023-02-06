@@ -59,3 +59,6 @@ jobs:
     - name: Check javascript for code style
       run: |
         yarn standard
+    - name: Run SCSS linter
+      run: |
+        yarn stylelint '**/*.(s)?css'
