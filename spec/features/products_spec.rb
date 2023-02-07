@@ -78,7 +78,7 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       investigation.update!(is_private: true)
       visit "/products/#{iphone.id}"
       within ".psd-case-card" do
-        expect(page).to have_css("span", text: "Allegation restricted")
+        expect(page).to have_css("dt", text: "Allegation restricted")
       end
     end
 

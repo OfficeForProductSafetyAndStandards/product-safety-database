@@ -46,6 +46,23 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
+  def details_summary_list
+    action = h.tag.span("Case #{status}", class: "opss-tag opss-tag--risk3")
+
+    h.tag.div class: "govuk-summary-list__row" do
+      list = []
+      if object.is_private?
+        list << h.tag.dt("Allegation restricted", class: "govuk-summary-list__key")
+      else
+        list << h.tag.dt(h.link_to(title, h.investigation_path(object)), class: "govuk-summary-list__key")
+        list << h.tag.dd(object.pretty_id, class: "govuk-summary-list__value")
+        list << h.tag.dd(object.complainant&.name, class: "govuk-summary-list__value")
+      end
+      list << h.tag.dd(action, class: "govuk-summary-list__actions")
+      safe_join(list)
+    end
+  end
+
   def source_details_summary_list(view_protected_details: false)
     contact_details = view_protected_details ? contact_details_list : h.tag.p("")
     contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right")
