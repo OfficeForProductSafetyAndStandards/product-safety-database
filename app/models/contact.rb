@@ -3,7 +3,8 @@ class Contact < ApplicationRecord
   belongs_to :business
   belongs_to :added_by_user, class_name: :User, optional: true
 
-  redacted_export_with :id, :business_id, :created_at, :updated_at
+  redacted_export_with :id, :added_by_user_id, :business_id, :created_at,
+                       :updated_at
 
   def summary
     [

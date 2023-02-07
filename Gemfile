@@ -5,8 +5,8 @@ ruby "~> 3.0"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
-gem "aws-sdk-s3", "~> 1.118"
-gem "aws-sdk-s3control", "~> 1.59"
+gem "aws-sdk-s3", "~> 1.119"
+gem "aws-sdk-s3control", "~> 1.60"
 gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
@@ -17,6 +17,7 @@ gem "draper", "~> 4.0"
 gem "elasticsearch"
 gem "elasticsearch-model"
 gem "elasticsearch-rails"
+gem "govuk-design-system-rails", "~> 0.10.1"
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
@@ -44,8 +45,8 @@ gem "sassc-rails"
 gem "scout_apm", "~> 5.3"
 gem "sentry-rails"
 gem "sentry-sidekiq"
-gem "sidekiq", "~> 6.5"
-gem "sidekiq-scheduler", "~> 4.0.3"
+gem "sidekiq", "~> 7.0"
+gem "sidekiq-scheduler", "~> 5.0.0"
 gem "slim-rails"
 gem "sprockets", "~> 4.2.0"
 gem "sprockets-rails", require: "sprockets/railtie"
@@ -54,8 +55,6 @@ gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
-
-gem "govuk-design-system-rails", git: "https://github.com/govuk-ruby/govuk-design-system-rails", tag: "0.9.8", require: "govuk_design_system"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
@@ -92,8 +91,7 @@ group :test do
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.15", require: false
-  gem "scss_lint-govuk", "~> 0.2"
-  gem "selenium-webdriver", "~> 4.7"
+  gem "selenium-webdriver", "~> 4.8"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"

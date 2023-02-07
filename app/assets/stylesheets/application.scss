@@ -10,7 +10,7 @@ $govuk-global-styles: true;
 $hmcts-page-width: $govuk-page-width;
 $hmcts-gutter: $govuk-gutter;
 $hmcts-gutter-half: $govuk-gutter-half;
-$hmcts-images-path: '/assets/images/';
+$hmcts-images-path: "/assets/images/";
 @import "@hmcts/frontend/objects/width-container";
 @import "@hmcts/frontend/components/hmcts-badge/badge";
 @import "@hmcts/frontend/components/hmcts-banner/banner";

@@ -67,7 +67,7 @@ class Product < ApplicationRecord
 
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
 
-  redacted_export_with :id, :authenticity, :barcode,
+  redacted_export_with :id, :added_by_user_id, :authenticity, :barcode,
                        :brand, :category, :country_of_origin, :created_at, :description,
                        :has_markings, :markings, :name, :product_code, :retired_at,
                        :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id

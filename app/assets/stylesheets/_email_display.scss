@@ -1,5 +1,5 @@
-$white-50-opaque: rgba(govuk-colour("white"), 0.5);
-$button-bottom-border-colour: rgba(0, 0, 0, 0.17);
+$white-50-opaque: rgba(govuk-colour("white"), .5);
+$button-bottom-border-colour: rgba(0, 0, 0, .17);
 $email-message-gutter: $govuk-gutter * 2;
 
 .email-message {
@@ -49,11 +49,11 @@ $email-message-gutter: $govuk-gutter * 2;
     position: relative;
 
     h2 {
-      @include govuk-font(27, $weight: bold)
+      @include govuk-font(27, $weight: bold);
     }
 
     table {
-      margin: 0 0 20px 0;
+      margin: 0 0 20px;
 
       td {
         border: 0;
