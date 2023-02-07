@@ -7,7 +7,7 @@ module Investigations
 
       @risk_assessment_form = RiskAssessmentForm.new(current_user:, investigation: @investigation)
 
-      return render "no_products" if @risk_assessment_form.products.length.zero?
+      return render "no_products" if @risk_assessment_form.products.empty?
     end
 
     def create
