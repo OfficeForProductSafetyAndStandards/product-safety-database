@@ -76,6 +76,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       session[:form_answers].merge!(reference_number_params)
     when :case_name
       @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
+      @product = authorize_product
       return render_wizard unless @case_name_form.valid?
 
       session[:investigation].assign_attributes(user_title: @case_name_form.user_title)
