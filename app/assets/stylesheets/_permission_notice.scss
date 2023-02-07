@@ -12,7 +12,7 @@
   }
 
   @include govuk-text-colour;
-  padding: govuk-spacing(2); //reduced padding from inset-text
+  padding: govuk-spacing(2); // reduced padding from inset-text
   padding-left: govuk-spacing(3); // to match inset-text
   // Margin top intended to collapse
   // This adds an additional 10px to the paragraph above
@@ -34,6 +34,4 @@
   > :last-child {
     margin-bottom: 0;
   }
-
-
 }

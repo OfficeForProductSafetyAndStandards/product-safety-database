@@ -19,7 +19,6 @@ $secondary-hover-colour: #171819; // same as footer links
   @include govuk-responsive-padding(6, "bottom");
   @include govuk-responsive-padding(4, "left");
   @include govuk-responsive-padding(4, "right");
-
 }
 
 .app-document-preview {
@@ -52,8 +51,8 @@ $thumbnail-border: 5px;
     display: block;
     width: 100%;
     background: govuk-colour("white");
-    outline: $thumbnail-border solid rgba(govuk-colour("black"), 0.2);
-    box-shadow: 0 2px 2px rgba(govuk-colour("black"), 0.4);
+    outline: $thumbnail-border solid rgba(govuk-colour("black"), .2);
+    box-shadow: 0 2px 2px rgba(govuk-colour("black"), .4);
   }
 }
 
@@ -100,8 +99,8 @@ $thumbnail-border: 5px;
     }
 
     .delete-document-link {
-      margin-bottom: 0.5em;
-      margin-top: 0.5em;
+      margin-bottom: .5em;
+      margin-top: .5em;
     }
   }
 }

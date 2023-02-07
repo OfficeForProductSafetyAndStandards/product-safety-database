@@ -50,7 +50,7 @@
 
 // The tick-cross styling has been adapted from
 // https://github.com/alphagov/notifications-admin/blob/master/app/assets/stylesheets/components/tick-cross.scss
-$semi-transparent-white: rgba(govuk-colour("white"), 0.6);
+$semi-transparent-white: rgba(govuk-colour("white"), .6);
 
 %tick-cross {
   display: inline-block;

@@ -84,7 +84,6 @@ group :test do
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.15"
   gem "rubocop-rspec", "~> 2.15", require: false
-  gem "scss_lint-govuk", "~> 0.2"
   gem "selenium-webdriver", "~> 4.8"
   gem "shoulda-matchers"
   gem "simplecov"

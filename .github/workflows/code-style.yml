@@ -32,8 +32,6 @@ jobs:
     - name: Run code style checks
       run:  bundle exec rubocop
 
-    - name: Run SCSS linter
-      run: bundle exec  scss-lint .
   front_end:
     name: "Javascript"
     runs-on: ubuntu-latest
@@ -59,3 +57,6 @@ jobs:
     - name: Check javascript for code style
       run: |
         yarn standard
+    - name: Run SCSS linter
+      run: |
+        yarn stylelint '**/*.(s)?css'

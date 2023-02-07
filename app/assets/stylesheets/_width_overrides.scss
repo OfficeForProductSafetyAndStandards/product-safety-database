@@ -61,7 +61,6 @@
     padding-right: 0;
   }
 
-  // scss-lint:disable QualifyingElement
   div.psd-case-card a:focus:before,
   div.psd-product-card a:focus:before {
     outline: none;
@@ -69,7 +68,6 @@
     box-shadow: none;
     text-decoration: none;
   }
-  // scss-lint:enable QualifyingElement
 
   .govuk-grid-column-three-quarters .govuk-grid-row.psd-product-card .govuk-grid-column-one-half:nth-child(2) .govuk-grid-column-one-third:first-child,
   .govuk-grid-column-three-quarters .govuk-grid-row.psd-product-card .govuk-grid-column-one-half:nth-child(2) .govuk-grid-column-one-third:nth-child(2) {
@@ -83,10 +81,8 @@
   }
 }
 
-// scss-lint:disable QualifyingElement
 select.govuk-select {
   // return to default setting
   width: auto;
   max-width: 100%;
 }
-// scss-lint:enable QualifyingElement

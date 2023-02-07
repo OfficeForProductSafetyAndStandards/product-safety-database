@@ -42,7 +42,7 @@
 
   .psd-header__logotype-crown {
     margin-right: 1px;
-    fill: currentColor;
+    fill: currentcolor;
     vertical-align: middle;
   }
 
@@ -134,7 +134,6 @@
     }
   }
 
-
   .psd-header__menu-button {
     @include govuk-font($size: 16);
     display: none;
@@ -151,7 +150,7 @@
       text-decoration: underline;
     }
 
-    &::after {
+    &:after {
       @include govuk-shape-arrow($direction: down, $base: 10px, $display: inline-block);
       content: "";
       margin-left: govuk-spacing(1);
@@ -168,7 +167,7 @@
 
   // Keeping the govuk class here, as it means we don't have to write our own toggling javascript
   .govuk-header__menu-button--open {
-    &::after {
+    &:after {
       @include govuk-shape-arrow($direction: up, $base: 10px, $display: inline-block);
     }
   }
@@ -215,7 +214,6 @@
     padding-top: govuk-spacing(7);
   }
 
-
   @include govuk-media-query($media-type: print) {
     .psd-header {
       border-bottom-width: 0;
@@ -249,10 +247,12 @@
     top: -4px;
   }
 
+  // stylelint-disable no-duplicate-selectors
   .psd-header {
     $offset: 3px;
     padding-top: $offset;
   }
+  // stylelint-enable no-duplicate-selectors
   // End adjustments
 
   .psd-header__secondary-navigation {
@@ -330,7 +330,6 @@
           width: 100%;
         }
       }
-
     }
 
     &.psd-header__navigation-item--right {
