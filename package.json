@@ -33,6 +33,9 @@
     "build": "webpack --config webpack.config.js"
   },
   "stylelint": {
-    "extends": ["stylelint-config-gds/scss", "./css-rules"]
+    "extends": [
+      "stylelint-config-gds/scss",
+      "./css-rules"
+    ]
   }
 }

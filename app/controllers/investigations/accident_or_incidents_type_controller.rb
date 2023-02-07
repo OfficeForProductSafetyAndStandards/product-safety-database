@@ -3,7 +3,7 @@ module Investigations
     def new
       authorize investigation, :update?
       @accident_or_incident_type_form = AccidentOrIncidentTypeForm.new(type: params[:type])
-      return render "no_products" if investigation.products.length.zero?
+      return render "no_products" if investigation.products.empty?
     end
 
     def create
