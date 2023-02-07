@@ -74,7 +74,8 @@ class ProductsController < ApplicationController
         format.html do
           UpdateProduct.call!(
             product: @product.object,
-            product_params: @product_form.serializable_hash
+            product_params: @product_form.serializable_hash,
+            updating_team: current_user.team
           )
 
           redirect_to product_path(@product), flash: { success: "The product record was updated" }

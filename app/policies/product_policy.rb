@@ -13,7 +13,7 @@ class ProductPolicy < ApplicationPolicy
     return false if record.version.present?
     return false if record.retired?
 
-    record.owning_team == user.team
+    record.owning_team.nil? || record.owning_team == user.team
   end
 
   def can_spawn_case?
