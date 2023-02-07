@@ -104,7 +104,7 @@ RSpec.describe Product do
 
       before do
         travel(-6.months) do
-          AddProductToCase.call! user: user, investigation: investigation, product: product
+          AddProductToCase.call!(user:, investigation:, product:)
           RemoveProductFromCase.call! user:, investigation_product: product.investigation_products.find_by(investigation:), investigation:
         end
       end
@@ -121,7 +121,7 @@ RSpec.describe Product do
 
       before do
         travel(-20.months) do
-          AddProductToCase.call! user: user, investigation: investigation, product: product
+          AddProductToCase.call!(user:, investigation:, product:)
           RemoveProductFromCase.call! user:, investigation_product: product.investigation_products.find_by(investigation:), investigation:
         end
       end
@@ -147,17 +147,17 @@ RSpec.describe Product do
 
     before do
       travel(-6.months) do
-        AddProductToCase.call! user: user, investigation: older_case_1, product: product_unlinked_recently
+        AddProductToCase.call! user:, investigation: older_case_1, product: product_unlinked_recently
         RemoveProductFromCase.call! user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_case_1), investigation: older_case_1
       end
 
       travel(-19.months) do
-        AddProductToCase.call! user: user, investigation: older_case_1, product: product_unlinked_in_the_past
+        AddProductToCase.call! user:, investigation: older_case_1, product: product_unlinked_in_the_past
         RemoveProductFromCase.call! user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_case_1), investigation: older_case_1
       end
 
       travel(-20.months) do
-        AddProductToCase.call! user: user, investigation: older_case_2, product: product_unlinked_in_the_past
+        AddProductToCase.call! user:, investigation: older_case_2, product: product_unlinked_in_the_past
         RemoveProductFromCase.call! user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_case_2), investigation: older_case_2
       end
     end

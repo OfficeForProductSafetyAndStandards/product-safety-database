@@ -9,8 +9,8 @@ RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_m
 
   before do
     product.update! owning_team: first_owning_team
-    AddProductToCase.call! product: product, investigation: first_investigation, user: user
-    ChangeCaseStatus.call! investigation: first_investigation, new_status: "closed", user: user
+    AddProductToCase.call!(product:, investigation: first_investigation, user:)
+    ChangeCaseStatus.call!(investigation: first_investigation, new_status: "closed", user:)
     product.update! owning_team: nil
     sign_in user
   end
@@ -45,7 +45,7 @@ RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_m
     expect(page).to have_summary_item(key: "Organisation", value: first_owning_team.team.organisation.name)
 
     # Adding the live product to a case will show the live owner (our team)
-    AddProductToCase.call! product: product.reload, investigation: second_investigation, user: user
+    AddProductToCase.call!(product: product.reload, investigation: second_investigation, user:)
 
     investigation_product_id = second_investigation.investigation_products.find_by(product:).id
     visit "/cases/#{second_investigation.pretty_id}/investigation_products/#{investigation_product_id}/owner"
