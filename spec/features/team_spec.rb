@@ -30,7 +30,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_opensearch, 
         expect(page).to have_user(another_active_user)
         expect(page).to have_user(another_inactive_user)
         expect(page).not_to have_user(another_user_another_team)
-        expect(page).not_to have_resend_link_button_for(another_inactive_user)
+        expect(page).not_to have_resend_button_for(another_inactive_user)
         expect(page).not_to have_link("Invite a team member")
         expect(page).not_to have_css("tfoot", text: "Name Email")
       end
@@ -56,14 +56,14 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_opensearch, 
 
       scenario "displays the invite a team member link, awaiting confirmation text and the resend invite link for inactive users that have not yet filled out their details" do
         expect(page).to have_link("Invite another team member")
-        expect(page).to have_resend_link_button_for(user_without_details)
+        expect(page).to have_resend_button_for(user_without_details)
         expect(page).to have_content("Awaiting confirmation for #{user_without_details.email}")
-        expect(page).not_to have_resend_link_button_for(another_active_user)
+        expect(page).not_to have_resend_button_for(another_active_user)
         expect(page).not_to have_content("Awaiting confirmation for #{another_active_user.email}")
       end
 
       scenario "resending an invitation sends an email to the user and shows a confirmation message" do
-        click_link "Resend invitation to #{user_without_details.email}"
+        click_button "Resend invitation to #{user_without_details.email}"
         expect_confirmation_banner "Invite sent to #{user_without_details.email}"
 
         email = delivered_emails.last
@@ -80,7 +80,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_opensearch, 
     have_link(user.email)
   end
 
-  def have_resend_link_button_for(user)
-    have_link("Resend invitation to #{user.email}")
+  def have_resend_button_for(user)
+    have_button("Resend invitation to #{user.email}")
   end
 end

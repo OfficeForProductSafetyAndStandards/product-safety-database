@@ -38,7 +38,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
     let(:form_errors_double) { instance_double(ActiveModel::Errors).as_null_object }
 
     it "requires secondary authentication", :with_2fa do
-      post team_invitations_path(team), params: params
+      post(team_invitations_path(team), params:)
       expect(response).to redirect_to(new_secondary_authentication_path)
     end
 
@@ -46,7 +46,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
       let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
       it "shows an error message" do
-        post team_invitations_path(team), params: params
+        post(team_invitations_path(team), params:)
         expect(response).to render_template("errors/forbidden")
       end
     end
@@ -55,7 +55,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
       let(:user_team) { create(:team) }
 
       it "shows an error message" do
-        post team_invitations_path(team), params: params
+        post(team_invitations_path(team), params:)
         expect(response).to render_template("errors/forbidden")
       end
     end

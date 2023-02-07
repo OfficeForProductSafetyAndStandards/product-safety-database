@@ -2,8 +2,8 @@
   padding: 0;
 
   // optional
-  font-family: arial, sans-serif; //input has OS specific font-family
   font: inherit;
+  font-family: arial, sans-serif; // input has OS specific font-family
   text-decoration: underline;
   color: $govuk-link-colour;
   @include remove-default-button-styling;
@@ -38,5 +38,3 @@
   color: $govuk-text-colour;
   background-color: $case-bar-secondary-hover-colour;
 }
-
-

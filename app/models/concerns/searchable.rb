@@ -90,7 +90,7 @@ module Searchable
 
         results = __elasticsearch__.search(query)
 
-        break if results.size.zero?
+        break if results.empty?
 
         records += results
         search_from = records.last.tiebreaker_id

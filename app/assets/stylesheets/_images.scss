@@ -15,7 +15,7 @@ $image-border-colour: rgba($govuk-text-colour, .15);
     }
 
     .image-description {
-      margin-bottom: 0.5em;
+      margin-bottom: .5em;
     }
 
     .edit-image-link {
@@ -23,7 +23,7 @@ $image-border-colour: rgba($govuk-text-colour, .15);
     }
 
     .delete-image-link {
-      margin-top: 0.5em;
+      margin-top: .5em;
     }
   }
 }
@@ -48,18 +48,17 @@ $image-border-colour: rgba($govuk-text-colour, .15);
     max-width: 100%;
     max-height: 100%;
   }
-
 }
 
 .app-document-preview__image-without-preview {
   @extend %placeholder-content;
 }
 
-@mixin preview-image-size ($max-width) {
+@mixin preview-image-size($max-width) {
   .app-document-preview__image {
     max-width: $max-width;
     @if $max-width != inherit {
-      max-width: $max-width * 0.75;
+      max-width: $max-width * .75;
     }
 
     @include govuk-media-query($from: tablet) {

@@ -1,7 +1,0 @@
-plugin_gems: ['scss_lint-govuk']
-scss_files: 'app/assets/stylesheets/**/*.css.scss'
-exclude:
-  - 'node_modules/*'
-  - 'coverage/*'
-  - 'vendor/bundle/**/*'
-  - 'app/assets/stylesheets/opss/*'
