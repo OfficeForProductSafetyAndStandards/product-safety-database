@@ -448,7 +448,7 @@ module PageExpectations
 
   def expect_to_be_on_product_page(product_id:, product_name:)
     expect(page).to have_current_path("/products/#{product_id}")
-    expect(page).to have_selector("h1", text: product_name)
+    expect(page).to have_selector("h3.govuk-heading-m", text: product_name)
   end
 
   def expect_to_be_on_edit_product_page(product_id: nil, product_name: nil)
