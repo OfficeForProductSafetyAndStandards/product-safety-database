@@ -169,4 +169,24 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
       end
     end
   end
+
+  describe "#unique_investigations_except", :with_stubbed_mailer do
+    context "when product is linked to multiple investigations" do
+      let(:product) { create(:product) }
+
+      before do
+        create(:allegation, user_title: "investigation 1", products: [product])
+        create(:allegation, user_title: "investigation 2", products: [product])
+        create(:allegation, user_title: "investigation 3", products: [product])
+        create(:allegation, user_title: "investigation 4", products: [product])
+      end
+
+      it "returns each unique linked investigation excluding the investigation that the is currently being viewed" do
+        investigation = Investigation.find_by(user_title: "investigation 1")
+        unique_cases = decorated_product.unique_cases_except(investigation)
+
+        expect(unique_cases.map(&:user_title)).to eq ["investigation 4", "investigation 3", "investigation 2"]
+      end
+    end
+  end
 end

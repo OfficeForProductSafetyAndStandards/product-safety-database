@@ -36,7 +36,7 @@
           <div class="govuk-grid-column-one-third">
             <% unless @product.virus_free_images.empty? %>
               <figure class="opss-margin-bottom-1-desktop">
-                <%= image_tag @product.virus_free_images.first, class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+                <%= image_tag @product.virus_free_images.first.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
                 <figcaption class="govuk-visually-hidden"><%= @product.images.first.title %></figcaption>
               </figure>
             <% end %>
@@ -59,8 +59,8 @@
           },
           {
             id: "cases-#{index}",
-            label: "Cases (#{@product.unique_investigation_products.count})",
-            panel: { html: render("products/case_product_info_tabs/cases") }
+            label: "Cases (#{@product.unique_cases_except(@investigation).count})",
+            panel: { html: render("products/case_product_info_tabs/cases")}
           }
         ]
       ) %>

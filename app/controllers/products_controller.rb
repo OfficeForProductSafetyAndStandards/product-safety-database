@@ -23,14 +23,8 @@ class ProductsController < ApplicationController
   end
 
   def show
-    if params[:timestamp].present?
-      @product = @product.paper_trail.version_at(Time.zone.at(params[:timestamp].to_i))&.decorate
-      # Only allow the show action to retrieve previous versions to prevent modifications
-      render_404_page and return unless @product
-    else
-      # Anyone can view timestamped products, but only certain people can view live [retired] products
-      return render "/products/retired" unless policy(@product).show?
-    end
+    # Anyone can view timestamped products, but only certain people can view live [retired] products
+    return render "/products/retired" unless policy(@product).show?
   end
 
   # GET /products/new

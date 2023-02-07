@@ -64,13 +64,13 @@ class Product < ApplicationRecord
   has_many :risk_assessments, through: :risk_assessed_products
 
   belongs_to :added_by_user, class_name: :User, optional: true
-
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
 
   redacted_export_with :id, :added_by_user_id, :authenticity, :barcode,
-                       :brand, :category, :country_of_origin, :created_at, :description,
-                       :has_markings, :markings, :name, :product_code, :retired_at,
-                       :subcategory, :updated_at, :webpage, :when_placed_on_market, :owning_team_id
+                       :brand, :category, :country_of_origin, :created_at,
+                       :description, :has_markings, :markings, :name,
+                       :product_code, :retired_at, :subcategory, :updated_at,
+                       :webpage, :when_placed_on_market, :owning_team_id
 
   scope :not_retired, -> { where(retired_at: nil) }
 
@@ -128,6 +128,6 @@ class Product < ApplicationRecord
   end
 
   def unique_investigation_products
-    investigation_products.group_by(&:investigation_id).values.map(&:first)
+    investigation_products.uniq(&:investigation_id)
   end
 end
