@@ -9,7 +9,7 @@ $timeline-item-margin-bottom: 20px;
   > ul {
     list-style-type: none;
     position: relative;
-    margin: 0 0 20px 0;
+    margin: 0 0 20px;
 
     &:after {
       content: "";
@@ -55,7 +55,7 @@ $timeline-item-margin-bottom: 20px;
       }
 
       > h3 {
-        margin-top: 0.5em;
+        margin-top: .5em;
         margin-bottom: 0;
       }
 

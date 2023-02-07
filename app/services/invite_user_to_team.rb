@@ -15,7 +15,7 @@ class InviteUserToTeam
 private
 
   def find_or_create_user
-    existing_user = User.find_by email: email
+    existing_user = User.find_by(email:)
 
     if existing_user&.deleted?
       reinstate_and_update_deleted_user(existing_user)

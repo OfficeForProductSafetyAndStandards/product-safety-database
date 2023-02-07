@@ -1,7 +1,7 @@
 // Apply GOVUK typography
 // See https://github.com/alphagov/accessible-autocomplete/issues/285
 .autocomplete__wrapper * {
-  @include govuk-typography-common();
+  @include govuk-typography-common;
 }
 
 // Fix invisible arrow when used as dropdown
@@ -14,6 +14,12 @@
 .autocomplete-select-with-clear {
   width: calc(100% - 48px);
   display: inline-block;
+
+  // Hide IE browser input clear button (that doesn't work anyway)
+  .autocomplete__input::-ms-clear,
+  .autocomplete__hint::-ms-clear {
+    display: none;
+  }
 }
 
 .autocomplete__clear-button {
@@ -45,16 +51,7 @@
   stroke-width: 5;
 }
 
-// Hide IE browser input clear button (that doesn't work anyway)
-.autocomplete-select-with-clear {
-  .autocomplete__input::-ms-clear,
-  .autocomplete__hint::-ms-clear {
-    display: none;
-  }
-}
-
 @include govuk-media-query($from: tablet) {
-
   .autocomplete__hint,
   .autocomplete__input,
   .autocomplete__option {
@@ -74,7 +71,6 @@
 
 // Apply error styling
 .govuk-form-group--error {
-
   .autocomplete__input {
     border: $govuk-border-width-form-element solid $govuk-error-colour;
   }
@@ -102,9 +98,7 @@
   .autocomplete__clear-button {
     margin-top: 4px;
   }
-
 }
-
 
 // Set autocomplete widths
 
@@ -133,7 +127,6 @@
   .autocomplete-select-with-clear .autocomplete__wrapper {
     max-width: inherit !important;
   }
-
 }
 
 // Custom width overrides so inputs can be fixed width regardless of resolution.
@@ -159,5 +152,4 @@
   .app-\!-autocomplete--max-width-one-quarter {
     @include autocomplete-set-width(17ex);
   }
-
 }
