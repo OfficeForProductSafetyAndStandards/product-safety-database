@@ -55,7 +55,7 @@ class InvestigationDecorator < ApplicationDecorator
       else
         list << h.tag.dt(h.link_to(title, h.investigation_path(object), class: 'govuk-link--no-visited-state'), class: "govuk-summary-list__key")
         list << h.tag.dd(object.pretty_id, class: "govuk-summary-list__value")
-        list << h.tag.dd(object.owner_team&.name, class: "govuk-summary-list__value")
+        list << h.tag.dd(object.owner_team&.name || "&ndash;".html_safe, class: "govuk-summary-list__value")
       end
       list << h.tag.dd(action, class: "govuk-summary-list__actions")
       safe_join(list)
