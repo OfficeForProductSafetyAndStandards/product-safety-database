@@ -313,7 +313,7 @@ GEM
     optimist (3.0.1)
     orm_adapter (0.5.0)
     parallel (1.22.1)
-    parallel_tests (4.1.0)
+    parallel_tests (4.2.0)
       parallel
     parser (3.2.0.0)
       ast (~> 2.4.1)
@@ -656,7 +656,7 @@ DEPENDENCIES
   lograge (~> 0.12)
   m (~> 1.6)
   mini_magick (~> 4.12)
-  parallel_tests (~> 4.1.0)
+  parallel_tests (~> 4.2.0)
   pg (~> 1.4)
   pghero (~> 3.1)
   pry (~> 0.14)
