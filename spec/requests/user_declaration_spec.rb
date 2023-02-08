@@ -23,12 +23,12 @@ RSpec.describe "User accepting declaration", type: :request do
     before { allow(UserDeclarationService).to receive(:accept_declaration) }
 
     it "calls UserDeclarationService.accept_declaration" do
-      post declaration_accept_path, params: params
+      post(declaration_accept_path, params:)
       expect(UserDeclarationService).to have_received(:accept_declaration).with(user)
     end
 
     it "redirects the user to root_path" do
-      post declaration_accept_path, params: params
+      post(declaration_accept_path, params:)
       expect(response).to redirect_to(authenticated_msa_root_path)
     end
   end
