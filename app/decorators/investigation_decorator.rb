@@ -48,7 +48,6 @@ class InvestigationDecorator < ApplicationDecorator
 
   def details_summary_list
     action = h.tag.span("Case #{status}", class: "opss-tag opss-tag--risk3")
-
     h.tag.div class: "govuk-summary-list__row" do
       list = []
       if object.is_private?
@@ -56,7 +55,7 @@ class InvestigationDecorator < ApplicationDecorator
       else
         list << h.tag.dt(h.link_to(title, h.investigation_path(object)), class: "govuk-summary-list__key")
         list << h.tag.dd(object.pretty_id, class: "govuk-summary-list__value")
-        list << h.tag.dd(object.complainant&.name, class: "govuk-summary-list__value")
+        list << h.tag.dd(object.owner_team&.name, class: "govuk-summary-list__value")
       end
       list << h.tag.dd(action, class: "govuk-summary-list__actions")
       safe_join(list)
