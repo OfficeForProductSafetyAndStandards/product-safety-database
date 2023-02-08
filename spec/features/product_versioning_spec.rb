@@ -44,7 +44,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
     visit "/cases/#{investigation.pretty_id}/products"
 
     expect(page).to have_selector("h3.govuk-heading-m", text: product.name)
-    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{investigation.date_closed.to_i} - The PSD reference for this version of the product record - as recorded when the case was closed: #{investigation.date_closed.to_fs(:govuk)}.")
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{investigation.date_closed.to_i} - The PSD reference for this version of the product record - as recorded when the case was closed: #{investigation.date_closed.to_formatted_s(:govuk)}.")
     expect(page).to have_selector("dd.govuk-summary-list__value", text: initial_product_description)
     expect(page).not_to have_link "Edit this product"
 
