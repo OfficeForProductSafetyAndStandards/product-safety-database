@@ -17,6 +17,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                                   else
                                     ReasonForCreatingForm.new
                                   end
+      @product = authorize_product
     when :reason_for_concern
       skip_step if session[:investigation].reported_reason == "safe_and_compliant"
       @edit_why_reporting_form = EditWhyReportingForm.new
@@ -51,6 +52,7 @@ class Investigations::TsInvestigationsController < ApplicationController
     case step
     when :reason_for_creating
       @reason_for_creating_form = ReasonForCreatingForm.new(reason_for_creating_params)
+      @product = authorize_product
       return render_wizard unless @reason_for_creating_form.valid?
 
       if @reason_for_creating_form.case_is_safe == "yes"
