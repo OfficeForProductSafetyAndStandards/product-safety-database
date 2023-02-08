@@ -14,7 +14,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
 
     scenario "the user can view a live product" do
       visit product_path(live_product)
-      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference for this product record")
+      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference number for this product record")
     end
 
     scenario "the user can view a live product's owner" do
@@ -24,7 +24,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
 
     scenario "the user can view a retired product" do
       visit product_path(retired_product)
-      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{retired_product.id} - The PSD reference for this product record")
+      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{retired_product.id} - The PSD reference number for this product record")
     end
 
     scenario "the user can view a retired product's owner" do
@@ -40,7 +40,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
 
     scenario "the user can view a live product" do
       visit product_path(live_product)
-      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference for this product record")
+      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference number for this product record")
     end
 
     scenario "the user can view a live product's owner" do

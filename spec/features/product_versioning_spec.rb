@@ -18,7 +18,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
 
   scenario "editing a product" do
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference for this product record")
+    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference number for this product record")
     expect(page).to have_summary_item(key: "Description", value: initial_product_description)
 
     # Close the case which has the product attatched, to create a "timestamped" version
@@ -37,7 +37,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
 
     # Ensure product page shows latest version
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference for this product record")
+    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference number for this product record")
     expect(page).to have_summary_item(key: "Description", value: new_product_description)
 
     # Old version should be accessible
