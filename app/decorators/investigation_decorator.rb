@@ -47,7 +47,9 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def details_summary_list
-    action = h.tag.span("Case #{status}", class: "opss-tag opss-tag--risk3")
+    tag_class_name = is_closed? ? 'opss-tag--risk3' : 'opss-tag--plain'
+    action = h.tag.span("Case #{status}", class: "opss-tag #{tag_class_name}")
+
     h.tag.div class: "govuk-summary-list__row" do
       list = []
       if object.is_private?
