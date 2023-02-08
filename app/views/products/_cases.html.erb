@@ -8,7 +8,7 @@
 
 <% if @product.investigations.any? %>
   <dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--sm-font opss-summary-list-mixed--4-cols psd-case-card">
-    <% @product.investigations.each do |investigation| %>
+    <% @product.investigations.uniq.each do |investigation| %>
       <%= investigation.details_summary_list %>
     <% end %>
   </dl>
