@@ -46,22 +46,25 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
-  def details_summary_list
+  def case_title_key
+    object.is_private? ? "#{case_type.upcase_first} restricted" : h.link_to(title, h.investigation_path(object), class: "govuk-link--no-visited-state")
+  end
+
+  def case_summary_values
+    values = []
+
+    if investigation.is_private?
+      values << { text: '' }
+      values << { text: '' }
+    else
+      values << { text: object.pretty_id }
+      values << { text: object.owner_team&.name || "&ndash;".html_safe }
+    end
+
     tag_class_name = is_closed? ? "opss-tag--risk3" : "opss-tag--plain"
     action = h.tag.span("Case #{status}", class: "opss-tag #{tag_class_name}")
-
-    h.tag.div class: "govuk-summary-list__row" do
-      list = []
-      if object.is_private?
-        list << h.tag.dt("#{case_type.upcase_first} restricted", class: "govuk-summary-list__key")
-      else
-        list << h.tag.dt(h.link_to(title, h.investigation_path(object), class: "govuk-link--no-visited-state"), class: "govuk-summary-list__key")
-        list << h.tag.dd(object.pretty_id, class: "govuk-summary-list__value")
-        list << h.tag.dd(object.owner_team&.name || "&ndash;".html_safe, class: "govuk-summary-list__value")
-      end
-      list << h.tag.dd(action, class: "govuk-summary-list__actions")
-      safe_join(list)
-    end
+    values << { html: h.tag.dd(action, class: "govuk-summary-list__actions") }
+    values
   end
 
   def source_details_summary_list(view_protected_details: false)
