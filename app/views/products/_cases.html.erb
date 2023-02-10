@@ -6,10 +6,12 @@
   </div>
 </div>
 
-<% if @product.investigations.any? %>
-  <% rows = @product.investigations.uniq.map do |investigation| %>
-    <% { key: { text: investigation.case_title_key }, values: investigation.case_summary_values } %>
-  <% end %>
+<div class="psd-case-card">
+  <% if @product.investigations.any? %>
+    <% rows = @product.investigations.uniq.map do |investigation| %>
+      <% { key: { text: investigation.case_title_key }, values: investigation.case_summary_values } %>
+    <% end %>
 
-  <%= govukSummaryList(rows: rows, classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--sm-font opss-summary-list-mixed--4-cols") %>
-<% end %>
+    <%= govukSummaryList(rows: rows, classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--sm-font opss-summary-list-mixed--4-cols") %>
+  <% end %>
+</div>
