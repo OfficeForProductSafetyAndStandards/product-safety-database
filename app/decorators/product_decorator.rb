@@ -18,7 +18,7 @@ class ProductDecorator < ApplicationDecorator
     psd_secondary_text_html << " - as recorded when the case was closed: #{date_case_closed.to_formatted_s(:govuk)}.".html_safe if date_case_closed.present?
     webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
     when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
-    psd_ref_value_html = h.safe_join([psd_ref(timestamp:, investigation_was_closed: date_case_closed.present?), "<br>".html_safe])
+    psd_ref_value_html = date_case_closed.present? ? h.safe_join([psd_ref(timestamp:, investigation_was_closed: true), "<br>".html_safe]) : psd_ref(timestamp:, investigation_was_closed: false)
 
     rows = [
       { key: { html: psd_ref_key_html }, value: { html: psd_ref_value_html, secondary_text: { html: psd_secondary_text_html } } },
