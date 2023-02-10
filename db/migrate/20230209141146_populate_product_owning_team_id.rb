@@ -1,13 +1,12 @@
 class PopulateProductOwningTeamId < ActiveRecord::Migration[7.0]
   def up
-    sql = "UPDATE products
+    sql = "UPDATE products p
     SET owning_team_id = c.collaborator_id
-    FROM collaborations c
-    INNER JOIN investigation_products ON c.investigation_id = investigation_products.investigation_id
-    INNER JOIN investigations ON investigation_products.investigation_id = investigations.id
-    WHERE c.type = 'Collaboration::Access::OwnerTeam'
-    AND investigations.is_closed = false
-    AND products.owning_team_id IS NULL;"
+    FROM investigation_products ip
+    JOIN investigations i ON ip.investigation_id = i.id
+    JOIN collaborations c ON i.id = c.investigation_id
+    AND c.type = 'Collaboration::Access::OwnerTeam'
+    WHERE p.id = ip.product_id;"
 
     ApplicationRecord.connection.exec_update(sql)
   end
