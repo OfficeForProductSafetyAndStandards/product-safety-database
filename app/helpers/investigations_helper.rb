@@ -185,14 +185,20 @@ module InvestigationsHelper
           html: team_list_html
         },
         actions: case_teams_actions(investigation)
-      },
-      {
+      }
+    ]
+
+    if investigation.is_private?
+      rows << {
         key: { text: "Case restriction" },
         value: {
           html: case_restriction_value(investigation)
         },
         actions: case_restriction_actions(investigation, user)
-      },
+      }
+    end
+
+    rows << [
       {
         key: { text: "Case risk level" },
         value: {
@@ -206,6 +212,7 @@ module InvestigationsHelper
         actions: risk_validation_actions(investigation, user)
       }
     ]
+    rows.flatten!
 
     rows.insert(7, notifying_country_section(investigation, user)) if policy(investigation).view_notifying_country?(user:)
 
