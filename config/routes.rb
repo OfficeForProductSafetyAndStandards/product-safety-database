@@ -216,10 +216,6 @@ Rails.application.routes.draw do
     end
   end
 
-  constraints(timestamp: /\d{9,11}/) do
-    get "products/:id(/:timestamp)", to: "products#show", as: :product_version
-  end
-
   resource :businesses, only: [], path: "businesses" do
     get "your-businesses", to: "businesses#your_businesses", as: "your"
     get "team-businesses", to: "businesses#team_businesses", as: "team"

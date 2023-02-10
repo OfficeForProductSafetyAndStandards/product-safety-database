@@ -35,7 +35,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
     it "does not allow user to edit the product" do
       visit "/products/#{product.id}"
-      expect(page).not_to have_link "Edit details"
+      expect(page).not_to have_link "Edit the product record"
 
       visit "/cases/#{investigation.pretty_id}/products"
       expect(page).not_to have_link "Change product details"
@@ -53,8 +53,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       expect(page).to have_summary_item(key: "Product authenticity", value: "Counterfeit")
 
-      expect(page).to have_link "Edit details"
-      click_link "Edit details"
+      click_link "Edit the product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)
       expect(page).to have_field("Product subcategory", with: product.subcategory)
@@ -133,27 +132,6 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       expect(page).to have_listed_case(investigation.pretty_id)
     end
-
-    it "allows the user to upload a document" do
-      visit "/products/#{product.id}"
-
-      click_on "Attachments"
-      click_on "Add attachment"
-
-      attach_file file_fixture("corrective_action.txt")
-      click_on "Save attachment"
-
-      document_title       = Faker::Hipster.word
-      document_description = Faker::Hipster.sentence
-      fill_in "Document title", with: document_title
-      fill_in "Description",    with: document_description
-
-      click_on "Save attachment"
-      click_on "Attachments (1)"
-
-      expect(page).to have_css("h2.govuk-heading-m", text: document_title)
-      expect(page).to have_css("p", text: document_description)
-    end
   end
 
   context "when the product is not owned by a team" do
@@ -171,8 +149,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       expect(page).to have_summary_item(key: "Product authenticity", value: "Counterfeit")
 
-      expect(page).to have_link "Edit details"
-      click_link "Edit details"
+      click_link "Edit the product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)
       expect(page).to have_field("Product subcategory", with: product.subcategory)

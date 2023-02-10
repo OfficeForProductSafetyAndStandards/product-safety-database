@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type: :feature do
-  let(:user) { create(:user, :activated) }
+  let(:user) { create :user, :activated, has_viewed_introduction: true }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   let(:creation_time) { 1.day.ago }
   let(:product) { create(:product, description: initial_product_description) }
+  let(:investigation) { create(:allegation, creator: user, products: [product]) }
 
   before do
     sign_in(user)
@@ -20,7 +21,16 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
     expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference for this product record")
     expect(page).to have_summary_item(key: "Description", value: initial_product_description)
 
-    click_link "Edit details"
+    # Close the case which has the product attatched, to create a "timestamped" version
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Close this case"
+    fill_in "Why are you closing the case?", with: "Case has been resolved."
+    click_button "Close case"
+    expect_confirmation_banner("Allegation was closed")
+    investigation.reload
+
+    visit product_path(product)
+    click_link "Edit the product record"
 
     fill_in "Description of product", with: new_product_description
     click_button "Save"
@@ -31,12 +41,12 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
     expect(page).to have_summary_item(key: "Description", value: new_product_description)
 
     # Old version should be accessible
-    visit product_version_path(product, timestamp: creation_time.to_i)
+    visit "/cases/#{investigation.pretty_id}/products"
 
-    expect(page).to have_selector("h1", text: product.name)
-    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id}_#{creation_time.to_i} - The PSD reference for this product record")
-    expect(page).to have_summary_item(key: "Description", value: initial_product_description)
-    expect(page).not_to have_link "Edit details"
+    expect(page).to have_selector("h3.govuk-heading-m", text: product.name)
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{investigation.date_closed.to_i} - The PSD reference for this version of the product record - as recorded when the case was closed: #{investigation.date_closed.to_s(:govuk)}.")
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: initial_product_description)
+    expect(page).not_to have_link "Edit this product"
 
     # Search should only index current version
     Product.import refresh: :wait_for

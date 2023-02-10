@@ -26,11 +26,6 @@
         <%= markdown simple_format(activity.body) %>
       <% end %>
 
-      <% if activity.product_id && !activity.is_a?(AuditActivity::Test::Result) %>
-        <% product = Product.find(activity.product_id) %>
-        <%= link_to "View product details", product.decorate.activity_view_link(activity.created_at.to_i), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
-      <% end %>
-
       <% if activity.business_id %>
         <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
       <% end %>

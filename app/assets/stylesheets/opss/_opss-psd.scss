@@ -8,19 +8,18 @@
 @import "./opss-pagination";
 
 @include govuk-media-query($from: desktop) {
-
-    /*fix for psd while it is unable to place back links outside and before the main.govuk-main-wrapper element */
-    body>.govuk-width-container>.govuk-main-wrapper>.govuk-back-link {
-        margin-top: - govuk-spacing(8);
-        margin-bottom: - (govuk-spacing(8) + govuk-spacing(1));
-        position: relative;
-        top: - (govuk-spacing(6) + govuk-spacing(1));
-    }
+  // fix for psd while it is unable to place back links outside and before the main.govuk-main-wrapper element
+  body > .govuk-width-container > .govuk-main-wrapper > .govuk-back-link {
+    margin-top: - govuk-spacing(8);
+    margin-bottom: - (govuk-spacing(8) + govuk-spacing(1));
+    position: relative;
+    top: - (govuk-spacing(6) + govuk-spacing(1));
+  }
 }
 
 @function govuk-tint($colour, $percentage) {
-    /// Make a colour lighter by mixing it with white
-    @return mix(govuk-colour("white"), $colour, $percentage);
+  /// Make a colour lighter by mixing it with white
+  @return mix(govuk-colour("white"), $colour, $percentage);
 }
 
 $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
@@ -55,11 +54,11 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
 }
 
 .opss-borders {
-  border-color: govuk-colour("mid-grey", $legacy: "grey-2");
+  border-color: govuk-colour("mid-grey");
   border-style: solid;
   border-width: 0;
 
-  &.opps-borders--all {
+  &.opss-borders--all {
     @include govuk-media-query($from: tablet) {
       border-width: 1px;
     }
@@ -92,9 +91,11 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
 
   .opss-panels__pair,
   .opss-panels__single {
+
     border-width: 2px;
     border-style: solid;
     border-color: $govuk-brand-colour;
+
     padding: govuk-spacing(6) govuk-spacing(5) govuk-spacing(8) govuk-spacing(6);
     margin-left: govuk-spacing(0);
     margin-right: govuk-spacing(0);
@@ -117,6 +118,7 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
   }
 
   .opss-panels__single {
+    width: 100%;
     padding-bottom: govuk-spacing(2);
     margin-top: - govuk-spacing(4);
     margin-bottom: govuk-spacing(2);
@@ -130,12 +132,18 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
 
 @include govuk-media-query($from: desktop) {
   .opss-panels {
-    display: -webkit-flex; // Safari
+    display: -webkit-flex;
+
+    // Safari
     display: flex;
 
     .opss-panels__pair {
-      -webkit-flex: 1 auto; // Safari
-      -ms-flex: 1 auto; // IE10
+      -webkit-flex: 1 auto;
+
+      // Safari
+      -ms-flex: 1 auto;
+
+      // IE10
       flex: 1 auto;
 
       padding-bottom: govuk-spacing(6);
@@ -150,6 +158,43 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
         margin-left: govuk-spacing(2);
       }
     }
+  }
+}
+
+.opss-grey-record {
+  position: relative;
+  top: -1px;
+
+  & + .opss-grey-record {
+    top: -2px;
+  }
+
+  tr:first-child th {
+    border-top: 1px dashed govuk-colour("mid-grey") !important;
+    background-color: $opss-retired-bg !important;
+
+    a {
+      padding-right: govuk-spacing(2);
+      color: $govuk-focus-text-colour;
+
+      &:hover {
+        color: govuk-colour("dark-grey");
+      }
+    }
+  }
+
+  tr:last-child td {
+    border-bottom: 1px dashed govuk-colour("mid-grey") !important;
+    background-color: $opss-retired-bg !important;
+  }
+
+  tr th,
+  tr + tr td:first-of-type {
+    padding-left: govuk-spacing(2);
+  }
+
+  tr + tr td:last-of-type {
+    padding-right: govuk-spacing(2);
   }
 }
 
@@ -208,6 +253,7 @@ ul.opss-radio-list {
   border-style: solid;
   padding: 2px 5px;
   margin-bottom: govuk-spacing(1);
+
   @include govuk-media-query($from: tablet) {
     margin-bottom: 0;
   }
@@ -218,6 +264,7 @@ ul.opss-radio-list {
     &:last-child {
       margin-bottom: 0;
     }
+
     @include govuk-media-query($from: desktop) {
       &:nth-of-type(n+11) {
         margin-top: govuk-spacing(1);
@@ -239,6 +286,16 @@ ul.opss-radio-list {
     border-color: govuk-colour("black");
     background-color: govuk-colour("black");
     color: govuk-colour("white");
+  }
+
+  &.opss-tag--risk4 {
+    border-width: 0;
+    margin-top: .2rem;
+    float: left;
+
+    background-color: govuk-colour("white");
+    color: govuk-colour("red");
+    text-transform: none;
   }
 
   &.opss-tag--plain {
@@ -283,6 +340,7 @@ ul.opss-radio-list {
     linear-gradient(to top left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) calc(50% - 1px), $govuk-border-colour 50%, rgba(0, 0, 0, 0) calc(50% + 1px), rgba(0, 0, 0, 0) 100%),
     linear-gradient(to top right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) calc(50% - 1px), $govuk-border-colour 50%, rgba(0, 0, 0, 0) calc(50% + 1px), rgba(0, 0, 0, 0) 100%);
 }
+
 @media screen and (min-width: 0\0) and (min-resolution: +72dpi) {
   // ie9+ only
   .opss-cross-through {
@@ -405,6 +463,12 @@ ul.opss-radio-list {
   }
 }
 
+.opss-label-wrapper,
+.opss-fieldset__legend,
+div[class*="warning-text"] strong {
+  max-width: none !important;
+}
+
 section[data-info-number] {
   margin-left: - govuk-spacing(4);
   margin-right: - govuk-spacing(4);
@@ -437,7 +501,8 @@ select:disabled {
   cursor: default;
 }
 
-.opss-accordion--sm-all > div:first-child button {// 'Show all sections': right + sm font
+.opss-accordion--sm-all > div:first-child button {
+  // 'Show all sections': right + sm font*/
   float: right;
   @include opss-font-size($s: 14px, $l: 1.3);
 }

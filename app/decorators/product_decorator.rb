@@ -58,7 +58,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
     ]
     rows.compact!
-    h.govukSummaryList rows:
+    h.govukSummaryList rows:, classes: "govuk-!-margin-top-8 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions"
   end
 
   def authenticity
@@ -118,10 +118,6 @@ class ProductDecorator < ApplicationDecorator
     product.counterfeit? ? "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe : "No"
   end
 
-  def activity_view_link(timestamp)
-    object.versions.count > 1 ? "/products/#{object.id}/#{timestamp}" : Rails.application.routes.url_helpers.product_path(object)
-  end
-
   def owning_team_link
     return "No owner" if owning_team.nil?
     return "Your team is the product record owner" if owning_team == h.current_user.team
@@ -133,5 +129,25 @@ class ProductDecorator < ApplicationDecorator
     unique_investigations = unique_investigation_products.map { |investigation_product| investigation_product.investigation unless investigation_product.investigation.id == investigation.id }
 
     unique_investigations.compact.sort_by(&:created_at).reverse!
+  end
+
+  def overview_summary_list
+    h.govukSummaryList(
+      classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
+      rows: [
+        {
+          key: { text: "Last updated" },
+          value: { text: h.date_or_recent_time_ago(product.updated_at) }
+        },
+        {
+          key: { text: "Created" },
+          value: { text: h.date_or_recent_time_ago(product.created_at) }
+        },
+        {
+          key: { text: "Product record owner" },
+          value: { html: owning_team_link }
+        }
+      ]
+    )
   end
 end

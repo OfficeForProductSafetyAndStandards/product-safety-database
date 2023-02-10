@@ -32,13 +32,14 @@ $opss-search-icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGkAAABGCAMAAA
 }
 
 .govuk-label--s + .govuk-hint[class*="font-size-16"][class*="display-inline-block"] {
-        line-height: 1.1 !important;
+  line-height: 1.1 !important;
 
-        &:before {
-            content: ' - '
-        }
+  &:before {
+    content: " - ";
+  }
 }
+
 .govuk-fieldset__legend--s + .govuk-hint[class*="font-size-16"][class*="display-inline-block"] {
-    position: relative;
-    top: -1px;
+  position: relative;
+  top: -1px;
 }

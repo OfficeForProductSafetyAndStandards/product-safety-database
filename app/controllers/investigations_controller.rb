@@ -76,9 +76,13 @@ class InvestigationsController < ApplicationController
     render "investigations/index"
   end
 
-  def cannot_close; end
+  def cannot_close
+    render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+  end
 
-  def confirm_deletion; end
+  def confirm_deletion
+    render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+  end
 
   def destroy
     authorize @investigation, :change_owner_or_status?
