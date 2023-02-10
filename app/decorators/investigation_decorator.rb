@@ -54,8 +54,8 @@ class InvestigationDecorator < ApplicationDecorator
     values = []
 
     if investigation.is_private?
-      values << { text: '' }
-      values << { text: '' }
+      values << { text: "" }
+      values << { text: "" }
     else
       values << { text: object.pretty_id }
       values << { text: object.owner_team&.name || "&ndash;".html_safe }
