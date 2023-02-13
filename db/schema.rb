@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_14_100702) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_13_085244) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -187,6 +187,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_100702) do
     t.string "type"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_correspondences_on_investigation_id"
+  end
+
+  create_table "document_uploads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.json "metadata"
+    t.datetime "updated_at", null: false
+    t.bigint "upload_model_id"
+    t.string "upload_model_type"
+    t.index ["upload_model_type", "upload_model_id"], name: "index_document_uploads_on_upload_model"
   end
 
   create_table "investigation_businesses", id: :serial, force: :cascade do |t|

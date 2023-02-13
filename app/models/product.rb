@@ -49,7 +49,12 @@ class Product < ApplicationRecord
     )
   end
 
+
+
   has_many_attached :documents
+
+  # has_many :document_uploads META DATA (has_paper_trail)
+  has_many :document_uploads, as: :upload_model
 
   has_many :activities
 

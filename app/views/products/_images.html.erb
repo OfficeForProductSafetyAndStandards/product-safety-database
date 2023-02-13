@@ -21,14 +21,29 @@
   <ul class="govuk-list govuk-!-margin-top-6">
     <% @product.virus_free_images.each do |image| %>
       <li>
+        <!-- TODO: Check with Darren the actions part of the summary list, i.e the editing and deleting of images -->
         <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
           {
             key: { text: "Image and title" },
-            value: { text: image.title }
+            value: { text: image.title },
+            actions: {
+              items: [
+                {
+                  href: edit_product_document_path(@product, image),
+                  text: "Edit",
+                  visuallyHiddenText: "name"
+                },
+                {
+                  href: product_document_path(@product, image, method: :delete),
+                  text: "Delete",
+                  visuallyHiddenText: "name"
+                }
+              ]
+            }
           },
           {
             key: { text: "Image description" },
-            value: { text: image.description }
+            value: { text: image.description },
           },
           {
             key: { text: "Updated" },
