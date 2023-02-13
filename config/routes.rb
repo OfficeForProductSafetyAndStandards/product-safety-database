@@ -52,6 +52,14 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :document_uploadable do
+    resources :document_uploads, controller: "document_uploads" do
+      member do
+        get :remove
+      end
+    end
+  end
+
   namespace :declaration do
     get :index, path: ""
     post :accept
@@ -210,7 +218,7 @@ Rails.application.routes.draw do
     get "all-products", to: "products#index", as: "all"
   end
 
-  resources :products, except: %i[destroy], concerns: %i[document_attachable] do
+  resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
     member do
       get :owner
     end

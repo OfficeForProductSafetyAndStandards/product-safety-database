@@ -5,5 +5,6 @@ class DocumentUpload < ApplicationRecord
   # has_one_attached :file_upload ANTI-VIRUS META DATA
   has_one_attached :file_upload
 
+  # title / description
   has_paper_trail
 end
