@@ -7,7 +7,7 @@ class PopulateProductOwningTeamId < ActiveRecord::Migration[7.0]
     JOIN collaborations c ON i.id = c.investigation_id
     AND c.type = 'Collaboration::Access::OwnerTeam'
     WHERE p.id = ip.product_id
-    AND i.is_closed = false 
+    AND i.is_closed = false
     AND p.owning_team_id IS NULL;"
 
     ApplicationRecord.connection.exec_update(sql)
