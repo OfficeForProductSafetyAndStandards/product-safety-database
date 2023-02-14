@@ -368,7 +368,7 @@ private
   end
 
   def case_restriction_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?(user:)
+    return {} unless policy(investigation).can_unrestrict?(user:)
 
     {
       items: [

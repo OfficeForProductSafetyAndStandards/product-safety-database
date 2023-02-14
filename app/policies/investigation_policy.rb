@@ -29,6 +29,10 @@ class InvestigationPolicy < ApplicationPolicy
     @record.owner.in_same_team_as?(user)
   end
 
+  def can_unrestrict?(user: @user)
+    change_owner_or_status?(user: @user) && record.is_private?
+  end
+
   # Ability to see most of the details of the case, with the exception of
   # 'protected' details, such as personal contact details or correspondance
   # with businesses.
