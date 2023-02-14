@@ -1,18 +1,19 @@
+//$opss-error-colour: #d4351c;
 @mixin down-load-link($color, $size) {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="' + $size + 'px" viewBox="0 0 24 24" width="' + $size + 'px" fill="' + $color + '"><g><rect fill="none" height="' + $size + '" width="' + $size + '"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="' + $size +'px" viewBox="0 0 24 24" width="' + $size +'px" fill="' + $color +'"><g><rect fill="none" height="' + $size +'" width="' + $size +'"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
   background-position: center;
   background-repeat: no-repeat;
   display: inline-block;
 }
 
-@function calculaterem($s) {
-  $remsize: $s / 16px;
-  @return #{$remsize}rem;
+@function calculateRem($s) {
+  $remSize: $s / 16px;
+  @return #{$remSize}rem;
 }
 
 @mixin opss-font-size($s, $l) {
   font-size: $s !important;
-  font-size: calculaterem($s) !important;
+  font-size: calculateRem($s) !important;
   line-height: $l !important;
 }
 
@@ -31,11 +32,14 @@
 $std-font-family: "GDS Transport", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
 form.opss-cookie-form {
-  // for the cookie banner
+  /*for the cookie banner*/
   display: flex;
 }
 
-// not normalised by gds library - starts
+/*input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {color:  govuk-colour("mid-grey"); }
+input[type="checkbox"]:disabled + label {opacity: 1 !important; }*/
+
+/* not normalised by gds library - starts */
 figure,
 figcaption {
   margin: 0;
@@ -43,31 +47,32 @@ figcaption {
   display: block;
 }
 
-// not normalised by gds library - ends
+/* not normalised by gds library - ends */
 
 @include govuk-media-query($from: desktop) {
-  .govuk-width-container > main.govuk-main-wrapper {
-    padding-top: govuk-spacing(8);
+  .govuk-width-container>main.govuk-main-wrapper {
+      padding-top: govuk-spacing(8);
   }
 
-  .govuk-width-container > .govuk-breadcrumbs + main.govuk-main-wrapper,
-  .govuk-width-container > .govuk-back-link + main.govuk-main-wrapper {
-    padding-top: govuk-spacing(2);
+  .govuk-width-container>.govuk-breadcrumbs+main.govuk-main-wrapper,
+  .govuk-width-container>.govuk-back-link+main.govuk-main-wrapper {
+      padding-top: govuk-spacing(2);
   }
 }
 
 main.govuk-main-wrapper {
   @include govuk-media-query($from: desktop) {
-    min-height: 500px;
+      min-height: 500px;
   }
 
   @include govuk-clearfix;
 }
 
-#main-content > div > div div {
+#main-content>div>div div {
+
   .govuk-heading-xl,
   .govuk-heading-l {
-    @include word-wrap;
+      @include word-wrap;
   }
 }
 
@@ -81,6 +86,7 @@ main.govuk-main-wrapper {
   @include word-wrap;
 }
 
+/*tbody th  {-webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto; }*/
 .govuk-summary-list .govuk-link,
 .opss-table td a,
 .opss-table tbody tr th:first-child,
@@ -99,12 +105,28 @@ h1.govuk-label-wrapper label.govuk-label--l {
   hyphens: unset;
 }
 
-main a.govuk-link:hover {
-  // recreate new hover styles of latest gds
-  text-decoration-skip-ink: none;
+/*.opss-secondary-text-colour {color: $govuk-secondary-text-colour; }
+.opss-weight-normal {font-weight: normal;
+  *[class^="govuk-heading"] & {
+      font-weight: 400;
+  }
+}*/
+main {
+  a.govuk-link:hover {
+      /*recreate new hover styles of latest gds*/
+      text-decoration-skip-ink: none;
+      /*text-decoration-thickness: max(3px, 0.1875rem, 0.12em); fails build
+      text-decoration-thickness: max(0.1875rem);*/
+      text-decoration: underline !important;
+      text-decoration-thickness: 0.1875rem !important;
+      text-decoration-thickness: 0.15em !important;
+  }
 
-  // text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
-  text-decoration-thickness: max(.1875rem);
+  a.govuk-link:active {
+      text-decoration-thickness: 0 !important;
+      text-decoration-thickness: 0 !important;
+      text-decoration: none !important;
+  }
 }
 
 .opss-no-wrap {
@@ -113,25 +135,26 @@ main a.govuk-link:hover {
 
 @include govuk-media-query($from: desktop) {
   .opss-no-wrap-desktop {
-    white-space: nowrap;
+      white-space: nowrap;
   }
 }
 
 .opss-font-size-14,
 .govuk-\!-font-size-14 {
-  // future proof the 14px which is required for legacy dashboard designs
+  /* future proof the 14px which is required for legacy dashboard designs*/
   font-size: 12px !important;
   font-size: .75rem !important;
-  line-height: 1.25 !important;
+  line-height: 1.25 !important
 }
 
 @media (min-width: 40.0625em) {
-  // future proof the 14px which is required for legacy dashboard designs
+
+  /* future proof the 14px which is required for legacy dashboard designs*/
   .opss-font-size-14,
   .govuk-\!-font-size-14 {
-    font-size: 14px !important;
-    font-size: .875rem !important;
-    line-height: 1.4286 !important;
+      font-size: 14px !important;
+      font-size: .875rem !important;
+      line-height: 1.4285714286 !important
   }
 }
 
@@ -145,7 +168,8 @@ body.js-enabled .opss-nojs-hide {
 
 .js-enabled {
   .opss-js-enabled-hidden {
-    display: none;
+      display: none;
+      /* @include govuk-visually-hidden; */
   }
 }
 
@@ -153,7 +177,7 @@ body.js-enabled .opss-nojs-hide {
   display: none;
 
   @include govuk-media-query($from: desktop) {
-    display: block;
+      display: block;
   }
 }
 
@@ -165,14 +189,17 @@ body.js-enabled .opss-nojs-hide {
   visibility: visible;
 
   @include govuk-media-query($from: desktop) {
-    visibility: hidden;
+      visibility: hidden;
   }
 }
 
+
+
 @include govuk-media-query($from: mobile, $until: desktop, $and: false, $media-type: "all") {
-  // for desktop only
+
+  /* for desktop only */
   .opss-keep-for-desktop {
-    display: none;
+      display: none;
   }
 }
 
@@ -183,32 +210,35 @@ body.js-enabled .opss-nojs-hide {
 .opss-float-right {
   float: right;
 
-  & + .opss-float-right {
-    clear: right;
+  &+.opss-float-right {
+      clear: right;
   }
 }
 
 @include govuk-media-query($from: mobile, $until: tablet, $and: false, $media-type: "all") {
-  // for mobile only
+
+  /* for mobile only */
   .opss-float-left--mobile {
-    display: block;
-    width: 100%;
-    float: left;
-    text-align: left !important;
+      display: block;
+      width: 100%;
+      float: left;
+      text-align: left !important;
   }
 }
 
+
+
 @include govuk-media-query($from: desktop) {
   .opss-float-left-desktop {
-    float: left;
+      float: left;
   }
 
   .opss-float-right-desktop {
-    float: right;
+      float: right;
 
-    & + .opss-float-right-desktop {
-      clear: right;
-    }
+      &+.opss-float-right-desktop {
+          clear: right;
+      }
   }
 }
 
@@ -241,7 +271,7 @@ body.js-enabled .opss-nojs-hide {
   margin-bottom: govuk-spacing(4);
 
   @include govuk-media-query($from: desktop) {
-    margin-bottom: govuk-spacing(1);
+      margin-bottom: govuk-spacing(1);
   }
 }
 
@@ -249,13 +279,13 @@ body.js-enabled .opss-nojs-hide {
   margin-top: govuk-spacing(4);
 
   @include govuk-media-query($from: tablet) {
-    margin-top: govuk-spacing(1);
+      margin-top: govuk-spacing(1);
   }
 }
 
 .opss-skip-link:focus {
   &.opss-skip-link--mb {
-    margin-bottom: govuk-spacing(4) !important;
+      margin-bottom: govuk-spacing(4) !important;
   }
 }
 
@@ -268,7 +298,7 @@ body.js-enabled .opss-nojs-hide {
 }
 
 .opss-document-icon-std {
-  // A CSS FOR ICON ON MOBILE - REQUIRES DESKTOP ONLY CSS TO SNAP IN FULL SIZE DIMS. And update HTML to figcaption
+  /*   A CSS FOR ICON ON MOBILE - REQUIRES DESKTOP ONLY CSS TO SNAP IN FULL SIZE DIMS. And update HTML to figcaption   */
   position: relative;
   padding: 2px;
   margin: 0 0 govuk-spacing(2) 0;
@@ -278,87 +308,94 @@ body.js-enabled .opss-nojs-hide {
   height: 70px;
 
   img {
-    display: block;
-    width: 50px;
+      display: block;
+      width: 50px;
   }
 
   .opss-document-icon-std__filetype {
-    visibility: hidden;
-    position: absolute;
-    left: -10000px;
+      visibility: hidden;
+      position: absolute;
+      left: -10000px;
 
-    abbr[title] {
-      border-bottom: none;
-    }
+      abbr[title] {
+          border-bottom: none;
+      }
   }
 
   @include govuk-media-query($from: desktop) {
-    height: 71px;
-    margin: 0;
+      height: 71px;
+      margin: 0;
 
-    .opss-document-icon-std__filetype {
-      visibility: visible;
-      left: 2px;
-      top: 7px;
-      width: 50px;
-      height: 30px;
-      color: govuk-colour("white");
-      font-family: inherit;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-weight: 700;
-      @include opss-font-size($s: 14px, $l: 1.2);
-      text-align: center;
-    }
+      .opss-document-icon-std__filetype {
+          visibility: visible;
+          left: 2px;
+          top: 7px;
+          width: 50px;
+          height: 30px;
+          color: govuk-colour("white");
+          font-family: inherit;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          font-weight: 700;
+          @include opss-font-size($s: 14px, $l: 1.2);
+          text-align: center;
+      }
   }
 }
 
 @include govuk-media-query($from: desktop) {
-  .opss-right-box-arrow {
-    position: relative;
-    background-color: govuk-colour("light-grey");
-    margin-right: govuk-spacing(5) !important;
-    border-radius: 5px;
-    padding-left: govuk-spacing(3);
 
-    .govuk-grid-column-one-quarter > & {
-      margin-right: govuk-spacing(7) + govuk-spacing(1) !important;
-    }
+  //use on
+  .opss-right-box-arrow {
+      position: relative;
+      background-color: govuk-colour("light-grey");
+      margin-right: govuk-spacing(5) !important;
+      border-radius: 5px;
+      padding-left: govuk-spacing(3);
+
+      .govuk-grid-column-one-quarter>& {
+          margin-right: govuk-spacing(7) + govuk-spacing(1) !important;
+      }
+
+      abbr {
+          border-bottom: none !important;
+      }
   }
 
   .opss-right-box-arrow:after {
-    left: 100%;
-    top: 50%;
-    border: solid transparent;
-    content: "";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-left-color: govuk-colour("light-grey");
-    border-width: 40px;
-    margin-top: -40px;
+      left: 100%;
+      top: 50%;
+      border: solid transparent;
+      content: "";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-left-color: govuk-colour("light-grey");
+      border-width: 40px;
+      margin-top: -40px;
   }
 }
 
 .opss-warning-text--s {
-  // make warning text smaller and allow several in succession
+
+  /* make warning text smaller and allow several in succession */
   strong {
-    @include opss-font-size($s: 16px, $l: 1.3);
+      @include opss-font-size($s: 16px, $l: 1.3);
   }
 
-  & + .opss-warning-text--s > span {
-    display: none;
+  &+.opss-warning-text--s>span {
+      display: none;
   }
 }
 
 .opss-warning-text--normal {
   strong {
-    font-weight: normal;
+      font-weight: normal;
   }
 }
 
-.opss-warning-text--s + .opss-warning-text--s.opss-warning-text--normal {
+.opss-warning-text--s+.opss-warning-text--s.opss-warning-text--normal {
   padding: govuk-spacing(0);
 }
 
@@ -366,16 +403,23 @@ abbr[title] {
   text-decoration: none;
 
   @include govuk-media-query($from: desktop) {
-    h1[class^="govuk-heading"] + p &,
-    h1.govuk-label-wrapper + div.govuk-hint &,
-    h1.govuk-label-wrapper + p &,
-    legend.govuk-fieldset__legend--l + p &,
-    .opss-switch-cols &,
-    .govuk-summary-list__row &,
-    .govuk-main-wrapper p & {
-      border-bottom: 1px dotted $govuk-secondary-text-colour;
-      cursor: help;
-    }
+
+      h1[class^="govuk-heading"]+p &,
+      h1.govuk-label-wrapper+div.govuk-hint &,
+      h1.govuk-label-wrapper+p &,
+      legend.govuk-fieldset__legend--l+p &,
+      .opss-switch-cols &,
+      .govuk-summary-list__row &,
+      .govuk-main-wrapper p & {
+          border-bottom: 1px dotted $govuk-secondary-text-colour;
+          cursor: help;
+      }
+
+      a.govuk-link &,
+      dd span.opss-secondary-text & {
+          border-bottom: none;
+          cursor: inherit;
+      }
   }
 }
 
@@ -395,30 +439,30 @@ samp {
 
 @include govuk-media-query($from: tablet) {
   .opss-max-width-two-thirds {
-    max-width: 66%;
+      max-width: 66%;
   }
 
   .opss-text-align-right {
-    // this opss style is prefered to govuk-!-text-align-right because it is resolution sensitive
-    text-align: right;
-    display: inline-block;
-    width: 100%;
+      /*this opss style is prefered to govuk-!-text-align-right because it is resolution sensitive*/
+      text-align: right;
+      display: inline-block;
+      width: 100%;
   }
 }
 
 .opss-text-underline-offset {
-  text-underline-offset: .1em;
+  text-underline-offset: 0.1em;
 }
 
 .opss-download-link-sm {
-  @include down-load-link(rgba($govuk-link-colour, .9), 16);
+  @include down-load-link(rgba($govuk-link-colour, 0.9), 16);
   width: 10px;
   height: 10px;
   margin-right: 5px;
 }
 
 .opss-download-link-m {
-  @include down-load-link(rgba($govuk-link-colour, .9), 20);
+  @include down-load-link(rgba($govuk-link-colour, 0.9), 20);
   width: 17px;
   height: 17px;
   margin-right: 5px;
@@ -430,142 +474,146 @@ samp {
 .opss-2-col-flow,
 .opss-3-col-flow {
   dl div dd:last-of-type {
-    margin-bottom: 0 !important;
+      margin-bottom: 0 !important;
   }
 
   li a {
-    @include word-wrap;
+      @include word-wrap;
   }
 }
 
 @include govuk-media-query($from: desktop) {
   .opss-desktop-min-height--xs {
-    min-height: 130px;
+      min-height: 130px;
   }
 
   .opss-desktop-min-height--s {
-    min-height: 180px;
+      min-height: 180px;
   }
 
   .opss-desktop-min-height--s2 {
-    min-height: 230px;
+      min-height: 230px;
   }
 
   .opss-desktop-min-height--s2b {
-    min-height: 200px;
+      min-height: 200px;
   }
 
   .opss-desktop-min-height--s3 {
-    min-height: 275px;
+      min-height: 275px;
   }
 
   .opss-desktop-min-height--m {
-    min-height: 300px;
+      min-height: 300px;
   }
 
   .opss-desktop-padding-0 {
-    padding: 0 !important;
+      padding: 0 !important;
   }
 
   .opss-desktop-padding-top-3 {
-    padding-top: govuk-spacing(3) !important;
+      padding-top: govuk-spacing(3) !important;
   }
 
   .opss-desktop-padding-bottom-4 {
-    padding-bottom: govuk-spacing(4) !important;
+      padding-bottom: govuk-spacing(4) !important;
   }
 
   .opss-summary-list__row--split {
-    margin-top: govuk-spacing(9);
+      margin-top: govuk-spacing(9);
   }
 
   .opss-2-col-flow {
-    -moz-column-count: 2;
-    -webkit-column-count: 2;
-    column-count: 2;
-    column-gap: 80px;
+      -moz-column-count: 2;
+      -webkit-column-count: 2;
+      column-count: 2;
+      column-gap: 80px;
 
-    .opss-summary-list-mixed > div {
-      break-inside: avoid-column;
-    }
-
-    .opss-summary-list-mixed.opss-summary-list-mixed--sm {
-      margin-bottom: 0;
-
-      dt {
-        width: 36% !important;
-        @include word-wrap;
+      .opss-summary-list-mixed>div {
+          break-inside: avoid-column;
       }
-    }
+
+      .opss-summary-list-mixed.opss-summary-list-mixed--sm {
+          margin-bottom: 0;
+
+          dt {
+              width: 36% !important;
+              @include word-wrap;
+          }
+
+          /*dt + dd {    //FF dosen't like
+              text-align: center;
+          }*/
+      }
   }
 
   .opss-3-col-flow {
-    -moz-column-count: 3;
-    -webkit-column-count: 3;
-    column-count: 3;
-    column-gap: govuk-spacing(3);
+      -moz-column-count: 3;
+      -webkit-column-count: 3;
+      column-count: 3;
+      column-gap: govuk-spacing(3);
 
-    .opss-summary-list-mixed > div {
-      break-inside: avoid-column;
-    }
-
-    .opss-summary-list-mixed.opss-summary-list-mixed--sm {
-      margin-bottom: 0;
-
-      dt {
-        width: inherit !important;
-        @include word-wrap;
-
-        span {
-          @include opss-font-size($s: 14px, $l: 1.2);
-        }
+      .opss-summary-list-mixed>div {
+          break-inside: avoid-column;
       }
-    }
+
+      .opss-summary-list-mixed.opss-summary-list-mixed--sm {
+          margin-bottom: 0;
+
+          dt {
+              width: inherit !important;
+              @include word-wrap;
+
+              span {
+                  @include opss-font-size($s: 14px, $l: 1.2);
+                  /*position: relative; top: -1px;*/
+              }
+          }
+      }
   }
 
-  // stylelint-disable function-url-quotes
   @-moz-document url-prefix() {
-    // firefox only: col flow bug
-    .opss-2-col-flow,
-    .opss-3-col-flow {
-      .govuk-summary-list {
-        display: unset;
-      }
 
-      .govuk-summary-list__row {
-        display: table;
-        width: 100%;
+      /*firefox only: col flow bug */
+      .opss-2-col-flow,
+      .opss-3-col-flow {
+          .govuk-summary-list {
+              display: unset;
+          }
+
+          .govuk-summary-list__row {
+              display: table;
+              width: 100%;
+          }
       }
-    }
   }
-  // stylelint-enable function-url-quotes
 }
 
 .opss-list {
   @include govuk-media-query($from: tablet) {
-    &.opss-list--inline {
-      li {
-        display: inline-block;
-        margin-left: govuk-spacing(1);
-      }
+      &.opss-list--inline {
+          li {
+              display: inline-block;
+              margin-left: govuk-spacing(1);
+          }
 
-      li:first-child {
-        margin-left: 0;
+          li:first-child {
+              margin-left: 0;
+          }
       }
-    }
   }
 }
 
 @mixin menu-inset-anchors {
   ul li {
-    padding-bottom: 0;
-    @include opss-font-size($s: 16px, $l: 1.2);
+      padding-bottom: 0;
+      @include opss-font-size($s: 16px, $l: 1.2);
 
-    &:before {
-      content: "—";
-      margin-left: - govuk-spacing(4);
-      color: $govuk-secondary-text-colour;
-    }
+      &:before {
+          content: "—";
+          margin-left: - govuk-spacing(4);
+          color: $govuk-secondary-text-colour;
+      }
   }
 }
 
@@ -573,57 +621,79 @@ ul.opss-left-nav {
   padding: 0;
 
   ul.govuk-list {
-    margin-top: 0;
+      margin-top: 0;
   }
 
-  & > li.opss-left-nav__active {
-    @include menu-inset-anchors;
+  &>li.opss-left-nav__active {
+      @include menu-inset-anchors;
   }
 
   li {
-    margin-bottom: 0;
-    padding: 8px 0 5px;
-    @include opss-font-size($s: 17px, $l: 1.2);
-    @include word-wrap;
-
-    ul {
-      padding-left: govuk-spacing(4);
       margin-bottom: 0;
-    }
+      padding: 8px 0 5px 0;
+      @include opss-font-size($s: 17px, $l: 1.2);
+      @include word-wrap;
 
-    ul li.opss-left-nav__active {
-      // 3rd nested ULs
-      @include menu-inset-anchors;
-    }
-
-    a {
-      text-decoration: none !important;
-      text-underline-offset: .1em;
-
-      span {
-        font-size: 90%;
+      ul {
+          padding-left: govuk-spacing(4);
+          margin-bottom: 0;
       }
-    }
+
+      ul li.opss-left-nav__active {
+          /* 3rd nested ULs */
+          @include menu-inset-anchors;
+      }
+
+      a {
+          text-decoration: none !important;
+          text-underline-offset: 0.1em;
+
+          &:hover {
+              //styles supersede by gds upgrade to 4.2
+              text-decoration: underline !important;
+              text-decoration-thickness: 0.1875rem !important;
+              text-decoration-thickness: 0.15em !important;
+              -webkit-text-decoration-skip-ink: none;
+              text-decoration-skip-ink: none;
+              -webkit-text-decoration-skip: none;
+              text-decoration-skip: none;
+          }
+
+          &:focus {
+              text-decoration-thickness: 0 !important;
+              text-decoration-thickness: 0 !important;
+              text-decoration: none !important;
+          }
+
+          span {
+              font-size: 90%;
+          }
+      }
   }
 
-  & > li:first-child {
-    padding-top: 5px;
+  /*& > li > ul.govuk-list { // 2nd nested ULs
+      padding-top: govuk-spacing(1); margin: govuk-spacing(4) 0 govuk-spacing(2) 0;
+  } */
+
+  &>li:first-child {
+      padding-top: 5px;
   }
 
   .opss-left-nav__active {
-    ul {
-      padding-left: govuk-spacing(6);
-    }
+      ul {
+          padding-left: govuk-spacing(6);
+      }
 
-    & > a {
-      font-weight: bold;
-      margin-left: govuk-spacing(2);
-    }
+      &>a {
+          font-weight: bold;
+          margin-left: govuk-spacing(2);
+      }
 
-    display: block;
-    margin-left: - govuk-spacing(2) - 4;
-    border-left: 4px solid $govuk-brand-colour;
+      display: block;
+      margin-left: - govuk-spacing(2) - 4;
+      border-left: 4px solid $govuk-brand-colour;
   }
+
 }
 
 .opss-primary-text {
@@ -634,7 +704,7 @@ ul.opss-left-nav {
   color: $govuk-secondary-text-colour;
 
   a[class*="link--no-underline"] sup[class$="font-size-14"] {
-    color: $govuk-secondary-text-colour;
+      color: $govuk-secondary-text-colour;
   }
 }
 
@@ -642,7 +712,7 @@ a.opss-secondary-text sup[class$="font-size-14"] {
   color: $govuk-secondary-text-colour;
 }
 
-div[class$="inset-text"] > ol li:last-child {
+div[class$="inset-text"]>ol li:last-child {
   margin-bottom: govuk-spacing(1);
 }
 
@@ -650,7 +720,8 @@ div[class$="inset-text"] > ol li:last-child {
 .opss-border-bottom,
 .opss-border-left,
 .opss-border-right,
-.opss-border-all {
+.opss-border-all,
+.opss-border-all-perm {
   border-color: $govuk-border-colour;
   border-style: solid;
   border-width: 0;
@@ -676,53 +747,70 @@ div[class$="inset-text"] > ol li:last-child {
   border-width: 0;
 }
 
+.opss-blue-border-top {
+  border-top: 2px solid $govuk-brand-colour;
+}
+
+.opss-blue-border-all {
+  border: 2px solid $govuk-brand-colour;
+}
+
 @include govuk-media-query($from: tablet) {
   .opss-rounded-corners {
-    border-radius: 5px;
+      border-radius: 5px;
   }
 
   .opss-drop-shadow {
-    box-shadow: 3px 4px 6px 0 #ebebeb;
+      box-shadow: 3px 4px 6px 0px #ebebeb;
   }
 
+  //2px 2px 10px govuk-colour("mid-grey");
   .opss-border-all {
-    border-width: 1px;
+      border-width: 1px;
   }
+
+  /*.opss-border-all--padding-sm {padding: govuk-spacing(1); }
+  a.opss-border-all--padding-sm {padding: 7px 13px 8px 11px; }*/
 
   a[class*="font-size-14"].opss-border-all {
-    line-height: 1.2 !important;
+      line-height: 1.2 !important;
   }
+}
+
+.opss-border-all-perm {
+  /* for all screen sizes */
+  border-width: 1px;
 }
 
 @include govuk-media-query($until: tablet) {
   .opss-border-all {
-    padding: govuk-spacing(0) !important;
+      padding: govuk-spacing(0) !important;
   }
 }
 
 .opss-details--sm {
   @include govuk-media-query($from: desktop) {
-    summary {
-      @include opss-font-size($s: 16px, $l: 1.25);
-      padding-left: govuk-spacing(3);
+      summary {
+          @include opss-font-size($s: 16px, $l: 1.25);
+          padding-left: govuk-spacing(3);
 
-      &:before {
-        border-width: 5px 0 7px 9px;
+          &::before {
+              border-width: 5px 0 7px 9px;
+          }
       }
-    }
 
-    &[open] > summary:before {
-      border-width: 10px 6px 0 !important;
-    }
+      &[open]>summary::before {
+          border-width: 10px 6px 0px 6px !important;
+      }
 
-    margin-bottom: govuk-spacing(2);
+      margin-bottom: govuk-spacing(2);
   }
 }
 
 .opss-details--plain {
-  & > div {
-    padding: govuk-spacing(3) 0;
-    border-left: none;
+  &>div {
+      padding: govuk-spacing(3) 0;
+      border-left: none;
   }
 }
 
@@ -735,22 +823,22 @@ div[class$="inset-text"] > ol li:last-child {
   text-decoration: underline;
 
   &:visited {
-    color: $govuk-link-colour;
+      color: $govuk-link-colour;
   }
 
   &:hover {
-    color: $govuk-link-hover-colour;
-    text-decoration: underline;
+      color: $govuk-link-hover-colour;
+      text-decoration: underline;
   }
 
   &:focus,
   &:active {
-    outline: 3px solid transparent !important;
-    color: govuk-colour("black") !important;
-    background-color: govuk-colour("yellow") !important;
-    box-shadow: 0 -2px govuk-colour("yellow"), 0 4px govuk-colour("black") !important;
-    text-decoration: none !important;
-    top: 0 !important;
+      outline: 3px solid transparent !important;
+      color: govuk-colour("black") !important;
+      background-color: govuk-colour("yellow") !important;
+      box-shadow: 0 -2px govuk-colour("yellow"), 0 4px govuk-colour("black") !important;
+      text-decoration: none !important;
+      top: 0 !important;
   }
 }
 
@@ -768,21 +856,20 @@ div[class$="inset-text"] > ol li:last-child {
   max-width: 100%;
 
   &.opss-details-img--thumbnail {
-    max-height: 110px;
+      max-height: 110px;
   }
 
-  &.opss-details-img--thumbnail + .opss-img-caption {
-    max-width: 174px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  &.opss-details-img--thumbnail+.opss-img-caption {
+      max-width: 174px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 }
 
-section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figure.opss-margin-bottom-1-desktop {
+section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third>figure.opss-margin-bottom-1-desktop {
   max-height: 105px;
-
-  // quick fix for smooth page loading on case products pg - when img height loads = zero pg movement
+  /*quick fix for smooth page loading on case products pg - when img height loads = zero pg movement*/
 }
 
 .opss-img-caption {
@@ -793,289 +880,295 @@ section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figur
 dl.opss-summary-list-aside {
   counter-reset: img;
 
-  dt:before {
-    counter-increment: img;
-    content: counter(img) ". ";
+  dt::before {
+      counter-increment: img;
+      content: counter(img) ". ";
   }
 
   dt,
   dd {
-    display: block;
-    margin-left: 0;
-    width: 100%;
+      display: block;
+      margin-left: 0;
+      width: 100%;
   }
 
   dt {
-    font-weight: 700;
-    border-top: 1px solid $govuk-border-colour;
-    margin-top: govuk-spacing(4);
-    padding-top: govuk-spacing(4);
+      font-weight: 700;
+      border-top: 1px solid $govuk-border-colour;
+      margin-top: govuk-spacing(4);
+      padding-top: govuk-spacing(4);
 
-    &:first-child {
-      border-top: none 0;
-      margin-top: 0;
-      padding-top: 0;
-    }
+      &:first-child {
+          border-top: none 0;
+          margin-top: 0;
+          padding-top: 0;
+      }
   }
 
   dd {
-    img {
-      max-height: 140px;
-      max-width: 100%;
-      margin-top: govuk-spacing(1);
-      margin-bottom: govuk-spacing(1);
-    }
+      img {
+          max-height: 140px;
+          max-width: 100%;
+          margin-top: govuk-spacing(1);
+          margin-bottom: govuk-spacing(1);
+      }
   }
 
-  dt + dd + dd + dd {
-    // image
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  dt+dd+dd+dd {
+      /* image */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
   }
 
   @media only screen and (max-width: 600px) {
-    dt,
-    dd {
-      @include govuk-font($size: 16);
-    }
 
-    dt {
-      font-weight: 700;
-    }
+      dt,
+      dd {
+          @include govuk-font($size: 16);
+      }
+
+      dt {
+          font-weight: 700;
+      }
   }
+
 }
 
 @include govuk-media-query($from: tablet) {
   .opss-summary-list-vertical {
-    margin-bottom: govuk-spacing(1);
+      margin-bottom: govuk-spacing(1);
 
-    dt,
-    dd {
-      display: block;
-      width: inherit !important;
-      padding: 0 !important;
-    }
+      dt,
+      dd {
+          display: block;
+          width: inherit !important;
+          padding: 0 !important;
+      }
 
-    dt {
-      margin-top: govuk-spacing(3);
-    }
+      dt {
+          margin-top: govuk-spacing(3);
+      }
 
-    div:first-of-type dt {
-      margin-top: govuk-spacing(0);
-    }
+      div:first-of-type dt {
+          margin-top: govuk-spacing(0);
+      }
   }
 }
 
 .opss-summary-list-mixed {
-  // this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed
-  & > div {
-    // std summary list but allows for a mixture of 2 & 3 cols in 1 list
-    display: table;
-    width: 100%;
 
-    .govuk-grid-column-three-quarters & {
-      dt {
-        width: 39%;
+  /* this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed  */
+  &>div {
+      /* std summary list but allows for a mixture of 2 & 3 cols in 1 list */
+      display: table;
+      width: 100%;
+
+      .govuk-grid-column-three-quarters & {
+          dt {
+              width: 39%;
+          }
+
+          dt+dd {
+              min-width: 40%;
+              width: auto;
+              /* 1. protects against rogue legacy psd invalid html */
+          }
       }
 
-      dt + dd {
-        min-width: 40%;
-        width: auto;
-
-        // 1. protects against rogue legacy psd invalid html
+      dd {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          -ms-word-break: break-all;
+          word-break: break-all;
+          word-break: break-word;
+          /*no adding hypens*/
       }
-    }
 
-    dd {
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      -ms-word-break: break-all;
-      word-break: break-all;
-      word-break: break-word;
+      dd[class*="summary-list__actions"] a {
+          /*don't wrap the short "edit" type action links*/
+          white-space: nowrap;
+      }
 
-      // no adding hypens
-    }
+      &>span.govuk-summary-list__actions {
+          display: none !important;
+      }
 
-    dd[class*="summary-list__actions"] a {
-      // don't wrap the short "edit" type action links
-      white-space: nowrap;
-    }
+      /* 2. protects against rogue legacy psd invalid html */
 
-    & > span.govuk-summary-list__actions {
-      display: none !important;
-    }
-
-    // 2. protects against rogue legacy psd invalid html
-
-    dd br + span.opss-secondary-text {
-      padding-left: govuk-spacing(0) !important;
-    }
+      dd br+span.opss-secondary-text,
+      dd ul li>span.opss-secondary-text:first-of-type {
+          padding-left: govuk-spacing(0) !important;
+      }
   }
 
   @include govuk-media-query($from: desktop) {
-    &.opss-summary-list-mixed--narrow-dt + .opss-text-align-right {
-      position: relative;
-      top: - govuk-spacing(4);
-    }
-
-    &.opss-summary-list-mixed--narrow-dt > div {
-      dt {
-        width: 25%;
+      &.opss-summary-list-mixed--narrow-dt+.opss-text-align-right {
+          position: relative;
+          top: - govuk-spacing(4);
       }
 
-      dt + dd {
-        min-width: 50%;
-      }
-    }
+      &.opss-summary-list-mixed--narrow-dt>div {
+          dt {
+              width: 25%;
+          }
 
-    &.opss-summary-list-mixed--narrow-actions > div {
-      dd[class$="__actions"] {
-        width: 10%;
+          dt+dd {
+              min-width: 50%;
+          }
       }
-    }
 
-    &.opss-summary-list-mixed--compact > div {
-      dt,
-      dd {
-        margin-top: 0;
-        margin-bottom: 0;
-        padding-top: 0;
-        padding-bottom: govuk-spacing(1);
-        @include opss-font-size($s: 16px, $l: 1.2);
-        color: $govuk-secondary-text-colour;
+      &.opss-summary-list-mixed--narrow-actions>div {
+          dd[class$="__actions"] {
+              width: 10%;
+          }
       }
-    }
+
+      &.opss-summary-list-mixed--compact>div {
+
+          dt,
+          dd {
+              margin-top: 0;
+              margin-bottom: 0;
+              padding-top: 0;
+              padding-bottom: govuk-spacing(1);
+              @include opss-font-size($s: 16px, $l: 1.2);
+              color: $govuk-secondary-text-colour;
+          }
+      }
   }
 
   &.opss-summary-list-mixed--image {
-    margin-bottom: govuk-spacing(8);
-    border-bottom: 1px solid $govuk-input-border-colour;
+      margin-bottom: govuk-spacing(8);
+      border-bottom: 1px solid $govuk-input-border-colour;
 
-    .opss-tabs li:last-child & {
-      margin-bottom: govuk-spacing(0);
-      border-bottom: none 0;
-    }
-
-    & > div:first-child dt {
-      vertical-align: bottom;
-
-      & + dd {
-        padding-right: govuk-spacing(0);
-
-        figure {
-          img {
-            max-width: 100%;
-          }
-
-          a {
-            display: block;
-            margin-top: - govuk-spacing(5);
-            margin-bottom: govuk-spacing(1);
-            text-align: right;
-
-            img {
-              margin-top: -2px;
-              margin-bottom: -2px;
-              border: 0;
-            }
-          }
-        }
+      .opss-tabs li:last-child & {
+          margin-bottom: govuk-spacing(0);
+          border-bottom: none 0;
       }
-    }
+
+      &>div:first-child dt {
+          vertical-align: bottom;
+
+          &+dd {
+              padding-right: govuk-spacing(0);
+
+              figure {
+                  img {
+                      max-width: 100%;
+                  }
+
+                  a {
+                      display: block;
+                      margin-top: - govuk-spacing(5);
+                      margin-bottom: govuk-spacing(1);
+                      text-align: right;
+
+                      img {
+                          margin-top: -2px;
+                          margin-bottom: -2px;
+                          border: 0;
+                      }
+                  }
+              }
+          }
+      }
   }
 
   .opss-grouping & {
-    &.opss-summary-list-mixed--narrow-dt {
-      dt {
-        width: 24%;
+      &.opss-summary-list-mixed--narrow-dt {
+          dt {
+              width: 24%;
+          }
       }
-    }
   }
 
-  // stylelint-disable function-url-quotes
   @-moz-document url-prefix() {
-    // firefox only: align 1st dd (without a 2nd) correctly
-    .govuk-summary-list__row dd:last-child {
-      width: inherit;
-    }
 
-    &.opss-summary-list-mixed--narrow-actions > div {
-      // firefox only: col flow bug
-      dd[class$="__actions"] {
-        width: auto;
+      /*firefox only: align 1st dd (without a 2nd) correctly */
+      .govuk-summary-list__row dd:last-child {
+          width: inherit;
       }
-    }
+
+      &.opss-summary-list-mixed--narrow-actions>div {
+
+          /*firefox only: col flow bug */
+          dd[class$="__actions"] {
+              width: auto;
+          }
+      }
   }
-  // stylelint-enable function-url-quotes
 }
 
 @include govuk-media-query($from: desktop) {
   .opss-summary-list-mixed.opss-summary-list-mixed--sm {
-    // a narrow and small font version
-    dt {
-      width: 25% !important;
-    }
 
-    dt,
-    dd {
-      @include opss-font-size($s: 16px, $l: 1.2);
-      padding-bottom: govuk-spacing(0);
-    }
+      /*a narrow and small font version */
+      dt {
+          width: 25% !important;
+      }
+
+      dt,
+      dd {
+          @include opss-font-size($s: 16px, $l: 1.2);
+          padding-bottom: govuk-spacing(0);
+      }
   }
 
   .opss-summary-list-mixed.opss-summary-list-mixed--sm-font {
-    // a mixed and small font version
-    margin-bottom: govuk-spacing(4);
+      /* a mixed and small font version */
+      margin-bottom: govuk-spacing(4);
 
-    dt,
-    dd {
-      @include opss-font-size($s: 16px, $l: 1.2);
-      padding-top: govuk-spacing(1);
-      padding-bottom: govuk-spacing(1);
-    }
-
-    .govuk-accordion__section-content & {
-      margin-bottom: govuk-spacing(7);
-
-      div:last-child {
-        dt,
-        dd {
-          border-bottom: none;
-        }
+      dt,
+      dd {
+          @include opss-font-size($s: 16px, $l: 1.2);
+          padding-top: govuk-spacing(1);
+          padding-bottom: govuk-spacing(1);
       }
-    }
+
+      .govuk-accordion__section-content & {
+          margin-bottom: govuk-spacing(7);
+
+          div:last-child {
+
+              dt,
+              dd {
+                  border-bottom: none;
+              }
+          }
+      }
   }
 
   .opss-summary-list-mixed.opss-summary-list--equal-widths {
-    div {
-      dt,
-      dd {
-        width: 33%;
+      div {
+
+          dt,
+          dd {
+              width: 33%;
+          }
       }
-    }
   }
 
   .opss-summary-list-mixed.opss-summary-list--equal-last-2-wide {
-    div {
-      dt {
-        width: 20%;
-      }
+      div {
+          dt {
+              width: 20%;
+          }
 
-      dd {
-        width: 40%;
+          dd {
+              width: 40%;
+          }
       }
-    }
   }
 }
 
-// bespoke styles for Cases accordian section on a product page ... starts
+/* bespoke styles for Cases accordian section on a product page ... starts */
 .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt {
   width: 35%;
 }
 
 .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd,
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd + dd {
+.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd+dd {
   width: 25%;
 }
 
@@ -1083,33 +1176,33 @@ dl.opss-summary-list-aside {
   width: 15%;
 }
 
-// bespoke styles for Cases accordian section on a product page ... ends
+/* bespoke styles for Cases accordian section on a product page ... ends */
 
 dd dl.opss-nested-definition-list {
   margin: 0;
   @include opss-font-size($s: 16px, $l: 1.6);
 
-  & > div {
-    width: 100%;
+  &>div {
+      width: 100%;
   }
 
   dt {
-    font-weight: bold;
-    display: inline-block;
-    margin: 0 govuk-spacing(2) 0 0;
-    width: 45%;
+      font-weight: bold;
+      display: inline-block;
+      margin: 0 govuk-spacing(2) 0 0;
+      width: 45%;
   }
 
   dd {
-    display: inline-block;
-    padding-right: 0;
-    margin-left: 0;
+      display: inline-block;
+      padding-right: 0;
+      margin-left: 0;
   }
 }
 
 .opss-definition-list {
   @include govuk-media-query($from: tablet) {
-    @include opss-font-size($s: 19px, $l: 1.3);
+      @include opss-font-size($s: 19px, $l: 1.3);
   }
 
   @include opss-font-size($s: 16px, $l: 1.25);
@@ -1117,405 +1210,420 @@ dd dl.opss-nested-definition-list {
   color: $govuk-text-colour;
 
   &.opss-definition-list--left dd {
-    margin-left: 0;
+      margin-left: 0;
   }
 
   @include govuk-media-query($from: desktop) {
-    & > div {
-      display: inline-block;
-      width: 100%;
-    }
+      &>div {
+          display: inline-block;
+          width: 100%;
+      }
   }
 
   dt {
-    @include word-wrap;
+      @include word-wrap;
   }
 }
 
 @include govuk-media-query($from: tablet) {
   .opss-grouping {
-    border: 1px solid $govuk-border-colour;
-    padding: 0 govuk-spacing(4) govuk-spacing(2) govuk-spacing(4);
-    margin: govuk-spacing(5) 0 0 0;
+      border: 1px solid $govuk-border-colour;
+      padding: 0 govuk-spacing(4) govuk-spacing(2) govuk-spacing(4);
+      margin: govuk-spacing(5) 0 0 0;
 
-    // not all style options to match GDS styles are added - you may need to add more when required: e.g, opss-grouping__legend--l
-    .opss-grouping__heading-l,
-    .opss-grouping__heading-m,
-    .opss-grouping__heading-s,
-    .opss-grouping__legend--s {
-      background-color: govuk-colour("white");
-      display: inline-block;
-      margin: 0;
-      padding: 0 govuk-spacing(2);
-      position: relative;
-      left: - govuk-spacing(2);
-      top: - govuk-spacing(3);
-    }
-
-    .opss-grouping__heading-l {
-      top: - govuk-spacing(4);
-    }
-
-    .opss-grouping__heading-s {
-      top: - govuk-spacing(2) - 3;
-    }
-
-    .opss-grouping__legend--s {
-      top: govuk-spacing(0);
-      padding-right: 0;
-    }
-
-    .opss-grouping__heading--norm {
-      font-weight: normal;
-    }
-
-    & > dl {
-      margin-bottom: 0;
-
-      dt {
-        padding-right: govuk-spacing(1);
-        width: 29%;
+      /* not all style options to match GDS styles are added - you may need to add more when required: e.g, opss-grouping__legend--l */
+      .opss-grouping__heading-l,
+      .opss-grouping__heading-m,
+      .opss-grouping__heading-s,
+      .opss-grouping__legend--s {
+          background-color: govuk-colour("white");
+          display: inline-block;
+          margin: 0;
+          padding: 0 govuk-spacing(2);
+          position: relative;
+          left: - govuk-spacing(2);
+          top: - govuk-spacing(3);
       }
-    }
 
-    & dl:last-of-type > div:last-child {
-      border-bottom: none;
-    }
+      .opss-grouping__heading-l {
+          top: - govuk-spacing(4);
+      }
+
+      .opss-grouping__heading-s {
+          top: - govuk-spacing(2) - 3;
+      }
+
+      .opss-grouping__legend--s {
+          top: govuk-spacing(0);
+          padding-right: 0;
+      }
+
+      .opss-grouping__heading--norm {
+          font-weight: normal;
+      }
+
+      &>dl {
+          margin-bottom: 0;
+
+          dt {
+              padding-right: govuk-spacing(1);
+              width: 29%;
+          }
+      }
+
+      /*& > dl > div:last-child {
+          border-bottom: none;
+      }*/
+
+      & dl:last-of-type>div:last-child {
+          border-bottom: none;
+      }
   }
+
 }
 
 @include govuk-media-query($from: tablet) {
   .opss-equal-height-container {
-    // on a .govuk-grid-row div
-    margin-left: 0;
-    margin-right: 0;
-    display: -webkit-flex;
-    display: flex;
-
-    .opss-equal-height__col {
-      // on a .govuk-grid-column-one-half
-      margin-right: 0;
-      margin-left: govuk-spacing(3);
-      -webkit-flex: 1 auto;
-      -ms-flex: 1 auto;
-      flex: 1 auto;
-    }
-
-    .opss-equal-height__col:first-child {
-      margin-right: govuk-spacing(3);
+      /* on a .govuk-grid-row div */
       margin-left: 0;
-    }
+      margin-right: 0;
+      display: -webkit-flex;
+      display: flex;
+
+      .opss-equal-height__col {
+          /* on a .govuk-grid-column-one-half */
+          margin-right: 0;
+          margin-left: govuk-spacing(3);
+          -webkit-flex: 1 auto;
+          -ms-flex: 1 auto;
+          flex: 1 auto;
+      }
+
+      .opss-equal-height__col:first-child {
+          margin-right: govuk-spacing(3);
+          margin-left: 0;
+      }
   }
 }
 
 @include govuk-media-query($from: desktop) {
   .opss-full-height {
-    display: flex;
-    flex-direction: row;
-
-    .opss-full-height__col {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
 
-      & > .opss-full-height__col--bottom {
-        margin-top: auto;
+      .opss-full-height__col {
+          display: flex;
+          flex-direction: column;
+
+          &>.opss-full-height__col--bottom {
+              margin-top: auto;
+          }
       }
-    }
   }
 }
 
 .opss-table {
-  // not .opss-table-items
+  /* not .opss-table-items */
   border-collapse: initial !important;
-
-  // stops 1px border issues on laptops using 150% text scale
+  /*stops 1px border issues on laptops using 150% text scale*/
 
   tbody tr:last-child th,
   tbody tr:last-child td {
-    border-bottom: none;
+      border-bottom: none;
   }
 
   tbody tr td:last-child a {
-    white-space: nowrap;
+      white-space: nowrap;
   }
 
   tfoot th {
-    border-top: 1px solid $govuk-border-colour;
-    border-bottom: none 0;
+      border-top: 1px solid $govuk-border-colour;
+      border-bottom: none 0;
   }
 
   thead tr th:first-child,
   tbody tr th:first-child {
-    width: 33%;
+      width: 33%;
   }
 
   @include govuk-media-query($from: tablet) {
-    thead tr th:first-child,
-    tbody tr th:first-child {
-      width: auto;
-      max-width: $govuk-page-width / 2;
-    }
+
+      thead tr th:first-child,
+      tbody tr th:first-child {
+          width: auto;
+          max-width: $govuk-page-width / 2;
+      }
   }
 }
 
 .opss-table--last-col-right {
+
   thead tr .govuk-table__header:last-child,
   tbody tr .govuk-table__cell:last-child,
   tfoot tr .govuk-table__header:last-child {
-    text-align: right;
+      text-align: right;
   }
 }
 
 .opss-table--first-col-normal {
   tbody tr th:first-child {
-    font-weight: normal;
+      font-weight: normal;
   }
 }
 
 .opss-table--2-row-groups {
   tbody tr:first-child {
-    & > * {
-      border-bottom: none 0;
-    }
+      &>* {
+          border-bottom: none 0;
+      }
 
-    & + tr > * {
-      border-bottom: 1px solid $govuk-border-colour;
-    }
+      &+tr>* {
+          border-bottom: 1px solid $govuk-border-colour;
+      }
   }
 
-  tbody:last-of-type tr > th,
-  tbody:last-of-type tr > td {
-    border-bottom: none 0;
+  tbody:last-of-type tr>th,
+  tbody:last-of-type tr>td {
+      border-bottom: none 0;
   }
 }
 
 .opss-table-items {
   border-collapse: initial !important;
-
-  // stops 1px border issues on laptops using 150% text scale
+  /*stops 1px border issues on laptops using 150% text scale*/
 
   thead th:nth-child(2) {
-    width: auto;
+      width: auto;
   }
 
   thead th:nth-child(3) {
-    width: auto;
+      width: auto;
   }
 
   thead th:nth-child(4) {
-    width: auto;
+      width: auto;
   }
 
   thead th:nth-child(5) {
-    width: auto;
+      width: auto;
   }
 
   @include govuk-media-query($from: tablet) {
-    thead th:nth-child(2) {
-      width: 20%;
-    }
+      thead th:nth-child(2) {
+          width: 20%;
+      }
   }
 
   thead th:last-child,
   tbody td:last-child,
   tfoot th:last-child {
-    text-align: right;
+      text-align: right;
   }
 
-  tbody td:nth-child(4):first-letter {
-    text-transform: uppercase;
+  tbody td:nth-child(4)::first-letter {
+      text-transform: uppercase;
   }
 
   thead th,
   tfoot th {
-    @include govuk-font($size: 19);
-    font-weight: 700;
+      @include govuk-font($size: 19);
+      font-weight: 700;
   }
 
   thead th {
-    vertical-align: bottom;
+      vertical-align: bottom;
   }
 
   tfoot th {
-    vertical-align: top;
+      vertical-align: top;
   }
 
   tbody td {
-    @include govuk-font($size: 19);
+      @include govuk-font($size: 19);
   }
 
-  // tbody tr:not(:first-child):not(:last-child) td, tbody tr:not(:first-child):not(:last-child) th,
+  /*tbody tr:last-child td a {
+      @include govuk-font($size: 16);
+  }*/
+  /*tbody tr:not(:first-child):not(:last-child) td, tbody tr:not(:first-child):not(:last-child) th, */
   tbody tr:nth-child(2) th,
   tbody tr:nth-child(2) td {
-    padding-top: govuk-spacing(0);
-    padding-bottom: govuk-spacing(2);
+      padding-top: govuk-spacing(0);
+      padding-bottom: govuk-spacing(2);
   }
 
   tbody tr:nth-child(3) th,
   tbody tr:nth-child(3) td {
-    padding-top: govuk-spacing(1);
-    padding-bottom: govuk-spacing(2);
+      padding-top: govuk-spacing(1);
+      padding-bottom: govuk-spacing(2);
   }
 
   tbody tr:nth-child(4) th,
   tbody tr:nth-child(4) td {
-    padding-top: govuk-spacing(0);
+      padding-top: govuk-spacing(0);
   }
 
-  // th[colspan="3"], tfoot th {padding-top: govuk-spacing(7); }
+  /*th[colspan="3"], tfoot th {padding-top: govuk-spacing(7); }*/
   tbody tr:first-child th,
-  tbody tr:not(:last-child) > *,
+  tbody tr:not(:last-child)>*,
   tfoot tr th {
-    border-bottom: 0 none;
+      border-bottom: 0 none;
   }
 
-  // stylelint-disable declaration-property-value-disallowed-list
   tbody th,
   tbody td {
-    transition: all .5s ease;
-    background-color: transparent;
+      transition: all 0.5s ease;
+      background-color: transparent;
   }
-  // stylelint-enable declaration-property-value-disallowed-list
 
   tbody.opss-bg th,
   tbody.opss-bg td {
-    background-color: govuk-colour("light-grey");
+      background-color: govuk-colour("light-grey");
   }
 
   &.opss-table--borders {
-    // add horizontal lines to simple single rows table in one parent tbody
-    tbody tr {
-      th,
-      td {
-        border-bottom: 1px solid $govuk-border-colour;
-        padding-top: govuk-spacing(2);
-        padding-bottom: govuk-spacing(2);
-        vertical-align: middle;
+
+      /* add horizontal lines to simple single rows table in one parent tbody */
+      tbody tr {
+
+          th,
+          td {
+              border-bottom: 1px solid $govuk-border-colour;
+              padding-top: govuk-spacing(2);
+              padding-bottom: govuk-spacing(2);
+              vertical-align: middle;
+          }
       }
-    }
   }
 
   &.opss-table-items--sm {
-    thead th,
-    tfoot th {
-      @include govuk-font($size: 16);
-      font-weight: 700;
-    }
 
-    tbody td {
-      @include govuk-font($size: 16);
-    }
+      thead th,
+      tfoot th {
+          @include govuk-font($size: 16);
+          font-weight: 700;
+      }
 
-    tbody tr:nth-child(2) th,
-    tbody tr:nth-child(2) td {
-      padding-bottom: govuk-spacing(1);
-    }
+      tbody td {
+          @include govuk-font($size: 16);
+      }
 
-    tbody tr:last-child th,
-    tbody tr:last-child td {
-      padding-bottom: govuk-spacing(2) + 2;
-    }
+      tbody tr:nth-child(2) th,
+      tbody tr:nth-child(2) td {
+          padding-bottom: govuk-spacing(1);
+      }
+
+      tbody tr:last-child th,
+      tbody tr:last-child td {
+          padding-bottom: govuk-spacing(2) + 2;
+      }
   }
 
   &.opss-table-items--first-col-33 {
-    @include govuk-media-query($from: tablet) {
-      thead th:nth-child(2) {
-        width: 33%;
+      @include govuk-media-query($from: tablet) {
+          thead th:nth-child(2) {
+              width: 33%;
+          }
       }
-    }
   }
 
   &.opss-table-items--first-col-50 {
-    // no hidden 1st col
-    @include govuk-media-query($from: tablet) {
-      thead th:nth-child(1) {
-        width: 50%;
+
+      /*no hidden 1st col */
+      @include govuk-media-query($from: tablet) {
+          thead th:nth-child(1) {
+              width: 50%;
+          }
       }
-    }
   }
 }
 
 .opss-table,
 .opss-table-items {
   tbody td {
-    span > em,
-    mark {
-      font-style: normal;
-      font-weight: bold;
-      background: none;
-      color: $govuk-text-colour;
-    }
+
+      span>em,
+      mark {
+          font-style: normal;
+          font-weight: bold;
+          background: none;
+          color: $govuk-text-colour;
+      }
   }
 }
 
 .opss-table-stripes {
   tbody tr {
-    th,
-    td {
-      border-top: 1px solid govuk-colour("light-grey");
-    }
+
+      th,
+      td {
+          border-top: 1px solid govuk-colour("light-grey");
+      }
   }
 
   tbody tr:first-child,
   tbody tr:last-child {
-    th,
-    td {
-      border-bottom: none;
-    }
+
+      th,
+      td {
+          border-bottom: none;
+      }
   }
 
   &.opss-table-items--sm {
-    tbody tr {
-      th,
-      td {
-        padding-top: govuk-spacing(2);
-        padding-bottom: govuk-spacing(2);
+      tbody tr {
+
+          th,
+          td {
+              padding-top: govuk-spacing(2);
+              padding-bottom: govuk-spacing(2);
+          }
       }
-    }
   }
 }
+
+
 
 @include govuk-media-query($from: desktop) {
   .opss-desktop-sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 20px;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 20px;
   }
 
   .opss-desktop-padding-left-0 {
-    padding-left: 0;
+      padding-left: 0;
   }
 
   .opss-desktop-padding-bottom-8 {
-    padding-bottom: govuk-spacing(8);
+      padding-bottom: govuk-spacing(8);
   }
 
   .opss-desktop-margin-bottom-240px {
-    margin-bottom: 240px !important;
-
-    // aligns bottom of tbody
+      margin-bottom: 240px !important;
+      /* aligns bottom of tbody */
   }
 
   .opss-desktop-margin-bottom-220px {
-    margin-bottom: 220px !important;
-
-    // aligns bottom of tbody
+      margin-bottom: 220px !important;
+      /* aligns bottom of tbody */
   }
 }
 
-@media only screen and (min-width: 641px) and (max-width: 961px) {
-  // jump to mobile sizing at tablet size for tight cols
+@media only screen and (min-width:641px) and (max-width: 961px) {
+
+  /* jump to mobile sizing at tablet size for tight cols */
   .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
-    @include govuk-font($size: 16);
+      @include govuk-font($size: 16);
   }
 }
 
 .opss-icon--tick {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABQUlEQVQ4jZXSMWhTURTG8V/SYkrpEwkiHZyapU4dOwkd8hydrLNL1xZ08EIo4iC8FkRwsODoLILzDbh0a8dCFaFooZuIcKGVIKVDEgivT5Kc7X7nfv/zcTgzpqisyJcb7dZeo9362euenEFtCjN8wRou8QHP61MEeDwwQx1PcDBRgqzI5/ENd0ut95Mm6FSY/6AzFpAV+RKeVrRepBB/TZLgDeZK2hHe0V/GcFKzYvoDPKyAbqUQ/8HM4OMj7DfarWaj3TrsdU8usiK/gc+4XTJ/TCHuDh+1rMhv4RiLA+03XmEBL0vmc9xLIZ4OhVnsjJihidcVsWFn1Ex/B3X9yxpXP7BbFuspxA2sYn8M4FkK8e81AKQQD3Ef64NJ5eriUxX12ilnRT6HTf3ru4keVlKIXycCjIDuYBvfU4hv//fvCi1WUVpTllRdAAAAAElFTkSuQmCC");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABQUlEQVQ4jZXSMWhTURTG8V/SYkrpEwkiHZyapU4dOwkd8hydrLNL1xZ08EIo4iC8FkRwsODoLILzDbh0a8dCFaFooZuIcKGVIKVDEgivT5Kc7X7nfv/zcTgzpqisyJcb7dZeo9362euenEFtCjN8wRou8QHP61MEeDwwQx1PcDBRgqzI5/ENd0ut95Mm6FSY/6AzFpAV+RKeVrRepBB/TZLgDeZK2hHe0V/GcFKzYvoDPKyAbqUQ/8HM4OMj7DfarWaj3TrsdU8usiK/gc+4XTJ/TCHuDh+1rMhv4RiLA+03XmEBL0vmc9xLIZ4OhVnsjJihidcVsWFn1Ex/B3X9yxpXP7BbFuspxA2sYn8M4FkK8e81AKQQD3Ef64NJ5eriUxX12ilnRT6HTf3ru4keVlKIXycCjIDuYBvfU4hv//fvCi1WUVpTllRdAAAAAElFTkSuQmCC');
 }
 
 .opss-icon--alert {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA4klEQVQ4jaXTP0oDQRgF8B/DFlaeQYJYiIhnkFxFPImEYB1yjBwgKLZbppBgl9ZSJAQJQQu/hGV2lvXPg9fse9/33sywtHGCO9R4DdYYYVDwH1CF6QOfHdxiHN7W8Cwzb/Ac3GTaLF8yLqQtGvqioN/vxdOo9tsFW5wl3JbO9ANUuEkY/mF4j2HS8zQ9GKR/DENKWHWJOA52Ba0qPOGyIF7grafBI5xjp/1Ma1wH3wv6LkLApGCoG0l1QZ80qxxhXkgY+f6x8oYPMSNfMu04TnPptDTcxFXUW8Y9rPES31qX/QVUY2XWKh7oRgAAAABJRU5ErkJggg==");
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA4klEQVQ4jaXTP0oDQRgF8B/DFlaeQYJYiIhnkFxFPImEYB1yjBwgKLZbppBgl9ZSJAQJQQu/hGV2lvXPg9fse9/33sywtHGCO9R4DdYYYVDwH1CF6QOfHdxiHN7W8Cwzb/Ac3GTaLF8yLqQtGvqioN/vxdOo9tsFW5wl3JbO9ANUuEkY/mF4j2HS8zQ9GKR/DENKWHWJOA52Ba0qPOGyIF7grafBI5xjp/1Ma1wH3wv6LkLApGCoG0l1QZ80qxxhXkgY+f6x8oYPMSNfMu04TnPptDTcxFXUW8Y9rPES31qX/QVUY2XWKh7oRgAAAABJRU5ErkJggg==');
 }
 
 .opss-icon {
@@ -1527,9 +1635,24 @@ dd dl.opss-nested-definition-list {
   margin-right: govuk-spacing(1);
 
   &.opss-icon--16sm {
-    width: 16px;
-    height: 16px;
-    margin-bottom: -2px;
-    margin-right: govuk-spacing(1) - 2;
+      width: 16px;
+      height: 16px;
+      margin-bottom: -2px;
+      margin-right: govuk-spacing(1) - 2;
   }
 }
+
+
+
+/*ul#navigation.psd-header__navigation {
+  display: block;
+  margin-left: 0 !important;
+
+  a {
+      font-weight: normal;
+  }
+
+  &[hidden] {
+      display: none;
+  }
+}*/
