@@ -26,6 +26,7 @@ class InvestigationProductDecorator < Draper::Decorator
           value: { html: owning_team_link }
         }
       ]
+
     )
   end
 end
