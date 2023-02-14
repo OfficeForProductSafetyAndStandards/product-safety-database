@@ -69,7 +69,7 @@
           html: "<span class=\"govuk-visually-hidden\">Related</span> Cases <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.unique_investigation_products.size })</span>".html_safe
         },
         content: {
-          html: render("investigations_summary", investigations: @product.unique_investigation_products.map(&:investigation))
+          html: render("cases", product: @product)
         }
       }
     ] %>
