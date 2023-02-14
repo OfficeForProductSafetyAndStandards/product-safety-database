@@ -16,6 +16,10 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
         expect_to_be_on_case_page(case_id:)
         expect(page).not_to have_text "Case restriction"
       end
+
+      scenario "user cannot direct browser to the change case restriction page" do
+        expect { visit "/cases/#{case_id}/visibility" }.to raise_error(Pundit::NotAuthorizedError)
+      end
     end
 
     context "when the case is restricted" do
