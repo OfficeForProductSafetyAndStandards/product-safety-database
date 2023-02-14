@@ -11,7 +11,8 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_op
            subcategory: "washing machine",
            product_code: "MBWM01",
            webpage: "http://example.com/mybrand/washing-machines",
-           description: "White with chrome buttons")
+           description: "White with chrome buttons",
+           owning_team: user.team)
   end
 
   scenario "Updating a product" do
