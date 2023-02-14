@@ -49,12 +49,7 @@ class Product < ApplicationRecord
     )
   end
 
-
-
-  has_many_attached :documents
-
-  # has_many :document_uploads META DATA (has_paper_trail)
-  has_many :document_uploads, as: :upload_model
+  has_many_attached :documents # Deprecated, to be migrated and removed
 
   has_many :activities
 
@@ -100,19 +95,21 @@ class Product < ApplicationRecord
   end
 
   def images
-    documents.includes(:blob).joins(:blob).where("left(content_type, 5) = 'image'")
-  end
-
-  def non_image_documents
-    documents.includes(:blob).joins(:blob).where("left(content_type, 5) != 'image'")
+    document_uploads.select { |document_upload| document_upload.file_upload.content_type.starts_with?("image") }
   end
 
   def virus_free_images
-    images.joins(:blob).where("active_storage_blobs.metadata LIKE ?", '%"safe":true%')
+    document_uploads.select do |document_upload|
+      file_upload = document_upload.file_upload
+      file_upload.content_type.starts_with?("image") && file_upload.metadata["safe"]
+    end
   end
 
-  def virus_free_non_image_attachments
-    non_image_documents.joins(:blob).where("active_storage_blobs.metadata LIKE ?", '%"safe":true%')
+  # Expose document uploads similarly to other model attributes while managing them as an
+  # array of IDs. This allows products to be versioned along with their associated document
+  # uploads as they were at the time of the versioned product.
+  def document_uploads
+    DocumentUpload.where(id: document_upload_ids)
   end
 
   def name_for_sorting

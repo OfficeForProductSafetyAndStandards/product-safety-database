@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_13_085244) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_13_163547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -295,6 +295,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_13_085244) do
     t.string "country_of_origin"
     t.datetime "created_at", precision: nil, null: false
     t.text "description"
+    t.bigint "document_upload_ids", default: [], array: true
     t.enum "has_markings", enum_type: "has_markings_values"
     t.text "markings", array: true
     t.string "name"

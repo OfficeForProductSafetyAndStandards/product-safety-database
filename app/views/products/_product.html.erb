@@ -2,7 +2,7 @@
   <%= link_to product.name, product_path(product), class: "app-block-link govuk-link govuk-!-margin-bottom-2" %>
   <% if product.images.any? %>
     <%= render "documents/document_preview",
-      document: product.images.first,
+      document: product.images.first.file_upload,
       dimensions: [300, 500],
       hide_link: true,
       class_name: 'app-document-preview--small' %>

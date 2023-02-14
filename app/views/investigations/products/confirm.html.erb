@@ -47,7 +47,7 @@
                     summaryText: "Product image",
                     html: capture {
                       render "documents/document_preview",
-                        document: @product.images.first,
+                        document: @product.images.first.file_upload,
                         dimensions: [300, 500],
                         hide_link: true,
                         class_name: 'app-document-preview--small'

@@ -11,7 +11,7 @@
   <% if documentable_policy(@product).create? %>
     <div class="govuk-grid-column-one-third">
       <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-        <%= link_to "Add an image", new_product_document_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+        <%= link_to "Add an image", new_product_document_upload_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
       </div>
     </div>
   <% end %>
@@ -29,12 +29,12 @@
             actions: {
               items: [
                 {
-                  href: edit_product_document_path(@product, image),
+                  href: edit_product_document_upload_path(@product, image),
                   text: "Edit",
                   visuallyHiddenText: "name"
                 },
                 {
-                  href: product_document_path(@product, image, method: :delete),
+                  href: remove_product_document_upload_path(@product, image),
                   text: "Delete",
                   visuallyHiddenText: "name"
                 }
@@ -47,7 +47,7 @@
           },
           {
             key: { text: "Updated" },
-            value: { text: formatted_file_updated_date(image) }
+            value: { text: formatted_document_upload_updated_date(image) }
           }
         ] %>
       </li>
