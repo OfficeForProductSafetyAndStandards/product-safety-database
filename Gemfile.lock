@@ -301,12 +301,12 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.14.1)
+    nokogiri (1.14.2)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.14.1-x86_64-darwin)
+    nokogiri (1.14.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.14.1-x86_64-linux)
+    nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
@@ -526,10 +526,10 @@ GEM
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
-    slim-rails (3.5.1)
+    slim-rails (3.6.1)
       actionpack (>= 3.1)
       railties (>= 3.1)
-      slim (>= 3.0, < 5.0)
+      slim (>= 3.0, < 6.0, != 5.0.0)
     solargraph (0.48.0)
       backport (~> 1.2)
       benchmark
@@ -616,7 +616,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.28)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.6)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   ruby
