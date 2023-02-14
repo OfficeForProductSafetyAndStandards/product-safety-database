@@ -46,6 +46,27 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
+  def case_title_key
+    object.is_private? ? "#{case_type.upcase_first} restricted" : h.link_to(title, h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
+  end
+
+  def case_summary_values
+    values = []
+
+    if investigation.is_private?
+      values << { text: "" }
+      values << { text: "" }
+    else
+      values << { text: object.pretty_id }
+      values << { text: object.owner_team&.name || "&ndash;".html_safe }
+    end
+
+    tag_class_name = is_closed? ? "opss-tag--risk3" : "opss-tag--plain"
+    action = h.tag.span("Case #{status}", class: "opss-tag #{tag_class_name}")
+    values << { html: h.tag.dd(action, class: "govuk-summary-list__actions") }
+    values
+  end
+
   def source_details_summary_list(view_protected_details: false)
     contact_details = view_protected_details ? contact_details_list : h.tag.p("")
     contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right")
