@@ -179,6 +179,19 @@
     list-style: none;
   }
 
+  ul#navigation.psd-header__navigation {
+    display: block;
+    margin-left: 0 !important;
+
+    a {
+      font-weight: normal;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
   .js-enabled {
     .psd-header__menu-button {
       display: block;
