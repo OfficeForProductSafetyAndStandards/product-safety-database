@@ -11,11 +11,14 @@ class ProductDecorator < ApplicationDecorator
     "Product: #{name}"
   end
 
-  def details_list(date_case_closed: nil)
+  def details_list(date_case_closed: nil, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
-    psd_secondary_text_html = '<span class="govuk-visually-hidden"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record'.html_safe
-    psd_secondary_text_html << " - as recorded when the case was closed: #{date_case_closed.to_formatted_s(:govuk)}.".html_safe if date_case_closed.present?
+    psd_secondary_text_html = if date_case_closed.present?
+                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the case was closed: #{date_case_closed.to_formatted_s(:govuk)}."
+                              else
+                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this product record"
+                              end.html_safe
     webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
     when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
     psd_ref_value_html = date_case_closed.present? ? h.safe_join([psd_ref(timestamp:, investigation_was_closed: true), "<br>".html_safe]) : psd_ref(timestamp:, investigation_was_closed: false)
@@ -29,36 +32,18 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Barcode" }, value: { text: barcode } },
       { key: { text: "Description" }, value: { text: description } },
       { key: { text: "Webpage" }, value: { html: webpage_html } },
-      { key: { text: "Market date" }, value: { text: when_placed_on_market_value }, secondary_text: { text: "Placed on the market" } },
+      { key: { text: "Market date" }, value: { text: when_placed_on_market_value, secondary_text: { text: "Placed on the market" } } },
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
       { key: { text: "Counterfeit" }, value: counterfeit_row_value },
       { key: { text: "Product marking" }, value: { text: markings } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
 
-    h.govukSummaryList classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt", rows:
+    h.govukSummaryList classes:, rows:
   end
 
-  def summary_list(timestamp = nil)
-    psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
-    psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference number for this product record".html_safe
-    rows = [
-      { key: { html: psd_ref_key_html }, value: { text: psd_ref(timestamp:, investigation_was_closed: timestamp.present?), secondary_text: { html: psd_secondary_text_html } } },
-      { key: { text: "Category" }, value: { text: category } },
-      { key: { text: "Product subcategory" }, value: { text: subcategory } },
-      { key: { text: "Product authenticity" }, value: { text: authenticity } },
-      { key: { text: "Product marking" }, value: { text: markings } },
-      { key: { text: "Product brand" }, value: { text: object.brand } },
-      { key: { text: "Product name" }, value: { text: object.name } },
-      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
-      { key: { text: "Barcode number" }, value: { text: barcode } },
-      { key: { text: "Other product identifiers" }, value: { text: product_code } },
-      { key: { text: "Webpage" }, value: { text: object.webpage } },
-      { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
-    ]
-    rows.compact!
-    h.govukSummaryList rows:, classes: "govuk-!-margin-top-8 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions"
+  def summary_list
+    details_list classes: "govuk-!-margin-top-8 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions"
   end
 
   def authenticity
