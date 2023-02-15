@@ -4,6 +4,8 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       authorize @investigation, :can_unrestrict?
       @last_update_visibility_activity = @investigation.activities.where(type: "AuditActivity::Investigation::UpdateVisibility").order(:created_at).first
+    rescue Pundit::NotAuthorizedError
+      render_404_page
     end
 
     def restrict
