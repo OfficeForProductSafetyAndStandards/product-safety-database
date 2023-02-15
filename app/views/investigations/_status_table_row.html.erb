@@ -20,13 +20,6 @@
     %>
   <% end %>
 <% end %>
-<% if investigation.is_private? %>
-  <% badges << capture do %>
-    <%= tag.span t(:restricted, scope: "case.badges"),
-          class: "opss-tag opss-tag--risk2"
-    %>
-  <% end %>
-<% end %>
 
 <tr class="govuk-table__row">
   <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :status %>" class="govuk-visually-hidden">
