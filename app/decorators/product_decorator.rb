@@ -14,8 +14,11 @@ class ProductDecorator < ApplicationDecorator
   def details_list(date_case_closed: nil, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
-    psd_secondary_text_html = '<span class="govuk-visually-hidden"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record'.html_safe
-    psd_secondary_text_html << " - as recorded when the case was closed: #{date_case_closed.to_formatted_s(:govuk)}.".html_safe if date_case_closed.present?
+    psd_secondary_text_html = if date_case_closed.present?
+                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the case was closed: #{date_case_closed.to_formatted_s(:govuk)}."
+                              else
+                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this product record"
+                              end.html_safe
     webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
     when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
     psd_ref_value_html = date_case_closed.present? ? h.safe_join([psd_ref(timestamp:, investigation_was_closed: true), "<br>".html_safe]) : psd_ref(timestamp:, investigation_was_closed: false)
