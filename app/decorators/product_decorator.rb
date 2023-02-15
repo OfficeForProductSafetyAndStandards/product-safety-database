@@ -11,7 +11,7 @@ class ProductDecorator < ApplicationDecorator
     "Product: #{name}"
   end
 
-  def details_list(date_case_closed: nil)
+  def details_list(date_case_closed: nil, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = '<span class="govuk-visually-hidden"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record'.html_safe
@@ -36,29 +36,11 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
 
-    h.govukSummaryList classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt", rows:
+    h.govukSummaryList classes:, rows:
   end
 
-  def summary_list(timestamp = nil)
-    psd_ref_key_html = "<abbr title='Product Safety Database'>PSD</abbr> <span title='reference'>ref</span>".html_safe
-    psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference number for this product record".html_safe
-    rows = [
-      { key: { html: psd_ref_key_html }, value: { text: psd_ref(timestamp:, investigation_was_closed: timestamp.present?), secondary_text: { html: psd_secondary_text_html } } },
-      { key: { text: "Category" }, value: { text: category } },
-      { key: { text: "Product subcategory" }, value: { text: subcategory } },
-      { key: { text: "Product authenticity" }, value: { text: authenticity } },
-      { key: { text: "Product marking" }, value: { text: markings } },
-      { key: { text: "Product brand" }, value: { text: object.brand } },
-      { key: { text: "Product name" }, value: { text: object.name } },
-      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
-      { key: { text: "Barcode number" }, value: { text: barcode } },
-      { key: { text: "Other product identifiers" }, value: { text: product_code } },
-      { key: { text: "Webpage" }, value: { text: object.webpage } },
-      { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
-    ]
-    rows.compact!
-    h.govukSummaryList rows:, classes: "govuk-!-margin-top-8 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions"
+  def summary_list
+    details_list classes: "govuk-!-margin-top-8 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions"
   end
 
   def authenticity
