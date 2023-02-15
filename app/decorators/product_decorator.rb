@@ -152,7 +152,7 @@ class ProductDecorator < ApplicationDecorator
 
     h.govukSummaryList(
       classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-      rows: rows
+      rows:
     )
   end
 end
