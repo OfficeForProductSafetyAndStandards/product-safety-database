@@ -29,6 +29,6 @@ private
   def record_is_unowned_and_attatched_to_an_open_case_owned_by_users_team?
     return false if record.owning_team.present?
 
-    Collaboration::Access::OwnerTeam.joins(:investigation).where(collaborator_id: user.team_id, investigations: { is_closed: false }).any?
+    Collaboration::Access::OwnerTeam.joins(:investigation).where(collaborator_id: user.team_id, investigations: { id: record.investigation_ids, is_closed: false }).any?
   end
 end
