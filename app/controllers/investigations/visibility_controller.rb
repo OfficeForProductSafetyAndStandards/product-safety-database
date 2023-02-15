@@ -1,7 +1,8 @@
 module Investigations
   class VisibilityController < ApplicationController
+    before_action :set_investigation
+
     def show
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       authorize @investigation, :can_unrestrict?
       @last_update_visibility_activity = @investigation.activities.where(type: "AuditActivity::Investigation::UpdateVisibility").order(:created_at).first
     rescue Pundit::NotAuthorizedError
@@ -9,14 +10,24 @@ module Investigations
     end
 
     def restrict
+      authorize @investigation, :can_unrestrict?
       change_case_visibility(new_visibility: "restricted", template: :restrict, flash: "restricted")
+    rescue Pundit::NotAuthorizedError
+      render_404_page
     end
 
     def unrestrict
+      authorize @investigation, :can_unrestrict?
       change_case_visibility(new_visibility: "unrestricted", template: :unrestrict, flash: "unrestricted")
+    rescue Pundit::NotAuthorizedError
+      render_404_page
     end
 
   private
+
+    def set_investigation
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+    end
 
     def change_case_visibility(new_visibility:, template:, flash:)
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
