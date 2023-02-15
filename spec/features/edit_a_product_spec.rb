@@ -51,8 +51,6 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       visit "/products/#{product.id}"
 
-      expect(page).to have_summary_item(key: "Product authenticity", value: "Counterfeit")
-
       click_link "Edit the product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)
@@ -71,12 +69,12 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       end
 
       expect(page).to have_field("Manufacturer's brand name", with: product.brand, disabled: true)
-      expect(page).to have_field("Product name",              with: product.name, disabled: true)
-      expect(page).to have_field("Barcode number",            with: product.barcode)
-      expect(page).to have_field("Other product identifier",  with: product.product_code)
-      expect(page).to have_field("Webpage",                   with: product.webpage)
-      expect(page).to have_select("Country of origin",        selected: "France")
-      expect(page).to have_field("Description of product",    with: product.description)
+      expect(page).to have_field("Product name", with: product.name, disabled: true)
+      expect(page).to have_field("Barcode number", with: product.barcode)
+      expect(page).to have_field("Other product identifier", with: product.product_code)
+      expect(page).to have_field("Webpage", with: product.webpage)
+      expect(page).to have_select("Country of origin", selected: "France")
+      expect(page).to have_field("Description of product", with: product.description)
 
       fill_in "Product subcategory", with: new_subcategory
 
@@ -109,17 +107,17 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
                           when "markings_unknown" then "Unknown"
                           end
 
-      expect(page).to have_summary_item(key: "Category",                  value: product.category)
-      expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
-      expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
-      expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
-      expect(page).to have_summary_item(key: "Product brand",             value: product.brand)
-      expect(page).to have_summary_item(key: "Product name",              value: product.name)
-      expect(page).to have_summary_item(key: "Barcode number",            value: new_barcode)
+      expect(page).to have_summary_item(key: "Category", value: product.category)
+      expect(page).to have_summary_item(key: "Subcategory", value: new_subcategory)
+      expect(page).to have_summary_item(key: "Counterfeit", value: "Yes This is a product record for a counterfeit product")
+      expect(page).to have_summary_item(key: "Product marking", value: expected_markings)
+      expect(page).to have_summary_item(key: "Brand name", value: product.brand)
+      expect(page).to have_summary_item(key: "Product name", value: product.name)
+      expect(page).to have_summary_item(key: "Barcode", value: new_barcode)
       expect(page).to have_summary_item(key: "Other product identifiers", value: new_product_code)
-      expect(page).to have_summary_item(key: "Webpage",                   value: new_webpage)
-      expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
-      expect(page).to have_summary_item(key: "Description",               value: new_description)
+      expect(page).to have_summary_item(key: "Webpage", value: new_webpage)
+      expect(page).to have_summary_item(key: "Country of origin", value: new_country_of_origin)
+      expect(page).to have_summary_item(key: "Description", value: new_description)
 
       within("header") { click_on "Cases" }
 
@@ -147,8 +145,6 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       visit "/products/#{product.id}"
 
-      expect(page).to have_summary_item(key: "Product authenticity", value: "Counterfeit")
-
       click_link "Edit the product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)
@@ -167,12 +163,12 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       end
 
       expect(page).to have_field("Manufacturer's brand name", with: product.brand, disabled: true)
-      expect(page).to have_field("Product name",              with: product.name, disabled: true)
-      expect(page).to have_field("Barcode number",            with: product.barcode)
-      expect(page).to have_field("Other product identifier",  with: product.product_code)
-      expect(page).to have_field("Webpage",                   with: product.webpage)
-      expect(page).to have_select("Country of origin",        selected: "France")
-      expect(page).to have_field("Description of product",    with: product.description)
+      expect(page).to have_field("Product name", with: product.name, disabled: true)
+      expect(page).to have_field("Barcode number", with: product.barcode)
+      expect(page).to have_field("Other product identifier", with: product.product_code)
+      expect(page).to have_field("Webpage", with: product.webpage)
+      expect(page).to have_select("Country of origin", selected: "France")
+      expect(page).to have_field("Description of product", with: product.description)
 
       fill_in "Product subcategory", with: new_subcategory
 
@@ -189,11 +185,11 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
         new_markings.each { |marking| check(marking) } if new_has_markings == "markings_yes"
       end
 
-      fill_in "Barcode number",            with: new_barcode
-      fill_in "Other product identifier",  with: new_product_code
-      fill_in "Webpage",                   with: new_webpage
-      select new_country_of_origin,        from: "Country of origin"
-      fill_in "Description of product",    with: new_description
+      fill_in "Barcode number", with: new_barcode
+      fill_in "Other product identifier", with: new_product_code
+      fill_in "Webpage", with: new_webpage
+      select new_country_of_origin, from: "Country of origin"
+      fill_in "Description of product", with: new_description
 
       click_on "Save"
 
@@ -207,17 +203,17 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
                           when "markings_unknown" then "Unknown"
                           end
 
-      expect(page).to have_summary_item(key: "Category",                  value: product.category)
-      expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
-      expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
-      expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
-      expect(page).to have_summary_item(key: "Product brand",             value: product.brand)
-      expect(page).to have_summary_item(key: "Product name",              value: product.name)
-      expect(page).to have_summary_item(key: "Barcode number",            value: new_barcode)
+      expect(page).to have_summary_item(key: "Category", value: product.category)
+      expect(page).to have_summary_item(key: "Subcategory", value: new_subcategory)
+      expect(page).to have_summary_item(key: "Counterfeit", value: "Yes This is a product record for a counterfeit product")
+      expect(page).to have_summary_item(key: "Product marking", value: expected_markings)
+      expect(page).to have_summary_item(key: "Brand name", value: product.brand)
+      expect(page).to have_summary_item(key: "Product name", value: product.name)
+      expect(page).to have_summary_item(key: "Barcode", value: new_barcode)
       expect(page).to have_summary_item(key: "Other product identifiers", value: new_product_code)
-      expect(page).to have_summary_item(key: "Webpage",                   value: new_webpage)
-      expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
-      expect(page).to have_summary_item(key: "Description",               value: new_description)
+      expect(page).to have_summary_item(key: "Webpage", value: new_webpage)
+      expect(page).to have_summary_item(key: "Country of origin", value: new_country_of_origin)
+      expect(page).to have_summary_item(key: "Description", value: new_description)
 
       within("header") { click_on "Cases" }
 

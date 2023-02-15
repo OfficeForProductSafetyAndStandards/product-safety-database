@@ -14,13 +14,11 @@ class CreateProduct
            :webpage,
            :investigation,
            :category,
-           :user,
            :product,
            :when_placed_on_market,
            to: :context
 
   def call
-    context.fail!(error: "No user supplied") unless user.is_a?(User)
     context.product = Product.create!(
       authenticity:,
       has_markings:,
@@ -34,8 +32,7 @@ class CreateProduct
       subcategory:,
       category:,
       webpage:,
-      when_placed_on_market:,
-      owning_team: user.team
+      when_placed_on_market:
     )
   end
 end
