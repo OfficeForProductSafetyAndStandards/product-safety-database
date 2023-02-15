@@ -16,27 +16,31 @@ class DocumentUploadsController < ApplicationController
           file_upload: existing_file, upload_model: @parent, created_by: current_user.id
         )
       )
-    else
+    elsif document_upload_params[:file_upload].present?
       file = ActiveStorage::Blob.create_and_upload!(
         io: document_upload_params[:file_upload],
         filename: document_upload_params[:file_upload].original_filename,
         content_type: document_upload_params[:file_upload].content_type
       )
+      file.analyze_later
       @document_upload = DocumentUpload.new(
         document_upload_params.merge(
           file_upload: file, existing_file_upload_file_id: file.signed_id, upload_model: @parent, created_by: current_user.id
         )
       )
+    else
+      # The document upload won't be valid since there is no file
+      @document_upload = DocumentUpload.new(document_upload_params.merge(upload_model: @parent, created_by: current_user.id))
     end
 
     # sleep to give the antivirus checks a chance to be completed before running document form validations
     sleep 3
 
     if @document_upload.valid?
-      @document_upload.save
+      @document_upload.save!
       # Manually attach the document upload to its parent model's ID array
       @parent.document_upload_ids.push(@document_upload.id)
-      @parent.save
+      @parent.save!
     else
       @parent = @parent.decorate
       return render :new
@@ -79,11 +83,11 @@ class DocumentUploadsController < ApplicationController
     )
 
     if @document_upload.valid?
-      @document_upload.save
+      @document_upload.save!
       # Manually attach the document upload to its parent model's ID array
       # and remove the old document upload
       @parent.document_upload_ids.push(@document_upload.id).delete(old_document_upload.id)
-      @parent.save
+      @parent.save!
     else
       @parent = @parent.decorate
       return render :edit
@@ -107,7 +111,7 @@ class DocumentUploadsController < ApplicationController
   # DELETE /document_uploads/1
   def destroy
     @document_upload = @parent.document_uploads.find(params[:id])
-    @document_upload.destroy
+    @document_upload.destroy!
 
     flash[:success] = @document_upload.file_upload.image? ? t(:image_removed) : t(:file_removed)
 

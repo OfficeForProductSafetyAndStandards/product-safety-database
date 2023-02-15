@@ -20,6 +20,23 @@
 <% if @product.virus_free_images.any? %>
   <ul class="govuk-list govuk-!-margin-top-6">
     <% @product.virus_free_images.each do |image| %>
+    <%
+      items = []
+      if documentable_policy(@product).update?
+        items << {
+          href: edit_product_document_upload_path(@product, image),
+          text: "Edit",
+          visuallyHiddenText: "image"
+        }
+      end
+      if documentable_policy(@product).destroy?
+        items << {
+          href: remove_product_document_upload_path(@product, image),
+          text: "Delete",
+          visuallyHiddenText: "image"
+        }
+      end
+    %>
       <li>
         <!-- TODO: Check with Darren the actions part of the summary list, i.e the editing and deleting of images -->
         <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
@@ -27,18 +44,7 @@
             key: { text: "Image and title" },
             value: { text: image.title },
             actions: {
-              items: [
-                {
-                  href: edit_product_document_upload_path(@product, image),
-                  text: "Edit",
-                  visuallyHiddenText: "name"
-                },
-                {
-                  href: remove_product_document_upload_path(@product, image),
-                  text: "Delete",
-                  visuallyHiddenText: "name"
-                }
-              ]
+              items: items
             }
           },
           {

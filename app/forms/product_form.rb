@@ -21,6 +21,7 @@ class ProductForm
   attribute :markings
   attribute :added_by_user_id
   attribute :when_placed_on_market
+  attribute :document_upload_ids
 
   before_validation { trim_line_endings(:description) }
   before_validation { trim_whitespace(:brand) }

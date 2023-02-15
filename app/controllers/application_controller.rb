@@ -110,7 +110,7 @@ private
 
   def highlight_products?
     return true if params[:controller].start_with?("product")
-    return true if params[:controller] == "documents" && params[:product_id]
+    return true if params[:controller] == "document_uploads" && params[:product_id]
   end
 
   def highlight_cases?

@@ -9,9 +9,12 @@ module DocumentUploadsHelper
 
   def document_upload_path(document)
     return investigation_document_upload_path(document.upload_model, document) if document.upload_model.is_a?(Investigation)
+
     return product_document_upload_path(document.upload_model, document) if document.upload_model.is_a?(Product)
+
     return business_document_upload_path(document.upload_model, document) if document.upload_model.is_a?(Business)
-    ''
+
+    ""
   end
 
   def document_upload_filename_with_size(document)

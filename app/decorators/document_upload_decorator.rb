@@ -2,7 +2,7 @@ class DocumentUploadDecorator < ApplicationDecorator
   delegate_all
 
   def title
-    object.file_upload.metadata[:title] || object.file_upload.filename.to_s
+    object.metadata["title"] || object.file_upload.filename.to_s
   end
 
   def supporting_information_title
@@ -22,7 +22,7 @@ class DocumentUploadDecorator < ApplicationDecorator
   end
 
   def description
-    object.file_upload.metadata[:description]
+    object.metadata["description"]
   end
 
   def updated_at
