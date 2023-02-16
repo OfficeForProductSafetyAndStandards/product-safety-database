@@ -42,11 +42,9 @@
   <%= render "sub_nav", product: @product %>
 
   <section id="page-content" role="region" class="govuk-grid-column-three-quarters">
-    <div class="govuk-warning-text govuk-!-display-inline-block govuk-!-margin-bottom-4">
-      <% if @product.retired? %>
-        <%= govukWarningText(iconFallbackText: "Warning", text: "This product record is retired.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-4") %>
-      <% end %>
-    </div>
+    <% if @product.retired? %>
+      <%= govukWarningText(iconFallbackText: "Warning", text: "This product record is retired.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-4") %>
+    <% end %>
     <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The product record</h2>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
