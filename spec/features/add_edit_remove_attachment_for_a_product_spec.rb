@@ -67,7 +67,7 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opens
     expect(page).to have_selector("figcaption", text: title)
     expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
 
-    click_link "Edit image"
+    click_link "Edit this image"
     expect_to_be_on_edit_attachment_for_a_product_page(product_id: product.id, document_upload_id: product.reload.virus_free_images.first.id)
 
     fill_in "Document title", with: new_title
@@ -103,7 +103,7 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opens
     expect(page).to have_selector("figcaption", text: title)
     expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
 
-    click_link "Delete image"
+    click_link "Remove this image"
     expect_to_be_on_delete_attachment_for_a_product_page(product_id: product.id, document_upload_id: product.reload.virus_free_images.first.id)
 
     expect(page).to have_selector("td.govuk-table__cell", text: title)
@@ -173,8 +173,8 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opens
       expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
       expect_confirmation_banner("The image was added")
 
-      expect(page).to have_link("Edit image")
-      expect(page).to have_link("Delete image")
+      expect(page).to have_link("Edit this image")
+      expect(page).to have_link("Remove this image")
 
       click_on "Sign out", match: :first
 
