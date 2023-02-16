@@ -47,7 +47,7 @@
                     summaryText: "Product image",
                     html: capture {
                       render "document_uploads/document_preview",
-                        document: @product.virus_free_images.first.file_upload,
+                        document: @product.virus_free_images.first,
                         dimensions: [300, 500],
                         hide_link: true,
                         class_name: 'app-document-preview--small'
