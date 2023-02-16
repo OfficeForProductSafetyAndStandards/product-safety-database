@@ -112,6 +112,8 @@ class DocumentUploadsController < ApplicationController
   def destroy
     @document_upload = @parent.document_uploads.find(params[:id])
     @document_upload.destroy!
+    @parent.document_upload_ids.delete(@document_upload.id)
+    @parent.save!
 
     flash[:success] = @document_upload.file_upload.image? ? t(:image_removed) : t(:file_removed)
 
