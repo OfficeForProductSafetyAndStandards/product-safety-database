@@ -540,8 +540,7 @@ samp {
     }
   }
 
-  // stylelint-disable function-url-quotes
-  @-moz-document url-prefix() {
+  @-moz-document url-prefix("") {
     // firefox only: col flow bug
     .opss-2-col-flow,
     .opss-3-col-flow {
@@ -555,7 +554,6 @@ samp {
       }
     }
   }
-  // stylelint-enable function-url-quotes
 }
 
 .opss-list {
@@ -827,8 +825,8 @@ div[class$="inset-text"] > ol li:last-child {
 }
 
 section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figure.opss-margin-bottom-1-desktop {
-  // quick fix for smooth page loading on case products pg - when img height loads = zero pg movement
   max-height: 105px;
+  // quick fix for smooth page loading on case products pg - when img height loads = zero pg movement
 }
 
 .opss-img-caption {
@@ -967,7 +965,7 @@ dl.opss-summary-list-aside {
   @include govuk-media-query($from: desktop) {
     &.opss-summary-list-mixed--narrow-dt + .opss-text-align-right {
       position: relative;
-      top: - govuk-spacing(4);
+      top: - govuk-spacing(7);
     }
 
     &.opss-summary-list-mixed--narrow-dt > div {
@@ -979,13 +977,11 @@ dl.opss-summary-list-aside {
         min-width: 50%;
       }
 
-      // stylelint-disable function-url-quotes
-      @-moz-document url-prefix() {
+      @-moz-document url-prefix("") {
         dt + dd {
           min-width: 60%;
         }
       }
-      // stylelint-enable function-url-quotes
     }
 
     &.opss-summary-list-mixed--narrow-actions > div {
@@ -1052,8 +1048,7 @@ dl.opss-summary-list-aside {
     }
   }
 
-  // stylelint-disable function-url-quotes
-  @-moz-document url-prefix() {
+  @-moz-document url-prefix("") {
     // firefox only: align 1st dd (without a 2nd) correctly
     .govuk-summary-list__row dd:last-child {
       width: inherit;
@@ -1066,7 +1061,6 @@ dl.opss-summary-list-aside {
       }
     }
   }
-  // stylelint-enable function-url-quotes
 }
 
 @include govuk-media-query($from: desktop) {
@@ -1426,13 +1420,10 @@ dd dl.opss-nested-definition-list {
     border-bottom: 0 none;
   }
 
-  // stylelint-disable declaration-property-value-disallowed-list
   tbody th,
   tbody td {
-    transition: all .5s ease;
     background-color: transparent;
   }
-  // stylelint-enable declaration-property-value-disallowed-list
 
   tbody.opss-bg th,
   tbody.opss-bg td {
