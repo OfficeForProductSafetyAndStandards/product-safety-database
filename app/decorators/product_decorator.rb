@@ -117,22 +117,27 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def overview_summary_list
+    rows = [
+      {
+        key: { text: "Last updated" },
+        value: { text: h.date_or_recent_time_ago(product.updated_at) }
+      },
+      {
+        key: { text: "Created" },
+        value: { text: h.date_or_recent_time_ago(product.created_at) }
+      }
+    ]
+
+    unless product.retired?
+      rows << {
+        key: { text: "Product record owner" },
+        value: { html: owning_team_link }
+      }
+    end
+
     h.govukSummaryList(
       classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-      rows: [
-        {
-          key: { text: "Last updated" },
-          value: { text: h.date_or_recent_time_ago(product.updated_at) }
-        },
-        {
-          key: { text: "Created" },
-          value: { text: h.date_or_recent_time_ago(product.created_at) }
-        },
-        {
-          key: { text: "Product record owner" },
-          value: { html: owning_team_link }
-        }
-      ]
+      rows:
     )
   end
 end
