@@ -20,16 +20,14 @@
               </p>
 
               <%= govukDetails(summaryText: "How to create a case") do %>
-                <ol class="govuk-list govuk-list--number govuk-list--spaced">
-                  <li>
-                    In the products area <%= link_to "search for your product", products_path, class: "govuk-link govuk-link--no-visited-state" %>
-                  </li>
-                  <li>
-                    Select a product record to view the product record page
-                  </li>
-                  <li>
-                    Select the '<span class="govuk-!-font-weight-bold">Create a new case for this product</span>' option
-                  </li>
+                <p class="govuk-body">
+                  A case and a product record are separate. Cases record information about allegations, evidence, and corrective actions. A product record describes the product and is included <em>within</em>&nbsp; a case.
+                </p>
+
+                <ol class="govuk-list govuk-list--number govuk-list--spaced govuk-!-margin-left-6">
+                  <li>In the products area search for your product</li>
+                  <li>Select a product record to view the product record page</li>
+                  <li>Select the '<span class="govuk-!-font-weight-bold">Create a new case for this product</span>' option</li>
                 </ol>
 
                 <p class="govuk-body">
@@ -37,7 +35,7 @@
                 </p>
 
                 <p class="govuk-body">
-                  If a suitable product record does not already exist, create a new product record and then create your case from that product record.
+                  <span class="govuk-!-font-weight-bold">If a suitable product record does not already exist</span>, create a new product record and then create your case from that product record.
                 </p>
               <% end %>
           <% end %>

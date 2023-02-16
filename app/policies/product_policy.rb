@@ -13,7 +13,7 @@ class ProductPolicy < ApplicationPolicy
     return false if record.version.present?
     return false if record.retired?
 
-    record.owning_team.nil? || record.owning_team == user.team
+    record.owning_team == user.team || record_is_unowned_and_attatched_to_an_open_case_owned_by_users_team?
   end
 
   def can_spawn_case?
@@ -22,5 +22,13 @@ class ProductPolicy < ApplicationPolicy
 
   def can_view_retired_products?
     user.is_opss?
+  end
+
+private
+
+  def record_is_unowned_and_attatched_to_an_open_case_owned_by_users_team?
+    return false if record.owning_team.present?
+
+    Collaboration::Access::OwnerTeam.joins(:investigation).where(collaborator_id: user.team_id, investigations: { id: record.investigation_ids, is_closed: false }).any?
   end
 end

@@ -119,6 +119,9 @@ module InvestigationsHelper
   end
 
   def case_rows(investigation, user, team_list_html)
+    reference_value = { text: investigation.complainant_reference }
+    reference_value[:secondary_text] = { text: "Optional reference number" } if investigation.complainant_reference
+
     rows = [
       {
         key: { text: "Case name" },
@@ -135,10 +138,7 @@ module InvestigationsHelper
       },
       {
         key: { text: "Reference" },
-        value: {
-          text: investigation.complainant_reference,
-          secondary_text: { text: "Trading standards reference" }
-        },
+        value: reference_value,
         actions: reference_actions(investigation, user)
       },
       {
@@ -157,13 +157,13 @@ module InvestigationsHelper
       {
         key: { text: "Last updated" },
         value: {
-          text: "#{time_ago_in_words(@investigation.updated_at)} ago"
+          text: "#{time_ago_in_words(@investigation.updated_at).capitalize} ago"
         }
       },
       {
         key: { text: "Created" },
         value: {
-          text: "#{time_ago_in_words(@investigation.created_at)} ago"
+          text: "#{time_ago_in_words(@investigation.created_at).capitalize} ago"
         }
       },
       {
@@ -185,14 +185,20 @@ module InvestigationsHelper
           html: team_list_html
         },
         actions: case_teams_actions(investigation)
-      },
-      {
+      }
+    ]
+
+    if investigation.is_private?
+      rows << {
         key: { text: "Case restriction" },
         value: {
           html: case_restriction_value(investigation)
         },
         actions: case_restriction_actions(investigation, user)
-      },
+      }
+    end
+
+    rows << [
       {
         key: { text: "Case risk level" },
         value: {
@@ -206,6 +212,7 @@ module InvestigationsHelper
         actions: risk_validation_actions(investigation, user)
       }
     ]
+    rows.flatten!
 
     rows.insert(7, notifying_country_section(investigation, user)) if policy(investigation).view_notifying_country?(user:)
 
@@ -361,7 +368,7 @@ private
   end
 
   def case_restriction_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?(user:)
+    return {} unless policy(investigation).can_unrestrict?(user:)
 
     {
       items: [

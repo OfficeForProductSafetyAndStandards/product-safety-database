@@ -11,7 +11,8 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_op
            subcategory: "washing machine",
            product_code: "MBWM01",
            webpage: "http://example.com/mybrand/washing-machines",
-           description: "White with chrome buttons")
+           description: "White with chrome buttons",
+           owning_team: user.team)
   end
 
   scenario "Updating a product" do
@@ -43,11 +44,11 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_op
 
     expect(page).to have_text "The product record was updated"
 
-    expect(page).to have_summary_item(key: "PSD ref", value: "#{product.psd_ref} - The PSD reference for this product record")
-    expect(page).to have_summary_item(key: "Product brand", value: "MyBrand")
+    expect(page).to have_summary_item(key: "PSD ref", value: "#{product.psd_ref} - The PSD reference number for this product record")
+    expect(page).to have_summary_item(key: "Brand name", value: "MyBrand")
     expect(page).to have_summary_item(key: "Product name", value: "Washing machine")
     expect(page).to have_summary_item(key: "Category", value: "Electrical appliances and equipment")
-    expect(page).to have_summary_item(key: "Product subcategory", value: "dishwasher")
+    expect(page).to have_summary_item(key: "Subcategory", value: "dishwasher")
     expect(page).to have_summary_item(key: "Other product identifiers", value: "MBDW01")
     expect(page).to have_summary_item(key: "Webpage", value: "http://example.com/mybrand/dishwashers")
     expect(page).to have_summary_item(key: "Description", value: "White with chrome handle")

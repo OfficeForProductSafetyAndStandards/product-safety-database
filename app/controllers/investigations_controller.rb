@@ -6,8 +6,6 @@ class InvestigationsController < ApplicationController
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
-  # GET /cases.json
-  # GET /cases.xlsx
   def index
     respond_to do |format|
       format.html do
@@ -21,7 +19,6 @@ class InvestigationsController < ApplicationController
   end
 
   # GET /cases/1
-  # GET /cases/1.json
   def show
     authorize @investigation, :view_non_protected_details?
     @complainant = @investigation.complainant&.decorate
