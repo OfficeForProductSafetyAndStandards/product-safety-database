@@ -22,6 +22,7 @@ node_modules/
 ### Rails ###
 *.rbc
 capybara-*.html
+.irb_history
 .rspec
 /log
 /tmp

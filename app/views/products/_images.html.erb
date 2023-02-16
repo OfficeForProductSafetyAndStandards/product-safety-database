@@ -11,7 +11,7 @@
   <% if documentable_policy(@product).create? %>
     <div class="govuk-grid-column-one-third">
       <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-        <%= link_to "Add an image", new_product_document_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+        <%= link_to "Add an image", new_product_document_upload_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
       </div>
     </div>
   <% end %>
@@ -20,19 +20,40 @@
 <% if @product.virus_free_images.any? %>
   <ul class="govuk-list govuk-!-margin-top-6">
     <% @product.virus_free_images.each do |image| %>
+    <%
+      items = []
+      if documentable_policy(@product).update?
+        items << {
+          href: edit_product_document_upload_path(@product, image),
+          text: "Edit",
+          visuallyHiddenText: "image"
+        }
+      end
+      if documentable_policy(@product).destroy?
+        items << {
+          href: remove_product_document_upload_path(@product, image),
+          text: "Delete",
+          visuallyHiddenText: "image"
+        }
+      end
+    %>
       <li>
+        <!-- TODO: Check with Darren the actions part of the summary list, i.e the editing and deleting of images -->
         <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
           {
             key: { text: "Image and title" },
-            value: { text: image.title }
+            value: { text: image.title },
+            actions: {
+              items: items
+            }
           },
           {
             key: { text: "Image description" },
-            value: { text: image.description }
+            value: { text: image.description },
           },
           {
             key: { text: "Updated" },
-            value: { text: formatted_file_updated_date(image) }
+            value: { text: formatted_document_upload_updated_date(image) }
           }
         ] %>
       </li>

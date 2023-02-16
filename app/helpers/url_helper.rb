@@ -51,6 +51,31 @@ module UrlHelper
     "#{associated_document_path(parent, document)}/remove"
   end
 
+  # DOCUMENT UPLOADS
+  def associated_document_uploads_path(parent)
+    path_for_model(parent, :document_uploads)
+  end
+
+  def associated_document_upload_path(parent, document_upload)
+    "#{path_for_model(parent, :document_uploads)}/#{document_upload.id}"
+  end
+
+  def new_associated_document_upload_path(parent)
+    "#{path_for_model(parent, :document_uploads)}/new"
+  end
+
+  def new_document_upload_flow_path(parent)
+    "#{path_for_model(parent, :document_uploads)}/new/new"
+  end
+
+  def edit_associated_document_upload_path(parent, document_upload)
+    "#{associated_document_upload_path(parent, document_upload)}/edit"
+  end
+
+  def remove_associated_document_upload_path(parent, document_upload)
+    "#{associated_document_upload_path(parent, document_upload)}/remove"
+  end
+
   def build_back_link_to_case
     case_id = request.referer&.match(/cases\/(\d+-\d+)/)&.captures&.first
     return nil if case_id.blank?
