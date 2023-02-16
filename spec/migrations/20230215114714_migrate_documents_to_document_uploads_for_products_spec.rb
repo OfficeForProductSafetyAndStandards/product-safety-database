@@ -3,8 +3,8 @@ require Rails.root.join("db/migrate/20230215114714_migrate_documents_to_document
 
 RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opensearch, :with_stubbed_antivirus do
   let(:migration_context) { ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths) }
-  let(:previous_version) { 20230215102554 }
-  let(:current_version) { 20230215114714 }
+  let(:previous_version) { 20_230_215_102_554 }
+  let(:current_version) { 20_230_215_114_714 }
   let(:up) do
     ActiveRecord::Migration.suppress_messages do
       migration_context.up(current_version)
@@ -34,9 +34,9 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
           expect(product.document_upload_ids).to eq([document_upload.id])
           expect(document_upload.file_upload.record).to eq(document_upload)
           expect(document_upload.metadata).to match(a_hash_including(
-            "title" => String,
-            "description" => String
-          ))
+                                                      "title" => String,
+                                                      "description" => String
+                                                    ))
           expect(document_upload.file_upload.blob.metadata).to match(
             "analyzed" => true,
             "identified" => true,
@@ -58,9 +58,9 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
           expect(product.document_upload_ids).to eq([document_upload.id])
           expect(document_upload.file_upload.record).to eq(document_upload)
           expect(document_upload.metadata).to match(a_hash_including(
-            "title" => String,
-            "description" => String
-          ))
+                                                      "title" => String,
+                                                      "description" => String
+                                                    ))
           expect(document_upload.file_upload.blob.metadata).to match(
             "analyzed" => true,
             "identified" => true,
@@ -92,12 +92,12 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
           expect(product.document_upload_ids).to eq([])
           expect(document.record).to eq(product)
           expect(document.metadata).to match(a_hash_including(
-            "analyzed" => true,
-            "identified" => true,
-            "safe" => true,
-            "title" => String,
-            "description" => String
-          ))
+                                               "analyzed" => true,
+                                               "identified" => true,
+                                               "safe" => true,
+                                               "title" => String,
+                                               "description" => String
+                                             ))
         end
       end
     end
@@ -114,12 +114,12 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
           expect(product.document_upload_ids).to eq([])
           expect(document.record).to eq(product)
           expect(document.metadata).to match(a_hash_including(
-            "analyzed" => true,
-            "identified" => true,
-            "safe" => true,
-            "title" => String,
-            "description" => String
-          ))
+                                               "analyzed" => true,
+                                               "identified" => true,
+                                               "safe" => true,
+                                               "title" => String,
+                                               "description" => String
+                                             ))
         end
       end
     end

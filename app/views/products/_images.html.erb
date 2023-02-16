@@ -20,32 +20,11 @@
 <% if @product.virus_free_images.any? %>
   <ul class="govuk-list govuk-!-margin-top-6">
     <% @product.virus_free_images.each do |image| %>
-    <%
-      items = []
-      if documentable_policy(@product).update?
-        items << {
-          href: edit_product_document_upload_path(@product, image),
-          text: "Edit",
-          visuallyHiddenText: "image"
-        }
-      end
-      if documentable_policy(@product).destroy?
-        items << {
-          href: remove_product_document_upload_path(@product, image),
-          text: "Delete",
-          visuallyHiddenText: "image"
-        }
-      end
-    %>
       <li>
-        <!-- TODO: Check with Darren the actions part of the summary list, i.e the editing and deleting of images -->
         <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
           {
             key: { text: "Image and title" },
-            value: { text: image.title },
-            actions: {
-              items: items
-            }
+            value: { text: product_image_preview(image, [600, 600]) },
           },
           {
             key: { text: "Image description" },
@@ -53,10 +32,25 @@
           },
           {
             key: { text: "Updated" },
-            value: { text: formatted_document_upload_updated_date(image) }
+            value: { text: document_upload_updated_date_in_govuk_format(image) },
           }
         ] %>
+        <div class="opss-text-align-right govuk-!-margin-bottom-8">
+          <ul class="govuk-list">
+            <% if documentable_policy(@product).update? %>
+              <li class="govuk-!-display-inline govuk-!-margin-left-2">
+                <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= edit_product_document_upload_path(@product, image) %>">Edit this image<span class="govuk-visually-hidden"><%= image.title %></span></a>
+              </li>
+            <% end %>
+            <% if documentable_policy(@product).destroy? %>
+              <li class="govuk-!-display-inline govuk-!-margin-left-2">
+                <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= remove_product_document_upload_path(@product, image) %>">Remove this image<span class="govuk-visually-hidden"><%= image.title %></span></a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
       </li>
+
     <% end %>
   </ul>
   <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">

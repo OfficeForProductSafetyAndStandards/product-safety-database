@@ -3,6 +3,10 @@ module DocumentUploadsHelper
     render "document_uploads/placeholder", document:
   end
 
+  def product_image_preview(image, dimensions)
+    render "products/image_preview", image:, dimensions:
+  end
+
   def document_upload_file_extension(document)
     File.extname(document.file_upload.filename.to_s)&.remove(".")&.upcase
   end
