@@ -27,12 +27,12 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
 
     select attributes[:category], from: "Product category"
 
-    fill_in "Product subcategory",               with: attributes[:subcategory]
-    fill_in "Manufacturer's brand name",         with: attributes[:brand]
-    fill_in "Product name",                      with: attributes[:name]
+    fill_in "Product subcategory", with: attributes[:subcategory]
+    fill_in "Manufacturer's brand name", with: attributes[:brand]
+    fill_in "Product name", with: attributes[:name]
     fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:barcode]
-    fill_in "Other product identifiers",         with: attributes[:product_code]
-    fill_in "Webpage",                           with: attributes[:webpage]
+    fill_in "Other product identifiers", with: attributes[:product_code]
+    fill_in "Webpage", with: attributes[:webpage]
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
       choose when_placed_on_market_answer(attributes[:when_placed_on_market])
@@ -68,17 +68,22 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
                         when "markings_unknown" then "Unknown"
                         end
 
-    expect(page).to have_summary_item(key: "Product brand",             value: attributes[:brand])
-    expect(page).to have_summary_item(key: "Product name",              value: attributes[:name])
-    expect(page).to have_summary_item(key: "Category",                  value: attributes[:category])
-    expect(page).to have_summary_item(key: "Product subcategory",       value: attributes[:subcategory])
-    expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(attributes[:authenticity], scope: Product.model_name.i18n_key))
-    expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
-    expect(page).to have_summary_item(key: "Barcode number",            value: attributes[:gin13])
+    expected_counterfeit_value = case attributes[:authenticity]
+                                 when "genuine" then "No This product record is about a genuine product"
+                                 when "counterfeit" then "Yes This is a product record for a counterfeit product"
+                                 end
+
+    expect(page).to have_summary_item(key: "Brand name", value: attributes[:brand])
+    expect(page).to have_summary_item(key: "Product name", value: attributes[:name])
+    expect(page).to have_summary_item(key: "Category", value: attributes[:category])
+    expect(page).to have_summary_item(key: "Subcategory", value: attributes[:subcategory])
+    expect(page).to have_summary_item(key: "Counterfeit", value: expected_counterfeit_value)
+    expect(page).to have_summary_item(key: "Product marking", value: expected_markings)
+    expect(page).to have_summary_item(key: "Barcode", value: attributes[:gin13])
     expect(page).to have_summary_item(key: "Other product identifiers", value: attributes[:product_code])
-    expect(page).to have_summary_item(key: "Webpage",                   value: attributes[:webpage])
-    expect(page).to have_summary_item(key: "Country of origin",         value: attributes[:country])
-    expect(page).to have_summary_item(key: "Description",               value: attributes[:description])
-    expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Webpage", value: attributes[:webpage])
+    expect(page).to have_summary_item(key: "Country of origin", value: attributes[:country])
+    expect(page).to have_summary_item(key: "Description", value: attributes[:description])
+    expect(page).to have_summary_item(key: "Market date", value: "#{I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key)} Placed on the market")
   end
 end

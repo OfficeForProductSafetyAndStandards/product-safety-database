@@ -26,10 +26,33 @@ RSpec.describe ProductPolicy do
 
     let(:product) { build(:product) }
 
-    context "when there is no owning team" do
-      before { product.owning_team = nil }
+    context "when there is no owning team", :with_stubbed_opensearch, :with_stubbed_mailer do
+      let(:team) { create(:team) }
+      let(:user) { create(:user, team:) }
+      let(:product) { create(:product, owning_team: nil) }
 
-      it { is_expected.to be_update }
+      context "when the user's team does not have any cases linked to the product" do
+        it { is_expected.not_to be_update }
+      end
+
+      context "when the user's team has closed cases linked to the product" do
+        let(:investigation) { create(:allegation, creator: user) }
+
+        before do
+          AddProductToCase.call!(investigation:, user:, product:)
+          ChangeCaseStatus.call!(investigation:, user:, new_status: "closed")
+        end
+
+        it { is_expected.not_to be_update }
+      end
+
+      context "when the user's team has open cases linked to the product" do
+        let(:investigation) { create(:allegation, creator: user) }
+
+        before { AddProductToCase.call! investigation:, user:, product: }
+
+        it { is_expected.to be_update }
+      end
     end
 
     context "when the owning team is the user's team" do
@@ -49,6 +72,12 @@ RSpec.describe ProductPolicy do
         product = create(:product, :with_versions)
         product.paper_trail.previous_version
       end
+
+      it { is_expected.not_to be_update }
+    end
+
+    context "with a retired product", :with_stubbed_opensearch do
+      let(:product) { build(:product, :retired) }
 
       it { is_expected.not_to be_update }
     end

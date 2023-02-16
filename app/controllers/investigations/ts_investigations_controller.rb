@@ -17,6 +17,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                                   else
                                     ReasonForCreatingForm.new
                                   end
+      @product = authorize_product
     when :reason_for_concern
       skip_step if session[:investigation].reported_reason == "safe_and_compliant"
       @edit_why_reporting_form = EditWhyReportingForm.new
@@ -28,6 +29,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                                end
     when :case_name
       @case_name_form = CaseNameForm.new
+      @product = authorize_product
     when :case_created
       @investigation = session[:investigation]
       @product = authorize_product
@@ -50,6 +52,7 @@ class Investigations::TsInvestigationsController < ApplicationController
     case step
     when :reason_for_creating
       @reason_for_creating_form = ReasonForCreatingForm.new(reason_for_creating_params)
+      @product = authorize_product
       return render_wizard unless @reason_for_creating_form.valid?
 
       if @reason_for_creating_form.case_is_safe == "yes"
@@ -75,6 +78,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       session[:form_answers].merge!(reference_number_params)
     when :case_name
       @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
+      @product = authorize_product
       return render_wizard unless @case_name_form.valid?
 
       session[:investigation].assign_attributes(user_title: @case_name_form.user_title)

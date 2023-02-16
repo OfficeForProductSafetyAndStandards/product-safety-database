@@ -5,6 +5,7 @@ RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_m
   let(:product) { create(:product, subcategory: "Lamp", owning_team_id: nil) }
   let(:first_investigation) { create(:allegation, creator: user) }
   let(:second_investigation) { create(:allegation, creator: user) }
+  let(:third_investigation) { create(:allegation, creator: user) }
   let(:first_owning_team) { create(:team, team_recipient_email: "team@example.com") }
 
   before do
@@ -22,11 +23,12 @@ RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_m
     expect(page).to have_http_status(:not_found)
     expect(page).to have_text("Page not found")
 
-    # Edit the product to gain ownership
-    visit "/products/#{product.id}/edit"
-    fill_in "Product subcategory", with: "Candle"
-    click_button "Save"
-    expect(page).to have_summary_item(key: "Product subcategory", value: "Candle")
+    # Link the product to a new open case to gain ownership
+    visit "/cases/#{third_investigation.pretty_id}/products/new"
+    fill_in "reference", with: product.id
+    click_button "Continue"
+    choose "Yes"
+    click_button "Save and continue"
 
     # The product is now owned by our team, so we expect our team's details
     visit "/products/#{product.id}/owner"
