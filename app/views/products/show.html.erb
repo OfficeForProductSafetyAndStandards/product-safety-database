@@ -8,7 +8,7 @@
   <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
     <span class="govuk-caption-m">&nbsp;</span>
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
-      Product <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= @psd_ref_for_display %></span>
+      Product <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= @product.psd_ref %></span>
     </h1>
     <% if @product.retired? %>
       <p class="govuk-body opss-secondary-text">
@@ -39,7 +39,7 @@
 </div>
 
 <div class="govuk-grid-row">
-  <%= render "sub_nav", product: @product, psd_ref_for_display: @psd_ref_for_display %>
+  <%= render "sub_nav", product: @product %>
 
   <section id="page-content" role="region" class="govuk-grid-column-three-quarters">
     <div class="govuk-warning-text govuk-!-display-inline-block govuk-!-margin-bottom-4">
