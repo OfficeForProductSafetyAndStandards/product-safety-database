@@ -18,7 +18,7 @@
           <dd class="govuk-summary-list__value">
             <figure class="opss-margin-bottom-1-desktop">
               <% link_content = capture do %>
-                <%= image_tag(image) %>
+                <%= image_tag(image.file_upload) %>
                 <span class="govuk-visually-hidden">(opens in new tab)</span>
               <% end %>
               <%= link_to link_content, image, target: "_blank", rel: 'noopener', title: "Opens in a new tab" %>
@@ -31,7 +31,7 @@
             Image description
           </dt>
           <dd class="govuk-summary-list__value">
-            <%= image.blob.metadata["description"] %>
+            <%= image.description %>
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -39,7 +39,7 @@
             Updated
           </dt>
           <dd class="govuk-summary-list__value">
-            <%= image.blob.metadata["updated"].to_date.to_formatted_s(:govuk) %>
+            <%= image.updated_at.to_date.to_formatted_s(:govuk) %>
           </dd>
         </div>
       </dl>
