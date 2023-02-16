@@ -42,7 +42,6 @@ figcaption {
   padding: 0;
   display: block;
 }
-
 // not normalised by gds library - ends
 
 @include govuk-media-query($from: desktop) {
@@ -99,12 +98,19 @@ h1.govuk-label-wrapper label.govuk-label--l {
   hyphens: unset;
 }
 
-main a.govuk-link:hover {
-  // recreate new hover styles of latest gds
-  text-decoration-skip-ink: none;
+main {
+  a.govuk-link:hover {
+    // recreate new hover styles of latest gds
+    text-decoration-skip-ink: none;
+    text-decoration: underline !important;
+    text-decoration-thickness: .1875rem !important;
+    text-decoration-thickness: .15em !important;
+  }
 
-  // text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
-  text-decoration-thickness: max(.1875rem);
+  a.govuk-link:active {
+    text-decoration-thickness: 0 !important;
+    text-decoration: none !important;
+  }
 }
 
 .opss-no-wrap {
@@ -325,6 +331,10 @@ body.js-enabled .opss-nojs-hide {
     .govuk-grid-column-one-quarter > & {
       margin-right: govuk-spacing(7) + govuk-spacing(1) !important;
     }
+
+    abbr {
+      border-bottom: none !important;
+    }
   }
 
   .opss-right-box-arrow:after {
@@ -376,6 +386,12 @@ abbr[title] {
     .govuk-main-wrapper p & {
       border-bottom: 1px dotted $govuk-secondary-text-colour;
       cursor: help;
+    }
+
+    a.govuk-link &,
+    dd span.opss-secondary-text & {
+      border-bottom: none;
+      cursor: inherit;
     }
   }
 }
@@ -601,6 +617,22 @@ ul.opss-left-nav {
       text-decoration: none !important;
       text-underline-offset: .1em;
 
+      &:hover {
+        // styles supersede by gds upgrade to 4.2
+        text-decoration: underline !important;
+        text-decoration-thickness: .1875rem !important;
+        text-decoration-thickness: .15em !important;
+        -webkit-text-decoration-skip-ink: none;
+        text-decoration-skip-ink: none;
+        -webkit-text-decoration-skip: none;
+        text-decoration-skip: none;
+      }
+
+      &:focus {
+        text-decoration-thickness: 0 !important;
+        text-decoration: none !important;
+      }
+
       span {
         font-size: 90%;
       }
@@ -651,7 +683,8 @@ div[class$="inset-text"] > ol li:last-child {
 .opss-border-bottom,
 .opss-border-left,
 .opss-border-right,
-.opss-border-all {
+.opss-border-all,
+.opss-border-all-perm {
   border-color: $govuk-border-colour;
   border-style: solid;
   border-width: 0;
@@ -677,6 +710,14 @@ div[class$="inset-text"] > ol li:last-child {
   border-width: 0;
 }
 
+.opss-blue-border-top {
+  border-top: 2px solid $govuk-brand-colour;
+}
+
+.opss-blue-border-all {
+  border: 2px solid $govuk-brand-colour;
+}
+
 @include govuk-media-query($from: tablet) {
   .opss-rounded-corners {
     border-radius: 5px;
@@ -693,6 +734,11 @@ div[class$="inset-text"] > ol li:last-child {
   a[class*="font-size-14"].opss-border-all {
     line-height: 1.2 !important;
   }
+}
+
+.opss-border-all-perm {
+  // for all screen sizes
+  border-width: 1px;
 }
 
 @include govuk-media-query($until: tablet) {
@@ -781,9 +827,8 @@ div[class$="inset-text"] > ol li:last-child {
 }
 
 section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figure.opss-margin-bottom-1-desktop {
-  max-height: 105px;
-
   // quick fix for smooth page loading on case products pg - when img height loads = zero pg movement
+  max-height: 105px;
 }
 
 .opss-img-caption {
@@ -883,7 +928,6 @@ dl.opss-summary-list-aside {
       dt + dd {
         min-width: 40%;
         width: auto;
-
         // 1. protects against rogue legacy psd invalid html
       }
     }
@@ -894,7 +938,6 @@ dl.opss-summary-list-aside {
       -ms-word-break: break-all;
       word-break: break-all;
       word-break: break-word;
-
       // no adding hypens
     }
 
@@ -909,7 +952,8 @@ dl.opss-summary-list-aside {
 
     // 2. protects against rogue legacy psd invalid html
 
-    dd br + span.opss-secondary-text {
+    dd br + span.opss-secondary-text,
+    dd ul li > span.opss-secondary-text:first-of-type {
       padding-left: govuk-spacing(0) !important;
     }
   }
@@ -1359,7 +1403,6 @@ dd dl.opss-nested-definition-list {
     @include govuk-font($size: 19);
   }
 
-  // tbody tr:not(:first-child):not(:last-child) td, tbody tr:not(:first-child):not(:last-child) th,
   tbody tr:nth-child(2) th,
   tbody tr:nth-child(2) td {
     padding-top: govuk-spacing(0);
@@ -1377,7 +1420,6 @@ dd dl.opss-nested-definition-list {
     padding-top: govuk-spacing(0);
   }
 
-  // th[colspan="3"], tfoot th {padding-top: govuk-spacing(7); }
   tbody tr:first-child th,
   tbody tr:not(:last-child) > *,
   tfoot tr th {
@@ -1507,13 +1549,11 @@ dd dl.opss-nested-definition-list {
 
   .opss-desktop-margin-bottom-240px {
     margin-bottom: 240px !important;
-
     // aligns bottom of tbody
   }
 
   .opss-desktop-margin-bottom-220px {
     margin-bottom: 220px !important;
-
     // aligns bottom of tbody
   }
 }

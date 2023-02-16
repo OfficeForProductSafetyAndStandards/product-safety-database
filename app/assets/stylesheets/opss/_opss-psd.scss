@@ -95,7 +95,6 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
     border-width: 2px;
     border-style: solid;
     border-color: $govuk-brand-colour;
-
     padding: govuk-spacing(6) govuk-spacing(5) govuk-spacing(8) govuk-spacing(6);
     margin-left: govuk-spacing(0);
     margin-right: govuk-spacing(0);
@@ -453,6 +452,20 @@ ul.opss-radio-list {
   }
 }
 
+.opss-keep-for-desktop > .opss-desktop-img-s {
+  min-height: 206px;
+}
+
+.opss-desktop-img-s {
+  max-height: 206px;
+  max-width: 100%;
+}
+
+.opss-desktop-img-m {
+  max-height: 300px;
+  max-width: 100%;
+}
+
 .opss-timeline img {
   max-width: 100%;
 }
@@ -531,5 +544,16 @@ select:disabled {
     &::-webkit-scrollbar-thumb:hover {
       background: $govuk-secondary-text-colour;
     }
+  }
+}
+
+@include govuk-media-query($from: desktop) {
+  .psd-header__navigation-item--right-2 {
+    // fix for nav design - to be removed when we rebuild the top nav
+    padding: 0 !important;
+    float: none !important;
+    position: absolute !important;
+    right: 6rem;
+    bottom: 8px;
   }
 }
