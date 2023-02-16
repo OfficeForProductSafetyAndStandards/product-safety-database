@@ -1,8 +1,0 @@
-<%= link_with_hidden_text_to("Edit #{image_document_text(@document_upload)}",
-  "(#{@document_upload.title})",
-  edit_associated_document_upload_path(@parent, @document_upload),
-  class: "govuk-link app-block-link govuk-!-margin-right-3 govuk-link--no-visited-state") if documentable_policy(@parent).update? %>
-<%= link_with_hidden_text_to("Remove #{image_document_text(@document_upload)}",
-  "(#{@document_upload.title})",
-  remove_associated_document_upload_path(@parent, @document_upload),
-  class: "govuk-link app-block-link govuk-link--no-visited-state") if documentable_policy(@parent).remove? %>

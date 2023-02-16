@@ -20,7 +20,7 @@ class DocumentUpload < ApplicationRecord
     trim_line_endings(:description)
   end
 
-  private
+private
 
   def file_is_free_of_viruses
     # Don't run this validation unless document has been analyzed by antivirus analyzer

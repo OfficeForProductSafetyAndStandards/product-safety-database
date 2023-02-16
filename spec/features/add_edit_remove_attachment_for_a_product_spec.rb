@@ -68,7 +68,7 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opens
     expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
 
     click_link "Edit image"
-    expect_to_be_on_edit_attachment_for_a_product_page(product_id: product.id, document_upload_id: product.reload.images.first.id)
+    expect_to_be_on_edit_attachment_for_a_product_page(product_id: product.id, document_upload_id: product.reload.virus_free_images.first.id)
 
     fill_in "Document title", with: new_title
     fill_in "Description",    with: new_description
@@ -104,7 +104,7 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opens
     expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
 
     click_link "Delete image"
-    expect_to_be_on_delete_attachment_for_a_product_page(product_id: product.id, document_upload_id: product.reload.images.first.id)
+    expect_to_be_on_delete_attachment_for_a_product_page(product_id: product.id, document_upload_id: product.reload.virus_free_images.first.id)
 
     expect(page).to have_selector("td.govuk-table__cell", text: title)
     expect(page).to have_selector("td.govuk-table__cell", text: description)
@@ -189,8 +189,8 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opens
       expect(page).not_to have_link("Edit image")
       expect(page).not_to have_link("Delete image")
 
-      expect { visit("/products/#{product.id}/document_uploads/#{product.images.last.id}/edit") }.to raise_error(Pundit::NotAuthorizedError)
-      expect { visit("/products/#{product.id}/document_uploads/#{product.images.last.id}/remove") }.to raise_error(Pundit::NotAuthorizedError)
+      expect { visit("/products/#{product.id}/document_uploads/#{product.virus_free_images.last.id}/edit") }.to raise_error(Pundit::NotAuthorizedError)
+      expect { visit("/products/#{product.id}/document_uploads/#{product.virus_free_images.last.id}/remove") }.to raise_error(Pundit::NotAuthorizedError)
     end
   end
 

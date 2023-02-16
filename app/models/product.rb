@@ -2,7 +2,6 @@ class Product < ApplicationRecord
   include CountriesHelper
   include Documentable
   include Searchable
-  include AttachmentConcern
   include Retireable
 
   self.ignored_columns = %w[batch_number customs_code number_of_affected_units affected_units_status]
