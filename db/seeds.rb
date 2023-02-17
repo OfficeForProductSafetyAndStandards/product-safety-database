@@ -69,9 +69,8 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
-  investigation.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
+  AddProductToCase.call!(investigation:, product:, user:)
+  investigation.reload.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
 
   accident_params = {
     type: "Accident",
@@ -151,8 +150,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   risk_assessment_params = {
     assessed_on: Time.zone.today,
@@ -200,8 +198,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
 
@@ -243,8 +240,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
 
@@ -286,8 +282,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
 
@@ -327,8 +322,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
@@ -399,8 +393,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   product.documents.attach(create_blob("2019-w6_27526-1f.jpg", title: "Lynx packaging"))
   product.documents.attach(create_blob("2019-w6_27526-2f.jpg", title: "Lynx packaging"))
@@ -443,8 +436,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   product.documents.attach(create_blob("2019-w3_27167-3f.jpg", title: "packaging and product"))
   product.documents.attach(create_blob("2019-w3_27167-1f.jpg", title: "label"))
@@ -498,8 +490,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
@@ -538,8 +529,7 @@ if run_seeds
   }
 
   product = CreateProduct.call!(product_params.merge({ user: })).product
-  # TODO: Use a service (like AddProductToCase when it's built) to do this
-  investigation.products << product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
