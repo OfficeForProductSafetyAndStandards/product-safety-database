@@ -15,7 +15,6 @@ class AddProductToCase
     context.fail!(error: "The product is retired") if product.retired?
 
     InvestigationProduct.transaction do
-      # TODO: Only check existing links on active products once product retirement is implemented
       (context.fail!(error: "The product is already linked to the case") and return false) if duplicate_investigation_product
       investigation.products << product
     end
