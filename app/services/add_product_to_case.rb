@@ -22,9 +22,7 @@ class AddProductToCase
 
     change_product_owner_if_unowned
 
-    investigation.reload.__elasticsearch__.update_document
-
-    product.reload.__elasticsearch__.update_document
+    product.__elasticsearch__.index_document
 
     context.activity = create_audit_activity_for_product_added
 
