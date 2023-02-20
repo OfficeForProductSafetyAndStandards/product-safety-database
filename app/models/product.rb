@@ -48,7 +48,8 @@ class Product < ApplicationRecord
     )
   end
 
-  has_many_attached :documents # Deprecated, to be migrated and removed
+  # TODO: Remove this once attachments have been migrated
+  has_many_attached :documents
 
   has_many :activities
 
