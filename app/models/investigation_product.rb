@@ -18,4 +18,8 @@ class InvestigationProduct < ApplicationRecord
   def product
     investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) || super : super
   end
+
+  def psd_ref
+    product.psd_ref timestamp: investigation_closed_at&.to_i, investigation_was_closed: investigation_closed_at.present?
+  end
 end

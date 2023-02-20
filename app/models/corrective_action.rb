@@ -1,4 +1,6 @@
 class CorrectiveAction < ApplicationRecord
+  self.ignored_columns = %w[product_id]
+
   MEASURE_TYPES = %w[mandatory voluntary].freeze
   DURATION_TYPES = %w[permanent temporary unknown].freeze
   TRUNCATED_ACTION_MAP = {
@@ -16,7 +18,7 @@ class CorrectiveAction < ApplicationRecord
 
   belongs_to :investigation
   belongs_to :business, optional: true
-  belongs_to :product
+  belongs_to :investigation_product
 
   has_one_attached :document
 
@@ -75,8 +77,8 @@ class CorrectiveAction < ApplicationRecord
 
   redacted_export_with :id, :action, :business_id, :created_at, :date_decided, :details, :duration,
                        :geographic_scope, :geographic_scopes, :has_online_recall_information,
-                       :investigation_id, :legislation, :measure_type, :online_recall_information,
-                       :other_action, :product_id, :updated_at
+                       :investigation_id, :investigation_product_id, :legislation, :measure_type,
+                       :online_recall_information, :other_action, :updated_at
 
   def self.migrate_geographical_scope(corrective_action)
     corrective_action.update!(geographic_scopes: GEOGRAPHIC_SCOPES_MIGRATION_MAP[corrective_action.geographic_scope])
