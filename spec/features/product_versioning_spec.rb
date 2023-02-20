@@ -5,7 +5,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   let(:creation_time) { 1.day.ago }
-  let(:product) { create(:product, description: initial_product_description, owning_team: user.team) }
+  let(:product) { create(:product, :with_document_upload, description: initial_product_description, owning_team: user.team) }
   let(:first_investigation) { create(:allegation, creator: user, products: [product]) }
   let(:second_investigation) { create(:allegation, creator: user) }
 
@@ -22,7 +22,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_mailer, type
     expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference number for this product record")
     expect(page).to have_summary_item(key: "Description", value: initial_product_description)
 
-    # Close the case which has the product attatched, to create a "timestamped" version
+    # Close the case which has the product attached, to create a "timestamped" version
     visit "/cases/#{first_investigation.pretty_id}"
     click_link "Close this case"
     fill_in "Why are you closing the case?", with: "Case has been resolved."

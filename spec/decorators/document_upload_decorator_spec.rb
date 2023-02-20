@@ -6,11 +6,19 @@ RSpec.describe DocumentUploadDecorator, :with_stubbed_opensearch do
   let(:product) { create(:product, :with_antivirus_checked_image_document_upload) }
 
   describe "#title" do
-    specify { expect(decorated_document_upload.title).to eq(product.document_uploads.first.metadata["title"]) }
-  end
+    context "when the base document upload has a title" do
+      it "returns the title" do
+        expect(decorated_document_upload.title).to eq(product.document_uploads.first.title)
+      end
+    end
 
-  describe "#description" do
-    specify { expect(decorated_document_upload.description).to eq(product.document_uploads.first.metadata["description"]) }
+    context "when the base document upload does not have a title" do
+      before { product.document_uploads.first.update_attribute(:title, nil) }
+
+      it "returns the filename" do
+        expect(decorated_document_upload.title).to eq(product.document_uploads.first.file_upload.filename.to_s)
+      end
+    end
   end
 
   describe "#event_type" do

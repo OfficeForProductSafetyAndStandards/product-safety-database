@@ -33,10 +33,6 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
           expect(product.document_uploads.count).to eq(1)
           expect(product.document_upload_ids).to eq([document_upload.id])
           expect(document_upload.file_upload.record).to eq(document_upload)
-          expect(document_upload.metadata).to match(a_hash_including(
-                                                      "title" => String,
-                                                      "description" => String
-                                                    ))
           expect(document_upload.file_upload.blob.metadata).to match(
             "analyzed" => true,
             "identified" => true,
@@ -57,10 +53,6 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
           expect(product.document_uploads.count).to eq(1)
           expect(product.document_upload_ids).to eq([document_upload.id])
           expect(document_upload.file_upload.record).to eq(document_upload)
-          expect(document_upload.metadata).to match(a_hash_including(
-                                                      "title" => String,
-                                                      "description" => String
-                                                    ))
           expect(document_upload.file_upload.blob.metadata).to match(
             "analyzed" => true,
             "identified" => true,

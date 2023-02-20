@@ -10,11 +10,9 @@ class MigrateDocumentsToDocumentUploadsForProducts < ActiveRecord::Migration[7.0
         # Create a new document upload and populate with details from the Active Storage attachment
         document_upload = DocumentUpload.new(
           upload_model: attachment.record,
-          metadata: {
-            title: attachment.blob.metadata["title"],
-            description: attachment.blob.metadata["description"],
-            created_by: attachment.blob.metadata["created_by"]
-          },
+          title: attachment.blob.metadata["title"],
+          description: attachment.blob.metadata["description"],
+          created_by: attachment.blob.metadata["created_by"],
           created_at: attachment.created_at,
           updated_at: attachment.blob.metadata["updated"] || attachment.created_at
         )
@@ -26,8 +24,8 @@ class MigrateDocumentsToDocumentUploadsForProducts < ActiveRecord::Migration[7.0
           metadata: attachment.blob.metadata&.except("title", "description", "created_by", "updated")
         )
         # Update the product to add the new document upload
-        attachment.record.update!(
-          document_upload_ids: (attachment.record.document_upload_ids << document_upload.id)
+        attachment.record.update_attribute(
+          :document_upload_ids, (attachment.record.document_upload_ids << document_upload.id)
         )
         # Delete the old attachment
         attachment.delete

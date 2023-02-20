@@ -191,7 +191,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_114714) do
 
   create_table "document_uploads", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.json "metadata"
+    t.uuid "created_by"
+    t.string "description"
+    t.string "title"
     t.datetime "updated_at", null: false
     t.bigint "upload_model_id"
     t.string "upload_model_type"

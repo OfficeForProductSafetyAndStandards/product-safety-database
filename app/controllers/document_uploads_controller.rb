@@ -56,13 +56,7 @@ class DocumentUploadsController < ApplicationController
       flash[:information] = "The #{file_type} did not finish uploading - you must refresh the #{file_type}"
     end
 
-    return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?
-    return redirect_to(product_path(@parent, anchor: "attachments")) if is_a_product_file?
-    return redirect_to(business_path(@parent, anchor: "attachments")) if is_a_business_file?
-    return redirect_to(@parent) unless @parent.is_a?(Investigation)
-    return redirect_to investigation_images_path(@parent) if @document_upload.file_upload.image?
-
-    redirect_to investigation_supporting_information_index_path(@parent)
+    redirect_to(product_path(@parent, anchor: "images"))
   end
 
   # GET /document_uploads/1/edit
@@ -95,13 +89,7 @@ class DocumentUploadsController < ApplicationController
 
     flash[:success] = @document_upload.file_upload.image? ? t(:image_updated) : t(:file_updated, type: @parent.model_name.human.downcase)
 
-    return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?
-    return redirect_to(product_path(@parent, anchor: "attachments")) if is_a_product_file?
-    return redirect_to(business_path(@parent, anchor: "attachments")) if is_a_business_file?
-    return redirect_to(@parent) unless @parent.is_a?(Investigation)
-    return redirect_to investigation_images_path(@parent) if @document_upload.file_upload.image?
-
-    redirect_to investigation_supporting_information_index_path(@parent)
+    redirect_to(product_path(@parent, anchor: "images"))
   end
 
   def remove
@@ -117,10 +105,7 @@ class DocumentUploadsController < ApplicationController
 
     flash[:success] = @document_upload.file_upload.image? ? t(:image_removed) : t(:file_removed)
 
-    return redirect_to(@parent) unless @parent.is_a?(Investigation)
-    return redirect_to investigation_images_path(@parent) if @document_upload.file_upload.image?
-
-    redirect_to investigation_supporting_information_index_path(@parent)
+    redirect_to(@parent)
   end
 
   def show
@@ -136,12 +121,7 @@ private
   end
 
   def get_parent
-    if (pretty_id = params[:investigation_pretty_id] || params[:allegation_id] || params[:project_id] || params[:enquiry_id])
-      return Investigation.find_by!(pretty_id:)
-    end
-
-    return Product.find(params[:product_id]) if params[:product_id]
-    return Business.find(params[:business_id]) if params[:business_id]
+    Product.find(params[:product_id])
   end
 
   def document_upload_params
@@ -150,17 +130,5 @@ private
 
   def existing_file_from_id(existing_file_id)
     ActiveStorage::Blob.find_signed!(existing_file_id)
-  end
-
-  def is_a_product_image?
-    @parent.is_a?(Product) && @document_upload.file_upload.image?
-  end
-
-  def is_a_business_file?
-    @parent.is_a?(Business)
-  end
-
-  def is_a_product_file?
-    @parent.is_a?(Product) && !@document_upload.file_upload.image?
   end
 end
