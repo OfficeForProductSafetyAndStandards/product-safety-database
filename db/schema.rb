@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_15_114714) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_20_203518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -160,15 +160,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_114714) do
     t.string "geographic_scopes", default: [], array: true
     t.enum "has_online_recall_information", enum_type: "has_online_recall_information"
     t.integer "investigation_id"
+    t.bigint "investigation_product_id"
     t.string "legislation"
     t.string "measure_type"
     t.string "online_recall_information"
     t.text "other_action"
-    t.integer "product_id"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["business_id"], name: "index_corrective_actions_on_business_id"
     t.index ["investigation_id"], name: "index_corrective_actions_on_investigation_id"
-    t.index ["product_id"], name: "index_corrective_actions_on_product_id"
+    t.index ["investigation_product_id"], name: "index_corrective_actions_on_investigation_product_id"
   end
 
   create_table "correspondences", force: :cascade do |t|
@@ -466,7 +466,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_15_114714) do
   add_foreign_key "complainants", "investigations"
   add_foreign_key "corrective_actions", "businesses"
   add_foreign_key "corrective_actions", "investigations"
-  add_foreign_key "corrective_actions", "products"
   add_foreign_key "correspondences", "investigations"
   add_foreign_key "locations", "businesses"
   add_foreign_key "products", "teams", column: "owning_team_id"

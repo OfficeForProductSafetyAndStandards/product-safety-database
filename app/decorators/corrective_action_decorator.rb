@@ -23,7 +23,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def supporting_information_title
     action_name = other? ? other_action : I18n.t(action, scope: %i[corrective_action attributes actions])
 
-    "#{action_name}: #{product.name}"
+    "#{action_name}: #{investigation_product.product.name}"
   end
 
   def date_of_activity

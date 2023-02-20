@@ -7,7 +7,8 @@ module Investigations
         { key: { text: "Action" }, value: { text: action_text_for(corrective_action) } },
         { key: { text: "Event date" }, value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },               value: { text: corrective_action.legislation } },
-        { key: { text: "Product" },                   value: { html: link_to(corrective_action.product.name, product_path(corrective_action.product)) } },
+        # TODO: This is problematic because the product might be a timestamped version, and we don't have a show page for a timestamped product:
+        { key: { text: "Product" },                   value: { html: link_to(corrective_action.investigation_product.product.name, product_path(corrective_action.investigation_product.product)) } },
         { key: { text: "Business" },                  value: { html: business_text_for(corrective_action) } },
         { key: { text: "Recall information" },        value: { html: recall_information } }
       ]
