@@ -24,9 +24,13 @@ class MigrateDocumentsToDocumentUploadsForProducts < ActiveRecord::Migration[7.0
           metadata: attachment.blob.metadata&.except("title", "description", "created_by", "updated")
         )
         # Update the product to add the new document upload
+        # We're using `update_attribute` here to ensure the record is updated even if there are other,
+        # unrelated issues
+        # rubocop:disable Rails/SkipsModelValidations
         attachment.record.update_attribute(
           :document_upload_ids, (attachment.record.document_upload_ids << document_upload.id)
         )
+        # rubocop:enable Rails/SkipsModelValidations
         # Delete the old attachment
         attachment.delete
         Rails.logger.debug "Migrated attachment id=#{attachment.id}"

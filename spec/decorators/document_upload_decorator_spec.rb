@@ -13,7 +13,9 @@ RSpec.describe DocumentUploadDecorator, :with_stubbed_opensearch do
     end
 
     context "when the base document upload does not have a title" do
-      before { product.document_uploads.first.update_attribute(:title, nil) }
+      before do
+        product.document_uploads.first.update_attribute(:title, nil) # rubocop:disable Rails/SkipsModelValidations
+      end
 
       it "returns the filename" do
         expect(decorated_document_upload.title).to eq(product.document_uploads.first.file_upload.filename.to_s)
