@@ -11,6 +11,7 @@ gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
+gem "cssbundling-rails"
 gem "devise", "~> 4.8"
 gem "devise-encryptable", "~> 0.2"
 gem "draper", "~> 4.0"
