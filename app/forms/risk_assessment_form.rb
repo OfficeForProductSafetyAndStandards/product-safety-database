@@ -81,7 +81,7 @@ class RiskAssessmentForm
   end
 
   def products
-    investigation.products
+    investigation.products.uniq
     .pluck(:name, :id).collect do |row|
       {
         text: row[0],
