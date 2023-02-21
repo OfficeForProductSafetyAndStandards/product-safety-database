@@ -14,7 +14,6 @@
     "govuk-frontend": "4.4.1",
     "jquery": "3.6.3",
     "postcss": "^8.4.19",
-    "resolve-url-loader": "5.0.0",
     "sass": "^1.58.3",
     "standard": "^17.0.0",
     "stylelint": "^14.16.1",
