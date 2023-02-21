@@ -31,13 +31,6 @@ services:
     ports:
       - 9200:9200
 
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana-oss:7.9.2
-  #   ports:
-  #     - 5601:5601
-  #   depends_on:
-  #     - opensearch
-
   redis:
     image: redis
     hostname: redis
