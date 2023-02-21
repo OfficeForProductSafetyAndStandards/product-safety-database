@@ -37,7 +37,7 @@ services:
     ports:
       - 6379:6379
 
-  psd-web:
+  web:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
@@ -52,11 +52,11 @@ services:
       - db
       - opensearch
       - redis
-      - psd-worker
+      - worker
     env_file:
       - ./docker/env.psd
 
-  psd-worker:
+  worker:
     build:
       context: .
       dockerfile: ./docker/worker/Dockerfile
