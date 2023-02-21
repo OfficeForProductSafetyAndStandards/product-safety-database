@@ -31,20 +31,13 @@ services:
     ports:
       - 9200:9200
 
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana-oss:7.9.2
-  #   ports:
-  #     - 5601:5601
-  #   depends_on:
-  #     - opensearch
-
   redis:
     image: redis
     hostname: redis
     ports:
       - 6379:6379
 
-  psd-web:
+  web:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
@@ -59,11 +52,11 @@ services:
       - db
       - opensearch
       - redis
-      - psd-worker
+      - worker
     env_file:
       - ./docker/env.psd
 
-  psd-worker:
+  worker:
     build:
       context: .
       dockerfile: ./docker/worker/Dockerfile
