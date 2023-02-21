@@ -9,17 +9,13 @@
   "dependencies": {
     "@hmcts/frontend": "^0.0.41-alpha",
     "accessible-autocomplete": "2.0.4",
-    "css-loader": "^6.7.3",
     "esbuild": "^0.17.10",
-    "file-loader": "^6.2.0",
     "govuk-country-and-territory-autocomplete": "1.0.2",
     "govuk-frontend": "4.4.1",
     "jquery": "3.6.3",
-    "mini-css-extract-plugin": "^2.7.2",
     "postcss": "^8.4.19",
     "resolve-url-loader": "5.0.0",
     "sass": "^1.58.3",
-    "sass-loader": "^13.2.0",
     "standard": "^17.0.0",
     "stylelint": "^14.16.1",
     "stylelint-config-gds": "^0.2.0"
