@@ -20,7 +20,7 @@
     "postcss": "^8.4.19",
     "regenerator-runtime": "^0.13.11",
     "resolve-url-loader": "5.0.0",
-    "sass": "^1.57.1",
+    "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
     "standard": "^17.0.0",
     "stylelint": "^14.16.1",
@@ -30,7 +30,8 @@
     "webpack-remove-empty-scripts": "^1.0.1"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "stylelint": {
     "extends": [
