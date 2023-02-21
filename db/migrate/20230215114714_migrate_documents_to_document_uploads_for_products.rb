@@ -50,9 +50,9 @@ class MigrateDocumentsToDocumentUploadsForProducts < ActiveRecord::Migration[7.0
         # Add back the metadata to the blob
         attachment.blob.update!(
           metadata: {
-            "title" => document_upload.metadata["title"],
-            "description" => document_upload.metadata["description"],
-            "created_by" => document_upload.metadata["created_by"],
+            "title" => document_upload.title,
+            "description" => document_upload.description,
+            "created_by" => document_upload.created_by,
             "updated" => document_upload.updated_at
           }.merge(attachment.blob.metadata),
         )
