@@ -147,7 +147,7 @@ class Investigation < ApplicationRecord
   end
 
   def supporting_information
-    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product) + risk_assessments + accidents + incidents).sort_by(&:created_at).reverse
+    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:investigation_product) + risk_assessments + accidents + incidents).sort_by(&:created_at).reverse
   end
 
   def enquiry?

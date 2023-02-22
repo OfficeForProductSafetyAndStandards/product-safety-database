@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_20_203518) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_120645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -366,14 +366,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_203518) do
     t.text "details"
     t.text "failure_details"
     t.integer "investigation_id"
+    t.bigint "investigation_product_id"
     t.string "legislation"
-    t.integer "product_id"
     t.string "result"
     t.string "standards_product_was_tested_against", default: [], array: true
     t.string "type"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
-    t.index ["product_id"], name: "index_tests_on_product_id"
+    t.index ["investigation_product_id"], name: "index_tests_on_investigation_product_id"
   end
 
   create_table "unexpected_events", force: :cascade do |t|
@@ -449,8 +449,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_203518) do
     t.string "event", null: false
     t.bigint "item_id", null: false
     t.string "item_type", null: false
-    t.text "object"
+    t.jsonb "object"
     t.text "object_changes"
+    t.text "old_object"
     t.string "whodunnit"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
@@ -477,6 +478,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_203518) do
   add_foreign_key "risk_assessments", "teams", column: "assessed_by_team_id"
   add_foreign_key "risk_assessments", "users", column: "added_by_user_id"
   add_foreign_key "tests", "investigations"
-  add_foreign_key "tests", "products"
   add_foreign_key "users", "teams"
 end
