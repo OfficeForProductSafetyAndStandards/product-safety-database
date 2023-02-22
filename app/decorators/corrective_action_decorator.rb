@@ -53,4 +53,18 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def display_medium_title_text_size?
     page_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
+
+  def is_attached_to_versioned_product?
+    !!investigation_closed_at
+  end
+
+  def investigation_closed_at
+    object.investigation_product.investigation_closed_at
+  end
+
+  def psd_ref
+    closed_at = investigation_closed_at
+    is_closed = !!investigation_closed_at
+    object.investigation_product.product.psd_ref(timestamp: closed_at, investigation_was_closed: is_closed)
+  end
 end
