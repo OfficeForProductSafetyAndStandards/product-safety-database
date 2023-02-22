@@ -56,7 +56,7 @@ jobs:
         yarn install
     - name: Check javascript for code style
       run: |
-        yarn standard
+        yarn lint:js
     - name: Run SCSS linter
       run: |
-        yarn stylelint '**/*.(s)?css'
+        yarn lint:css
