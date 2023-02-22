@@ -1,9 +1,11 @@
 class UnexpectedEvent < ApplicationRecord
+  self.ignored_columns = %w[product_id]
+
   belongs_to :investigation
-  belongs_to :product
+  belongs_to :investigation_product
 
   redacted_export_with :id, :additional_info, :created_at, :date, :investigation_id,
-                       :is_date_known, :product_id, :severity, :severity_other, :type,
+                       :is_date_known, :investigation_product_id, :severity, :severity_other, :type,
                        :updated_at, :usage
 
   enum usage: {

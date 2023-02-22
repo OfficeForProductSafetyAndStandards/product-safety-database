@@ -13,7 +13,7 @@
 <%= form_with model: @accident_or_incident_form, scope: :accident_or_incident_form, local: true, builder: ApplicationFormBuilder, method: :post, html: {novalidate: true}, url: investigation_accident_or_incidents_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@accident_or_incident_form.errors, %i[is_date_known date product_id usage severity severity_other])%>
+      <%= error_summary(@accident_or_incident_form.errors, %i[is_date_known date investigation_product_id usage severity severity_other])%>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
