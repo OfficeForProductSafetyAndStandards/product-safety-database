@@ -13,7 +13,7 @@ class TestResultForm
   attribute :legislation
   attribute :result
   attribute :standards_product_was_tested_against, :comma_separated_list
-  attribute :product_id, :integer
+  attribute :investigation_product_id, :integer
   attribute :document
   attribute :existing_document_file_id
   attribute :filename
@@ -26,7 +26,7 @@ class TestResultForm
   validates :standards_product_was_tested_against, presence: true
   validates :result, inclusion: { in: Test::Result.results.keys }
   validates :document, presence: true
-  validates :product_id, presence: true, on: :create_with_product
+  validates :investigation_product_id, presence: true, on: :create_with_investigation_product
   validates :further_test_results, presence: true, on: :ts_user_create
   validates :date,
             presence: true,
@@ -42,7 +42,7 @@ class TestResultForm
   end
 
   ATTRIBUTES_FROM_TEST_RESULT = %i[
-    id date details legislation result failure_details standards_product_was_tested_against product_id
+    id date details legislation result failure_details standards_product_was_tested_against investigation_product_id
   ].freeze
 
   def self.from(test_result)

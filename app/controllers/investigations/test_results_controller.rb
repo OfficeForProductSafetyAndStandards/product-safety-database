@@ -13,7 +13,7 @@ class Investigations::TestResultsController < ApplicationController
     @test_result_form.load_document_file
 
     @investigation = investigation.decorate
-    return render :new if @test_result_form.invalid?(:create_with_product)
+    return render :new if @test_result_form.invalid?(:create_with_investigation_product)
 
     service_attributes = @test_result_form
                            .serializable_hash
@@ -54,7 +54,7 @@ class Investigations::TestResultsController < ApplicationController
     @test_result_form.assign_attributes(test_result_params)
     @test_result_form.load_document_file
 
-    if @test_result_form.invalid?(:create_with_product)
+    if @test_result_form.invalid?(:create_with_investigation_product)
       @investigation = investigation.decorate
       return render :edit
     end
@@ -80,7 +80,7 @@ private
     params.require(:test_result).permit(
       :details,
       :legislation,
-      :product_id,
+      :investigation_product_id,
       :result,
       :failure_details,
       :standards_product_was_tested_against,

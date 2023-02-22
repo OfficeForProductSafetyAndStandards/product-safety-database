@@ -1,11 +1,12 @@
 class Test < ApplicationRecord
   belongs_to :investigation
-  belongs_to :product, optional: false
+  belongs_to :investigation_product, optional: false
+  self.ignored_columns = %w[product_id]
 
   has_one_attached :document
 
   redacted_export_with :id, :created_at, :date, :details, :failure_details, :investigation_id,
-                       :legislation, :product_id, :result, :standards_product_was_tested_against,
+                       :legislation, :investigation_product_id, :result, :standards_product_was_tested_against,
                        :type, :updated_at
 
   def initialize(*args)

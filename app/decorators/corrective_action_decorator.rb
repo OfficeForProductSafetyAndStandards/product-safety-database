@@ -63,8 +63,6 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def psd_ref
-    closed_at = investigation_closed_at
-    is_closed = !!investigation_closed_at
-    object.investigation_product.product.psd_ref(timestamp: closed_at, investigation_was_closed: is_closed)
+    object.investigation_product.psd_ref
   end
 end
