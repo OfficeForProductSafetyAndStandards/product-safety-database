@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_22_120645) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_142358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -381,13 +381,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_22_120645) do
     t.datetime "created_at", null: false
     t.date "date"
     t.integer "investigation_id", null: false
+    t.bigint "investigation_product_id"
     t.boolean "is_date_known"
-    t.integer "product_id", null: false
     t.enum "severity", enum_type: "severities"
     t.string "severity_other"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.enum "usage", enum_type: "usages"
+    t.index ["investigation_product_id"], name: "index_unexpected_events_on_investigation_product_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

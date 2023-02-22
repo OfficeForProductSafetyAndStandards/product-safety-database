@@ -16,5 +16,4 @@ class MoveTestResultProductRefsToInvestigationProducts < ActiveRecord::Migration
       remove_reference :tests, :investigation_product, index: { algorithm: :concurrently }
     end
   end
-
 end

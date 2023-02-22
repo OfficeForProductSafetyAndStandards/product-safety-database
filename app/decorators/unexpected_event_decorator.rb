@@ -32,7 +32,7 @@ class UnexpectedEventDecorator < ApplicationDecorator
   end
 
   def product_description
-    Product.find(object.product_id).name
+    "#{object.investigation_product.product.name} #{object.investigation_product.psd_ref}"
   end
 
   def usage
@@ -47,5 +47,17 @@ class UnexpectedEventDecorator < ApplicationDecorator
     return object.severity_other if severity_other.present?
 
     I18n.t(".accident_or_incident.severity.#{object.severity}")
+  end
+
+  def is_attached_to_versioned_product?
+    !!investigation_closed_at
+  end
+
+  def investigation_closed_at
+    object.investigation_product.investigation_closed_at
+  end
+
+  def psd_ref
+    object.investigation_product.psd_ref
   end
 end
