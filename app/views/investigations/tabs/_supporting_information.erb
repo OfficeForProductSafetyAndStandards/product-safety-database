@@ -50,7 +50,7 @@
               <dt class="govuk-summary-list__key">Title</dt>
               <% title = if supporting_information_type_id == "correspondence" && !policy(@investigation).view_protected_details?
                     tag.p(I18n.t("case.protected_details", data_type: "correspondence"), class: "govuk-hint")
-                  elsif (supporting_information_type_id == "other" && !policy(@investigation).view_protected_details?) || item.is_attached_to_versioned_product?
+                  elsif (supporting_information_type_id == "other" && !policy(@investigation).view_protected_details?)
                     "#{item.supporting_information_title} (#{item.psd_ref})"
                   else
                     link_to item.supporting_information_title, item.show_path, class: "govuk-link govuk-link--no-visited-state"

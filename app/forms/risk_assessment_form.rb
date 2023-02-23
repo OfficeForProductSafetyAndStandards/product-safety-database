@@ -17,7 +17,7 @@ class RiskAssessmentForm
   attribute :assessed_by_business_id
   attribute :assessed_by_other
 
-  attribute :product_ids
+  attribute :investigation_product_ids
 
   attribute :old_file
   attribute :risk_assessment_file
@@ -80,14 +80,13 @@ class RiskAssessmentForm
     super
   end
 
-  def products
-    investigation.products.uniq
-    .pluck(:name, :id).collect do |row|
+  def investigation_products
+    investigation.investigation_products.map do |ip|
       {
-        text: row[0],
-        value: row[1],
+        text: ip.product.name,
+        value: ip.id,
         disable_ghost: true,
-        checked: product_ids.to_a.include?(row[1])
+        checked: investigation_product_ids.to_a.include?(ip.id)
       }
     end
   end
@@ -134,8 +133,8 @@ class RiskAssessmentForm
 private
 
   def at_least_one_product_associated
-    return unless product_ids.to_a.empty?
+    return unless investigation_product_ids.to_a.empty?
 
-    errors.add(:product_ids, :blank)
+    errors.add(:investigation_product_ids, :blank)
   end
 end

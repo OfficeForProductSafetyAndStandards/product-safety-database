@@ -1,7 +1,7 @@
 class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
   def self.build_metadata(risk_assessment)
     { "risk_assessment" => risk_assessment.attributes.merge(
-      "product_ids" => risk_assessment.product_ids,
+      "investigation_product_ids" => risk_assessment.investigation_product_ids,
       "risk_assessment_file" => risk_assessment.risk_assessment_file.blob&.attributes
     ) }
   end

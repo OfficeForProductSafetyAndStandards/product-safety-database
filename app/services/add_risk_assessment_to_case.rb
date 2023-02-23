@@ -3,7 +3,7 @@ class AddRiskAssessmentToCase
   include EntitiesToNotify
 
   delegate :investigation, :user, :assessed_on, :risk_level, :custom_risk_level,
-           :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :product_ids, :risk_assessment_file, :risk_assessment, to: :context
+           :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :investigation_product_ids, :risk_assessment_file, :risk_assessment, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -20,7 +20,7 @@ class AddRiskAssessmentToCase
         assessed_by_business_id: assessed_by_business_id.presence,
         assessed_by_other: assessed_by_other.presence,
         details:,
-        product_ids:
+        investigation_product_ids:
       )
 
       context.risk_assessment.risk_assessment_file.attach(risk_assessment_file)
