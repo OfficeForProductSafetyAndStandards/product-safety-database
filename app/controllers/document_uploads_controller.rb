@@ -98,8 +98,9 @@ class DocumentUploadsController < ApplicationController
 
   # DELETE /document_uploads/1
   def destroy
+    # Destroying a document upload actually removes the association
+    # from the parent model. The parent model may implement versioning.
     @document_upload = @parent.document_uploads.find(params[:id])
-    @document_upload.destroy!
     @parent.document_upload_ids.delete(@document_upload.id)
     @parent.save!
 
