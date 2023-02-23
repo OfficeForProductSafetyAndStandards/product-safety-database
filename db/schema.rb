@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_23_144450) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -64,15 +64,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.bigint "correspondence_id"
     t.datetime "created_at", precision: nil, null: false
     t.integer "investigation_id"
+    t.bigint "investigation_product_id"
     t.jsonb "metadata"
-    t.bigint "product_id"
     t.string "title"
     t.string "type", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["business_id"], name: "index_activities_on_business_id"
     t.index ["correspondence_id"], name: "index_activities_on_correspondence_id"
     t.index ["investigation_id"], name: "index_activities_on_investigation_id"
-    t.index ["product_id"], name: "index_activities_on_product_id"
+    t.index ["investigation_product_id"], name: "index_activities_on_investigation_product_id"
     t.index ["type"], name: "index_activities_on_type"
   end
 
@@ -462,7 +462,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
   add_foreign_key "activities", "businesses"
   add_foreign_key "activities", "correspondences"
   add_foreign_key "activities", "investigations"
-  add_foreign_key "activities", "products"
   add_foreign_key "alerts", "investigations"
   add_foreign_key "collaborations", "investigations"
   add_foreign_key "complainants", "investigations"
