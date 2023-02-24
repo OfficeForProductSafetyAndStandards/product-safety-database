@@ -8,4 +8,21 @@ class AuditActivity::Investigation::UpdateVisibility < AuditActivity::Investigat
     }
   end
 
+  def metadata
+    migrate_metadata_structure
+  end
+
+private
+
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    return metadata if already_in_new_format?
+
+    { "updates" => { "is_private" => [nil, title.match?(/\s+restricted$/im)] } }
+  end
+
+  def already_in_new_format?
+    self[:metadata]&.key?("updates")
+  end
 end
