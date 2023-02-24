@@ -3,7 +3,7 @@ class UpdateRiskAssessment
   include EntitiesToNotify
 
   delegate :risk_assessment, :user, :assessed_on, :risk_level, :custom_risk_level,
-           :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :product_ids, :risk_assessment_file, to: :context
+           :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :investigation_product_ids, :risk_assessment_file, to: :context
 
   delegate :investigation, to: :risk_assessment
 
@@ -11,7 +11,7 @@ class UpdateRiskAssessment
     context.fail!(error: "No risk assessment supplied") unless risk_assessment.is_a?(RiskAssessment)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    @previous_product_ids = risk_assessment.product_ids
+    @previous_investigation_product_ids = risk_assessment.investigation_product_ids
     @previous_attachment_filename = risk_assessment.risk_assessment_file.filename
 
     ActiveRecord::Base.transaction do
@@ -23,7 +23,7 @@ class UpdateRiskAssessment
         assessed_by_business_id: assessed_by_business_id.presence,
         assessed_by_other: assessed_by_other.presence,
         details:,
-        product_ids:
+        investigation_product_ids:
       )
 
       if risk_assessment_file
@@ -35,7 +35,8 @@ class UpdateRiskAssessment
 
       risk_assessment.save!
 
-      create_audit_activity
+      # TODO: reinstate when we tackle the audit activity work
+      # create_audit_activity
       send_notification_email
     end
   end
@@ -59,7 +60,7 @@ private
   def audit_activity_metadata
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.build_metadata(
       risk_assessment:,
-      previous_product_ids: @previous_product_ids,
+      previous_product_ids: @previous_investigation_product_ids.map {|ip| InvestigationProduct.find(ip).product_id },
       attachment_changed: risk_assessment_file.present?,
       previous_attachment_filename: @previous_attachment_filename
     )
