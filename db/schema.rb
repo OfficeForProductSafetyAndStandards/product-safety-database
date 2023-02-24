@@ -160,15 +160,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.string "geographic_scopes", default: [], array: true
     t.enum "has_online_recall_information", enum_type: "has_online_recall_information"
     t.integer "investigation_id"
+    t.bigint "investigation_product_id"
     t.string "legislation"
     t.string "measure_type"
     t.string "online_recall_information"
     t.text "other_action"
-    t.bigint "product_id"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["business_id"], name: "index_corrective_actions_on_business_id"
     t.index ["investigation_id"], name: "index_corrective_actions_on_investigation_id"
-    t.index ["product_id"], name: "index_corrective_actions_on_product_id"
+    t.index ["investigation_product_id"], name: "index_corrective_actions_on_investigation_product_id"
   end
 
   create_table "correspondences", force: :cascade do |t|
@@ -366,14 +366,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.text "details"
     t.text "failure_details"
     t.integer "investigation_id"
+    t.bigint "investigation_product_id"
     t.string "legislation"
-    t.bigint "product_id"
     t.string "result"
     t.string "standards_product_was_tested_against", default: [], array: true
     t.string "type"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
-    t.index ["product_id"], name: "index_tests_on_product_id"
+    t.index ["investigation_product_id"], name: "index_tests_on_investigation_product_id"
   end
 
   create_table "unexpected_events", force: :cascade do |t|
@@ -381,14 +381,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.datetime "created_at", null: false
     t.date "date"
     t.integer "investigation_id", null: false
+    t.bigint "investigation_product_id"
     t.boolean "is_date_known"
-    t.bigint "product_id"
     t.enum "severity", enum_type: "severities"
     t.string "severity_other"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.enum "usage", enum_type: "usages"
-    t.index ["product_id"], name: "index_unexpected_events_on_product_id"
+    t.index ["investigation_product_id"], name: "index_unexpected_events_on_investigation_product_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -450,9 +450,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.string "event", null: false
     t.bigint "item_id", null: false
     t.string "item_type", null: false
-    t.jsonb "object"
+    t.text "object"
     t.text "object_changes"
-    t.text "old_object"
     t.string "whodunnit"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
