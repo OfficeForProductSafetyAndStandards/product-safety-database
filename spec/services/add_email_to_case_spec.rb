@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
-  let(:product) { create(:product_washing_machine) }
-
   let(:team) { create(:team) }
 
   let(:user) { create(:user) }
@@ -72,7 +70,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :
         result
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Correspondence::AddEmail)
-        expect(activity.product).to be_nil
+        expect(activity.investigation_product).to be_nil
         expect(activity.title(nil)).to be_nil
         expect(activity.body).to eq nil
       end
