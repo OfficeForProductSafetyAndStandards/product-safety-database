@@ -318,6 +318,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.integer "risk_assessment_id", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_product_id"], name: "index_risk_assessed_products_on_investigation_product_id"
+    t.index ["risk_assessment_id", "investigation_product_id"], name: "index_risk_assessed_products", unique: true
   end
 
   create_table "risk_assessments", force: :cascade do |t|
