@@ -2,7 +2,7 @@ class UpdateTestResult
   include Interactor
   include EntitiesToNotify
 
-  delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :failure_details, :standards_product_was_tested_against, :product_id, :changes, to: :context
+  delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :failure_details, :standards_product_was_tested_against, :investigation_product_id, :changes, to: :context
 
   def call
     context.fail!(error: "No test result supplied")   unless test_result.is_a?(Test::Result)
@@ -16,7 +16,7 @@ class UpdateTestResult
       result:,
       failure_details: updated_failure_details,
       standards_product_was_tested_against:,
-      product_id:,
+      investigation_product_id:,
     )
 
     test_result.transaction do
@@ -40,7 +40,7 @@ private
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
       added_by_user: user,
       investigation: test_result.investigation,
-      product: test_result.product,
+      product: test_result.investigation_product.product,
       metadata:
     )
   end
