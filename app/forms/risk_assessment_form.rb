@@ -83,7 +83,7 @@ class RiskAssessmentForm
   def investigation_products
     investigation.investigation_products.map do |ip|
       {
-        text: ip.product.name,
+        text: "#{ip.product.name} (#{ip.psd_ref})",
         value: ip.id,
         disable_ghost: true,
         checked: investigation_product_ids.to_a.include?(ip.id)
