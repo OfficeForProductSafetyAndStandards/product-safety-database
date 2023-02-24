@@ -37,14 +37,10 @@ private
     AuditActivity::CorrectiveAction::Add.create!(
       investigation:,
       business_id:,
-      investigation_product_id:,
+      product_id:,
       added_by_user: user,
       metadata:
     )
-  end
-
-  def investigation_product_id
-    investigation.investigation_products.find_by(product_id:)&.id
   end
 
   def send_notification_email
