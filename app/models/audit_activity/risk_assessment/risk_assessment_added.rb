@@ -6,6 +6,12 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
     ) }
   end
 
+  # Temporarily override getter until data is migrated
+  # TODO: Remove method once data migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def subtitle_slug
     "Added"
   end
