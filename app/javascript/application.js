@@ -1,7 +1,3 @@
-// JS
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
-
 import * as GOVUKFrontend from 'govuk-frontend'
 
 import './location_picker'

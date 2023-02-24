@@ -34,7 +34,7 @@ $thumbnail-border: 5px;
 
 .app-document-preview__placeholder {
   position: relative; // Needed so text can overlay correctly
-  width: $thumbnail-width / 2;
+  width: calc($thumbnail-width / 2);
 
   @include govuk-media-query($from: tablet) {
     width: $thumbnail-width;

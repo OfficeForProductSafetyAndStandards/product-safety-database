@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "~> 3.0"
+ruby "3.1.3"
 
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
@@ -11,6 +11,7 @@ gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
+gem "cssbundling-rails"
 gem "devise", "~> 4.8"
 gem "devise-encryptable", "~> 0.2"
 gem "draper", "~> 4.0"
