@@ -15,7 +15,7 @@
         Only products already added to the case are listed.
         <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
-      <%= form.govuk_autocomplete :investigation_product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.product.name + investigation_product.psd_ref}", value: investigation_product.id } }, hint: span_html %>
+      <%= form.govuk_autocomplete :investigation_product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } }, hint: span_html %>
     <% end %>
   </div>
 <% end %>
