@@ -39,12 +39,8 @@ private
       added_by_user: user,
       investigation:,
       title: product.name,
-      investigation_product:
+      product:
     )
-  end
-
-  def investigation_product
-    investigation.investigation_products.find_by(product_id: product.id)
   end
 
   def send_notification_email
