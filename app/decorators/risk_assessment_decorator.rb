@@ -53,7 +53,7 @@ private
     products = object.investigation_products.map {|ip| ip.product}
 
     if products.size > 1
-      h.pluralize(object.products.size, "product")
+      h.pluralize(products.size, "product")
     else
       products.first.name
     end
