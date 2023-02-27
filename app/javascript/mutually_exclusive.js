@@ -1,3 +1,5 @@
+'use strict'
+
 function mutuallyExclusive (el) {
   const checkboxes = Array.from(el.querySelectorAll('.js-mutually-exclusive__item[data-mutually-exclusive-set-id]'))
   const checkboxesGroupedBySetId = checkboxes.reduce((acc, checkbox) => {
@@ -25,8 +27,7 @@ function mutuallyExclusive (el) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const mutuallyExclusiveComponents = document.getElementsByClassName('js-mutually-exclusive')
-  for (const mutuallyExclusiveComponent of mutuallyExclusiveComponents) {
-    mutuallyExclusive(mutuallyExclusiveComponent)
-  }
+  document.querySelectorAll('.js-mutually-exclusive').forEach(el => {
+    mutuallyExclusive(el)
+  })
 })
