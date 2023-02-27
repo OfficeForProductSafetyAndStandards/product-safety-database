@@ -35,7 +35,7 @@ class UpdateAccidentOrIncident
       metadata: audit_activity_metadata,
       title: nil,
       body: nil,
-      product_id: InvestigationProduct.find(investigation_product_id).product_id
+      investigation_product_id:
     )
   end
 

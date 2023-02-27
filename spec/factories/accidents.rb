@@ -5,6 +5,6 @@ FactoryBot.define do
     is_date_known { "no" }
     severity { "serious" }
     usage { "during_normal_use" }
-    product { build(:product) }
+    investigation_product
   end
 end

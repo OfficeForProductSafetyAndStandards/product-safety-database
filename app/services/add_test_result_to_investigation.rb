@@ -31,7 +31,7 @@ private
     AuditActivity::Test::Result.create!(
       added_by_user: user,
       investigation:,
-      product: context.test_result.investigation_product.product,
+      investigation_product: context.test_result.investigation_product,
       metadata: AuditActivity::Test::Result.build_metadata(context.test_result)
     )
   end
