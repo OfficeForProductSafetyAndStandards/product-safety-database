@@ -70,7 +70,7 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Product::Add)
         expect(activity.added_by_user).to eq(user)
-        expect(activity.product).to eq(product)
+        expect(activity.investigation_product).to eq(investigation.investigation_products.first)
         expect(activity.title(nil)).to eq(product.name)
       end
 
