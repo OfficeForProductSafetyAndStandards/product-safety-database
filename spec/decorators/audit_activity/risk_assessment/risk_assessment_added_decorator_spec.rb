@@ -9,14 +9,14 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     ).decorate
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, custom_risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, products:) }
+  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, custom_risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products:) }
   let(:trait) { :without_file }
   let(:risk_level) { "serious" }
   let(:custom_risk_level) { nil }
   let(:assessed_by_team) { nil }
   let(:assessed_by_business) { nil }
   let(:assessed_by_other) { "test" }
-  let(:products) { [build(:product)] }
+  let(:investigation_products) { [build(:investigation_product)] }
 
   describe "#assessed_on" do
     it "returns a generated String" do
