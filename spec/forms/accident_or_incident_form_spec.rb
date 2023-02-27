@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe AccidentOrIncidentForm, :with_stubbed_opensearch, :with_test_queue_adapter do
-  # Default set of valid attributes
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user) }
 
@@ -10,9 +9,8 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_opensearch, :with_test_queu
   let(:severity) { "serious" }
   let(:severity_other) { "" }
   let(:usage) { "during_normal_use" }
-  let(:product_id) { product.id }
+  let(:investigation_product_id) { create(:investigation_product).id }
   let(:type) { "accident" }
-  let(:product) { create(:product) }
 
   let(:params) do
     {
@@ -21,7 +19,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_opensearch, :with_test_queu
       severity:,
       severity_other:,
       usage:,
-      product_id:,
+      investigation_product_id:,
       type:
     }
   end
@@ -65,8 +63,8 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_opensearch, :with_test_queu
       end
     end
 
-    context "when product_id is missing" do
-      let(:product_id) { nil }
+    context "when investigation_product_id is missing" do
+      let(:investigation_product_id) { nil }
 
       it "is not valid" do
         expect(form).not_to be_valid
