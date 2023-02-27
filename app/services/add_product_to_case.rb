@@ -39,7 +39,7 @@ private
       added_by_user: user,
       investigation:,
       title: product.name,
-      product:
+      investigation_product:
     )
   end
 
@@ -55,6 +55,10 @@ private
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
+  end
+
+  def investigation_product
+    InvestigationProduct.find_by(product_id: product.id, investigation_id: investigation.id)
   end
 
   def duplicate_investigation_product
