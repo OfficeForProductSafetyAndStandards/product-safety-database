@@ -86,7 +86,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     return super unless action_name
 
     if (truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym]) && !action_name.inquiry.other?
-      return "#{truncated_action}: #{product.name}"
+      return "#{truncated_action}: #{investigation_product.product.name}"
     end
 
     metadata.dig("corrective_action", "other_action")

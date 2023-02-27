@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_opensearch, 
 
   include_context "with corrective action setup for updates"
 
-  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation:, product:, business:) }
+  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation:, investigation_product:, business:) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
 
   before do
