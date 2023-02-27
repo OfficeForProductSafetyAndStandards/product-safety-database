@@ -3,7 +3,7 @@ FactoryBot.define do
     date        { 14.days.ago.to_date }
     details     { Faker::Hipster.sentence }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
-    product
+    investigation_product
     investigation { create(:allegation) }
 
     document { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }

@@ -82,7 +82,7 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def case_ids
-    object.investigations.map(&:pretty_id)
+    object.investigations.map(&:pretty_id).uniq
   end
 
   def counterfeit_row_value

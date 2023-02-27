@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :corrective_action do
     association :investigation, factory: :allegation
-    product
+    investigation_product
     action { (CorrectiveAction.actions.keys - %w[other]).sample }
     date_decided { Faker::Date.backward(days: 14) }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }

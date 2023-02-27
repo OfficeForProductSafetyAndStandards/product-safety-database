@@ -1,22 +1,23 @@
 require "rails_helper"
 
 RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
-  let!(:investigation)       { create(:allegation).decorate }
-  let!(:other_investigation) { create(:allegation).decorate }
+  let!(:investigation)          { create(:allegation).decorate }
+  let!(:other_investigation)    { create(:allegation).decorate }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   # Create a new product version to ensure only the current version is rendered
-  let!(:product)             { create(:product, :with_versions, investigations: [investigation], description: initial_product_description, new_description: new_product_description).decorate }
-  let!(:other_product)       { create(:product, investigations: [other_investigation]).decorate }
-  let!(:risk_assessment)     { create(:risk_assessment, investigation:, products: [product]).decorate }
-  let!(:risk_assessment_2)   { create(:risk_assessment, investigation:, products: [product]).decorate }
-  let!(:test)                { create(:test_result, investigation:, product:, failure_details: "something bad").decorate }
-  let!(:test_2)              { create(:test_result, investigation:, product:, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]).decorate }
-  let!(:corrective_action)   { create(:corrective_action, investigation:, product:).decorate }
-  let!(:corrective_action_2) { create(:corrective_action, investigation:, product:, geographic_scopes: %w[great_britain eea_wide worldwide]).decorate }
-  let!(:user)                { create(:user, :activated, has_viewed_introduction: true) }
-  let(:params)               { {} }
-  let(:product_export)       { described_class.create!(user:, params:) }
+  let!(:product)                { create(:product, :with_versions, investigations: [investigation], description: initial_product_description, new_description: new_product_description).decorate }
+  let!(:other_product)          { create(:product, investigations: [other_investigation]).decorate }
+  let!(:investigation_product)  { create(:investigation_product, product:, investigation:) }
+  let!(:risk_assessment)        { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
+  let!(:risk_assessment_2)      { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
+  let!(:test)                   { create(:test_result, investigation:, investigation_product:, failure_details: "something bad").decorate }
+  let!(:test_2)                 { create(:test_result, investigation:, investigation_product:, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]).decorate }
+  let!(:corrective_action)      { create(:corrective_action, investigation:, investigation_product:).decorate }
+  let!(:corrective_action_2)    { create(:corrective_action, investigation:, investigation_product:, geographic_scopes: %w[great_britain eea_wide worldwide]).decorate }
+  let!(:user)                   { create(:user, :activated, has_viewed_introduction: true) }
+  let(:params)                  { {} }
+  let(:product_export)          { described_class.create!(user:, params:) }
 
   before { Product.import force: true, refresh: :wait }
 

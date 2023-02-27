@@ -26,7 +26,7 @@ class ProductExport < ApplicationRecord
 
   def to_spreadsheet
     product_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_product_ids|
-      find_products(batch_product_ids).each { |product| add_product_to_sheets(product.decorate) }
+      find_investigation_products(batch_product_ids).each { |investigation_product| add_product_to_sheets(investigation_product) }
     end
 
     package
@@ -42,25 +42,25 @@ private
     @product_ids = Product.search_in_batches(query).map(&:id)
   end
 
-  def find_products(ids)
-    Product
-      .includes([:investigations, :test_results, :owning_team, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }])
-      .find(ids)
+  def find_investigation_products(ids)
+    InvestigationProduct
+      .includes([:product, :investigation, :test_results, :owning_team, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }])
+      .where(product_id: ids)
   end
 
-  def add_product_to_sheets(product)
-    product_info_sheet.add_row(attributes_for_info_sheet(product), types: :text)
+  def add_product_to_sheets(investigation_product)
+    product_info_sheet.add_row(attributes_for_info_sheet(investigation_product.product.decorate), types: :text)
 
-    product.test_results.sort.each do |test_result|
-      test_results_sheet.add_row(attributes_for_test_results_sheet(product, test_result.decorate), types: :text)
+    investigation_product.test_results.sort.each do |test_result|
+      test_results_sheet.add_row(attributes_for_test_results_sheet(investigation_product.product.decorate, test_result.decorate), types: :text)
     end
 
-    product.risk_assessments.sort.each do |risk_assessment|
-      risk_assessments_sheet.add_row(attributes_for_risk_assessments_sheet(product, risk_assessment.decorate), types: :text)
+    investigation_product.risk_assessments.sort.each do |risk_assessment|
+      risk_assessments_sheet.add_row(attributes_for_risk_assessments_sheet(investigation_product.product.decorate, risk_assessment.decorate), types: :text)
     end
 
-    product.corrective_actions.sort.each do |corrective_action|
-      corrective_actions_sheet.add_row(attributes_for_corrective_actions_sheet(product, corrective_action.decorate), types: :text)
+    investigation_product.corrective_actions.sort.each do |corrective_action|
+      corrective_actions_sheet.add_row(attributes_for_corrective_actions_sheet(investigation_product.product.decorate, corrective_action.decorate), types: :text)
     end
   end
 
