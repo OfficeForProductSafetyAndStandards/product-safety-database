@@ -15,7 +15,7 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_o
     create(:corrective_action,
            :with_file,
            investigation:,
-           product: product_one,
+           investigation_product:,
            business: business_one,
            has_online_recall_information:)
   end
