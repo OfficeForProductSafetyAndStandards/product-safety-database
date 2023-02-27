@@ -13,7 +13,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
 
   let(:risk_level) { "serious" }
   let(:custom_risk_level) { "" }
-  let(:product_ids) { [create(:product).id] }
+  let(:investigation_product_ids) { [create(:investigation_product).id] }
   let(:details) { "" }
   let(:old_file) { nil }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
@@ -29,7 +29,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
       assessed_by_other:,
       risk_level:,
       custom_risk_level:,
-      product_ids:,
+      investigation_product_ids:,
       old_file:,
       risk_assessment_file:,
       details:
@@ -159,9 +159,8 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
       end
     end
 
-    # Products
-    context "with no product_ids specified" do
-      let(:product_ids) { [] }
+    context "with no investigation_product_ids specified" do
+      let(:investigation_product_ids) { [] }
 
       it "is not valid" do
         expect(form).not_to be_valid
