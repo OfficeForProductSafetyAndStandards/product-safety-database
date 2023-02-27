@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_opensearch, :
     create(
       :legacy_audit_add_activity_corrective_action,
       metadata:,
-      product:,
+      investigation_product:,
       investigation: corrective_action.investigation,
       body:,
       title: legacy_title

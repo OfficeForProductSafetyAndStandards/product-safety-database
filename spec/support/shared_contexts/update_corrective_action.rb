@@ -43,6 +43,7 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_o
   let(:file_form)                 { { file: new_document, description: new_file_description } }
 
   let(:product)                   { create(:product) }
+  let(:investigation_product)     { investigation.investigation_products.first }
   let(:business)                  { create(:business) }
 
   before { new_geographic_scopes }

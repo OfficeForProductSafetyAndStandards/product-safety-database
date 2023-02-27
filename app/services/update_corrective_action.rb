@@ -96,7 +96,7 @@ private
     AuditActivity::CorrectiveAction::Update.create!(
       added_by_user: user,
       investigation:,
-      product: corrective_action.investigation_product.product,
+      investigation_product: corrective_action.investigation_product,
       business: corrective_action.business,
       metadata:,
       title: nil,
