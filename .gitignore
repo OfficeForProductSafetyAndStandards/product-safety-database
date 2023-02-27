@@ -63,7 +63,7 @@ config/master.key
 *examples.txt
 
 # Redis snapshots. See https://redis.io/topics/persistence
- dump.rdb
+dump.rdb
 
 # Entity relationship diagram
 erd.pdf
