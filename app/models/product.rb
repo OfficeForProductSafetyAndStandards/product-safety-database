@@ -51,10 +51,10 @@ class Product < ApplicationRecord
   # TODO: Remove this once attachments have been migrated
   has_many_attached :documents
 
-  has_many :activities
 
   has_many :investigation_products, dependent: :destroy
   has_many :investigations, through: :investigation_products
+  has_many :activities, through: :investigations
 
   has_many :corrective_actions, dependent: :destroy
   has_many :tests, dependent: :destroy
