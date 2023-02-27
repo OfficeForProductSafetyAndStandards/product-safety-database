@@ -108,12 +108,10 @@ module Investigations::DisplayTextHelper
   end
 
   def products_sub_items(investigation)
-    products = investigation.investigation_products.reverse.map(&:product)
-
-    products.map do |product|
+    investigation.investigation_products.reverse.map do |investigation_product|
       {
-        text: product.name,
-        href: investigation_products_path(investigation, anchor: "prod-#{product.id}")
+        text: investigation_product.product.name,
+        href: investigation_products_path(investigation_product.investigation, anchor: dom_id(investigation_product))
       }
     end
   end

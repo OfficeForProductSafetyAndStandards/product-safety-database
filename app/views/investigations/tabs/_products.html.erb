@@ -18,7 +18,7 @@
     <section>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-          <h3 id="<%= "prod-#{@product.id}" %>" class="govuk-heading-m"><%= @product.name %></h3>
+          <%= tag.h3 @product.name, class: "govuk-heading-m", id: dom_id(@investigation_product) %>
         </div>
         <% if policy(@investigation_product).edit_product? %>
           <div class="govuk-grid-column-one-quarter">
