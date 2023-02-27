@@ -13,7 +13,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mai
       geographic_scopes:,
       details:,
       related_file:,
-      product_id:,
+      investigation_product_id:,
       business_id: create(:business).id,
       has_online_recall_information:,
       online_recall_information:,
@@ -22,7 +22,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mai
     ).tap(&:valid?)
   end
 
-  let(:product_id) { create(:product).id }
+  let(:investigation_product_id) { create(:investigation_product).id }
   let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:file_description) { Faker::Hipster.sentence }
   let(:file_form) { { file:, description: file_description } }
@@ -69,8 +69,8 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mai
       end
     end
 
-    context "without a product" do
-      let(:product_id) { nil }
+    context "without an investigation product" do
+      let(:investigation_product_id) { nil }
 
       context "with add_corrective_action custom context" do
         it "returns false" do
