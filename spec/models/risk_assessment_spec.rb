@@ -7,7 +7,7 @@ RSpec.describe RiskAssessment, type: :model do
         investigation:,
         risk_level:,
         custom_risk_level:,
-        products:,
+        investigation_products:,
         added_by_user:,
         added_by_team:,
         assessed_by_team:,
@@ -27,7 +27,7 @@ RSpec.describe RiskAssessment, type: :model do
     let(:assessment_date) { Time.zone.today }
     let(:risk_level) { "serious" }
     let(:custom_risk_level) { nil }
-    let(:products) { [build(:product)] }
+    let(:investigation_products) { [build(:investigation_product)] }
 
     context "with all required attributes" do
       it "is valid" do
@@ -126,7 +126,7 @@ RSpec.describe RiskAssessment, type: :model do
     end
 
     context "with no associated products" do
-      let(:products) { [] }
+      let(:investigation_products) { [] }
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
