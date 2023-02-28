@@ -11,13 +11,13 @@
     <div class="govuk-grid-column-two-thirds">
 
       <% hint_html = capture do %>
-          <span class="govuk-!-display-block govuk-!-margin-bottom-2">
-              You can add and edit customs codes for <%= @investigation_product.product.name %>. For example, a <abbr>CN</abbr>  code (8 digits) or a TARIC code (10 digits).
-          </span>
+        <span class="govuk-!-display-block govuk-!-margin-bottom-2">
+          You can add and edit customs codes for <%= @investigation_product.name %>. For example, a <abbr>CN</abbr>  code (8 digits) or a TARIC code (10 digits).
+        </span>
 
-          <span class="govuk-!-display-block govuk-!-font-size-16">
-            Use a comma and a space to separate multiple customs codes. For example, <br class="opss-br-desktop">85258091, 85285291<span class="govuk-visually-hidden">.</span>
-          </span>
+        <span class="govuk-!-display-block govuk-!-font-size-16">
+          Use a comma and a space to separate multiple customs codes. For example, <br class="opss-br-desktop">85258091, 85285291<span class="govuk-visually-hidden">.</span>
+        </span>
       <% end %>
 
       <%= govukInput(

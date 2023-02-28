@@ -398,7 +398,7 @@ private
       items: [
         href: edit_investigation_product_batch_numbers_path(investigation_product),
         text: "Edit",
-        visuallyHiddenText: "  the batch numbers for #{investigation_product.product.name}"
+        visuallyHiddenText: "  the batch numbers for #{investigation_product.name}"
       ]
     }
   end
@@ -410,7 +410,7 @@ private
       items: [
         href: edit_investigation_product_customs_code_path(investigation_product),
         text: "Edit",
-        visuallyHiddenText: "  the customs codes for #{investigation_product.product.name}"
+        visuallyHiddenText: "  the customs codes for #{investigation_product.name}"
       ]
     }
   end
@@ -422,7 +422,7 @@ private
       items: [
         href: edit_investigation_product_number_of_affected_units_path(investigation_product),
         text: "Edit",
-        visuallyHiddenText: " the units affected for #{investigation_product.product.name}"
+        visuallyHiddenText: " the units affected for #{investigation_product.name}"
       ]
     }
   end

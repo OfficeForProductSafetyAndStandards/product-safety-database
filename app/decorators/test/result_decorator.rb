@@ -10,7 +10,7 @@ class Test < ApplicationRecord
                       "Test result"
                     end
 
-      "#{result_text}: #{investigation_product.product.name}"
+      "#{result_text}: #{investigation_product.name}"
     end
 
     def result_text
@@ -71,11 +71,11 @@ class Test < ApplicationRecord
     def is_attached_to_versioned_product?
       !!investigation_closed_at
     end
-  
+
     def investigation_closed_at
       object.investigation_product.investigation_closed_at
     end
-  
+
     def psd_ref
       object.investigation_product.psd_ref
     end

@@ -32,7 +32,7 @@ class UnexpectedEventDecorator < ApplicationDecorator
   end
 
   def product_description
-    "#{object.investigation_product.product.name} #{object.investigation_product.psd_ref}"
+    "#{object.investigation_product.name} #{object.investigation_product.psd_ref}"
   end
 
   def usage

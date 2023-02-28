@@ -25,6 +25,8 @@ class InvestigationProduct < ApplicationRecord
                        :customs_code, :investigation_id, :number_of_affected_units,
                        :product_id, :updated_at
 
+  delegate :name, to: :product
+
   def product
     investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) || super : super
   end

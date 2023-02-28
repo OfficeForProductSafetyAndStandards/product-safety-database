@@ -1,9 +1,9 @@
 module TestsHelper
   def test_result_summary_rows(test_result)
     product_value = if test_result.investigation_product.investigation_closed_at
-      { text: "#{test_result.investigation_product.product.name} (#{test_result.investigation_product.psd_ref})" }
-    else 
-      { html: link_to("#{test_result.investigation_product.product.name} (#{test_result.investigation_product.psd_ref})", product_path(test_result.investigation_product.product)) }
+      { text: "#{test_result.investigation_product.name} (#{test_result.investigation_product.psd_ref})" }
+    else
+      { html: link_to("#{test_result.investigation_product.name} (#{test_result.investigation_product.psd_ref})", product_path(test_result.investigation_product.product)) }
     end
 
     rows = [
