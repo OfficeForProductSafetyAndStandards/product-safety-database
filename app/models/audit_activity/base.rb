@@ -1,4 +1,4 @@
-# TODO move all super class methods to this class, remove AuditActivity::Base
+# TODO: move all super class methods to this class, remove AuditActivity::Base
 # This is the only class that inherits from Activity
 
 class AuditActivity::Base < Activity
