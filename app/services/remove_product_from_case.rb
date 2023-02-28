@@ -42,7 +42,7 @@ private
     AuditActivity::Product::Destroy.create!(
       added_by_user: user,
       investigation:,
-      product:,
+      investigation_product:,
       metadata: AuditActivity::Product::Destroy.build_metadata(product, reason)
     )
   end

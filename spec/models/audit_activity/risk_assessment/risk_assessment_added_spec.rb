@@ -9,12 +9,12 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
     )
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, assessed_by_team:, assessed_by_business:, assessed_by_other:, products:) }
+  let(:risk_assessment) { create(:risk_assessment, trait, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products:) }
   let(:trait) { :without_file }
   let(:assessed_by_team) { nil }
   let(:assessed_by_business) { nil }
   let(:assessed_by_other) { "test" }
-  let(:products) { [build(:product)] }
+  let(:investigation_products) { [build(:investigation_product)] }
   let(:metadata) { described_class.build_metadata(risk_assessment) }
 
   describe "#metadata" do
