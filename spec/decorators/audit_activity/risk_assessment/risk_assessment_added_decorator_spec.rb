@@ -69,8 +69,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
 
   describe "#products_assessed" do
     context "with one product" do
-      let(:product) { build(:product) }
-      let(:products) { [product] }
+      let(:product) { build(:investigation_product) }
+      let(:investigation_products) { [product] }
 
       it "returns the product name" do
         expect(activity.products_assessed).to eq(product.name)
@@ -78,10 +78,10 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     end
 
     context "with multiple products" do
-      let(:product_1) { build(:product) }
-      let(:product_2) { build(:product) }
-      let(:product_3) { build(:product) }
-      let(:products) { [product_1, product_2, product_3] }
+      let(:product_1) { build(:investigation_product) }
+      let(:product_2) { build(:investigation_product) }
+      let(:product_3) { build(:investigation_product) }
+      let(:investigation_products) { [product_1, product_2, product_3] }
 
       it "returns the product names in a single String" do
         expect(activity.products_assessed).to eq("#{product_1.name}, #{product_2.name} and #{product_3.name}")
