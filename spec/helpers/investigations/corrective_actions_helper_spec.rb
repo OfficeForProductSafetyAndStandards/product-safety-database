@@ -11,7 +11,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_opensearch
         { key: { text: "Event date" }, value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" }, value: { text: corrective_action.legislation } },
         { key: { text: "Recall information" }, value: { html: match(expected_online_recall_information) } },
-        { key: { text: "Product" }, value: { html: helper.link_to(corrective_action.product.name, helper.product_path(corrective_action.product)) } },
+        { key: { text: "Product" }, value: { html: helper.link_to("#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})", helper.product_path(corrective_action.investigation_product)) } },
         { key: { text: "Business" }, value: { html: helper.link_to(corrective_action.business.trading_name, helper.business_path(corrective_action.business)) } },
         { key: { text: "Type of action" }, value: { text: corrective_action.measure_type.upcase_first } },
         { key: { text: "Duration of measure" }, value: { text: corrective_action.duration.upcase_first } },
