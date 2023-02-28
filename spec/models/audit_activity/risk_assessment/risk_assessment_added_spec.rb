@@ -36,7 +36,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
           assessed_by_business_id: risk_assessment.assessed_by_business_id,
           assessed_by_other: risk_assessment.assessed_by_other,
           details: risk_assessment.details,
-          product_ids: risk_assessment.product_ids
+          investigation_product_ids: risk_assessment.investigation_product_ids
         }
       end
 
@@ -55,7 +55,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
             "added_by_user_id" => risk_assessment.added_by_user_id,
             "added_by_team_id" => risk_assessment.added_by_team_id,
             "risk_level" => risk_assessment.risk_level,
-            "product_ids" => risk_assessment.product_ids
+            "investigation_product_ids" => risk_assessment.investigation_product_ids
           })
         })
       end
@@ -79,7 +79,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
             details: "test update",
             assessed_on: risk_assessment.assessed_on,
             risk_level: risk_assessment.risk_level,
-            product_ids: risk_assessment.product_ids,
+            investigation_product_ids: risk_assessment.investigation_product_ids,
             assessed_by_other: risk_assessment.assessed_by_other
           )
         end
@@ -119,21 +119,21 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
 
   describe "#products_assessed" do
     context "with one product on the risk assessment" do
-      let(:product) { create(:product) }
-      let(:products) { [product] }
+      let(:product) { create(:investigation_product) }
+      let(:investigation_products) { [product] }
 
       it "returns the product" do
-        expect(activity.products_assessed).to eq(products)
+        expect(activity.products_assessed).to eq(investigation_products)
       end
     end
 
     context "with multiple products on the risk assessment" do
-      let(:product_1) { create(:product) }
-      let(:product_2) { create(:product) }
-      let(:products) { [product_1, product_2] }
+      let(:product_1) { create(:investigation_product) }
+      let(:product_2) { create(:investigation_product) }
+      let(:investigation_products) { [product_1, product_2] }
 
       it "returns an Array of products" do
-        expect(activity.products_assessed).to eq(products)
+        expect(activity.products_assessed).to eq(investigation_products)
       end
     end
   end
