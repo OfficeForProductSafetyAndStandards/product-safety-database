@@ -24,8 +24,8 @@
     Recall information: <strong><%= activity.new_online_recall_information %></strong><br>
   <% end %>
 
-  <% if activity.product_updated? %>
-    Product: <%= link_to activity.product.name, activity.product, class: "govuk-link--no-visited-state" %><br>
+  <% if activity.investigation_product_updated? %>
+    Product: <%= activity.investigation_product.name %><br>
   <% end %>
 
   <% if activity.business_updated? %>

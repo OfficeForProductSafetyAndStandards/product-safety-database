@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds">
 <% end %>
     <div class="govuk-body">
-      Product: <%= link_to activity.product_name, activity.product, class: "govuk-link govuk-link--no-visited-state" %>
+      Product: <%= activity.investigation_product.name %>
       <br />
       Legislation: <strong><%= activity.legislation %></strong>
       <br />
@@ -37,10 +37,6 @@
       <br />
       <%= activity.details %>
     </div>
-
-    <% if activity.product_id %>
-      <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
-    <% end %>
 
     <% if activity.business_id %>
       <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
