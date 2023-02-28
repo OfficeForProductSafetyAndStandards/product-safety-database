@@ -60,7 +60,7 @@ private
   def audit_activity_metadata
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.build_metadata(
       risk_assessment:,
-      previous_product_ids: @previous_investigation_product_ids.map {|ip| InvestigationProduct.find(ip).product_id },
+      previous_product_ids: @previous_investigation_product_ids,
       attachment_changed: risk_assessment_file.present?,
       previous_attachment_filename: @previous_attachment_filename
     )
