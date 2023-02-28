@@ -1,11 +1,6 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  let(:investigation_product) { test_result.investigation_product }
-  let(:test_result) { create(:test_result, result: :passed, standards_product_was_tested_against:) }
-  let(:user) { test_result.investigation.creator_user }
-  let(:standards_product_was_tested_against) { %w[test1 test2] }
-
   subject(:activity) do
     AuditActivity::Test::Result.create!(
       investigation: test_result.investigation,
@@ -14,6 +9,11 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :
       added_by_user: user
     ).decorate
   end
+
+  let(:investigation_product) { test_result.investigation_product }
+  let(:test_result) { create(:test_result, result: :passed, standards_product_was_tested_against:) }
+  let(:user) { test_result.investigation.creator_user }
+  let(:standards_product_was_tested_against) { %w[test1 test2] }
 
   describe "#title" do
     it "returns a string" do

@@ -2,10 +2,10 @@ module Investigations
   module AccidentOrIncidentsHelper
     def accident_or_incident_summary_list_rows(accident_or_incident)
       product_value = if accident_or_incident.investigation_product.investigation_closed_at
-        { text: "#{accident_or_incident.investigation_product.name} (#{accident_or_incident.investigation_product.psd_ref})" }
-      else
-        { html: link_to("#{accident_or_incident.investigation_product.name} (#{accident_or_incident.investigation_product.psd_ref})", product_path(accident_or_incident.investigation_product.product)) }
-      end
+                        { text: "#{accident_or_incident.investigation_product.name} (#{accident_or_incident.investigation_product.psd_ref})" }
+                      else
+                        { html: link_to("#{accident_or_incident.investigation_product.name} (#{accident_or_incident.investigation_product.psd_ref})", product_path(accident_or_incident.investigation_product.product)) }
+                      end
 
       rows = [
         { key: { text: "Date of #{accident_or_incident.type.downcase}" }, value: { text: accident_or_incident.date_of_activity } },
