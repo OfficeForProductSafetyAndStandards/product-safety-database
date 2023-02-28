@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_09_141146) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_15_114714) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_141146) do
     t.datetime "created_at", precision: nil, null: false
     t.string "filename", null: false
     t.string "key", null: false
-    t.text "metadata"
+    t.text "metadata", default: "{}"
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
     t.index ["metadata"], name: "index_active_storage_blobs_on_metadata"
@@ -189,6 +189,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_141146) do
     t.index ["investigation_id"], name: "index_correspondences_on_investigation_id"
   end
 
+  create_table "document_uploads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "created_by"
+    t.string "description"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.bigint "upload_model_id"
+    t.string "upload_model_type"
+    t.index ["upload_model_type", "upload_model_id"], name: "index_document_uploads_on_upload_model"
+  end
+
   create_table "investigation_businesses", id: :serial, force: :cascade do |t|
     t.integer "business_id"
     t.datetime "created_at", precision: nil, null: false
@@ -286,6 +297,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_141146) do
     t.string "country_of_origin"
     t.datetime "created_at", precision: nil, null: false
     t.text "description"
+    t.bigint "document_upload_ids", default: [], array: true
     t.enum "has_markings", enum_type: "has_markings_values"
     t.text "markings", array: true
     t.string "name"

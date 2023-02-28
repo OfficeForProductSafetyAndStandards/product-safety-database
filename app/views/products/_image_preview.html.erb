@@ -1,0 +1,6 @@
+<figure>
+  <a href="<%= url_for(image.file_upload) %>" class="govuk-link govuk-link--no-visited-state" target="_blank" title="Opens in a new tab">
+    <%= image_tag image.file_upload.variant(resize_to_limit: dimensions), alt: image.title %>
+  </a>
+  <figcaption><%= image.title %></figcaption>
+</figure>

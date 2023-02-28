@@ -1,0 +1,42 @@
+<%
+  hide_link ||= false
+  class_name ||= ""
+  custom_image_classes ||= ""
+  analyzed = document.file_upload.metadata["analyzed"]
+  safe = document.file_upload.metadata["safe"]
+  image_class = if document.file_upload.variable?
+                  "app-document-preview__image"
+                else
+                  "app-document-preview__image-without-preview"
+                end
+  image_classes = class_names(image_class, custom_image_classes)
+%>
+
+<div class="app-document-preview <%= class_name %>">
+  <% if analyzed && safe %>
+    <% if document.file_upload.image? %>
+      <div class="<%= image_classes %>">
+        <% if hide_link %>
+          <%= render("document_uploads/image_tag", image: document, dimensions: dimensions) %>
+        <% else %>
+          <% link_content = capture do %>
+            <%= render("document_uploads/image_tag", image: document, dimensions: dimensions) %>
+            <span class="govuk-visually-hidden">(opens in new tab)</span>
+          <% end %>
+          <%= link_to link_content, document, target: "_blank", rel: 'noopener' %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= document_upload_placeholder(document) %>
+    <% end %>
+  <% else %>
+    <div class="app-document-preview ">
+       <div class="app-document-preview__image">
+           <a target="_blank" rel="noopener" href="#">
+             <%= image_tag "img-icon.png", alt: "" %>
+             <span class="govuk-visually-hidden">(opens in new tab)</span>
+           </a>
+       </div>
+     </div>
+  <% end %>
+</div>

@@ -22,6 +22,7 @@ node_modules/
 ### Rails ###
 *.rbc
 capybara-*.html
+.irb_history
 .rspec
 /log
 /tmp
@@ -72,3 +73,9 @@ erd.pdf
 !/app/assets/builds/.keep
 
 /node_modules
+
+.DS_Store
+
+.idea/
+
+.tool-versions

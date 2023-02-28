@@ -42,12 +42,12 @@
                     }
                   ]
                 ) %>
-                <% if @product.images.any? %>
+                <% if @product.virus_free_images.any? %>
                   <%= govukDetails(
                     summaryText: "Product image",
                     html: capture {
-                      render "documents/document_preview",
-                        document: @product.images.first,
+                      render "document_uploads/document_preview",
+                        document: @product.virus_free_images.first,
                         dimensions: [300, 500],
                         hide_link: true,
                         class_name: 'app-document-preview--small'
