@@ -6,7 +6,6 @@
 @import "./opss-shared";
 @import "./opss-search";
 @import "./opss-pagination";
-@import "./opss-step-by-step-nav";
 
 @include govuk-media-query($from: desktop) {
   // fix for psd while it is unable to place back links outside and before the main.govuk-main-wrapper element
