@@ -53,7 +53,7 @@
 <% else %>
   <% @investigation.investigation_products.each_with_index do |investigation_product, index| %>
     <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
-      <%= investigation_product.product.name %> (<%= investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).psd_ref(timestamp: investigation_product.investigation_closed_at.to_i, investigation_was_closed: investigation_product.investigation_closed_at.present?) %>)
+      <%= investigation_product.name %> (<%= investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).psd_ref(timestamp: investigation_product.investigation_closed_at.to_i, investigation_was_closed: investigation_product.investigation_closed_at.present?) %>)
     </h4>
     <%= govukSummaryList(
       classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",

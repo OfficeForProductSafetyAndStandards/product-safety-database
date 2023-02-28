@@ -26,7 +26,7 @@
             classes: "govuk-fieldset__legend--l"
           },
         },
-        hint: { text: "You can add and edit how many product units are affected for #{@investigation_product.product.name}.", classes: "govuk-!-margin-bottom-5" },
+        hint: { text: "You can add and edit how many product units are affected for #{@investigation_product.name}.", classes: "govuk-!-margin-bottom-5" },
         items: [
           { text: "Exact number",       value: "exact", conditional: { html: form.govuk_input(:exact_units, label: "How many units are affected?",  classes: "govuk-input--width-10") }, id: "affected_units_status" },
           { text: "Approximate number", value: "approx", conditional: { html: form.govuk_input(:approx_units, label: "How many units are affected?",  classes: "govuk-input--width-10") } },

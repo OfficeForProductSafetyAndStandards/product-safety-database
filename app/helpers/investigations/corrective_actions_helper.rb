@@ -5,9 +5,9 @@ module Investigations
       recall_information = link_to(recall_information) if recall_information.starts_with?("http")
 
       product_value = if corrective_action.investigation_product.investigation_closed_at
-                        { text: "#{corrective_action.investigation_product.product.name} (#{corrective_action.investigation_product.psd_ref})" }
-                      else 
-                        { html: link_to("#{corrective_action.investigation_product.product.name} (#{corrective_action.investigation_product.psd_ref})", product_path(corrective_action.investigation_product.product)) }
+                        { text: "#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})" }
+                      else
+                        { html: link_to("#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})", product_path(corrective_action.investigation_product.product)) }
                       end
       rows = [
         { key: { text: "Action" }, value: { text: action_text_for(corrective_action) } },

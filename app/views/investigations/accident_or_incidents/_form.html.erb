@@ -5,7 +5,7 @@
   <p class="govuk-body"><%= investigation.products.first.name %></p>
   <%= form.hidden_field :investigation_product_id, value: investigation.investigation_products.first.id %>
 <% else %>
-  <%= form.govuk_autocomplete :investigation_product_id, label: "Which product was involved?", label_classes: "govuk-label--m", items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } } %>
+  <%= form.govuk_autocomplete :investigation_product_id, label: "Which product was involved?", label_classes: "govuk-label--m", items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } } %>
 <% end %>
 
 <% other = capture do %>
