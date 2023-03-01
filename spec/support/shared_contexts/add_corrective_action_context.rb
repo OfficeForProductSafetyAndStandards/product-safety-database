@@ -26,7 +26,7 @@ RSpec.shared_context "with add corrective action setup" do
   let(:corrective_action_form) do
     CorrectiveActionForm.new(
       business_id: business.id,
-      product_id: product.id,
+      investigation_product_id: investigation_product.id,
       action: action_key,
       other_action:,
       date_decided:,
