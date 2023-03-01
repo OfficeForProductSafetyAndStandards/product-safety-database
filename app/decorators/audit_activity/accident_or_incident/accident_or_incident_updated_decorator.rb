@@ -11,8 +11,8 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
     metadata.dig("updates", "additional_info", 1).presence || "Removed"
   end
 
-  def product_updated?
-    metadata.dig("updates", "product_id", 1)
+  def investigation_product_updated?
+    metadata.dig("updates", "investigation_product_id", 1)
   end
 
   def date_changed?

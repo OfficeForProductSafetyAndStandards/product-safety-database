@@ -7,7 +7,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
       :severity_other,
       :usage,
       :additional_info,
-      :product_id
+      :investigation_product_id
     )
 
     {
