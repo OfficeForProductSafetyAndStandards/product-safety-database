@@ -5,21 +5,21 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }
   let(:doll) { create(:product, name: "Doll") }
   let(:date) { Date.current }
+  let(:team) { create(:team, name: "MyCouncil Trading Standards") }
+
+  let!(:doll_investigation_product)       { create(:investigation_product, investigation:, product: doll) }
+  let!(:teddy_bear_investigation_product) { create(:investigation_product, investigation:, product: teddy_bear) }
 
   let(:investigation) do
     create(:allegation,
            creator: user,
-           risk_level: :serious,
-           products: [teddy_bear, doll])
+           risk_level: :serious)
   end
-
-  let(:team) { create(:team, name: "MyCouncil Trading Standards") }
-
   let!(:incident) do
     create(:incident,
            date: nil,
            is_date_known: false,
-           product: doll,
+           investigation_product: doll_investigation_product,
            severity: "serious",
            usage: "during_normal_use",
            investigation:)
@@ -29,7 +29,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
     create(:accident,
            date: Date.current,
            is_date_known: true,
-           product: teddy_bear,
+           investigation_product: teddy_bear_investigation_product,
            severity: "other",
            severity_other: "very extreme",
            usage: "during_normal_use",
@@ -44,7 +44,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
-    click_link "Doll: Normal use"
+    click_link "Doll #{doll.psd_ref}: Normal use"
 
     click_link "Edit incident"
 
@@ -54,7 +54,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Which product was involved?", selected: "Doll")
+    expect(page).to have_select("Which product was involved?", selected: "Doll (#{doll.psd_ref})")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
@@ -82,7 +82,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     expect(page).not_to have_error_messages
 
-    click_link "Teddy Bear: Misuse"
+    click_link "Teddy Bear #{teddy_bear.psd_ref}: Misuse"
 
     expect(page).to have_content "Incident involving Teddy Bear"
 
@@ -109,7 +109,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
-    click_link "Teddy Bear: Normal use"
+    click_link "Teddy Bear #{teddy_bear.psd_ref}: Normal use"
 
     click_link "Edit accident"
 
@@ -119,7 +119,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
       expect(page).to have_checked_field("Yes")
     end
 
-    expect(page).to have_select("Which product was involved?", selected: "Teddy Bear")
+    expect(page).to have_select("Which product was involved?", selected: "Teddy Bear (#{teddy_bear.psd_ref})")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Other")
@@ -142,7 +142,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     click_button "Update accident"
 
-    click_link "Doll: Misuse"
+    click_link "Doll #{doll.psd_ref}: Misuse"
 
     expect(page).not_to have_error_messages
 
