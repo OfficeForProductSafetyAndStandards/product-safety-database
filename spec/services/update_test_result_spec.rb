@@ -6,7 +6,8 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
   let(:user)                                     { create(:user, :activated) }
   let(:investigation)                            { create(:allegation) }
   let(:product)                                  { create(:product) }
-  let(:test_result)                              { create(:test_result, investigation:, product:) }
+  let(:investigation_product)                    { create(:investigation_product) }
+  let(:test_result)                              { create(:test_result, investigation:, investigation_product:) }
 
   let(:new_details)                              { Faker::Hipster.sentence }
   let(:new_legislation) do
@@ -22,7 +23,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
       legislation: new_legislation,
       date: new_date,
       result: new_result,
-      product_id: product.id,
+      investigation_product_id: investigation_product.id,
       standards_product_was_tested_against: new_standards_product_was_tested_against,
       document: new_document
     }

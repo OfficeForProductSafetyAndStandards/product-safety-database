@@ -40,7 +40,7 @@ private
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
       added_by_user: user,
       investigation: test_result.investigation,
-      product: test_result.investigation_product.product,
+      investigation_product: test_result.investigation_product,
       metadata:
     )
   end
