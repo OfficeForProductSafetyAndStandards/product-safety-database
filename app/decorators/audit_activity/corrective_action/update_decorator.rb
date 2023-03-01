@@ -71,8 +71,8 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     metadata.dig("updates", "file_description", 1)
   end
 
-  def product_updated?
-    metadata.dig("updates", "product_id", 1)
+  def investigation_product_updated?
+    metadata.dig("updates", "investigation_product_id", 1)
   end
 
   def business_updated?
