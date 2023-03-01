@@ -37,7 +37,7 @@ private
     AuditActivity::CorrectiveAction::Add.create!(
       investigation:,
       business_id:,
-      product_id:,
+      investigation_product_id: investigation_product.id,
       added_by_user: user,
       metadata:
     )
