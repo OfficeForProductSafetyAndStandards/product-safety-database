@@ -72,7 +72,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :
         result
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Correspondence::AddEmail)
-        expect(activity.product).to be_nil
+        expect(activity.investigation_product).to be_nil
         expect(activity.title(nil)).to be_nil
         expect(activity.body).to eq nil
       end
