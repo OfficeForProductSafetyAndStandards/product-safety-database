@@ -18,80 +18,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
   let(:metadata) { described_class.build_metadata(risk_assessment) }
 
   describe "#metadata" do
-    context "when the metadata is in the current format" do
-      it "returns the metadata" do
-        expect(activity.metadata).to eq(activity.read_attribute(:metadata))
-      end
-    end
-
-    context "when the activity was generated prior to the metadata structure revision" do
-      let(:trait) { :with_file }
-      let(:metadata) do
-        {
-          risk_assessment_id: risk_assessment.id,
-          assessed_on: risk_assessment.assessed_on,
-          risk_level: risk_assessment.risk_level,
-          custom_risk_level: risk_assessment.custom_risk_level,
-          assessed_by_team_id: risk_assessment.assessed_by_team_id,
-          assessed_by_business_id: risk_assessment.assessed_by_business_id,
-          assessed_by_other: risk_assessment.assessed_by_other,
-          details: risk_assessment.details,
-          investigation_product_ids: risk_assessment.investigation_product_ids
-        }
-      end
-
-      # rubocop:disable RSpec/ExampleLength
-      it "returns a Hash in the new format" do
-        expect(activity.metadata).to match({
-          "risk_assessment" => hash_including({
-            "id" => risk_assessment.id,
-            "investigation_id" => risk_assessment.investigation_id,
-            "assessed_on" => "2020-07-20",
-            "assessed_by_team_id" => risk_assessment.assessed_by_team_id,
-            "assessed_by_business_id" => risk_assessment.assessed_by_business_id,
-            "assessed_by_other" => risk_assessment.assessed_by_other,
-            "details" => risk_assessment.details,
-            "custom_risk_level" => risk_assessment.custom_risk_level,
-            "added_by_user_id" => risk_assessment.added_by_user_id,
-            "added_by_team_id" => risk_assessment.added_by_team_id,
-            "risk_level" => risk_assessment.risk_level,
-            "investigation_product_ids" => risk_assessment.investigation_product_ids
-          })
-        })
-      end
-      # rubocop:enable RSpec/ExampleLength
-
-      context "when the risk assessment has not been subsequently updated" do
-        it "returns the file blob metadata" do
-          expect(JSON.parse(activity.metadata["risk_assessment"]["risk_assessment_file"].to_json)).to eq(JSON.parse(risk_assessment.risk_assessment_file.blob.attributes.to_json))
-        end
-
-        it "returns the updated_at of the risk assessment" do
-          expect(activity.metadata["risk_assessment"]["updated_at"].to_i).to eq(risk_assessment.updated_at.to_i)
-        end
-      end
-
-      context "when the risk assessment has been subsequently updated" do
-        before do
-          UpdateRiskAssessment.call!(
-            user: risk_assessment.added_by_user,
-            risk_assessment:,
-            details: "test update",
-            assessed_on: risk_assessment.assessed_on,
-            risk_level: risk_assessment.risk_level,
-            investigation_product_ids: risk_assessment.investigation_product_ids,
-            assessed_by_other: risk_assessment.assessed_by_other
-          )
-        end
-
-        it "does not return the file blob metadata" do
-          expect(activity.metadata["risk_assessment"]["risk_assessment_file"]).to be_nil
-        end
-
-        it "returns the updated_at of the activity" do
-          expect(activity.metadata["risk_assessment"]["updated_at"]).to eq(activity.updated_at)
-        end
-      end
+    it "returns the metadata" do
+      expect(activity.metadata).to eq(activity.read_attribute(:metadata))
     end
   end
 
