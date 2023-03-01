@@ -130,7 +130,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:products]).to eql([{ error: :blank }])
+        expect(risk_assessment.errors.details[:investigation_products]).to eql([{ error: :blank }])
       end
     end
 
