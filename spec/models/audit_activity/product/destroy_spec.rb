@@ -1,16 +1,22 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Product::Destroy, :with_stubbed_opensearch, :with_stubbed_mailer do
-  subject(:audit_activity) { create :legacy_audit_product_destroyed }
+  subject(:activity) do
+    described_class.create(
+      investigation:,
+      investigation_product:,
+      metadata:
+    )
+  end
+
+  let(:investigation) { create(:allegation) }
+  let!(:investigation_product) { create(:investigation_product) }
+  let(:reason) { "test" }
+  let(:metadata) { described_class.build_metadata(investigation_product, reason) }
 
   describe "#metadata" do
-    context "when not migrated to new structure" do
-      it "builds the new structure" do
-        expect(audit_activity.metadata).to eq(
-          "product" => JSON.parse(audit_activity.product.attributes.to_json),
-          "reason" => "Product removed from case"
-        )
-      end
+    it "returns the metadata" do
+      expect(activity.metadata).to eq(activity.read_attribute(:metadata))
     end
   end
 end
