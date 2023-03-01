@@ -7,6 +7,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   let(:product1) { create(:product_washing_machine, name: "MyBrand red washing machine") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand blue washing machine") }
   let(:investigation) { create(:allegation, products: [product1, product2], creator: user) }
+  let(:investigation_product) { investigation.investigation_products.first }
   let(:standards_product_was_tested_against) { %w[test] }
   let(:failure_details) { "Something terrible happened" }
   let(:result) { "passed" }
@@ -19,7 +20,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       legislation: "General Product Safety Regulations 2005",
       details: "Provisional",
       result:,
-      product_id: product1.id,
+      investigation_product_id: investigation_product.id,
       document: fixture_file_upload("test_result.txt"),
       standards_product_was_tested_against:
     ).test_result
