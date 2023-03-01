@@ -35,8 +35,7 @@ class UpdateRiskAssessment
 
       risk_assessment.save!
 
-      # TODO: reinstate when we tackle the audit activity work
-      # create_audit_activity
+      create_audit_activity
       send_notification_email
     end
   end
@@ -60,7 +59,7 @@ private
   def audit_activity_metadata
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.build_metadata(
       risk_assessment:,
-      previous_product_ids: @previous_investigation_product_ids,
+      previous_investigation_product_ids: @previous_investigation_product_ids,
       attachment_changed: risk_assessment_file.present?,
       previous_attachment_filename: @previous_attachment_filename
     )

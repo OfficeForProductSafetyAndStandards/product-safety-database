@@ -64,7 +64,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
     end
   end
 
-  xdescribe "#new_assessed_on" do
+  describe "#new_assessed_on" do
     before do
       UpdateRiskAssessment.call!(
         risk_assessment:,
@@ -73,6 +73,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
         assessed_by_team_id: user.team.id,
         risk_level: "serious",
         details: "Test 2",
+        previous_investigation_product_ids: investigation.investigation_product_ids,
         investigation_product_ids: investigation.investigation_product_ids
       )
     end
