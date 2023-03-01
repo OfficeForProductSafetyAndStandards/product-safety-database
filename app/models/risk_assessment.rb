@@ -59,6 +59,6 @@ private
   def at_least_one_product_associated
     return unless investigation_product_ids.to_a.empty?
 
-    errors.add(:products, :blank)
+    errors.add(:investigation_products, :blank)
   end
 end
