@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2020-02-28
+## 2023-03-01
 - Significant service update made to change the way users create products and cases. Products and cases are now two separate entities with associated information, enabling one product to be included in multiple different cases.
 
 ## 2020-02-01
