@@ -1,11 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  let(:product) { create(:product) }
+  let(:investigation_product) { create(:investigation_product) }
   let(:test_result) do
-    create(:test_result,
-           product:,
-           investigation: create(:allegation))
+    create(:test_result, investigation_product:, investigation: create(:allegation))
   end
 
   describe "#test_result" do
@@ -73,11 +71,11 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch,
   end
 
   describe "#new_product" do
-    let(:new_product) { create(:product) }
-    let(:activity) { described_class.new(metadata: { updates: { product_id: [product.id, new_product.id] } }) }
+    let(:new_investigation_product) { create(:investigation_product) }
+    let(:activity) { described_class.new(metadata: { updates: { investigation_product_id: [investigation_product.id, new_investigation_product.id] } }) }
 
     it "returns the new product" do
-      expect(activity.new_product).to eq new_product
+      expect(activity.new_product).to eq new_investigation_product
     end
   end
 end
