@@ -4,16 +4,11 @@ module Investigations
       recall_information = online_recall_information_text_for(corrective_action.online_recall_information, has_online_recall_information: corrective_action.has_online_recall_information)
       recall_information = link_to(recall_information) if recall_information.starts_with?("http")
 
-      product_value = if corrective_action.investigation_product.investigation_closed_at
-                        { text: "#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})" }
-                      else
-                        { html: link_to("#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})", product_path(corrective_action.investigation_product.product)) }
-                      end
       rows = [
         { key: { text: "Action" }, value: { text: action_text_for(corrective_action) } },
         { key: { text: "Event date" }, value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },               value: { text: corrective_action.legislation } },
-        { key: { text: "Product" },                   value: product_value },
+        { key: { text: "Product" },                   value: { text: "#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})" } },
         { key: { text: "Business" },                  value: { html: business_text_for(corrective_action) } },
         { key: { text: "Recall information" },        value: { html: recall_information } }
       ]
