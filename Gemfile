@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "~> 3.0"
+ruby "3.1.3"
 
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
@@ -11,7 +11,8 @@ gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
-gem "devise", "~> 4.8"
+gem "cssbundling-rails"
+gem "devise", "~> 4.9"
 gem "devise-encryptable", "~> 0.2"
 gem "draper", "~> 4.0"
 gem "elasticsearch"
@@ -33,7 +34,7 @@ gem "net-smtp"
 
 gem "paper_trail"
 gem "pg", "~> 1.4"
-gem "pghero", "~> 3.1"
+gem "pghero", "~> 3.2"
 gem "puma", "~> 6.1"
 gem "pundit", "~> 2.3"
 gem "rack", "~> 2.2.6"
@@ -46,7 +47,7 @@ gem "scout_apm", "~> 5.3"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 7.0"
-gem "sidekiq-scheduler", "~> 5.0.0"
+gem "sidekiq-scheduler", "~> 5.0.2"
 gem "sprockets", "~> 4.2.0"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "stimulus-rails"

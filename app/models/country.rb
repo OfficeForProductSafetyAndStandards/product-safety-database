@@ -1,6 +1,5 @@
 class Country
-  PATH_TO_COUNTRIES_LIST =
-    "node_modules/govuk-country-and-territory-autocomplete/dist/location-autocomplete-canonical-list.json".freeze
+  PATH_TO_COUNTRIES_LIST = "app/assets/location-autocomplete-canonical-list.json".freeze
 
   ADDITIONAL_COUNTRIES = [
     ["England", "country:GB-ENG"],
