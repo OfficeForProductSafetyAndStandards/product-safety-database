@@ -60,7 +60,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
 private
 
   def products_description
-    products = object.investigation_products.map { |ip| ip.product }
+    products = object.investigation_products.map(&:product)
 
     if products.size > 1
       h.pluralize(products.size, "product")
