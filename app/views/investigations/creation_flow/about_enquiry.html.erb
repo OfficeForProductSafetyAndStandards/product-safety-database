@@ -12,8 +12,8 @@
       <fieldset class="govuk-fieldset">
         <%= form.govuk_date_input :date_received, legend: "When was it received?" %>
         <p class="govuk-body">
-          Set to: <%= link_to('Today', 'javascript:void(0)', id: :today) %>
-          <%= link_to('Yesterday', 'javascript:void(0)', id: :yesterday) %>
+          Set to: <%= link_to('Today', '#', id: :today) %>
+          <%= link_to('Yesterday', '#', id: :yesterday) %>
         </p>
         <%= govukRadios(
           form: form,
@@ -29,6 +29,6 @@
   </div>
 <% end %>
 
-<script type="text/javascript" >
- window.dateInput("date_received-fieldset");
+<script type="text/javascript">
+  window.dateInput("date_received-fieldset");
 </script>

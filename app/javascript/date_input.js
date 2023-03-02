@@ -1,19 +1,17 @@
-import $ from 'jquery'
+'use strict'
 
-function dateInput (id) {
-  $(document).ready(() => {
-    const setDateInput = (date) => {
-      return () => {
-        day.value = date.getDate()
-        month.value = date.getMonth() + 1
-        year.value = date.getFullYear()
-      }
-    }
+window.setDateInput = (date, inputDay, inputMonth, inputYear) => {
+  inputDay.value = date.getDate()
+  inputMonth.value = date.getMonth() + 1
+  inputYear.value = date.getFullYear()
+}
 
+window.dateInput = (id) => {
+  document.addEventListener('DOMContentLoaded', () => {
     const currentDate = new Date()
     const dateYesterday = new Date(currentDate.getTime())
 
-    const element = document.getElementById(id)
+    const element = document.querySelector(`#${id}`)
     const day = element.querySelector("input[name*='day']")
     const month = element.querySelector("input[name*='month']")
     const year = element.querySelector("input[name*='year']")
@@ -23,11 +21,15 @@ function dateInput (id) {
     // previous month.
     dateYesterday.setDate(dateYesterday.getDate() - 1)
 
-    const today = document.getElementById('today')
-    const yesterday = document.getElementById('yesterday')
-    today.onclick = setDateInput(currentDate)
-    yesterday.onclick = setDateInput(dateYesterday)
+    document.querySelector('#today').addEventListener('click', (e) => {
+      e.preventDefault()
+      window.setDateInput(currentDate, day, month, year)
+      return false
+    })
+    document.querySelector('#yesterday').addEventListener('click', (e) => {
+      e.preventDefault()
+      window.setDateInput(dateYesterday, day, month, year)
+      return false
+    })
   })
 }
-
-window.dateInput = dateInput
