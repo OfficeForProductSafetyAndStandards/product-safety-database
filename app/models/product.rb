@@ -57,7 +57,7 @@ class Product < ApplicationRecord
 
   has_many :corrective_actions, through: :investigation_products, dependent: :destroy
   has_many :tests, through: :investigation_products, dependent: :destroy
-  has_many :test_results, class_name: "Test::Result", dependent: :destroy
+  has_many :test_results, through: :investigation_products, class_name: "Test::Result", dependent: :destroy
   has_many :unexpected_events, through: :investigation_products
   has_many :risk_assessed_products, through: :investigation_products
   has_many :risk_assessments, through: :risk_assessed_products
