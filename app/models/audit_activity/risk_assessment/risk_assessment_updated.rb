@@ -85,7 +85,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def new_products
-    Product.find(new_product_ids)
+    InvestigationProduct.find(new_product_ids).map(&:product)
   end
 
   def new_details
