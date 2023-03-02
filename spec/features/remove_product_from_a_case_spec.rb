@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-  let(:user)           { create(:user, :opss_user, :activated) }
-  let(:investigation)  { create(:enquiry, :with_products, creator: user) }
-  let(:removal_reason) { "I made a mistake" }
-  let(:product)        { investigation.products.first }
+  let(:user)                  { create(:user, :opss_user, :activated) }
+  let(:investigation)         { create(:enquiry, :with_products, creator: user) }
+  let(:removal_reason)        { "I made a mistake" }
+  let(:investigation_product) { investigation.investigation_products.first }
+  let(:product)               { investigation_product.product }
 
   context "when investigation is closed" do
     before do
@@ -81,9 +82,9 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
   end
 
   context "when product has linked supporting information" do
-    let!(:accident) { create :accident, product:, investigation: }
-    let!(:risk_assessment) { create :risk_assessment, products: [product], investigation: }
-    let!(:corrective_action) { create :corrective_action, product: }
+    let!(:accident) { create :accident, investigation_product:, investigation: }
+    let!(:risk_assessment) { create :risk_assessment, investigation_products: [investigation_product], investigation: }
+    let!(:corrective_action) { create :corrective_action, investigation_product: }
 
     it "does not allow user to remove product from investigation" do
       sign_in user
