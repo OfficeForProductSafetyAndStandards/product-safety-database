@@ -48,5 +48,4 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
   def assessed_by_business
     Business.find_by(id: metadata["risk_assessment"]["assessed_by_business_id"])
   end
-
 end
