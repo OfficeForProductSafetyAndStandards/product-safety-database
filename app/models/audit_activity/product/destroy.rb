@@ -2,7 +2,7 @@ class AuditActivity::Product::Destroy < AuditActivity::Product::Base
   def self.build_metadata(investigation_product, reason)
     {
       reason:,
-      investigation_product: investigation_product.attributes
+      product: investigation_product.product.attributes
     }
   end
 

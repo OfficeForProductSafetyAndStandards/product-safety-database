@@ -43,7 +43,7 @@ private
       added_by_user: user,
       investigation:,
       investigation_product:,
-      metadata: AuditActivity::Product::Destroy.build_metadata(product, reason)
+      metadata: AuditActivity::Product::Destroy.build_metadata(investigation_product, reason)
     )
   end
 
