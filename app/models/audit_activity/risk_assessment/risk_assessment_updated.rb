@@ -81,7 +81,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def new_product_ids
-    updates["product_ids"]&.second
+    updates["investigation_product_ids"]&.second
   end
 
   def new_products
