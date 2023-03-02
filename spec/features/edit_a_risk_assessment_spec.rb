@@ -7,7 +7,8 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
 
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }
   let(:doll) { create(:product, name: "Doll") }
-  let!(:doll_investigation_product)       { create(:investigation_product, investigation:, product: doll) }
+
+  let!(:doll_investigation_product) { create(:investigation_product, investigation:, product: doll) } # rubocop:disable RSpec/LetSetup
   let!(:teddy_bear_investigation_product) { create(:investigation_product, investigation:, product: teddy_bear) }
 
   let(:investigation) do

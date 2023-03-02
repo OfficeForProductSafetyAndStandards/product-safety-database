@@ -92,7 +92,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           end
         end
 
-        it "creates an audit activity", :aggregate_failures do
+        it "creates an audit activity", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
           result
           activity = investigation.reload.activities.find_by!(type: AuditActivity::Product::Destroy.name)
           expect(activity).to have_attributes(
