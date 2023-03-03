@@ -225,7 +225,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    govuk-design-system-rails (0.10.1)
+    govuk-design-system-rails (0.10.3)
     govuk_notify_rails (2.2.0)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -649,7 +649,7 @@ DEPENDENCIES
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
   faker (~> 3.1)
-  govuk-design-system-rails (~> 0.10.1)
+  govuk-design-system-rails (~> 0.10.3)
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)

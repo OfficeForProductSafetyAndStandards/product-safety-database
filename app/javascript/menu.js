@@ -1,3 +1,4 @@
+'use strict'
 
 import { nodeListForEach } from 'govuk-frontend/govuk/common'
 
@@ -159,9 +160,9 @@ Menu.prototype.convertLinkToButton = function () {
   this.$module.appendChild(this.$button)
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const $menus = document.querySelectorAll('[data-module="app-menu"]')
-  nodeListForEach($menus, function ($menu) {
+  nodeListForEach($menus, ($menu) => {
     new Menu($menu).init()
   })
 })
