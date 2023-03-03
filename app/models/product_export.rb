@@ -44,7 +44,7 @@ private
 
   def find_products(ids)
     Product
-      .includes([:investigations, :owning_team, investigation_products: [:test_results, corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] ]])
+      .includes([:investigations, :owning_team, { investigation_products: [:test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }] }])
       .find(ids)
   end
 

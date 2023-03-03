@@ -83,7 +83,7 @@ if run_seeds
 
   incident_params = {
     type: "Incident",
-    investigation_product_id:  investigation.investigation_products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     severity: "other",
     severity_other: "maximum severity",
     usage: "unknown_usage",
