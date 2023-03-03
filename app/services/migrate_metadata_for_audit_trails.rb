@@ -49,5 +49,4 @@ private
   def investigation_product_id(investigation:, product_id:)
     investigation.investigation_products.where(product_id:).pick("investigation_products.id")
   end
-
 end
