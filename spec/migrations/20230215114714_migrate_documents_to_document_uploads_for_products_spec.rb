@@ -12,7 +12,9 @@ RSpec.describe MigrateDocumentsToDocumentUploadsForProducts, :with_stubbed_opens
   end
   let(:down) do
     ActiveRecord::Migration.suppress_messages do
-      migration_context.down(previous_version)
+      ActiveRecord::Migration.disable_ddl_transaction do
+        migration_context.down(previous_version)
+      end
     end
   end
 
