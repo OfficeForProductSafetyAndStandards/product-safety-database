@@ -665,7 +665,7 @@ en:
               in_future: Date enquiry received must be today or in the past
         test/result:
           attributes:
-            product:
+            investigation_product:
               required: "Select the product which was tested"
         test/request:
           attributes:

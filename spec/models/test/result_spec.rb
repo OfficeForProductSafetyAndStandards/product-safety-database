@@ -16,7 +16,7 @@ RSpec.describe Test::Result, :with_stubbed_opensearch, :with_stubbed_notify, :wi
 
       it "is invalid and includes an error message", :aggregate_failures do
         expect(test_result).not_to be_valid
-        expect(test_result.errors.messages[:investigation_product]).to include("must exist")
+        expect(test_result.errors.messages[:investigation_product]).to include("Select the product which was tested")
       end
     end
   end
