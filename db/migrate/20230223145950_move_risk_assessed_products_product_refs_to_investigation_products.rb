@@ -12,9 +12,9 @@ class MoveRiskAssessedProductsProductRefsToInvestigationProducts < ActiveRecord:
 
   def down
     safety_assured do
-      # add_reference :risk_assessed_products, :product, index: { algorithm: :concurrently }
-      # execute "UPDATE risk_assessed_products SET product_id = investigation_products.product_id FROM investigation_products WHERE investigation_products.id = risk_assessed_products.investigation_product_id;"
-      # remove_reference :risk_assessed_products, :investigation_product, index: { algorithm: :concurrently }
+      add_reference :risk_assessed_products, :product, index: { algorithm: :concurrently }
+      execute "UPDATE risk_assessed_products SET product_id = investigation_products.product_id FROM investigation_products WHERE investigation_products.id = risk_assessed_products.investigation_product_id;"
+      remove_reference :risk_assessed_products, :investigation_product, index: { algorithm: :concurrently }
       # we won't be able to re-add the unique index here because it is possible that we will have risk_assessed_products with the same product_id and risk_assessment_id due to multiple versions of the same product being added.
     end
   end
