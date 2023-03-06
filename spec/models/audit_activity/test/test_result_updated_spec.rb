@@ -75,7 +75,7 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch,
     let(:activity) { described_class.new(metadata: { updates: { investigation_product_id: [investigation_product.id, new_investigation_product.id] } }) }
 
     it "returns the new product" do
-      expect(activity.new_product).to eq new_investigation_product
+      expect(activity.new_product).to eq new_investigation_product.product
     end
   end
 end
