@@ -63,10 +63,9 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   end
 
   def new_product
-    @new_product ||=
-      if updates["investigation_product_id"]
-        InvestigationProduct.find(updates["investigation_product_id"].second)
-      end
+    return unless updates["investigation_product_id"]
+
+    InvestigationProduct.find(updates["investigation_product_id"].second)&.product
   end
 
 private

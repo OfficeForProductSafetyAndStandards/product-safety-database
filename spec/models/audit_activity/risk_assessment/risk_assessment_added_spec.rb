@@ -47,21 +47,21 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
 
   describe "#products_assessed" do
     context "with one product on the risk assessment" do
-      let(:product) { create(:investigation_product) }
-      let(:investigation_products) { [product] }
+      let(:investigation_product) { create(:investigation_product) }
+      let(:investigation_products) { [investigation_product] }
 
       it "returns the product" do
-        expect(activity.products_assessed).to eq(investigation_products)
+        expect(activity.products_assessed).to eq([investigation_product.product])
       end
     end
 
     context "with multiple products on the risk assessment" do
-      let(:product_1) { create(:investigation_product) }
-      let(:product_2) { create(:investigation_product) }
-      let(:investigation_products) { [product_1, product_2] }
+      let(:investigation_product1) { create(:investigation_product) }
+      let(:investigation_product2) { create(:investigation_product) }
+      let(:investigation_products) { [investigation_product1, investigation_product2] }
 
       it "returns an Array of products" do
-        expect(activity.products_assessed).to eq(investigation_products)
+        expect(activity.products_assessed).to eq([investigation_product1.product, investigation_product2.product])
       end
     end
   end

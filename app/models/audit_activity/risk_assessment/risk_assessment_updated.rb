@@ -105,7 +105,9 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def products_assessed
-    InvestigationProduct.find(metadata["investigation_product_ids"])
+    return unless metadata["investigation_product_ids"]
+
+    InvestigationProduct.find(metadata["investigation_product_ids"]).map(&:product)
   end
 
   def further_details

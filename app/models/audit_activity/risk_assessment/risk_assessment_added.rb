@@ -22,7 +22,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
   end
 
   def products_assessed
-    InvestigationProduct.find(metadata["risk_assessment"]["investigation_product_ids"])
+    InvestigationProduct.find(metadata["risk_assessment"]["investigation_product_ids"]).map(&:product)
   end
 
   def further_details
