@@ -1,17 +1,17 @@
-import $ from 'jquery'
+'use strict'
 
-$(document).ready(() => {
-  if ($('#which-businesses-page').length) {
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('#which-businesses-page')) {
     const normalElements = [
-      $('#businesses_retailer')[0],
-      $('#businesses_distributor')[0],
-      $('#businesses_importer')[0],
-      $('#businesses_fulfillment_house')[0],
-      $('#businesses_manufacturer')[0],
-      $('#businesses_exporter')[0]
+      document.querySelector('#businesses_retailer'),
+      document.querySelector('#businesses_distributor'),
+      document.querySelector('#businesses_importer'),
+      document.querySelector('#businesses_fulfillment_house'),
+      document.querySelector('#businesses_manufacturer'),
+      document.querySelector('#businesses_exporter')
     ]
-    const elementOther = $('#businesses_other')[0]
-    const elementNone = $('#businesses_none')[0]
+    const elementOther = document.querySelector('#businesses_other')
+    const elementNone = document.querySelector('#businesses_none')
 
     const deselectOthers = () => {
       normalElements.forEach((element) => {

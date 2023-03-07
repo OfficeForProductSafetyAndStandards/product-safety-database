@@ -1,23 +1,25 @@
-import $ from 'jquery'
+'use strict'
 
-$(document).ready(() => {
-  const attachmentFileInput = $('#attachment-file-input, #email_attachment')
-  const attachmentDescription = document.getElementById('attachment-description')
-  const currentAttachmentDetails = document.getElementById('current-attachment-details')
+document.addEventListener('DOMContentLoaded', () => {
+  const attachmentFileInput = document.querySelectorAll('#attachment-file-input, #email_attachment')
+  const attachmentDescription = document.querySelector('#attachment-description')
+  const currentAttachmentDetails = document.querySelector('#current-attachment-details')
 
-  attachmentFileInput.change(function () {
-    if (this.value) {
-      $(attachmentDescription).show()
-    } else {
-      $(attachmentDescription).hide()
-    }
+  attachmentFileInput.forEach(el => {
+    el.addEventListener('change', () => {
+      if (this.value) {
+        attachmentDescription.style.display = 'block'
+      } else {
+        attachmentDescription.style.display = 'none'
+      }
+    })
   })
 
   if (attachmentDescription) {
     if (currentAttachmentDetails) {
-      $(attachmentDescription).show()
+      attachmentDescription.style.display = 'block'
     } else {
-      $(attachmentDescription).hide()
+      attachmentDescription.style.display = 'none'
     }
   }
 })
