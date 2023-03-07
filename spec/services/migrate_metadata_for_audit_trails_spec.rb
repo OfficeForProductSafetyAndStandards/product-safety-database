@@ -7,8 +7,9 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
   let(:product2) { create(:product) }
   let(:product3) { create(:product) }
 
+  let(:investigation) { create(:allegation) }
+
   context "with risk assessment added audit activity" do
-    let(:investigation) { create(:allegation) }
     let(:risk_assessment) { create(:risk_assessment, investigation:) }
     let(:investigation_product) { create(:investigation_product, investigation:, product:) }
 
@@ -44,7 +45,6 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
   end
 
   context "with risk assessment updated audit activity" do
-    let(:investigation) { create(:allegation) }
     let(:risk_assessment) { create(:risk_assessment, investigation:) }
     let(:investigation_product1) { create(:investigation_product, investigation:, product:) }
     let(:investigation_product2) { create(:investigation_product, investigation:, product: product2) }
@@ -80,7 +80,6 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
   end
 
   context "with accident or incident updated audit activity" do
-    let(:investigation) { create(:allegation) }
     let(:accident_or_incident) { create(:accident_or_incident, investigation:) }
     let(:investigation_product) { create(:investigation_product, investigation:, product:) }
 
@@ -116,7 +115,6 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
   end
 
   context "with corrective action updated activity" do
-    let(:investigation) { create(:allegation) }
     let(:corrective_action) { create(:corrective_action, investigation:) }
     let(:investigation_product) { create(:investigation_product, investigation:, product:) }
 
@@ -149,6 +147,114 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
       do_the_migration
 
       expect(corrective_action_updated_audit_activity.reload.metadata.dig("updates", "investigation_product_id")).to eq(investigation_product.id)
+    end
+  end
+
+  context "with corrective action added activity" do
+    let(:corrective_action) { create(:corrective_action, investigation:) }
+    let(:investigation_product) { create(:investigation_product, investigation:, product:) }
+
+    let(:corrective_action_updated_audit_activity) do
+      AuditActivity::CorrectiveAction::Add.create!(
+        added_by_user: create(:user),
+        investigation:,
+        investigation_product:,
+        metadata: audit_activity_metadata,
+        title: nil,
+        body: nil
+      )
+    end
+
+    let(:audit_activity_metadata) do
+      {
+        "corrective_action": {
+          "product_id" => investigation_product.product_id
+        }
+      }
+    end
+
+    before do
+      corrective_action_updated_audit_activity
+    end
+
+    it "migrates the metadata", :aggregate_failures do
+      expect(corrective_action_updated_audit_activity.metadata.dig("corrective_action", "investigation_product_id")).to be_nil
+
+      do_the_migration
+
+      expect(corrective_action_updated_audit_activity.reload.metadata.dig("corrective_action", "investigation_product_id")).to eq(investigation_product.id)
+    end
+  end
+
+  context "with test result activity" do
+    let(:test_result) { create(:test_result, investigation:) }
+    let(:investigation_product) { create(:investigation_product, investigation:, product:) }
+
+    let(:test_result_updated_audit_activity) do
+      AuditActivity::Test::Result.create!(
+        added_by_user: create(:user),
+        investigation:,
+        investigation_product:,
+        metadata: audit_activity_metadata,
+        title: nil,
+        body: nil
+      )
+    end
+
+    let(:audit_activity_metadata) do
+      {
+        "test_result": {
+          "product_id" => investigation_product.product_id
+        }
+      }
+    end
+
+    before do
+      test_result_updated_audit_activity
+    end
+
+    it "migrates the metadata", :aggregate_failures do
+      expect(test_result_updated_audit_activity.metadata.dig("test_result", "investigation_product_id")).to be_nil
+
+      do_the_migration
+
+      expect(test_result_updated_audit_activity.reload.metadata.dig("test_result", "investigation_product_id")).to eq(investigation_product.id)
+    end
+  end
+
+  context "with test result updated activity" do
+    let(:test_result) { create(:test_result, investigation:) }
+    let(:investigation_product) { create(:investigation_product, investigation:, product:) }
+
+    let(:test_result_updated_audit_activity) do
+      AuditActivity::Test::TestResultUpdated.create!(
+        added_by_user: create(:user),
+        investigation:,
+        investigation_product:,
+        metadata: audit_activity_metadata,
+        title: nil,
+        body: nil
+      )
+    end
+
+    let(:audit_activity_metadata) do
+      {
+        "updates": {
+          "product_id" => investigation_product.product_id
+        }
+      }
+    end
+
+    before do
+      test_result_updated_audit_activity
+    end
+
+    it "migrates the metadata", :aggregate_failures do
+      expect(test_result_updated_audit_activity.metadata.dig("updates", "investigation_product_id")).to be_nil
+
+      do_the_migration
+
+      expect(test_result_updated_audit_activity.reload.metadata.dig("updates", "investigation_product_id")).to eq(investigation_product.id)
     end
   end
 end

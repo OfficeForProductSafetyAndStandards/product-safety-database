@@ -6,6 +6,9 @@ class MigrateMetadataForAuditTrails
     migrate_risk_assessments_updated!
     migrate_accident_or_incident_updated!
     migrate_corrective_action_updated!
+    migrate_corrective_action_added!
+    migrate_test_result_activity!
+    migrate_test_result_updated_activity!
   end
 
 private
@@ -36,6 +39,30 @@ private
 
   def migrate_corrective_action_updated!
     AuditActivity::CorrectiveAction::Update.all.each do |object|
+      product_id = object.metadata["updates"]["product_id"]
+      object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
+      object.save!
+    end
+  end
+
+  def migrate_corrective_action_added!
+    AuditActivity::CorrectiveAction::Add.all.each do |object|
+      product_id = object.metadata["corrective_action"]["product_id"]
+      object.metadata["corrective_action"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
+      object.save!
+    end
+  end
+
+  def migrate_test_result_activity!
+    AuditActivity::Test::Result.all.each do |object|
+      product_id = object.metadata["test_result"]["product_id"]
+      object.metadata["test_result"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
+      object.save!
+    end
+  end
+
+  def migrate_test_result_updated_activity!
+    AuditActivity::Test::TestResultUpdated.all.each do |object|
       product_id = object.metadata["updates"]["product_id"]
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
       object.save!
