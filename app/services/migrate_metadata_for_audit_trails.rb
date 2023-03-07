@@ -15,7 +15,9 @@ private
 
   def migrate_risk_assessments_added!
     AuditActivity::RiskAssessment::RiskAssessmentAdded.all.each do |object|
-      product_ids = object.metadata["risk_assessment"]["product_ids"]
+      product_ids = object.metadata.dig("risk_assessment", "product_ids")
+      next if product_ids.blank?
+
       object.metadata["risk_assessment"]["investigation_product_ids"] = investigation_product_ids(investigation: object.investigation, product_ids:)
       object.save!
     end
@@ -24,6 +26,8 @@ private
   def migrate_risk_assessments_updated!
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.all.each do |object|
       product_ids = object.metadata["previous_product_ids"]
+      next if product_ids.blank?
+
       object.metadata["previous_investigation_product_ids"] = investigation_product_ids(investigation: object.investigation, product_ids:)
       object.save!
     end
@@ -31,7 +35,9 @@ private
 
   def migrate_accident_or_incident_updated!
     AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated.all.each do |object|
-      product_id = object.metadata["updates"]["product_id"]
+      product_id = object.metadata.dig("updates", "product_id")
+      next if product_id.blank?
+
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
       object.save!
     end
@@ -39,7 +45,9 @@ private
 
   def migrate_corrective_action_updated!
     AuditActivity::CorrectiveAction::Update.all.each do |object|
-      product_id = object.metadata["updates"]["product_id"]
+      product_id = object.metadata.dig("updates", "product_id")
+      next if product_id.blank?
+
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
       object.save!
     end
@@ -47,7 +55,9 @@ private
 
   def migrate_corrective_action_added!
     AuditActivity::CorrectiveAction::Add.all.each do |object|
-      product_id = object.metadata["corrective_action"]["product_id"]
+      product_id = object.metadata.dig("corrective_action", "product_id")
+      next if product_id.blank?
+
       object.metadata["corrective_action"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
       object.save!
     end
@@ -55,7 +65,9 @@ private
 
   def migrate_test_result_activity!
     AuditActivity::Test::Result.all.each do |object|
-      product_id = object.metadata["test_result"]["product_id"]
+      product_id = object.metadata.dig("test_result", "product_id")
+      next if product_id.blank?
+
       object.metadata["test_result"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
       object.save!
     end
@@ -63,7 +75,9 @@ private
 
   def migrate_test_result_updated_activity!
     AuditActivity::Test::TestResultUpdated.all.each do |object|
-      product_id = object.metadata["updates"]["product_id"]
+      product_id = object.metadata.dig("updates", "product_id")
+      next if product_id.blank?
+
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
       object.save!
     end
