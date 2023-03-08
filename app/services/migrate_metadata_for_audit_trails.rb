@@ -19,7 +19,7 @@ private
       next if product_ids.blank?
 
       object.metadata["risk_assessment"]["investigation_product_ids"] = investigation_product_ids(investigation: object.investigation, product_ids:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
@@ -29,7 +29,7 @@ private
       next if product_ids.blank?
 
       object.metadata["previous_investigation_product_ids"] = investigation_product_ids(investigation: object.investigation, product_ids:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
@@ -39,7 +39,7 @@ private
       next if product_id.blank?
 
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
@@ -49,7 +49,7 @@ private
       next if product_id.blank?
 
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
@@ -59,7 +59,7 @@ private
       next if product_id.blank?
 
       object.metadata["corrective_action"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
@@ -69,7 +69,7 @@ private
       next if product_id.blank?
 
       object.metadata["test_result"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
@@ -79,7 +79,7 @@ private
       next if product_id.blank?
 
       object.metadata["updates"]["investigation_product_id"] = investigation_product_id(investigation: object.investigation, product_id:)
-      object.save!
+      object.save!(validate: false)
     end
   end
 
