@@ -42,6 +42,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
 
         expect(risk_assessment_added_audit_activity.reload.metadata.dig("risk_assessment", "investigation_product_ids")).to eq([investigation_product.id])
       end
+
+      it "removes the product_ids from the metadata", :aggregate_failures do
+        expect(risk_assessment_added_audit_activity.metadata.dig("risk_assessment", "product_ids")).not_to be_nil
+
+        do_the_migration
+
+        expect(risk_assessment_added_audit_activity.reload.metadata.dig("risk_assessment", "product_ids")).to be_nil
+      end
     end
 
     context "with nothing to migrate" do
@@ -87,6 +95,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
         do_the_migration
 
         expect(risk_assessment_added_audit_activity.reload.metadata["previous_investigation_product_ids"]).to eq([investigation_product1.id, investigation_product2.id])
+      end
+
+      it "removes the product ids from the metadata", :aggregate_failures do
+        expect(risk_assessment_added_audit_activity.metadata["previous_product_ids"]).not_to be_nil
+
+        do_the_migration
+
+        expect(risk_assessment_added_audit_activity.reload.metadata["previous_product_ids"]).to be_nil
       end
     end
 
@@ -135,6 +151,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
 
         expect(accident_or_incident_updated_audit_activity.reload.metadata.dig("updates", "investigation_product_id")).to eq(investigation_product.id)
       end
+
+      it "removes the product ids from the metadata", :aggregate_failures do
+        expect(accident_or_incident_updated_audit_activity.metadata.dig("updates", "product_id")).not_to be_nil
+
+        do_the_migration
+
+        expect(accident_or_incident_updated_audit_activity.reload.metadata.dig("updates", "product_id")).to be_nil
+      end
     end
 
     context "with nothing to migrate" do
@@ -181,6 +205,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
         do_the_migration
 
         expect(corrective_action_updated_audit_activity.reload.metadata.dig("updates", "investigation_product_id")).to eq(investigation_product.id)
+      end
+
+      it "removes the product ids from the metadata", :aggregate_failures do
+        expect(corrective_action_updated_audit_activity.metadata.dig("updates", "product_id")).not_to be_nil
+
+        do_the_migration
+
+        expect(corrective_action_updated_audit_activity.reload.metadata.dig("updates", "product_id")).to be_nil
       end
     end
 
@@ -229,6 +261,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
 
         expect(corrective_action_updated_audit_activity.reload.metadata.dig("corrective_action", "investigation_product_id")).to eq(investigation_product.id)
       end
+
+      it "removes the product ids from the metadata", :aggregate_failures do
+        expect(corrective_action_updated_audit_activity.metadata.dig("corrective_action", "product_id")).not_to be_nil
+
+        do_the_migration
+
+        expect(corrective_action_updated_audit_activity.reload.metadata.dig("corrective_action", "product_id")).to be_nil
+      end
     end
 
     context "with nothing to migrate" do
@@ -276,6 +316,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
 
         expect(test_result_updated_audit_activity.reload.metadata.dig("test_result", "investigation_product_id")).to eq(investigation_product.id)
       end
+
+      it "removes the product ids from the metadata", :aggregate_failures do
+        expect(test_result_updated_audit_activity.metadata.dig("test_result", "product_id")).not_to be_nil
+
+        do_the_migration
+
+        expect(test_result_updated_audit_activity.reload.metadata.dig("test_result", "product_id")).to be_nil
+      end
     end
 
     context "with nothing to migrate" do
@@ -322,6 +370,14 @@ RSpec.describe MigrateMetadataForAuditTrails, :with_stubbed_mailer, :with_stubbe
         do_the_migration
 
         expect(test_result_updated_audit_activity.reload.metadata.dig("updates", "investigation_product_id")).to eq(investigation_product.id)
+      end
+
+      it "removes the product ids from the metadata", :aggregate_failures do
+        expect(test_result_updated_audit_activity.metadata.dig("updates", "product_id")).not_to be_nil
+
+        do_the_migration
+
+        expect(test_result_updated_audit_activity.reload.metadata.dig("updates", "product_id")).to be_nil
       end
     end
 

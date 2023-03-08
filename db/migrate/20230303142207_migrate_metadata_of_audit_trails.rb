@@ -4,6 +4,6 @@ class MigrateMetadataOfAuditTrails < ActiveRecord::Migration[7.0]
   end
 
   def self.down
-    # This migration is non-reversible but not destructive
+    # This migration is non-reversible
   end
 end
