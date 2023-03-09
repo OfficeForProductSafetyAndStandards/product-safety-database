@@ -35,7 +35,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
     expect(result.corrective_action)
       .to have_attributes(
         investigation:, date_decided:, business_id: business.id, details:, legislation:, measure_type:,
-        duration:, geographic_scopes:, other_action:, action:, product_id: product.id,
+        duration:, geographic_scopes:, other_action:, action:, investigation_product_id: investigation_product.id,
         online_recall_information:, has_online_recall_information:
       )
   end

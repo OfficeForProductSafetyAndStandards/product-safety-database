@@ -48,11 +48,10 @@
         },
         {
           key: {
-            text: "Product".pluralize(@risk_assessment.products.count) + " assessed"
+            text: "Product".pluralize(@risk_assessment.investigation_products.count) + " assessed"
           },
           value: {
-            text: safe_join(@risk_assessment.products.collect {|p| link_to(p.name, p) }, tag.br)
-
+            text: @risk_assessment.links_to_products
           }
         }
       ] %>

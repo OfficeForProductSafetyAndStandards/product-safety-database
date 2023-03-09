@@ -12,7 +12,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
   let(:new_severity) { "serious" }
   let(:usage) { "during_normal_use" }
   let(:new_usage) { "during_misuse" }
-  let(:product) { create(:product) }
+  let(:investigation_product) { create(:investigation_product) }
   let(:accident_or_incident) do
     AddAccidentOrIncidentToCase.call!(
       investigation:,
@@ -21,7 +21,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
       is_date_known: "false",
       severity:,
       usage:,
-      product_id: product.id,
+      investigation_product_id: investigation_product.id,
       type: "Accident",
       additional_info: nil
     ).accident_or_incident

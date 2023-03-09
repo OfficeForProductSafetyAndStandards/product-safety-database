@@ -7,7 +7,7 @@ FactoryBot.define do
     assessed_by_business { nil }
     assessed_by_other { nil }
     details { "MyText" }
-    products { [build(:product)] }
+    investigation_products { [build(:investigation_product)] }
     added_by_user { association :user }
     added_by_team { association :team }
 

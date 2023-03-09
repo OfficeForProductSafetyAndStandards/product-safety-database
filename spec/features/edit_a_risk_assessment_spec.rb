@@ -3,16 +3,18 @@ require "rails_helper"
 RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:risk_assessment_file_path) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new(risk_assessment_file_path) }
-
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }
+
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }
   let(:doll) { create(:product, name: "Doll") }
+
+  let!(:doll_investigation_product) { create(:investigation_product, investigation:, product: doll) } # rubocop:disable RSpec/LetSetup
+  let!(:teddy_bear_investigation_product) { create(:investigation_product, investigation:, product: teddy_bear) }
 
   let(:investigation) do
     create(:allegation,
            creator: user,
-           risk_level: :serious,
-           products: [teddy_bear, doll])
+           risk_level: :serious)
   end
 
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
@@ -23,7 +25,7 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
            assessed_on: Date.parse("2020-01-02"),
            assessed_by_team: team,
            risk_level: :serious,
-           products: [teddy_bear],
+           investigation_products: [teddy_bear_investigation_product],
            risk_assessment_file:)
   end
 
@@ -129,7 +131,7 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
 
     expect(page).to have_summary_item(key: "Risk level",          value: "Medium-high risk")
     expect(page).to have_summary_item(key: "Assessed by",         value: "RiskAssessmentsRUs")
-    expect(page).to have_summary_item(key: "Product assessed",    value: "Doll")
+    expect(page).to have_summary_item(key: "Product assessed",    value: "Doll (#{doll.psd_ref})")
 
     click_link "Back to allegation"
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)

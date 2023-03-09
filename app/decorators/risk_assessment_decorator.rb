@@ -46,13 +46,26 @@ class RiskAssessmentDecorator < ApplicationDecorator
     assessed_by_other
   end
 
+  def links_to_products
+    values = object.investigation_products.map do |ip|
+      if ip.investigation_closed_at
+        "#{ip.product.name} (#{ip.psd_ref})"
+      else
+        h.link_to("#{ip.product.name} (#{ip.psd_ref})", ip.product)
+      end
+    end
+    h.safe_join(values, h.tag.br)
+  end
+
 private
 
   def products_description
-    if object.products.size > 1
-      h.pluralize(object.products.size, "product")
+    products = object.investigation_products.map(&:product)
+
+    if products.size > 1
+      h.pluralize(products.size, "product")
     else
-      object.products.first.name
+      products.first.name
     end
   end
 end

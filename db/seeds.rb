@@ -75,7 +75,7 @@ if run_seeds
   accident_params = {
     type: "Accident",
     date: Time.zone.today,
-    product_id: investigation.products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     severity: "serious",
     usage: "during_normal_use",
     is_date_known: true
@@ -83,7 +83,7 @@ if run_seeds
 
   incident_params = {
     type: "Incident",
-    product_id: investigation.products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     severity: "other",
     severity_other: "maximum severity",
     usage: "unknown_usage",
@@ -97,7 +97,7 @@ if run_seeds
     date: 15.days.ago,
     details: "Test results",
     legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
-    product_id: investigation.products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     result: "failed",
     created_at: 3.days.ago,
     document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
@@ -155,7 +155,7 @@ if run_seeds
   risk_assessment_params = {
     assessed_on: Time.zone.today,
     risk_level: "serious",
-    product_ids: [investigation.products.first.id]
+    investigation_product_ids: [investigation.investigation_products.first.id]
   }
 
   AddRiskAssessmentToCase.call!(risk_assessment_params.merge(investigation:, user:, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
@@ -449,7 +449,7 @@ if run_seeds
     legislation: Rails.application.config.legislation_constants["legislation"].sample,
     details: "Passed tests 1 to 4 and failed test 5",
     result: "passed",
-    product_id: product.id,
+    investigation_product_id: product.investigation_products.first.id,
     document: create_blob("test_result.txt", title: "test result"),
     standards_product_was_tested_against: []
   )
@@ -680,7 +680,7 @@ if run_seeds
       investigation: i,
       legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
       measure_type: CorrectiveAction::MEASURE_TYPES.sample,
-      product:,
+      investigation_product: product.investigation_products.first,
       action: "other",
       other_action: "First corrective action",
       created_at: 2.days.ago

@@ -64,8 +64,10 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
   end
 
   scenario "when the business is attached to supporting information" do
-    product = create(:product, investigations: [investigation])
-    corrective_action_params = attributes_for(:corrective_action, business_id: business.id, product_id: product.id)
+    create(:product, investigations: [investigation])
+    investigation_product = investigation.investigation_products.first
+
+    corrective_action_params = attributes_for(:corrective_action, business_id: business.id, investigation_product_id: investigation_product.id)
       .merge(user:, investigation:)
     supporting_information = AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action.decorate
 

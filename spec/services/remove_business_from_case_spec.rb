@@ -8,6 +8,7 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
   let(:creator)                  { user }
   let(:owner)                    { user }
   let(:product)                  { create(:product, investigations: [investigation]) }
+  let(:investigation_product)    { investigation.investigation_products.first }
   let(:investigation)            { create(:allegation, :with_business, creator:, business_to_add: business) }
   let(:common_context)           { { user:, investigation: } }
   let(:reason)                   { Faker::Hipster.sentence }
@@ -44,7 +45,7 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
       end
 
       context "when a corrective action is attached to the business" do
-        let(:corrective_action_params) { attributes_for(:corrective_action, business_id: business.id, product_id: product.id).merge(common_context) }
+        let(:corrective_action_params) { attributes_for(:corrective_action, business_id: business.id, investigation_product_id: investigation_product.id).merge(common_context) }
         let(:corrective_action)        { AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action }
 
         before { corrective_action }
@@ -57,7 +58,7 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
 
       context "when a risk assessment is attached to the business" do
         let(:risk_assessment_params) do
-          attributes_for(:risk_assessment, assessed_by_business_id: business.id, product_ids: [product.id]).merge(common_context)
+          attributes_for(:risk_assessment, assessed_by_business_id: business.id, investigation_product_ids: [investigation_product.id]).merge(common_context)
         end
         let(:risk_assessment) { AddRiskAssessmentToCase.call!(risk_assessment_params).risk_assessment }
 

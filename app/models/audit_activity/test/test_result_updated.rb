@@ -1,8 +1,11 @@
 class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   def self.build_metadata(test_result, changes)
-    updated_values = changes.except("document", "existing_document_file_id")
+    updates = changes.except("document", "existing_document_file_id")
 
-    { test_result_id: test_result.id, updates: updated_values }
+    {
+      test_result_id: test_result.id,
+      updates:
+    }
   end
 
   def title(_)
@@ -60,10 +63,9 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   end
 
   def new_product
-    @new_product ||=
-      if updates["product_id"]
-        Product.find(updates["product_id"].second)
-      end
+    return unless updates["investigation_product_id"]
+
+    InvestigationProduct.find(updates["investigation_product_id"].second)&.product
   end
 
 private

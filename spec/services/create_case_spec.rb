@@ -119,13 +119,14 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
 
       context "when there are products added to the case" do
         let(:investigation) { build(:allegation, creator: user) }
+        let(:investigation_product) { investigation.investigation_products.first }
 
         it "creates an audit activity for product added", :aggregate_failures do
           result
           activity = investigation.reload.activities.last
           expect(activity).to be_a(AuditActivity::Product::Add)
           expect(activity.added_by_user).to eq(user)
-          expect(activity.product).to eq(product)
+          expect(activity.investigation_product).to eq(investigation_product)
           expect(activity.title(user)).to eq(product.name)
         end
       end

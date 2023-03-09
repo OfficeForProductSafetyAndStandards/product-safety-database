@@ -400,7 +400,7 @@ en:
           attributes:
             is_date_known:
               inclusion: Select yes if you know when the %{type} happened
-            product_id:
+            investigation_product_id:
               blank: Select the product involved in the %{type}
             severity:
               inclusion: Select the severity of the %{type}
@@ -432,7 +432,7 @@ en:
               blank: Enter a comment
         test_result_form:
           attributes:
-            product_id:
+            investigation_product_id:
               blank: "Select the product which was tested"
             legislation:
               inclusion: "Select the legislation that relates to this test"
@@ -491,7 +491,7 @@ en:
               blank: Select business related to the case
             assessed_by_other:
               blank: Enter organisation name
-            product_ids:
+            investigation_product_ids:
               blank: You must choose at least one product
             risk_assessment_file:
               blank: You must upload the risk assessment
@@ -613,7 +613,7 @@ en:
               recent_date: Date of call must be on or after 1 January 1970
         corrective_action_form:
           attributes:
-            product_id:
+            investigation_product_id:
               blank: "Select the product the corrective action relates to"
             date_decided:
               blank: "Enter the date the corrective action came into effect"
@@ -665,7 +665,7 @@ en:
               in_future: Date enquiry received must be today or in the past
         test/result:
           attributes:
-            product:
+            investigation_product:
               required: "Select the product which was tested"
         test/request:
           attributes:

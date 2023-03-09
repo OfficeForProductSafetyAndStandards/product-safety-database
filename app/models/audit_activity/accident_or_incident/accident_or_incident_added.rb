@@ -1,5 +1,5 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity::Base
-  belongs_to :product, class_name: "::Product"
+  belongs_to :investigation_product, class_name: "::InvestigationProduct"
 
   def self.build_metadata(accident_or_incident)
     {

@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
-  subject(:result) { described_class.call(investigation:, investigation_product:, user:, reason:) }
+  subject(:result) do
+    described_class.call(investigation:, investigation_product:, user:, reason:)
+  end
 
   let(:investigation) { create(:allegation, products: [product], creator:) }
   let(:product)       { create(:product_washing_machine, owning_team: creator.team) }
@@ -19,6 +21,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
     def expected_email_body(name)
       "Product was removed from the allegation by #{name}."
     end
+
     context "with stubbed opensearch", :with_stubbed_opensearch do
       context "with no parameters" do
         let(:result) { described_class.call }
@@ -66,7 +69,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           it "creates an audit activity", :aggregate_failures do
             result
             activity = investigation.reload.activities.find_by!(type: AuditActivity::Product::Destroy.name)
-            expect(activity).to have_attributes(title: nil, body: nil, product_id: product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.attributes.to_json) })
+            expect(activity).to have_attributes(title: nil, body: nil, investigation_product_id: investigation_product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.attributes.to_json) })
             expect(activity.added_by_user).to eq(user)
           end
 
@@ -89,10 +92,18 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           end
         end
 
-        it "creates an audit activity", :aggregate_failures do
+        it "creates an audit activity", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
           result
           activity = investigation.reload.activities.find_by!(type: AuditActivity::Product::Destroy.name)
-          expect(activity).to have_attributes(title: nil, body: nil, product_id: product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.attributes.to_json) })
+          expect(activity).to have_attributes(
+            title: nil,
+            body: nil,
+            investigation_product_id: investigation_product.id,
+            metadata: {
+              "reason" => reason,
+              "product" => JSON.parse(product.attributes.to_json)
+            }
+          )
           expect(activity.added_by_user).to eq(user)
         end
 

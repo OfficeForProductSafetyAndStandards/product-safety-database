@@ -1,21 +1,21 @@
 <% if allow_product_linking %>
   <div class="govuk-form-group <%= "govuk-form-group--error" if test_result_form.errors[:product].any? %>">
 
-    <% if investigation.products.empty? %>
+    <% if investigation.investigation_products.empty? %>
       <h2 class="govuk-heading-m">Which product was tested?</h2>
       <span class="govuk-hint">
         There are no products on this case. <%= link_to "Add a product", new_investigation_product_path(investigation) %> to send it for testing.
       </span>
-    <% elsif @investigation.products.uniq.one? %>
+    <% elsif @investigation.investigation_products.size == 1 %>
       <h2 class="govuk-heading-m">Product tested</h2>
-      <p class="govuk-body"><%= @investigation.products.first.name %></p>
-      <%= form.hidden_field :product_id, value: @investigation.products.first.id %>
+      <p class="govuk-body"><%= @investigation.investigation_products.first.product.name %></p>
+      <%= form.hidden_field :investigation_product_id, value: @investigation.investigation_products.first.id %>
     <% else %>
       <% span_html = capture do %>
         Only products already added to the case are listed.
         <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
-      <%= form.govuk_autocomplete :product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.products.uniq.map { |product| { text: product.name, value: product.id } }, hint: span_html %>
+      <%= form.govuk_autocomplete :investigation_product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } }, hint: span_html %>
     <% end %>
   </div>
 <% end %>

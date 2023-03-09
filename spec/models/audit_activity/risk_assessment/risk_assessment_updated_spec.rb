@@ -18,13 +18,13 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
       assessed_by_team_id: user.team.id,
       risk_level: "high",
       details: "Test",
-      product_ids: investigation.product_ids,
+      investigation_product_ids: investigation.investigation_product_ids,
       risk_assessment_file: file
     ).risk_assessment
   end
 
   describe ".build_metadata" do
-    subject(:metadata) { described_class.build_metadata(risk_assessment:, previous_product_ids: investigation.product_ids, attachment_changed:, previous_attachment_filename:) }
+    subject(:metadata) { described_class.build_metadata(risk_assessment:, previous_investigation_product_ids: investigation.investigation_product_ids, attachment_changed:, previous_attachment_filename:) }
 
     context "when the attachment has not changed" do
       let(:attachment_changed) { false }
@@ -73,7 +73,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
         assessed_by_team_id: user.team.id,
         risk_level: "serious",
         details: "Test 2",
-        product_ids: investigation.product_ids
+        previous_investigation_product_ids: investigation.investigation_product_ids,
+        investigation_product_ids: investigation.investigation_product_ids
       )
     end
 

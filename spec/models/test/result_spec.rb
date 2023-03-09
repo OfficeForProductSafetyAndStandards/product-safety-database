@@ -11,12 +11,12 @@ RSpec.describe Test::Result, :with_stubbed_opensearch, :with_stubbed_notify, :wi
       end
     end
 
-    context "when missing a product" do
-      let(:test_result) { build(:test_result, product: nil) }
+    context "when missing an investigation_product" do
+      let(:test_result) { build(:test_result, investigation_product: nil) }
 
       it "is invalid and includes an error message", :aggregate_failures do
         expect(test_result).not_to be_valid
-        expect(test_result.errors.messages[:product]).to include("Select the product which was tested")
+        expect(test_result.errors.messages[:investigation_product]).to include("Select the product which was tested")
       end
     end
   end
