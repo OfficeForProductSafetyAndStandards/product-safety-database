@@ -46,13 +46,9 @@ class RiskAssessmentDecorator < ApplicationDecorator
     assessed_by_other
   end
 
-  def links_to_products
+  def product_titles
     values = object.investigation_products.map do |ip|
-      if ip.investigation_closed_at
-        "#{ip.product.name} (#{ip.psd_ref})"
-      else
-        h.link_to("#{ip.product.name} (#{ip.psd_ref})", ip.product)
-      end
+      "#{ip.product.name} (#{ip.psd_ref})"
     end
     h.safe_join(values, h.tag.br)
   end
