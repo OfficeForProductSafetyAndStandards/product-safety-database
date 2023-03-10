@@ -43,7 +43,7 @@ module Investigations
     end
 
     def set_investigation_product
-      @investigation_product = InvestigationProduct.find(params[:id])
+      @investigation_product = @investigation.investigation_products.find(params[:id])
     end
 
     def set_product
