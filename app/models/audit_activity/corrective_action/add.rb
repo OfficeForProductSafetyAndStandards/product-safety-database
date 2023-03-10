@@ -77,6 +77,11 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     populate_missing_fields(metadata, audit_activity)
   end
 
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def email_update_text(viewer = nil)
     "Corrective action was added to the #{investigation.case_type.upcase_first} by #{added_by_user&.decorate&.display_name(viewer:)}."
   end
@@ -104,5 +109,17 @@ private
 
   def subtitle_slug
     "Corrective action recorded"
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata] || {}
+
+    product_id = metadata.dig("corrective_action", "product_id")
+    return metadata if product_id.blank?
+
+    metadata["corrective_action"]["investigation_product_id"] = investigation.investigation_products.where(product_id:).pick("investigation_products.id")
+    metadata["corrective_action"].delete("product_id")
+    metadata
   end
 end

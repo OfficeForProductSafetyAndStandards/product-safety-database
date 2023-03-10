@@ -1,3 +1,4 @@
+# TODO: This service is missing specs
 class UpdateAccidentOrIncident
   include Interactor
   include EntitiesToNotify
@@ -5,6 +6,7 @@ class UpdateAccidentOrIncident
   delegate :accident_or_incident, :investigation, :date, :is_date_known, :investigation_product_id, :severity, :severity_other, :usage, :additional_info, :user, :type, to: :context
 
   def call
+    context.fail!(error: "No accident or incident supplied") unless accident_or_incident.is_a?(UnexpectedEvent)
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 

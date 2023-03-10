@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 
-  subject(:activity) { investigation.reload.activities.first }
+  subject(:activity) { investigation.reload.activities.where(type: described_class.to_s).first }
 
   let(:investigation) { create(:allegation, :with_products, creator: user) }
   let(:user) { create(:user) }
@@ -60,6 +60,19 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
             "filename" => ["risk_assessment.txt", "new_risk_assessment.txt"]
           }
         })
+      end
+    end
+  end
+
+  describe "#metadata" do
+    # TODO: remove once migrated
+    context "when metadata contains a Product reference" do
+      let(:new_investigation_product) { create(:investigation_product, investigation:) }
+      let(:activity) { described_class.new(metadata: { updates: { investigation_product_id: [investigation.investigation_product_ids.first, new_investigation_product.id] } }.deep_stringify_keys) }
+
+      it "translates the Product ID to InvestigationProduct ID" do
+        expect(activity.metadata["updates"]["product_id"]).to be_nil
+        expect(activity.metadata["updates"]["investigation_product_id"]).to eq([investigation.investigation_product_ids.first, new_investigation_product.id])
       end
     end
   end

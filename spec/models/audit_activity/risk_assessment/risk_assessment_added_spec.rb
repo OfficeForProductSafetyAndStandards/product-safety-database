@@ -4,22 +4,37 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
   subject(:activity) do
     described_class.create!(
       added_by_user: risk_assessment.added_by_user,
-      investigation: risk_assessment.investigation,
+      investigation:,
       metadata:
     )
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products:) }
+  let(:risk_assessment) { create(:risk_assessment, trait, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products: investigation.investigation_products, investigation:) }
   let(:trait) { :without_file }
   let(:assessed_by_team) { nil }
   let(:assessed_by_business) { nil }
   let(:assessed_by_other) { "test" }
-  let(:investigation_products) { [build(:investigation_product)] }
+  let(:investigation) { create(:allegation, :with_products) }
   let(:metadata) { described_class.build_metadata(risk_assessment) }
 
   describe "#metadata" do
     it "returns the metadata" do
       expect(activity.metadata).to eq(activity.read_attribute(:metadata))
+    end
+
+    # TODO: remove once migrated
+    context "when metadata contains Product references" do
+      let(:metadata) do
+        data = described_class.build_metadata(risk_assessment)
+        data["risk_assessment"]["product_ids"] = investigation.product_ids
+        data["risk_assessment"].delete("investigation_product_ids")
+        data
+      end
+
+      it "translates the Product IDs to InvestigationProduct IDs" do
+        expect(activity.metadata["risk_assessment"]["product_ids"]).to be_nil
+        expect(activity.metadata["risk_assessment"]["investigation_product_ids"]).to eq(investigation.investigation_product_ids)
+      end
     end
   end
 
@@ -47,21 +62,18 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
 
   describe "#products_assessed" do
     context "with one product on the risk assessment" do
-      let(:investigation_product) { create(:investigation_product) }
-      let(:investigation_products) { [investigation_product] }
-
       it "returns the product" do
-        expect(activity.products_assessed).to eq([investigation_product.product])
+        expect(activity.products_assessed).to eq([investigation.products.first])
       end
     end
 
     context "with multiple products on the risk assessment" do
-      let(:investigation_product1) { create(:investigation_product) }
-      let(:investigation_product2) { create(:investigation_product) }
-      let(:investigation_products) { [investigation_product1, investigation_product2] }
+      let(:investigation) { create(:allegation, products: [product_1, product_2]) }
+      let(:product_1) { create(:product) }
+      let(:product_2) { create(:product) }
 
       it "returns an Array of products" do
-        expect(activity.products_assessed).to eq([investigation_product1.product, investigation_product2.product])
+        expect(activity.products_assessed).to eq([product_1, product_2])
       end
     end
   end

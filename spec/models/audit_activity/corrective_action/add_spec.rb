@@ -22,7 +22,9 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_opensearch, :
       action: action_key,
       other_action:,
       geographic_scope:,
-      geographic_scopes:
+      geographic_scopes:,
+      investigation:,
+      investigation_product:
     )
   end
   let(:legacy_title) { Faker::Hipster.sentence }
@@ -42,7 +44,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_opensearch, :
     end
   end
 
-  describe ".migrate_legacy_audit_activity" do
+  describe ".metadata_from_legacy_audit_activity" do
     let(:metadata) { nil }
     let(:details_string) do
       "balbabl alf ba;erl qmer
@@ -214,6 +216,23 @@ ergq perog n
 
       it "shows the action and product name" do
         expect(audit_activity.title).to eq(other_action)
+      end
+    end
+  end
+
+  describe "#metadata" do
+    # TODO: remove once migrated
+    context "when metadata contains a Product reference" do
+      let(:metadata) do
+        data = described_class.build_metadata(corrective_action).stringify_keys
+        data["corrective_action"]["product_id"] = investigation.product_ids.first
+        data["corrective_action"].delete("investigation_product_id")
+        data
+      end
+
+      it "translates the Product ID to InvestigationProduct ID" do
+        expect(audit_activity.metadata["corrective_action"]["product_id"]).to be_nil
+        expect(audit_activity.metadata["corrective_action"]["investigation_product_id"]).to eq(investigation.investigation_product_ids.first)
       end
     end
   end

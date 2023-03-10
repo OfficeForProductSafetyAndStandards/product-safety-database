@@ -36,7 +36,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
     end
   end
 
-  # rubocop:disable RSpec/MultipleExpectations
   context "when using representations proxy controller" do
     # /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)      active_storage/representations/proxy#show
     let(:asset_url) { rails_storage_proxy_path(document) }
@@ -425,5 +424,4 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
     end
   end
   # rubocop:enable RSpec/NestedGroups
-  # rubocop:enable RSpec/MultipleExpectations
 end
