@@ -146,4 +146,34 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     expect(page).to have_content("Assessed by: RiskAssessmentsRUs")
     expect(page).to have_content("Product assessed: Doll")
   end
+
+  scenario "Editing a risk assessments associated products (without any other changes)" do
+    sign_in(user)
+    visit "/cases/#{investigation.pretty_id}"
+
+    click_link "Supporting information (1)"
+    click_link "Serious risk: Teddy Bear"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
+
+    click_link "Edit risk assessment"
+
+    expect_to_be_on_edit_risk_assessement_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
+
+    within_fieldset("Which products were assessed?") do
+      uncheck "Teddy Bear"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      check "Doll"
+    end
+
+    click_button "Update risk assessment"
+
+    click_link "Serious risk: Doll"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
+
+    expect(page).to have_summary_item(key: "Product assessed",    value: "Doll (#{doll.psd_ref})")
+  end
 end
