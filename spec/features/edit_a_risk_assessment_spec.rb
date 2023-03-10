@@ -174,6 +174,6 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
 
-    expect(page).to have_summary_item(key: "Product assessed",    value: "Doll (#{doll.psd_ref})")
+    expect(page).to have_summary_item(key: "Product assessed", value: "Doll (#{doll.psd_ref})")
   end
 end
