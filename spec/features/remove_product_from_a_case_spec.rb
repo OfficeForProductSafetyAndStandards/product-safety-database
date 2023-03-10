@@ -84,7 +84,6 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
   context "when product has linked supporting information" do
     let!(:accident) { create :accident, investigation_product:, investigation: }
     let!(:risk_assessment) { create :risk_assessment, investigation_products: [investigation_product], investigation: }
-    let!(:corrective_action) { create :corrective_action, investigation_product: }
 
     it "does not allow user to remove product from investigation" do
       sign_in user
@@ -173,5 +172,4 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
     product.update!(description: "wowthisisnew!")
     ChangeCaseStatus.call!(investigation:, new_status: "open", user:)
   end
-
 end
