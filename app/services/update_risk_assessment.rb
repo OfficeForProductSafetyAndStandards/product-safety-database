@@ -43,10 +43,10 @@ class UpdateRiskAssessment
 private
 
   def no_changes?
-    !risk_assessment.changed? && !risk_assessment_file && attached_investigation_products_unchanged?
+    !risk_assessment.changed? && !risk_assessment_file && investigation_products_unchanged?
   end
 
-  def attached_investigation_products_unchanged?
+  def investigation_products_unchanged?
     @previous_investigation_product_ids.sort == investigation_product_ids.sort
   end
 
