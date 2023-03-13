@@ -8,6 +8,11 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
     }
   end
 
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def title(_)
     "Test result"
   end
@@ -72,5 +77,17 @@ private
 
   def updates
     metadata["updates"]
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_id = metadata.dig("updates", "product_id")
+    return metadata if product_id.blank?
+
+    metadata["updates"]["investigation_product_id"] = product_id.map { |id| investigation.investigation_products.where(product_id: id).pick("investigation_products.id") }
+    metadata["updates"].delete("product_id")
+    metadata
   end
 end

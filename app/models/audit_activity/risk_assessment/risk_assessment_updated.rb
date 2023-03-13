@@ -25,6 +25,11 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
     }
   end
 
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def risk_level_changed?
     new_risk_level || new_custom_risk_level
   end
@@ -118,5 +123,17 @@ private
 
   def updates
     metadata["updates"]
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_ids = metadata["previous_product_ids"]
+    return metadata if product_ids.blank?
+
+    metadata["previous_investigation_product_ids"] = investigation.investigation_products.where(product_id: product_ids).pluck("investigation_products.id")
+    metadata.delete("previous_product_ids")
+    metadata
   end
 end

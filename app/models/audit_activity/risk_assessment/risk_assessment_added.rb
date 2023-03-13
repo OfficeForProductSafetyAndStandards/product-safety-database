@@ -8,6 +8,11 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
     }
   end
 
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def subtitle_slug
     "Added"
   end
@@ -47,5 +52,19 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
 
   def assessed_by_business
     Business.find_by(id: metadata["risk_assessment"]["assessed_by_business_id"])
+  end
+
+private
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_ids = metadata.dig("risk_assessment", "product_ids")
+    return metadata if product_ids.blank?
+
+    metadata["risk_assessment"]["investigation_product_ids"] = investigation.investigation_products.where(product_id: product_ids).pluck("investigation_products.id")
+    metadata["risk_assessment"].delete("product_ids")
+    metadata
   end
 end
