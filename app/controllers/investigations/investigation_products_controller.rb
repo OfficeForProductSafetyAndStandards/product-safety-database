@@ -12,7 +12,7 @@ module Investigations
     def remove
       authorize @investigation_product, :remove?
 
-      @supporting_information = @product.supporting_information.select { |si| si.investigation == @investigation }
+      @supporting_information = @investigation_product.supporting_information
       render "supporting_information_warning" and return if @supporting_information.any?
 
       @remove_product_form = RemoveProductForm.new
@@ -43,7 +43,7 @@ module Investigations
     end
 
     def set_investigation_product
-      @investigation_product = InvestigationProduct.find(params[:id])
+      @investigation_product = @investigation.investigation_products.find(params[:id])
     end
 
     def set_product

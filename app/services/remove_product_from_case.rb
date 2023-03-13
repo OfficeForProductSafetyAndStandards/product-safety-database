@@ -12,7 +12,7 @@ class RemoveProductFromCase
 
     InvestigationProduct.transaction do
       product.reload
-      investigation.products.delete product
+      investigation.investigation_products.delete investigation_product
       change_product_ownership
     end
 

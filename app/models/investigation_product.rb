@@ -31,6 +31,10 @@ class InvestigationProduct < ApplicationRecord
     investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) || super : super
   end
 
+  def supporting_information
+    tests + corrective_actions + unexpected_events + risk_assessments
+  end
+
   def psd_ref
     product.psd_ref timestamp: investigation_closed_at&.to_i, investigation_was_closed: investigation_closed_at.present?
   end
