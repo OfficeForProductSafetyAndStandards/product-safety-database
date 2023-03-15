@@ -59,6 +59,11 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # For temportary acceptance testing with prod data, disable email delivery
+  # The :test delivery method accumulates sent emails in the
+  # ActionMailer::Base.deliveries array.
+  config.action_mailer.delivery_method = :test
+
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter = :sidekiq
   # config.active_job.queue_name_prefix = "product_safety_database_production"
