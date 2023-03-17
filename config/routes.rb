@@ -252,7 +252,7 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
   authenticated :user, ->(user) { user.is_opss? } do
-    root to: redirect("/cases/your-cases"), as: "authenticated_opss_root"
+    root to: "homepage#opss", as: "authenticated_opss_root"
   end
 
   authenticated :user, ->(user) { !user.is_opss? } do

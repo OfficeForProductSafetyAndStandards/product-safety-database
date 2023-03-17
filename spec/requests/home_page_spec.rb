@@ -9,13 +9,24 @@ RSpec.describe "Home page", :with_stubbed_opensearch, type: :request do
   end
 
   context "when signed in" do
-    let(:user) { create(:user, :opss_user, :activated) }
-
     before { sign_in(user) }
 
-    it "signed in visits / gets redirected to /cases/your-cases" do
-      get "/"
-      expect(response).to redirect_to("/cases/your-cases")
+    context "with a non-opss user" do
+      let(:user) { create(:user, :team_admin, :activated) }
+
+      it "signed in visits / gets the non-opss homepage" do
+        get "/"
+        expect(response).to render_template("homepage/non_opss")
+      end
+    end
+
+    context "with an opss user" do
+      let(:user) { create(:user, :opss_user, :activated) }
+
+      it "signed in visits / gets the opss homepage" do
+        get "/"
+        expect(response).to render_template("homepage/opss")
+      end
     end
   end
 end

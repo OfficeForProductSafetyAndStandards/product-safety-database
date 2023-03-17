@@ -1,0 +1,194 @@
+$stroke-width: 2px;
+$stroke-width-large: 3px;
+$number-circle-size: 26px;
+$number-circle-size-large: 35px;
+$top-border: solid 2px $govuk-border-colour;
+
+@mixin step-nav-font($size, $tablet-size: $size, $weight: normal, $line-height: 1.3, $tablet-line-height: $line-height) {
+  font-family: $std-font-family;
+  font-size: $size + px;
+  font-weight: $weight;
+  line-height: $line-height;
+
+  @include govuk-media-query($from: tablet) {
+    font-size: $tablet-size + px;
+    line-height: $tablet-line-height;
+  }
+}
+
+@mixin step-nav-vertical-line($line-style: solid) {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 0;
+  height: 100%;
+  border-left: $line-style $stroke-width $govuk-border-colour;
+  background: govuk-colour("white");
+}
+
+@mixin step-nav-line-position {
+  left: 0;
+  margin-left: ($number-circle-size / 2) - ($stroke-width / 2);
+}
+
+@mixin step-nav-line-position-large {
+  left: 0;
+  margin-left: ($number-circle-size-large / 2) - ($stroke-width-large / 2);
+  border-width: $stroke-width-large;
+}
+
+.opss-step-nav {
+  margin-bottom: govuk-spacing(6);
+}
+
+.opss-step-nav__steps {
+  padding: 0;
+  margin: 0;
+}
+
+.opss-step-nav__step {
+  position: relative;
+  padding-left: govuk-spacing(6) + govuk-spacing(3);
+  list-style: none;
+
+  // line down the side of a step
+  &:after {
+    @include step-nav-vertical-line;
+    @include step-nav-line-position;
+    top: govuk-spacing(3);
+  }
+
+  .opss-step-nav--large & {
+    @include govuk-media-query($from: tablet) {
+      padding-left: govuk-spacing(9);
+
+      &:after {
+        @include step-nav-line-position-large;
+        top: govuk-spacing(6);
+      }
+    }
+  }
+}
+
+.opss-step-nav__header {
+  padding: govuk-spacing(3) 0;
+  border-top: $top-border;
+
+  .opss-step-nav__step:first-child & {
+    border-top: none;
+  }
+}
+
+.opss-step-nav__title {
+  @include govuk-text-colour;
+  @include step-nav-font(19, $weight: bold, $line-height: 1.4);
+  margin: 0;
+
+  .opss-step-nav--large & {
+    @include step-nav-font(19, $tablet-size: 24, $weight: bold, $line-height: 1.4);
+  }
+}
+
+.opss-step-nav__step--active {
+
+  &:last-child:before,
+  .opss-step-nav__circle--number,
+  &:after {
+    border-color: $govuk-text-colour;
+  }
+}
+
+.opss-step-nav__circle {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 5;
+  top: govuk-spacing(3);
+  left: 0;
+  width: $number-circle-size;
+  height: $number-circle-size;
+  color: $govuk-text-colour;
+  background: govuk-colour("white");
+  border-radius: 100px;
+  text-align: center;
+
+  .opss-step-nav--large & {
+    @include govuk-media-query($from: tablet) {
+      top: govuk-spacing(3);
+      width: $number-circle-size-large;
+      height: $number-circle-size-large;
+    }
+  }
+}
+
+.opss-step-nav__circle--number {
+  @include step-nav-font(16, $weight: bold, $line-height: 23px);
+  border: solid $stroke-width $govuk-border-colour;
+
+  .opss-step-nav--large & {
+    @include step-nav-font(16, $tablet-size: 19, $weight: bold, $line-height: 23px, $tablet-line-height: 30px);
+
+    @include govuk-media-query($from: tablet) {
+      border-width: $stroke-width-large;
+    }
+  }
+}
+
+.opss-step-nav__circle--logic {
+  @include step-nav-font(16, $weight: bold, $line-height: 28px);
+
+  .opss-step-nav--large & {
+    @include step-nav-font(16, $tablet-size: 19, $weight: bold, $line-height: 28px, $tablet-line-height: 34px);
+  }
+}
+
+// makes sure logic text expands to the left if text size is zoomed, preventing overlap
+.opss-step-nav__circle-inner {
+  float: right;
+  min-width: 100%;
+}
+
+.opss-step-nav__circle-background {
+  $shadow-offset: .1em;
+  $shadow-colour: govuk-colour("white");
+
+  // to make numbers readable for users zooming text only in browsers such as Firefox
+  text-shadow: 0 -#{$shadow-offset} 0 $shadow-colour,
+  $shadow-offset 0 0 $shadow-colour,
+  0 $shadow-offset 0 $shadow-colour,
+  -#{$shadow-offset} 0 0 $shadow-colour;
+}
+
+.opss-step-nav__step:last-child {
+
+  // little dash at the bottom of the line
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 6;
+    bottom: 0;
+    left: 0;
+    margin-left: $number-circle-size / 4;
+    width: $number-circle-size / 2;
+    height: 0;
+    border-bottom: solid $stroke-width $govuk-border-colour;
+  }
+
+  &:after {
+    height: -webkit-calc(100% - #{govuk-spacing(3)}); // fallback for iphone 4
+    height: calc(100% - #{govuk-spacing(3)});
+  }
+
+  .opss-step-nav--large & {
+    @include govuk-media-query($from: tablet) {
+      &:before {
+        margin-left: $number-circle-size-large / 4;
+        width: $number-circle-size-large / 2;
+        border-width: $stroke-width-large;
+      }
+
+      &:after {
+        height: calc(100% - #{govuk-spacing(6)});
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@
 @import "./opss-shared";
 @import "./opss-search";
 @import "./opss-pagination";
+@import "./opss-step-by-step-nav";
 
 .opss-radios__divider--title .govuk-radios__divider {
   width: 100%;
@@ -19,7 +20,7 @@
 }
 
 .opss-radios__divider--title {
-  & > .govuk-radios__divider:first-child {
+  &>.govuk-radios__divider:first-child {
     margin-top: govuk-spacing(0);
   }
 }
@@ -82,7 +83,7 @@
     margin-right: govuk-spacing(0);
     margin-bottom: govuk-spacing(6);
 
-    & > span {
+    &>span {
       text-align: center;
       width: 100%;
       margin-bottom: govuk-spacing(4);
@@ -109,6 +110,7 @@
     }
   }
 }
+
 @include govuk-media-query($from: desktop) {
   .opss-panels {
     display: -webkit-flex; // Safari
@@ -189,6 +191,7 @@ ul.opss-radio-list {
   border-style: solid;
   padding: 2px 5px;
   margin-bottom: govuk-spacing(1);
+
   @include govuk-media-query($from: tablet) {
     margin-bottom: 0;
   }
@@ -199,6 +202,7 @@ ul.opss-radio-list {
     &:last-child {
       margin-bottom: 0;
     }
+
     @include govuk-media-query($from: desktop) {
       &:nth-of-type(n+11) {
         margin-top: govuk-spacing(1);
@@ -264,7 +268,9 @@ ul.opss-radio-list {
     linear-gradient(to top left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) calc(50% - 1px), $govuk-border-colour 50%, rgba(0, 0, 0, 0) calc(50% + 1px), rgba(0, 0, 0, 0) 100%),
     linear-gradient(to top right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) calc(50% - 1px), $govuk-border-colour 50%, rgba(0, 0, 0, 0) calc(50% + 1px), rgba(0, 0, 0, 0) 100%);
 }
+
 @media screen and (min-width: 0\0) and (min-resolution: +72dpi) {
+
   // ie9+ only
   .opss-cross-through {
     background: none !important;
@@ -274,6 +280,7 @@ ul.opss-radio-list {
 .opss-form-group {
   @include govuk-media-query($from: desktop) {
     &.opss-form-group--sm-labels {
+
       .govuk-radios--small,
       .govuk-checkboxes--small {
         label {
@@ -299,6 +306,7 @@ ul.opss-radio-list {
 }
 
 .opss-dl-select {
+
   // non-js select
   & dt,
   & dd {
@@ -359,18 +367,18 @@ ul.opss-radio-list {
 @include govuk-media-query($from: desktop) {
   .opss-tabs {
     &.opss-tabs--min-height-s {
-      & > div {
+      &>div {
         min-height: 254px;
       }
     }
 
     &.opss-tabs--min-height-m {
-      & > div {
+      &>div {
         min-height: 730px;
       }
     }
 
-    dl > div:last-child {
+    dl>div:last-child {
       border-bottom: none 0;
     }
   }
@@ -379,6 +387,7 @@ ul.opss-radio-list {
 .opss-timeline img {
   max-width: 100%;
 }
+
 @include govuk-media-query($from: desktop) {
   .opss-blank-img {
     width: 50%;
@@ -393,7 +402,7 @@ section[data-info-number] {
 section.opss-border-all[data-info-number] {
   margin-bottom: govuk-spacing(8) !important;
 
-  & > ul li:last-child dl {
+  &>ul li:last-child dl {
     // remove border bottom and margin from last row when inside a border box
     margin-bottom: - govuk-spacing(2);
 
@@ -417,7 +426,8 @@ select:disabled {
   cursor: default;
 }
 
-.opss-accordion--sm-all > div:first-child button {// 'Show all sections': right + sm font
+.opss-accordion--sm-all>div:first-child button {
+  // 'Show all sections': right + sm font
   float: right;
   @include opss-font-size($s: 14px, $l: 1.3);
 }

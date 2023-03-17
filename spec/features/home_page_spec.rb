@@ -55,21 +55,21 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           check "I agree"
           click_button "Continue"
 
-          expect(page).to have_current_path(your_cases_investigations_path)
+          expect(page).to have_current_path(authenticated_opss_root_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_text("Cases")
-          expect(page).to have_link("Create a case")
+          expect(page).to have_text("Home – The Product Safety Database (PSD)")
+          expect(page).to have_link("Your cases")
         end
       end
 
       context "when the user has previously accepted the declaration" do
-        scenario "shows the case list" do
-          expect(page).to have_current_path(your_cases_investigations_path)
+        scenario "shows the inner home page" do
+          expect(page).to have_current_path(authenticated_opss_root_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_text("Cases")
-          expect(page).to have_link("Create a case")
+          expect(page).to have_text("Home – The Product Safety Database (PSD)")
+          expect(page).to have_link("Your cases")
         end
       end
     end
