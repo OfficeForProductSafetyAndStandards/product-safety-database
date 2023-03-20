@@ -1,18 +1,21 @@
-@mixin down-load-link($color,$size) {
+@mixin down-load-link($color, $size) {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="' + $size + 'px" viewBox="0 0 24 24" width="' + $size + 'px" fill="' + $color + '"><g><rect fill="none" height="' + $size + '" width="' + $size + '"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
   background-position: center;
   background-repeat: no-repeat;
   display: inline-block;
 }
+
 @function calculaterem($s) {
   $remsize: calc($s / 16px);
   @return #{$remsize}rem;
 }
+
 @mixin opss-font-size($s, $l) {
   font-size: $s !important;
   font-size: calculaterem($s) !important;
   line-height: $l !important;
 }
+
 @mixin word-wrap() {
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -39,15 +42,16 @@ figcaption {
   padding: 0;
   display: block;
 }
+
 // not normalised by gds library - ends
 
 @include govuk-media-query($from: desktop) {
-  .govuk-width-container > main.govuk-main-wrapper {
+  .govuk-width-container>main.govuk-main-wrapper {
     padding-top: govuk-spacing(8);
   }
 
-  .govuk-width-container > .govuk-breadcrumbs + main.govuk-main-wrapper,
-  .govuk-width-container > .govuk-back-link + main.govuk-main-wrapper {
+  .govuk-width-container>.govuk-breadcrumbs+main.govuk-main-wrapper,
+  .govuk-width-container>.govuk-back-link+main.govuk-main-wrapper {
     padding-top: govuk-spacing(2);
   }
 }
@@ -56,10 +60,12 @@ main.govuk-main-wrapper {
   @include govuk-media-query($from: desktop) {
     min-height: 500px;
   }
+
   @include govuk-clearfix;
 }
 
-#main-content > div > div div {
+#main-content>div>div div {
+
   .govuk-heading-xl,
   .govuk-heading-l {
     @include word-wrap;
@@ -97,6 +103,7 @@ h1.govuk-label-wrapper label.govuk-label--l {
 .opss-no-wrap {
   white-space: nowrap;
 }
+
 @include govuk-media-query($from: desktop) {
   .opss-no-wrap-desktop {
     white-space: nowrap;
@@ -140,7 +147,7 @@ body.js-enabled .opss-nojs-hide {
 .opss-float-right {
   float: right;
 
-  & + .opss-float-right {
+  &+.opss-float-right {
     clear: right;
   }
 }
@@ -153,7 +160,7 @@ body.js-enabled .opss-nojs-hide {
   .opss-float-right-desktop {
     float: right;
 
-    & + .opss-float-right-desktop {
+    &+.opss-float-right-desktop {
       clear: right;
     }
   }
@@ -268,7 +275,7 @@ body.js-enabled .opss-nojs-hide {
     border-radius: 5px;
     padding-left: govuk-spacing(3);
 
-    .govuk-grid-column-one-quarter > & {
+    .govuk-grid-column-one-quarter>& {
       margin-right: govuk-spacing(7) + govuk-spacing(1) !important;
     }
   }
@@ -289,12 +296,13 @@ body.js-enabled .opss-nojs-hide {
 }
 
 .opss-warning-text--s {
+
   // make warning text smaller and allow several in succession
   strong {
     @include opss-font-size($s: 16px, $l: 1.3);
   }
 
-  & + .opss-warning-text--s > span {
+  &+.opss-warning-text--s>span {
     display: none;
   }
 }
@@ -303,6 +311,7 @@ abbr[title] {
   text-decoration: none;
 
   @include govuk-media-query($from: desktop) {
+
     .opss-switch-cols &,
     .govuk-summary-list__row & {
       border-bottom: 1px dotted $govuk-secondary-text-colour;
@@ -401,7 +410,7 @@ samp {
     column-count: 2;
     column-gap: 80px;
 
-    .opss-summary-list-mixed > div {
+    .opss-summary-list-mixed>div {
       break-inside: avoid-column;
     }
 
@@ -421,7 +430,7 @@ samp {
     column-count: 3;
     column-gap: govuk-spacing(3);
 
-    .opss-summary-list-mixed > div {
+    .opss-summary-list-mixed>div {
       break-inside: avoid-column;
     }
 
@@ -441,6 +450,7 @@ samp {
 
   // stylelint-disable function-url-quotes
   @-moz-document url-prefix() {
+
     // firefox only: col flow bug
     .opss-2-col-flow,
     .opss-3-col-flow {
@@ -454,6 +464,7 @@ samp {
       }
     }
   }
+
   // stylelint-enable function-url-quotes
 }
 
@@ -492,7 +503,7 @@ ul.opss-left-nav {
     margin-top: 0;
   }
 
-  & > li.opss-left-nav__active {
+  &>li.opss-left-nav__active {
     @include menu-inset-anchors;
   }
 
@@ -531,7 +542,7 @@ ul.opss-left-nav {
     }
   }
 
-  & > li:first-child {
+  &>li:first-child {
     padding-top: 5px;
   }
 
@@ -540,7 +551,7 @@ ul.opss-left-nav {
       padding-left: govuk-spacing(6);
     }
 
-    & > a {
+    &>a {
       font-weight: bold;
       margin-left: govuk-spacing(2);
     }
@@ -584,6 +595,7 @@ ul.opss-left-nav {
 .opss-border-none {
   border-width: 0;
 }
+
 @include govuk-media-query($from: tablet) {
   .opss-rounded-corners {
     border-radius: 5px;
@@ -609,7 +621,7 @@ ul.opss-left-nav {
       }
     }
 
-    &[open] > summary:before {
+    &[open]>summary:before {
       border-width: 10px 6px 0 !important;
     }
 
@@ -618,7 +630,7 @@ ul.opss-left-nav {
 }
 
 .opss-details--plain {
-  & > div {
+  &>div {
     padding: govuk-spacing(3) 0;
     border-left: none;
   }
@@ -669,7 +681,7 @@ ul.opss-left-nav {
     max-height: 110px;
   }
 
-  &.opss-details-img--thumbnail + .opss-img-caption {
+  &.opss-details-img--thumbnail+.opss-img-caption {
     max-width: 174px;
     white-space: nowrap;
     overflow: hidden;
@@ -719,7 +731,7 @@ dl.opss-summary-list-aside {
     }
   }
 
-  dt + dd + dd + dd {
+  dt+dd+dd+dd {
     // image
     display: flex;
     flex-direction: column;
@@ -727,6 +739,7 @@ dl.opss-summary-list-aside {
   }
 
   @media only screen and (max-width: 600px) {
+
     dt,
     dd {
       @include govuk-font($size: 16);
@@ -760,8 +773,9 @@ dl.opss-summary-list-aside {
 }
 
 .opss-summary-list-mixed {
+
   // this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed
-  & > div {
+  &>div {
     // std summary list but allows for a mixture of 2 & 3 cols in 1 list
     display: table;
     width: 100%;
@@ -771,7 +785,7 @@ dl.opss-summary-list-aside {
         width: 39%;
       }
 
-      dt + dd {
+      dt+dd {
         min-width: 40%;
         width: auto; // 1. protects against rogue legacy psd invalid html
       }
@@ -785,34 +799,37 @@ dl.opss-summary-list-aside {
       word-break: break-word; // no adding hypens
     }
 
-    & > span.govuk-summary-list__actions {
+    &>span.govuk-summary-list__actions {
       display: none !important;
-    } // 2. protects against rogue legacy psd invalid html
+    }
+
+    // 2. protects against rogue legacy psd invalid html
   }
 
   @include govuk-media-query($from: desktop) {
-    &.opss-summary-list-mixed--narrow-dt + .opss-text-align-right {
+    &.opss-summary-list-mixed--narrow-dt+.opss-text-align-right {
       position: relative;
       top: - govuk-spacing(4);
     }
 
-    &.opss-summary-list-mixed--narrow-dt > div {
+    &.opss-summary-list-mixed--narrow-dt>div {
       dt {
         width: 25%;
       }
 
-      dt + dd {
+      dt+dd {
         min-width: 50%;
       }
     }
 
-    &.opss-summary-list-mixed--narrow-actions > div {
+    &.opss-summary-list-mixed--narrow-actions>div {
       dd[class$="__actions"] {
         width: 10%;
       }
     }
 
-    &.opss-summary-list-mixed--compact > div {
+    &.opss-summary-list-mixed--compact>div {
+
       dt,
       dd {
         margin-top: 0;
@@ -825,10 +842,10 @@ dl.opss-summary-list-aside {
     }
   }
 
-  &.opss-summary-list-mixed--image > div:first-child dt {
+  &.opss-summary-list-mixed--image>div:first-child dt {
     vertical-align: bottom;
 
-    & + dd {
+    &+dd {
       padding-right: govuk-spacing(0);
 
       figure {
@@ -861,23 +878,27 @@ dl.opss-summary-list-aside {
 
   // stylelint-disable function-url-quotes
   @-moz-document url-prefix() {
+
     // firefox only: align 1st dd (without a 2nd) correctly
     .govuk-summary-list__row dd:last-child {
       width: inherit;
     }
 
-    &.opss-summary-list-mixed--narrow-actions > div {
+    &.opss-summary-list-mixed--narrow-actions>div {
+
       // firefox only: col flow bug
       dd[class$="__actions"] {
         width: auto;
       }
     }
   }
+
   // stylelint-enable function-url-quotes
 }
 
 @include govuk-media-query($from: desktop) {
   .opss-summary-list-mixed.opss-summary-list-mixed--sm {
+
     // a narrow and small font version
     dt {
       width: 25% !important;
@@ -905,6 +926,7 @@ dl.opss-summary-list-aside {
       margin-bottom: govuk-spacing(7);
 
       div:last-child {
+
         dt,
         dd {
           border-bottom: none;
@@ -915,6 +937,7 @@ dl.opss-summary-list-aside {
 
   .opss-summary-list-mixed.opss-summary-list--equal-widths {
     div {
+
       dt,
       dd {
         width: 33%;
@@ -941,7 +964,7 @@ dl.opss-summary-list-aside {
 }
 
 .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd,
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd + dd {
+.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd+dd {
   width: 25%;
 }
 
@@ -955,7 +978,7 @@ dd dl.opss-nested-definition-list {
   margin: 0;
   @include opss-font-size($s: 16px, $l: 1.6);
 
-  & > div {
+  &>div {
     width: 100%;
   }
 
@@ -987,7 +1010,7 @@ dd dl.opss-nested-definition-list {
   }
 
   @include govuk-media-query($from: desktop) {
-    & > div {
+    &>div {
       display: inline-block;
       width: 100%;
     }
@@ -1035,7 +1058,7 @@ dd dl.opss-nested-definition-list {
       font-weight: normal;
     }
 
-    & > dl {
+    &>dl {
       margin-bottom: 0;
 
       dt {
@@ -1044,7 +1067,8 @@ dd dl.opss-nested-definition-list {
       }
     }
 
-    & > dl > div:last-child {
+    &>dl>div:last-child {
+
       dt,
       dd {
         border-bottom: none;
@@ -1086,7 +1110,7 @@ dd dl.opss-nested-definition-list {
       display: flex;
       flex-direction: column;
 
-      & > .opss-full-height__col--bottom {
+      &>.opss-full-height__col--bottom {
         margin-top: auto;
       }
     }
@@ -1115,7 +1139,9 @@ dd dl.opss-nested-definition-list {
   tbody tr th:first-child {
     width: 33%;
   }
+
   @include govuk-media-query($from: tablet) {
+
     thead tr th:first-child,
     tbody tr th:first-child {
       width: auto;
@@ -1125,6 +1151,7 @@ dd dl.opss-nested-definition-list {
 }
 
 .opss-table--last-col-right {
+
   thead tr .govuk-table__header:last-child,
   tbody tr .govuk-table__cell:last-child,
   tfoot tr .govuk-table__header:last-child {
@@ -1140,17 +1167,17 @@ dd dl.opss-nested-definition-list {
 
 .opss-table--2-row-groups {
   tbody tr:first-child {
-    & > * {
+    &>* {
       border-bottom: none 0;
     }
 
-    & + tr > * {
+    &+tr>* {
       border-bottom: 1px solid $govuk-border-colour;
     }
   }
 
-  tbody:last-of-type tr > th,
-  tbody:last-of-type tr > td {
+  tbody:last-of-type tr>th,
+  tbody:last-of-type tr>td {
     border-bottom: none 0;
   }
 }
@@ -1226,7 +1253,7 @@ dd dl.opss-nested-definition-list {
   }
 
   tbody tr:first-child th,
-  tbody tr:not(:last-child) > *,
+  tbody tr:not(:last-child)>*,
   tfoot tr th {
     border-bottom: 0 none;
   }
@@ -1237,6 +1264,7 @@ dd dl.opss-nested-definition-list {
     transition: all .5s ease;
     background-color: transparent;
   }
+
   // stylelint-enable declaration-property-value-disallowed-list
 
   tbody.opss-bg th,
@@ -1245,8 +1273,10 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table--borders {
+
     // add horizontal lines to simple single rows table in one parent tbody
     tbody tr {
+
       th,
       td {
         border-bottom: 1px solid $govuk-border-colour;
@@ -1258,6 +1288,7 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table-items--sm {
+
     thead th,
     tfoot th {
       @include govuk-font($size: 16);
@@ -1288,6 +1319,7 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table-items--first-col-50 {
+
     // no hidden 1st col
     @include govuk-media-query($from: tablet) {
       thead th:nth-child(1) {
@@ -1300,7 +1332,8 @@ dd dl.opss-nested-definition-list {
 .opss-table,
 .opss-table-items {
   tbody td {
-    span > em,
+
+    span>em,
     mark {
       font-style: normal;
       font-weight: bold;
@@ -1312,6 +1345,7 @@ dd dl.opss-nested-definition-list {
 
 .opss-table-stripes {
   tbody tr {
+
     th,
     td {
       border-top: 1px solid govuk-colour("light-grey");
@@ -1320,6 +1354,7 @@ dd dl.opss-nested-definition-list {
 
   tbody tr:first-child,
   tbody tr:last-child {
+
     th,
     td {
       border-bottom: none;
@@ -1328,6 +1363,7 @@ dd dl.opss-nested-definition-list {
 
   &.opss-table-items--sm {
     tbody tr {
+
       th,
       td {
         padding-top: govuk-spacing(2);
@@ -1361,7 +1397,9 @@ dd dl.opss-nested-definition-list {
   }
 }
 
-@media only screen and (min-width: 641px) and (max-width: 961px) {/* jump to mobile sizing at tablet size for tight cols */
+@media only screen and (min-width: 641px) and (max-width: 961px) {
+
+  /* jump to mobile sizing at tablet size for tight cols */
   .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
     @include govuk-font($size: 16);
   }
@@ -1389,4 +1427,25 @@ dd dl.opss-nested-definition-list {
     margin-bottom: -2px;
     margin-right: govuk-spacing(1) - 2;
   }
+}
+
+.opss-colour-block-title {
+  background-color: #0b0c0c;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+}
+
+.opss-colour-block-title.opss-colour-block-title--blue {
+  background-color: #1d70b8;
+}
+
+.opss-colour-block-title h2,
+.opss-colour-block-title h3 {
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+}
+
+.opss-brand-text {
+  color: #1d70b8;
 }

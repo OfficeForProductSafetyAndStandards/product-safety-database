@@ -192,3 +192,24 @@ $top-border: solid 2px $govuk-border-colour;
     }
   }
 }
+
+.opss-colour-block-title {
+  background-color: #0b0c0c;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+}
+
+.opss-colour-block-title.opss-colour-block-title--blue {
+  background-color: #1d70b8;
+}
+
+.opss-colour-block-title h2,
+.opss-colour-block-title h3 {
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+}
+
+.opss-brand-text {
+  color: #1d70b8;
+}
