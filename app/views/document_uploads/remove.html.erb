@@ -1,0 +1,49 @@
+<%= page_title "Remove attachment" %>
+<% content_for :after_header do %>
+  <%= link_to "Back", attachments_tab_path(@parent, @document_upload), class: "govuk-back-link" %>
+<% end %>
+
+<%= render "page_heading", title: "Remove attachment" %>
+
+<%= render "document_uploads/document_preview", document: @document_upload, dimensions: [480, 320] %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Title</th>
+          <td class="govuk-table__cell">
+            <%= @document_upload.title %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Type</th>
+          <td class="govuk-table__cell">
+            <%= document_upload_pretty_type_description(@document_upload) %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">
+            Description
+          </th>
+          <td class="govuk-table__cell">
+            <%= @document_upload.description %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">
+            URL
+          </th>
+          <td class="govuk-table__cell">
+            <%= @document_upload.file_upload.filename %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= form_with url: associated_document_upload_path(@parent, @document_upload), method: :delete, local: true do |form| %>
+  <%= form.submit "Delete attachment", class: "govuk-button govuk-button--warning" %>
+<% end %>

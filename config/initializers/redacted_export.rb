@@ -35,11 +35,6 @@ RedactedExport.register_table_attributes(
 )
 
 RedactedExport.register_table_attributes(
-  "investigation_businesses",
-  :business_id, :created_at, :investigation_id, :relationship, :updated_at
-)
-
-RedactedExport.register_table_attributes(
-  "investigation_products",
-  :created_at, :investigation_id, :product_id, :updated_at
+  "versions",
+  :created_at, :event, :item_id, :item_type, :object, :object_changes, :whodunnit
 )

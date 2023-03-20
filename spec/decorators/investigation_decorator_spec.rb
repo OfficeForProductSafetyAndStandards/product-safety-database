@@ -8,7 +8,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
   let(:organisation)  { create :organisation }
   let(:user)          { create(:user, organisation:).decorate }
   let(:team)          { create(:team) }
-  let(:creator)       { create(:user, organisation:, team:) }
+  let(:creator)       { create(:user, :opss_user, organisation:, team:) }
   let(:products)      { [] }
   let(:risk_level)    { :serious }
   let(:coronavirus_related) { false }
@@ -252,6 +252,45 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
       let(:viewing_user) { create(:user) }
 
       it { expect(partial).to eq("documents/restricted_generic_document_card") }
+    end
+  end
+
+  describe "#case_title_key" do
+    let(:case_title_key) { decorated_investigation.case_title_key }
+    let(:user_title)     { "user title" }
+
+    context "with unrestricted case" do
+      let(:investigation) { create(:allegation, user_title:) }
+
+      it { expect(case_title_key).to include(user_title) }
+    end
+
+    context "with restricted case" do
+      let(:investigation) { create(:allegation, user_title:, is_private: true) }
+
+      it { expect(case_title_key).to eq("Allegation restricted") }
+    end
+  end
+
+  describe "#case_summary_values" do
+    let(:case_summary_values) { decorated_investigation.case_summary_values }
+    let(:text_values) { case_summary_values.pluck(:text).compact }
+    let(:html_value) { case_summary_values.pluck(:html).compact.join }
+
+    context "with unrestricted case" do
+      let(:investigation) { create(:allegation, is_closed: true) }
+
+      it { expect(text_values).to include(investigation.pretty_id) }
+      it { expect(text_values).to include(investigation.owner_team.name) }
+      it { expect(html_value).to include("Closed") }
+    end
+
+    context "with restricted case" do
+      let(:investigation) { create(:allegation, is_private: true, is_closed: false) }
+
+      it { expect(text_values).not_to include(investigation.pretty_id) }
+      it { expect(text_values).not_to include(investigation.owner_team.name) }
+      it { expect(html_value).to include("Open") }
     end
   end
 end

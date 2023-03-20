@@ -16,6 +16,11 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
     audit_activity.save!
   end
 
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def title(_user = nil)
     "Corrective action"
   end
@@ -34,5 +39,19 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
 
   def attachment
     @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
+  end
+
+private
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_id = metadata.dig("updates", "product_id")
+    return metadata if product_id.blank?
+
+    metadata["updates"]["investigation_product_id"] = product_id.map { |id| investigation.investigation_products.where(product_id: id).pick("investigation_products.id") }
+    metadata["updates"].delete("product_id")
+    metadata
   end
 end

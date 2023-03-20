@@ -7,7 +7,7 @@ module Investigations
 
       @risk_assessment_form = RiskAssessmentForm.new(current_user:, investigation: @investigation)
 
-      return render "no_products" if @risk_assessment_form.products.empty?
+      return render "no_products" if @risk_assessment_form.investigation_products.empty?
     end
 
     def create
@@ -64,7 +64,7 @@ module Investigations
           current_user:,
           investigation: @investigation,
           assessed_by:,
-          product_ids: @risk_assessment.product_ids,
+          investigation_product_ids: @risk_assessment.investigation_product_ids,
           old_file: @risk_assessment.risk_assessment_file_blob
         )
       )
@@ -123,7 +123,7 @@ module Investigations
         :custom_risk_level,
         :existing_risk_assessment_file_file_id,
         assessed_on: %i[day month year],
-        product_ids: []
+        investigation_product_ids: []
       )
     end
 

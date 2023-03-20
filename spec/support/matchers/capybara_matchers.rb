@@ -36,4 +36,8 @@ module PageMatchers
   def have_h1(text)
     have_selector("h1", text:)
   end
+
+  def have_h2(text)
+    have_selector("h2", text:)
+  end
 end

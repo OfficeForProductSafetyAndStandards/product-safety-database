@@ -1,18 +1,21 @@
-@mixin down-load-link($color,$size) {
+@mixin down-load-link($color, $size) {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="' + $size + 'px" viewBox="0 0 24 24" width="' + $size + 'px" fill="' + $color + '"><g><rect fill="none" height="' + $size + '" width="' + $size + '"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
   background-position: center;
   background-repeat: no-repeat;
   display: inline-block;
 }
+
 @function calculaterem($s) {
-  $remsize: calc($s / 16px);
+  $remsize: $s / 16px;
   @return #{$remsize}rem;
 }
+
 @mixin opss-font-size($s, $l) {
   font-size: $s !important;
   font-size: calculaterem($s) !important;
   line-height: $l !important;
 }
+
 @mixin word-wrap() {
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -56,6 +59,7 @@ main.govuk-main-wrapper {
   @include govuk-media-query($from: desktop) {
     min-height: 500px;
   }
+
   @include govuk-clearfix;
 }
 
@@ -94,12 +98,46 @@ h1.govuk-label-wrapper label.govuk-label--l {
   hyphens: unset;
 }
 
+main {
+  a.govuk-link:hover {
+    text-decoration-skip-ink: none;
+    text-decoration: underline !important;
+    text-decoration-thickness: .1875rem !important;
+    text-decoration-thickness: .15em !important;
+  }
+
+  a.govuk-link:active,
+  a.govuk-link:focus:hover {
+    text-decoration-thickness: 0 !important;
+    text-decoration: none !important;
+  }
+}
+
 .opss-no-wrap {
   white-space: nowrap;
 }
+
 @include govuk-media-query($from: desktop) {
   .opss-no-wrap-desktop {
     white-space: nowrap;
+  }
+}
+
+.opss-font-size-14,
+.govuk-\!-font-size-14 {
+  // future proof the 14px which is required for legacy dashboard designs
+  font-size: 12px !important;
+  font-size: .75rem !important;
+  line-height: 1.25 !important;
+}
+
+@media (min-width: 40.0625em) {
+  // future proof the 14px which is required for legacy dashboard designs
+  .opss-font-size-14,
+  .govuk-\!-font-size-14 {
+    font-size: 14px !important;
+    font-size: .875rem !important;
+    line-height: 1.4286 !important;
   }
 }
 
@@ -119,17 +157,27 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-br-desktop {
   display: none;
-
   @include govuk-media-query($from: desktop) {
     display: block;
+    line-height: 0;
   }
+}
+
+.opss-visibility-hidden {
+  visibility: hidden;
 }
 
 .opss-hidden-desktop {
   visibility: visible;
-
   @include govuk-media-query($from: desktop) {
     visibility: hidden;
+  }
+}
+
+@include govuk-media-query($from: mobile, $until: desktop, $and: false, $media-type: "all") {
+  // for desktop only
+  .opss-keep-for-desktop {
+    display: none;
   }
 }
 
@@ -142,6 +190,20 @@ body.js-enabled .opss-nojs-hide {
 
   & + .opss-float-right {
     clear: right;
+  }
+}
+
+@include govuk-media-query($from: mobile, $until: tablet, $and: false, $media-type: "all") {
+  // for mobile only
+  .opss-float-left--mobile {
+    display: block;
+    width: 100%;
+    float: left;
+    text-align: left !important;
+  }
+
+  .opss-padding-bottom-4-mobile {
+    padding-bottom: govuk-spacing(4);
   }
 }
 
@@ -186,7 +248,6 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-margin-bottom-1-desktop {
   margin-bottom: govuk-spacing(4);
-
   @include govuk-media-query($from: desktop) {
     margin-bottom: govuk-spacing(1);
   }
@@ -194,7 +255,6 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-margin-top-1-mobile {
   margin-top: govuk-spacing(4);
-
   @include govuk-media-query($from: tablet) {
     margin-top: govuk-spacing(1);
   }
@@ -261,6 +321,7 @@ body.js-enabled .opss-nojs-hide {
 }
 
 @include govuk-media-query($from: desktop) {
+  // use on
   .opss-right-box-arrow {
     position: relative;
     background-color: govuk-colour("light-grey");
@@ -270,6 +331,10 @@ body.js-enabled .opss-nojs-hide {
 
     .govuk-grid-column-one-quarter > & {
       margin-right: govuk-spacing(7) + govuk-spacing(1) !important;
+    }
+
+    abbr {
+      border-bottom: none !important;
     }
   }
 
@@ -299,14 +364,35 @@ body.js-enabled .opss-nojs-hide {
   }
 }
 
+.opss-warning-text--normal {
+  strong {
+    font-weight: normal;
+  }
+}
+
+.opss-warning-text--s + .opss-warning-text--s.opss-warning-text--normal {
+  padding: govuk-spacing(0);
+}
+
 abbr[title] {
   text-decoration: none;
 
   @include govuk-media-query($from: desktop) {
+    h1[class^="govuk-heading"] + p &,
+    h1.govuk-label-wrapper + div.govuk-hint &,
+    h1.govuk-label-wrapper + p &,
+    legend.govuk-fieldset__legend--l + p &,
     .opss-switch-cols &,
-    .govuk-summary-list__row & {
+    .govuk-summary-list__row &,
+    .govuk-main-wrapper p & {
       border-bottom: 1px dotted $govuk-secondary-text-colour;
       cursor: help;
+    }
+
+    a.govuk-link &,
+    dd span.opss-secondary-text & {
+      border-bottom: none;
+      cursor: inherit;
     }
   }
 }
@@ -319,6 +405,10 @@ samp {
 
 .opss-text-align-center {
   text-align: center;
+}
+
+*[class^="govuk-heading"].opss-text-align-center {
+  width: 100%;
 }
 
 @include govuk-media-query($from: tablet) {
@@ -373,6 +463,18 @@ samp {
 
   .opss-desktop-min-height--s {
     min-height: 180px;
+  }
+
+  .opss-desktop-min-height--s2 {
+    min-height: 230px;
+  }
+
+  .opss-desktop-min-height--s2b {
+    min-height: 200px;
+  }
+
+  .opss-desktop-min-height--s3 {
+    min-height: 275px;
   }
 
   .opss-desktop-min-height--m {
@@ -439,8 +541,7 @@ samp {
     }
   }
 
-  // stylelint-disable function-url-quotes
-  @-moz-document url-prefix() {
+  @-moz-document url-prefix("") {
     // firefox only: col flow bug
     .opss-2-col-flow,
     .opss-3-col-flow {
@@ -454,7 +555,6 @@ samp {
       }
     }
   }
-  // stylelint-enable function-url-quotes
 }
 
 .opss-list {
@@ -500,6 +600,7 @@ ul.opss-left-nav {
     margin-bottom: 0;
     padding: 8px 0 5px;
     @include opss-font-size($s: 17px, $l: 1.2);
+    @include word-wrap;
 
     ul {
       padding-left: govuk-spacing(4);
@@ -516,13 +617,19 @@ ul.opss-left-nav {
       text-underline-offset: .1em;
 
       &:hover {
+        // styles supersede by gds upgrade to 4.2
         text-decoration: underline !important;
-        text-decoration-thickness: .2em !important;
-        text-decoration-thickness: 3px !important;
+        text-decoration-thickness: .1875rem !important;
+        text-decoration-thickness: .15em !important;
         -webkit-text-decoration-skip-ink: none;
         text-decoration-skip-ink: none;
         -webkit-text-decoration-skip: none;
         text-decoration-skip: none;
+      }
+
+      &:focus {
+        text-decoration-thickness: 0 !important;
+        text-decoration: none !important;
       }
 
       span {
@@ -551,15 +658,32 @@ ul.opss-left-nav {
   }
 }
 
+.opss-primary-text {
+  color: $govuk-text-colour;
+}
+
 .opss-secondary-text {
   color: $govuk-secondary-text-colour;
+
+  a[class*="link--no-underline"] sup[class$="font-size-14"] {
+    color: $govuk-secondary-text-colour;
+  }
+}
+
+a.opss-secondary-text sup[class$="font-size-14"] {
+  color: $govuk-secondary-text-colour;
+}
+
+div[class$="inset-text"] > ol li:last-child {
+  margin-bottom: govuk-spacing(1);
 }
 
 .opss-border-top,
 .opss-border-bottom,
 .opss-border-left,
 .opss-border-right,
-.opss-border-all {
+.opss-border-all,
+.opss-border-all-perm {
   border-color: $govuk-border-colour;
   border-style: solid;
   border-width: 0;
@@ -584,6 +708,15 @@ ul.opss-left-nav {
 .opss-border-none {
   border-width: 0;
 }
+
+.opss-blue-border-top {
+  border-top: 2px solid $govuk-brand-colour;
+}
+
+.opss-blue-border-all {
+  border: 2px solid $govuk-brand-colour;
+}
+
 @include govuk-media-query($from: tablet) {
   .opss-rounded-corners {
     border-radius: 5px;
@@ -595,6 +728,21 @@ ul.opss-left-nav {
 
   .opss-border-all {
     border-width: 1px;
+  }
+
+  a[class*="font-size-14"].opss-border-all {
+    line-height: 1.2 !important;
+  }
+}
+
+.opss-border-all-perm {
+  // for all screen sizes
+  border-width: 1px;
+}
+
+@include govuk-media-query($until: tablet) {
+  .opss-border-all {
+    padding: govuk-spacing(0) !important;
   }
 }
 
@@ -675,6 +823,11 @@ ul.opss-left-nav {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figure.opss-margin-bottom-1-desktop {
+  max-height: 105px;
+  // quick fix for smooth page loading on case products pg - when img height loads = zero pg movement
 }
 
 .opss-img-caption {
@@ -773,7 +926,8 @@ dl.opss-summary-list-aside {
 
       dt + dd {
         min-width: 40%;
-        width: auto; // 1. protects against rogue legacy psd invalid html
+        width: auto;
+        // 1. protects against rogue legacy psd invalid html
       }
     }
 
@@ -782,18 +936,41 @@ dl.opss-summary-list-aside {
       word-wrap: break-word;
       -ms-word-break: break-all;
       word-break: break-all;
-      word-break: break-word; // no adding hypens
+      word-break: break-word;
+      // no adding hypens
+    }
+
+    dd[class*="summary-list__actions"] a {
+      // don't wrap the short "edit" type action links
+      white-space: nowrap;
     }
 
     & > span.govuk-summary-list__actions {
       display: none !important;
-    } // 2. protects against rogue legacy psd invalid html
+    }
+
+    // 2. protects against rogue legacy psd invalid html
+
+    dd br + span.opss-secondary-text,
+    dd ul li > span.opss-secondary-text:first-of-type {
+      padding-left: govuk-spacing(0) !important;
+    }
+  }
+
+  div[class^="govuk-accordion"] & {
+    & > div {
+      display: table-row !important;
+    }
   }
 
   @include govuk-media-query($from: desktop) {
     &.opss-summary-list-mixed--narrow-dt + .opss-text-align-right {
       position: relative;
       top: - govuk-spacing(4);
+    }
+
+    &.opss-summary-list-mixed--narrow-dt.opss-summary-list-mixed--image + .opss-text-align-right {
+      top: - govuk-spacing(7);
     }
 
     &.opss-summary-list-mixed--narrow-dt > div {
@@ -803,6 +980,12 @@ dl.opss-summary-list-aside {
 
       dt + dd {
         min-width: 50%;
+      }
+
+      @-moz-document url-prefix("") {
+        dt + dd {
+          min-width: 60%;
+        }
       }
     }
 
@@ -825,26 +1008,37 @@ dl.opss-summary-list-aside {
     }
   }
 
-  &.opss-summary-list-mixed--image > div:first-child dt {
-    vertical-align: bottom;
+  &.opss-summary-list-mixed--image {
+    margin-bottom: govuk-spacing(8);
+    border-bottom: 1px solid $govuk-input-border-colour;
 
-    & + dd {
-      padding-right: govuk-spacing(0);
+    .opss-tabs li:last-child & {
+      margin-bottom: govuk-spacing(0);
+      border-bottom: none 0;
+    }
 
-      figure {
-        img {
-          max-width: 100%;
-        }
+    & > div:first-child dt {
+      vertical-align: bottom;
 
-        a {
-          display: block;
-          margin-top: - govuk-spacing(5);
-          margin-bottom: govuk-spacing(1);
+      & + dd {
+        padding-right: govuk-spacing(0);
 
+        figure {
           img {
-            margin-top: -2px;
-            margin-bottom: -2px;
-            border: 0;
+            max-width: 100%;
+          }
+
+          a {
+            display: block;
+            margin-top: - govuk-spacing(5);
+            margin-bottom: govuk-spacing(1);
+            text-align: right;
+
+            img {
+              margin-top: -2px;
+              margin-bottom: -2px;
+              border: 0;
+            }
           }
         }
       }
@@ -859,8 +1053,7 @@ dl.opss-summary-list-aside {
     }
   }
 
-  // stylelint-disable function-url-quotes
-  @-moz-document url-prefix() {
+  @-moz-document url-prefix("") {
     // firefox only: align 1st dd (without a 2nd) correctly
     .govuk-summary-list__row dd:last-child {
       width: inherit;
@@ -873,7 +1066,6 @@ dl.opss-summary-list-aside {
       }
     }
   }
-  // stylelint-enable function-url-quotes
 }
 
 @include govuk-media-query($from: desktop) {
@@ -1044,11 +1236,8 @@ dd dl.opss-nested-definition-list {
       }
     }
 
-    & > dl > div:last-child {
-      dt,
-      dd {
-        border-bottom: none;
-      }
+    & dl:last-of-type > div:last-child {
+      border-bottom: none;
     }
   }
 }
@@ -1074,6 +1263,16 @@ dd dl.opss-nested-definition-list {
       margin-right: govuk-spacing(3);
       margin-left: 0;
     }
+
+    &.opss-equal-height-container--flush {
+      .opss-equal-height__col {
+        padding: 0;
+      }
+    }
+
+    .opss-equal-height-container__panel-1 {
+      min-height: 120px;
+    }
   }
 }
 
@@ -1095,7 +1294,9 @@ dd dl.opss-nested-definition-list {
 
 .opss-table {
   // not .opss-table-items
-  border-collapse: initial !important; // stops 1px border issues on laptops using 150% text scale
+  border-collapse: initial !important;
+
+  // stops 1px border issues on laptops using 150% text scale
 
   tbody tr:last-child th,
   tbody tr:last-child td {
@@ -1115,11 +1316,12 @@ dd dl.opss-nested-definition-list {
   tbody tr th:first-child {
     width: 33%;
   }
+
   @include govuk-media-query($from: tablet) {
     thead tr th:first-child,
     tbody tr th:first-child {
       width: auto;
-      max-width: calc($govuk-page-width / 2);
+      max-width: $govuk-page-width / 2;
     }
   }
 }
@@ -1156,7 +1358,9 @@ dd dl.opss-nested-definition-list {
 }
 
 .opss-table-items {
-  border-collapse: initial !important; // stops 1px border issues on laptops using 150% text scale
+  border-collapse: initial !important;
+
+  // stops 1px border issues on laptops using 150% text scale
 
   thead th:nth-child(2) {
     width: auto;
@@ -1231,13 +1435,10 @@ dd dl.opss-nested-definition-list {
     border-bottom: 0 none;
   }
 
-  // stylelint-disable declaration-property-value-disallowed-list
   tbody th,
   tbody td {
-    transition: all .5s ease;
     background-color: transparent;
   }
-  // stylelint-enable declaration-property-value-disallowed-list
 
   tbody.opss-bg th,
   tbody.opss-bg td {
@@ -1353,15 +1554,18 @@ dd dl.opss-nested-definition-list {
   }
 
   .opss-desktop-margin-bottom-240px {
-    margin-bottom: 240px !important; // aligns bottom of tbody
+    margin-bottom: 240px !important;
+    // aligns bottom of tbody
   }
 
   .opss-desktop-margin-bottom-220px {
-    margin-bottom: 220px !important; // aligns bottom of tbody
+    margin-bottom: 220px !important;
+    // aligns bottom of tbody
   }
 }
 
-@media only screen and (min-width: 641px) and (max-width: 961px) {/* jump to mobile sizing at tablet size for tight cols */
+@media only screen and (min-width: 641px) and (max-width: 961px) {
+  // jump to mobile sizing at tablet size for tight cols
   .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
     @include govuk-font($size: 16);
   }

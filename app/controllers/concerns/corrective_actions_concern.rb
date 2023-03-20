@@ -3,7 +3,7 @@ module CorrectiveActionsConcern
 
   def corrective_action_params
     params.require(:corrective_action).permit(
-      :product_id,
+      :investigation_product_id,
       :business_id,
       :legislation,
       :action,

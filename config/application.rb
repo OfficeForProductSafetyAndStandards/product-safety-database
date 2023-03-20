@@ -58,6 +58,7 @@ module ProductSafetyDatabase
     config.two_factor_attempts = 10
 
     config.active_storage.resolve_model_to_route = :rails_storage_proxy
+    config.active_record.yaml_column_permitted_classes = [Time]
 
     # vips 8.6+ is the minimum required version to use vips as an variant
     # processor

@@ -44,7 +44,7 @@ private
 
   def find_products(ids)
     Product
-      .includes([:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }])
+      .includes([:investigations, :owning_team, { investigation_products: [:test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }] }])
       .find(ids)
   end
 
@@ -74,31 +74,23 @@ private
     sheet = package.workbook.add_worksheet name: "product_info"
     sheet.add_row %w[psd_ref
                      ID
-                     affected_units_status
                      authenticity
                      barcode
-                     batch_number
                      brand
                      case_ids
                      category
                      country_of_origin
                      created_at
-                     customs_code
                      description
                      has_markings
                      markings
                      name
-                     number_of_affected_units
                      product_code
                      subcategory
                      updated_at
                      webpage
                      when_placed_on_market
-                     reported_reason
-                     hazard_type
-                     non_compliant_reason
-                     risk_level
-                     name]
+                     owning_team]
 
     @product_info_sheet = sheet
   end
@@ -145,30 +137,23 @@ private
     [
       product.psd_ref,
       product.id,
-      product.affected_units_status,
       product.authenticity,
       product.barcode,
-      product.batch_number,
       product.brand,
       product.case_ids,
       product.category,
       product.country_of_origin,
       product.created_at,
-      product.customs_code,
       product.description,
       product.has_markings,
       product.markings,
       product.name,
-      product.number_of_affected_units,
       product.product_code,
       product.subcategory,
       product.updated_at,
       product.webpage,
       product.when_placed_on_market,
-      product.investigations.first.try(:reported_reason),
-      product.investigations.first.try(:hazard_type),
-      product.investigations.first.try(:non_compliant_reason),
-      product.investigations.first.try(:risk_level)
+      product.owning_team.try(:name)
     ]
   end
 

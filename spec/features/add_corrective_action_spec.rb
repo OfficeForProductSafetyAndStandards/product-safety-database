@@ -40,11 +40,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add new"
-    expect_to_be_on_add_to_case_page
-    choose "Corrective action"
-
-    click_button "Continue"
+    click_link "Add Corrective actions"
 
     expect_to_be_on_record_corrective_action_for_case_page
     expect(page).not_to have_error_messages
@@ -83,7 +79,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
     click_link CorrectiveAction.first.decorate.supporting_information_title
 
     expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
-    expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
+    expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine (#{product.psd_ref})")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Recall information",  value: "#{online_recall_information} (opens in new tab)")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
@@ -110,7 +106,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
-    expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
+    expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine (#{product.psd_ref})")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
     expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
@@ -171,7 +167,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
     expect(item).to have_text("Geographic scopes: #{geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence}")
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text(details)
-    expect(item).to have_link("View product details", href: product_url(product))
     expect(item).to have_link("View business details", href: business_url(business))
   end
 

@@ -33,6 +33,16 @@ RSpec.describe UrlHelper do
         end
       end
     end
+
+    context "with an instance of Product" do
+      let(:object) { create(:product) }
+
+      context "with no slug" do
+        it "returns /products/:id" do
+          expect(path).to eq("/products/#{object.id}")
+        end
+      end
+    end
   end
 
   describe "#associated_documents_path", :with_stubbed_opensearch, :with_stubbed_mailer do
@@ -65,6 +75,32 @@ RSpec.describe UrlHelper do
 
       it "returns /businesses/:id/documents/:id" do
         expect(path).to eq("/businesses/#{object.id}/documents/#{document.id}")
+      end
+    end
+  end
+
+  describe "#associated_document_uploads_path", :with_stubbed_opensearch, :with_stubbed_mailer do
+    subject(:path) { helper.associated_document_uploads_path(object) }
+
+    context "with an instance of Product" do
+      let(:object) { create(:product) }
+
+      it "returns /products/:id/document_uploads" do
+        expect(path).to eq("/products/#{object.id}/document_uploads")
+      end
+    end
+  end
+
+  describe "#associated_document_upload_path", :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+    subject(:path) { helper.associated_document_upload_path(object, document_upload) }
+
+    let(:document_upload) { object.document_uploads.first }
+
+    context "with an instance of Product" do
+      let(:object) { create(:product, :with_document_upload) }
+
+      it "returns /products/:product_id/document_uploads/:id" do
+        expect(path).to eq("/products/#{object.id}/document_uploads/#{document_upload.id}")
       end
     end
   end

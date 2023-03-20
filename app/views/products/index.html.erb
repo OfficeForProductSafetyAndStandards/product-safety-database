@@ -26,7 +26,7 @@
         </div>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
-            <%= render "search_statement", count: @count, keywords: params[:q], filter: params[:hazard_type] %>
+            <%= render "search_statement", count: @count, keywords: params[:q], filter: { category: params[:category], retired_status: params[:retired_status] } %>
           </div>
         </div>
       <% elsif (@results.total_count && @results.total_count > 11) %>

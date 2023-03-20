@@ -1,0 +1,11 @@
+<%= page_title "Contact the product record owner - #{@product.name}" %>
+
+<% content_for :after_header do %>
+  <%= link_to "Back", investigation_products_path(@investigation), class: "govuk-back-link" %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "products/owner_contact_details", product: @product, investigation_closed_at: @investigation_product.investigation_closed_at %>
+  </div>
+</div>

@@ -1,11 +1,6 @@
-<% if investigation.products.size.zero? %>
-  <div class="govuk-warning-text govuk-!-display-inline-block">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-warning-text__assistive">Warning</span>
-      A product has not been added to this case.
-    </strong>
-  </div>
+<% if investigation.products.none? %>
+  <%= govukWarningText(iconFallbackText: "Warning", text: "A product has not been added to this case.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-0 opss-warning-text--s") %>
+  <%= govukWarningText(iconFallbackText: "Warning", text: "Cases without products are subject to deletion during case audits.", classes: "govuk-!-display-inline-block govuk-!-margin-top-0 govuk-!-margin-bottom-4 opss-warning-text--s opss-warning-text--normal") %>
 <% end %>
 
 <section class="govuk-grid-column-full govuk-!-padding-top-3 govuk-!-padding-bottom-1 opss-desktop-padding-top-3 opss-desktop-padding-bottom-4 govuk-!-padding-right-3 govuk-!-padding-left-3 opss-border-all opss-grey-bg opss-3-col-flow opss-responsive-margin-bottom-6">
@@ -66,7 +61,9 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Comment</dt>
-      <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_activity_comment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a comment</span></a></dd>
+      <% if policy(@investigation).comment? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_activity_comment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a comment</span></a></dd>
+      <% end %>
     </div>
   </dl>
 </section>

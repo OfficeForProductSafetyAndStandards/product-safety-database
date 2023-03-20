@@ -1,0 +1,47 @@
+<% page_heading = "Why are you creating a case?" %>
+<%= page_title page_heading, errors: @reason_for_creating_form.errors.any? %>
+
+<%= govukBackLink(
+  text: "Back",
+  href: "/"
+) %>
+
+<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, builder: ApplicationFormBuilder, html: {novalidate: true}, method: :put, local: true do |form| %>
+    <%= error_summary @reason_for_creating_form.errors %>
+    <% error_message = { text: @reason_for_creating_form.errors.full_messages_for("case_is_safe").first } if @reason_for_creating_form.errors.any? %>
+    <%= govukRadios(
+          idPrefix: "case_is_safe",
+          name: "investigation[case_is_safe]",
+          errorMessage: error_message,
+          fieldset: {
+            legend: {
+              text: "Why are you creating a case?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-7"
+            }
+          },
+          items: [
+            {
+              value: 'no',
+              text: "A product is of concern",
+              id: "case_is_safe",
+              checked: @reason_for_creating_form.case_is_safe == "no"
+            },
+            {
+              value: 'yes',
+              text: "A product is safe and compliant",
+              hint: {
+                text: "This helps other market surveillance authorities avoid testing the same product again.",
+                classes: "govuk-!-font-size-16"
+              },
+              checked: @reason_for_creating_form.case_is_safe == "yes"
+            }
+          ]
+        )
+     %>
+     
+     <div class="govuk-button-group">
+       <%= form.submit "Continue", class: "govuk-button" %>
+       <%= link_to "Cancel", @product ? product_path(@product) : "/", class: "govuk-link govuk-link--no-visited-state" %>
+     </div>
+<% end %>

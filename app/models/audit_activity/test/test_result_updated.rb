@@ -1,8 +1,16 @@
 class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   def self.build_metadata(test_result, changes)
-    updated_values = changes.except("document", "existing_document_file_id")
+    updates = changes.except("document", "existing_document_file_id")
 
-    { test_result_id: test_result.id, updates: updated_values }
+    {
+      test_result_id: test_result.id,
+      updates:
+    }
+  end
+
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
   end
 
   def title(_)
@@ -60,15 +68,26 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   end
 
   def new_product
-    @new_product ||=
-      if updates["product_id"]
-        Product.find(updates["product_id"].second)
-      end
+    return unless updates["investigation_product_id"]
+
+    InvestigationProduct.find(updates["investigation_product_id"].second)&.product
   end
 
 private
 
   def updates
     metadata["updates"]
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_id = metadata.dig("updates", "product_id")
+    return metadata if product_id.blank?
+
+    metadata["updates"]["investigation_product_id"] = product_id.map { |id| investigation.investigation_products.where(product_id: id).pick("investigation_products.id") }
+    metadata["updates"].delete("product_id")
+    metadata
   end
 end

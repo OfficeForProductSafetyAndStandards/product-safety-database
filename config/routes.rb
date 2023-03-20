@@ -52,6 +52,14 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :document_uploadable do
+    resources :document_uploads, controller: "document_uploads" do
+      member do
+        get :remove
+      end
+    end
+  end
+
   namespace :declaration do
     get :index, path: ""
     post :accept
@@ -64,6 +72,8 @@ Rails.application.routes.draw do
     get :share_data
     get :skip
   end
+
+  resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
 
   resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
   resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
@@ -93,11 +103,13 @@ Rails.application.routes.draw do
 
   resources :investigations,
             path: "cases",
-            only: %i[show new index],
+            only: %i[show new index destroy],
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
       get :created
+      get :cannot_close
+      get :confirm_deletion
     end
 
     resource :status, only: %i[], controller: "investigations/status" do
@@ -123,6 +135,8 @@ Rails.application.routes.draw do
     resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
     resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
     resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
+    resource :reference_numbers, only: %i[edit update], controller: "investigations/reference_numbers"
+    resource :case_names, only: %i[edit update], controller: "investigations/case_names"
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resource :reported_reason, only: %i[edit update], path: "edit-reported-reason", controller: "investigations/reported_reason"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
@@ -140,8 +154,14 @@ Rails.application.routes.draw do
     end
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
+      collection do
+        post :find
+      end
+    end
+
+    resources :investigation_products, only: %i[remove unlink], controller: "investigations/investigation_products" do
       member do
-        put :link, path: ""
+        get :owner
         get :remove
         delete :unlink, path: ""
       end
@@ -192,11 +212,16 @@ Rails.application.routes.draw do
     end
   end
 
-  # yo
   resource :products, only: [], path: "products" do
     get "your-products", to: "products#your_products", as: "your"
     get "team-products", to: "products#team_products", as: "team"
     get "all-products", to: "products#index", as: "all"
+  end
+
+  resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
+    member do
+      get :owner
+    end
   end
 
   resource :businesses, only: [], path: "businesses" do
@@ -205,7 +230,11 @@ Rails.application.routes.draw do
     get "all-businesses", to: "businesses#index", as: "all"
   end
 
-  resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
+  resources :investigation_products, only: %i[], param: :id do
+    resource :batch_numbers, only: %i[edit update], path: "edit-batch-numbers", controller: "investigation_products/batch_numbers"
+    resource :customs_code, only: %i[edit update], path: "edit-customs-code", controller: "investigation_products/customs_codes"
+    resource :number_of_affected_units, only: %i[edit update], path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
+  end
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do

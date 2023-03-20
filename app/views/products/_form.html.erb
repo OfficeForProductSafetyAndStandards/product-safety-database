@@ -6,23 +6,33 @@
   key: :category,
   form: form,
   show_all_values: true,
+  include_blank: true,
   id: "category",
   aria_describedby: "report-product-category-hint",
-  is_autocomplete: true,
   label: { text: "Product category", classes: label_class },
-  hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" }
+  hint: { text: "The product category will be permanent for this product record", classes: "govuk-!-font-size-16" },
+  attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
 <%= govukInput(
   key: :subcategory,
   form: form,
   id: "subcategory",
-  classes: "app-!-max-width-one-half",
   label: { text: "Product subcategory", classes: label_class },
   hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" }
 ) %>
 
-<%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
+<% if product_form.authenticity_unsure?  %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is the product counterfeit?</legend>
+    <p class="govuk-body">The original record was recorded as 'unsure'</p>
+  </fieldset>
+<% else %>
+  <%= form.govuk_radios :authenticity,
+                        legend: "Is the product counterfeit?",
+                        hint: { text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", classes: "govuk-!-font-size-16" },
+                        items: conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]) %>
+<% end %>
 
 <% product_marking_fields = capture do %>
   <%= form.govuk_checkboxes :markings,
@@ -40,25 +50,27 @@
   ]
 %>
 
-
-<%= form.govuk_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Number of units affected?", text: "The number of units affected is case related data (and has now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
 
 <%= govukInput(
   key: :brand,
   form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Product brand (if branded)", classes: label_class },
-  hint: { text: "For example, ‘Dyson’ or ‘Sony’" }
+  label: { text: "Manufacturer's brand name", classes: label_class },
+  hint: { html: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe },
+  attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
-
 
 <%= govukInput(
   key: :name,
   form: form,
-  classes: "app-!-max-width-three-quarters",
   label: { text: "Product name", classes: label_class },
   id: "name",
-  hint: { text: "Include model name and model number, for example ‘PlayStation 5’" }
+  hint: { html: 'Include model name and model number, for example \'PlayStation 5\'<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The product name will be permanent for this product record</span>'.html_safe },
+  attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
 <%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
@@ -67,23 +79,19 @@
   key: :barcode,
   id: "barcode",
   form: form,
-  classes: "app-!-max-width-one-half",
   label: { text: "Barcode number (GTIN, EAN or UPC)", classes: label_class },
   hint: {text: "Normally 8, 12, or 13 digits"}
 ) %>
 
-
-<%= govukInput(
-  key: :batch_number,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Batch number", classes: label_class }
-) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Batch numbers", text: "Batch numbers are case related data (and have now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
 
 <%= govukTextarea(
   key: :product_code,
   form: form,
-  classes: "app-!-max-width-one-half",
   label: { text: "Other product identifiers", classes: label_class },
   hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." }
 ) %>
@@ -91,7 +99,6 @@
 <%= govukInput(
   key: :webpage,
   form: form,
-  classes: "app-!-max-width-three-quarters",
   label: { text: "Webpage", classes: label_class },
   hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" }
 ) %>
@@ -99,29 +106,24 @@
 <%= govukSelect(
   form: form,
   key: :country_of_origin,
-  formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
   items: options_for_country_of_origin(countries, product_form),
   include_blank: true,
-  id: "location-autocomplete",
   label: { text: "Country of origin", classes: label_class },
   hint: { text: "Where the product was manufactured" }
 ) %>
 
-<%= govukInput(
-  key: :customs_code,
-  form: form,
-  classes: "app-!-max-width-three-quarters",
-  label: { text: "Customs code", classes: label_class },
-  hint: { text: "For example, CN code (8 digits) or TARIC code (10 digits). Use a comma to separate multiple codes" }
-) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Customs codes", text: "Customs codes are case related data (and have now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
 
 <%= govukTextarea(
   key: :description,
   form: form,
   attributes: { maxlength: 10_000 },
-  classes: "app-!-max-width-three-quarters",
   label: { text: "Description of product", classes: label_class },
-  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents" }
+  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. Do not include details of damage or incidents" }
 ) %>
 
-<%= form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button" %>
+<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button" %>

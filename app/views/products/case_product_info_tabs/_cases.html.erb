@@ -1,0 +1,14 @@
+<h4 class="govuk-heading-m">Related cases</h4>
+<% unique_investigations = @product.unique_cases_except(@investigation) %>
+<% if unique_investigations.count.zero? %>
+  <p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">The original product record has not been included in any other cases.</p>
+<% else %>
+  <p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">The original product record was or is included in these <%= unique_investigations.count %> cases.</p>
+<% end %>
+<% unique_investigations.each do |investigation| %>
+  <%= govukSummaryList(
+    classes: "govuk-summary-list govuk-!-padding-bottom-6 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt",
+    rows: details_for_products_tab(investigation.decorate)
+    )
+  %>
+<% end %>

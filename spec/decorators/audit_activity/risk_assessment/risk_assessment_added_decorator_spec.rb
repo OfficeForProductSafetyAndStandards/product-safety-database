@@ -9,14 +9,14 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     ).decorate
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, custom_risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, products:) }
+  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, custom_risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products:) }
   let(:trait) { :without_file }
   let(:risk_level) { "serious" }
   let(:custom_risk_level) { nil }
   let(:assessed_by_team) { nil }
   let(:assessed_by_business) { nil }
   let(:assessed_by_other) { "test" }
-  let(:products) { [build(:product)] }
+  let(:investigation_products) { [build(:investigation_product)] }
 
   describe "#assessed_on" do
     it "returns a generated String" do
@@ -69,8 +69,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
 
   describe "#products_assessed" do
     context "with one product" do
-      let(:product) { build(:product) }
-      let(:products) { [product] }
+      let(:product) { build(:investigation_product) }
+      let(:investigation_products) { [product] }
 
       it "returns the product name" do
         expect(activity.products_assessed).to eq(product.name)
@@ -78,10 +78,10 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     end
 
     context "with multiple products" do
-      let(:product_1) { build(:product) }
-      let(:product_2) { build(:product) }
-      let(:product_3) { build(:product) }
-      let(:products) { [product_1, product_2, product_3] }
+      let(:product_1) { build(:investigation_product) }
+      let(:product_2) { build(:investigation_product) }
+      let(:product_3) { build(:investigation_product) }
+      let(:investigation_products) { [product_1, product_2, product_3] }
 
       it "returns the product names in a single String" do
         expect(activity.products_assessed).to eq("#{product_1.name}, #{product_2.name} and #{product_3.name}")

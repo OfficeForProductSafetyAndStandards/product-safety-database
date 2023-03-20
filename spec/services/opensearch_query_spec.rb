@@ -18,7 +18,7 @@ RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
   let(:sorting_params) { {} }
 
   def perform_search
-    Investigation.full_search(os_query)
+    Investigation.not_deleted.full_search(os_query)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
@@ -26,9 +26,8 @@ RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
   # needed to improve the relevance of the results. We should then add
   # assertions that irrelevant records are *not* returned here.
   describe "#build_query" do
-    let(:batch_number)            { SecureRandom.uuid }
     let(:country_of_origin)       { "United Kingdom" }
-    let(:product)                 { create(:product, country_of_origin:, batch_number:) }
+    let(:product)                 { create(:product, country_of_origin:) }
     let(:investigation)           { create(:allegation, creator: user, products: [product]) }
 
     before do
@@ -46,12 +45,6 @@ RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
 
       context "when searching for name" do
         let(:query) { product.name }
-
-        it_behaves_like "finds the relevant investigation"
-      end
-
-      context "when searching for batch_number" do
-        let(:query) { product.batch_number }
 
         it_behaves_like "finds the relevant investigation"
       end

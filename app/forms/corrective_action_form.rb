@@ -9,7 +9,7 @@ class CorrectiveActionForm
 
   attribute :id
   attribute :date_decided, :govuk_date
-  attribute :product_id, :integer
+  attribute :investigation_product_id, :integer
   attribute :business_id, :integer
   attribute :legislation
   attribute :action
@@ -29,7 +29,7 @@ class CorrectiveActionForm
   attribute :file_description
   attribute :further_corrective_action, :boolean
 
-  validates :product_id, presence: true, on: %i[add_corrective_action edit_corrective_action]
+  validates :investigation_product_id, presence: true, on: %i[add_corrective_action edit_corrective_action]
   validates :date_decided,
             presence: true,
             real_date: true,
@@ -60,7 +60,7 @@ class CorrectiveActionForm
   ATTRIBUTES_FROM_CORRECTIVE_ACTION = %i[
     id
     date_decided
-    product_id
+    investigation_product_id
     business_id
     legislation
     action

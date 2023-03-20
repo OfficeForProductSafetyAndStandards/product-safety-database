@@ -13,7 +13,7 @@ module SearchHelper
   end
 
   def query_params
-    params.permit(:q, :sort_by, :sort_dir, :direction, :hazard_type, :page_name)
+    params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
   end
 
   def sorting_params

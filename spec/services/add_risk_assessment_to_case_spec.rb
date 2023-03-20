@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AddRiskAssessmentToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
-  let(:product) { create(:product_washing_machine) }
+  let(:investigation_product) { create(:investigation_product) }
 
   let(:team) { create(:team) }
   let(:business) { create(:business) }
@@ -55,7 +55,7 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_opensearch, :with_stubbed_
           investigation:,
           assessed_on: assessment_date,
           assessed_by_other: "RiskAssessmentsRUs",
-          product_ids: [product.id],
+          investigation_product_ids: [investigation_product.id],
           risk_level: :serious
         )
       end
@@ -71,7 +71,7 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_opensearch, :with_stubbed_
         expect(risk_assessment.assessed_on).to eq assessment_date
         expect(risk_assessment.assessed_by_other).to eq "RiskAssessmentsRUs"
         expect(risk_assessment.risk_level).to eq "serious"
-        expect(risk_assessment.products).to eq [product]
+        expect(risk_assessment.investigation_products).to eq [investigation_product]
       end
 
       it "associates the added risk assessment with the user and their team", :aggregate_failures do

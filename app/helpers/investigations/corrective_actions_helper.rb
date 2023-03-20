@@ -3,11 +3,12 @@ module Investigations
     def corrective_action_summary_list_rows(corrective_action)
       recall_information = online_recall_information_text_for(corrective_action.online_recall_information, has_online_recall_information: corrective_action.has_online_recall_information)
       recall_information = link_to(recall_information) if recall_information.starts_with?("http")
+
       rows = [
         { key: { text: "Action" }, value: { text: action_text_for(corrective_action) } },
         { key: { text: "Event date" }, value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },               value: { text: corrective_action.legislation } },
-        { key: { text: "Product" },                   value: { html: link_to(corrective_action.product.name, product_path(corrective_action.product)) } },
+        { key: { text: "Product" },                   value: { text: "#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.psd_ref})" } },
         { key: { text: "Business" },                  value: { html: business_text_for(corrective_action) } },
         { key: { text: "Recall information" },        value: { html: recall_information } }
       ]

@@ -1,14 +1,13 @@
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
-
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-            Your products
-        </h1>
-
-        <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-1">
-            <%= "There are #{count} products linked to open cases where you are the case owner." %>
-        </p>
-
+  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Your products</h1>
+    <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-1">
+      <%= "There are #{count} product records linked to open cases where you are the case owner." %>
+    </p>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="opss-text-align-right govuk-!-margin-bottom-8">
+      <%= link_to "Create a product record", new_product_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
     </div>
-
+  </div>
 </div>
