@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_20_145730) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_20_151233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -59,6 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_145730) do
 
   create_table "activities", id: :serial, force: :cascade do |t|
     t.uuid "added_by_user_id"
+    t.bigint "ahoy_visit_id"
     t.text "body"
     t.bigint "business_id"
     t.bigint "correspondence_id"
@@ -68,7 +69,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_145730) do
     t.jsonb "metadata"
     t.string "title"
     t.string "type", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
+    t.index ["ahoy_visit_id"], name: "index_activities_on_ahoy_visit_id"
     t.index ["business_id"], name: "index_activities_on_business_id"
     t.index ["correspondence_id"], name: "index_activities_on_correspondence_id"
     t.index ["investigation_id"], name: "index_activities_on_investigation_id"

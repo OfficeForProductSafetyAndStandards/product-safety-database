@@ -6,6 +6,8 @@ class Activity < ApplicationRecord
                        :created_at, :investigation_id, :investigation_product_id,
                        :type, :updated_at
 
+  visitable :ahoy_visit
+
   def has_attachment?
     false
   end
