@@ -1,5 +1,5 @@
 <div class="govuk-body">
-  Product: <%= link_to activity.product.name, activity.product, class: "govuk-link govuk-link--no-visited-state" %>
+  Product: <%= activity.investigation_product.name %>
   <br />
   Legislation: <strong><%= activity.legislation %></strong>
   <br />
@@ -22,6 +22,5 @@
   <% end %>
   <br />
   <br />
-  <%= link_to "View product details", product_path(activity.product), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
   <%= link_to "View test result", investigation_test_result_path(activity.investigation, activity.test_result), class: "govuk-link govuk-link--no-visited-state" %>
 </div>

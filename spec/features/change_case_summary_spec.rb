@@ -9,7 +9,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
     sign_in user
     visit investigation_path(investigation)
 
-    click_link "Change summary"
+    click_link "Edit the summary"
 
     expect_to_be_on_case_summary_edit_page(case_id: investigation.pretty_id)
     fill_in "Edit the summary", with: ""
@@ -17,7 +17,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    click_link "Change summary"
+    click_link "Edit the summary"
 
     expect_to_be_on_case_summary_edit_page(case_id: investigation.pretty_id)
 
@@ -25,7 +25,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
     click_on "Save"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("p", text: "new summary")
+    expect(page).to have_css("span", text: "new summary")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -35,6 +35,6 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
   scenario "user from other team cannot edit summary" do
     sign_in other_user
     visit investigation_path(investigation)
-    expect(page).not_to have_link("Change summary")
+    expect(page).not_to have_link("Edit the summary")
   end
 end

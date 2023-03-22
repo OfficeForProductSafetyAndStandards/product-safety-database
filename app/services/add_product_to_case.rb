@@ -2,71 +2,44 @@ class AddProductToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :authenticity,
-           :has_markings,
-           :markings,
-           :batch_number,
-           :brand,
-           :country_of_origin,
-           :description,
-           :barcode,
-           :name,
-           :product_code,
-           :subcategory,
-           :webpage,
-           :investigation,
-           :category,
+  delegate :investigation,
            :user,
            :product,
-           :affected_units_status,
-           :number_of_affected_units,
-           :exact_units,
-           :approx_units,
-           :when_placed_on_market,
-           :customs_code,
+           :skip_email,
            to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-    when_placed_on_market = context.when_placed_on_market
+    context.fail!(error: "No product supplied") unless product.is_a?(Product)
+    context.fail!(error: "The product is retired") if product.retired?
 
-    Product.transaction do
-      context.product = investigation.products.create!(
-        authenticity:,
-        has_markings:,
-        markings:,
-        batch_number:,
-        brand:,
-        country_of_origin:,
-        description:,
-        barcode:,
-        name:,
-        product_code:,
-        subcategory:,
-        category:,
-        webpage:,
-        added_by_user: user,
-        affected_units_status:,
-        number_of_affected_units:,
-        when_placed_on_market:,
-        customs_code:
-      )
-
-      context.activity = create_audit_activity_for_product_added
-
-      send_notification_email
+    InvestigationProduct.transaction do
+      (context.fail!(error: "The product is already linked to the case") and return false) if duplicate_investigation_product
+      investigation.products << product
     end
+
+    change_product_owner_if_unowned
+
+    product.__elasticsearch__.index_document
+
+    context.activity = create_audit_activity_for_product_added
+
+    send_notification_email unless skip_email
   end
 
 private
+
+  def change_product_owner_if_unowned
+    product.update!(owning_team: investigation.owner_team) if product.owning_team.nil?
+  end
 
   def create_audit_activity_for_product_added
     AuditActivity::Product::Add.create!(
       added_by_user: user,
       investigation:,
       title: product.name,
-      product:
+      investigation_product:
     )
   end
 
@@ -82,5 +55,13 @@ private
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
+  end
+
+  def investigation_product
+    InvestigationProduct.find_by(product_id: product.id, investigation_id: investigation.id)
+  end
+
+  def duplicate_investigation_product
+    InvestigationProduct.find_by(product_id: product.id, investigation_id: investigation.id, investigation_closed_at: investigation.date_closed)
   end
 end

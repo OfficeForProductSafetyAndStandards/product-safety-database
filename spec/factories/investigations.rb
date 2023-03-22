@@ -12,7 +12,7 @@ FactoryBot.define do
     non_compliant_reason  {}
 
     transient do
-      creator { create(:user, :activated) }
+      creator { create(:user, :activated, :opss_user) }
       read_only_teams { [] }
       edit_access_teams { [] }
     end
@@ -109,8 +109,13 @@ FactoryBot.define do
 
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
+    # Cases created by non OPSS users must have a product assigned to them.
     before(:create) do |investigation, options|
-      CreateCase.call(investigation:, user: options.creator)
+      if options.creator.is_opss?
+        CreateCase.call(investigation:, user: options.creator)
+      else
+        CreateCase.call(investigation:, user: options.creator, product: create(:product))
+      end
     end
 
     after(:create) do |investigation, evaluator|

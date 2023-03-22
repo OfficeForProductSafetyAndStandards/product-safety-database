@@ -21,7 +21,7 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
     InvestigationBusiness.create!(business_id: closed_business.id, investigation_id: closed_case.id)
     InvestigationBusiness.create!(business_id: other_business.id, investigation_id: other_case.id)
 
-    Investigation.import refresh: true, force: true
+    Investigation.import scope: "not_deleted", refresh: true, force: true
     Business.import refresh: true, force: true
   end
 

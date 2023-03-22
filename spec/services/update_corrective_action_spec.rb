@@ -25,7 +25,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
     end
   end
   let(:case_editor)               { create(:user, :activated, team: editor_team) }
-  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation:, product:, business:) }
+  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation:, investigation_product:, business:) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
     corrective_action_form.tap { |form|
@@ -33,7 +33,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
         date_decided: new_date_decided,
         other_action: new_other_action,
         action: new_summary,
-        product_id: corrective_action.product_id,
+        investigation_product_id: corrective_action.investigation_product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
         has_online_recall_information: new_has_online_recall_information,

@@ -4,19 +4,20 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :
   subject(:activity) do
     AuditActivity::Test::Result.create!(
       investigation: test_result.investigation,
-      product: test_result.product,
+      investigation_product:,
       metadata: described_class.build_metadata(test_result),
       added_by_user: user
     ).decorate
   end
 
+  let(:investigation_product) { test_result.investigation_product }
   let(:test_result) { create(:test_result, result: :passed, standards_product_was_tested_against:) }
   let(:user) { test_result.investigation.creator_user }
   let(:standards_product_was_tested_against) { %w[test1 test2] }
 
   describe "#title" do
     it "returns a string" do
-      expect(activity.title).to match(/\A(Passed test|Failed test|Test result): #{test_result.product.name}\z/)
+      expect(activity.title).to match(/\A(Passed test|Failed test|Test result): #{test_result.investigation_product.name}\z/)
     end
   end
 

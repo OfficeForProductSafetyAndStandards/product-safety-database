@@ -1,0 +1,2 @@
+class CreateACasePageController < ApplicationController
+end

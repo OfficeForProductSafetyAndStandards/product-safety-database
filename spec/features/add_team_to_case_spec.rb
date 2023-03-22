@@ -12,21 +12,12 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
     team
   end
 
-  scenario "when signed in as a read-only user" do
-    sign_in read_only_user
-
-    visit "/cases/#{investigation.pretty_id}"
-
-    expect(page).not_to have_link("Change teams added to the case")
-    expect(page).to have_link("View teams added to the case")
-  end
-
   scenario "when signed in as an owner of the case" do
     sign_in user
 
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Change teams added to the case"
+    click_link "Change the teams added"
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
@@ -88,7 +79,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Birmingham Trading Standards Southampton Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards Birmingham Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 

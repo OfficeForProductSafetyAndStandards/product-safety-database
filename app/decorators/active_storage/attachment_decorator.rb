@@ -22,6 +22,14 @@ module ActiveStorage
       object.created_at.to_formatted_s(:govuk)
     end
 
+    def description
+      object.metadata[:description]
+    end
+
+    def updated_at
+      Time.zone.parse(object.metadata[:updated]).to_formatted_s(:govuk)
+    end
+
     def edit_path
       h.edit_investigation_document_path(Investigation.find_by(id: object.record_id), object)
     end

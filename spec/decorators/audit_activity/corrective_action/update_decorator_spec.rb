@@ -15,7 +15,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_o
         date_decided: new_date_decided,
         other_action: new_other_action,
         action: new_summary,
-        product_id: corrective_action.product_id,
+        investigation_product_id: corrective_action.investigation_product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
         has_online_recall_information: new_has_online_recall_information,

@@ -46,13 +46,22 @@ class RiskAssessmentDecorator < ApplicationDecorator
     assessed_by_other
   end
 
+  def product_titles
+    values = object.investigation_products.map do |ip|
+      "#{ip.product.name} (#{ip.psd_ref})"
+    end
+    h.safe_join(values, h.tag.br)
+  end
+
 private
 
   def products_description
-    if object.products.size > 1
-      h.pluralize(object.products.size, "product")
+    products = object.investigation_products.map(&:product)
+
+    if products.size > 1
+      h.pluralize(products.size, "product")
     else
-      object.products.first.name
+      products.first.name
     end
   end
 end

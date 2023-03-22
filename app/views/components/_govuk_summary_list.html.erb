@@ -17,13 +17,25 @@
         </dt>
         <dd class="<%= class_names("govuk-summary-list__value", row.dig(:value, :classes)) %>">
           <%= row.dig(:value, :html).presence || row.dig(:value, :text) %>
-          <% if row[:value][:secondary_text] %>
+          <% if row.dig(:value, :secondary_text) %>
             <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>
               <%= row[:value][:secondary_text][:text] ? row[:value][:secondary_text][:text] : sanitize(row[:value][:secondary_text][:html]) %>
-            <span>
+            </span>
           <% end %>
         </dd>
+        <% if row&.dig(:values)&.any? %>
+          <% row.dig(:values).each do |value| %>
+            <% if value.dig(:text).present? %>
+              <dd class="<%= class_names("govuk-summary-list__value", value.dig(:classes)) %>">
+                <%= value.dig(:text) %>
+              </dd>
+            <% elsif value.dig(:html).present? %>
+              <%= value.dig(:html) %>
+            <% end %>
+          <% end %>
+        <% end %>
         <% if row.dig(:actions, :items)&.any? %>
+          <% row.dig(:actions, :items).each {|action| action.merge!(classes: "govuk-link--no-visited-state") } %>
           <dd class="<%= class_names("govuk-summary-list__actions", row.dig(:actions, :classes)) %>">
             <% if row.dig(:actions, :items).size == 1 %>
               <%= render "components/govuk_action_link", **row.dig(:actions, :items).first %>

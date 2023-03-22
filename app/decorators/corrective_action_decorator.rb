@@ -23,7 +23,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def supporting_information_title
     action_name = other? ? other_action : I18n.t(action, scope: %i[corrective_action attributes actions])
 
-    "#{action_name}: #{product.name}"
+    "#{action_name}: #{investigation_product.name}"
   end
 
   def date_of_activity
@@ -52,5 +52,17 @@ class CorrectiveActionDecorator < ApplicationDecorator
 
   def display_medium_title_text_size?
     page_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
+  end
+
+  def is_attached_to_versioned_product?
+    !!investigation_closed_at
+  end
+
+  def investigation_closed_at
+    object.investigation_product.investigation_closed_at
+  end
+
+  def psd_ref
+    object.investigation_product.psd_ref
   end
 end

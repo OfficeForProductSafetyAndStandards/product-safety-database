@@ -4,8 +4,8 @@ class ProductsController < ApplicationController
   include UrlHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_product, only: %i[show edit update]
-  before_action :set_countries, only: %i[update edit]
+  before_action :set_product, only: %i[show edit update owner]
+  before_action :set_countries, only: %i[new update edit]
   before_action :build_breadcrumbs, only: %i[show]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
 
@@ -22,43 +22,68 @@ class ProductsController < ApplicationController
     end
   end
 
-  # GET /products/1
-  # GET /products/1.json
   def show
+    # Anyone can view timestamped products, but only certain people can view live [retired] products
+    return render "/products/retired" unless policy(@product).show?
+  end
+
+  # GET /products/new
+  def new
+    @product_form = ProductForm.new
+  end
+
+  def owner
+    render_404_page and return if !policy(@product).show? || @product.owning_team.blank?
+  end
+
+  # POST /products
+  def create
+    @product_form = ProductForm.new product_params
+
     respond_to do |format|
-      format.html
+      if @product_form.valid?
+        context = CreateProduct.call!(
+          @product_form.serializable_hash.merge(user: current_user)
+        )
+        @product = context.product
+        format.html { render :confirmation }
+      else
+        set_countries
+        format.html { render :new }
+      end
     end
   end
 
   # GET /products/1/edit
   def edit
-    @product_form = ProductForm.from(Product.find(params[:id]))
+    authorize @product, :update?
+
+    @product_form = ProductForm.from @product.object
   end
 
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    product = Product.find(params[:id])
-
-    authorize product, :update?
+    authorize @product, :update?
 
     respond_to do |format|
-      @product_form = ProductForm.from(product)
-      @product_form.attributes = product_params
+      @product_form = ProductForm.from @product.object
+      @product_form.attributes = product_params_for_update
 
       if @product_form.valid?
         format.html do
           UpdateProduct.call!(
-            product:,
-            product_params: @product_form.serializable_hash
+            product: @product.object,
+            product_params: @product_form.serializable_hash,
+            updating_team: current_user.team
           )
 
-          redirect_to product_path(product), flash: { success: "Product was successfully updated." }
+          redirect_to product_path(@product), flash: { success: "The product record was updated" }
         end
-        format.json { render :show, status: :ok, location: product }
+        format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }
-        format.json { render json: product.errors, status: :unprocessable_entity }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -117,6 +142,6 @@ private
   end
 
   def count_to_display
-    params[:hazard_type].blank? && params[:q].blank? ? Product.count : @results.total_count
+    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @results.total_count
   end
 end

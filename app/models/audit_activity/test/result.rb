@@ -5,6 +5,11 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     ) }
   end
 
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
+  end
+
   def test_result
     return if metadata.nil?
 
@@ -49,5 +54,17 @@ private
 
   def subtitle_slug
     "Test result recorded"
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata] || {}
+
+    product_id = metadata.dig("test_result", "product_id")
+    return metadata if product_id.blank?
+
+    metadata["test_result"]["investigation_product_id"] = investigation.investigation_products.where(product_id:).pick("investigation_products.id")
+    metadata["test_result"].delete("product_id")
+    metadata
   end
 end

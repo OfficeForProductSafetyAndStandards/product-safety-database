@@ -1,0 +1,15 @@
+<%= page_title "Remove #{@product.name}" %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_products_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= govukErrorSummary(
+  titleText: "Cannot remove the product from the case",
+  descriptionText: "This is because the product is associated with the following supporting information:",
+  errorList: @supporting_information.map { |si| si = si.decorate; { text: si.supporting_information_title, href: si.show_path } }
+) %>

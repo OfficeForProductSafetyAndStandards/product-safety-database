@@ -180,10 +180,16 @@ en:
         primary_hazard: Primary hazard
         description: Hazard description
         compliance: Compliance
-        unsafe: Unsafe
-        non_compliant: Non-compliant
-        unsafe_and_non_compliant: Unsafe and non-compliant
-        safe_and_compliant: Safe and compliant
+        activity_log:
+          unsafe: Unsafe
+          non_compliant: Non-compliant
+          unsafe_and_non_compliant: Unsafe and non-compliant
+          safe_and_compliant: Safe and compliant
+          not_provided: Not provided
+        unsafe: Product reported as unsafe
+        non_compliant: Product reported as non-compliant
+        unsafe_and_non_compliant: Product reported as unsafe and non-compliant
+        safe_and_compliant: Product reported as safe and compliant
         not_provided: Not provided
       risk_assessments:
         key:
@@ -394,7 +400,7 @@ en:
           attributes:
             is_date_known:
               inclusion: Select yes if you know when the %{type} happened
-            product_id:
+            investigation_product_id:
               blank: Select the product involved in the %{type}
             severity:
               inclusion: Select the severity of the %{type}
@@ -415,7 +421,7 @@ en:
             remove_product:
               inclusion: Select yes if you want to remove the product from the case
             reason:
-              blank: Enter the reason for removing the product from the case
+              blank: Enter the reason for removing the product
         notifying_country_form:
           attributes:
             country:
@@ -426,7 +432,7 @@ en:
               blank: Enter a comment
         test_result_form:
           attributes:
-            product_id:
+            investigation_product_id:
               blank: "Select the product which was tested"
             legislation:
               inclusion: "Select the legislation that relates to this test"
@@ -458,12 +464,6 @@ en:
               too_short: "The barcode must be between 5 and 15 digits"
               only_integer: "Enter a valid barcode number"
               not_a_number: "Enter a valid barcode number"
-            affected_units_status:
-              inclusion: "You must state how many units are affected"
-            approx_units:
-              not_a_number: "Give the number of units affected"
-            exact_units:
-              not_a_number: "Give the number of units affected"
             has_markings:
               inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
             markings:
@@ -491,7 +491,7 @@ en:
               blank: Select business related to the case
             assessed_by_other:
               blank: Enter organisation name
-            product_ids:
+            investigation_product_ids:
               blank: You must choose at least one product
             risk_assessment_file:
               blank: You must upload the risk assessment
@@ -569,6 +569,28 @@ en:
           attributes:
             hazard_type:
               blank: "Enter the primary hazard"
+            reported_reason:
+              blank: "Select the options which are reasons for concern"
+        edit_why_reporting_form:
+          attributes:
+            reported_reason:
+              blank: "Select the options which are reasons for concern"
+            non_compliant_reason:
+              blank: "Enter why the product is non-compliant"
+            hazard_type:
+              blank: "Select the primary hazard"
+            hazard_description:
+              blank: "Enter why the product is unsafe"
+        case_name_form:
+          attributes:
+            user_title:
+              blank: "Enter a case name"
+        reference_number_form:
+          attributes:
+            has_complainant_reference:
+              inclusion: "Select yes to add a reference number to the case"
+            complainant_reference:
+              blank: "Enter a reference number"
         email_correspondence_form:
           attributes:
             correspondence_date:
@@ -591,7 +613,7 @@ en:
               recent_date: Date of call must be on or after 1 January 1970
         corrective_action_form:
           attributes:
-            product_id:
+            investigation_product_id:
               blank: "Select the product the corrective action relates to"
             date_decided:
               blank: "Enter the date the corrective action came into effect"
@@ -617,6 +639,10 @@ en:
               inclusion: "Select yes if the business responsible has published recall information online"
             online_recall_information:
               blank: "Enter the webpage where the business responsible published recall information"
+        reason_for_creating_form:
+          attributes:
+            case_is_safe:
+              inclusion: "Select a product is of concern if the product might be unsafe or non-compliant"
         risk_validation_form:
           attributes:
             risk_validation_change_rationale:
@@ -639,7 +665,7 @@ en:
               in_future: Date enquiry received must be today or in the past
         test/result:
           attributes:
-            product:
+            investigation_product:
               required: "Select the product which was tested"
         test/request:
           attributes:
@@ -718,6 +744,11 @@ en:
     before_2021: "Before 1 January 2021"
     on_or_after_2021: "On or after 1 January 2021"
     unknown_date: "Unable to ascertain"
+    affected_units_status:
+      exact: "Exact"
+      approx: "Approximate"
+      unknown: "Unknown"
+      not_relevant: "Not relevant"
   accident_or_incident:
     usage:
       during_normal_use: "Normal use"

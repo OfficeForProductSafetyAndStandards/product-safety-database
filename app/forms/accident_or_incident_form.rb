@@ -6,7 +6,7 @@ class AccidentOrIncidentForm
 
   attribute :date, :govuk_date
   attribute :is_date_known, :boolean
-  attribute :product_id
+  attribute :investigation_product_id
   attribute :severity
   attribute :severity_other
   attribute :usage
@@ -32,7 +32,7 @@ class AccidentOrIncidentForm
     severity_other
     additional_info
     usage
-    product_id
+    investigation_product_id
     type
     date
   ].freeze
@@ -50,6 +50,6 @@ class AccidentOrIncidentForm
   end
 
   def presence_of_product
-    errors.add(:product_id, :blank, type: type.downcase) if product_id.blank?
+    errors.add(:investigation_product_id, :blank, type: type.downcase) if investigation_product_id.blank?
   end
 end

@@ -3,42 +3,10 @@ require "rails_helper"
 RSpec.describe ProductDecorator, :with_stubbed_opensearch do
   subject(:decorated_product) { product.decorate }
 
-  let(:product) { build(:product) }
+  let(:product) { build(:product, authenticity: "unsure") }
 
   describe "#pretty_description" do
     specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
-  end
-
-  describe "#units_affected" do
-    context "when affected_units_status is `exact`" do
-      it "returns correct units affected string" do
-        product.affected_units_status = "exact"
-        product.number_of_affected_units = 12
-        expect(decorated_product.units_affected).to eq "12"
-      end
-    end
-
-    context "when affected_units_status is `approx`" do
-      it "returns correct units affected string" do
-        product.affected_units_status = "approx"
-        product.number_of_affected_units = 12
-        expect(decorated_product.units_affected).to eq "12"
-      end
-    end
-
-    context "when affected_units_status is `unknown`" do
-      it "returns correct units affected string" do
-        product.affected_units_status = "unknown"
-        expect(decorated_product.units_affected).to eq "Unknown"
-      end
-    end
-
-    context "when affected_units_status is `not_relevant`" do
-      it "returns correct units affected string" do
-        product.affected_units_status = "not_relevant"
-        expect(decorated_product.units_affected).to eq "Not relevant"
-      end
-    end
   end
 
   describe "#summary_list" do
@@ -47,8 +15,8 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
     let(:summary_list) { decorated_product.summary_list }
 
     context "when displaying the product summary" do
-      it "displays the brand" do
-        expect(summary_list).to summarise("Product brand", text: product.brand)
+      it "displays the Brand name" do
+        expect(summary_list).to summarise("Brand name", text: product.brand)
       end
 
       it "displays the Product name" do
@@ -59,24 +27,16 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
         expect(summary_list).to summarise("Category", text: product.category)
       end
 
-      it "displays product authenticity" do
-        expect(summary_list).to summarise("Product authenticity", text: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
-      end
-
-      it "displays the product marking" do
-        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
+      it "displays the Subcategory" do
+        expect(summary_list).to summarise("Subcategory", text: product.subcategory)
       end
 
       it "displays the Barcode" do
         expect(summary_list).to summarise("Barcode", text: product.barcode)
       end
 
-      it "displays the other product identifiers" do
-        expect(summary_list).to summarise("Other product identifiers", text: product.product_code)
-      end
-
-      it "displays the Batch number" do
-        expect(summary_list).to summarise("Batch number", text: product.batch_number)
+      it "displays the Description" do
+        expect(summary_list).to summarise("Description", text: product.description)
       end
 
       it "displays the Webpage" do
@@ -87,8 +47,16 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
         expect(summary_list).to summarise("Country of origin", text: country_from_code(product.country_of_origin))
       end
 
-      it "displays the Description" do
-        expect(summary_list).to summarise("Description", text: product.description)
+      it "displays product Authenticity" do
+        expect(summary_list).to summarise("Counterfeit", text: "Unsure")
+      end
+
+      it "displays the Product marking" do
+        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
+      end
+
+      it "displays the Other product identifiers" do
+        expect(summary_list).to summarise("Other product identifiers", text: product.product_code)
       end
     end
   end
@@ -169,6 +137,59 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
 
       it "returns a String" do
         expect(decorated_product.markings).to eq("Not provided")
+      end
+    end
+  end
+
+  describe "#owning_team_link" do
+    let(:user) { create(:user) }
+    let(:product) { create(:product, owning_team:) }
+
+    before do
+      allow(helper).to receive(:current_user).and_return(user)
+    end
+
+    context "when the product is not owned" do
+      let(:owning_team) { nil }
+
+      it "returns 'No owner'" do
+        expect(decorated_product.owning_team_link).to eq("No owner")
+      end
+    end
+
+    context "when the product is owned by the user's team" do
+      let(:owning_team) { user.team }
+
+      it "returns 'Your team is the product record owner'" do
+        expect(decorated_product.owning_team_link).to eq("Your team is the product record owner")
+      end
+    end
+
+    context "when the product is owned by another team" do
+      let(:owning_team) { build(:team, name: "Other Team") }
+
+      it "returns a link to the other team's contact details" do
+        expect(decorated_product.owning_team_link).to have_link("Other Team", href: owner_product_path(product))
+      end
+    end
+  end
+
+  describe "#unique_investigations_except", :with_stubbed_mailer do
+    context "when product is linked to multiple investigations" do
+      let(:product) { create(:product) }
+
+      before do
+        create(:allegation, user_title: "investigation 1", products: [product])
+        create(:allegation, user_title: "investigation 2", products: [product])
+        create(:allegation, user_title: "investigation 3", products: [product])
+        create(:allegation, user_title: "investigation 4", products: [product])
+      end
+
+      it "returns each unique linked investigation excluding the investigation that the is currently being viewed" do
+        investigation = Investigation.find_by(user_title: "investigation 1")
+        unique_cases = decorated_product.unique_cases_except(investigation)
+
+        expect(unique_cases.map(&:user_title)).to eq ["investigation 4", "investigation 3", "investigation 2"]
       end
     end
   end

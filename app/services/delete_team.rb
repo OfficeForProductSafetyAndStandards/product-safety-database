@@ -13,6 +13,7 @@ class DeleteTeam
     ActiveRecord::Base.transaction do
       team.mark_as_deleted!
       team.users.update_all(team_id: new_team.id)
+      team.owned_products.update_all(owning_team_id: new_team.id)
       remove_team_as_owner_from_cases
       remove_team_as_collaborator_from_cases
     end

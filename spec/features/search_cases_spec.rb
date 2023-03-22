@@ -9,12 +9,17 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
            category: "kitchen appliances",
            product_code: "W2020-10/1")
   end
-  let!(:investigation) { create(:allegation, products: [product]) }
+  let!(:investigation) { create(:allegation, products: [product], user_title: nil) }
+  let!(:deleted_investigation) { create(:allegation, products: [product], user_title: "DeletedCase", deleted_at: Time.zone.now) }
 
   let(:mobile_phone) do
     create(:product,
            name: "T12 mobile phone",
-           category: "consumer electronics")
+           category: "consumer electronics",
+           subcategory: "telephone",
+           barcode: "11111",
+           description: "Original",
+           product_code: "AAAAA")
   end
 
   let(:mobilz_phont) do
@@ -35,14 +40,14 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
            category: "consumer electronics")
   end
 
-  let!(:mobile_phone_investigation) { create(:allegation, products: [mobile_phone]) }
-  let!(:mobilz_phont_investigation) { create(:allegation, products: [mobilz_phont]) }
-  let!(:thirteenproduct_investigation) { create(:allegation, products: [thirteenproduct]) }
-  let!(:eeirteenproduct_investigation) { create(:allegation, products: [eeirteenproduct]) }
+  let!(:mobile_phone_investigation) { create(:allegation, products: [mobile_phone], user_title: "mobile phone investigation") }
+  let!(:mobilz_phont_investigation) { create(:allegation, products: [mobilz_phont], user_title: "mobilz phone investigation") }
+  let!(:thirteenproduct_investigation) { create(:allegation, products: [thirteenproduct], user_title: "thirteenproduct investigation") }
+  let!(:eeirteenproduct_investigation) { create(:allegation, products: [eeirteenproduct], user_title: "eeirteenproduct investigation") }
 
   before do
     # Import products syncronously into Opensearch
-    Investigation.__elasticsearch__.import refresh: :wait_for
+    Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for, force: true
   end
 
   scenario "searching for a case using a keyword from a product name" do
@@ -222,7 +227,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     context "when no search term is used" do
-      it "shows all results if no word is searched for" do
+      it " does not show any deleted cases, but does show all none deleted cases if no word is searched for" do
         sign_in(user)
         visit "/cases"
 
@@ -232,26 +237,33 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_content "5 cases using the current filters, were found."
 
         expect(page).to have_text(thirteenproduct_investigation.pretty_id)
-        expect(page).to have_text("thirteenproduct")
+        expect(page).to have_text(thirteenproduct_investigation.user_title)
 
         expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
-        expect(page).to have_text("eeirteenproduct")
+        expect(page).to have_text(eeirteenproduct_investigation.user_title)
 
         expect(page).to have_text(mobile_phone_investigation.pretty_id)
-        expect(page).to have_text("T12 mobile phone")
+        expect(page).to have_text(mobile_phone_investigation.user_title)
 
         expect(page).to have_text(mobilz_phont_investigation.pretty_id)
-        expect(page).to have_text("T12 mobilz phont")
+        expect(page).to have_text(mobilz_phont_investigation.user_title)
+
+        expect(page).not_to have_text(deleted_investigation.pretty_id)
+        expect(page).not_to have_text(deleted_investigation.user_title)
 
         expect(page).to have_text(investigation.pretty_id)
         expect(page).to have_text("MyBrand washing machine")
       end
 
       context "when over 10k cases exist" do
+        # rubocop:disable RSpec/VerifiedDoubles
         before do
-          allow(Investigation).to receive(:count).and_return(10_001)
+          spy = spy("not_deleted")
+          allow(Investigation).to receive(:not_deleted).and_return(spy)
+          allow(spy).to receive(:count).and_return(10_001)
           sign_in(user)
         end
+        # rubocop:enable RSpec/VerifiedDoubles
 
         it "shows total number of cases" do
           visit "/cases"
@@ -261,6 +273,85 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           click_button "Apply"
 
           expect(page).to have_content "10001 cases using the current filters, were found."
+        end
+      end
+    end
+
+    context "when searching for a case that has been deleted" do
+      it "does not show the deleted case in the results" do
+      end
+    end
+
+    context "when searching by product subcategory" do
+      context "when case is closed" do
+        before do
+          ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
+          mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
+          Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for
+
+          sign_in(user)
+          visit "/cases"
+          within_fieldset "Case status" do
+            choose "All"
+          end
+        end
+
+        it "only shows the case when searching by product details from the time the case was closed" do
+          fill_in "Search", with: "telephone"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) telephone, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "11111"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) 11111, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "original"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) original, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "AAAAA"
+          click_button "Submit search"
+
+          expect(page).to have_content "1 case matching keyword(s) AAAAA, using the current filters, was found."
+
+          expect(page).to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "handset"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) handset, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "22222"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) 22222, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "anewone"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) anewone, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
+
+          fill_in "Search", with: "BBBBB"
+          click_button "Submit search"
+
+          expect(page).to have_content "0 cases matching keyword(s) BBBBB, using the current filters, were found."
+
+          expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
         end
       end
     end

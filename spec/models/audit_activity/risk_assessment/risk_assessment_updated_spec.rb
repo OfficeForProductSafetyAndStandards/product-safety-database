@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 
-  subject(:activity) { investigation.reload.activities.first }
+  subject(:activity) { investigation.reload.activities.where(type: described_class.to_s).first }
 
   let(:investigation) { create(:allegation, :with_products, creator: user) }
   let(:user) { create(:user) }
@@ -18,13 +18,13 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
       assessed_by_team_id: user.team.id,
       risk_level: "high",
       details: "Test",
-      product_ids: investigation.product_ids,
+      investigation_product_ids: investigation.investigation_product_ids,
       risk_assessment_file: file
     ).risk_assessment
   end
 
   describe ".build_metadata" do
-    subject(:metadata) { described_class.build_metadata(risk_assessment:, previous_product_ids: investigation.product_ids, attachment_changed:, previous_attachment_filename:) }
+    subject(:metadata) { described_class.build_metadata(risk_assessment:, previous_investigation_product_ids: investigation.investigation_product_ids, attachment_changed:, previous_attachment_filename:) }
 
     context "when the attachment has not changed" do
       let(:attachment_changed) { false }
@@ -64,6 +64,19 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
     end
   end
 
+  describe "#metadata" do
+    # TODO: remove once migrated
+    context "when metadata contains a Product reference" do
+      let(:new_investigation_product) { create(:investigation_product, investigation:) }
+      let(:activity) { described_class.new(metadata: { updates: { investigation_product_id: [investigation.investigation_product_ids.first, new_investigation_product.id] } }.deep_stringify_keys) }
+
+      it "translates the Product ID to InvestigationProduct ID" do
+        expect(activity.metadata["updates"]["product_id"]).to be_nil
+        expect(activity.metadata["updates"]["investigation_product_id"]).to eq([investigation.investigation_product_ids.first, new_investigation_product.id])
+      end
+    end
+  end
+
   describe "#new_assessed_on" do
     before do
       UpdateRiskAssessment.call!(
@@ -73,7 +86,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
         assessed_by_team_id: user.team.id,
         risk_level: "serious",
         details: "Test 2",
-        product_ids: investigation.product_ids
+        previous_investigation_product_ids: investigation.investigation_product_ids,
+        investigation_product_ids: investigation.investigation_product_ids
       )
     end
 

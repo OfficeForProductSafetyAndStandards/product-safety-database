@@ -1,51 +1,9 @@
-<% content_for :action_bar do %>
-  <div class="hmcts-identity-bar app-identity-bar">
-    <div class="hmcts-identity-bar__container govuk-width-container">
-      <div class="hmcts-identity-bar__details app-identity-bar__details">
-        <span class="hmcts-identity-bar__title app-identity-bar__title"><span class="app-identity-bar__case-id"><%= investigation.pretty_id %></span> <%= investigation.decorate.title %></span>
-      </div>
-
-      <div class="hmcts-identity-bar__actions">
-
-
-        <% if policy(investigation).update? %>
-          <div class="hmcts-identity-bar__menu">
-            <%= tag.div(class: "app-menu", "data-module": "app-menu", data: add_new_menu_data_attributes(investigation)) do %>
-              <%= govukButton(text: "Add new", href: investigation_add_to_case_path(investigation), classes: "hmcts-menu__item app-button--case-bar-secondary") %>
-            <% end %>
-          </div>
-        <% else %>
-          <%= govukButton(text: "Add comment", href: new_investigation_activity_comment_path(investigation), classes: "app-menu__item app-button--case-bar-secondary") %>
-        <% end %>
-
-        <% if policy(investigation).change_owner_or_status? %>
-          <%= tag.div(class: "app-menu", "data-module": "app-menu", data: actions_menu_data_attributes(investigation)) do %>
-            <%= govukButton(text: "Actions", href: investigation_actions_path(investigation), classes: "app-menu__item app-button--case-bar-secondary") %>
-          <% end %>
-        <% elsif policy(investigation).send_email_alert? %>
-          <%= govukButton(text: "Send email alert", href: new_investigation_alert_path(investigation), classes: "app-menu__item app-button--case-bar-secondary") %>
-        <% end %>
-
-      </div>
-
-    </div>
-  </div>
-<% end %>
-
 <% content_for :after_header do %>
   <% if content_for?(:back_link) || has_badges?(investigation) %>
     <div class="govuk-grid-row">
       <% if content_for?(:back_link) %>
         <div class="govuk-grid-column-one-half">
           <%= yield :back_link %>
-        </div>
-      <% end %>
-
-      <% if has_badges?(investigation) %>
-        <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-0">
-          <%= render "investigations/case_badges",
-          investigation: investigation,
-          classes: "hmcts-badge--aligned-right-from-tablet" %>
         </div>
       <% end %>
     </div>

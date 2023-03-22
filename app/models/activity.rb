@@ -3,8 +3,8 @@ class Activity < ApplicationRecord
   belongs_to :added_by_user, class_name: :User, optional: true
 
   redacted_export_with :id, :added_by_user_id, :business_id, :correspondence_id,
-                       :created_at, :investigation_id, :product_id, :type,
-                       :updated_at
+                       :created_at, :investigation_id, :investigation_product_id,
+                       :type, :updated_at
 
   def has_attachment?
     false

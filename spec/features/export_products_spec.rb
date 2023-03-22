@@ -11,15 +11,13 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     end
   end
 
-  let!(:product_1) { create(:product, name: "ABC") }
-  let!(:product_2) { create(:product, name: "XYZ") }
-  let!(:hazardous_product) { create(:product, name: "STU") }
-  let!(:investigation) { create(:allegation, :reported_unsafe, :with_products, products: [hazardous_product]) }
-  let(:hazard_type) { investigation.hazard_type }
+  let!(:product_1) { create(:product, name: "ABC", category: "Lifts") }
+  let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser") }
+  let!(:hazardous_product) { create(:product, name: "STU", category: "Waste") }
 
   before do
     Product.import force: true, refresh: :wait_for
-    Investigation.import force: true, refresh: :wait_for
+    Investigation.import scope: "not_deleted", force: true, refresh: :wait_for
 
     sign_in(user)
   end
@@ -40,9 +38,9 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     expect(email.personalization[:download_export_url]).to eq product_export_url(export)
 
     expect(spreadsheet.last_row).to eq(4)
-    expect(spreadsheet.cell(2, 16)).to eq(product_1.name)
-    expect(spreadsheet.cell(3, 16)).to eq(product_2.name)
-    expect(spreadsheet.cell(4, 16)).to eq(hazardous_product.name)
+    expect(spreadsheet.cell(2, 13)).to eq(product_1.name)
+    expect(spreadsheet.cell(3, 13)).to eq(product_2.name)
+    expect(spreadsheet.cell(4, 13)).to eq(hazardous_product.name)
   end
 
   scenario "with search query" do
@@ -58,13 +56,13 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2, 16)).to eq(product_2.name)
+    expect(spreadsheet.cell(2, 13)).to eq(product_2.name)
   end
 
-  scenario "with hazard type filter" do
+  scenario "with category filter" do
     visit products_path
 
-    select hazard_type, from: "Hazard type"
+    select hazardous_product.category, from: "Category"
     click_button "Submit search"
 
     expect(page).not_to have_text product_1.name
@@ -74,6 +72,6 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2, 16)).to eq(hazardous_product.name)
+    expect(spreadsheet.cell(2, 13)).to eq(hazardous_product.name)
   end
 end

@@ -9,24 +9,23 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
 
 <% if allow_product_linking %>
   <%= govukFieldset(legend: { text: "Which product is subject to action?", classes: "govuk-fieldset__legend--m" }) do %>
-    <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:product].any? %>">
-      <% if investigation.products.empty? %>
+    <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:investigation_product].any? %>">
+      <% if investigation.investigation_products.empty? %>
         <span class="govuk-hint">
           There are no products on this case.
           <br />
           <%= link_to "Add a product", new_investigation_product_path(investigation) %>
           to record a corrective action.
         </span>
-      <% elsif  investigation.products.size == 1 %>
-        <p class="govuk-body"><%= investigation.products.first.name %></p>
-        <%= form.hidden_field :product_id, value: investigation.products.first.id %>
+      <% elsif investigation.investigation_products.one? %>
+        <p class="govuk-body"><%= investigation.investigation_products.first.product.name %></p>
+        <%= form.hidden_field :investigation_product_id, value: investigation.investigation_products.first.id %>
       <% else %>
-
-        <%= form.govuk_select :product_id,
+        <%= form.govuk_select :investigation_product_id,
           label: "Product",
           label_classes: "govuk-visually-hidden",
-          items: [{text: "", value: ""}] + investigation.products.map { |product| { text: product.name, value: product.id }},
-         hint: "Only products already added to the case are listed."
+          items: [{text: "", value: ""}] + investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id }},
+          hint: "Only products already added to the case are listed."
         %>
       <% end %>
     </div>

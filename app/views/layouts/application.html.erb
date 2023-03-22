@@ -55,8 +55,6 @@
     <% content = yield %>
 
     <% if content.present? %>
-      <%= yield :action_bar %>
-
       <div class="govuk-width-container">
         <%= yield :after_header %>
 
@@ -98,12 +96,13 @@
               %>
 
               <li class="govuk-footer__inline-list-item"><%
-                  html = capture do %>More information<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                  html = capture do %>How to use the <%= psd_abbr title: false %><span class="govuk-visually-hidden"> (opens in new tab)</span><%
                 end %><%=
                 link_to html,
                         help_about_path,
                         class: "govuk-footer__link govuk-!-margin-right-2",
-                        target: "_blank"
+                        target: "_blank",
+                        rel: "noreferrer noopener"
               %></li><li class="govuk-footer__inline-list-item"><%=
                 link_to "Accessibility", help_accessibility_path, class: "govuk-footer__link govuk-!-margin-right-2"
               %></li><li class="govuk-footer__inline-list-item"><%

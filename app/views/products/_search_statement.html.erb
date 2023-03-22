@@ -1,5 +1,6 @@
 <p class="govuk-body">
-  <% if keywords.blank? && filter.blank? %>
+  <% filters_are_blank = filter[:category].blank? && filter[:retired_status].blank? %>
+  <% if keywords.blank? && filters_are_blank %>
     There are currently <%= pluralize count, "product" %>.
   <% else %>
     <% if keywords.present? || filter.present? %>
@@ -7,8 +8,8 @@
       <% if keywords.present? %>
         matching keyword(s) <span class="govuk-!-font-weight-bold"><%= sanitize keywords %></span>,
       <% end %>
-      <% if filter.present? %>
-        using the current filter,
+      <% unless filters_are_blank %>
+        using the current filters,
       <% end %>
       <%= count == 1 ? "was" : "were" %> found.
     <% end %>
