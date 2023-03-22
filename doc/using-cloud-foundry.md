@@ -21,6 +21,22 @@ cd app
 bin/tll bin/rails c
 ```
 
+#### Copying data from staging to review apps
+
+```
+cf login -a api.london.cloud.service.gov.uk -u EMAIL
+cf target -s staging
+cf conduit psd-database -- pg_dump --file psd-staging.sql --no-acl --no-owner
+cf target -s int
+cf create-service postgres tiny-unencrypted-13 NEW_DB_NAME
+cf service NEW_DB_NAME # wait until status is `create succeeded` (10-15 mins)
+cf conduit NEW_DB_NAME -- psql < psd-staging.sql
+cf unbind-service PR_APP_NAME OLD_DB_NAME
+cf bind-service PR_APP_NAME NEW_DB_NAME
+cf restage PR_APP_NAME
+cf ssh PR_APP_NAME -> cd app -> bin/tll bin/rake opensearch:index
+```
+
 #### List apps
 
 ```
