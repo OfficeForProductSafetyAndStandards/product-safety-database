@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_23_103006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -451,8 +451,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "event", null: false
     t.bigint "item_id", null: false
     t.string "item_type", null: false
-    t.text "object"
-    t.text "object_changes"
+    t.jsonb "object"
+    t.jsonb "object_changes"
     t.string "whodunnit"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
