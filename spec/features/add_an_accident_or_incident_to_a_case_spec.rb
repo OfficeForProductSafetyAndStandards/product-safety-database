@@ -54,7 +54,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
     expect(page).not_to have_error_messages
 
     expect(page).to have_content "Supporting information"
-    expect(page).to have_content "MyBrand Washing Machine: Normal use"
+    expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
     expect_to_be_on_supporting_information_page
 
@@ -68,7 +68,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine", severity: "Serious", usage: "Normal use", additional_info: "")
+    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine (#{product1.psd_ref})", severity: "Serious", usage: "Normal use", additional_info: "")
   end
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
@@ -76,13 +76,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add new"
-
-    expect_to_be_on_add_to_case_page
-
-    choose "Accident or incident"
-
-    click_button "Continue"
+    click_link "Add Accident or incidents"
 
     expect_to_be_on_accident_or_incident_type_page
 
@@ -120,7 +114,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "MyBrand Washing Machine: Normal use"
+    expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
     expect_to_be_on_supporting_information_page
 
@@ -134,7 +128,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: date.to_formatted_s(:govuk), product_name: product1.name, severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
+    expect_summary_list_to_have(date: date.to_formatted_s(:govuk), product_name: "#{product1.name} (#{product1.psd_ref})", severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
   end
 
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
@@ -173,12 +167,8 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add new"
+    click_link "Add Accident or incidents"
 
-    expect_to_be_on_add_to_case_page
-
-    choose "Accident or incident"
-
-    click_button "Continue"
+    expect_to_be_on_accident_or_incident_type_page
   end
 end

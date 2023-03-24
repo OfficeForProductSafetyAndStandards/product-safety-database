@@ -12,6 +12,7 @@ module InvestigationOpensearch
         indexes :type, type: :keyword
         indexes :owner_id, type: :keyword
         indexes :creator_id, type: :keyword
+        indexes :hazard_type, type: :keyword
         indexes :teams_with_access, type: :nested do
           indexes :id, type: :keyword
         end
@@ -31,7 +32,7 @@ module InvestigationOpensearch
                  hazard_description
                  non_compliant_reason
                  risk_level],
-        methods: %i[title creator_id owner_id tiebreaker_id],
+        methods: %i[title creator_id owner_id product_subcategories product_barcodes product_descriptions product_codes tiebreaker_id],
         include: {
           teams_with_access: { only: %i[id name] },
           documents: {
@@ -49,7 +50,7 @@ module InvestigationOpensearch
             only: %i[legal_name trading_name company_number]
           },
           products: {
-            only: %i[category description brand name product_code subcategory batch_number barcode]
+            only: %i[category brand name]
           },
           complainant: {
             only: %i[name phone_number email_address other_details]
@@ -81,10 +82,15 @@ module InvestigationOpensearch
          corrective_actions.*
          tests.*
          alerts.*
+         product_subcategories
          title
          description
          hazard_type
+         product_names
+         product_codes
+         product_descriptions
          product_category
+         product_barcodes
          hazard_description
          non_compliant_reason]
     end

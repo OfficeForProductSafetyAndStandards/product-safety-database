@@ -36,7 +36,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
     end
   end
 
-  # rubocop:disable RSpec/MultipleExpectations
   context "when using representations proxy controller" do
     # /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)      active_storage/representations/proxy#show
     let(:asset_url) { rails_storage_proxy_path(document) }
@@ -263,9 +262,10 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
       context "when the attachment is on an activity" do
         let(:asset_url) { rails_storage_proxy_path(document) }
         let(:product) { create(:product, investigations: [investigation]) }
+        let(:investigation_product) { investigation.investigation_products.first }
 
         context "when the activity is not a correspondence or investigation document related" do
-          let(:activity) { create(:audit_activity_test_result, investigation:, product:) }
+          let(:activity) { create(:audit_activity_test_result, investigation:, investigation_product:) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)
@@ -289,9 +289,11 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
         end
 
         context "when the activity is a correspondence" do
-          let!(:product) { create(:product, investigations: [investigation]) }
-          let!(:correspondence) { create(:correspondence_meeting, investigation:) }
-          let!(:activity) { AuditActivity::Correspondence::Base.create(investigation:, product:, correspondence:) }
+          let(:product) { create(:product, investigations: [investigation]) }
+          let(:correspondence) { create(:correspondence_meeting, investigation:) }
+          let(:investigation_product) { investigation.investigation_products.first }
+
+          let!(:activity) { AuditActivity::Correspondence::Base.create(investigation:, investigation_product:, correspondence:) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)
@@ -315,8 +317,9 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
         end
 
         context "when the activity is related to a document" do
-          let!(:product) { create(:product, investigations: [investigation]) }
-          let!(:activity) { AuditActivity::Document::Base.create(investigation:, product:) }
+          let(:product) { create(:product, investigations: [investigation]) }
+          let(:investigation_product) { investigation.investigation_products.first }
+          let!(:activity) { AuditActivity::Document::Base.create(investigation:, investigation_product:) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)
@@ -421,5 +424,4 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
     end
   end
   # rubocop:enable RSpec/NestedGroups
-  # rubocop:enable RSpec/MultipleExpectations
 end

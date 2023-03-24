@@ -1,15 +1,12 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  let(:product) { create(:product) }
-  let(:test_result) do
-    create(:test_result,
-           product:,
-           investigation: create(:allegation))
-  end
+  let(:investigation_product) { create(:investigation_product, investigation:) }
+  let(:investigation) { create(:allegation) }
+  let(:test_result) { create(:test_result, investigation_product:, investigation:) }
 
   describe "#test_result" do
-    let(:activity) { described_class.new(metadata: { test_result_id: test_result.id }) }
+    let(:activity) { described_class.new(metadata: { test_result_id: test_result.id }.stringify_keys) }
 
     it "returns the test result" do
       expect(activity.test_result).to eq test_result
@@ -73,11 +70,24 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch,
   end
 
   describe "#new_product" do
-    let(:new_product) { create(:product) }
-    let(:activity) { described_class.new(metadata: { updates: { product_id: [product.id, new_product.id] } }) }
+    let(:new_investigation_product) { create(:investigation_product, investigation:) }
+    let(:activity) { described_class.new(metadata: { updates: { investigation_product_id: [investigation_product.id, new_investigation_product.id] } }) }
 
     it "returns the new product" do
-      expect(activity.new_product).to eq new_product
+      expect(activity.new_product).to eq new_investigation_product.product
+    end
+  end
+
+  describe "#metadata" do
+    # TODO: remove once migrated
+    context "when metadata contains a Product reference" do
+      let(:new_investigation_product) { create(:investigation_product, investigation:) }
+      let(:activity) { described_class.new(metadata: { updates: { investigation_product_id: [investigation_product.id, new_investigation_product.id] } }.deep_stringify_keys) }
+
+      it "translates the Product ID to InvestigationProduct ID" do
+        expect(activity.metadata["updates"]["product_id"]).to be_nil
+        expect(activity.metadata["updates"]["investigation_product_id"]).to eq([investigation_product.id, new_investigation_product.id])
+      end
     end
   end
 end

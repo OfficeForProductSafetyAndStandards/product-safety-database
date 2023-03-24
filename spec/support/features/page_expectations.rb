@@ -116,7 +116,7 @@ module PageExpectations
     end
 
     expect(page).to have_summary_item(key: "Event date", value: new_date_decided.to_formatted_s(:govuk))
-    expect(page).to have_summary_item(key: "Product",             value: product_two.name)
+    expect(page).to have_summary_item(key: "Product",             value: "#{product_two.name} (#{product_two.psd_ref})")
     expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
     expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
     expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
@@ -158,7 +158,7 @@ module PageExpectations
 
   def expect_to_be_on_add_product_to_investigation_page(investigation)
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products/new")
-    expect(page).to have_selector("h1", text: investigation.user_title)
+    expect(page).to have_selector("h1", text: "Create a product record")
   end
 
   def expect_to_be_on_case_products_page
@@ -209,6 +209,16 @@ module PageExpectations
   def expect_to_be_on_close_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/status/close")
     expect(page).to have_h1("Why are you closing the case?")
+  end
+
+  def expect_to_be_on_cannot_close_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/cannot_close")
+    expect(page).to have_h1("A product has not been added to this case")
+  end
+
+  def expect_to_be_on_confirm_case_deletion_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/confirm_deletion")
+    expect(page).to have_h1("Delete the case")
   end
 
   def expect_to_be_on_reopen_case_page(case_id:)
@@ -438,7 +448,7 @@ module PageExpectations
 
   def expect_to_be_on_product_page(product_id:, product_name:)
     expect(page).to have_current_path("/products/#{product_id}")
-    expect(page).to have_selector("h1", text: product_name)
+    expect(page).to have_selector("h3.govuk-heading-m", text: product_name)
   end
 
   def expect_to_be_on_edit_product_page(product_id: nil, product_name: nil)
@@ -448,8 +458,20 @@ module PageExpectations
 
   def expect_to_be_on_add_attachment_to_a_product_page(product_id:)
     expect(page).to have_content "Image files will be saved to the product images"
-    expect(page).to have_current_path("/products/#{product_id}/documents/new")
+    expect(page).to have_current_path("/products/#{product_id}/document_uploads/new")
     expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
+  end
+
+  def expect_to_be_on_edit_attachment_for_a_product_page(product_id:, document_upload_id:)
+    expect(page).to have_current_path("/products/#{product_id}/document_uploads/#{document_upload_id}/edit")
+    expect(page).to have_h2("Edit attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
+  end
+
+  def expect_to_be_on_delete_attachment_for_a_product_page(product_id:, document_upload_id:)
+    expect(page).to have_current_path("/products/#{product_id}/document_uploads/#{document_upload_id}/remove")
+    expect(page).to have_h2("Remove attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end
 
@@ -666,5 +688,20 @@ module PageExpectations
 
   def expect_to_be_on_case_summary_edit_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/summary/edit")
+  end
+
+  def expect_to_be_on_edit_batch_numbers_page(investigation_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-batch-numbers/edit")
+    expect(page).to have_css("h1", text: "Edit the batch numbers")
+  end
+
+  def expect_to_be_on_edit_customs_code_page(investigation_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-customs-code/edit")
+    expect(page).to have_css("h1", text: "Edit the customs code")
+  end
+
+  def expect_to_be_on_edit_units_affected_page(investigation_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-number-of-affected-units/edit")
+    expect(page).to have_css("h1", text: "Edit how many units are affected")
   end
 end

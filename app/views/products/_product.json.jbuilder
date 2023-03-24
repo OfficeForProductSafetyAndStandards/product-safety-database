@@ -7,7 +7,6 @@ json.extract! product,
               :webpage,
               :description,
               :added_by_user,
-              :batch_number,
               :country_of_origin,
               :created_at,
               :updated_at

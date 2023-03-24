@@ -1,0 +1,47 @@
+<% title = "Add attachment" %>
+<%= page_title title, errors: @document_upload.errors.any? %>
+
+<% if @parent.is_a?(Investigation) %>
+  <% @investigation = @parent %>
+
+  <% content_for :back_link do %>
+    <%= govukBackLink(
+      text: "Back to #{@investigation.pretty_description.downcase}",
+      href: investigation_path(@investigation)
+    ) %>
+  <% end %>
+
+  <%= render "investigations/pages_top", investigation: @investigation %>
+
+<% else %>
+  <% content_for :after_header do %>
+    <%= govukBackLink(
+      text: "Back",
+      href: attachments_tab_path(@parent)
+    ) %>
+  <% end %>
+<% end %>
+
+<%= form_with model: @document_upload, local: true, builder: ApplicationFormBuilder, html: { novalidate: true }, url: associated_document_uploads_path(@parent) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+      <%= error_summary(@document_upload.errors, %i[file_upload title description])%>
+
+      <span class="govuk-caption-l"><%= @parent.pretty_description %></span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-1"><%= title %></h1>
+
+      <% if (@parent.is_a?(Investigation) || @parent.is_a?(Product)) %>
+        <% hint_text = @parent.is_a?(Investigation) ? "Image files will be saved to the case images page." : "Image files will be saved to the product images." %>
+        <div class="govuk-hint govuk-!-margin-bottom-8"><%= hint_text %></div>
+      <% end %>
+
+      <%= render "upload_file_component", form: form, old_file: nil, field_name: :file_upload, legend: "Upload a file", label: "Upload a file" %>
+
+      <%= form.govuk_input :title, label_classes: "govuk-label--m", label: "Document title" %>
+      <%= form.govuk_text_area :description, label: "Description", attributes: { maxlength: 10_000 } %>
+
+      <%= govukButton text: "Save attachment" %>
+    </div>
+  </div>
+<% end %>

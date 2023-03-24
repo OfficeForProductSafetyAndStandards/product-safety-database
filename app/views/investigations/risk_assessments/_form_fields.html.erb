@@ -51,20 +51,20 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
  items: assessed_by_radio_items
 %>
 
-<% if risk_assessment_form.products.length > 1 %>
-  <%= form.govuk_checkboxes :product_ids,
+<% if risk_assessment_form.investigation_products.length > 1 %>
+  <%= form.govuk_checkboxes :investigation_product_ids,
      legend: "Which products were assessed?",
      hint: "You must choose at least one. Only products already added to the case are listed.",
-     items: risk_assessment_form.products
+     items: risk_assessment_form.investigation_products
   %>
 <% else %>
 
   <h2 class="govuk-heading-m">Product assessed</h2>
 
-  <p class="govuk-body"><%= risk_assessment_form.products.first[:text] %></p>
+  <p class="govuk-body"><%= risk_assessment_form.investigation_products.first[:text] %></p>
 
-  <%= form.fields_for :product_ids do |field| %>
-    <%= field.hidden_field nil, value: risk_assessment_form.products.first[:value] %>
+  <%= form.fields_for :investigation_product_ids do |field| %>
+    <%= field.hidden_field nil, value: risk_assessment_form.investigation_products.first[:value] %>
   <% end %>
 <% end %>
 

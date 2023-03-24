@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation) }
+  let(:investigation) { create(:allegation, creator: user) }
 
   before { sign_in(user) }
 
@@ -37,6 +37,24 @@ RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer
 
     it "redirects to the case activities page" do
       expect(response).to redirect_to(investigation_activity_path(investigation))
+    end
+
+    context "with an investigation owned by someone else" do
+      let(:investigation) { create(:allegation) }
+
+      it "redirects to the case activities page" do
+        expect(response).to redirect_to(investigation_activity_path(investigation))
+      end
+    end
+  end
+
+  context "with a closed investigation" do
+    let(:investigation) { create(:allegation, :closed) }
+
+    it "does not allow a comment to be added" do
+      expect {
+        post investigation_activity_comment_path(investigation), params: { comment_form: { body: "Test" } }
+      }.to raise_error(Pundit::NotAuthorizedError)
     end
   end
 end

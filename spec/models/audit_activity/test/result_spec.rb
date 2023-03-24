@@ -47,4 +47,25 @@ RSpec.describe AuditActivity::Test::Result, :with_stubbed_opensearch, :with_stub
       expect(activity.date).to eq test_result.date
     end
   end
+
+  describe "#metadata" do
+    subject(:activity) { described_class.new(metadata:, investigation:) }
+
+    let(:investigation) { create(:allegation, :with_products) }
+
+    # TODO: remove once migrated
+    context "when metadata contains a Product reference" do
+      let(:metadata) do
+        data = described_class.build_metadata(test_result).stringify_keys
+        data["test_result"]["product_id"] = investigation.product_ids.first
+        data["test_result"].delete("investigation_product_id")
+        data
+      end
+
+      it "translates the Product ID to InvestigationProduct ID" do
+        expect(activity.metadata["test_result"]["product_id"]).to be_nil
+        expect(activity.metadata["test_result"]["investigation_product_id"]).to eq(investigation.investigation_product_ids.first)
+      end
+    end
+  end
 end

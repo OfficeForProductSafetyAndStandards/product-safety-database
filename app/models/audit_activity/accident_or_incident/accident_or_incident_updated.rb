@@ -7,7 +7,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
       :severity_other,
       :usage,
       :additional_info,
-      :product_id
+      :investigation_product_id
     )
 
     {
@@ -15,6 +15,11 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
       updates:,
       type: accident_or_incident.type
     }
+  end
+
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
   end
 
   def title(*)
@@ -49,5 +54,17 @@ private
 
   def is_date_know_has_been_changed_from_no_to_yes?
     updates["is_date_known"]&.second
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_id = metadata.dig("updates", "product_id")
+    return metadata if product_id.blank?
+
+    metadata["updates"]["investigation_product_id"] = product_id.map { |id| investigation.investigation_products.where(product_id: id).pick("investigation_products.id") }
+    metadata["updates"].delete("product_id")
+    metadata
   end
 end

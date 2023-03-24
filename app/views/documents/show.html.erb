@@ -70,8 +70,10 @@
       ] %>
     <%= govukSummaryList(rows: rows) %>
 
-    <% if policy(@parent).update? %>
+    <% if documentable_policy(@parent).update? %>
       <p class="govuk-body"><%= link_to "Edit attachment", edit_investigation_document_path(@parent, @file), class: "govuk-link" %></p>
+    <% end %>
+    <% if documentable_policy(@parent).remove? %>
       <p class="govuk-body"><%= link_to "Remove attachment", remove_investigation_document_path(@parent, @file), class: "govuk-link" %></p>
     <% end %>
   </div>

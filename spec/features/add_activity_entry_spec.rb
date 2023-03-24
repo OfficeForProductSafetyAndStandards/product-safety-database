@@ -8,7 +8,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
   let(:commentator_user) { create(:user, :activated).decorate }
 
   # Create the case up front and clear the case created email so we can test update email functionality
-  let!(:investigation) { create(:allegation, creator: creator_user) }
+  let!(:investigation) { create(:allegation, creator: creator_user, edit_access_teams: commentator_user.team) }
 
   before { delivered_emails.clear }
 

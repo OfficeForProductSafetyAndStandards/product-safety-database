@@ -17,6 +17,7 @@ AllCops:
     - 'coverage/**/*'
     - 'db/schema.rb'
     - 'db/migrate/20200402142659_init_schema.rb'
+    - 'spec/migrations/20230215114714_migrate_documents_to_document_uploads_for_products_spec.rb'
     - 'log/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'
@@ -48,3 +49,6 @@ RSpec/ExampleLength:
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 2

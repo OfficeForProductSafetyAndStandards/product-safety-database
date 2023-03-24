@@ -8,7 +8,7 @@ class RiskAssessment < ApplicationRecord
   belongs_to :added_by_team, class_name: :Team
 
   has_many :risk_assessed_products
-  has_many :products, through: :risk_assessed_products
+  has_many :investigation_products, through: :risk_assessed_products
 
   has_one_attached :risk_assessment_file
 
@@ -57,8 +57,8 @@ private
   end
 
   def at_least_one_product_associated
-    return unless product_ids.to_a.empty?
+    return unless investigation_product_ids.to_a.empty?
 
-    errors.add(:products, :blank)
+    errors.add(:investigation_products, :blank)
   end
 end

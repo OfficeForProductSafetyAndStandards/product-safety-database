@@ -1,77 +1,7 @@
-<%= page_title "Case - #{@investigation.pretty_id}" %>
-<% products_count = @investigation.products.size %>
-
-<%= render 'investigations/actions', investigation: @investigation %>
-
-<p class="govuk-body-l"><%= @investigation.title %></p>
-
-<h2 class="govuk-heading-m">Summary</h2>
-
-<p class="govuk-body"><%= @investigation.description %></p>
-
-<% if policy(@investigation).update? %>
-  <p class="govuk-body"><%= link_to "Change summary", edit_investigation_summary_path(@investigation), class: "govuk-link" %></p>
-<% end %>
-
-<% if @investigation.display_product_summary_list? %>
-  <%= govuk_hr %>
-  <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).upcase_first %></h2>
-  <%= @investigation.product_summary_list %>
-<% end %>
-
-<%= govuk_hr %>
-<h2 class="govuk-heading-m"><%= "Risks and issues" %></h2>
-
-<%= govukSummaryList(
-  classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-  rows: risks_and_issues_rows(@investigation, current_user)
-) %>
-
-<%= govuk_hr %>
-<h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">Safety and compliance</h3>
-<a href="<%= edit_investigation_reported_reason_path(@investigation) %>" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
-  Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
-</a>
-
-<%= govukSummaryList(
-  classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-  rows: safety_and_compliance_rows(@investigation)
-) %>
-
-<% if @investigation.complainant %>
-  <%= govuk_hr %>
-  <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
-  <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
-<% end %>
-
-
-<%= govuk_hr %>
-<h2 class="govuk-heading-m">Sharing and collaboration</h2>
-
-<% if policy(@investigation).change_owner_or_status? %>
-  <% case_owner_actions = {
-    items: [
-      href: new_investigation_ownership_path(@investigation),
-      text: "Change",
-      visuallyHiddenText: "case owner"
-    ]
-  } %>
-  <% case_restriction_actions = {
-    items: [
-      href: investigation_visibility_path(@investigation),
-      text: "Change",
-      visuallyHiddenText: "case restriction"
-    ]
-  }
-  %>
-<% else %>
-  <% case_owner_actions = {} %>
-  <% case_restriction_actions = {} %>
-<% end %>
-
+<%= render('investigations/actions', investigation: @investigation) unless @investigation.is_closed? %>
 <% team_list_html = capture do %>
   <% if @investigation.teams_with_access.length > 1 %>
-    <ul class="govuk-list">
+    <ul class="govuk-list govuk-list--bullet">
       <% @investigation.teams_with_access.each do |team| %>
         <li><%= team.name %></li>
       <% end %>
@@ -81,46 +11,67 @@
   <% else %>
     No teams added
   <% end %>
-
 <% end %>
 
 <%= govukSummaryList(
-  classes: "govuk-summary-list--no-border",
-  rows: [
-    {
-      key: { text: "Case owner" },
-      value: { text: investigation_owner(@investigation) },
-      actions: case_owner_actions
-    },
-    {
-      key: { text: "Teams added to case" },
-      value: { text: team_list_html },
-      actions: {
-        items: [
-          href: investigation_collaborators_path(@investigation),
-          text: (policy(@investigation).manage_collaborators? ? "Change" : "View"),
-          visuallyHiddenText: "teams added to the case"
-        ]
-      }
-    },
-    {
-      key: { text: "Case restriction" },
-      value: { text: @investigation.is_private? ? "Restricted" : "Unrestricted" },
-      actions: case_restriction_actions
-    }
-  ]
+      classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
+      rows: case_rows(@investigation, current_user, team_list_html)
 ) %>
 
-<%= govuk_hr %>
-<h2 class="govuk-heading-m">About the case</h2>
+<% if policy(@investigation).send_email_alert? %>
+  <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+    <%= link_to "Create an email alert", about_investigation_alerts_path(@investigation), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" %>
+  </div>
+<% end %>
 
+<h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">
+  Safety and compliance
+</h3>
+<% if policy(@investigation).update?(user: current_user) %>
+  <a href="<%= edit_investigation_reported_reason_path(@investigation) %>" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
+    Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
+  </a>
+<% end %>
 <%= govukSummaryList(
-  classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-  rows: about_the_case_rows(@investigation, current_user)
+  classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
+  rows: safety_and_compliance_rows(@investigation)
 ) %>
 
-<% if @investigation.products.any? %>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible app-!-display-mobile--only">
-    <h2 class="govuk-heading-m"><%= "Products (#{products_count})" %></h2>
-    <%= @investigation.products_list %>
+<h3 id="product-info-1" class="govuk-heading-m govuk-!-margin-top-9">
+  Case specific product information
+</h3>
+
+<% if @investigation.investigation_products.empty? %>
+  <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
+    You can add this information after a product has been added to the case
+  </h4>
+
+  <%= govukSummaryList(
+    classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
+    rows: investigation_product_rows
+  ) %>
+<% else %>
+  <% @investigation.investigation_products.each_with_index do |investigation_product, index| %>
+    <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
+      <%= investigation_product.name %> (<%= investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).psd_ref(timestamp: investigation_product.investigation_closed_at.to_i, investigation_was_closed: investigation_product.investigation_closed_at.present?) %>)
+    </h4>
+    <%= govukSummaryList(
+      classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
+      rows: investigation_product_rows(investigation_product, current_user),
+      attributes: {
+        id: "product-#{index}"
+      }
+    ) %>
+  <% end %>
+<% end %>
+
+<% if @investigation.complainant %>
+  <section class="govuk-!-margin-top-9 opss-grouping">
+    <h3 id="source" class="govuk-heading-m opss-grouping__heading-m">Case source</h3>
+    <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
+  </section>
+<% end %>
+
+<% unless policy(@investigation).update?(user: current_user) %>
+  <p class="govuk-body-s govuk-!-margin-top-7 govuk-!-margin-bottom-2 opss-secondary-text opss-text-align-right">Only teams added to the case with editing rights can edit the case.</p>
 <% end %>

@@ -1,0 +1,28 @@
+<%= page_title "Do you want to remove this product?", errors: @remove_product_form.errors.any? %>
+
+<%= govukBackLink text: "Back", href: investigation_products_path(@investigation) %>
+
+<%= error_summary @remove_product_form.errors %>
+
+<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_investigation_product_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="remove-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">Do you want to remove this product?</h1>
+              </legend>
+
+              <div class="govuk-hint" id="remove-hint">The product record '<%= @product.name %>' (<%= @product.psd_ref %>) will be removed from the case.</div>
+
+              <%= govukWarningText(iconFallbackText: "Warning", text: "Related Batch numbers, Customs codes and Units affected will be deleted from the case.") %>
+              <%= form.govuk_radios :remove_product, legend: nil, fieldset: false, classes: "govuk-!-padding-bottom-1", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, label_classes: "govuk-label", label: "Enter the reason for removing the product")} },  { text: "No", value: "false" }] %>
+          </fieldset>
+      </div>
+      <div class="govuk-button-group">
+        <%= govukButton(text: "Save and continue") %>
+        <%= link_to("Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state") %>
+      </div>
+    </div>
+  </div>
+<% end %>

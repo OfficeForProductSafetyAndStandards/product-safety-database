@@ -1,63 +1,111 @@
-<%= page_title "Product - #{@product.name}" %>
+<%= page_title @product.retired? ? "Retired product record" : "Product - #{@product.name}" %>
 
 <% content_for :after_header do %>
-  <%= render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs %>
+  <%= govukBackLink href: all_products_path, text: "Back" %>
 <% end %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Product</span>
-    <h1 class="govuk-heading-l"><%= @product.name %></h1>
-
-    <% if @product.subcategory_and_category_label.present? %>
-      <p class="govuk-body-l"><%= @product.subcategory_and_category_label %></p>
-    <% end %>
-
-    <p class="govuk-caption-m">
-      <%= "Created: " + @product.created_at.to_formatted_s(:govuk) %>
-      <% if @product.updated_at != @product.created_at %>
-        <br>
-        <%= "Updated: " + @product.updated_at.to_formatted_s(:govuk) %>
-      <% end %>
-    </p>
-  </div>
-
-  <div class="govuk-grid-column-one-third govuk-!-margin-top-7">
-    <% if @product.images.any? %>
-      <%= render "documents/document_preview",
-               document: @product.images.first,
-               dimensions: [400, 300],
-               class_name: "product-image app-document-preview--inherit" %>
+  <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
+    <span class="govuk-caption-m">&nbsp;</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
+      Product <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= @product.psd_ref %></span>
+    </h1>
+    <% if @product.retired? %>
+      <p class="govuk-body opss-secondary-text">
+        <span class="govuk-!-font-weight-bold opss-primary-text">This product record has been retired and can no
+            longer be added to cases</span>.
+        <br class="opss-br-desktop">
+        <span class="govuk-!-font-size-16">
+            It was not used in an open case for 18 months. You can create a new product record for this product.
+        </span>
+      </p>
     <% else %>
-      <div class="app-document-preview__image-without-preview app-document-preview--add-image-prompt">
-        <p class="govuk-body"><%= link_to "Add an image of this product", new_product_document_path(@product) %></p>
-      </div>
+      <p class="govuk-body opss-secondary-text">This is a Product Safety Database (<%= psd_abbr title: false %>) product record.</p>
     <% end %>
+  </div>
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
+    <div class="opss-text-align-right">
+      <% if policy(@product).update? %>
+        <%= link_to "Edit the product record", edit_product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+      <% end %>
+      <span class="govuk-visually-hidden">|</span>
+      <% if policy(@product).can_spawn_case? %>
+        <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-14 govuk-!-text-align-centre govuk-!-padding-2 govuk-!-display-inline-block govuk-!-margin-top-4 govuk-!-margin-bottom-6 govuk-link--no-underline opss-border-all opss-float-left--mobile" do %>
+          Create a new case<br class="opss-br-desktop"> for this product
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
 
+<div class="govuk-grid-row">
+  <%= render "sub_nav", product: @product %>
 
-<%= govukTabs(
-  items: [
-    {
-      id: "full-detail",
-      label: "Full detail",
-      panel: { html: render("products/tabs/details") }
-    },
-    {
-      id: "attachments",
-      label: "Attachments (#{@product.virus_free_non_image_attachments.count})",
-      panel: { html: render("products/tabs/attachments") }
-    },
-    {
-      id: "images",
-      label: "Images (#{@product.virus_free_images.count})",
-      panel: { html: render("products/tabs/images") }
-    },
-    {
-      id: "cases",
-      label: "Cases",
-      panel: { html: render("products/tabs/cases") }
-    }
-  ]
-) %>
+  <section id="page-content" role="region" class="govuk-grid-column-three-quarters">
+    <% if @product.retired? %>
+      <%= govukWarningText(iconFallbackText: "Warning", text: "This product record is retired.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-4") %>
+    <% end %>
+    <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The product record</h2>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-m"><%= @product.name %></h3>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <%= @product.overview_summary_list %>
+      </div>
+      <% unless @product.virus_free_images.empty? %>
+        <div class="govuk-grid-column-one-third">
+          <figure class="opss-margin-bottom-1-desktop">
+            <%= image_tag @product.virus_free_images.first.file_upload.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+            <figcaption class="govuk-visually-hidden"><%= @product.virus_free_images.first.title %></figcaption>
+          </figure>
+        </div>
+      <% end %>
+    </div>
+
+    <h4 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-visually-hidden">Product details</h4>
+
+    <%= @product.summary_list %>
+
+    <%= govukAccordion id: "product-accordion", classes: "govuk-!-margin-top-9 opss-accordion--sm-all", items: [
+      {
+        heading: {
+          html: "Images <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.virus_free_images.size })</span>".html_safe
+        },
+        content: {
+          html: render("images", product: @product)
+        }
+      },
+      {
+        heading: {
+          html: "<span class=\"govuk-visually-hidden\">Related</span> Cases <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.unique_investigation_products.size })</span>".html_safe
+        },
+        content: {
+          html: render("cases", product: @product)
+        }
+      }
+    ] %>
+
+    <% unless @product.retired? %>
+      <% if @product.owning_team.nil? %>
+        <% if policy(@product).update? %>
+          <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+            This product record currently has no owner<span class="opss-hidden-desktop">.</span>
+          </p>
+        <% end %>
+      <% elsif @product.owning_team == current_user.team %>
+        <% if policy(@product).update? %>
+          <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+            This product record is currently owned by your team<span class="opss-hidden-desktop">.</span><br class="opss-br-desktop"> You can <%= link_to "edit the product details", product_path(@product), class: "govuk-link govuk-link--no-visited-state" %><span class="opss-hidden-desktop">.</span>
+          </p>
+        <% end %>
+      <% else %>
+        <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+          This product record is currently owned by <%= @product.owning_team.name %><span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries<span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can still add this product record to your case<span class="opss-hidden-desktop">.</span>
+        </p>
+      <% end %>
+    <% end %>
+  </section>
+</div>

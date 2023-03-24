@@ -1,50 +1,79 @@
-<%= page_title "Products - #{@investigation.pretty_id}" %>
-
-<% if policy(@investigation).update?(user: current_user) %>
-  <p class="govuk-body">
-    <%= link_to "Add product", new_investigation_product_url(@investigation) %>
-  </p>
-  <hr class="govuk-section-break govuk-section-break--l">
-<% end %>
-
-<% @investigation.products.each do |product| %>
-
-  <%= render "product_summary", product: product do %>
-    <% # Add visually hidden product name to make links unique %>
-    <%= link_with_hidden_text_to "View product",
-      "(#{product.name})",
-      product,
-      class: "app-block-link govuk-link govuk-!-margin-right-3"
-    %>
-    <% if product.investigations.first == nil || policy(product.investigations.first).update? %>
-      <%= link_with_hidden_text_to "Change product details",
-        "(#{product.name})",
-        edit_product_path(product),
-        class: "app-block-link govuk-link govuk-!-margin-right-3"
-      %>
-    <% end %>
-    <% if policy(@investigation).update?(user: current_user) %>
-      <br>
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          Removing a product from a case cannot be undone
-        </strong>
-      </div>
-      <%= link_with_hidden_text_to "Remove product",
-        "(#{product.name})",
-        remove_investigation_product_path(@investigation, product),
-        class: "app-block-link govuk-link"
-      %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @investigation.products.length.zero? %>
+<% if @investigation.investigation_products.empty? %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <p class="govuk-body">No products</p>
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body opss-text-align-center">
+        This case has not added any products.
+      </p>
     </div>
   </div>
+<% else %>
+  <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
+  <%= govukInsetText(text: "This case has reported any included products as safe and compliant.") if @investigation.safe_and_compliant? %>
+
+  <% @investigation.investigation_products.decorate.reverse.each.with_index(1) do |investigation_product, index| %>
+    <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).decorate : investigation_product.product %>
+    <% @product = product %>
+    <% @investigation_product = investigation_product %>
+
+    <section>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+          <%= tag.h3 @product.name, class: "govuk-heading-m", id: dom_id(@investigation_product) %>
+        </div>
+        <% if policy(@investigation_product).edit_product? %>
+          <div class="govuk-grid-column-one-quarter">
+            <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+              <%= link_to("Edit this product", product_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <% unless @investigation_product.investigation_closed_at.present? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <%= @investigation_product.product_overview_summary_list %>
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <% unless @product.virus_free_images.empty? %>
+              <figure class="opss-margin-bottom-1-desktop">
+                <%= image_tag @product.virus_free_images.first.file_upload.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+                <figcaption class="govuk-visually-hidden"><%= @product.virus_free_images.first.title %></figcaption>
+              </figure>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <%= govukTabs(
+        classes: "opss-tabs govuk-!-margin-bottom-2 opss-tabs--min-height-m",
+        title: "Information related to this PSD product record",
+        items: [
+          {
+            id: "details-#{index}",
+            label: "Details",
+            panel: { html: render("products/case_product_info_tabs/details") }
+          },
+          {
+            id: "images-#{index}",
+            label: "Images (#{@product.virus_free_images.count})",
+            panel: { html: render("products/case_product_info_tabs/images") }
+          },
+          {
+            id: "cases-#{index}",
+            label: "Cases (#{@product.unique_cases_except(@investigation).count})",
+            panel: { html: render("products/case_product_info_tabs/cases")}
+          }
+        ]
+      ) %>
+
+      <% if policy(@investigation_product).remove? %>
+        <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+          <%= link_to(remove_investigation_investigation_product_path(@investigation, @investigation_product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset") do %>Remove this <span class="govuk-visually-hidden"><%= @product.name %></span> product <span class="govuk-visually-hidden">from the case</span><% end %>
+        </div>
+      <% end %>
+    </section>
+
+    <% unless index == @investigation.investigation_products.size %>
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-6">
+    <% end %>
+  <% end %>
 <% end %>

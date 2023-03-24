@@ -1,0 +1,59 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body opss-secondary-text">
+      <% if @product.virus_free_images.one? %>
+        There is one product image.
+      <% else %>
+        There are <%= @product.virus_free_images.size %> product images.
+      <% end %>
+    </p>
+  </div>
+  <% if documentable_policy(@product).create? %>
+    <div class="govuk-grid-column-one-third">
+      <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+        <%= link_to "Add an image", new_product_document_upload_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @product.virus_free_images.any? %>
+  <ul class="govuk-list govuk-!-margin-top-6">
+    <% @product.virus_free_images.each do |image| %>
+      <li>
+        <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
+          {
+            key: { text: "Image and title" },
+            value: { text: product_image_preview(image, [400, 400]) },
+          },
+          {
+            key: { text: "Image description" },
+            value: { text: image.description },
+          },
+          {
+            key: { text: "Updated" },
+            value: { text: document_upload_updated_date_in_govuk_format(image) },
+          }
+        ] %>
+        <div class="opss-text-align-right govuk-!-margin-bottom-8">
+          <ul class="govuk-list">
+            <% if documentable_policy(@product).update? %>
+              <li class="govuk-!-display-inline govuk-!-margin-left-2">
+                <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= edit_product_document_upload_path(@product, image) %>">Edit this image<span class="govuk-visually-hidden"><%= image.title %></span></a>
+              </li>
+            <% end %>
+            <% if documentable_policy(@product).destroy? %>
+              <li class="govuk-!-display-inline govuk-!-margin-left-2">
+                <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= remove_product_document_upload_path(@product, image) %>">Remove this image<span class="govuk-visually-hidden"><%= image.title %></span></a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </li>
+
+    <% end %>
+  </ul>
+  <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+    These are product images – they <strong>are not</strong> case evidence images.
+  </p>
+<% end %>

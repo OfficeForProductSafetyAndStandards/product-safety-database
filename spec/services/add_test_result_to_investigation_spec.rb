@@ -11,7 +11,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
   let(:legislation)                          { Rails.application.config.legislation_constants["legislation"].sample }
   let(:test_result)                          { Test::Result.results[:passed] }
   let(:standards_product_was_tested_against) { %w[EN71] }
-  let(:product_id)                           { create(:product).id }
+  let(:investigation_product_id)             { create(:investigation_product).id }
   let(:params) do
     {
       investigation:,
@@ -22,7 +22,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
       legislation:,
       result: test_result,
       standards_product_was_tested_against:,
-      product_id:
+      investigation_product_id:
     }
   end
 
@@ -41,7 +41,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
       expect(command).to be_a_success
 
       expect(command.test_result).to have_attributes(
-        date:, details:, legislation:, result: "passed", product_id:,
+        date:, details:, legislation:, result: "passed", investigation_product_id:,
         standards_product_was_tested_against:,
         document_blob: document
       )
@@ -49,7 +49,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
 
     it "creates an audit log", :aggregate_failures do
       test_result = command.test_result
-      audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", product_id:)
+      audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", investigation_product_id:)
       expect(audit.added_by_user).to eq(user)
       expect(audit.metadata["test_result"]["id"]).to eq(test_result.id)
     end

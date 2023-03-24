@@ -1,0 +1,82 @@
+<%= page_title "Is this the product?", errors: @confirm_product_form.errors.any? %>
+
+<%= govukBackLink text: "Back", href: new_investigation_product_path(@investigation) %>
+
+<%= error_summary @confirm_product_form.errors %>
+
+<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
+  <%= form.hidden_field :product_id %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l opss-fieldset__legend">
+            <h1 class="govuk-fieldset__heading">Is this the correct product record to add to your case?</h1>
+          </legend>
+          <div class="govuk-grid-row">
+            <section class="govuk-grid-column-three-quarters opss-panels">
+              <div class="opss-panels__single">
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
+                <%= govukSummaryList(
+                  classes: "govuk-summary-list--no-border govuk-!-margin-bottom-6",
+                  rows: [
+                    {
+                      key: { html: "#{psd_abbr title: false} <span title=\"reference\">ref</span>".html_safe },
+                      value: { text: @product.psd_ref }
+                    },
+                    {
+                      key: { text: "Brand name" },
+                      value: { text: @product.brand }
+                    },
+                    {
+                      key: { text: "Product name" },
+                      value: { text: @product.name }
+                    },
+                    {
+                      key: { text: "Barcode" },
+                      value: { text: @product.barcode }
+                    },
+                    {
+                      key: { text: "Counterfeit" },
+                      value: { html: render("product_authenticity", authenticity: @product.object.authenticity) }
+                    }
+                  ]
+                ) %>
+                <% if @product.virus_free_images.any? %>
+                  <%= govukDetails(
+                    summaryText: "Product image",
+                    html: capture {
+                      render "document_uploads/document_preview",
+                        document: @product.virus_free_images.first,
+                        dimensions: [300, 500],
+                        hide_link: true,
+                        class_name: 'app-document-preview--small'
+                    }
+                  ) %>
+                <% end %>
+              </div>
+            </section>
+          </div>
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1">
+              <%= form.govuk_radios(
+                :correct,
+                legend: nil,
+                fieldset: false,
+                items: [
+                  { value: "yes", text: "Yes" },
+                  { value: "no", html: "No - Enter the #{psd_abbr title: false} reference number again".html_safe }
+                ]
+              ) %>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+      <div class="govuk-button-group">
+        <%= govukButton(text: "Save and continue") %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -9,7 +9,7 @@
   <ul class="govuk-list opss-left-nav">
     <% items.each do |item| %>
       <li class="<%= class_names("opss-left-nav__active" => item[:active]) %>">
-        <%= link_to(item[:href], class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if item[:active]), id: "#{item[:text]}_id") do %>
+        <%= link_to(item[:href], class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if item[:active])) do %>
           <%= item[:html] || item[:text] + item[:count].to_s %>
         <% end %>
         <% if item[:active] && item[:sub_items] %>

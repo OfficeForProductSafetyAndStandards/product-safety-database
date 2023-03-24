@@ -1,0 +1,21 @@
+<%= page_title "Create a product record", errors: @product_form.errors.any? %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: products_path(@investigation)
+  ) %>
+<% end %>
+
+<%= form_with model: @product_form, scope: :product, url: products_path(@investigation), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings name when_placed_on_market barcode]) %>
+
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Create a product record</h1>
+      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<%= psd_abbr title: false %>), you can create a product record for the product. This will also generate a new <%= psd_abbr %> product record reference number.</p>
+
+      <%= render "form", form: form, product_form: @product_form, countries: @countries, search: true %>
+    </div>
+  </div>
+<% end %>

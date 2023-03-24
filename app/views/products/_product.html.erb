@@ -1,8 +1,8 @@
 <li class="govuk-!-margin-bottom-3">
   <%= link_to product.name, product_path(product), class: "app-block-link govuk-link govuk-!-margin-bottom-2" %>
-  <% if product.images.any? %>
-    <%= render "documents/document_preview",
-      document: product.images.first,
+  <% if product.virus_free_images.any? %>
+    <%= render "document_uploads/document_preview",
+      document: product.virus_free_images.first,
       dimensions: [300, 500],
       hide_link: true,
       class_name: 'app-document-preview--small' %>
