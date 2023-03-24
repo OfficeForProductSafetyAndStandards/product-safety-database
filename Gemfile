@@ -35,7 +35,7 @@ gem "net-smtp"
 
 gem "paper_trail"
 gem "pg", "~> 1.4"
-gem "pghero", "~> 3.2"
+gem "pghero", "~> 3.3"
 gem "puma", "~> 6.1"
 gem "pundit", "~> 2.3"
 gem "rack", "~> 2.2.6"
