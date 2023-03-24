@@ -7,7 +7,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 gem "activerecord-pg_enum", "~> 2.0"
 gem "active_storage_validations", "~> 1.0.3"
 gem "aws-sdk-s3", "~> 1.119"
-gem "aws-sdk-s3control", "~> 1.60"
+gem "aws-sdk-s3control", "~> 1.62"
 gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
@@ -35,7 +35,7 @@ gem "net-smtp"
 
 gem "paper_trail"
 gem "pg", "~> 1.4"
-gem "pghero", "~> 3.2"
+gem "pghero", "~> 3.3"
 gem "puma", "~> 6.1"
 gem "pundit", "~> 2.3"
 gem "rack", "~> 2.2.6"
