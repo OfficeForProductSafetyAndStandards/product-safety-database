@@ -1,0 +1,14 @@
+<div class="govuk-body">
+  <p>Changes:</p>
+  <% if activity.new_batch_number %>
+    <%= "Batch number:" %> <b><%= activity.new_batch_number %></b><br>
+  <% end %>
+  <% if activity.new_customs_code %>
+    <%= "Customs code:" %> <b><%= activity.new_customs_code %></b><br>
+  <% end %>
+  <% if activity.new_number_of_affected_units %>
+    <%= "Number of affected units:" %> <b><%= activity.new_number_of_affected_units %></b><br>
+  <% end %>
+  <% if activity.new_affected_units_status %>
+    <%= "Affected units status:" %> <b><%= activity.new_affected_units_status %></b><br>
+  <% end %>

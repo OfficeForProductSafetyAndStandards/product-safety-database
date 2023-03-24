@@ -8,14 +8,51 @@
     <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
     <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
     <%= govukSelect(
-      key: "hazard_type",
+      key: "category",
       form: form,
-      items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
-      label: { text: "Hazard type" },
+      items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + product_categories.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+      label: { text: "Category" },
       formGroup: { classes: "govuk-!-margin-right-1" },
       is_autocomplete: false,
       attributes: { "data-opss-clear-on-reset" => "element" }
     ) %>
+
+    <% if policy(Product).can_view_retired_products? %>
+      <%= govukRadios(
+      form: form,
+      key: :retired_status,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
+      fieldset: {
+        legend: {
+          text: "Product record status",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+        }
+      },
+      attributes: { "data-opss-reset-to-default" => "element" },
+      items: [
+      {
+        id: "active",
+        text: "Active",
+        value: "active",
+        checked: true
+      },
+      {
+        id: "retired",
+        text: "Retired",
+        value: "retired"
+      },
+      {
+        id: "all",
+        text: "All",
+        value: "all"
+      }
+      ]
+      ) %>
+    <% end %>
 
     <div class="govuk-button-group">
       <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>

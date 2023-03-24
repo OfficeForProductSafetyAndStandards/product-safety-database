@@ -4,30 +4,27 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   let(:organisation)          { create(:organisation) }
   let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }
 
-  let!(:chemical_investigation)              { create(:allegation, hazard_type: "Chemical") }
-  let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
-  let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
   # rubocop:disable RSpec/LetSetup
-  let!(:fire_product_1)   { create(:product, name: "Hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_2)   { create(:product, name: "Xtra hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_3)   { create(:product, name: "Very very hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_4)   { create(:product, name: "Super hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_5)   { create(:product, name: "Extra hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_6)   { create(:product, name: "Firey hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_7)   { create(:product, name: "Mega hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_8)   { create(:product, name: "Crazy hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_9)   { create(:product, name: "Spicy hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_10)   { create(:product, name: "Ultra hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_11)   { create(:product, name: "Intense hot product", investigations: [fire_investigation]) }
-  let!(:fire_product_12)   { create(:product, name: "Smoking hot product", investigations: [fire_investigation]) }
-  let!(:chemical_product) { create(:product, name: "Some lab stuff", investigations: [chemical_investigation]) }
-  let!(:drowning_product) { create(:product, name: "Dangerous life vest", investigations: [drowning_investigation]) }
-  let!(:another_drowning_product) { create(:product, name: "Another dangerous life vest", investigations: [drowning_investigation]) }
-  let!(:zebra_product) { create(:product, name: "Zebra print jacket", investigations: [drowning_investigation]) }
+  let!(:fire_product_1)   { create(:product, name: "Hot product", category: "Lifts") }
+  let!(:fire_product_2)   { create(:product, name: "Xtra hot product", category: "Lifts") }
+  let!(:fire_product_3)   { create(:product, name: "Very very hot product", category: "Lifts") }
+  let!(:fire_product_4)   { create(:product, name: "Super hot product", category: "Lifts") }
+  let!(:fire_product_5)   { create(:product, name: "Extra hot product", category: "Lifts") }
+  let!(:fire_product_6)   { create(:product, name: "Firey hot product", category: "Lifts") }
+  let!(:fire_product_7)   { create(:product, name: "Mega hot product", category: "Lifts") }
+  let!(:fire_product_8)   { create(:product, name: "Crazy hot product", category: "Lifts") }
+  let!(:fire_product_9)   { create(:product, name: "Spicy hot product", category: "Lifts") }
+  let!(:fire_product_10)   { create(:product, name: "Ultra hot product", category: "Lifts") }
+  let!(:fire_product_11)   { create(:product, name: "Intense hot product", category: "Lifts") }
+  let!(:fire_product_12)   { create(:product, name: "Smoking hot product", category: "Lifts") }
+  let!(:chemical_product) { create(:product, name: "Some lab stuff") }
+  let!(:drowning_product) { create(:product, name: "Dangerous life vest") }
+  let!(:another_drowning_product) { create(:product, name: "Another dangerous life vest") }
+  let!(:zebra_product) { create(:product, name: "Zebra print jacket") }
   # rubocop:enable RSpec/LetSetup
 
   before do
-    Investigation.import refresh: :wait_for
+    Investigation.import scope: "not_deleted", refresh: :wait_for
     Product.import refresh: :wait_for
     sign_in(user)
     visit products_path
@@ -70,12 +67,12 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_css("#item-3", text: fire_product_10.name)
   end
 
-  scenario "selected sort order is persisted when filtering by hazard type" do
+  scenario "selected sort order is persisted when filtering by category" do
     within "form dl.govuk-list.opss-dl-select" do
       click_on "Name A–Z"
     end
 
-    select "Fire", from: "Hazard type"
+    select "Lifts", from: "Category"
     click_button "Apply"
 
     expect(page).to have_current_path(/sort_by=name/, ignore_query: false)
@@ -88,7 +85,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
 
     expect(page).to have_css("form dl.govuk-list.opss-dl-select dd", text: "Active: Relevance")
 
-    select "Fire", from: "Hazard type"
+    select "Lifts", from: "Category"
     click_button "Apply"
 
     expect(page).to have_current_path(/sort_by=relevant/, ignore_query: false)

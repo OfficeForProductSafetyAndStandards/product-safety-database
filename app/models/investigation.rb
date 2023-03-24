@@ -2,6 +2,7 @@ class Investigation < ApplicationRecord
   include Documentable
   include SanitizationHelper
   include InvestigationOpensearch
+  include Deletable
 
   attr_accessor :visibility_rationale, :owner_rationale
 
@@ -86,7 +87,7 @@ class Investigation < ApplicationRecord
                        :date_closed, :date_received, :description, :hazard_description, :hazard_type,
                        :is_closed, :is_private, :non_compliant_reason, :notifying_country, :pretty_id,
                        :product_category, :received_type, :reported_reason, :risk_level, :risk_validated_at,
-                       :risk_validated_by, :type, :updated_at, :user_title
+                       :risk_validated_by, :type, :updated_at, :user_title, :deleted_at, :deleted_by
 
   # All sub-classes share this policy class
   def self.policy_class
@@ -146,7 +147,7 @@ class Investigation < ApplicationRecord
   end
 
   def supporting_information
-    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product) + risk_assessments + accidents + incidents).sort_by(&:created_at).reverse
+    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:investigation_product) + risk_assessments + accidents + incidents).sort_by(&:created_at).reverse
   end
 
   def enquiry?
@@ -189,6 +190,22 @@ class Investigation < ApplicationRecord
 
   def risk_level_currently_validated?
     !risk_validated_by.nil?
+  end
+
+  def product_subcategories
+    investigation_products.map { |investigation_product| investigation_product.product.subcategory }
+  end
+
+  def product_barcodes
+    investigation_products.map { |investigation_product| investigation_product.product.barcode }
+  end
+
+  def product_descriptions
+    investigation_products.map { |investigation_product| investigation_product.product.description }
+  end
+
+  def product_codes
+    investigation_products.map { |investigation_product| investigation_product.product.product_code }
   end
 
   def sends_notifications?

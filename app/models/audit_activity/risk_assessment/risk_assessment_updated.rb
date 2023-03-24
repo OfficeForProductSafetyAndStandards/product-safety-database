@@ -1,5 +1,5 @@
 class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
-  def self.build_metadata(risk_assessment:, previous_product_ids:, attachment_changed:, previous_attachment_filename:)
+  def self.build_metadata(risk_assessment:, previous_investigation_product_ids:, attachment_changed:, previous_attachment_filename:)
     updates = risk_assessment.previous_changes.slice(
       :assessed_on,
       :risk_level,
@@ -10,8 +10,8 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
       :details
     )
 
-    if previous_product_ids.sort != risk_assessment.product_ids.sort
-      updates[:product_ids] = [previous_product_ids, risk_assessment.product_ids]
+    if previous_investigation_product_ids.sort != risk_assessment.investigation_product_ids.sort
+      updates[:investigation_product_ids] = [previous_investigation_product_ids, risk_assessment.investigation_product_ids]
     end
 
     if attachment_changed
@@ -23,6 +23,11 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
       risk_assessment_id: risk_assessment.id,
       updates:
     }
+  end
+
+  # TODO: remove once migrated
+  def metadata
+    migrate_metadata_structure
   end
 
   def risk_level_changed?
@@ -81,11 +86,11 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def new_product_ids
-    updates["product_ids"]&.second
+    updates["investigation_product_ids"]&.second
   end
 
   def new_products
-    Product.find(new_product_ids)
+    InvestigationProduct.find(new_product_ids).map(&:product)
   end
 
   def new_details
@@ -105,7 +110,9 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def products_assessed
-    Product.find(metadata["product_ids"])
+    return unless metadata["investigation_product_ids"]
+
+    InvestigationProduct.find(metadata["investigation_product_ids"]).map(&:product)
   end
 
   def further_details
@@ -116,5 +123,17 @@ private
 
   def updates
     metadata["updates"]
+  end
+
+  # TODO: remove once migrated
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    product_ids = metadata["previous_product_ids"]
+    return metadata if product_ids.blank?
+
+    metadata["previous_investigation_product_ids"] = investigation.investigation_products.where(product_id: product_ids).pluck("investigation_products.id")
+    metadata.delete("previous_product_ids")
+    metadata
   end
 end

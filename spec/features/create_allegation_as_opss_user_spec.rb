@@ -17,23 +17,6 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       file: Rails.root.join("test/fixtures/files/testImage.png")
     }
   end
-  let(:product_details) do
-    {
-      name: Faker::Lorem.sentence,
-      barcode: Faker::Number.number(digits: 10),
-      category: Rails.application.config.product_constants["product_category"].sample,
-      type: Faker::Appliance.equipment,
-      webpage: Faker::Internet.url,
-      country_of_origin: Country.all.sample.first,
-      description: Faker::Lorem.sentence,
-      authenticity: Product.authenticities.keys.without("missing").sample,
-      affected_units_status: "approx",
-      has_markings: %w[Yes No Unknown].sample,
-      markings: [Product::MARKINGS.sample],
-      when_placed_on_market: Product.when_placed_on_markets.keys.without("missing").sample
-    }
-  end
-
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, :opss_user, team:) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
@@ -88,18 +71,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
       expect_details_on_summary_page
       expect_protected_details_on_summary_page(**contact_details)
 
-      click_link "Products (0)"
-      click_link "Add product"
-
-      expect(page).to have_css(".govuk-heading-m", text: "Add product")
-
-      enter_product_details(**product_details)
-
-      expect_confirmation_banner("Product was successfully created.")
-
-      click_link "Products (1)"
-
-      expect_page_to_show_entered_product_details(**product_details.except(:affected_units_status))
+      # TODO: Test linking an existing product when this feature is introduced
 
       click_link "Activity"
       expect_details_on_activity_page(contact_details, allegation_details)
@@ -146,67 +118,21 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:, when_placed_on_market:)
-    select category,                      from: "Product category"
-    select country_of_origin,             from: "Country of origin"
-    within_fieldset("Was the product placed on the market before 1 January 2021?") { choose when_placed_on_market_answer(when_placed_on_market) }
-    fill_in "Product subcategory", with: type
-    within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
-
-    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
-      choose has_markings
-    end
-
-    within_fieldset("Select product marking") do
-      markings.each { |marking| check(marking) } if has_markings == "Yes"
-    end
-
-    within_fieldset("How many units are affected?") do
-      choose affected_units_status_answer(affected_units_status)
-      find("#approx_units").set(21)
-    end
-    fill_in "Product name",               with: name
-    fill_in "Other product identifiers",  with: barcode
-    fill_in "Webpage",                    with: webpage
-    fill_in "Description of product",     with: description
-    click_button "Save product"
-  end
-
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:, when_placed_on_market:)
-    expected_markings = case has_markings
-                        when "Yes" then markings.join(", ")
-                        when "No" then "None"
-                        when "Unknown" then "Unknown"
-                        end
-
-    expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
-    expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: type)
-    expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
-    expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
-    expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
-    expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: barcode)
-    expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
-    expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
-    expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
-    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21")
-    expect(page.find("dt", text: "When placed on market")).to have_sibling("dd", text: I18n.t(when_placed_on_market, scope: Product.model_name.i18n_key))
-  end
-
   def expect_details_on_summary_page
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
     expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
   end
 
   def expect_protected_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
-    expect(page).to have_css("p", text: contact_name)
-    expect(page).to have_css("p", text: contact_email)
-    expect(page).to have_css("p", text: contact_phone)
+    expect(page).to have_css("li", text: contact_name)
+    expect(page).to have_css("li", text: contact_email)
+    expect(page).to have_css("li", text: contact_phone)
   end
 
   def expect_protected_details_not_on_summary_page(contact_name:, contact_email:, contact_phone:)
-    expect(page).not_to have_css("p", text: contact_name)
-    expect(page).not_to have_css("p", text: contact_email)
-    expect(page).not_to have_css("p", text: contact_phone)
+    expect(page).not_to have_css("li", text: contact_name)
+    expect(page).not_to have_css("li", text: contact_email)
+    expect(page).not_to have_css("li", text: contact_phone)
   end
 
   def expect_details_on_activity_page(contact, allegation)

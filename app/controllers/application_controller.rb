@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!
+  before_action :set_paper_trail_whodunnit
   before_action :check_current_user_status
   before_action :set_user_last_activity_time
   before_action :ensure_secondary_authentication
@@ -109,7 +110,7 @@ private
 
   def highlight_products?
     return true if params[:controller].start_with?("product")
-    return true if params[:controller] == "documents" && params[:product_id]
+    return true if %w[documents document_uploads].include?(params[:controller]) && params[:product_id]
   end
 
   def highlight_cases?

@@ -1,0 +1,48 @@
+<% page_heading = "Edit the customs codes " %>
+
+<%= page_title page_heading %>
+<%= govukBackLink(
+  text: "Back",
+  href: investigation_path(@investigation_product.investigation)
+) %>
+
+<%= form_with model: @investigation_product, url: investigation_product_customs_code_path, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <% hint_html = capture do %>
+        <span class="govuk-!-display-block govuk-!-margin-bottom-2">
+          You can add and edit customs codes for <%= @investigation_product.name %>. For example, a <abbr>CN</abbr>  code (8 digits) or a TARIC code (10 digits).
+        </span>
+
+        <span class="govuk-!-display-block govuk-!-font-size-16">
+          Use a comma and a space to separate multiple customs codes. For example, <br class="opss-br-desktop">85258091, 85285291<span class="govuk-visually-hidden">.</span>
+        </span>
+      <% end %>
+
+      <%= govukInput(
+            form: form,
+            label: {
+              text: page_heading,
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            hint: {
+              html: hint_html,
+              classes: "govuk-hint govuk-!-margin-bottom-5"
+            },
+            id: "customs_code",
+            key: :customs_code,
+            name: "customs_code",
+            attributes: { maxlength: 45 },
+            classes: "govuk-!-width-two-thirds",
+          )
+       %>
+
+       <div class="govuk-button-group">
+         <%= form.submit "Save", class: "govuk-button" %>
+         <%= link_to "Cancel", investigation_path(@investigation_product.investigation), class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
+    </div>
+  </div>
+<% end %>

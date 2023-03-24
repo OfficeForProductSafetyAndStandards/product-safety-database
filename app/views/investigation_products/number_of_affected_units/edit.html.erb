@@ -1,0 +1,45 @@
+<% page_heading = "Edit how many units are affected" %>
+
+<% page_title page_heading, errors: @number_of_affected_units_form.errors.any? %>
+<%= govukBackLink(
+  text: "Back",
+  href: investigation_path(@investigation_product.investigation)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @number_of_affected_units_form, url: investigation_product_number_of_affected_units_path, builder: ApplicationFormBuilder, method: :put, html: {novalidate: true}, local: true do |form| %>
+    <%= error_summary @number_of_affected_units_form.errors %>
+
+      <% legend = capture do %>
+        <h1 class="govuk-fieldset__heading">
+          Edit how many units are affected
+        </h1>
+      <% end %>
+
+      <%= govukRadios(
+        form: form,
+        key: :affected_units_status,
+        fieldset: {
+        legend: {
+            html: legend,
+            classes: "govuk-fieldset__legend--l"
+          },
+        },
+        hint: { text: "You can add and edit how many product units are affected for #{@investigation_product.name}.", classes: "govuk-!-margin-bottom-5" },
+        items: [
+          { text: "Exact number",       value: "exact", conditional: { html: form.govuk_input(:exact_units, label: "How many units are affected?",  classes: "govuk-input--width-10") }, id: "affected_units_status" },
+          { text: "Approximate number", value: "approx", conditional: { html: form.govuk_input(:approx_units, label: "How many units are affected?",  classes: "govuk-input--width-10") } },
+          { text: "Unknown",            value: "unknown" },
+          { divider: "or" },
+          { text: "Not relevant", value: "not_relevant" }
+        ]
+      ) %>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation_product.investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -7,7 +7,7 @@ module TestsHelper
       },
       {
         key: { text: "Product tested" },
-        value: { html: link_to(test_result.product.name, product_path(test_result.product)) }
+        value: { text: "#{test_result.investigation_product.name} (#{test_result.investigation_product.psd_ref})" }
       },
       {
         key: { text: "Legislation" },

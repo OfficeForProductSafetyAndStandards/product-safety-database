@@ -14,13 +14,15 @@ module Investigations::DisplayTextHelper
         href: investigation_path(investigation),
         html: safe_join(["Case ", tag.span(" #{investigation.pretty_id}", class: "govuk-!-font-weight-regular")]),
         text: "Case",
-        active: is_current_tab.overview?
+        active: is_current_tab.overview?,
+        sub_items: investigation_sub_items(investigation)
       },
       {
         href: investigation_products_path(investigation),
         text: "Products",
         count: " (#{investigation.products.size})",
-        active: is_current_tab.products?
+        active: is_current_tab.products?,
+        sub_items: products_sub_items(investigation)
       },
       {
         href: investigation_businesses_path(investigation),
@@ -81,6 +83,37 @@ module Investigations::DisplayTextHelper
       }
     ]
     render "investigations/sub_nav", items:
+  end
+
+  def investigation_sub_items(investigation)
+    rows = [
+      {
+        text: "Safety and compliance",
+        href: investigation_path(investigation, anchor: "safety")
+      },
+      {
+        text: "Case specific product information",
+        href: investigation_path(investigation, anchor: "product-info-1")
+      }
+    ]
+
+    if investigation.complainant
+      rows << {
+        text: "Case source",
+        href: investigation_path(investigation, anchor: "source")
+      }
+    end
+
+    rows
+  end
+
+  def products_sub_items(investigation)
+    investigation.investigation_products.reverse.map do |investigation_product|
+      {
+        text: investigation_product.product.name,
+        href: investigation_products_path(investigation_product.investigation, anchor: dom_id(investigation_product))
+      }
+    end
   end
 
   def get_displayable_highlights(highlights, investigation)
@@ -151,7 +184,7 @@ module Investigations::DisplayTextHelper
     owner_names.uniq!
     owner_names.compact!
 
-    safe_join(owner_names, "<br>".html_safe)
+    safe_join(owner_names, " - ")
   end
 
   def business_summary_list(business)

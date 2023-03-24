@@ -1,7 +1,3 @@
 <p class="govuk-body">
   <%= activity.metadata['reason'] %>
 </p>
-
-<% if activity.product_id %>
-  <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
-<% end %>

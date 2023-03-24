@@ -1,5 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   include FormattedDescription
+  include ActionView::Helpers::OutputSafetyHelper
   delegate_all
   decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities, :risk_assessments
 
@@ -45,9 +46,30 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
+  def case_title_key
+    object.is_private? ? "#{case_type.upcase_first} restricted" : h.link_to(title, h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
+  end
+
+  def case_summary_values
+    values = []
+
+    if investigation.is_private?
+      values << { text: "" }
+      values << { text: "" }
+    else
+      values << { text: object.pretty_id }
+      values << { text: object.owner_team&.name || "&ndash;".html_safe }
+    end
+
+    tag_class_name = is_closed? ? "opss-tag--risk3" : "opss-tag--plain"
+    action = h.tag.span("Case #{status}", class: "opss-tag #{tag_class_name}")
+    values << { html: h.tag.dd(action, class: "govuk-summary-list__actions") }
+    values
+  end
+
   def source_details_summary_list(view_protected_details: false)
-    contact_details = view_protected_details ? h.tag.p(complainant.contact_details) : h.tag.p("")
-    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
+    contact_details = view_protected_details ? contact_details_list : h.tag.p("")
+    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right")
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_formatted_s(:govuk) } } : nil,
@@ -58,7 +80,18 @@ class InvestigationDecorator < ApplicationDecorator
 
     rows.compact!
 
-    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
+    h.govukSummaryList rows:, classes: "govuk-summary-list govuk-summary-list--no-border opss-summary-list-mixed opss-summary-list-mixed--narrow-dt"
+  end
+
+  def contact_details_list
+    h.tag.ul(class: "govuk-list govuk-list--bullet govuk-list--spaced") do
+      lis = []
+      lis << h.tag.li(complainant.name) if complainant.name.present?
+      lis << h.tag.li("Telephone: #{complainant.phone_number}") if complainant.phone_number.present?
+      lis << h.tag.li("Email: ".html_safe + h.mail_to(complainant.email_address, class: "govuk-link govuk-link--no-visited-state")) if complainant.email_address.present?
+      lis << h.tag.li(complainant.other_details) if complainant.other_details.present?
+      safe_join(lis)
+    end
   end
 
   def pretty_description
@@ -68,11 +101,7 @@ class InvestigationDecorator < ApplicationDecorator
   def created_by
     return if creator_user.nil?
 
-    out = []
-    out << h.escape_once(creator_user.full_name)
-    out << h.escape_once(creator_user.team.name)
-
-    out.join("<br />").html_safe
+    "#{creator_user.full_name} - #{creator_user.team.name}"
   end
 
   def products_list

@@ -1,0 +1,21 @@
+<% page_heading = "What is the case name?" %>
+
+<%= page_title page_heading, errors: @case_name_form.errors.any? %>
+<%= govukBackLink(
+  text: "Back",
+  href: wizard_path(:reference_number)
+) %>
+
+<%= form_with scope: :investigation, model: @case_name_form, url: wizard_path, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= render "/investigations/case_names/form", form: form, heading: "What is the case name?" %>
+
+
+       <div class="govuk-button-group">
+         <%= form.submit "Save", class: "govuk-button" %>
+         <%= link_to "Cancel", product_path(@product), class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
+    </div>
+  </div>
+<% end %>

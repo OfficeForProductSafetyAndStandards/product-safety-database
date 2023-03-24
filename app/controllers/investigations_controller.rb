@@ -2,12 +2,10 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show created]
+  before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
-  # GET /cases.json
-  # GET /cases.xlsx
   def index
     respond_to do |format|
       format.html do
@@ -21,7 +19,6 @@ class InvestigationsController < ApplicationController
   end
 
   # GET /cases/1
-  # GET /cases/1.json
   def show
     authorize @investigation, :view_non_protected_details?
     @complainant = @investigation.complainant&.decorate
@@ -76,6 +73,27 @@ class InvestigationsController < ApplicationController
     render "investigations/index"
   end
 
+  def cannot_close
+    render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+  end
+
+  def confirm_deletion
+    render "investigations/cannot_delete" unless Pundit.policy(current_user, @investigation).can_be_deleted?
+  end
+
+  def destroy
+    authorize @investigation, :change_owner_or_status?
+
+    @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
+
+    if @delete_investigation_form.valid?
+      DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
+      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
+    else
+      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
+    end
+  end
+
 private
 
   def update!
@@ -117,12 +135,12 @@ private
   end
 
   def count_to_display
-    default_params ? Investigation.count : @answer.total_count
+    default_params ? Investigation.not_deleted.count : @answer.total_count
   end
 
   def default_params
-    [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access]].each do |param_value|
-      return false unless ["all", nil].include? param_value
+    [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access], params[:hazard_type]].each do |param_value|
+      return false unless param_value == "all" || param_value.blank?
     end
 
     params["case_status"] == "all" && params[:q].blank?

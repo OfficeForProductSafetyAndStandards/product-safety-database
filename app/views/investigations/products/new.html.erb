@@ -1,22 +1,39 @@
-<%= page_title "Add product to case", errors: @product_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_products_path(@investigation)
-  ) %>
-<% end %>
+<%= page_title "Add a product to the case", errors: @find_product_form.errors.any? %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
+<%= govukBackLink text: "Back", href: investigation_products_path(@investigation) %>
 
-<%= form_with model: @product_form, scope: :product, url: investigation_products_path(@investigation), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |form| %>
+<%= error_summary @find_product_form.errors %>
+
+<%= form_with model: @find_product_form, url: find_investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings affected_units_status number_of_affected_units name when_placed_on_market barcode]) %>
-      <%= render "investigation_heading", investigation: @investigation %>
-
-      <h2 class="govuk-heading-m">Add product</h2>
-
-      <%= render "products/form", form: form, product_form: @product_form, countries: @countries, search: true %>
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-label-wrapper opss-label-wrapper">
+        <label class="govuk-label govuk-label--l" for="add-product">Enter a <%= psd_abbr title: false %> product record reference number</label>
+      </h1>
+      <div id="add-product-hint" class="govuk-hint">
+        Each product record in the Product Safety Database (<%= psd_abbr title: false %>) has a <%= psd_abbr title: false %> reference number.
+      </div>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <%= govukDetails(
+        classes: "govuk-!-margin-bottom-9 opss-details--sm",
+        summaryText: "Help with adding a product to the case"
+      ) do %>
+        <p class="govuk-body-s">
+          Use the Products area to find a product and its product record reference number. For example, psd-301.
+        </p>
+        <p class="govuk-body-s">
+          Search for the product in the <%= link_to "Products area (opens in a new tab)", your_products_path, class: "govuk-link govuk-link--no-visited-state", rel: "noreferrer noopener", target: "_blank" %>
+        </p>
+        <p class="govuk-body-s">
+        Using an existing <%= psd_abbr title: false %> product record to add to your case avoids the need to create a new one and highlights other cases investigating the same product. After checking that the product does not already exist within the <%= psd_abbr title: false %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr title: false %> reference number to add it to your case.
+        </p>
+      <% end %>
+      <%= form.govuk_input(:reference, prefix: { text: "psd-" }, classes: "govuk-input--width-5", spellcheck: false, describedBy: "add-product-hint") %>
+      <div class="govuk-button-group">
+        <%= govukButton(text: "Continue") %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
     </div>
   </div>
 <% end %>

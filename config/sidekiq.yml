@@ -1,8 +1,8 @@
 ---
 :concurrency: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
 :queues:
-  - <%= ENV["SIDEKIQ_QUEUE"] || "psd" %>
-  - <%= ENV["SIDEKIQ_QUEUE"] || "psd" %>-mailers
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
 :scheduler:
   :schedule:
     delete_unsafe_files_job:
@@ -14,3 +14,6 @@
     lock_inactive_users_job:
       cron: "0 1 * * *"
       class: "LockInactiveUsersJob"
+    retire_stale_products_job:
+      cron: "0 2 * * *"
+      class: "RetireStaleProductsJob"

@@ -2,20 +2,20 @@ FactoryBot.define do
   factory :audit_activity_test_result, class: "AuditActivity::Test::Result" do
     title { Faker::Hipster.word }
     investigation
-    product
+    investigation_product
   end
 
   factory :legacy_audit_activity_test_result, class: "AuditActivity::Test::Result" do
     title { Faker::Hipster.word }
     metadata { nil }
     investigation
-    product
+    investigation_product
   end
 
   factory :legacy_audit_activity_corrective_action, class: "AuditActivity::CorrectiveAction::Base" do
     metadata { nil }
     investigation { create :allegation }
-    product
+    investigation_product
   end
 
   factory :legacy_audit_add_activity_corrective_action, class: "AuditActivity::CorrectiveAction::Add", parent: :legacy_audit_activity_corrective_action
@@ -41,7 +41,7 @@ FactoryBot.define do
 
   factory :legacy_audit_product_destroyed, class: "AuditActivity::Product::Destroy" do
     investigation { create :allegation }
-    product { create(:product) }
+    investigation_product
     title { "Product removed from case" }
   end
 

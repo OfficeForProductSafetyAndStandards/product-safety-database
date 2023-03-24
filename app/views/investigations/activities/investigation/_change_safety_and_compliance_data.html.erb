@@ -1,7 +1,7 @@
 <div class="govuk-body">
   <p>Changes:</p>
   <% if activity.reported_reason_changed? %>
-    Reported as: <b><%= I18n.t(".investigations.overview.safety_and_compliance.#{activity.new_reported_reason}") %></b><br>
+    Reported as: <b><%= I18n.t(".investigations.overview.safety_and_compliance.activity_log.#{activity.new_reported_reason}") %></b><br>
   <% end %>
 
   <% if activity.hazard_type_changed? %>

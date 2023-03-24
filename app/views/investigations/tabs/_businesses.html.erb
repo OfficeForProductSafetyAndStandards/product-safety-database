@@ -115,16 +115,6 @@
         </dd>
       </div>
     <% end %>
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Attachments
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <% unless business.documents.empty? %>
-            <a href="<%= business_path(business, anchor: "attachments") %>" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden"><%= business.trading_name %> has </span> <%= business.documents.count %> file attachments</a>
-          <% end %>
-        </dd>
-    </div>
   </dl>
 
   <p class="govuk-body-s govuk-!-margin-bottom-0 opss-secondary-text opss-text-align-right">

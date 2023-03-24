@@ -20,20 +20,17 @@
     %>
   <% end %>
 <% end %>
-<% if investigation.is_private? %>
-  <% badges << capture do %>
-    <%= tag.span t(:restricted, scope: "case.badges"),
-          class: "opss-tag opss-tag--risk2"
-    %>
-  <% end %>
-<% end %>
 
 <tr class="govuk-table__row">
   <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :status %>" class="govuk-visually-hidden">
     Type
   </th>
-  <td headers="<%= dom_id investigation, :item %> <%= dom_id investigation, :status %>" colspan="3" class="govuk-table__cell">
+  <td headers="<%= dom_id investigation, :item %> <%= dom_id investigation, :status %>" colspan="4" class="govuk-table__cell">
     <%= tag.span investigation.case_type.upcase_first, class: class_names("opss-tag", "opss-tag--std", investigation.is_closed? && "opss-cross-through") %>
+    <% if investigation.products.count.zero? && ["team_cases", "your_cases"].include?(@page_name) %>
+      <span class="govuk-visually-hidden"> | </span>
+      <span class="opss-tag opss-tag--risk4">This case has no product</span>
+    <% end %>
     <% badges.each do |badge| %>
       <span class="govuk-visually-hidden"> | </span>
       <%= badge %>

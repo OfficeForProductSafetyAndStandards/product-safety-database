@@ -68,7 +68,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards")
 
     click_link "Activity"
 
@@ -130,7 +130,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Southampton Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 

@@ -15,7 +15,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     create(:allegation, products: [other_product])
     create(:allegation, creator: other_user_same_team, products: [team_product])
     create(:allegation, creator: user, products: [closed_product], is_closed: true)
-    Investigation.import refresh: true, force: true
+    Investigation.import scope: "not_deleted", refresh: true, force: true
     Product.import refresh: true, force: true
   end
 
@@ -26,12 +26,12 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     click_on "Your products"
 
     expect(highlighted_tab).to eq "Your products"
-    expect(page).to have_content "There are 0 products linked to open cases where you are the case owner."
+    expect(page).to have_content "There are 0 product records linked to open cases where you are the case owner."
 
     click_on "Team products"
 
     expect(highlighted_tab).to eq "Team products"
-    expect(page).to have_content "There are 0 products linked to open cases where the #{team.name} team is the case owner."
+    expect(page).to have_content "There are 0 product records linked to open cases where the #{team.name} team is the case owner."
   end
 
   scenario "Browsing products" do

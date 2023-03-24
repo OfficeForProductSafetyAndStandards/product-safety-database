@@ -268,6 +268,21 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
           end
         end
       end
+
+      context "when the team owns products" do
+        let!(:owned_product_1) { create(:product, owning_team: team) }
+        let!(:owned_product_2) { create(:product, owning_team: team) }
+        let!(:unowned_product) { create(:product, owning_team: nil) }
+        let!(:other_team_product) { create(:product, owning_team: create(:team)) }
+
+        it "sets the new team to own the currently owned products", :aggregate_failures do
+          result
+          expect(owned_product_1.reload.owning_team).to eq(new_team)
+          expect(owned_product_2.reload.owning_team).to eq(new_team)
+          expect(unowned_product.reload.owning_team).to eq(nil)
+          expect(other_team_product.reload.owning_team).not_to eq(new_team)
+        end
+      end
     end
   end
 end

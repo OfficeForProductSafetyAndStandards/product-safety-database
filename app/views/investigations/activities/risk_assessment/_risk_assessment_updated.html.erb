@@ -15,7 +15,7 @@
   <% end %>
 
   <% if activity.products_changed? %>
-    <%= "Product".pluralize(activity.new_products.count) %> assessed: <b><%= to_sentence(activity.new_products.collect {|p| link_to(p.name, p, class: "govuk-link--no-visited-state") }) %></b><br>
+    <%= "Product".pluralize(activity.new_products.count) %> assessed: <b><%= to_sentence(activity.new_products.map(&:name)) %></b><br>
   <% end %>
 
   <% if activity.new_filename %>

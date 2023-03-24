@@ -12,21 +12,9 @@ RSpec.feature "App navigation", :with_stubbed_mailer, :with_stubbed_opensearch, 
     investigation.products << product
   end
 
-  scenario "when accessing product page from case page navigation should let you go back to the case" do
-    visit "/cases/#{investigation.pretty_id}"
-
-    within "main" do
-      click_on "Products"
-      click_on "View product"
-    end
-
-    expect(page).to have_content("Back to #{investigation.decorate.pretty_description}")
-  end
-
   scenario "when accessing product page from list page navigation should let you go back to the list" do
     visit "/products/#{product.id}"
-    expect(page).to have_css("li", text: "Products")
-    expect(page).to have_css("li", text: product.name)
+    expect(page).to have_link("Back", href: all_products_path)
   end
 
   scenario "when accessing business page from case page navigation should let you go back to the case" do

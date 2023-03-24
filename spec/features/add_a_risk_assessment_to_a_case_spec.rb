@@ -4,7 +4,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
   let(:risk_assessment_file) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
 
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, team:, name: "Jo Bloggs") }
+  let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, team:, name: "Jo Bloggs") }
 
   let(:product1) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }
@@ -41,9 +41,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     visit "/cases/#{investigation.pretty_id}"
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Risk assessments", value: "No risk assessments")
-
-    click_link "Add risk assessment"
+    click_link "Add a risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
 
@@ -114,7 +112,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     expect(page).to have_summary_item(key: "Date of assessment",  value: "3 April 2020")
     expect(page).to have_summary_item(key: "Risk level",          value: "Serious risk")
     expect(page).to have_summary_item(key: "Assessed by",         value: "MyCouncil Trading Standards")
-    expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X")
+    expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X (#{product1.psd_ref})")
     expect(page).to have_summary_item(key: "Further details", value: "Products risk-assessed in response to incident.")
 
     expect(page).to have_text("new_risk_assessment.txt")
@@ -125,8 +123,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     within('nav[aria-label="Secondary"]') { click_link "Case" }
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_summary_item(key: "Risk assessment", value: "1 risk assessment\nCompleted by MyCouncil Trading Standards on 3 April 2020\nAssessed risk: Serious risk")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -206,8 +202,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     within('nav[aria-label="Secondary"]') { click_link "Case" }
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_summary_item(key: "Risk assessment", value: "1 risk assessment\nCompleted by OtherCouncil Trading Standards on 3 April 2020\nAssessed risk: Medium-high risk")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -387,7 +381,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
-    expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X")
+    expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X (#{product1.psd_ref})")
   end
 
   scenario "Adding a risk assessment to a case where the assessed risk level matches the existing case risk level" do

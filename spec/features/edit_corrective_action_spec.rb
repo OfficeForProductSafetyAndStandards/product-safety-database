@@ -19,7 +19,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
       expect(page).to have_field("Month",   with: corrective_action.date_decided.month)
       expect(page).to have_field("Year",    with: corrective_action.date_decided.year)
-      expect(page).to have_select("Product", selected: corrective_action.product.name)
+      expect(page).to have_select("Product", selected: "#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.product.psd_ref})")
       expect(page).to have_select("Under which legislation?", selected: corrective_action.legislation)
       expect(page).to have_select("Business", selected: corrective_action.business.trading_name)
       corrective_action.geographic_scopes.each do |geographic_scope|

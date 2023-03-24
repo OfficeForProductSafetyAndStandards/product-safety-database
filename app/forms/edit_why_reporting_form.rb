@@ -10,6 +10,7 @@ class EditWhyReportingForm
   attribute :reported_reason_non_compliant,      :boolean, default: false
   attribute :reported_reason
 
+  validates :reported_reason, presence: true
   validates :non_compliant_reason, presence: true, if: -> { (reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant") }
   validates :hazard_description, :hazard_type, presence: true, if: -> { (reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant") }
 

@@ -1,3 +1,3 @@
 class AuditActivity::Product::Base < AuditActivity::Base
-  validates :product, presence: true
+  validates :investigation_product, presence: true
 end

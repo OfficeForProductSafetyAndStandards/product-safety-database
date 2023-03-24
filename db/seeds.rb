@@ -58,7 +58,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "",
     country_of_origin: "country:CN",
     description: "Plastic doll (5 different models) with long blonde hair.",
     product_code: "NO.DY807",
@@ -69,13 +68,14 @@ if run_seeds
     has_markings: "markings_unknown"
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
-  investigation.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
+  investigation.reload.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
 
   accident_params = {
     type: "Accident",
     date: Time.zone.today,
-    product_id: investigation.products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     severity: "serious",
     usage: "during_normal_use",
     is_date_known: true
@@ -83,7 +83,7 @@ if run_seeds
 
   incident_params = {
     type: "Incident",
-    product_id: investigation.products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     severity: "other",
     severity_other: "maximum severity",
     usage: "unknown_usage",
@@ -97,7 +97,7 @@ if run_seeds
     date: 15.days.ago,
     details: "Test results",
     legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
-    product_id: investigation.products.first.id,
+    investigation_product_id: investigation.investigation_products.first.id,
     result: "failed",
     created_at: 3.days.ago,
     document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
@@ -139,7 +139,6 @@ if run_seeds
   AuditActivity::Document::Add.from(blob, investigation)
 
   product_params = {
-    batch_number: "Unknown",
     country_of_origin: "country:CN",
     description: "Purple magnetic putty with small plastic accessories (eyes and a nose).",
     product_code: "Unknown",
@@ -150,12 +149,13 @@ if run_seeds
     has_markings: "markings_no"
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   risk_assessment_params = {
     assessed_on: Time.zone.today,
     risk_level: "serious",
-    product_ids: [investigation.products.first.id]
+    investigation_product_ids: [investigation.investigation_products.first.id]
   }
 
   AddRiskAssessmentToCase.call!(risk_assessment_params.merge(investigation:, user:, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
@@ -186,7 +186,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "Unknown",
     country_of_origin: "territory:TW",
     description: "",
     product_code: "Unknown",
@@ -198,7 +197,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
 
@@ -228,7 +228,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "Batch 105R sold between February and May 2018",
     country_of_origin: "territory:TW",
     description: "",
     product_code: "749266006615",
@@ -240,7 +239,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
 
@@ -270,7 +270,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "",
     country_of_origin: "",
     description: "White Christmas tree shaped candle, 4 inches high, unstable base.",
     product_code: "8719202753615",
@@ -282,7 +281,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
 
@@ -310,7 +310,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "",
     country_of_origin: "country:CN",
     description: "",
     product_code: "",
@@ -322,7 +321,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
@@ -381,7 +381,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "8710447348123 (LynxThe Golden Year); 8710522349168 (Lynx Black)",
     country_of_origin: "country:CN",
     description: "",
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
@@ -393,9 +392,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
-
-  product = investigation.products.first
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   product.documents.attach(create_blob("2019-w6_27526-1f.jpg", title: "Lynx packaging"))
   product.documents.attach(create_blob("2019-w6_27526-2f.jpg", title: "Lynx packaging"))
@@ -426,7 +424,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "X00076P3WF",
     country_of_origin: "country:CN",
     description: "",
     product_code: "PN 2124531316474, TJ-65-195334",
@@ -438,9 +435,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
-
-  product = investigation.products.first
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   product.documents.attach(create_blob("2019-w3_27167-3f.jpg", title: "packaging and product"))
   product.documents.attach(create_blob("2019-w3_27167-1f.jpg", title: "label"))
@@ -453,7 +449,7 @@ if run_seeds
     legislation: Rails.application.config.legislation_constants["legislation"].sample,
     details: "Passed tests 1 to 4 and failed test 5",
     result: "passed",
-    product_id: product.id,
+    investigation_product_id: product.investigation_products.first.id,
     document: create_blob("test_result.txt", title: "test result"),
     standards_product_was_tested_against: []
   )
@@ -482,7 +478,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "3105 & 1109",
     country_of_origin: "country:ES",
     description: "",
     product_code: "",
@@ -494,7 +489,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
@@ -521,7 +517,6 @@ if run_seeds
   CreateCase.call!(investigation:, user:)
 
   product_params = {
-    batch_number: "11",
     country_of_origin: "country:ES",
     description: "",
     product_code: "",
@@ -533,7 +528,8 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
+  product = CreateProduct.call!(product_params.merge({ user: })).product
+  AddProductToCase.call!(investigation:, product:, user:)
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
@@ -684,7 +680,7 @@ if run_seeds
       investigation: i,
       legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
       measure_type: CorrectiveAction::MEASURE_TYPES.sample,
-      product:,
+      investigation_product: product.investigation_products.first,
       action: "other",
       other_action: "First corrective action",
       created_at: 2.days.ago
@@ -698,7 +694,7 @@ if run_seeds
   end
 
   Investigation.__elasticsearch__.create_index! force: true
-  Investigation.import
+  Investigation.import scope: "not_deleted"
 
   Product.__elasticsearch__.create_index! force: true
   Product.import

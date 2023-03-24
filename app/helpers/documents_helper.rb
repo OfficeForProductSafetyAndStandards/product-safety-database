@@ -56,4 +56,11 @@ module DocumentsHelper
       Time.zone.parse(file.blob.metadata[:updated]).to_formatted_s(:govuk)
     end
   end
+
+  def documentable_policy(record)
+    # NOTE: record will be the parent record, not the document!
+    # NOTE: Pundit doesn't have a policy helper that allows the overriding
+    #   of policy_class, so this helper manually instantiates an instance
+    DocumentablePolicy.new current_user, record
+  end
 end

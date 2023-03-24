@@ -3,7 +3,7 @@ class AuditActivity::CorrectiveAction::Base < AuditActivity::Base
   with_attachments attachment: "attachment"
 
   belongs_to :business, optional: true, class_name: "::Business"
-  belongs_to :product, class_name: "::Product"
+  belongs_to :investigation_product, class_name: "::InvestigationProduct"
 
   def corrective_action
     if attachment.attached?
