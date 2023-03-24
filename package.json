@@ -9,7 +9,7 @@
   "dependencies": {
     "@hmcts/frontend": "^0.0.41-alpha",
     "accessible-autocomplete": "2.0.4",
-    "esbuild": "^0.17.12",
+    "esbuild": "^0.17.13",
     "govuk-frontend": "4.4.1",
     "postcss": "^8.4.19",
     "sass": "^1.59.3",
