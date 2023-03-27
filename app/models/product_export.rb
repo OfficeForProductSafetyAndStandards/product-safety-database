@@ -90,7 +90,13 @@ private
                      updated_at
                      webpage
                      when_placed_on_market
-                     owning_team]
+                     owning_team
+                     local_authority
+                     region
+                     region_code
+                     regulator
+                     regulator_name
+                     internal_opss_team]
 
     @product_info_sheet = sheet
   end
@@ -153,7 +159,13 @@ private
       product.updated_at,
       product.webpage,
       product.when_placed_on_market,
-      product.owning_team.try(:name)
+      product.owning_team.try(:name),
+      product.owning_team.try(:local_authority),
+      product.owning_team&.ts_region&.name,
+      product.owning_team&.ts_region&.acronym,
+      product.owning_team.try(:external_regulator),
+      product.owning_team&.regulator&.name,
+      product.owning_team.try(:internal_opss_team),
     ]
   end
 

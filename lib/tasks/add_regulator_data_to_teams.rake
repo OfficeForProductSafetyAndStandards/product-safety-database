@@ -32,20 +32,30 @@ namespace :teams do
 
     teams = spreadsheet.sheet("Team data").parse(headers: true)[1..]
 
+    regulators = teams.map { |t| t["Name of regulator (if Y)"] }.uniq.compact
+
+    regulators.each do |regulator_name|
+      regulator = Regulator.find_or_initialize_by(name: regulator_name)
+
+      regulator.save!
+    end
+
     teams.each do |team_data|
       team = Team.find_by_name(team_data["Team name"])
 
       next if team.blank?
 
-      team.update!(regulator_type(team_data))
+      team.update!(regulator_information(team_data))
     end
   end
 end
 
-def regulator_type(team_data)
+def regulator_information(team_data)
   return { local_authority: true } if team_data["External - LA"].casecmp("y").zero?
 
   return { internal_opss: true } if team_data["Internal"].casecmp("y").zero?
 
-  { external_regulator: true } if team_data["External Regulator"].casecmp("y").zero?
+  regulator = Regulator.find_by_name(team_data["Name of regulator (if Y)"])
+
+  { external_regulator: true, regulator: } if team_data["External Regulator"].casecmp("y").zero?
 end

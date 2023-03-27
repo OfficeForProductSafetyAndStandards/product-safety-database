@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_22_102410) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_24_142955) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -312,6 +312,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_102410) do
     t.index ["retired_at"], name: "index_products_on_retired_at"
   end
 
+  create_table "regulators", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "risk_assessed_products", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "investigation_product_id"
@@ -352,8 +358,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_102410) do
     t.string "country"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
+    t.boolean "external_regulator", default: false
+    t.boolean "internal_opss", default: false
+    t.boolean "local_authority", default: false
     t.string "name"
     t.uuid "organisation_id"
+    t.bigint "regulator_id"
     t.string "team_recipient_email"
     t.bigint "ts_region_id"
     t.datetime "updated_at", null: false
