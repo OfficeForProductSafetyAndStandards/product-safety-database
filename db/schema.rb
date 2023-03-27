@@ -453,6 +453,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_103006) do
     t.string "item_type", null: false
     t.jsonb "object"
     t.jsonb "object_changes"
+    t.text "old_object"
+    t.text "old_object_changes"
     t.string "whodunnit"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
