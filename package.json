@@ -9,10 +9,10 @@
   "dependencies": {
     "@hmcts/frontend": "^0.0.41-alpha",
     "accessible-autocomplete": "2.0.4",
-    "esbuild": "^0.17.11",
+    "esbuild": "^0.17.12",
     "govuk-frontend": "4.4.1",
     "postcss": "^8.4.19",
-    "sass": "^1.58.3",
+    "sass": "^1.59.3",
     "standard": "^17.0.0",
     "stylelint": "^14.16.1",
     "stylelint-config-gds": "^0.2.0"
