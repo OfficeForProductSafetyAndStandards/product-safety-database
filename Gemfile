@@ -98,6 +98,5 @@ group :test do
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
   gem "super_diff"
-  gem "webdrivers"
   gem "webmock", "~> 3.18"
 end
