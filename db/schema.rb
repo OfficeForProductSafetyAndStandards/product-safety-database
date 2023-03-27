@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_24_142955) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "name", null: false
     t.bigint "record_id", null: false
     t.string "record_type", null: false
@@ -42,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.string "content_type"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "filename", null: false
     t.string "key", null: false
     t.text "metadata", default: "{}"
@@ -62,13 +62,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.text "body"
     t.bigint "business_id"
     t.bigint "correspondence_id"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.integer "investigation_id"
     t.bigint "investigation_product_id"
     t.jsonb "metadata"
     t.string "title"
     t.string "type", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_activities_on_business_id"
     t.index ["correspondence_id"], name: "index_activities_on_correspondence_id"
     t.index ["investigation_id"], name: "index_activities_on_investigation_id"
@@ -78,11 +78,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
 
   create_table "alerts", id: :serial, force: :cascade do |t|
     t.uuid "added_by_user_id"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.text "description"
     t.integer "investigation_id"
     t.string "summary"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
   end
 
@@ -97,10 +97,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
   create_table "businesses", id: :serial, force: :cascade do |t|
     t.uuid "added_by_user_id"
     t.string "company_number"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "legal_name"
     t.string "trading_name", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "case_exports", force: :cascade do |t|
@@ -115,11 +115,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.uuid "added_by_user_id"
     t.uuid "collaborator_id", null: false
     t.string "collaborator_type", null: false
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.integer "investigation_id", null: false
     t.text "message"
     t.string "type", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_id", "collaborator_id"], name: "index_collaborations_on_investigation_id_and_collaborator_id", unique: true, where: "(((type)::text <> 'Collaboration::CreatorTeam'::text) AND ((type)::text <> 'Collaboration::CreatorUser'::text))"
     t.index ["investigation_id", "collaborator_type"], name: "index_collaborations_on_investigation_id_and_collaborator_type", unique: true, where: "((type)::text = 'Collaboration::Access::OwnerTeam'::text)"
     t.index ["investigation_id"], name: "index_collaborations_on_investigation_id"
@@ -127,32 +127,32 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
 
   create_table "complainants", id: :serial, force: :cascade do |t|
     t.string "complainant_type"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "email_address"
     t.integer "investigation_id"
     t.string "name"
     t.text "other_details"
     t.string "phone_number"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_complainants_on_investigation_id"
   end
 
   create_table "contacts", force: :cascade do |t|
     t.uuid "added_by_user_id"
     t.integer "business_id"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "email"
     t.string "job_title"
     t.string "name"
     t.string "phone_number"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_contacts_on_business_id"
   end
 
   create_table "corrective_actions", id: :serial, force: :cascade do |t|
     t.string "action", default: "other", null: false
     t.integer "business_id"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.date "date_decided"
     t.text "details"
     t.string "duration"
@@ -165,7 +165,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "measure_type"
     t.string "online_recall_information"
     t.text "other_action"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_corrective_actions_on_business_id"
     t.index ["investigation_id"], name: "index_corrective_actions_on_investigation_id"
     t.index ["investigation_product_id"], name: "index_corrective_actions_on_investigation_product_id"
@@ -176,7 +176,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.date "correspondence_date"
     t.string "correspondent_name"
     t.string "correspondent_type"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.text "details"
     t.string "email_address"
     t.string "email_direction"
@@ -185,7 +185,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "overview"
     t.string "phone_number"
     t.string "type"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_correspondences_on_investigation_id"
   end
 
@@ -202,10 +202,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
 
   create_table "investigation_businesses", id: :serial, force: :cascade do |t|
     t.integer "business_id"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.integer "investigation_id"
     t.string "relationship"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_investigation_businesses_on_business_id"
     t.index ["investigation_id", "business_id"], name: "index_on_investigation_id_and_business_id", unique: true
     t.index ["investigation_id"], name: "index_investigation_businesses_on_investigation_id"
@@ -214,13 +214,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
   create_table "investigation_products", id: :serial, force: :cascade do |t|
     t.enum "affected_units_status", enum_type: "affected_units_statuses"
     t.string "batch_number"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.text "customs_code"
     t.datetime "investigation_closed_at", precision: nil
     t.integer "investigation_id"
     t.text "number_of_affected_units"
     t.integer "product_id"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_id", "product_id", "investigation_closed_at"], name: "index_investigation_products_on_inv_id_product_id_closed_at", unique: true
     t.index ["investigation_id"], name: "index_investigation_products_on_investigation_id"
     t.index ["product_id"], name: "index_investigation_products_on_product_id"
@@ -229,9 +229,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
   create_table "investigations", id: :serial, force: :cascade do |t|
     t.string "complainant_reference"
     t.boolean "coronavirus_related", default: false
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "custom_risk_level"
-    t.datetime "date_closed", precision: nil
+    t.datetime "date_closed"
     t.date "date_received"
     t.datetime "deleted_at", precision: nil
     t.string "deleted_by"
@@ -247,10 +247,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "received_type"
     t.enum "reported_reason", enum_type: "reported_reasons"
     t.enum "risk_level", enum_type: "risk_levels"
-    t.datetime "risk_validated_at", precision: nil
+    t.datetime "risk_validated_at"
     t.string "risk_validated_by"
     t.string "type", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.string "user_title"
     t.index ["custom_risk_level"], name: "index_investigations_on_custom_risk_level"
     t.index ["deleted_at"], name: "index_investigations_on_deleted_at"
@@ -266,18 +266,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "city"
     t.string "country"
     t.string "county"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "name", null: false
     t.string "phone_number"
     t.string "postal_code"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_locations_on_business_id"
   end
 
   create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "name"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "product_exports", force: :cascade do |t|
@@ -295,7 +295,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.text "brand"
     t.string "category"
     t.string "country_of_origin"
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.text "description"
     t.bigint "document_upload_ids", default: [], array: true
     t.enum "has_markings", enum_type: "has_markings_values"
@@ -305,7 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "product_code"
     t.datetime "retired_at", precision: nil
     t.string "subcategory"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.string "webpage"
     t.enum "when_placed_on_market", enum_type: "when_placed_on_markets"
     t.index ["owning_team_id"], name: "index_products_on_owning_team_id"
@@ -313,10 +313,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
   end
 
   create_table "risk_assessed_products", force: :cascade do |t|
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.bigint "investigation_product_id"
     t.integer "risk_assessment_id", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_product_id"], name: "index_risk_assessed_products_on_investigation_product_id"
     t.index ["risk_assessment_id", "investigation_product_id"], name: "index_risk_assessed_products", unique: true
   end
@@ -328,20 +328,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.text "assessed_by_other"
     t.uuid "assessed_by_team_id"
     t.date "assessed_on", null: false
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.text "custom_risk_level"
     t.text "details"
     t.integer "investigation_id", null: false
     t.enum "risk_level", enum_type: "risk_levels"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles", force: :cascade do |t|
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.uuid "entity_id"
     t.string "entity_type", null: false
     t.string "name", null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["entity_id", "entity_type"], name: "index_roles_on_entity_id_and_entity_type"
     t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
     t.index ["entity_id"], name: "index_roles_on_entity_id"
@@ -350,19 +350,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
 
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "country"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "deleted_at"
+    t.boolean "external_regulator", default: false
+    t.boolean "internal_opss", default: false
+    t.boolean "local_authority", default: false
     t.string "name"
     t.uuid "organisation_id"
     t.string "team_recipient_email"
-    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "ts_region_id"
+    t.datetime "updated_at", null: false
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
     t.index ["name"], name: "index_teams_on_name"
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
   end
 
   create_table "tests", id: :serial, force: :cascade do |t|
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.date "date"
     t.text "details"
     t.text "failure_details"
@@ -372,9 +376,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.string "result"
     t.string "standards_product_was_tested_against", default: [], array: true
     t.string "type"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
     t.index ["investigation_product_id"], name: "index_tests_on_investigation_product_id"
+  end
+
+  create_table "ts_regions", force: :cascade do |t|
+    t.string "acronym"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "unexpected_events", force: :cascade do |t|
@@ -394,14 +405,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "account_activated", default: false
-    t.datetime "created_at", precision: nil, null: false
+    t.datetime "created_at", null: false
     t.string "credential_type"
-    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
-    t.datetime "deleted_at", precision: nil
+    t.datetime "deleted_at"
     t.string "deleted_by"
     t.string "direct_otp"
-    t.datetime "direct_otp_sent_at", precision: nil
+    t.datetime "direct_otp_sent_at"
     t.string "email"
     t.string "encrypted_otp_secret_key"
     t.string "encrypted_otp_secret_key_iv"
@@ -413,28 +424,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_03_142207) do
     t.boolean "has_viewed_introduction", default: false
     t.integer "hash_iterations", default: 27500
     t.text "invitation_token"
-    t.datetime "invited_at", precision: nil, default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "keycloak_created_at", precision: nil
-    t.datetime "last_activity_at_approx", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "invited_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "keycloak_created_at"
+    t.datetime "last_activity_at_approx"
+    t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
-    t.datetime "locked_at", precision: nil
+    t.datetime "locked_at"
     t.enum "locked_reason", enum_type: "account_locked_reasons"
     t.text "mobile_number"
     t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"
     t.uuid "organisation_id"
     t.binary "password_salt"
-    t.datetime "remember_created_at", precision: nil
-    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.integer "second_factor_attempts_count", default: 0
-    t.datetime "second_factor_attempts_locked_at", precision: nil
+    t.datetime "second_factor_attempts_locked_at"
     t.string "secondary_authentication_operation"
     t.integer "sign_in_count", default: 0, null: false
     t.uuid "team_id", null: false
     t.string "unlock_token"
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true

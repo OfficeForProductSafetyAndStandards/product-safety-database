@@ -3,6 +3,7 @@ class Team < ApplicationRecord
   include TeamCollaboratorInterface
 
   belongs_to :organisation
+  belongs_to :ts_region, optional: true
   has_many :users, dependent: :restrict_with_exception
 
   has_many :collaborations, dependent: :destroy, as: :collaborator
