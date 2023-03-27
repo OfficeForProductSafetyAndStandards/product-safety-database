@@ -3,7 +3,7 @@ namespace :teams do
   task :add_ts_region_information, [:filepath] => :environment do |_t, args|
     spreadsheet = Roo::Spreadsheet.open(args[:filepath])
 
-    regions = spreadsheet.sheet("TS Region List").parse(headers: true)[1..-1]
+    regions = spreadsheet.sheet("TS Region List").parse(headers: true)[1..]
 
     regions.each do |region|
       region_information = { name: region["Name"], acronym: region["Acronym"] }
@@ -13,7 +13,7 @@ namespace :teams do
       ts_region.save!
     end
 
-    teams = spreadsheet.sheet("Team data").parse(headers: true)[1..-1]
+    teams = spreadsheet.sheet("Team data").parse(headers: true)[1..]
 
     teams.each do |team_data|
       next if team_data["Name of Region"].blank?
@@ -30,7 +30,7 @@ namespace :teams do
   task :add_regulator_information_to_teams, [:filepath] => :environment do |_t, args|
     spreadsheet = Roo::Spreadsheet.open(args[:filepath])
 
-    teams = spreadsheet.sheet("Team data").parse(headers: true)[1..-1]
+    teams = spreadsheet.sheet("Team data").parse(headers: true)[1..]
 
     teams.each do |team_data|
       team = Team.find_by_name(team_data["Team name"])

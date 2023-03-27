@@ -1,15 +1,19 @@
 class AddRegulatorTypesToTeams < ActiveRecord::Migration[7.0]
   def up
-    add_column :teams, :internal_opss, :boolean, default: false
-    add_column :teams, :local_authority, :boolean, default: false
-    add_column :teams, :external_regulator, :boolean, default: false
+    change_table :teams, bulk: true do |t|
+      t.column :internal_opss, :boolean, default: false
+      t.column :local_authority, :boolean, default: false
+      t.column :external_regulator, :boolean, default: false
+    end
 
     Rake::Task["teams:add_regulator_information_to_teams"].invoke(Rails.root.join("lib/regulators/regulators.xlsx").to_s)
   end
 
   def down
-    remove_column :teams, :internal_opss
-    remove_column :teams, :local_authority
-    remove_column :teams, :external_regulator
+    change_table :teams, bulk: true do |t|
+      t.column :internal_opss
+      t.column :local_authority
+      t.column :external_regulator
+    end
   end
 end
