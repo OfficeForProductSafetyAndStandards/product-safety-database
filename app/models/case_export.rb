@@ -89,6 +89,12 @@ private
                      Coronavirus_Related
                      Risk_Level
                      Case_Owner_Team
+                     Case_Owner_Team_Internal
+                     Case_Owner_Team_Local_Authority
+                     Case_Owner_Team_Local_Authority_Code
+                     Case_Owner_Team_Region
+                     Case_Owner_Team_External
+                     Case_Owner_Team_Regulator
                      Case_Owner_User
                      Source_Type
                      Products
@@ -130,6 +136,12 @@ private
       investigation.coronavirus_related?,
       investigation.risk_level_description,
       investigation.owner_team&.name,
+      investigation.owner_team.try(:local_authority),
+      investigation.owner_team&.ts_region&.name,
+      investigation.owner_team&.ts_region&.acronym,
+      investigation.owner_team.try(:external_regulator),
+      investigation.owner_team&.regulator&.name,
+      investigation.owner_team.try(:internal_opss_team),
       investigation.owner_user&.name,
       investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
@@ -162,6 +174,12 @@ private
       investigation.coronavirus_related?,
       investigation.risk_level_description,
       investigation.owner_team&.name,
+      investigation.owner_team.try(:local_authority),
+      investigation.owner_team&.ts_region&.name,
+      investigation.owner_team&.ts_region&.acronym,
+      investigation.owner_team.try(:external_regulator),
+      investigation.owner_team&.regulator&.name,
+      investigation.owner_team.try(:internal_opss_team),
       "Restricted",
       investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
