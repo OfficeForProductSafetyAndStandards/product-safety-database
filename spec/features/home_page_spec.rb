@@ -117,7 +117,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
             expect_header_to_have_signed_in_links
             expect(page).to have_link("Your cases")
             expect(page).to have_link("All cases")
-            expect(page).to have_link("How to use the Product Safety Database")
+            expect(page).to have_link("How to use the PSD")
           end
         end
       end
