@@ -1,4 +1,4 @@
-<%= govukFieldset(legend: { text: "Business details", classes: "govuk-fieldset__legend--m" }) do %>
+<%= govukFieldset(legend: { text: "The business details", classes: "govuk-fieldset__legend--m" }) do %>
   <%= govukInput(
     key: :trading_name,
     id: "trading_name",
@@ -28,7 +28,7 @@
 <% end %>
 
 <%= form.fields_for :contacts, business.primary_contact do |ff| %>
-  <%= render "contacts/form", form: ff, legend: { text: "Contact", classes: "govuk-fieldset__legend--m" } %>
+  <%= render "contacts/form", form: ff, legend: { text: "The business contact", classes: "govuk-fieldset__legend--m" } %>
 <% end %>
 
 <%= form.submit local_assigns[:submit_text] || "Save business", class: "govuk-button" %>

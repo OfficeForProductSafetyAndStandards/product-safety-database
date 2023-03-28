@@ -23,7 +23,7 @@ RSpec.feature "Edit an investigation's reference number", :with_stubbed_opensear
     click_button "Save"
 
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}", ignore_query: true
-    expect(page).to have_content "Reference number was successfully updated"
+    expect(page).to have_content "The reference number was updated"
 
     expect(page.find("dt", text: "Reference")).to have_sibling("dd", text: new_reference_number)
   end

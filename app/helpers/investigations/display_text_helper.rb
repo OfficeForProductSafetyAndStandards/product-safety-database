@@ -145,7 +145,7 @@ module Investigations::DisplayTextHelper
 
   def replace_unsightly_field_names(field_name)
     pretty_field_names = {
-      pretty_id: "Case ID",
+      pretty_id: "Case number",
       "activities.search_index": "Activities, comment",
       "teams_with_access.id": "Team added to the case"
     }
