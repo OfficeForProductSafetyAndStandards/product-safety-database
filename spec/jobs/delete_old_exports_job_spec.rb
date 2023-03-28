@@ -1,6 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DeleteOldExportsJob, :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :job do
+  subject(:job) { described_class.new }
+
   let(:user) { create(:user) }
 
   let!(:old_product_export) do
@@ -44,23 +46,23 @@ RSpec.describe DeleteOldExportsJob, :with_stubbed_opensearch, :with_stubbed_anti
   let(:old_product_export_file_id) { old_product_export.export_file.attachment.id }
   let(:recent_product_export_file_id) { recent_product_export.export_file.attachment.id }
 
-  subject(:job) { described_class.new }
-
-  describe '#perform' do
-    it 'deletes old ProductExport instances and their attached files' do
-      expect { job.perform }.to change { ProductExport.count }.by(-1)
+  # rubocop:disable RSpec/MultipleExpectations
+  describe "#perform" do
+    it "deletes old ProductExport instances and their attached files" do
+      expect { job.perform }.to change(ProductExport, :count).by(-1)
       expect(ProductExport.all).not_to include(old_product_export)
       expect(ProductExport.all).to include(recent_product_export)
       expect(ActiveStorage::Attachment.exists?(old_product_export_file_id)).to eq false
       expect(ActiveStorage::Attachment.exists?(recent_product_export_file_id)).to eq true
     end
 
-    it 'deletes old CaseExport instances and their attached files' do
-      expect { job.perform }.to change { CaseExport.count }.by(-1)
+    it "deletes old CaseExport instances and their attached files" do
+      expect { job.perform }.to change(CaseExport, :count).by(-1)
       expect(CaseExport.all).not_to include(old_case_export)
       expect(CaseExport.all).to include(recent_case_export)
       expect(ActiveStorage::Attachment.exists?(old_case_export_file_id)).to eq false
       expect(ActiveStorage::Attachment.exists?(recent_case_export_file_id)).to eq true
     end
   end
+  # rubocop:enable RSpec/MultipleExpectations
 end
