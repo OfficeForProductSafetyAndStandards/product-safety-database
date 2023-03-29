@@ -9,8 +9,9 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   # Create a new product version to ensure only the current version is rendered
-  let!(:product)                { create(:product, :with_versions, investigations: [investigation], description: initial_product_description, new_description: new_product_description).decorate }
-  let!(:other_product)          { create(:product, investigations: [other_investigation]).decorate }
+  let(:country_of_origin)       { "country:GB-ENG" }
+  let!(:product)                { create(:product, :with_versions, investigations: [investigation], country_of_origin:, description: initial_product_description, new_description: new_product_description).decorate }
+  let!(:other_product)          { create(:product, investigations: [other_investigation], country_of_origin: nil).decorate }
   let!(:investigation_product)  { create(:investigation_product, product:, investigation:) }
   let!(:risk_assessment)        { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:risk_assessment_2)      { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
@@ -71,8 +72,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(3, 7)).to eq other_product.category
 
       expect(product_sheet.cell(1, 8)).to eq "country_of_origin"
-      expect(product_sheet.cell(2, 8)).to eq product.country_of_origin
-      expect(product_sheet.cell(3, 8)).to eq other_product.country_of_origin
+      expect(product_sheet.cell(2, 8)).to eq "GB-ENG"
+      expect(product_sheet.cell(3, 8)).to eq nil
 
       expect(product_sheet.cell(1, 9)).to eq "created_at"
       expect(product_sheet.cell(2, 9)).to eq product.created_at.to_formatted_s(:xmlschema)

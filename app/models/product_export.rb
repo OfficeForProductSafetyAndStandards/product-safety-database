@@ -144,7 +144,7 @@ private
       product.brand,
       case_id,
       product.category,
-      product.country_of_origin,
+      format_country_code(code: product.country_of_origin),
       product.created_at.to_formatted_s(:xmlschema),
       product.description,
       product.has_markings,
@@ -200,5 +200,11 @@ private
       corrective_action.details,
       product.name
     ]
+  end
+
+  def format_country_code(code:)
+    return if code.blank?
+
+    code.split(":")&.last
   end
 end
