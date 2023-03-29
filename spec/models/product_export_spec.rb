@@ -75,8 +75,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(3, 8)).to eq other_product.country_of_origin
 
       expect(product_sheet.cell(1, 9)).to eq "created_at"
-      expect(product_sheet.cell(2, 9)).to eq product.created_at.to_s
-      expect(product_sheet.cell(3, 9)).to eq other_product.created_at.to_s
+      expect(product_sheet.cell(2, 9)).to eq product.created_at.to_formatted_s(:xmlschema)
+      expect(product_sheet.cell(3, 9)).to eq other_product.created_at.to_formatted_s(:xmlschema)
 
       expect(product_sheet.cell(1, 10)).to eq "description"
       expect(product_sheet.cell(2, 10)).to eq "<p>#{new_product_description}</p>"
@@ -103,8 +103,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(3, 15)).to eq other_product.subcategory
 
       expect(product_sheet.cell(1, 16)).to eq "updated_at"
-      expect(product_sheet.cell(2, 16)).to eq product.updated_at.to_s
-      expect(product_sheet.cell(3, 16)).to eq other_product.updated_at.to_s
+      expect(product_sheet.cell(2, 16)).to eq product.updated_at.to_formatted_s(:xmlschema)
+      expect(product_sheet.cell(3, 16)).to eq other_product.updated_at.to_formatted_s(:xmlschema)
 
       expect(product_sheet.cell(1, 17)).to eq "webpage"
       expect(product_sheet.cell(2, 17)).to eq product.webpage
@@ -159,8 +159,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(risk_assessments_sheet.cell(3, 2)).to eq product.id.to_s
 
       expect(risk_assessments_sheet.cell(1, 3)).to eq "date_of_assessment"
-      expect(risk_assessments_sheet.cell(2, 3)).to eq risk_assessment.assessed_on.to_s
-      expect(risk_assessments_sheet.cell(3, 3)).to eq risk_assessment_2.assessed_on.to_s
+      expect(risk_assessments_sheet.cell(2, 3)).to eq risk_assessment.assessed_on.to_formatted_s(:xmlschema)
+      expect(risk_assessments_sheet.cell(3, 3)).to eq risk_assessment_2.assessed_on.to_formatted_s(:xmlschema)
 
       expect(risk_assessments_sheet.cell(1, 4)).to eq "risk_level"
       expect(risk_assessments_sheet.cell(2, 4)).to eq risk_assessment.risk_level.to_s
