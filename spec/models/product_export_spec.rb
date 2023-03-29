@@ -1,3 +1,6 @@
+# rubocop:disable RSpec/LetSetup
+# rubocop:disable RSpec/MultipleExpectations
+# rubocop:disable RSpec/ExampleLength
 require "rails_helper"
 
 RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
@@ -38,8 +41,6 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
     let(:risk_assessments_sheet) { exported_data.sheet("risk_assessments") }
     let(:corrective_actions_sheet) { exported_data.sheet("corrective_actions") }
 
-    # rubocop:disable RSpec/MultipleExpectations
-    # rubocop:disable RSpec/ExampleLength
     it "exports product data" do
       expect(product_sheet.cell(1, 1)).to eq "psd_ref"
       expect(product_sheet.cell(2, 1)).to eq product.psd_ref
@@ -61,9 +62,9 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(2, 5)).to eq product.brand
       expect(product_sheet.cell(3, 5)).to eq other_product.brand
 
-      expect(product_sheet.cell(1, 6)).to eq "case_ids"
-      expect(product_sheet.cell(2, 6)).to eq product.case_ids.to_s
-      expect(product_sheet.cell(3, 6)).to eq other_product.case_ids.to_s
+      expect(product_sheet.cell(1, 6)).to eq "case_id"
+      expect(product_sheet.cell(2, 6)).to eq product.case_ids.first.to_s
+      expect(product_sheet.cell(3, 6)).to eq other_product.case_ids.first.to_s
 
       expect(product_sheet.cell(1, 7)).to eq "category"
       expect(product_sheet.cell(2, 7)).to eq product.category
@@ -225,7 +226,37 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(corrective_actions_sheet.cell(2, 12)).to eq product.name
       expect(corrective_actions_sheet.cell(3, 12)).to eq product.name
     end
-    # rubocop:enable RSpec/MultipleExpectations
-    # rubocop:enable RSpec/ExampleLength
+  end
+
+  context "when there is a product with multiple cases" do
+    let(:investigation_a) { create(:allegation).decorate }
+    let(:investigation_b) { create(:allegation).decorate }
+    let!(:multiple_case_product) { create(:product, investigations: [investigation_a, investigation_b]).decorate }
+    let!(:investigation_product_a)  { create(:investigation_product, product: multiple_case_product, investigation: investigation_a) }
+    let!(:investigation_product_b)  { create(:investigation_product, product: multiple_case_product, investigation: investigation_b) }
+    let!(:risk_assessment) { create(:risk_assessment, investigation: investigation_a, investigation_products: [investigation_product_a]).decorate }
+    let!(:risk_assessment_2) { create(:risk_assessment, investigation: investigation_b, investigation_products: [investigation_product_b]).decorate }
+
+    let(:spreadsheet) { product_export.to_spreadsheet.to_stream }
+    let(:exported_data) { Roo::Excelx.new(spreadsheet) }
+    let(:products_sheet) { exported_data.sheet("product_info") }
+
+    it "exports the product into multiple rows, each with a different case" do
+      expect(products_sheet.cell(1, 1)).to eq "psd_ref"
+      expect(products_sheet.cell(2, 1)).to eq product.psd_ref
+      expect(products_sheet.cell(3, 1)).to eq other_product.psd_ref
+      expect(products_sheet.cell(4, 1)).to eq multiple_case_product.psd_ref
+      expect(products_sheet.cell(5, 1)).to eq multiple_case_product.psd_ref
+
+      expect(products_sheet.cell(1, 6)).to eq "case_id"
+      expect(products_sheet.cell(2, 6)).to eq product.case_ids.first.to_s
+      expect(products_sheet.cell(3, 6)).to eq other_product.case_ids.first.to_s
+      expect(products_sheet.cell(4, 6)).to eq multiple_case_product.case_ids[0].to_s
+      expect(products_sheet.cell(5, 6)).to eq multiple_case_product.case_ids[1].to_s
+    end
   end
 end
+
+# rubocop:enable RSpec/MultipleExpectations
+# rubocop:enable RSpec/ExampleLength
+# rubocop:enable RSpec/LetSetup
