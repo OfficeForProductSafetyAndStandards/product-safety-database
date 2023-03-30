@@ -69,7 +69,7 @@
             <% if current_user.is_team_admin? %>
               <td class="govuk-table__cell">
                 <% if current_user != user && !user.is_team_admin? %>
-                  <%= link_to "Remove", remove_user_path(user_id: user.id), class: "govuk-link govuk-link--no-visited-state" do %>
+                  <%= link_to remove_user_path(user_id: user.id), class: "govuk-link govuk-link--no-visited-state" do %>
                     Remove <span class="govuk-visually-hidden"><%= user.name %></span>
                   <% end %>
                 <% end %>
