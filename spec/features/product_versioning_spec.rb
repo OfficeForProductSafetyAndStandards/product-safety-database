@@ -33,7 +33,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_antivirus, :
     click_link "Close this case"
     fill_in "Why are you closing the case?", with: "Case has been resolved."
     click_button "Close case"
-    expect_confirmation_banner("Allegation was closed")
+    expect_confirmation_banner("The case was closed")
     first_investigation.reload
 
     # Closing the case makes the product unowned, and the user can no longer edit it
