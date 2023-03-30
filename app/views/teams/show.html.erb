@@ -62,7 +62,7 @@
               <% if !user.has_filled_out_account_setup_form_and_verified_number? && current_user.is_team_admin? %>
                 <br>
                 <%= button_to resend_team_invitation_path(@team, user), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 govuk-!-font-weight-bold", method: :put do %>
-                  Resend invitation <span class="govuk-visually-hidden"> to <%= user.name %></span>
+                  Resend invitation <span class="govuk-visually-hidden"> to <%= user.email %></span>
                 <% end %>
               <% end %>
             </td>
