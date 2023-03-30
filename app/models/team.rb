@@ -3,8 +3,6 @@ class Team < ApplicationRecord
   include TeamCollaboratorInterface
 
   belongs_to :organisation
-  belongs_to :ts_region, optional: true
-  belongs_to :regulator, optional: true
   has_many :users, dependent: :restrict_with_exception
 
   has_many :collaborations, dependent: :destroy, as: :collaborator
@@ -15,6 +13,8 @@ class Team < ApplicationRecord
   has_many :roles, dependent: :destroy, as: :entity
 
   has_many :owned_products, class_name: "Product", foreign_key: "owning_team_id", inverse_of: :owning_team, dependent: :nullify
+
+  delegate :ts_region, :regulator, :internal_opss, :local_authority, :external_regulator, to: :organisation
 
   validates :name, presence: true
   validates :country, presence: true

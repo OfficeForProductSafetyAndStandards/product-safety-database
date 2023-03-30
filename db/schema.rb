@@ -276,7 +276,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_24_142955) do
 
   create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.boolean "external_regulator", default: false
+    t.boolean "internal_opss", default: false
+    t.boolean "local_authority", default: false
     t.string "name"
+    t.bigint "regulator_id"
+    t.bigint "ts_region_id"
     t.datetime "updated_at", null: false
   end
 
@@ -358,14 +363,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_24_142955) do
     t.string "country"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
-    t.boolean "external_regulator", default: false
-    t.boolean "internal_opss", default: false
-    t.boolean "local_authority", default: false
     t.string "name"
     t.uuid "organisation_id"
-    t.bigint "regulator_id"
     t.string "team_recipient_email"
-    t.bigint "ts_region_id"
     t.datetime "updated_at", null: false
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
     t.index ["name"], name: "index_teams_on_name"
