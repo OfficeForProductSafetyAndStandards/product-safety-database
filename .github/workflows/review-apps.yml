@@ -59,7 +59,7 @@ jobs:
         cf target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
         export DB_NAME=psd-db-pr-$PR_NUMBER
-        export TWO_FACTOR_AUTH_ENABLED=false
+        export TWO_FACTOR_AUTHENTICATION_ENABLED=false
         echo "Deploying review app. If fails, use command below to deploy manually:"
         echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /deploy-review.sh"
 
