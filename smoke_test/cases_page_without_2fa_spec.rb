@@ -29,7 +29,7 @@ RSpec.feature "Search smoke test" do
     @session.visit(smoke_uri('/sign-in'))
     @session.fill_in "Email address", with: ENV["SMOKE_USER"]
     @session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
-    @session.click_button "Continue", wait: 60
+    @session.click_button "Continue"
 
     @session.click_link "Cases", wait: 60
     @session.click_link "All cases", wait: 60

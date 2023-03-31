@@ -4,7 +4,6 @@ on: [pull_request]
 
 env:
   PR_NUMBER: ${{ github.event.number }}
-  TWO_FACTOR_AUTHENTICATION_ENABLED: false
 
 jobs:
   reviewapp:
@@ -129,6 +128,7 @@ jobs:
         SMOKE_TEST_URL: https://psd-pr-${{ github.event.number }}.london.cloudapps.digital
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER}}
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD}}
+        TWO_FACTOR_AUTHENTICATION_ENABLED: false
 
       run: |
         mkdir -p tmp/capybara
