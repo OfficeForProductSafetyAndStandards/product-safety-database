@@ -128,11 +128,10 @@ jobs:
         SMOKE_TEST_URL: https://psd-pr-${{ github.event.number }}.london.cloudapps.digital
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER}}
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD}}
-        TWO_FACTOR_AUTHENTICATION_ENABLED: false
 
       run: |
         mkdir -p tmp/capybara
-        bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
+        TWO_FACTOR_AUTHENTICATION_ENABLED=false bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
 
     - uses: actions/upload-artifact@v3
       if: failure()
