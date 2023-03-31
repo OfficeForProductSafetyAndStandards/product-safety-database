@@ -13,6 +13,7 @@ applications:
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
     LOCK_MAXIMUM_ATTEMPTS: 3
+    TWO_FACTOR_AUTHENTICATION_ENABLED: false
     OS_NAMESPACE: ((app-name))
     STATEMENT_TIMEOUT: 60s
     RAILS_MAX_THREADS: ((web-max-threads))
