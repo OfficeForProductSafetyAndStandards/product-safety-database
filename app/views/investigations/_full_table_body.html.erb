@@ -14,7 +14,7 @@
     <td headers="case <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
       <%= investigation.pretty_id %>
     </td>
-    <% if ["team_cases", "your_cases"].include? @page_name %>
+    <% if non_search_cases_page_names.include? @page_name %>
       <td headers="casecreated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= investigation.created_at.to_formatted_s(:govuk) %>
       </td>
@@ -23,9 +23,15 @@
         <%= investigation.owner_display_name_for(viewer: current_user) %>
       </td>
     <% end %>
-    <td headers="haztype item-1 meta-1" class="govuk-table__cell">
-      <%= investigation.hazard_type %>
-    </td>
+    <% if @page_name == "assigned_cases" %>
+      <td headers="assigner" class="govuk-table__cell">
+        <%= investigation.owner_team.name %>
+      </td>
+    <% else %>
+      <td headers="haztype" class="govuk-table__cell">
+        <%= investigation.hazard_type %>
+      </td>
+    <% end %>
     <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
       <td headers="created <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= "#{time_ago_in_words(investigation.created_at)} ago" %>

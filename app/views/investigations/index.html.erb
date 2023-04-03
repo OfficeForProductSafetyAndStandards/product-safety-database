@@ -31,13 +31,18 @@
                 <tr class="govuk-table__row">
                   <th class="govuk-visually-hidden">&nbsp;</th>
                   <th id="case" scope="col" class="govuk-table__header">Case number</th>
-                  <% if ["team_cases", "your_cases"].include? @page_name %>
+                  <% if non_search_cases_page_names.include? @page_name %>
                     <th id="casecreated" scope="col" class="govuk-table__header">Case created</th>
                   <% else %>
                     <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
                   <% end %>
-                  <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
-                  <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && ["team_cases", "your_cases"].exclude?(@page_name) %>
+
+                  <% if @page_name == "assigned_cases" %>
+                    <th id="assigner" scope="col" class="govuk-table__header">Assigner</th>
+                  <% else %>
+                    <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
+                  <% end %>
+                  <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% else %>
                     <th id="updated" scope="col" class="govuk-table__header">Updated</th>
@@ -56,9 +61,9 @@
                   <tr class="govuk-table__row">
                     <th class="govuk-visually-hidden">&nbsp;</th>
                     <th scope="col" class="govuk-table__header">Case number</th>
-                    <th scope="col" class="govuk-table__header">Case <%= ["team_cases", "your_cases"].include?(@page_name) ? "created" : "owner" %></th>
+                    <th scope="col" class="govuk-table__header">Case <%= non_search_cases_page_names.include?(@page_name) ? "created" : "owner" %></th>
                     <th scope="col" class="govuk-table__header">Hazard type</th>
-                    <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && ["team_cases", "your_cases"].exclude?(@page_name) %>
+                    <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
                       <th scope="col" class="govuk-table__header">Created</th>
                     <% else %>
                       <th scope="col" class="govuk-table__header">Updated</th>
