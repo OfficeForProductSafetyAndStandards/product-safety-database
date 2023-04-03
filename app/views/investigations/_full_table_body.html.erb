@@ -25,7 +25,7 @@
     <% end %>
     <% if @page_name == "assigned_cases" %>
       <td headers="assigner" class="govuk-table__cell">
-        <%= investigation.owner_team.name %>
+        <%= investigation.owner_team&.name %>
       </td>
     <% else %>
       <td headers="haztype" class="govuk-table__cell">
