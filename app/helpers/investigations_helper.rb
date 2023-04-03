@@ -267,6 +267,10 @@ module InvestigationsHelper
     end
   end
 
+  def non_search_cases_page_names
+    %w[team_cases your_cases assigned_cases].freeze
+  end
+
 private
 
   def search_result_values(_search_terms, number_of_results)

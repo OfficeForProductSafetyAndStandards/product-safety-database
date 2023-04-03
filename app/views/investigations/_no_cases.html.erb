@@ -1,9 +1,8 @@
-<% owner_statement = @page_name == "team_cases" ? "The team has" : "You have" %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full" role="region" aria-label="Cases">
     <p class="govuk-body opss-text-align-center">
-       <%=owner_statement %> no open cases.<br>
-       You can find all other cases in the <%= link_to "all cases", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %> search page.
+      <%= t("investigations.no_cases.title.#{@page_name}") %><br>
+      <%= t("investigations.no_cases.subtitle_html", cases_path: all_cases_investigations_path) %>
     </p>
   </div>
 </div>

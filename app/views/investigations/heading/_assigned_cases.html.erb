@@ -1,0 +1,12 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+      Assigned cases
+    </h1>
+    <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-1">
+      <%= "The #{current_user.team.name} team have #{@answer.total_count} open cases assigned from other teams." %>
+    </p>
+  </div>
+
+  <%= render "investigations/create_a_case_link" %>
+</div>

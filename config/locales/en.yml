@@ -134,11 +134,20 @@ en:
     titles:
       team_cases: Team cases
       your_cases: Your cases
+      assigned_cases: Assigned cases
       all_cases: All Cases – Search
     filters:
       teams_added_to_case: "Teams added to case"
       my_team: "My team"
       other_team: "Other team"
+    no_cases:
+      title:
+        team_cases: The team has no open cases.
+        your_cases: You have no open cases.
+        assigned_cases: There are no open cases your team has been added to.
+      subtitle_html: |
+        You can find all other cases in the
+        <a href="%{cases_path}" class="govuk-link govuk-link--no-visited-state">all cases</a> search page.
     corrective_actions:
       form:
         geographic_scopes:

@@ -6,7 +6,7 @@
   <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters" id="page-content">
-      <% if ["team_cases", "your_cases"].exclude?(@page_name) %>
+      <% if non_search_cases_page_names.exclude?(@page_name) %>
         <div class="govuk-grid-row">
           <%= render 'investigations/search_bar', form: form %>
           <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir if (@answer.total_count && @answer.total_count > 11) %>
@@ -71,7 +71,7 @@
             <%= paginate @investigations.object %>
           </div>
         </div>
-      <% elsif ["team_cases", "your_cases"].include?(@page_name)%>
+      <% elsif non_search_cases_page_names.include?(@page_name)%>
         <%= render "investigations/no_cases" %>
       <% end %>
     </section>
