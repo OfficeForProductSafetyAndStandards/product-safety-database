@@ -131,7 +131,7 @@ jobs:
 
       run: |
         mkdir -p tmp/capybara
-        bundle exec rspec ./smoke_test/cases_page_spec.rb
+        bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
 
     - uses: actions/upload-artifact@v3
       if: failure()
