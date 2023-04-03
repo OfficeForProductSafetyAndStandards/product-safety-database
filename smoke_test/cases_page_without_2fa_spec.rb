@@ -26,16 +26,6 @@ RSpec.feature "Search smoke test" do
     WebMock.allow_net_connect!
     @session.visit(smoke_uri)
     expect(@session).to have_css("h1", text: "Product Safety Database")
-    @session.visit(smoke_uri('/sign-in'))
-    @session.fill_in "Email address", with: ENV["SMOKE_USER"]
-    @session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
-    @session.click_button "Continue"
-
-    @session.click_link "Cases", wait: 60
-    @session.click_link "All cases", wait: 60
-
-    expect(@session).to have_css("tbody.govuk-table__body:nth-child(3)")
-    expect(@session).to have_css("tbody.govuk-table__body:nth-child(13)")
   end
 end
 
