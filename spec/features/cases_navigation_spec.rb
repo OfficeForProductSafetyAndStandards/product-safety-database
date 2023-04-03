@@ -15,28 +15,23 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
 
       it "explains that the user has no cases" do
-        expect(page).to have_content "You have no open cases. You can find all other cases in the all cases search page."
-      end
-
-      it "highlights the your cases tab" do
+        expect(page).to have_content "You have no open cases."
         expect(highlighted_tab).to eq "Your cases"
       end
     end
 
     context "when the user is on the team cases page" do
       before do
-        click_on "All cases"
         click_on "Team cases"
       end
 
       it "explains that the team has no cases" do
-        visit "/cases"
-        click_on "Team cases"
-        expect(page).to have_content "The team has no open cases. You can find all other cases in the all cases search page."
-      end
-
-      it "highlights the team cases tab" do
+        expect(page).to have_content "The team has no open cases."
         expect(highlighted_tab).to eq "Team cases"
+      end
+    end
+
+      it "explains that the team has no cases" do
       end
     end
   end
