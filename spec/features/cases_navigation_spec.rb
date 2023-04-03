@@ -31,7 +31,14 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
     end
 
-      it "explains that the team has no cases" do
+    context "when the user is on the assigned cases page" do
+      before do
+        click_on "Assigned cases"
+      end
+
+      it "explains that the team has no assigned cases" do
+        expect(page).to have_content "There are no open cases your team has been added to."
+        expect(highlighted_tab).to eq "Assigned cases"
       end
     end
   end
