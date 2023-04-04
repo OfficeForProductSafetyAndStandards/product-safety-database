@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :feature do
-  let(:team) { create :team }
-  let(:user) { create :user, :opss_user, :activated, has_viewed_introduction: true, team: }
+  let(:team) { create(:team) }
+  let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, team:) }
 
   before do
     sign_in user
@@ -44,11 +44,15 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
   end
 
   context "when there are cases" do
-    let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: }
+    let(:other_user_same_team) { create(:user, :activated, has_viewed_introduction: true, team:) }
     let!(:user_case) { create(:allegation, :with_products, creator: user) }
     let!(:user_case_without_products) { create(:allegation, creator: user) }
     let!(:other_case) { create(:allegation) }
     let!(:team_case) { create(:allegation, creator: other_user_same_team) }
+
+    let(:different_team) { create :team, name: "Different team" }
+    let(:different_user) { create :user, :activated, has_viewed_introduction: true, team: different_team }
+    let!(:different_team_case) { create(:allegation, creator: different_user) }
 
     before do
       Investigation.import scope: "not_deleted", refresh: true, force: true
@@ -64,6 +68,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_selector("td.govuk-table__cell", text: user_case_without_products.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
       end
 
       it "indicates which cases do not have a product attached" do
@@ -114,6 +119,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
         expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
       end
 
       it "indicates which cases do not have a product attached" do
@@ -168,6 +174,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
         expect(page).to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
         expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
       end
 
       it "highlights the all cases tab" do
@@ -201,6 +208,43 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
           expect(page).to have_css("th#created")
           expect(page).not_to have_css("th#updated")
+        end
+      end
+    end
+
+    context "when the different team case is assigned to the user's team" do
+      before do
+        AddTeamToCase.call(user:, investigation: different_team_case, team:, collaboration_class: Collaboration::Access::Edit)
+        click_on "All cases"
+      end
+
+      context "when on team cases page" do
+        before do
+          visit "/cases/team-cases"
+        end
+
+        it "does not show the case" do
+          expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+        end
+      end
+
+      context "when on assigned cases page" do
+        before do
+          visit "/cases/assigned-cases"
+        end
+
+        it "shows the case" do
+          expect(page).to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+        end
+      end
+
+      context "when on all cases page" do
+        before do
+          visit "/cases/all-cases"
+        end
+
+        it "shows the case" do
+          expect(page).to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
         end
       end
     end
