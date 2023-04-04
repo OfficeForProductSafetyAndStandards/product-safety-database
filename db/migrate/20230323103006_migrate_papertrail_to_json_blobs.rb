@@ -2,8 +2,8 @@ class MigratePapertrailToJsonBlobs < ActiveRecord::Migration[7.0]
   disable_ddl_transaction!
 
   def self.up
-    add_column :versions, :new_object, :jsonb
-    add_column :versions, :new_object_changes, :jsonb
+    add_column :versions, :new_object, :jsonb, if_not_exists: true
+    add_column :versions, :new_object_changes, :jsonb, if_not_exists: true
 
     PaperTrail::Version.where.not(object: nil).find_each do |version|
       new_object = Psych.safe_load(version.object, permitted_classes: [Date, Time])
