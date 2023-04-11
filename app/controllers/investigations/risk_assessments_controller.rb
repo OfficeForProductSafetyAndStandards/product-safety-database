@@ -33,7 +33,7 @@ module Investigations
         )
 
         if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
-          redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
+          redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
         else
           redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
         end
@@ -98,7 +98,7 @@ module Investigations
 
         if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
 
-          redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
+          redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
         else
           redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
         end
