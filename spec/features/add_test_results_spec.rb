@@ -34,7 +34,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Pass", file:, standards: "EN71, EN73")
 
-      expect_confirmation_banner("The supporting information has been updated")
+      expect_confirmation_banner("The supporting information was updated")
       expect_page_to_have_h1("Supporting information")
 
       click_link "Activity"
@@ -88,7 +88,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Fail", failure_details:, file:, standards: "EN71, EN73")
 
-      expect_confirmation_banner("The supporting information has been updated")
+      expect_confirmation_banner("The supporting information was updated")
       expect_page_to_have_h1("Supporting information")
 
       click_link "Activity"
