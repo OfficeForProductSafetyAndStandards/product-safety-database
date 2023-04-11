@@ -19,7 +19,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
 
     expect_to_be_on_edit_business_page(business_id: business.id, business_name: "OldCo")
 
-    within_fieldset "Business details" do
+    within_fieldset "The business details" do
       fill_in "Trading name", with: "NewCo"
       fill_in "Registered or legal name", with: "NewCo Ltd"
       fill_in "Company number", with: "222 222 22"
@@ -33,7 +33,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
       fill_in "Postcode", with: "NE2 2EW"
     end
 
-    within_fieldset "Contact" do
+    within_fieldset "The business contact" do
       fill_in "Name", with: "Mr New"
       fill_in "Email", with: "contact@newco.example"
       fill_in "Phone number", with: "01632 960000"
@@ -43,7 +43,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
     click_button "Save business"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: "NewCo")
-    expect_confirmation_banner("Business was successfully updated.")
+    expect_confirmation_banner("The business was updated")
 
     expect(page).to have_summary_item(key: "Trading name", value: "NewCo")
     expect(page).to have_summary_item(key: "Registered or legal name", value: "NewCo Ltd")

@@ -35,7 +35,7 @@ module Investigations
         )
       end
 
-      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     end
 
   private

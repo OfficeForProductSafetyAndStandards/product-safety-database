@@ -33,7 +33,7 @@ RSpec.feature "Case product tab", :with_stubbed_opensearch, :with_stubbed_antivi
 
       click_link "Cases (3)"
 
-      expect(page).to have_content "The original product record was or is included in these 3 cases."
+      expect(page).to have_content "The original product record was or is also included in these 3 cases."
 
       expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_1.pretty_id)
       expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_2.pretty_id)

@@ -183,7 +183,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
     it "shows empty case specific info section of case page" do
       sign_in user
       visit investigation_path(investigation)
-      expect(page).to have_css("h4", text: "You can add this information after a product has been added to the case")
+      expect(page).to have_css("h4", text: "You can add this information after a product has been added to the case.")
     end
   end
 end
