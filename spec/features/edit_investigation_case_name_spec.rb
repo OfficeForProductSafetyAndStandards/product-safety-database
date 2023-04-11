@@ -42,7 +42,7 @@ RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :wi
     click_button "Save"
 
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}", ignore_query: true
-    expect(page).to have_content "Case name was successfully updated"
+    expect(page).to have_content "The case name was updated"
 
     expect(page.find("dt", text: "Case name")).to have_sibling("dd", text: new_case_name)
 

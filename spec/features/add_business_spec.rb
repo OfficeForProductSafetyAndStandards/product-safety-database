@@ -57,7 +57,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Save business"
     expect(page).to have_error_summary("Trading name cannot be blank")
 
-    within_fieldset "Business details" do
+    within_fieldset "The business details" do
       fill_in "Registered or legal name", with: business_details
       fill_in "Company number",           with: company_number
     end
@@ -70,7 +70,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
       select country,                from: "Country"
     end
 
-    within_fieldset "Contact" do
+    within_fieldset "The business contact" do
       fill_in "Name",                          with: name
       fill_in "Email",                         with: email
       fill_in "Phone number",                  with: phone_number
@@ -81,7 +81,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect(page).to have_error_summary("Trading name cannot be blank")
 
-    within_fieldset "Business details" do
+    within_fieldset "The business details" do
       fill_in "Trading name", with: trading_name
     end
 

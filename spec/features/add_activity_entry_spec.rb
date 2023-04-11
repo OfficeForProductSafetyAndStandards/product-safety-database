@@ -22,7 +22,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
     add_comment
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_confirmation_banner("Comment was successfully added.")
+    expect_confirmation_banner("The comment was successfully added")
 
     expect(delivered_emails.last.recipient).to eq creator_user.email
     expect(delivered_emails.last.personalization).to include(
@@ -53,7 +53,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
       add_comment
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect_confirmation_banner("Comment was successfully added.")
+      expect_confirmation_banner("The comment was successfully added")
 
       expect(delivered_emails.map(&:recipient).uniq.sort).to eq ["active@example.com", "creator@example.com"]
 
