@@ -230,10 +230,10 @@ en:
       not_validated: "No"
       validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
       page_title: "Risk level validated"
-      validated_success_message: "Case risk level validated"
+      validated_success_message: "The case risk level has updated"
       validation_removed_success_message: "Case risk level validation removed"
       activity:
-        added: "Case risk level validated"
+        added: "The case risk level has updated"
         removed: "Case risk level validation removed"
     risk_level:
       show:
@@ -252,8 +252,8 @@ en:
           medium: "Medium risk"
           low: "Low risk"
       success:
-        set: "Case risk level set to %{level}"
-        changed: "Case risk level changed to %{level}"
+        set: "The case risk level was updated"
+        changed: "The case risk level was updated"
         removed: "Case risk level removed"
     status:
       close:

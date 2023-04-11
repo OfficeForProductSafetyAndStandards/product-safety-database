@@ -15,7 +15,7 @@ module Investigations
 
       if @case_name_form.valid?
         ChangeCaseName.call!(investigation: @investigation, user_title: @case_name_form.user_title, user: current_user)
-        redirect_to investigation_path(@investigation), flash: { success: "Case name was successfully updated" }
+        redirect_to investigation_path(@investigation), flash: { success: "The case name was updated" }
       else
         render :edit
       end
