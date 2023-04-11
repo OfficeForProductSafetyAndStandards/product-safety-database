@@ -42,6 +42,7 @@ figcaption {
   padding: 0;
   display: block;
 }
+
 // not normalised by gds library - ends
 
 @include govuk-media-query($from: desktop) {
@@ -132,6 +133,7 @@ main {
 }
 
 @media (min-width: 40.0625em) {
+
   // future proof the 14px which is required for legacy dashboard designs
   .opss-font-size-14,
   .govuk-\!-font-size-14 {
@@ -157,6 +159,7 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-br-desktop {
   display: none;
+
   @include govuk-media-query($from: desktop) {
     display: block;
     line-height: 0;
@@ -169,12 +172,14 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-hidden-desktop {
   visibility: visible;
+
   @include govuk-media-query($from: desktop) {
     visibility: hidden;
   }
 }
 
 @include govuk-media-query($from: mobile, $until: desktop, $and: false, $media-type: "all") {
+
   // for desktop only
   .opss-keep-for-desktop {
     display: none;
@@ -194,6 +199,7 @@ body.js-enabled .opss-nojs-hide {
 }
 
 @include govuk-media-query($from: mobile, $until: tablet, $and: false, $media-type: "all") {
+
   // for mobile only
   .opss-float-left--mobile {
     display: block;
@@ -248,6 +254,7 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-margin-bottom-1-desktop {
   margin-bottom: govuk-spacing(4);
+
   @include govuk-media-query($from: desktop) {
     margin-bottom: govuk-spacing(1);
   }
@@ -255,6 +262,7 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-margin-top-1-mobile {
   margin-top: govuk-spacing(4);
+
   @include govuk-media-query($from: tablet) {
     margin-top: govuk-spacing(1);
   }
@@ -321,6 +329,7 @@ body.js-enabled .opss-nojs-hide {
 }
 
 @include govuk-media-query($from: desktop) {
+
   // use on
   .opss-right-box-arrow {
     position: relative;
@@ -354,6 +363,7 @@ body.js-enabled .opss-nojs-hide {
 }
 
 .opss-warning-text--s {
+
   // make warning text smaller and allow several in succession
   strong {
     @include opss-font-size($s: 16px, $l: 1.3);
@@ -542,6 +552,7 @@ samp {
   }
 
   @-moz-document url-prefix("") {
+
     // firefox only: col flow bug
     .opss-2-col-flow,
     .opss-3-col-flow {
@@ -913,6 +924,7 @@ dl.opss-summary-list-aside {
 }
 
 .opss-summary-list-mixed {
+
   // this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed
   & > div {
     // std summary list but allows for a mixture of 2 & 3 cols in 1 list
@@ -1054,12 +1066,14 @@ dl.opss-summary-list-aside {
   }
 
   @-moz-document url-prefix("") {
+
     // firefox only: align 1st dd (without a 2nd) correctly
     .govuk-summary-list__row dd:last-child {
       width: inherit;
     }
 
     &.opss-summary-list-mixed--narrow-actions > div {
+
       // firefox only: col flow bug
       dd[class$="__actions"] {
         width: auto;
@@ -1070,6 +1084,7 @@ dl.opss-summary-list-aside {
 
 @include govuk-media-query($from: desktop) {
   .opss-summary-list-mixed.opss-summary-list-mixed--sm {
+
     // a narrow and small font version
     dt {
       width: 25% !important;
@@ -1446,6 +1461,7 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table--borders {
+
     // add horizontal lines to simple single rows table in one parent tbody
     tbody tr {
       th,
@@ -1489,6 +1505,7 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table-items--first-col-50 {
+
     // no hidden 1st col
     @include govuk-media-query($from: tablet) {
       thead th:nth-child(1) {
@@ -1565,6 +1582,7 @@ dd dl.opss-nested-definition-list {
 }
 
 @media only screen and (min-width: 641px) and (max-width: 961px) {
+
   // jump to mobile sizing at tablet size for tight cols
   .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
     @include govuk-font($size: 16);
@@ -1593,4 +1611,25 @@ dd dl.opss-nested-definition-list {
     margin-bottom: -2px;
     margin-right: govuk-spacing(1) - 2;
   }
+}
+
+.opss-colour-block-title {
+  background-color: #0b0c0c;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+}
+
+.opss-colour-block-title.opss-colour-block-title--blue {
+  background-color: #1d70b8;
+}
+
+.opss-colour-block-title h2,
+.opss-colour-block-title h3 {
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+}
+
+.opss-brand-text {
+  color: #1d70b8;
 }
