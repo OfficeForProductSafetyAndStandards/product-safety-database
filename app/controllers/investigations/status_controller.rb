@@ -26,7 +26,7 @@ module Investigations
 
       ChangeCaseStatus.call!(@change_case_status_form.serializable_hash.merge(user: current_user, investigation:))
 
-      redirect_to investigation_path(investigation), flash: { success: "#{investigation.case_type.upcase_first} was #{flash}" }
+      redirect_to investigation_path(investigation), flash: { success: "The case was #{flash}" }
     end
 
     def change_case_status_form_params

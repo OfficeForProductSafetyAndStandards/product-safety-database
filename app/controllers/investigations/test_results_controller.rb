@@ -22,7 +22,7 @@ class Investigations::TestResultsController < ApplicationController
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
-      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
     end
 
     @investigation = investigation.decorate
@@ -67,7 +67,7 @@ class Investigations::TestResultsController < ApplicationController
                changes: @test_result_form.changes)
     )
 
-    redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information has been updated." }
+    redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
   end
 
 private
