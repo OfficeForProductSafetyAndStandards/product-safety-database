@@ -51,7 +51,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       click_button "Close case"
 
       expect_to_be_on_case_page(case_id: investigation.pretty_id)
-      expect_confirmation_banner("Allegation was closed")
+      expect_confirmation_banner("The case was closed")
       expect(page).to have_summary_item(key: "Status", value: "Case closed #{Date.current.to_formatted_s(:govuk)}")
 
       click_link "Activity"
@@ -81,7 +81,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
 
       expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-      expect_confirmation_banner("Allegation was re-opened")
+      expect_confirmation_banner("The case was re-opened")
       expect(page).to have_summary_item(key: "Status", value: "Open")
 
       click_link "Activity"

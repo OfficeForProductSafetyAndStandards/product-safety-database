@@ -30,7 +30,7 @@ class Investigations::RecordEmailsController < ApplicationController
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     else
 
       @email = @investigation.emails.new
@@ -72,7 +72,7 @@ class Investigations::RecordEmailsController < ApplicationController
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information has been updated." }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     else
       @investigation = @investigation.decorate
       @email_correspondence_form.cache_files!
