@@ -6,8 +6,10 @@
 @import "./opss-shared";
 @import "./opss-search";
 @import "./opss-pagination";
+@import "./opss-step-by-step-nav";
 
 @include govuk-media-query($from: desktop) {
+
   // fix for psd while it is unable to place back links outside and before the main.govuk-main-wrapper element
   body > .govuk-width-container > .govuk-main-wrapper > .govuk-back-link {
     margin-top: - govuk-spacing(8);
@@ -361,6 +363,7 @@ ul.opss-radio-list {
 }
 
 @media screen and (min-width: 0\0) and (min-resolution: +72dpi) {
+
   // ie9+ only
   .opss-cross-through {
     background: none !important;
@@ -395,6 +398,7 @@ ul.opss-radio-list {
 }
 
 .opss-dl-select {
+
   // non-js select
   & dt,
   & dd {
