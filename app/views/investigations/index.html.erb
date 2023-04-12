@@ -62,7 +62,13 @@
                     <th class="govuk-visually-hidden">&nbsp;</th>
                     <th scope="col" class="govuk-table__header">Case number</th>
                     <th scope="col" class="govuk-table__header">Case <%= non_search_cases_page_names.include?(@page_name) ? "created" : "owner" %></th>
-                    <th scope="col" class="govuk-table__header">Hazard type</th>
+
+                    <% if @page_name == "assigned_cases" %>
+                      <th scope="col" class="govuk-table__header">Assigner</th>
+                    <% else %>
+                      <th scope="col" class="govuk-table__header">Hazard type</th>
+                    <% end %>
+
                     <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
                       <th scope="col" class="govuk-table__header">Created</th>
                     <% else %>
