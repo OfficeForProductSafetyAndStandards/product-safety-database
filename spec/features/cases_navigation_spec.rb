@@ -215,6 +215,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     context "when the different team case is assigned to the user's team" do
       before do
         AddTeamToCase.call(user:, investigation: different_team_case, team:, collaboration_class: Collaboration::Access::Edit)
+        Investigation.import scope: "not_deleted", refresh: true, force: true
         click_on "All cases"
       end
 
