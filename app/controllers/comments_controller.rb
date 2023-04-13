@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
       })
     )
 
-    redirect_to investigation_activity_path(@investigation), flash: { success: "Comment was successfully added." }
+    redirect_to investigation_activity_path(@investigation), flash: { success: "The comment was successfully added" }
   end
 
 private

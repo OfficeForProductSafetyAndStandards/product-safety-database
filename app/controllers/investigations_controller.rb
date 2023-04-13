@@ -60,6 +60,26 @@ class InvestigationsController < ApplicationController
     render "investigations/index"
   end
 
+  def assigned_cases
+    @page_name = "assigned_cases"
+
+    @search = SearchParams.new(
+      {
+        "case_owner" => "all",
+        "teams_with_access" => "my_team",
+        "created_by" => "others",
+        "sort_by" => params["sort_by"],
+        "sort_dir" => params["sort_dir"],
+        "page_name" => "team_cases"
+      }
+    )
+    @answer         = search_for_investigations(20)
+    @investigations = InvestigationDecorator
+                        .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+
+    render "investigations/index"
+  end
+
   def team_cases
     @page_name = "team_cases"
     @search = SearchParams.new({ "case_owner" => "my_team",

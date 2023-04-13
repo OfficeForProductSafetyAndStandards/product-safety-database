@@ -42,7 +42,7 @@ jobs:
         CF_CLI_VERSION: v7
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin
-        curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+        curl -A "" -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
         echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
     - name: Deploy
@@ -131,9 +131,9 @@ jobs:
 
       run: |
         mkdir -p tmp/capybara
-        bundle exec rspec ./smoke_test/cases_page_spec.rb
+        bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v3
       if: failure()
       with:
         name: capybara screenshots

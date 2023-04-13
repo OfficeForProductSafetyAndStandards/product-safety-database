@@ -49,7 +49,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
 
     click_button "Set risk level"
 
-    expect_confirmation_banner("Case risk level set to serious risk")
+    expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Serious risk")
     expect(page).to have_css("span.opss-tag--risk1", text: "Serious risk")
@@ -100,7 +100,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     fill_in "Custom risk level", with: "Mildly risky"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Case risk level changed to mildly risky")
+    expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Mildly risky")
 
@@ -126,7 +126,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     choose("High risk")
     click_button "Set risk level"
 
-    expect_confirmation_banner("Case risk level changed to high risk")
+    expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "High risk")
 
@@ -155,7 +155,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     fill_in "Custom risk level", with: "Low"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Case risk level changed to low risk")
+    expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Low risk")
 
