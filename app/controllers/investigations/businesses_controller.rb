@@ -97,7 +97,7 @@ private
         investigation: @investigation,
         user: current_user
       )
-      redirect_to_investigation_businesses_tab success: "Business was successfully created."
+      redirect_to_investigation_businesses_tab success: "The business was created"
     else
       render_wizard
     end
