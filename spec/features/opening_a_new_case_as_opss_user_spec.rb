@@ -6,9 +6,7 @@ RSpec.feature "Opening a new case", :with_stubbed_opensearch, :with_stubbed_anti
   scenario "Opening a new case (with validation error)" do
     sign_in(user)
 
-    visit "/cases"
-
-    click_link "Create a case"
+    visit "/cases/new"
 
     expect_to_be_on_new_case_page
 

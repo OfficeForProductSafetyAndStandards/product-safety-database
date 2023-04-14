@@ -11,9 +11,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
     end
 
     scenario "can create a project" do
-      visit "/cases"
-
-      click_link "Create a case"
+      visit "/cases/new"
 
       expect_page_to_have_h1("Create new")
       choose "Project"
