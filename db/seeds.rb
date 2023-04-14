@@ -663,7 +663,7 @@ if run_seeds
   end
   Investigation.all.each do |i|
     operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
-    southampton_council = Team.find_by(name: "Southampton Council")
+    southampton_council = Team.find_by(name: "Southampton City Council")
     Collaboration::Access::Edit.create!(investigation: i, collaborator: operational_support_unit, added_by_user: User.first)
     Collaboration::Access::Edit.create!(investigation: i, collaborator: southampton_council, added_by_user: User.first)
 
