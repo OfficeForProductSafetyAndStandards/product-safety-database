@@ -6,7 +6,7 @@
   href: wizard_path(:reason_for_creating)
 ) %>
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <%= form_with scope: :investigation, model: @reference_number_form, url: wizard_path, method: :put, local: true do |form| %>
       <%= error_summary @reference_number_form.errors %>
       <% has_complainant_reference_error_message = { text: @reference_number_form.errors.full_messages_for("has_complainant_reference").first } if @reference_number_form.errors.any? %>

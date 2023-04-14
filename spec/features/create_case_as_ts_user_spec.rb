@@ -21,6 +21,8 @@ RSpec.feature "Creating a case as a TS user", :with_opensearch, :with_stubbed_an
   scenario "Opening a new case (with validation error)" do
     sign_in(user)
 
+    click_link "Cases"
+
     click_link "Create a case"
 
     click_link "Go to the products search page"
@@ -117,6 +119,8 @@ RSpec.feature "Creating a case as a TS user", :with_opensearch, :with_stubbed_an
   context "when a case is safe and compliant" do
     it "does not take user to the safety and compliance details page" do
       sign_in(user)
+
+      click_link "Cases"
 
       click_link "Create a case"
 

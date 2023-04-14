@@ -658,8 +658,8 @@ if run_seeds
       )
     end
 
-    organisation = Organisation.create!(name: "Southampton Council")
-    Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
+    organisation = Organisation.create!(name: "Southampton City Council")
+    Team.create!(name: "Southampton City Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
   end
   Investigation.all.each do |i|
     operational_support_unit = Team.find_by(name: "OPSS Operational support unit")

@@ -112,7 +112,7 @@ jobs:
         SMOKE_TEST_URL: "https://staging.product-safety-database.service.gov.uk"
 
       run: |
-        bundle exec rspec ./smoke_test/cases_page_spec.rb
+        bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
 
     - name: Create GitHub deployment for Production
       if: success()
@@ -184,7 +184,7 @@ jobs:
         SMOKE_TEST_URL: "https://www.product-safety-database.service.gov.uk/"
 
       run: |
-        bundle exec rspec ./smoke_test/cases_page_spec.rb
+        bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
 
     - name: Alert team via Slack of deployment failure
       if: failure()
