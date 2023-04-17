@@ -1,0 +1,12 @@
+<%= page_title "Is this the same product?" %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: products_path(@investigation)
+  ) %>
+<% end %>
+
+same product?
+
+<%= @product.name %>
