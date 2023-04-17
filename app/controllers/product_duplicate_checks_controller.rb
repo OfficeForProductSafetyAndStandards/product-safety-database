@@ -1,6 +1,11 @@
 class ProductDuplicateChecksController < ApplicationController
+  before_action :find_product, only: [:show]
+
   def new
     @product_duplicate_check_form = ProductDuplicateCheckForm.new
+  end
+
+  def show
   end
 
   def create
@@ -21,6 +26,10 @@ class ProductDuplicateChecksController < ApplicationController
   end
 
 private
+
+  def find_product
+    @product = Product.find_by!(pretty_id: params[:id])
+  end
 
   def product_duplicate_check_form_params
     params.require(:product_duplicate_check_form)

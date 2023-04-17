@@ -221,7 +221,7 @@ Rails.application.routes.draw do
     get "all-products", to: "products#index", as: "all"
   end
 
-  resource :product_duplicate_checks, only: %i[new create]
+  resource :product_duplicate_checks, only: %i[new create show]
 
   resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
     member do
