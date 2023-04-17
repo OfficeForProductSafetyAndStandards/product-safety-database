@@ -26,9 +26,7 @@ RSpec.feature "Creating cases", :with_stubbed_opensearch, :with_stubbed_antiviru
     before { sign_in(user) }
 
     scenario "able to create safety allegation from a consumer and optionally add a product" do
-      visit "/cases"
-
-      click_link "Create a case"
+      visit "/cases/new"
 
       expect_page_to_have_h1("Create new")
       choose "Product safety allegation"
