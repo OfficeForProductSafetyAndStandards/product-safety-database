@@ -101,6 +101,9 @@ en:
       team_products: Team products
       your_products: Your products
       all_products: All Products - Search
+    counterfeit: This is a product record for a counterfeit product
+    genuine: This product record is about a genuine product
+
   businesses:
       titles:
         team_businesses: Team businesses
