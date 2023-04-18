@@ -6,6 +6,7 @@ class ProductDuplicateChecksController < ApplicationController
   end
 
   def show
+    @image = @product.virus_free_images.first&.decorate
   end
 
   def create
@@ -29,7 +30,7 @@ class ProductDuplicateChecksController < ApplicationController
 private
 
   def find_product
-    @product = Product.find(params[:id])
+    @product = Product.find(params[:id]).decorate
   end
 
   def product_duplicate_check_form_params
