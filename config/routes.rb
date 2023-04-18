@@ -221,11 +221,22 @@ Rails.application.routes.draw do
     get "all-products", to: "products#index", as: "all"
   end
 
-  resources :product_duplicate_checks, only: %i[new create show]
 
   resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
     member do
       get :owner
+    end
+
+    collection do
+      get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
+      post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
+    end
+
+    resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
+      member do
+        get :confirm
+        post :confirm
+      end
     end
   end
 

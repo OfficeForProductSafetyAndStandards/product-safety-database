@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= form_with model: @product_duplicate_check_form, url: product_duplicate_checks_path(@product_duplicate_check_form), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
+<%= form_with model: @product_duplicate_check_form, url: duplicate_check_products_path(@product_duplicate_check_form), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary(@product_duplicate_check_form.errors, %i[barcode]) %>
