@@ -20,7 +20,7 @@
 
           <div class="govuk-radios" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <%= f.radio_button :has_barcode, true, class: "govuk-radios__input", aria: { controls: "conditional-barcode", expanded: "true" } %>
+              <%= f.radio_button :has_barcode, true, class: "govuk-radios__input", aria: { controls: "conditional-barcode", expanded: "true" }, data: { cy: "barcode-yes" } %>
               <%= f.label :has_barcode, "Yes", class: "govuk-label govuk-radios__label" %>
             </div>
 
@@ -34,19 +34,19 @@
                   It is normally 13 digits, although older products may have a 12 digit number.
                 </div>
 
-                <%= f.text_field :barcode, class: "govuk-input govuk-!-width-one-third", aria: { describedby: "barnumber-hint" }, autocomplete: "off", spellcheck: "false" %>
+                <%= f.text_field :barcode, class: "govuk-input govuk-!-width-one-third", aria: { describedby: "barnumber-hint" }, autocomplete: "off", spellcheck: "false", data: { cy: "barcode" } %>
               </div>
             </div>
 
             <div class="govuk-radios__item">
-              <%= f.radio_button :has_barcode, false, class: "govuk-radios__input" %>
+              <%= f.radio_button :has_barcode, false, class: "govuk-radios__input", data: { cy: "barcode-no" } %>
               <%= f.label :has_barcode, "No", class: "govuk-label govuk-radios__label" %>
             </div>
           </div>
         </fieldset>
       </div>
 
-      <%= f.submit "Continue", class: "govuk-button" %>
+      <%= f.submit "Continue", class: "govuk-button", data: { cy: "continue" } %>
     </div>
     <div class="govuk-grid-column-one-quarter">
       <h2 class="govuk-heading-s govuk-visually-hidden">Barcode example</h2>
