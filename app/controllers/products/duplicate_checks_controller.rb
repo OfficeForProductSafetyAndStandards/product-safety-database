@@ -1,6 +1,6 @@
 module Products
   class DuplicateChecksController < ApplicationController
-    before_action :find_product, only: [:show, :confirm]
+    before_action :find_product, only: %i[show confirm]
 
     def new
       @product_duplicate_check_form = ProductDuplicateCheckForm.new
