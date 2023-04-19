@@ -661,6 +661,10 @@ en:
               blank: Enter details
             is_risk_validated:
               inclusion:  "Select yes if you have validated the case risk level"
+        product_duplicate_confirmation_form:
+          attributes:
+            correct:
+              inclusion: Select yes if this is the same product
 
   activerecord:
     models:

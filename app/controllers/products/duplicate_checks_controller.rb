@@ -1,12 +1,13 @@
 module Products
   class DuplicateChecksController < ApplicationController
-    before_action :find_product, only: [:show]
+    before_action :find_product, only: [:show, :confirm]
 
     def new
       @product_duplicate_check_form = ProductDuplicateCheckForm.new
     end
 
     def show
+      @product_duplicate_confirmation_form = ProductDuplicateConfirmationForm.new
       @image = @product.virus_free_images.first&.decorate
     end
 
@@ -23,8 +24,18 @@ module Products
       if @product_duplicate_check_form.has_barcode
         redirect_to new_product_path(barcode: @product_duplicate_check_form.barcode)
       else
-        # TODO: do we need a flash message here?
         redirect_to new_product_path
+      end
+    end
+
+    def confirm
+      @product_duplicate_confirmation_form = ProductDuplicateConfirmationForm.new(correct: product_duplicate_confirmation_form_params[:correct])
+      return render :show unless @product_duplicate_confirmation_form.valid?
+
+      if @product_duplicate_confirmation_form.correct?
+        redirect_to product_path(@product)
+      else
+        redirect_to new_product_path(barcode: @product.barcode)
       end
     end
 
@@ -37,6 +48,11 @@ module Products
     def product_duplicate_check_form_params
       params.require(:product_duplicate_check_form)
             .permit(:has_barcode, :barcode)
+    end
+
+    def product_duplicate_confirmation_form_params
+      params.require(:product_duplicate_confirmation_form)
+            .permit(:correct)
     end
   end
 end

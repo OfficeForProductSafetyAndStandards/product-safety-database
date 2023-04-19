@@ -221,7 +221,6 @@ Rails.application.routes.draw do
     get "all-products", to: "products#index", as: "all"
   end
 
-
   resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
     member do
       get :owner
@@ -234,7 +233,6 @@ Rails.application.routes.draw do
 
     resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
       member do
-        get :confirm
         post :confirm
       end
     end
