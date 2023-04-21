@@ -8,6 +8,8 @@
 <% end %>
 
 <%= form_with model: @product_duplicate_confirmation_form, url: confirm_product_duplicate_checks_path(product_id: @product.id), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
+  <%= error_summary(@product_duplicate_confirmation_form.errors, %i[correct]) %>
+
   <div class="govuk-form-group">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -80,14 +82,14 @@
 
                 <%= f.hidden_field :correct, value: '' %>
                 <div class="govuk-radios__item">
-                  <%= f.radio_button :correct, 'yes', class: "govuk-radios__input", id: "correct_yes", data: { cy: "confirm-yes" } %>
+                  <%= f.radio_button :correct, 'yes', class: "govuk-radios__input", id: "correct", data: { cy: "confirm-yes" } %>
                   <%= f.label :correct, class: "govuk-label govuk-radios__label", for: "correct_yes" do %>
                     Yes &nbsp;&ndash;&nbsp; use this product record instead
                   <% end %>
                 </div>
 
                 <div class="govuk-radios__item">
-                  <%= f.radio_button :correct, 'no', class: "govuk-radios__input", id: "correct_no", data: { cy: "confirm-no" }  %>
+                  <%= f.radio_button :correct, 'no', class: "govuk-radios__input", data: { cy: "confirm-no" }  %>
                   <%= f.label :correct, "No", class: "govuk-label govuk-radios__label", for: "correct_no" %>
                 </div>
               </div>
