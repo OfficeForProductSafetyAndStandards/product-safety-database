@@ -29,17 +29,18 @@
 
             <div class="govuk-radios__conditional" id="conditional-barcode">
               <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @product_duplicate_check_form.errors.any? %>">
-                <%= f.label :barcode, class: "govuk-label" do %>
+                <%= f.label :barcode, class: "govuk-label", for: "barcode" do %>
                   Barcode number (<abbr title="Global Trade Item Number">GTIN</abbr>, <abbr title="European Article Number">EAN</abbr> or <abbr title="Universal Product Code">UPC</abbr>)
-                <% end %>
-                <div id="barnumber-hint" class="govuk-hint govuk-!-font-size-16">
-                  It is normally 13 digits, although older products may have a 12 digit number.
-                </div>
 
-                <% if @product_duplicate_check_form.errors.any? %>
-                  <p id="barcode-error" class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span> Enter a barcode number
-                  </p>
+                  <div id="barnumber-hint" class="govuk-hint govuk-!-font-size-16">
+                    It is normally 13 digits, although older products may have a 12 digit number.
+                  </div>
+
+                  <% if @product_duplicate_check_form.errors.any? %>
+                    <p id="barcode-error" class="govuk-error-message">
+                      <span class="govuk-visually-hidden">Error:</span> Enter a barcode number
+                    </p>
+                  <% end %>
                 <% end %>
 
                 <%= f.text_field :barcode, class: "govuk-input govuk-!-width-one-third", aria: { describedby: "barnumber-hint" }, autocomplete: "off", spellcheck: "false", data: { cy: "barcode" }, id: "barcode" %>
