@@ -665,6 +665,16 @@ en:
           attributes:
             correct:
               inclusion: Select yes if this is the same product
+        product_duplicate_check_form:
+          attributes:
+            has_barcode:
+              inclusion: Select yes if you have the product barcode number
+            barcode:
+              invalid: Enter a valid barcode number
+              too_long: The barcode must be between 5 and 15 digits
+              too_short: The barcode must be between 5 and 15 digits
+              only_integer: Enter a valid barcode number
+              not_a_number: Enter a valid barcode number
 
   activerecord:
     models:

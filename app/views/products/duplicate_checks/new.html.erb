@@ -18,8 +18,8 @@
 
           <div class="govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <%= f.radio_button :has_barcode, true, class: "govuk-radios__input", aria: { controls: "conditional-barcode", expanded: "true" }, data: { cy: "barcode-yes" }, id: "has_barcode_yes" %>
-              <%= f.label :has_barcode, "Yes", class: "govuk-label govuk-radios__label", for: "has_barcode_yes" %>
+              <%= f.radio_button :has_barcode, true, class: "govuk-radios__input", aria: { controls: "conditional-barcode", expanded: "true" }, data: { cy: "barcode-yes" }, id: "has_barcode" %>
+              <%= f.label :has_barcode, "Yes", class: "govuk-label govuk-radios__label" %>
             </div>
 
             <div class="govuk-radios__conditional" id="conditional-barcode">
