@@ -1,52 +1,49 @@
 <%= page_title "Do you have a barcode number?", errors: @product_duplicate_check_form.errors.any? %>
-
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back",
     href: products_path(@investigation)
   ) %>
 <% end %>
-
 <%= form_with model: @product_duplicate_check_form, url: duplicate_check_products_path(@product_duplicate_check_form), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@product_duplicate_check_form.errors, %i[barcode]) %>
+  <%= error_summary(@product_duplicate_check_form.errors, %i[barcode]) %>
 
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading">Do you have the product barcode number?</h1>
           </legend>
 
-          <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <%= f.radio_button :has_barcode, true, class: "govuk-radios__input", aria: { controls: "conditional-barcode", expanded: "true" }, data: { cy: "barcode-yes" } %>
-              <%= f.label :has_barcode, "Yes", class: "govuk-label govuk-radios__label" %>
+              <%= f.radio_button :has_barcode, true, class: "govuk-radios__input", aria: { controls: "conditional-barcode", expanded: "true" }, data: { cy: "barcode-yes" }, id: "has_barcode_yes" %>
+              <%= f.label :has_barcode, "Yes", class: "govuk-label govuk-radios__label", for: "has_barcode_yes" %>
             </div>
 
             <div class="govuk-radios__conditional" id="conditional-barcode">
               <div class="govuk-form-group">
-                <label class="govuk-label" for="barnumber">
+                <%= f.label :barcode, class: "govuk-label" do %>
                   Barcode number (<abbr title="Global Trade Item Number">GTIN</abbr>, <abbr title="European Article Number">EAN</abbr> or <abbr title="Universal Product Code">UPC</abbr>)
-                </label>
-
-                <div id="barnumber-hint" class="govuk-hint">
+                <% end %>
+                <div id="barnumber-hint" class="govuk-hint govuk-!-font-size-16">
                   It is normally 13 digits, although older products may have a 12 digit number.
                 </div>
 
-                <%= f.text_field :barcode, class: "govuk-input govuk-!-width-one-third", aria: { describedby: "barnumber-hint" }, autocomplete: "off", spellcheck: "false", data: { cy: "barcode" } %>
+                <%= f.text_field :barcode, class: "govuk-input govuk-!-width-one-third", aria: { describedby: "barnumber-hint" }, autocomplete: "off", spellcheck: "false", data: { cy: "barcode" }, id: "barcode" %>
               </div>
             </div>
 
             <div class="govuk-radios__item">
-              <%= f.radio_button :has_barcode, false, class: "govuk-radios__input", data: { cy: "barcode-no" } %>
-              <%= f.label :has_barcode, "No", class: "govuk-label govuk-radios__label" %>
+              <%= f.radio_button :has_barcode, false, class: "govuk-radios__input", data: { cy: "barcode-no" }, id: "has_barcode_no" %>
+              <%= f.label :has_barcode, "No", class: "govuk-label govuk-radios__label", for: "has_barcode_no" %>
             </div>
           </div>
         </fieldset>
       </div>
 
-      <%= f.submit "Continue", class: "govuk-button", data: { cy: "continue" } %>
+      <%= f.submit "Continue", class: "govuk-button", data: { cy: "continue" }, role: "button" %>
     </div>
     <div class="govuk-grid-column-one-quarter">
       <h2 class="govuk-heading-s govuk-visually-hidden">Barcode example</h2>
@@ -57,3 +54,4 @@
     </div>
   </div>
 <% end %>
+

@@ -8,101 +8,99 @@
 <% end %>
 
 <%= form_with model: @product_duplicate_confirmation_form, url: confirm_product_duplicate_checks_path(product_id: @product.id), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@product_duplicate_confirmation_form.errors, %i[correct]) %>
+  <div class="govuk-form-group">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <fieldset class="govuk-fieldset" aria-describedby="product-hint <%= 'is-product-error' if @product_duplicate_confirmation_form.errors.any? %>">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l opss-fieldset__legend">
+            <h1 class="govuk-fieldset__heading">
+              Is this the same product?
+            </h1>
+          </legend>
+
+          <div id="product-hint" class="govuk-hint">
+            A product record with the same barcode already exists.
+          </div>
+
+          <div class="govuk-grid-row">
+            <section class="govuk-grid-column-three-quarters opss-panels">
+              <div class="opss-panels__single">
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
+
+                <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
+                    <dd class="govuk-summary-list__value"><%= @product.psd_ref %></dd>
+                  </div>
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Brand name</dt>
+                    <dd class="govuk-summary-list__value"><%= @product.brand %></dd>
+                  </div>
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Product name</dt>
+                    <dd class="govuk-summary-list__value"><%= @product.name %></dd>
+                  </div>
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Barcode</dt>
+                    <dd id="barNumber" class="govuk-summary-list__value"><%= @product.barcode %></dd>
+                  </div>
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Counterfeit</dt>
+                    <dd class="govuk-summary-list__value">
+                      <%= @product.counterfeit_value %>
+                      <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= @product.counterfeit_explanation %></span>
+                    </dd>
+                  </div>
+                </dl>
+
+                <% if @image %>
+                  <details class="govuk-details govuk-!-margin-bottom-3" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                      <span class="govuk-details__summary-text">
+                        Product image
+                      </span>
+                    </summary>
+                      <div class="govuk-details__text">
+                        <%= image_tag(@image.file_upload, alt: image.title, class: 'opss-details-img') %>
+                      </div>
+                  </details>
+                <% end %>
+              </div>
+            </section>
+          </div>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+              <div class="govuk-form-group <%= class_names("govuk-form-group--error" => @product_duplicate_confirmation_form.errors.any?) %>">
+                <% if @product_duplicate_confirmation_form.errors.any? %>
+                  <p id="is-product-error" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> Select yes if this is the same product
+                  </p>
+                <% end %>
+
+                <%= f.hidden_field :correct, value: '' %>
+                <div class="govuk-radios__item">
+                  <%= f.radio_button :correct, 'yes', class: "govuk-radios__input", id: "correct_yes", data: { cy: "confirm-yes" } %>
+                  <%= f.label :correct, class: "govuk-label govuk-radios__label", for: "correct_yes" do %>
+                    Yes &nbsp;&ndash;&nbsp; use this product record instead
+                  <% end %>
+                </div>
+
+                <div class="govuk-radios__item">
+                  <%= f.radio_button :correct, 'no', class: "govuk-radios__input", id: "correct_no", data: { cy: "confirm-no" }  %>
+                  <%= f.label :correct, "No", class: "govuk-label govuk-radios__label", for: "correct_no" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
     </div>
   </div>
 
-  <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset" aria-describedby="product-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l opss-fieldset__legend">
-        <h1 class="govuk-fieldset__heading">
-          Is this the same product?
-        </h1>
-      </legend>
-
-      <div id="product-hint" class="govuk-hint">
-        A product record with the same barcode already exists.
-      </div>
-
-      <div class="govuk-grid-row">
-        <section class="govuk-grid-column-three-quarters opss-panels">
-          <div class="opss-panels__single">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
-
-            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
-                <dd class="govuk-summary-list__value"><%= @product.psd_ref %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Brand name</dt>
-                <dd class="govuk-summary-list__value"><%= @product.brand %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product name</dt>
-                <dd class="govuk-summary-list__value"><%= @product.name %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Barcode</dt>
-                <dd id="barNumber" class="govuk-summary-list__value"><%= @product.barcode %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Counterfeit</dt>
-                <dd class="govuk-summary-list__value">
-                  <%= @product.counterfeit_value %>
-                  <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= @product.counterfeit_explanation %></span>
-                </dd>
-              </div>
-            </dl>
-
-            <% if @image %>
-              <details class="govuk-details govuk-!-margin-bottom-3" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text">
-                    Product image
-                  </span>
-                </summary>
-                  <div class="govuk-details__text">
-                    <%= image_tag(@image.file_upload, alt: image.title, class: 'opss-details-img') %>
-                  </div>
-              </details>
-            <% end %>
-          </div>
-        </section>
-      </div>
-
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1">
-
-          <div class="govuk-form-group <%= class_names("govuk-form-group--error" => @product_duplicate_confirmation_form.errors.any?) %>">
-            <% if @product_duplicate_confirmation_form.errors.any? %>
-              <p id="is-product-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span> Select yes if this is the same product
-              </p>
-            <% end %>
-
-            <%= f.hidden_field :correct, value: '' %>
-            <div class="govuk-radios__item">
-              <%= f.radio_button :correct, 'yes', class: "govuk-radios__input", data: { cy: "confirm-yes" } %>
-              <%= f.label :correct, class: "govuk-label govuk-radios__label" do %>
-                Yes &nbsp;&ndash;&nbsp; use this product record instead
-              <% end %>
-            </div>
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button :correct, 'no', class: "govuk-radios__input", data: { cy: "confirm-no" }  %>
-              <%= f.label :correct, class: "govuk-label govuk-radios__label" do %>
-                No
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </fieldset>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= f.submit "Continue", class: "govuk-button", role: "button", data: {module: "govuk-button", cy: "continue"} %>
+    </div>
   </div>
-
-  <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button", cy: "continue"} %>
-
 <% end %>
