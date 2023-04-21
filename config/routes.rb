@@ -75,23 +75,14 @@ Rails.application.routes.draw do
 
   resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
 
-  resources :enquiry, controller: "investigations/enquiry", only: %i[show update]
-  resources :allegation, controller: "investigations/allegation", only: %i[show update]
-  resources :project, controller: "investigations/project", only: %i[show update]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
   scope :investigation, path: "", as: :investigation do
-    resources :allegation,       only: [], concerns: %i[document_attachable]
-    resources :enquiry,          only: [], concerns: %i[document_attachable]
-    resources :project,          only: [], concerns: %i[document_attachable]
     resources :ts_investigation, only: [], concerns: %i[document_attachable]
   end
 
   scope :investigation, path: "", module: "investigations", as: :investigation do
-    resources :enquiry,          controller: "enquiry",           only: %i[show update]
-    resources :allegation,       controller: "allegation",        only: %i[show update]
-    resources :project,          controller: "project",           only: %i[show update]
-    resources :ts_investigation, controller: "ts_investigations", only: %i[show update]
+    resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 
   resource :investigations, only: [], path: "cases" do
