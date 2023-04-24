@@ -1,4 +1,4 @@
-<%= page_title "Is this the same product?" %>
+<% page_title "Is this the same product?", errors: @product_duplicate_confirmation_form.errors.any? %>
 
 <% content_for :after_header do %>
   <%= govukBackLink(
@@ -82,8 +82,8 @@
 
                 <%= f.hidden_field :correct, value: '' %>
                 <div class="govuk-radios__item">
-                  <%= f.radio_button :correct, 'yes', class: "govuk-radios__input", id: "correct_yes", data: { cy: "confirm-yes" } %>
-                  <%= f.label :correct, class: "govuk-label govuk-radios__label", for: "correct_yes" do %>
+                  <%= f.radio_button :correct, 'yes', class: "govuk-radios__input", id: "correct", data: { cy: "confirm-yes" } %>
+                  <%= f.label :correct, class: "govuk-label govuk-radios__label", for: "correct" do %>
                     Yes &nbsp;&ndash;&nbsp; use this product record instead
                   <% end %>
                 </div>
