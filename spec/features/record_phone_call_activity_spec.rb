@@ -69,7 +69,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
 
     expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
 
-    click_on "Back to allegation: #{investigation.pretty_id}"
+    click_on "Back to case: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -127,7 +127,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
 
     click_link "Test summary"
 
-    click_on "Back to allegation: #{investigation.pretty_id}"
+    click_on "Back to case: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

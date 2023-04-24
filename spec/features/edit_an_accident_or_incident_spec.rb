@@ -86,7 +86,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     expect(page).to have_content "Incident involving Teddy Bear"
 
-    click_link "Back to allegation: #{investigation.pretty_id}"
+    click_link "Back to case: #{investigation.pretty_id}"
 
     click_on "Activity"
 
@@ -148,7 +148,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
 
     expect(page).to have_content "Accident involving Doll"
 
-    click_link "Back to allegation: #{investigation.pretty_id}"
+    click_link "Back to case: #{investigation.pretty_id}"
 
     click_on "Activity"
 
