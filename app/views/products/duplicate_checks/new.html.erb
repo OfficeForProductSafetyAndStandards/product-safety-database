@@ -36,9 +36,9 @@
                     It is normally 13 digits, although older products may have a 12 digit number.
                   </div>
 
-                  <% if @product_duplicate_check_form.errors.any? %>
+                  <% if @product_duplicate_check_form&.errors[:barcode].any? %>
                     <p id="barcode-error" class="govuk-error-message">
-                      <span class="govuk-visually-hidden">Error:</span> Enter a barcode number
+                      <span class="govuk-visually-hidden">Error:</span> Enter a valid barcode number
                     </p>
                   <% end %>
                 <% end %>
