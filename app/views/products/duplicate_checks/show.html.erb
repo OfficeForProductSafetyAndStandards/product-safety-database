@@ -10,9 +10,9 @@
 <%= form_with model: @product_duplicate_confirmation_form, url: confirm_product_duplicate_checks_path(product_id: @product.id), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
   <%= error_summary(@product_duplicate_confirmation_form.errors, %i[correct]) %>
 
-  <div class="govuk-form-group">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" aria-describedby="product-hint <%= 'is-product-error' if @product_duplicate_confirmation_form.errors.any? %>">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l opss-fieldset__legend">
             <h1 class="govuk-fieldset__heading">
