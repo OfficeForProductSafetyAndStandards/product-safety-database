@@ -35,9 +35,8 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
     before { sign_in(user) }
 
     scenario "is able to report an enquiry" do
-      visit "/cases"
+      visit "/cases/new"
 
-      click_link "Create a case"
       choose "type_enquiry"
       click_button "Continue"
 
