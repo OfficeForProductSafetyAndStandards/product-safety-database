@@ -47,11 +47,11 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
 
         # Now back on the case page, the user cannot see the restriction status
         expect_to_be_on_case_page(case_id:)
-        expect_confirmation_banner("Allegation was unrestricted")
+        expect_confirmation_banner("Case was unrestricted")
         expect(page).not_to have_text "Case restriction"
 
         click_link "Activity"
-        expect(page).to have_css("h3", text: "Allegation unrestricted")
+        expect(page).to have_css("h3", text: "Case unrestricted")
         expect(page).to have_css("p", text: "Unrestricted reason")
       end
     end

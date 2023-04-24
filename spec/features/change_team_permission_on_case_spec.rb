@@ -49,7 +49,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
 
     expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
     expect(notification_email.personalization_value(:case_id)).to eq(investigation.pretty_id)
-    expect(notification_email.personalization_value(:case_type)).to eq("allegation")
+    expect(notification_email.personalization_value(:case_type)).to eq("case")
     expect(notification_email.personalization_value(:case_title)).to eq(investigation.decorate.title)
     expect(notification_email.personalization_value(:updater_name)).to eq("Bob Jones (Portsmouth Trading Standards)")
     expect(notification_email.personalization_value(:optional_message)).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this case with us before.")
@@ -74,7 +74,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_text("Southampton Trading Standards removed from allegation")
+    expect(page).to have_text("Southampton Trading Standards removed from case")
     expect(page).to have_text("Team removed by Bob Jones")
     expect(page).to have_text("Thanks for collaborating on this case with us before.")
   end
@@ -112,7 +112,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
 
     expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
     expect(notification_email.personalization_value(:case_id)).to eq(investigation.pretty_id)
-    expect(notification_email.personalization_value(:case_type)).to eq("allegation")
+    expect(notification_email.personalization_value(:case_type)).to eq("case")
     expect(notification_email.personalization_value(:case_title)).to eq(investigation.decorate.title)
     expect(notification_email.personalization_value(:updater_name)).to eq("Bob Jones (Portsmouth Trading Standards)")
     expect(notification_email.personalization_value(:optional_message)).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ You now have view read only access.")

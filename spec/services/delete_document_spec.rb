@@ -79,11 +79,11 @@ RSpec.describe DeleteDocument, :with_stubbed_opensearch, :with_test_queue_adapte
         let(:parent) { investigation }
 
         def expected_email_subject
-          "Allegation updated"
+          "Case updated"
         end
 
         def expected_email_body(name)
-          "Document attached to the #{investigation.case_type.upcase_first} was removed by #{name}."
+          "Document attached to the Case was removed by #{name}."
         end
 
         it "adds an audit activity record", :aggregate_failures do

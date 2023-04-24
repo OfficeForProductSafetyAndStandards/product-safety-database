@@ -23,7 +23,7 @@ class ConvertActivityMetadataForCaseSummaryChange < ActiveRecord::Migration[5.2]
       activity.update!(
         metadata: nil,
         body: activity.metadata["updates"]["description"].second,
-        title: "#{activity.investigation.case_type.upcase_first} summary updated"
+        title: "Case summary updated"
       )
     end
   end

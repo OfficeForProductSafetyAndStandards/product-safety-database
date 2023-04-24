@@ -29,7 +29,7 @@ class Investigations::SummaryController < ApplicationController
     respond_to do |format|
       format.html do
         redirect_to investigation_path(investigation),
-                    flash: { success: "#{investigation.case_type.upcase_first} was successfully updated" }
+                    flash: { success: "Case was successfully updated" }
       end
       format.json { render :show, status: :ok, location: investigation }
     end

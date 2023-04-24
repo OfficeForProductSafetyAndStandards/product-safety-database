@@ -58,7 +58,7 @@ private
       user.name,
       user.email,
       investigation.decorate.title,
-      investigation.case_type
+      "case"
     ).deliver_later
   end
 

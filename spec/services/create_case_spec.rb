@@ -137,7 +137,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
           user.name,
           user.email,
           "test enquiry title",
-          "enquiry"
+          "case"
         )
       end
 

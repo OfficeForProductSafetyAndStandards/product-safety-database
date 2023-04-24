@@ -51,8 +51,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Product was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
-        "#{investigation.case_type.upcase_first} updated"
+        "Product was added to the case by #{user.decorate.display_name(viewer: recipient)}.",
+        "Case updated"
       ).deliver_later
     end
   end

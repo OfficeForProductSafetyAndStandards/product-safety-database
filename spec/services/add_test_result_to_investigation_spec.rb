@@ -27,11 +27,11 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
   end
 
   def expected_email_body(user, viewing_user)
-    "Test result was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: viewing_user)}."
+    "Test result was added to the case by #{user.decorate.display_name(viewer: viewing_user)}."
   end
 
   def expected_email_subject
-    "#{investigation.case_type.upcase_first} updated"
+    "Case updated"
   end
 
   describe "when provided with a user and an investigation" do

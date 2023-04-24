@@ -81,11 +81,11 @@ RSpec.describe AddDocument, :with_stubbed_opensearch, :with_test_queue_adapter d
         let(:parent) { investigation }
 
         def expected_email_subject
-          "Allegation updated"
+          "Case updated"
         end
 
         def expected_email_body(name)
-          "Document was attached to the #{investigation.case_type.upcase_first} by #{name}."
+          "Document was attached to the Case by #{name}."
         end
 
         it "adds an audit activity record", :aggregate_failures do

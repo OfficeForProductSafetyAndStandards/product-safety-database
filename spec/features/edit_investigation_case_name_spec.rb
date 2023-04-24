@@ -52,6 +52,6 @@ RSpec.feature "Edit an investigation's case name", :with_stubbed_opensearch, :wi
     expect(page).to have_css("h3", text: "Case name updated")
     expect(page).to have_content("Case name: #{new_case_name}")
 
-    expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation case name updated"
+    expect(delivered_emails.last.personalization[:subject_text]).to eq "Case name updated"
   end
 end

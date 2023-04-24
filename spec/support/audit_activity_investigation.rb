@@ -120,7 +120,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
       end
 
       it "generates the title dynamically" do
-        expect(title).to eq("#{investigation.case_type.titleize} logged: Test metadata title")
+        expect(title).to eq("Case logged: Test metadata title")
       end
     end
   end

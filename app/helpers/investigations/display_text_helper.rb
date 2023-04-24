@@ -170,8 +170,8 @@ module Investigations::DisplayTextHelper
       !policy(investigation).view_protected_details?
   end
 
-  def protected_details_text(source, investigation)
-    data_type = source.include?("correspondences") ? "correspondence" : "#{investigation.case_type} contact details"
+  def protected_details_text(source, _investigation)
+    data_type = source.include?("correspondences") ? "correspondence" : "case contact details"
     t("case.protected_details", data_type:)
   end
 

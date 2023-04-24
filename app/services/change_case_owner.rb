@@ -65,7 +65,7 @@ private
         recipient.name,
         recipient.email,
         email_body(recipient),
-        "Case owner changed for #{investigation.case_type}"
+        "Case owner changed for case"
       ).deliver_later
     end
   end
@@ -84,7 +84,7 @@ private
 
   def email_body(viewer = nil)
     user_name = user.decorate.display_name(viewer:)
-    body = "Case owner changed on #{investigation.case_type} to #{owner.decorate.display_name(viewer:)} by #{user_name}."
+    body = "Case owner changed on case to #{owner.decorate.display_name(viewer:)} by #{user_name}."
     body << "\n\nMessage from #{user_name}: #{inset_text_for_notify(rationale)}" if rationale
     body
   end

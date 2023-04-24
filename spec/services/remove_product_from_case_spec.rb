@@ -15,11 +15,11 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
 
   describe ".call" do
     def expected_email_subject
-      "Allegation updated"
+      "Case updated"
     end
 
     def expected_email_body(name)
-      "Product was removed from the allegation by #{name}."
+      "Product was removed from the case by #{name}."
     end
 
     context "with stubbed opensearch", :with_stubbed_opensearch do

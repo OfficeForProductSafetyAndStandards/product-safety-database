@@ -32,7 +32,7 @@ RSpec.describe AuditActivity::Investigation::UpdateSummary, :with_stubbed_opense
 
   describe "#title" do
     it "returns a String" do
-      expect(activity.title(nil)).to eq("Allegation summary updated")
+      expect(activity.title(nil)).to eq("Case summary updated")
     end
   end
 end
