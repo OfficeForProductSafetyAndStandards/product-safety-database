@@ -94,7 +94,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
         before { investigations.each { |i| described_class.call(investigation: i, user:, product:) } }
 
         it "generates a successive pretty_id", :aggregate_failures do
-          expect(Investigation.pluck(:pretty_id).map { |id| id.split("-").last })
+          expect(Investigation.pluck(:pretty_id).map { |id| id.split("-").last }.sort)
             .to eq(%w[0001 0002 0003])
           result
           expect(investigation.reload.pretty_id).to end_with("0004")

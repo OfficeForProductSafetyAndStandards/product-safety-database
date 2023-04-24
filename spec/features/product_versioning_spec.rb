@@ -33,7 +33,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_antivirus, :
     click_link "Close this case"
     fill_in "Why are you closing the case?", with: "Case has been resolved."
     click_button "Close case"
-    expect_confirmation_banner("Allegation was closed")
+    expect_confirmation_banner("The case was closed")
     first_investigation.reload
 
     # Closing the case makes the product unowned, and the user can no longer edit it
@@ -72,7 +72,7 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_antivirus, :
     visit "/cases/#{first_investigation.pretty_id}/products"
 
     expect(page).to have_selector("h3.govuk-heading-m", text: product.name)
-    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{first_investigation.date_closed.to_i} - The PSD reference number for this version of the product record - as recorded when the case was closed: #{first_investigation.date_closed.to_formatted_s(:govuk)}.")
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{first_investigation.date_closed.to_i} - The PSD reference number for this version of the product record - as recorded when the case was closed: #{first_investigation.date_closed.to_formatted_s(:govuk)}")
     expect(page).to have_selector("dd.govuk-summary-list__value", text: initial_product_description)
     expect(page).not_to have_link "Edit this product"
     expect(page).to have_link("Images (1)")

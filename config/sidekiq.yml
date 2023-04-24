@@ -17,3 +17,6 @@
     retire_stale_products_job:
       cron: "0 2 * * *"
       class: "RetireStaleProductsJob"
+    delete_old_exports_job:
+      cron: "0 3 * * *"
+      class: "DeleteOldExportsJob"

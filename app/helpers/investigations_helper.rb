@@ -267,6 +267,10 @@ module InvestigationsHelper
     end
   end
 
+  def non_search_cases_page_names
+    %w[team_cases your_cases assigned_cases].freeze
+  end
+
 private
 
   def search_result_values(_search_terms, number_of_results)
@@ -456,7 +460,7 @@ private
   end
 
   def case_risk_level_value(investigation)
-    investigation.risk_level == "serious" ? '<span class="opss-tag opss-tag--risk1 opss-tag--lrg">Serious risk</span>'.html_safe : investigation.risk_level_description
+    investigation.risk_level == "high" || investigation.risk_level == "serious" ? "<span class='opss-tag opss-tag--risk1 opss-tag--lrg'>#{investigation.risk_level.capitalize} risk</span>".html_safe : investigation.risk_level_description
   end
 
   def risk_validated_value(investigation)
