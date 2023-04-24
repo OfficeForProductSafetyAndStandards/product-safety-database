@@ -7,6 +7,7 @@ if Rails.env.production?
       ActiveSupport::SecurityUtils.secure_compare(password, ENV["SIDEKIQ_PASSWORD"])
   end
 end
+
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
@@ -223,6 +224,17 @@ Rails.application.routes.draw do
   resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
     member do
       get :owner
+    end
+
+    collection do
+      get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
+      post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
+    end
+
+    resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
+      member do
+        post :confirm
+      end
     end
   end
 
