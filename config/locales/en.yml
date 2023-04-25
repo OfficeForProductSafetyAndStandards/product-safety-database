@@ -101,6 +101,9 @@ en:
       team_products: Team products
       your_products: Your products
       all_products: All Products - Search
+    counterfeit: This is a product record for a counterfeit product
+    genuine: This product record is about a genuine product
+
   businesses:
       titles:
         team_businesses: Team businesses
@@ -658,6 +661,20 @@ en:
               blank: Enter details
             is_risk_validated:
               inclusion:  "Select yes if you have validated the case risk level"
+        product_duplicate_confirmation_form:
+          attributes:
+            correct:
+              inclusion: Select yes if this is the same product
+        product_duplicate_check_form:
+          attributes:
+            has_barcode:
+              inclusion: Select yes if you have the product barcode number
+            barcode:
+              invalid: Enter a valid barcode number
+              too_long: The barcode must be between 5 and 15 digits
+              too_short: The barcode must be between 5 and 15 digits
+              only_integer: Enter a valid barcode number
+              not_a_number: Enter a valid barcode number
 
   activerecord:
     models:
