@@ -11,9 +11,10 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     end
   end
 
-  let!(:product_1) { create(:product, name: "ABC", category: "Lifts") }
-  let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser") }
-  let!(:hazardous_product) { create(:product, name: "STU", category: "Waste") }
+  let!(:investigation) { create(:allegation).decorate }
+  let!(:product_1) { create(:product, name: "ABC", category: "Lifts", investigations: [investigation]) }
+  let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser", investigations: [investigation]) }
+  let!(:hazardous_product) { create(:product, name: "STU", category: "Waste", investigations: [investigation]) }
 
   before do
     Product.import force: true, refresh: :wait_for
