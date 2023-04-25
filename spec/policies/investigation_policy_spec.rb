@@ -173,6 +173,47 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
         expect(policy.readonly?).to be false
       end
     end
+
+    context "when the user is a super user" do
+      let(:different_team) { create(:team) }
+      let(:user) { create(:user, :super_user, team: different_team) }
+
+      it "can update the case" do
+        expect(policy.update?).to be true
+      end
+
+      it "can change case owner or status" do
+        expect(policy.change_owner_or_status?).to be true
+      end
+
+      it "can unrestrict the case" do
+        expect(policy.can_unrestrict?).to be true
+      end
+
+      it "can manage collaborators" do
+        expect(policy.manage_collaborators?).to be true
+      end
+
+      it "can view non-protected details" do
+        expect(policy.view_non_protected_details?).to be true
+      end
+
+      it "can view all details about the case" do
+        expect(policy.view_protected_details?).to be true
+      end
+
+      it "is readonly" do
+        expect(policy.readonly?).to be false
+      end
+
+      it "can view the notifying country" do
+        expect(policy.view_notifying_country?).to be true
+      end
+
+      it "can edit the notifying country" do
+        expect(policy.change_notifying_country?).to be true
+      end
+    end
   end
 
   context "when the investigation has been restricted" do
@@ -213,6 +254,43 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
         it "can view all details about the case" do
           expect(policy.view_protected_details?).to be true
         end
+      end
+    end
+
+    context "when the user is a super user" do
+      let(:different_team) { create(:team) }
+      let(:user) { create(:user, :super_user, team: different_team) }
+
+      it "can update the case" do
+        expect(policy.update?).to be true
+      end
+
+      it "can change case owner or status" do
+        expect(policy.change_owner_or_status?).to be true
+      end
+
+      it "can unrestrict the case" do
+        expect(policy.can_unrestrict?).to be true
+      end
+
+      it "can manage collaborators" do
+        expect(policy.manage_collaborators?).to be true
+      end
+
+      it "can view non-protected details" do
+        expect(policy.view_non_protected_details?).to be true
+      end
+
+      it "can view all details about the case" do
+        expect(policy.view_protected_details?).to be true
+      end
+
+      it "can view the notifying country" do
+        expect(policy.view_notifying_country?).to be true
+      end
+
+      it "can edit the notifying country" do
+        expect(policy.change_notifying_country?).to be true
       end
     end
   end
