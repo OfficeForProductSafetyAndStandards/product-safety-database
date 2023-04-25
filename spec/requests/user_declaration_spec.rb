@@ -29,7 +29,7 @@ RSpec.describe "User accepting declaration", type: :request do
 
     it "redirects the user to root_path" do
       post(declaration_accept_path, params:)
-      expect(response).to redirect_to(authenticated_msa_root_path)
+      expect(response).to redirect_to(authenticated_root_path)
     end
   end
 end

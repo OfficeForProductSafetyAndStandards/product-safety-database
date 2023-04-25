@@ -275,12 +275,9 @@ Rails.application.routes.draw do
   match "/503", to: "errors#timeout", via: :all
 
   mount PgHero::Engine, at: "pghero"
-  authenticated :user, ->(user) { user.is_opss? } do
-    root to: redirect("/cases/your-cases"), as: "authenticated_opss_root"
-  end
 
-  authenticated :user, ->(user) { !user.is_opss? } do
-    root to: "homepage#non_opss", as: "authenticated_msa_root"
+  authenticated :user do
+    root to: "homepage#authenticated", as: "authenticated_root"
   end
 
   unauthenticated do
