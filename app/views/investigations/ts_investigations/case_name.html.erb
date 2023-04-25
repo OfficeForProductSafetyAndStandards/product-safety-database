@@ -6,9 +6,10 @@
   href: wizard_path(:reference_number)
 ) %>
 
-<%= form_with scope: :investigation, model: @case_name_form, url: wizard_path, method: :put, local: true do |form| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with scope: :investigation, model: @case_name_form, url: wizard_path, method: :put, local: true do |form| %>
       <%= render "/investigations/case_names/form", form: form, heading: "What is the case name?" %>
 
 
@@ -16,6 +17,19 @@
          <%= form.submit "Save", class: "govuk-button" %>
          <%= link_to "Cancel", product_path(@product), class: "govuk-link govuk-link--no-visited-state" %>
        </div>
-    </div>
+    <% end %>
   </div>
-<% end %>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-s">Case name examples</h2>
+    <p class="govuk-body-s opss-secondary-text">
+      A suggested format for the <abbr>PSD</abbr> would be, brand name, model name and description of the hazard.
+    </p>
+    <ul id="case-name-examples" class="govuk-list govuk-list--bullet govuk-list--spaced govuk-!-font-size-16 opss-secondary-text">
+      <li>Microsoft Xbox Series X gaming console causing burns</li>
+      <li>Chairplan Gary office chair - flammable health risk</li>
+      <li>JoJo Maman Bébé James bear causing injuries</li>
+      <li>Minolta Compact 220 handheld camera - damage to sight</li>
+      <li>Hoover H3W998 washing machine, electric shock</li>
+    </ul>
+  </div>
+</div>
