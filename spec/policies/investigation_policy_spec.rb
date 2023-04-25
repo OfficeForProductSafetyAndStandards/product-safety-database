@@ -205,6 +205,14 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
       it "is readonly" do
         expect(policy.readonly?).to be false
       end
+
+      it "can view the notifying country" do
+        expect(policy.view_notifying_country?).to be true
+      end
+
+      it "can edit the notifying country" do
+        expect(policy.change_notifying_country?).to be true
+      end
     end
   end
 
@@ -275,6 +283,14 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
 
       it "can view all details about the case" do
         expect(policy.view_protected_details?).to be true
+      end
+
+      it "can view the notifying country" do
+        expect(policy.view_notifying_country?).to be true
+      end
+
+      it "can edit the notifying country" do
+        expect(policy.change_notifying_country?).to be true
       end
     end
   end

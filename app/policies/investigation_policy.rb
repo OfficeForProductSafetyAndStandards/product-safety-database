@@ -63,7 +63,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def change_notifying_country?(user: @user)
-    user.notifying_country_editor?
+    user.notifying_country_editor? || user.has_role?(:super_user)
   end
 
   def comment?
@@ -77,6 +77,6 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def view_notifying_country?(user: @user)
-    record.notifying_country.present? || user.is_opss?
+    record.notifying_country.present? || user.is_opss? || user.has_role?(:super_user)
   end
 end
