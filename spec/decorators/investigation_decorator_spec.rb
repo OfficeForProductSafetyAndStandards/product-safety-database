@@ -268,7 +268,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
     context "with restricted case" do
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
 
-      it { expect(case_title_key).to eq("Allegation restricted") }
+      it { expect(case_title_key).to eq("Case restricted") }
     end
   end
 
