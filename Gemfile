@@ -92,7 +92,7 @@ group :test do
   gem "rubocop-govuk", "~> 4.7"
   gem "rubocop-performance", "~> 1.17"
   gem "rubocop-rspec", "~> 2.15", require: false
-  gem "selenium-webdriver", "~> 4.8"
+  gem "selenium-webdriver", "~> 4.9"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
