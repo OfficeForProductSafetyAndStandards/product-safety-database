@@ -498,7 +498,7 @@ GEM
       tilt
     scout_apm (5.3.3)
       parser
-    selenium-webdriver (4.8.6)
+    selenium-webdriver (4.9.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -684,7 +684,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.15)
   sassc-rails
   scout_apm (~> 5.3)
-  selenium-webdriver (~> 4.8)
+  selenium-webdriver (~> 4.9)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
