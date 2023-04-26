@@ -52,8 +52,8 @@ RSpec.feature "Creating a case", :with_opensearch, :with_stubbed_antivirus, :wit
       expect(errors_list[0].text).to eq "Select the options which are reasons for concern"
 
       within_fieldset("Why is the product of concern?") do
-        check "The product is unsafe (or suspected of being)"
-        check "The product is non-compliant (or suspected of being)"
+        check "The product is unsafe"
+        check "The product is non-compliant"
       end
 
       click_button "Continue"
@@ -63,8 +63,8 @@ RSpec.feature "Creating a case", :with_opensearch, :with_stubbed_antivirus, :wit
       expect(errors_list[2].text).to eq "Enter why the product is non-compliant"
 
       within_fieldset("Why is the product of concern?") do
-        check "The product is unsafe (or suspected of being)"
-        check "The product is non-compliant (or suspected of being)"
+        check "The product is unsafe"
+        check "The product is non-compliant"
       end
 
       select hazard_type, from: "hazard_type"
@@ -198,8 +198,8 @@ RSpec.feature "Creating a case", :with_opensearch, :with_stubbed_antivirus, :wit
       expect(errors_list[0].text).to eq "Select the options which are reasons for concern"
 
       within_fieldset("Why is the product of concern?") do
-        check "The product is unsafe (or suspected of being)"
-        check "The product is non-compliant (or suspected of being)"
+        check "The product is unsafe"
+        check "The product is non-compliant"
       end
 
       click_button "Continue"
@@ -209,8 +209,8 @@ RSpec.feature "Creating a case", :with_opensearch, :with_stubbed_antivirus, :wit
       expect(errors_list[2].text).to eq "Enter why the product is non-compliant"
 
       within_fieldset("Why is the product of concern?") do
-        check "The product is unsafe (or suspected of being)"
-        check "The product is non-compliant (or suspected of being)"
+        check "The product is unsafe"
+        check "The product is non-compliant"
       end
 
       select hazard_type, from: "hazard_type"

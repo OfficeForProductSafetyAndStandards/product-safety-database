@@ -27,8 +27,8 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
     expect(delivered_emails.last.recipient).to eq creator_user.email
     expect(delivered_emails.last.personalization).to include(
       name: creator_user.name,
-      subject_text: "Allegation updated",
-      update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the allegation."
+      subject_text: "Case updated",
+      update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the case."
     )
   end
 
@@ -59,8 +59,8 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
 
       delivered_emails.each do |email|
         expect(email.personalization).to include(
-          subject_text: "Allegation updated",
-          update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the allegation."
+          subject_text: "Case updated",
+          update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the case."
         )
       end
     end

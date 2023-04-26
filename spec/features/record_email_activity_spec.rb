@@ -75,7 +75,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
     expect(page).to have_summary_item(key: "Email", value: "email_file.txt (0 Bytes)")
 
-    click_link "Back to allegation"
+    click_link "Back to case"
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
     click_on "Activity"
@@ -142,7 +142,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     expect(page).to have_text("attachment_filename.txt")
     expect(page).to have_text("Test attachment description")
 
-    click_link "Back to allegation"
+    click_link "Back to case"
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
     click_on "Activity"

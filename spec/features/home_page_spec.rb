@@ -46,7 +46,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
         let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
 
-        scenario "shows the declaration page before the case list" do
+        scenario "shows the declaration page before the home page" do
           expect(page).to have_current_path(declaration_index_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
@@ -55,21 +55,25 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           check "I agree"
           click_button "Continue"
 
-          expect(page).to have_current_path(your_cases_investigations_path)
+          expect(page).to have_current_path(authenticated_root_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_text("Cases")
-          expect(page).to have_link("Create a case")
+          expect(page).to have_link("Your cases")
+          expect(page).to have_link("All cases")
+          expect(page).to have_link("Guidance")
+          expect(page).to have_link("How to use the PSD")
         end
       end
 
       context "when the user has previously accepted the declaration" do
-        scenario "shows the case list" do
-          expect(page).to have_current_path(your_cases_investigations_path)
+        scenario "shows the authenticated home page" do
+          expect(page).to have_current_path(authenticated_root_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_text("Cases")
-          expect(page).to have_link("Create a case")
+          expect(page).to have_link("Your cases")
+          expect(page).to have_link("All cases")
+          expect(page).to have_link("Guidance")
+          expect(page).to have_link("How to use the PSD")
         end
       end
     end
@@ -112,11 +116,12 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
         context "when the user has previously viewed the introduction" do
           scenario "shows the non-OPSS home page" do
-            expect(page).to have_current_path(authenticated_msa_root_path)
+            expect(page).to have_current_path(authenticated_root_path)
             expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
             expect(page).to have_link("Your cases")
             expect(page).to have_link("All cases")
+            expect(page).to have_link("Guidance")
             expect(page).to have_link("How to use the PSD")
           end
         end

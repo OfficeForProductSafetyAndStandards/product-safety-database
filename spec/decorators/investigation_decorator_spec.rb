@@ -121,7 +121,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
   describe "#pretty_description" do
     it {
       expect(decorated_investigation.pretty_description)
-        .to eq("#{investigation.case_type.upcase_first}: #{investigation.pretty_id}")
+        .to eq("Case: #{investigation.pretty_id}")
     }
   end
 

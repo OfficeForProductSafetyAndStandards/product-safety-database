@@ -48,8 +48,8 @@ private
         investigation.pretty_id,
         entity.name,
         email,
-        "#{user.name} (#{user.team.name}) edited notifying country on the #{investigation.case_type}.",
-        "Notifying country edited for #{investigation.case_type.upcase_first}"
+        "#{user.name} (#{user.team.name}) edited notifying country on the case.",
+        "Notifying country edited for Case"
       ).deliver_later
     end
   end

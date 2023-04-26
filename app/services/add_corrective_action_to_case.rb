@@ -55,8 +55,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Corrective action was added to the #{investigation.case_type.upcase_first} by #{user.decorate.display_name(viewer: recipient)}.",
-        "#{investigation.case_type.upcase_first} updated"
+        "Corrective action was added to the Case by #{user.decorate.display_name(viewer: recipient)}.",
+        "Case updated"
       ).deliver_later
     end
   end

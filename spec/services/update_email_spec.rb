@@ -135,11 +135,11 @@ RSpec.describe UpdateEmail, :with_stubbed_opensearch, :with_stubbed_mailer, :wit
         # rubocop:enable RSpec/ExampleLength
 
         def expected_email_subject
-          "Email edited for Allegation"
+          "Email edited for Case"
         end
 
         def expected_email_body(name)
-          "#{name} edited an email on the allegation."
+          "#{name} edited an email on the case."
         end
 
         it_behaves_like "a service which notifies the case owner"

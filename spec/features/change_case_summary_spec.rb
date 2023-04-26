@@ -29,7 +29,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_text("Project summary updated")
+    expect(page).to have_text("Case summary updated")
   end
 
   scenario "user from other team cannot edit summary" do

@@ -95,7 +95,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def pretty_description
-    "#{case_type.upcase_first}: #{pretty_id}"
+    "Case: #{pretty_id}"
   end
 
   def created_by

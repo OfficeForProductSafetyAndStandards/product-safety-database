@@ -40,11 +40,11 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_opensearch, :with_stubbed_
 
     context "with required parameters" do
       def expected_email_subject
-        "Allegation updated"
+        "Case updated"
       end
 
       def expected_email_body(name)
-        "Risk assessment was added to the #{investigation.case_type} by #{name}."
+        "Risk assessment was added to the case by #{name}."
       end
 
       let(:assessment_date) { Time.zone.today }

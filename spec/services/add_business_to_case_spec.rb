@@ -15,7 +15,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     def expected_email_body(name)
-      "Business was added to the #{investigation.case_type} by #{name}."
+      "Business was added to the case by #{name}."
     end
 
     context "with no parameters" do

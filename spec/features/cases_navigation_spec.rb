@@ -6,6 +6,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
   before do
     sign_in user
+    click_on "Cases"
   end
 
   context "when there are no cases" do
