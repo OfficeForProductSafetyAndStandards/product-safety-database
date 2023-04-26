@@ -105,7 +105,8 @@ private
                      Case_Creator_Team
                      Notifying_Country
                      Reported_As
-                     Complainant_Reference]
+                     Complainant_Reference
+                     Case_Type]
   end
 
   def find_cases(ids)
@@ -146,7 +147,8 @@ private
       investigation.creator_user&.team&.name,
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
-      investigation.complainant_reference
+      investigation.complainant_reference,
+      investigation.case_type
     ]
   end
 
@@ -178,7 +180,8 @@ private
       investigation.creator_user&.team&.name,
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
-      "Restricted"
+      "Restricted",
+      investigation.case_type
     ]
   end
 end

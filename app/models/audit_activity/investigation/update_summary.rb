@@ -8,7 +8,7 @@ class AuditActivity::Investigation::UpdateSummary < AuditActivity::Investigation
   end
 
   def title(_viewer)
-    "#{investigation.case_type.upcase_first} summary updated"
+    "Case summary updated"
   end
 
   def new_summary

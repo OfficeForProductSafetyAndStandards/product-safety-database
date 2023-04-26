@@ -125,7 +125,7 @@ RSpec.feature "Validate risk level", :with_stubbed_opensearch, :with_stubbed_ant
       expect(delivered_email.personalization).to include(
         name: creator_user.team.name,
         case_title: investigation.user_title,
-        case_type: "project",
+        case_type: "case",
         case_id: investigation.pretty_id,
         updater_name: user.name,
         updater_team_name: user.team.name,

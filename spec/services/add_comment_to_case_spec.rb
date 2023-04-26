@@ -41,11 +41,11 @@ RSpec.describe AddCommentToCase, :with_stubbed_opensearch, :with_test_queue_adap
 
     context "with required parameters" do
       def expected_email_subject
-        "Allegation updated"
+        "Case updated"
       end
 
       def expected_email_body(name)
-        "#{name} commented on the allegation."
+        "#{name} commented on the case."
       end
 
       let(:assessment_date) { Time.zone.today }

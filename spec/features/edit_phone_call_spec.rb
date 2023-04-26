@@ -51,7 +51,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
 
     expect(page).to have_summary_item(key: "Transcript", value: "#{new_transcript.basename} (30 Bytes)")
 
-    click_on "Back to allegation: #{investigation.pretty_id}"
+    click_on "Back to case: #{investigation.pretty_id}"
 
     click_on "Activity"
 
@@ -89,7 +89,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     expect(page).to have_summary_item(key: "Transcript",   value: "#{new_transcript.basename} (30 Bytes)")
     expect(page).to have_summary_item(key: "Notes",        value: new_details)
 
-    click_on "Back to allegation: #{investigation.pretty_id}"
+    click_on "Back to case: #{investigation.pretty_id}"
     click_on "Activity"
 
     activity = correspondence.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")

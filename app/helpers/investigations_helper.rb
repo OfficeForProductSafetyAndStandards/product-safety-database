@@ -129,10 +129,9 @@ module InvestigationsHelper
         actions: case_name_actions(investigation, user)
       },
       {
-        key: { text: investigation.case_type.capitalize },
+        key: { text: "Case number" },
         value: {
           text: investigation.pretty_id,
-          secondary_text: { html: '<span class="govuk-visually-hidden"> - </span>Case number' }
         },
         actions: {}
       },

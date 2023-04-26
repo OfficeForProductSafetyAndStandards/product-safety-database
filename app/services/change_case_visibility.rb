@@ -68,7 +68,7 @@ private
   end
 
   def email_case_type
-    investigation.case_type.upcase_first
+    "Case"
   end
 
   def private?

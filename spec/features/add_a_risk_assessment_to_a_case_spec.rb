@@ -117,7 +117,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     expect(page).to have_text("new_risk_assessment.txt")
 
-    click_link "Back to allegation"
+    click_link "Back to case"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
@@ -196,7 +196,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     expect(page).to have_summary_item(key: "Assessed by", value: "OtherCouncil Trading Standards")
 
-    click_link "Back to allegation"
+    click_link "Back to case"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
@@ -257,7 +257,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     expect(page).to have_summary_item(key: "Assessed by", value: "MyBrand Inc")
 
-    click_link "Back to allegation"
+    click_link "Back to case"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
@@ -320,7 +320,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     expect(page).to have_summary_item(key: "Assessed by", value: "RiskAssessmentsRUs")
 
-    click_link "Back to allegation"
+    click_link "Back to case"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 

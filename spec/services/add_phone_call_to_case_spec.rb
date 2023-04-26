@@ -51,8 +51,8 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_opensearch, :with_stubbed_maile
         investigation.pretty_id,
         investigation.owner_team.name,
         investigation.owner_team.email,
-        "Phone call details added to the Allegation by #{user.decorate.display_name(viewer: user)}.",
-        "Allegation updated"
+        "Phone call details added to the Case by #{user.decorate.display_name(viewer: user)}.",
+        "Case updated"
       )
     end
   end

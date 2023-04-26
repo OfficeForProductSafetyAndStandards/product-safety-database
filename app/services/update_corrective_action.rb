@@ -112,8 +112,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited a corrective action on the #{investigation.case_type}.",
-        "Corrective action edited for #{investigation.case_type.upcase_first}"
+        "#{user.decorate.display_name(viewer: recipient)} edited a corrective action on the case.",
+        "Corrective action edited for Case"
       ).deliver_later
     end
   end

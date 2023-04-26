@@ -23,11 +23,11 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_opensearch, :with_stubbe
   end
 
   def expected_email_body(user, user_with_edit_access)
-    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{user&.decorate&.display_name(viewer: user_with_edit_access)}."
+    "Corrective action was added to the Case by #{user&.decorate&.display_name(viewer: user_with_edit_access)}."
   end
 
   def expected_email_subject
-    "#{investigation.case_type.upcase_first} updated"
+    "Case updated"
   end
 
   it "creates the corrective action", :aggregate_failures do

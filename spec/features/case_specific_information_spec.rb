@@ -88,7 +88,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         expect(page).to have_css("h3", text: "Case specific product information updated")
         expect(page).to have_content("Batch number: #{new_batch_numbers}")
 
-        expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation batch number updated"
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Case batch number updated"
       end
 
       it "allows editing of customs code" do
@@ -119,7 +119,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         expect(page).to have_css("h3", text: "Case specific product information updated")
         expect(page).to have_content("Customs code: #{new_customs_code}")
 
-        expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation customs code updated"
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Case customs code updated"
       end
 
       it "allows editing of units affected" do
@@ -162,7 +162,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
         expect(page).to have_content("Affected units status: exact")
         expect(page).to have_content("Number of affected units: 100")
 
-        expect(delivered_emails.last.personalization[:subject_text]).to eq "Allegation units affected updated"
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Case units affected updated"
       end
     end
 

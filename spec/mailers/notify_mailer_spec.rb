@@ -178,7 +178,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     let(:team_to_be_deleted) { create(:team, name: "Collaborator Team") }
     let(:edit_access_collaboration) { create(:collaboration_edit_access, collaborator: team_to_be_deleted) }
     let(:investigation) { edit_access_collaboration.investigation }
-    let(:case_type) { investigation.case_type.to_s.downcase }
+    let(:case_type) { "case" }
     let(:case_title) { investigation.decorate.title }
 
     context "with a message" do
@@ -220,7 +220,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
 
     let(:investigation) { create(:allegation, creator: user) }
-    let(:case_type) { investigation.case_type.to_s.downcase }
+    let(:case_type) { "case" }
     let(:case_title) { investigation.decorate.title }
     let(:user) { create(:user, :activated, name: "Bob Jones") }
     let(:team) { create(:team) }

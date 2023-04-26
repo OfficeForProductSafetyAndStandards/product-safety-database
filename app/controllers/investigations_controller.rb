@@ -27,22 +27,6 @@ class InvestigationsController < ApplicationController
     end
   end
 
-  # GET /cases/new
-  def new
-    return redirect_to new_ts_investigation_path unless current_user.is_opss?
-
-    case params[:type]
-    when "allegation"
-      redirect_to new_allegation_path
-    when "enquiry"
-      redirect_to new_enquiry_path
-    when "project"
-      redirect_to new_project_path
-    else
-      @nothing_selected = true if params[:commit].present?
-    end
-  end
-
   def created
     authorize @investigation, :view_non_protected_details?
   end
@@ -124,7 +108,7 @@ private
         format.html do
           redirect_to investigation_path(@investigation),
                       flash: {
-                        success: "#{@investigation.case_type.upcase_first} was successfully updated"
+                        success: "Case was successfully updated"
                       }
         end
         format.json { render :show, status: :ok, location: @investigation }
