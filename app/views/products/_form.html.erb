@@ -126,4 +126,4 @@
   hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. Do not include details of damage or incidents" }
 ) %>
 
-<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button" %>
+<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>
