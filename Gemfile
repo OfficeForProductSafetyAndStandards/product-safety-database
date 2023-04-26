@@ -81,7 +81,7 @@ group :test do
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.2"
-  gem "faker", "~> 3.1"
+  gem "faker", "~> 3.2"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.9"
