@@ -93,6 +93,12 @@ FactoryBot.define do
       end
     end
 
+    trait :super_user do
+      transient do
+        roles { %i[super_user] }
+      end
+    end
+
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
         create(:role, name: role, entity: user)

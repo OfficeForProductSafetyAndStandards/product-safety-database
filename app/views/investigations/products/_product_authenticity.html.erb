@@ -1,5 +1,5 @@
 <% if authenticity == "counterfeit" %>
-<span class="opss-tag opss-tag--risk2 opss-tag--lrg">Yes</span> <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text">This is a product record for a counterfeit product</span>                                    
+<span class="opss-tag opss-tag--risk2 opss-tag--lrg">Yes</span> <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= t("products.counterfeit") %></span>
 <% else %>
-No <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text">This product record is about a genuine product</span>
+No <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= t("products.genuine") %></span>
 <% end %>

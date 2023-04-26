@@ -11,13 +11,13 @@ class InvestigationPolicy < ApplicationPolicy
   def update?(user: @user)
     return false if record.is_closed?
 
-    record.teams_with_edit_access.include?(user.team)
+    record.teams_with_edit_access.include?(user.team) || user.has_role?(:super_user)
   end
 
   # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),
   # and whether or not it is 'restricted'.
   def change_owner_or_status?(user: @user)
-    record.owner.in_same_team_as?(user) || record.owner == user
+    record.owner.in_same_team_as?(user) || record.owner == user || user.has_role?(:super_user)
   end
 
   # Ability to add and remove other teams as collaborators, and to set their
@@ -26,11 +26,11 @@ class InvestigationPolicy < ApplicationPolicy
     return false if record.is_closed?
     return false if record.owner.nil?
 
-    @record.owner.in_same_team_as?(user)
+    @record.owner.in_same_team_as?(user) || user.has_role?(:super_user)
   end
 
   def can_unrestrict?(user: @user)
-    change_owner_or_status?(user:) && record.is_private?
+    change_owner_or_status?(user:) && record.is_private? || user.has_role?(:super_user)
   end
 
   # Ability to see most of the details of the case, with the exception of
@@ -39,11 +39,11 @@ class InvestigationPolicy < ApplicationPolicy
   def view_non_protected_details?(user: @user, private: @record.is_private)
     return true unless private
 
-    user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team)
+    user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team) || user.has_role?(:super_user)
   end
 
   def view_protected_details?(user: @user)
-    user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team)
+    user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team) || user.has_role?(:super_user)
   end
 
   def send_email_alert?(user: @user)
@@ -63,7 +63,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def change_notifying_country?(user: @user)
-    user.notifying_country_editor?
+    user.notifying_country_editor? || user.has_role?(:super_user)
   end
 
   def comment?
@@ -77,6 +77,6 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def view_notifying_country?(user: @user)
-    record.notifying_country.present? || user.is_opss?
+    record.notifying_country.present? || user.is_opss? || user.has_role?(:super_user)
   end
 end

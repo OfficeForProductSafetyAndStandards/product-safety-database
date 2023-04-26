@@ -194,7 +194,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (3.1.1)
+    faker (3.2.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.3)
       faraday-em_http (~> 1.0)
@@ -235,7 +235,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
@@ -330,7 +330,7 @@ GEM
     patience_diff (1.2.0)
       optimist (~> 3.0)
     pg (1.4.6)
-    pghero (3.3.1)
+    pghero (3.3.3)
       activerecord (>= 6)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -342,13 +342,13 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (5.0.1)
-    puma (6.2.1)
+    puma (6.2.2)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-test (2.1.0)
       rack (>= 1.3)
     rails (7.0.4.3)
@@ -498,17 +498,17 @@ GEM
       tilt
     scout_apm (5.3.3)
       parser
-    selenium-webdriver (4.8.6)
+    selenium-webdriver (4.9.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sentry-rails (5.8.0)
+    sentry-rails (5.9.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.8.0)
-    sentry-ruby (5.8.0)
+      sentry-ruby (~> 5.9.0)
+    sentry-ruby (5.9.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.8.0)
-      sentry-ruby (~> 5.8.0)
+    sentry-sidekiq (5.9.0)
+      sentry-ruby (~> 5.9.0)
       sidekiq (>= 3.0)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
@@ -643,7 +643,7 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
-  faker (~> 3.1)
+  faker (~> 3.2)
   govuk-design-system-rails (~> 0.10.3)
   govuk_notify_rails (~> 2.2)
   image_processing
@@ -667,7 +667,7 @@ DEPENDENCIES
   pry-doc (~> 1.4)
   puma (~> 6.2)
   pundit (~> 2.3)
-  rack (~> 2.2.6)
+  rack (~> 2.2.7)
   rails (~> 7.0.4)
   rails-controller-testing (~> 1.0)
   rails-erd
@@ -684,7 +684,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.15)
   sassc-rails
   scout_apm (~> 5.3)
-  selenium-webdriver (~> 4.8)
+  selenium-webdriver (~> 4.9)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
