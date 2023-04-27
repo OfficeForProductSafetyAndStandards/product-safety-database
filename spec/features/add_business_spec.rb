@@ -34,22 +34,14 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_error_summary("Please select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
+    expect(page).to have_unchecked_field("Online seller - via an online marketplace")
     expect(page).to have_unchecked_field("Manufacturer")
     expect(page).to have_unchecked_field("Exporter")
     expect(page).to have_unchecked_field("Importer")
     expect(page).to have_unchecked_field("Fulfillment house")
     expect(page).to have_unchecked_field("Distributor")
-    expect(page).to have_unchecked_field("Other")
 
-    choose "Other"
-    click_on "Continue"
-
-    expect_to_be_on_investigation_add_business_type_page
-    expect(page).to have_error_summary('Please enter a business type "Other"')
-
-    choose "Other" # This shouldn't need to be re-selected, but currently does.
-    fill_in "Other type", with: "Advertiser"
-
+    choose "Exporter"
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_details_page
@@ -109,13 +101,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_text("Business added")
 
     expect(page.find("h3", text: "Business added"))
-      .to have_sibling(".govuk-body", text: "Role: Advertiser")
+      .to have_sibling(".govuk-body", text: "Role: exporter")
 
     expect(page)
       .to have_link("View business", href: /\/businesses\/(\d)+/)
   end
 
-  scenario "Not being able to add a business to another team’s case" do
+  scenario "Not being able to add a business to another team's case" do
     sign_in other_user
     visit "/cases/#{investigation.pretty_id}/businesses"
     expect(page).not_to have_link("Add a business")
