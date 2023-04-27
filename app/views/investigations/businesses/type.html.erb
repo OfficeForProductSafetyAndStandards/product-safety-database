@@ -8,17 +8,23 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @business, local: true, url: wizard_path, method: :put) do |form| %>
-      <div class="govuk-form-group">
+<%= form_with(model: @business, url: wizard_path, method: :put) do |form| %>
+  <%= govukErrorSummary form: form %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @business&.errors[:type].present? %>">
         <fieldset class="govuk-fieldset" aria-describedby="type-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading"><%= t(".heading") %></h1>
           </legend>
           <div id="type-hint" class="govuk-hint govuk-!-margin-bottom-5"><%= t(".hint") %></div>
-
-          <%= govukErrorSummary form: form %>
+          <% if @business&.errors[:type].present? %>
+            <p id="type-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> Select a business type
+            </p>
+          <% end %>
+          <%= form.hidden_field :type, value: "" %>
 
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
@@ -64,8 +70,7 @@
           </div>
         </fieldset>
       </div>
-
-      <%= form.submit "Continue", class: "govuk-button" %>
-    <% end %>
+    </div>
   </div>
-</div>
+  <%= form.submit "Continue", class: "govuk-button" %>
+<% end %>
