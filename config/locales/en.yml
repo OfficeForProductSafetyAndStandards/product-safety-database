@@ -418,9 +418,7 @@ en:
         add_business_to_case_form:
           attributes:
             relationship:
-              inclusion: "Please select a business type"
-            other_relationship:
-              blank: "Please enter a business type \"Other\""
+              inclusion: Select a business type
 
         remove_business_form:
           attributes:
