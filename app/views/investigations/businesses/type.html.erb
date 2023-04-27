@@ -8,37 +8,64 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(model: @business, local: true, url: wizard_path, method: :put) do |form| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= govukErrorSummary form: form %>
-      <%= render "investigation_heading", investigation: @investigation %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @business, local: true, url: wizard_path, method: :put) do |form| %>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="type-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading"><%= t(".heading") %></h1>
+          </legend>
+          <div id="type-hint" class="govuk-hint govuk-!-margin-bottom-5"><%= t(".hint") %></div>
 
-      <h2 class="govuk-heading-m">Add business</h2>
+          <%= govukErrorSummary form: form %>
 
-      <%- other = capture do %>
-        <%= govukInput(
-          key: :type_other,
-          form: form,
-          classes: "govuk-!-width-one-third",
-          label: { text: "Other type", classes: "govuk-visually-hidden" }
-        ) %>
-      <% end %>
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "retailer", id: "business_type_retailer", class: "govuk-radios__input", aria: { describedby: "business_type_retailer-hint" } %>
+              <%= form.label :type_retailer, t(".types.retailer.label"), class: "govuk-label govuk-radios__label", for: "business_type_retailer" %>
+              <div id="business_type_retailer-hint" class="govuk-hint govuk-radios__hint govuk-!-font-size-16" aria-live="assertive">
+                <%= t(".types.retailer.hint")%>
+              </div>
+            </div>
 
-      <%= govukRadios(
-        form: form,
-        key: :type,
-        fieldset: { legend: { text: "Select business type", classes: "govuk-fieldset__legend--m" } },
-        items: [{ text: "Retailer", value: "retailer" },
-               { text: "Manufacturer", value: "manufacturer" },
-               { text: "Exporter", value: "exporter" },
-               { text: "Importer", value: "importer" },
-               { text: "Fulfillment house", value: "fulfillment_house" },
-               { text: "Distributor", value: "distributor" },
-               { text: "Other", value: "other", conditional: { html: other } }]
-      ) %>
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "online_marketplace", id: "business_type_online", class: "govuk-radios__input", aria: { describedby: "business_type_online-hint" } %>
+              <%= form.label :type_online_2, t(".types.online_marketplace.label"), class: "govuk-label govuk-radios__label", for: "business_type_online" %>
+              <div id="business_type_online-hint" class="govuk-hint govuk-radios__hint govuk-!-font-size-16" aria-live="assertive">
+                <%= t(".types.online_marketplace.hint") %>
+              </div>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "manufacturer", id: "business_type_manufacturer", class: "govuk-radios__input" %>
+              <%= form.label :type_manufacturer, t(".types.manufacturer.label"), class: "govuk-label govuk-radios__label", for: "business_type_manufacturer" %>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "exporter", id: "business_type_exporter", class: "govuk-radios__input" %>
+              <%= form.label :type_exporter, t(".types.exporter.label"), class: "govuk-label govuk-radios__label", for: "business_type_exporter" %>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "importer", id: "business_type_importer", class: "govuk-radios__input" %>
+              <%= form.label :type_exporter, t(".types.importer.label"), class: "govuk-label govuk-radios__label", for: "business_type_importer" %>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "fulfillment_house", id: "business_type_fulfillment_house", class: "govuk-radios__input" %>
+              <%= form.label :type_fulfillment_house, t(".types.fulfillment_house.label"), class: "govuk-label govuk-radios__label", for: "business_type_fulfillment_house" %>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "distributor", id: "business_type_distributor", class: "govuk-radios__input" %>
+              <%= form.label :type_distributor, t(".types.distributor.label"), class: "govuk-label govuk-radios__label", for: "business_type_distributor" %>
+            </div>
+          </div>
+        </fieldset>
+      </div>
 
       <%= form.submit "Continue", class: "govuk-button" %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>
