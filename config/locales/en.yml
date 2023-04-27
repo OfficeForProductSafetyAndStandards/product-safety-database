@@ -142,7 +142,7 @@ en:
           importer:
             label: Importer
           fulfillment_house:
-            label: Fulfilment house
+            label: Fulfillment house
           distributor:
             label: Distributor
 
