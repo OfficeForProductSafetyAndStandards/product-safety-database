@@ -2,15 +2,14 @@
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.pretty_description.downcase}",
-    href: previous_wizard_path
+    href: new_investigation_business_types_path(@investigation)
   ) %>
 <% end %>
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with(model: @business,
-              url: wizard_path,
-              method: :put,
+              url: investigation_businesses_path(@investigation),
               local: true,
               html: { autocomplete: :off }) do |form| %>
   <div class="govuk-grid-row">
