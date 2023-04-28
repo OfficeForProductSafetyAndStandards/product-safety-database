@@ -163,8 +163,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :businesses, only: %i[index update show new create destroy], controller: "investigations/businesses" do
-      member { get :remove }
+    resource :business_types, controller: "investigations/business_types", path: "businesses/with-type", only: %i[new create]
+    resources :businesses, controller: "investigations/businesses" do
+      member do
+        get :remove
+      end
     end
 
     resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"

@@ -8,7 +8,7 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(model: @business, url: wizard_path, method: :put) do |form| %>
+<%= form_with(model: @business, url: investigation_business_types_path(investigation_pretty_id: @investigation.pretty_id)) do |form| %>
   <%= govukErrorSummary form: form %>
 
   <div class="govuk-grid-row">

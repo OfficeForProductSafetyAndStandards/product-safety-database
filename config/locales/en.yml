@@ -125,7 +125,8 @@ en:
         no_label: "No"
         reason_for_removing_the_business_from_the_case: "Reason for removing the business from the case"
         cancel: "Cancel"
-      type:
+    business_types:
+      new:
         heading: What is the business type?
         hint: What is the business role as an economic operator in the supply chain?
         types:
