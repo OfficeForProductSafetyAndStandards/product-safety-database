@@ -420,6 +420,11 @@ en:
           attributes:
             relationship:
               inclusion: Select a business type
+        set_business_type_on_case_form:
+          attributes:
+            type:
+              blank: Select a business type
+              inclusion: Select a business type
 
         remove_business_form:
           attributes:

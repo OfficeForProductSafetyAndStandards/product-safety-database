@@ -2,13 +2,17 @@ class Investigations::BusinessTypesController < ApplicationController
   before_action :set_investigation
 
   def new
-    clear_session
-    @business = Business.new
+    @business_type_form = SetBusinessTypeOnCaseForm.new
   end
 
   def create
-    session[:business_type] = business_request_params[:type]
-    redirect_to new_investigation_business_path(@investigation)
+    @business_type_form = SetBusinessTypeOnCaseForm.new(business_request_params)
+    if @business_type_form.valid?
+      session[:business_type] = @business_type_form.type
+      redirect_to new_investigation_business_path(@investigation)
+    else
+      render :new
+    end
   end
 
 private
@@ -19,11 +23,7 @@ private
     @investigation = investigation.decorate
   end
 
-  def clear_session
-    session.delete(:business_type)
-  end
-
   def business_request_params
-    params.require(:business).permit(:type)
+    params.require(:set_business_type_on_case_form).permit(:type)
   end
 end
