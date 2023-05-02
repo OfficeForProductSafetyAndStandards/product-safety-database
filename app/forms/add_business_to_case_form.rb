@@ -18,10 +18,6 @@ class AddBusinessToCaseForm
 
   validates :current_user, :trading_name, presence: true
 
-  def valid?
-    super && !contacts_have_errors? && !locations_have_errors?
-  end
-
   def business_object
     object = Business.new(
       legal_name:,
@@ -42,46 +38,32 @@ class AddBusinessToCaseForm
     contacts.first
   end
 
-# private
+private
 
   def new_location
-    location = Location.new(locations_attributes["0"])
+    location = Location.new(location_attrs)
     location.name = "Registered office address"
     location.added_by_user = current_user
     location
   end
 
   def new_contact
-    Contact.new(contacts_attributes["0"])
+    Contact.new(contact_attrs)
   end
 
   def given_location?
-    location = locations_attributes["0"]
-    location[:address_line_1].present? ||
-      location[:address_line_2].present? ||
-      location[:city].present? ||
-      location[:county].present? ||
-      location[:country].present? ||
-      location[:postal_code].present?
+    location_attrs.values.any?(&:present?)
   end
 
   def given_contact?
-    contact = contacts_attributes["0"]
-    contact[:name].present? ||
-      contact[:email].present? ||
-      contact[:phone_number].present? ||
-      contact[:job_title].present?
+    contact_attrs.values.any?(&:present?)
   end
 
-  def contacts_have_errors?
-    return false unless given_contact?
-
-    new_contact.errors.any?
+  def location_attrs
+    locations_attributes["0"]
   end
 
-  def locations_have_errors?
-    return false unless given_location?
-
-    new_location.errors.any?
+  def contact_attrs
+    contacts_attributes["0"]
   end
 end
