@@ -125,6 +125,9 @@ en:
         no_label: "No"
         reason_for_removing_the_business_from_the_case: "Reason for removing the business from the case"
         cancel: "Cancel"
+      remove:
+        remove_business_warning_html: Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
+      empty: This case has not added any businesses.
     business_types:
       new:
         heading: What is the business type?
@@ -147,9 +150,6 @@ en:
           distributor:
             label: Distributor
 
-      remove:
-        remove_business_warning_html: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>."
-      empty: "This case has not added any businesses."
 
     tabs:
       businesses:

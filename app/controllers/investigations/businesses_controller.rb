@@ -6,7 +6,6 @@ class Investigations::BusinessesController < ApplicationController
   before_action :set_investigation_business, except: %i[destroy remove]
   before_action :authorize_user_for_business_updates, except: %i[index new remove destroy]
   before_action :set_countries, only: %i[new create show update]
-  before_action :set_business_location_and_contact, only: %i[new create show update]
 
   def index
     @breadcrumbs = {
@@ -18,17 +17,29 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def new
+    @business_form = AddBusinessToCaseForm.new(current_user:)
   end
 
   def create
-    # @business = Business.new(business_params)
-    AddBusinessToCase.call!(
-      business: @business,
-      relationship: session[:type],
-      investigation: @investigation,
-      user: current_user
-    )
-    redirect_to_investigation_businesses_tab success: "The business was created"
+    @business_form = AddBusinessToCaseForm.new(business_form_params.merge(current_user:, relationship: session[:business_type]))
+
+    if @business_form.valid?
+      @business = @business_form.business_object
+
+      if @business.save
+        AddBusinessToCase.call!(
+          business: @business,
+          relationship: @business_form.relationship,
+          investigation: @investigation,
+          user: current_user
+        )
+        redirect_to_investigation_businesses_tab success: "The business was created"
+      else
+        render :new
+      end
+    else
+      render :new
+    end
   end
 
   def show
@@ -45,39 +56,32 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def remove
-    @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
-    authorize @investigation, :view_non_protected_details?
     @business = Business.find(params[:id])
     @remove_business_form = RemoveBusinessForm.new
   end
 
   def destroy
-  #   investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-  #   authorize investigation, :view_non_protected_details?
+    @business = @investigation.businesses.find(params[:id])
+    @remove_business_form = RemoveBusinessForm.new(remove_business_params)
 
-  #   @business             = investigation.businesses.find(params[:id])
-  #   @remove_business_form = RemoveBusinessForm.new(remove_business_params)
+    if @remove_business_form.invalid?
+      return render :remove
+    end
 
-  #   if @remove_business_form.invalid?
-  #     @investigation = investigation.decorate
-  #     return render :remove
-  #   end
+    return redirect_to investigation_businesses_path(@investigation, @business) unless @remove_business_form.remove?
 
-  #   return redirect_to investigation_businesses_path(investigation, @business) unless @remove_business_form.remove?
+    result = RemoveBusinessFromCase.call!(
+      reason: @remove_business_form.reason,
+      investigation: @investigation.object,
+      business: @business,
+      user: current_user
+    )
 
-  #   result = RemoveBusinessFromCase.call!(
-  #     reason: @remove_business_form.reason,
-  #     investigation:,
-  #     business: @business,
-  #     user: current_user
-  #   )
-
-  #   if result.success?
-  #     redirect_to investigation_businesses_path(investigation, @business), flash: { success: t(".business_successfully_deleted") }
-  #   else
-  #     @investigation = investigation.decorate
-  #     render :remove
-  #   end
+    if result.success?
+      redirect_to investigation_businesses_path(@investigation, @business), flash: { success: t(".business_successfully_deleted") }
+    else
+      render :remove
+    end
   end
 
 private
@@ -92,27 +96,27 @@ private
     authorize @investigation, :update?
   end
 
-#   def create!
-#     if @business.valid?
-#     else
-#       render_wizard
-#     end
-#   end
-
   def set_investigation_business
     @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)
   end
 
-  def set_business_location_and_contact
-    @business = Business.new
-    @business.locations.build unless @business.primary_location
-    @business.contacts.build unless @business.primary_contact
-    defaults_on_primary_location @business
+  def business_form_params
+    params.require(:add_business_to_case_form).permit(
+      :legal_name,
+      :trading_name,
+      :company_number,
+      locations_attributes: %i[id name address_line_1 address_line_2 phone_number city county country postal_code],
+      contacts_attributes: %i[id name email phone_number job_title]
+    )
   end
 
-  # def redirect_to_investigation_businesses_tab(flash)
-  #   redirect_to investigation_businesses_path(@investigation), flash:
+  # def location_params
+  #   business_form_params[:locations_attributes]["0"]
   # end
+
+  def redirect_to_investigation_businesses_tab(flash)
+    redirect_to investigation_businesses_path(@investigation), flash:
+  end
 
   def remove_business_params
     params.require(:remove_business_form).permit(:remove, :reason)

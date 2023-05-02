@@ -1,4 +1,4 @@
-<%= page_title "Add business to case", errors: @business.errors.any? %>
+<%= page_title "Add business to case", errors: @business_form.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.pretty_description.downcase}",
@@ -8,17 +8,17 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(model: @business,
+<%= form_with(model: @business_form,
               url: investigation_businesses_path(@investigation),
               local: true,
               html: { autocomplete: :off }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary @business.errors %>
+      <%= error_summary @business_form.errors %>
       <%= render "investigation_heading", investigation: @investigation %>
 
       <h2 class="govuk-heading-m">Add business</h2>
-      <%= render "businesses/form", form: form, business: @business, countries: @countries %>
+      <%= render "businesses/form", form: form, business: @business_form, countries: @countries %>
     </div>
   </div>
 <% end %>
