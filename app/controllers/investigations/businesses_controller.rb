@@ -110,10 +110,6 @@ private
     )
   end
 
-  # def location_params
-  #   business_form_params[:locations_attributes]["0"]
-  # end
-
   def redirect_to_investigation_businesses_tab(flash)
     redirect_to investigation_businesses_path(@investigation), flash:
   end
