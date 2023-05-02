@@ -31,4 +31,4 @@
   <%= render "contacts/form", form: ff, legend: { text: "The business contact", classes: "govuk-fieldset__legend--m" } %>
 <% end %>
 
-<%= form.submit local_assigns[:submit_text] || "Save business", class: "govuk-button" %>
+<%= form.submit local_assigns[:submit_text] || "Save business", class: "govuk-button", data: { cy: "save" } %>
