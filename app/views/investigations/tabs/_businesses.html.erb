@@ -34,7 +34,7 @@
         Business type
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= @investigation.investigation_businesses.find_by(business_id: business.id).relationship.capitalize %>
+        <%= @investigation.investigation_businesses.find_by(business_id: business.id).relationship&.humanize %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
