@@ -1,0 +1,34 @@
+<h4 class="govuk-heading-s">Case details</h4>
+
+<% if activity.metadata['investigation']['coronavirus_related'] %>
+  <p class="govuk-body">
+    <%= t("audit_activity.investigation.coronavirus_related") %>
+  </p>
+<% end %>
+
+<% if activity.metadata['investigation']['product_category'] %>
+  <p class="govuk-body">
+    Product category: <strong><%= activity.metadata['investigation']['product_category'] %></strong>
+  </p>
+<% end %>
+
+<% if activity.metadata['investigation']['hazard_type'] %>
+  <p class="govuk-body">
+    Hazard type: <strong><%= activity.metadata['investigation']['hazard_type'] %></strong>
+  </p>
+<% end %>
+
+<% if activity.metadata['attachment'] %>
+  <p class="govuk-body">
+    Attachment: <strong><%= activity.metadata['attachment']['filename'] %></strong>
+  </p>
+<% end %>
+
+<% if activity.metadata['investigation']['description'] %>
+  <p class="govuk-body">
+    <%= activity.metadata['investigation']['description'] %>
+  </p>
+<% end %>
+
+<%= render "investigations/activities/investigation/complainant", activity: activity, complainant: activity.complainant if activity.complainant %>
+<%= render "investigations/activities/investigation/owner", owner: activity.owner if activity.owner %>
