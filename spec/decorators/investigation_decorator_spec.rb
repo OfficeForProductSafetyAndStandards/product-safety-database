@@ -272,7 +272,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
       it { expect(case_title_key).to eq("Case restricted") }
     end
 
-    context 'with restricted case as a super user' do
+    context "with restricted case as a super user" do
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
       let(:viewing_user) { create(:user, :super_user) }
 
