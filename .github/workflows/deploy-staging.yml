@@ -1,0 +1,122 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install cf client
+      env:
+        CF_CLI_VERSION: v7
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/bin
+        curl -A "" -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+        echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+    - name: Create GitHub deployment for Staging
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: develop
+      run: |
+        source deploy-github-functions.sh
+        gh_deploy_create staging
+
+    - name: Initiate Staging deployment status
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source deploy-github-functions.sh
+
+        # URL where the deployment progress can be tracked. Exported for future steps.
+        log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/actions?query=branch%3Adevelop+workflow%3ADeployStaging")
+        echo "LOG_URL=$log_url" >> $GITHUB_ENV
+
+        gh_deploy_initiate staging $log_url
+
+    - name: Deploy to staging
+      env:
+        SPACE: staging
+        APP_NAME: psd-web
+        DOMAIN: staging.product-safety-database.service.gov.uk
+        WEB_DISK_QUOTA: 2.5G
+        WORKER_DISK_QUOTA: 2.5G
+        WEB_MEMORY: 2G
+        WORKER_MEMORY: 1G
+        WEB_INSTANCES: 1
+        WORKER_INSTANCES: 1
+        WEB_MAX_THREADS: 5
+        WORKER_MAX_THREADS: 10
+        CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
+        CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+        SENTRY_SERVICE_NAME: psd-staging-sentry-env
+      run: |
+        cf api api.london.cloud.service.gov.uk
+        cf auth
+        cf target -o 'beis-opss' -s $SPACE
+        chmod +x ./deploy.sh
+        ./deploy.sh
+        cf logout
+
+    - name: Update Staging deployment status (success)
+      if: success()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source deploy-github-functions.sh
+        environment_url=https://staging.product-safety-database.service.gov.uk/
+        gh_deploy_success staging $LOG_URL $environment_url
+
+    - name: Update Staging deployment status (failure)
+      if: failure()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source deploy-github-functions.sh
+        gh_deploy_failure staging $LOG_URL
+
+    - name: Set up Ruby
+      if: success()
+      uses: ruby/setup-ruby@v1
+
+    - uses: actions/cache@v3
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Install RubyGems
+      if: success()
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --without development --jobs=4 --retry=3
+
+    - name: Run Smoke Tests
+      if: success()
+      env:
+        SMOKE_USER: ${{secrets.SMOKE_USER}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
+        SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
+        SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
+        SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
+        IS_REVIEW_APP: "false"
+        SMOKE_TEST_URL: "https://staging.product-safety-database.service.gov.uk"
+
+      run: |
+        bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
+
+    - name: Alert team via Slack of deployment failure
+      if: failure()
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
+      run: |
+        curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"Deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK
