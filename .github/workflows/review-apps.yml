@@ -7,7 +7,7 @@ env:
 
 jobs:
   reviewapp:
-    name: Deploy
+    name: Deploy Review App
     runs-on: ubuntu-latest
     # Skip if it is a Dependabot created PR.
     # For security reasons they do not have write permissions to deploy or access to secrets.
