@@ -4,33 +4,9 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: core-js
-    versions:
-    - 3.11.0
+  open-pull-requests-limit: 5
 - package-ecosystem: bundler
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: mimemagic
-    versions:
-    - 0.3.7
-    - 0.3.8
-  - dependency-name: webmock
-    versions:
-    - 3.11.3
-  - dependency-name: rails
-    versions:
-    - 6.1.2
-  - dependency-name: aws-sdk-s3
-    versions:
-    - 1.88.0
-  - dependency-name: database_cleaner
-    versions:
-    - 1.99.0
-  - dependency-name: capybara
-    versions:
-    - 3.35.2
+  open-pull-requests-limit: 5
