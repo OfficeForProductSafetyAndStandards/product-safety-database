@@ -73,7 +73,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
 
       fill_and_submit_change_owner_reason_form
 
-      expect_confirmation_banner("Allegation owner changed to #{another_active_user.name}")
+      expect_confirmation_banner("Case owner changed to #{another_active_user.name}")
       expect_page_to_show_case_owner(another_active_user)
       expect_activity_page_to_show_case_owner_changed_to(another_active_user)
     end
@@ -84,7 +84,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
 
       fill_and_submit_change_owner_reason_form
 
-      expect_confirmation_banner("Allegation owner changed to #{user.team.name}")
+      expect_confirmation_banner("Case owner changed to #{user.team.name}")
       expect_page_to_show_case_owner(user.team)
       expect_activity_page_to_show_case_owner_changed_to(user.team)
     end

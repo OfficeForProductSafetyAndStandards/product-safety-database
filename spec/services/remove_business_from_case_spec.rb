@@ -16,11 +16,11 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
   describe "#call" do
     context "with stubbed opensearch" do
       def expected_email_subject
-        "Allegation updated"
+        "Case updated"
       end
 
       def expected_email_body(name)
-        "Business was removed from the allegation by #{name}."
+        "Business was removed from the case by #{name}."
       end
 
       context "when no supporting informations are attached to the business" do

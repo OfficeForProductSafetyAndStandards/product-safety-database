@@ -134,7 +134,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
         expect(last_added_activity.added_by_user_id).to eql(user.id)
         expect(last_added_activity.metadata).to be_present
 
-        expect(last_added_activity.decorate.title(nil)).to eql("Testing team added to allegation")
+        expect(last_added_activity.decorate.title(nil)).to eql("Testing team added to case")
       end
 
       context "when the team has already been added to the case" do

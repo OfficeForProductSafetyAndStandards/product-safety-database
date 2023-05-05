@@ -85,7 +85,7 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       expect(page).to have_text("This product record has been added to 1 case")
 
       within ".capy-cases" do
-        expect(page).to have_css("dt", text: "Allegation restricted")
+        expect(page).to have_css("dt", text: "Case restricted")
         expect(page).not_to have_css("dd", text: investigation.pretty_id)
         expect(page).not_to have_css("dd", text: investigation.owner_team.name)
       end

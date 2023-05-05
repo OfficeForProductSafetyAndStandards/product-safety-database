@@ -7,6 +7,7 @@ if Rails.env.production?
       ActiveSupport::SecurityUtils.secure_compare(password, ENV["SIDEKIQ_PASSWORD"])
   end
 end
+
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
@@ -75,22 +76,13 @@ Rails.application.routes.draw do
 
   resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
 
-  resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
-  resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
-  resources :project, controller: "investigations/project", only: %i[show new create update]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
   scope :investigation, path: "", as: :investigation do
-    resources :allegation,       only: [], concerns: %i[document_attachable]
-    resources :enquiry,          only: [], concerns: %i[document_attachable]
-    resources :project,          only: [], concerns: %i[document_attachable]
     resources :ts_investigation, only: [], concerns: %i[document_attachable]
   end
 
   scope :investigation, path: "", module: "investigations", as: :investigation do
-    resources :enquiry,          controller: "enquiry",           only: %i[show new create update]
-    resources :allegation,       controller: "allegation",        only: %i[show new create update]
-    resources :project,          controller: "project",           only: %i[show new create update]
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 
@@ -103,9 +95,11 @@ Rails.application.routes.draw do
     get "all-cases", to: "investigations#index"
   end
 
+  get "cases/new", to: "ts_investigations#new"
+
   resources :investigations,
             path: "cases",
-            only: %i[show new index destroy],
+            only: %i[show index destroy],
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
@@ -224,6 +218,17 @@ Rails.application.routes.draw do
     member do
       get :owner
     end
+
+    collection do
+      get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
+      post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
+    end
+
+    resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
+      member do
+        post :confirm
+      end
+    end
   end
 
   resource :businesses, only: [], path: "businesses" do
@@ -282,12 +287,9 @@ Rails.application.routes.draw do
   match "/503", to: "errors#timeout", via: :all
 
   mount PgHero::Engine, at: "pghero"
-  authenticated :user, ->(user) { user.is_opss? } do
-    root to: redirect("/cases/your-cases"), as: "authenticated_opss_root"
-  end
 
-  authenticated :user, ->(user) { !user.is_opss? } do
-    root to: "homepage#non_opss", as: "authenticated_msa_root"
+  authenticated :user do
+    root to: "homepage#authenticated", as: "authenticated_root"
   end
 
   unauthenticated do

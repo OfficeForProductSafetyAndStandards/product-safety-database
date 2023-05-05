@@ -87,11 +87,11 @@ class ProductDecorator < ApplicationDecorator
 
   def counterfeit_row_value
     if product.counterfeit?
-      return { html: "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe, secondary_text: { text: "This is a product record for a counterfeit product" } }
+      return { html: "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe, secondary_text: { text: counterfeit_explanation } }
     end
 
     if product.genuine?
-      return { text: "No", secondary_text: { text: "This product record is about a genuine product" } }
+      return { text: "No", secondary_text: { text: counterfeit_explanation } }
     end
 
     { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }
@@ -101,6 +101,12 @@ class ProductDecorator < ApplicationDecorator
     return "Unsure" if product.unsure?
 
     product.counterfeit? ? "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe : "No"
+  end
+
+  def counterfeit_explanation
+    return if product.unsure?
+
+    product.counterfeit? ? I18n.t("products.counterfeit") : I18n.t("products.genuine")
   end
 
   def owning_team_link

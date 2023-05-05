@@ -85,7 +85,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_text("Southampton Trading Standards added to allegation")
+    expect(page).to have_text("Southampton Trading Standards added to case")
     expect(page).to have_text("Team added by Bob Jones")
     expect(page).to have_text("Permission level given: edit full case.")
     expect(page).to have_text("Thanks for collaborating on this case with us.")

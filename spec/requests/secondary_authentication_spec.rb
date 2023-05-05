@@ -65,7 +65,7 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
     context "with correct otp" do
       it "redirects to the main page" do
         submit_2fa
-        expect(response).to redirect_to(authenticated_msa_root_path)
+        expect(response).to redirect_to(authenticated_root_path)
       end
 
       it "user is signed in" do

@@ -47,7 +47,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def case_title_key
-    object.is_private? ? "#{case_type.upcase_first} restricted" : h.link_to(title, h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
+    object.is_private? ? "Case restricted" : h.link_to(title, h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
   end
 
   def case_summary_values
@@ -95,7 +95,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def pretty_description
-    "#{case_type.upcase_first}: #{pretty_id}"
+    "Case: #{pretty_id}"
   end
 
   def created_by

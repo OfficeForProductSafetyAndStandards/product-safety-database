@@ -140,11 +140,11 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
         end
 
         def expected_email_subject
-          "Corrective action edited for Allegation"
+          "Corrective action edited for Case"
         end
 
         def expected_email_body(name)
-          "#{name} edited a corrective action on the allegation."
+          "#{name} edited a corrective action on the case."
         end
 
         it_behaves_like "a service which notifies the case owner"

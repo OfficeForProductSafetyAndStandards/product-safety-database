@@ -40,7 +40,7 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Business was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
+        "Business was added to the case by #{user.decorate.display_name(viewer: recipient)}.",
         "Business added"
       ).deliver_later
     end

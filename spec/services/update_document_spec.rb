@@ -145,11 +145,11 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
           let(:last_added_activity) { investigation.activities.order(:id).first }
 
           def expected_email_subject
-            "Allegation updated"
+            "Case updated"
           end
 
           def expected_email_body(name)
-            "Document attached to the #{investigation.case_type.upcase_first} was updated by #{name}."
+            "Document attached to the Case was updated by #{name}."
           end
 
           it "adds an audit activity record", :aggregate_failures do

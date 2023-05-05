@@ -56,11 +56,11 @@ RSpec.describe ChangeCaseStatus, :with_stubbed_opensearch, :with_test_queue_adap
 
     context "when the previous status and the new status are different" do
       def expected_email_subject
-        "Enquiry was closed"
+        "Case was closed"
       end
 
       def expected_email_body(name)
-        "Enquiry was closed by #{name}. Email notifications about edits made to cases are not sent when edits are made to closed cases."
+        "Case was closed by #{name}. Email notifications about edits made to cases are not sent when edits are made to closed cases."
       end
 
       it "succeeds" do

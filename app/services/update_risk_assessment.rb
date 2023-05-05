@@ -77,8 +77,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited a risk assessment on the #{investigation.case_type}.",
-        "Risk assessment edited for #{investigation.case_type.upcase_first}"
+        "#{user.decorate.display_name(viewer: recipient)} edited a risk assessment on the case.",
+        "Risk assessment edited for Case"
       ).deliver_later
     end
   end

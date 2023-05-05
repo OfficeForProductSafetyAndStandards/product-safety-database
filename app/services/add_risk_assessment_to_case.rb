@@ -53,8 +53,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Risk assessment was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
-        "#{investigation.case_type.upcase_first} updated"
+        "Risk assessment was added to the case by #{user.decorate.display_name(viewer: recipient)}.",
+        "Case updated"
       ).deliver_later
     end
   end

@@ -6,7 +6,7 @@ class AuditActivity::Investigation::AutomaticallyUpdateOwner < AuditActivity::In
   end
 
   def title(user)
-    type = investigation.case_type.capitalize
+    type = "Case"
     new_owner = owner.decorate.display_name(viewer: user)
     "Case owner automatically changed on #{type} to #{new_owner}"
   end

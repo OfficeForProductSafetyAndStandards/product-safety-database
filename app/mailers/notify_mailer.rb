@@ -171,7 +171,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: investigation.case_type.to_s.downcase,
+      case_type: "case",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
@@ -184,7 +184,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
   def risk_validation_updated(email:, updater:, investigation:, action:, name:)
     set_template(TEMPLATES[:risk_validation_updated])
     set_personalisation(
-      case_type: investigation.case_type.to_s.downcase,
+      case_type: "case",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: updater.name,
@@ -216,7 +216,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: investigation.case_type.to_s.downcase,
+      case_type: "case",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
@@ -237,7 +237,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_personalisation(
       verb_with_level:,
       name:,
-      case_type: investigation.case_type.to_s.downcase,
+      case_type: "case",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       investigation_url: investigation_url(pretty_id: investigation.pretty_id)
