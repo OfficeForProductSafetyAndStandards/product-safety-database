@@ -245,6 +245,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    foreman (0.87.2)
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
@@ -702,6 +703,7 @@ DEPENDENCIES
   draper (~> 4.0)
   factory_bot_rails (~> 6.4)
   faker (~> 3.2)
+  foreman (~> 0.87)
   govuk-components (~> 5.0)
   govuk-design-system-rails (~> 0.10.5)!
   govuk_design_system_formbuilder (~> 5.0)
