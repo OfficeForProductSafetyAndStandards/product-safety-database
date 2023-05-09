@@ -36,10 +36,10 @@ jobs:
         source deploy-github-functions.sh
 
         # URL where the deployment progress can be tracked. Exported for future steps.
-        log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/actions?query=branch%3Amain+workflow%3ADeploy+Production
+        log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/actions?query=branch%3Amain+workflow%3ADeploy+Production")
         echo "LOG_URL=$log_url" >> $GITHUB_ENV
 
-        gh_deploy_initiate staging $log_url
+        gh_deploy_initiate production $log_url
 
     - name: Deploy to production
       if: success()
