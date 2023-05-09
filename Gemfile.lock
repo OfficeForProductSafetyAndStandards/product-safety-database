@@ -220,6 +220,7 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
+    foreman (0.87.2)
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
@@ -307,6 +308,8 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.9)
+    nokogiri (1.14.3-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.14.3-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.14.3-x86_64-darwin)
@@ -615,6 +618,7 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin-22
   x86_64-darwin-20
   x86_64-darwin-21
@@ -644,6 +648,7 @@ DEPENDENCIES
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
+  foreman (~> 0.87)
   govuk-design-system-rails (~> 0.10.3)
   govuk_notify_rails (~> 2.2)
   image_processing
