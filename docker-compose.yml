@@ -41,7 +41,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
-    command: bin/rails s -p 3000 -b 0.0.0.0
+    command: ./docker/start.sh
     ports:
       - "3000:3000"
     volumes:
@@ -59,8 +59,8 @@ services:
   worker:
     build:
       context: .
-      dockerfile: ./docker/worker/Dockerfile
-    command: bin/sidekiq -C config/sidekiq.yml
+      dockerfile: ./docker/web/Dockerfile
+    command: bundle exec sidekiq -C config/sidekiq.yml
     env_file:
       - ./docker/env.psd
     volumes:
