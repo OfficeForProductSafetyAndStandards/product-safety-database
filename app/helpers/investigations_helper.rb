@@ -213,8 +213,6 @@ module InvestigationsHelper
     ]
     rows.flatten!
 
-    rows.insert(7, notifying_country_section(investigation, user)) if policy(investigation).view_notifying_country?(user:)
-
     if investigation.coronavirus_related
       rows << {
         key: { text: "COVID-19" },
@@ -226,6 +224,8 @@ module InvestigationsHelper
         }
       }
     end
+
+    rows << notifying_country_section(investigation, user) if policy(investigation).view_notifying_country?(user:)
 
     rows
   end
