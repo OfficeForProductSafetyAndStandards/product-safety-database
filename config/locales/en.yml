@@ -126,8 +126,30 @@ en:
         reason_for_removing_the_business_from_the_case: "Reason for removing the business from the case"
         cancel: "Cancel"
       remove:
-        remove_business_warning_html: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>."
-      empty: "This case has not added any businesses."
+        remove_business_warning_html: Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
+      empty: This case has not added any businesses.
+    business_types:
+      new:
+        heading: What is the business type?
+        hint: What is the business role as an economic operator in the supply chain?
+        types:
+          retailer:
+            label: Retailer
+            hint: This includes traditional retailers and retailers selling directly to customers via their own online presence.
+          online_marketplace:
+            label: Online seller - via an online marketplace
+            hint: Select this option if the business only sells products via online marketplaces such as Amazon.
+          manufacturer:
+            label: Manufacturer
+          exporter:
+            label: Exporter
+          importer:
+            label: Importer
+          fulfillment_house:
+            label: Fulfillment house
+          distributor:
+            label: Distributor
+
 
     tabs:
       businesses:
@@ -397,9 +419,12 @@ en:
         add_business_to_case_form:
           attributes:
             relationship:
-              inclusion: "Please select a business type"
-            other_relationship:
-              blank: "Please enter a business type \"Other\""
+              inclusion: Select a business type
+        set_business_type_on_case_form:
+          attributes:
+            type:
+              blank: Select a business type
+              inclusion: Select a business type
 
         remove_business_form:
           attributes:

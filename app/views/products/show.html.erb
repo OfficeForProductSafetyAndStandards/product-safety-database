@@ -30,7 +30,7 @@
       <% end %>
       <span class="govuk-visually-hidden">|</span>
       <% if policy(@product).can_spawn_case? %>
-        <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-14 govuk-!-text-align-centre govuk-!-padding-2 govuk-!-display-inline-block govuk-!-margin-top-4 govuk-!-margin-bottom-6 govuk-link--no-underline opss-border-all opss-float-left--mobile" do %>
+        <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-14 govuk-!-text-align-centre govuk-!-padding-2 govuk-!-display-inline-block govuk-!-margin-top-4 govuk-!-margin-bottom-6 govuk-link--no-underline opss-border-all opss-float-left--mobile", data: { cy: "create-new-case" } do %>
           Create a new case<br class="opss-br-desktop"> for this product
         <% end %>
       <% end %>

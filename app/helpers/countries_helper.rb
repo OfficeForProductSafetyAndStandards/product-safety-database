@@ -5,6 +5,10 @@ module CountriesHelper
     (country && country[0]) || code
   end
 
+  def set_countries
+    @countries = all_countries
+  end
+
   def all_countries
     Country.all
   end
