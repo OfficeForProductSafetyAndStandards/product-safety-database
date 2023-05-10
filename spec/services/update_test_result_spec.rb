@@ -73,11 +73,11 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
 
     context "with required parameters" do
       def expected_email_subject
-        "Test result edited for Allegation"
+        "Test result edited for Case"
       end
 
       def expected_email_body(name)
-        "#{name} edited a test result on the allegation."
+        "#{name} edited a test result on the case."
       end
       let!(:expected_changes_metadata) do
         {

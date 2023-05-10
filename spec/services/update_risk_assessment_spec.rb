@@ -151,11 +151,11 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
         # rubocop:enable RSpec/ExampleLength
 
         def expected_email_subject
-          "Risk assessment edited for Allegation"
+          "Risk assessment edited for Case"
         end
 
         def expected_email_body(name)
-          "#{name} edited a risk assessment on the allegation."
+          "#{name} edited a risk assessment on the case."
         end
 
         it_behaves_like "a service which notifies the case owner"

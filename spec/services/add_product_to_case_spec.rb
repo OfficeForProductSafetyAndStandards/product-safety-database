@@ -43,11 +43,11 @@ RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adap
 
     context "with required parameters" do
       def expected_email_subject
-        "Allegation updated"
+        "Case updated"
       end
 
       def expected_email_body(name)
-        "Product was added to the allegation by #{name}."
+        "Product was added to the case by #{name}."
       end
 
       let(:result) { described_class.call(user:, investigation:, product:) }

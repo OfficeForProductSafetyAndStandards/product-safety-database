@@ -130,8 +130,8 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
               investigation.pretty_id,
               investigation.owner_team.name,
               investigation.owner_team.email,
-              "Phone call details updated on the Allegation by #{user_same_team.decorate.display_name(viewer: user_same_team)}.",
-              "Allegation updated"
+              "Phone call details updated on the Case by #{user_same_team.decorate.display_name(viewer: user_same_team)}.",
+              "Case updated"
             )
           end
         end
@@ -144,8 +144,8 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
               investigation.pretty_id,
               investigation.owner_user.name,
               investigation.owner_user.email,
-              "Phone call details updated on the Allegation by #{user_same_team.decorate.display_name(viewer: user_same_team)}.",
-              "Allegation updated"
+              "Phone call details updated on the Case by #{user_same_team.decorate.display_name(viewer: user_same_team)}.",
+              "Case updated"
             )
           end
         end

@@ -18,7 +18,7 @@ RSpec.describe AuditActivity::Investigation::TeamAddedDecorator, :with_stubbed_o
 
   describe "#title" do
     it "returns a generated String" do
-      expect(activity.title(user)).to eq("#{team.display_name} added to allegation")
+      expect(activity.title(user)).to eq("#{team.display_name} added to case")
     end
   end
 

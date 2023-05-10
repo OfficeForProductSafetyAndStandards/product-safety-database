@@ -49,7 +49,9 @@ private
   end
 
   def add_product_to_sheets(product)
-    product_info_sheet.add_row(attributes_for_info_sheet(product), types: :text)
+    product.case_ids.each do |case_id|
+      product_info_sheet.add_row(attributes_for_info_sheet(product, case_id:), types: :text)
+    end
 
     product.test_results.sort.each do |test_result|
       test_results_sheet.add_row(attributes_for_test_results_sheet(product, test_result.decorate), types: :text)
@@ -77,7 +79,7 @@ private
                      authenticity
                      barcode
                      brand
-                     case_ids
+                     case_id
                      category
                      country_of_origin
                      created_at
@@ -139,24 +141,24 @@ private
     @corrective_actions_sheet = sheet
   end
 
-  def attributes_for_info_sheet(product)
+  def attributes_for_info_sheet(product, case_id:)
     [
       product.psd_ref,
       product.id,
       product.authenticity,
       product.barcode,
       product.brand,
-      product.case_ids,
+      case_id,
       product.category,
-      product.country_of_origin,
-      product.created_at,
+      format_country_code(code: product.country_of_origin),
+      product.created_at.to_formatted_s(:xmlschema),
       product.description,
       product.has_markings,
       product.markings,
       product.name,
       product.product_code,
       product.subcategory,
-      product.updated_at,
+      product.updated_at.to_formatted_s(:xmlschema),
       product.webpage,
       product.when_placed_on_market,
       product.owning_team.try(:name),
@@ -187,7 +189,7 @@ private
     [
       product.psd_ref,
       product.id,
-      risk_assessment.assessed_on,
+      risk_assessment.assessed_on.to_formatted_s(:xmlschema),
       risk_assessment.risk_level,
       risk_assessment.decorate.assessed_by,
       risk_assessment.details,
@@ -210,5 +212,11 @@ private
       corrective_action.details,
       product.name
     ]
+  end
+
+  def format_country_code(code:)
+    return if code.blank?
+
+    code.split(":")&.last
   end
 end

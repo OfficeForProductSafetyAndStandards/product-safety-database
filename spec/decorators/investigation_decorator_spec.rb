@@ -121,7 +121,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
   describe "#pretty_description" do
     it {
       expect(decorated_investigation.pretty_description)
-        .to eq("#{investigation.case_type.upcase_first}: #{investigation.pretty_id}")
+        .to eq("Case: #{investigation.pretty_id}")
     }
   end
 
@@ -268,7 +268,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
     context "with restricted case" do
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
 
-      it { expect(case_title_key).to eq("Allegation restricted") }
+      it { expect(case_title_key).to eq("Case restricted") }
     end
   end
 

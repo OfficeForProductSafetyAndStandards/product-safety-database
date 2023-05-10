@@ -140,6 +140,10 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(1, 33)).to eq "Complainant_Reference"
       expect(sheet.cell(2, 33)).to eq investigation.complainant_reference
       expect(sheet.cell(3, 33)).to eq "Restricted"
+
+      expect(sheet.cell(1, 34)).to eq "Case_Type"
+      expect(sheet.cell(2, 34)).to eq investigation.case_type
+      expect(sheet.cell(3, 34)).to eq other_team_investigation.case_type
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength

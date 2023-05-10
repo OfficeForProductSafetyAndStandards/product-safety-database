@@ -30,6 +30,7 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product_form = ProductForm.new
+    @product_form.barcode = params[:barcode] if params[:barcode].present?
   end
 
   def owner

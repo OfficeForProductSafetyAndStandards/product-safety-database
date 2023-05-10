@@ -36,7 +36,7 @@ class Investigations::OwnershipController < ApplicationController
 
     session[session_store_key] = nil
 
-    message = "#{@investigation.case_type.upcase_first} owner changed to #{form.owner.decorate.display_name(viewer: current_user)}"
+    message = "Case owner changed to #{form.owner.decorate.display_name(viewer: current_user)}"
     @investigation = @investigation.decorate
     redirect_to investigation_path(@investigation), flash: { success: message }
   end

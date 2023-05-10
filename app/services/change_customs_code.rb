@@ -47,7 +47,7 @@ private
         recipient.name,
         recipient.email,
         email_body(recipient),
-        "#{investigation.case_type.upcase_first} customs code updated"
+        "Case customs code updated"
       ).deliver_later
     end
   end
@@ -58,6 +58,6 @@ private
 
   def email_body(viewer = nil)
     user_name = user.decorate.display_name(viewer:)
-    "#{investigation.case_type.upcase_first} customs code was updated by #{user_name}."
+    "Case customs code was updated by #{user_name}."
   end
 end

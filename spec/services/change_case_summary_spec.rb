@@ -42,11 +42,11 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_opensearch, :with_test_queue_ada
 
     context "with required parameters" do
       def expected_email_subject
-        "Enquiry summary updated"
+        "Case summary updated"
       end
 
       def expected_email_body(name)
-        "Enquiry summary was updated by #{name}."
+        "Case summary was updated by #{name}."
       end
 
       let(:result) { described_class.call(investigation:, user:, summary: new_summary) }

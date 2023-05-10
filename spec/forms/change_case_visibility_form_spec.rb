@@ -7,7 +7,7 @@ RSpec.describe ChangeCaseVisibilityForm, :with_stubbed_opensearch, :with_test_qu
 
   describe ".from" do
     it "sets the case type" do
-      expect(form.case_type).to eq("allegation")
+      expect(form.case_type).to eq("case")
     end
 
     it "sets the old visibility" do
