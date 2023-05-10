@@ -10,6 +10,8 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=password
+    restart:
+      on-failure
 
   antivirus:
     image: beisopss/antivirus:master
@@ -19,6 +21,8 @@ services:
       - PORT=3006
     ports:
       - "3006:3006"
+    restart:
+      on-failure
 
   opensearch:
     image: opensearchproject/opensearch:1.2.3
@@ -30,12 +34,16 @@ services:
       - opensearch-volume:/usr/share/opensearch/data
     ports:
       - 9200:9200
+    restart:
+      on-failure
 
   redis:
     image: redis
     hostname: redis
     ports:
       - 6379:6379
+    restart:
+      on-failure
 
   web:
     build:
@@ -51,6 +59,7 @@ services:
     depends_on:
       - db
       - opensearch
+      - antivirus
       - redis
       - worker
     env_file:
@@ -69,6 +78,7 @@ services:
       - bundle-cache:/usr/local/bundle/gems
     depends_on:
       - db
+      - antivirus
       - opensearch
       - redis
 
