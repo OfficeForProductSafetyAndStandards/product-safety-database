@@ -57,6 +57,9 @@ gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
+# PRISM Rails engine
+gem "prism", path: "prism"
+
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
