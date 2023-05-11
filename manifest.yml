@@ -23,10 +23,10 @@ applications:
     - psd-health-env
     - psd-notify-env
     - psd-pghero-env
-    - psd-queue-7
+    - psd-queue-6
     - psd-rails-env
     - ((sentry-service-name))
-    - psd-session-7
+    - psd-session-6
     - psd-sidekiq-env
     - psd-two-factor-auth-env
     - psd-web-scout-env
