@@ -1,14 +1,12 @@
 class Investigations::TestResultsController < ApplicationController
   before_action :set_investigation
+  before_action :authorize_investigation_update, only: %i[new create edit update]
 
   def new
-    authorize @investigation_object, :update?
     @test_result_form = TestResultForm.new
   end
 
   def create
-    investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation_object, :update?
     @test_result_form = TestResultForm.new(test_result_params)
     @test_result_form.load_document_file
 
@@ -33,14 +31,11 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def edit
-    authorize @investigation_object, :update?
     @test_result_form = TestResultForm.from(@investigation_object.test_results.find(params[:id]))
     @test_result_form.load_document_file
   end
 
   def update
-    authorize investigation, :update?
-
     test_result = @investigation_object.test_results.find(params[:id])
 
     @test_result_form = TestResultForm.from(test_result)
@@ -68,6 +63,10 @@ private
   def set_investigation
     @investigation_object = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     @investigation = @investigation_object.decorate
+  end
+
+  def authorize_investigation_update
+    authorize @investigation_object, :update?
   end
 
   def test_params
