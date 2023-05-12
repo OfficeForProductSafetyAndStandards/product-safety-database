@@ -34,7 +34,7 @@ gem "net-pop"
 gem "net-smtp"
 
 gem "paper_trail"
-gem "pg", "~> 1.4"
+gem "pg", "~> 1.5"
 gem "pghero", "~> 3.3"
 gem "puma", "~> 6.2"
 gem "pundit", "~> 2.3"
