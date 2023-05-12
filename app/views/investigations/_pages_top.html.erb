@@ -1,11 +1,7 @@
 <% content_for :after_header do %>
   <% if content_for?(:back_link) || has_badges?(investigation) %>
-    <div class="govuk-grid-row">
-      <% if content_for?(:back_link) %>
-        <div class="govuk-grid-column-one-half">
-          <%= yield :back_link %>
-        </div>
-      <% end %>
-    </div>
+    <% if content_for?(:back_link) %>
+      <%= yield :back_link %>
+    <% end %>
   <% end %>
 <% end %>

@@ -149,8 +149,9 @@ en:
             label: Fulfillment house
           distributor:
             label: Distributor
-
-
+    overseas_regulator:
+      option_yes: "Yes"
+      option_no: "No"
     tabs:
       businesses:
         remove_business_hint: "Removing a business from a case cannot be undone"
@@ -355,6 +356,9 @@ en:
         body: "Permission level changed to '%{new_permission}' from '%{old_permission}'."
       update_notifying_country:
         body: "Notifying country changed from %{previous_country} to %{new_country}."
+      update_overseas_regulator:
+        body_set: Overseas regulator set to %{new_country}
+        body_changed: "Overseas regulator changed from %{previous_country} to %{new_country}"
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
@@ -463,6 +467,12 @@ en:
           attributes:
             country:
               inclusion: Enter the notifying country
+        overseas_regulator_form:
+          attributes:
+            is_from_overseas_regulator:
+              inclusion: Select yes if the allegation was made by an overseas regulator
+            overseas_regulator_country:
+              inclusion: Select which country
         comment_form:
           attributes:
             body:

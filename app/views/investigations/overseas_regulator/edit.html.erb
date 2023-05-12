@@ -1,0 +1,48 @@
+<% page_heading = "Was the allegation made by an overseas regulator?" %>
+<% page_title page_heading, errors: @overseas_regulator_form.errors.any? %>
+
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with scope: :investigation, model: @overseas_regulator_form, url: investigation_overseas_regulator_path(@investigation), html: {novalidate: true}, method: :put, local: true do |form| %>
+      <%= error_summary @overseas_regulator_form.errors, map_errors: {
+        is_from_overseas_regulator: :investigation_is_from_overseas_regulator_true,
+        overseas_regulator_country: :investigation_overseas_regulator_country
+      } %>
+
+      <% select_menu_html = capture do %>
+        <%= govukSelect(
+          form: form,
+          key: :overseas_regulator_country,
+          items: options_for_overseas_regulator(Country.overseas_regulator_countries, @overseas_regulator_form),
+          include_blank: true,
+          label: { text: "Select which country" }
+        ) %>
+      <% end %>
+      <%= govukRadios(
+        form: form,
+        key: :is_from_overseas_regulator,
+        fieldset: { legend: { html: "<h1 class=\"govuk-fieldset__heading\">Was the allegation made by an overseas regulator?</h1>".html_safe, classes: "govuk-fieldset__legend--l" } },
+        hint: { html: "Select no if the allegation was from the <abbr>UK</abbr> (or <abbr>GB</abbr>).".html_safe, classes: "govuk-!-margin-bottom-5" },
+        items: [{ text: t("investigations.overseas_regulator.option_yes"),
+                  value: true,
+                  conditional: { html: select_menu_html } },
+                { text: t("investigations.overseas_regulator.option_no"),
+                  value: false }]
+      ) %>
+
+      <div class="govuk-button-group">
+        <%= govukButton(text: t("Save")) %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>

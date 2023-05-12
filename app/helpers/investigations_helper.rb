@@ -213,8 +213,6 @@ module InvestigationsHelper
     ]
     rows.flatten!
 
-    rows.insert(7, notifying_country_section(investigation, user)) if policy(investigation).view_notifying_country?(user:)
-
     if investigation.coronavirus_related
       rows << {
         key: { text: "COVID-19" },
@@ -227,17 +225,27 @@ module InvestigationsHelper
       }
     end
 
-    rows
-  end
+    if policy(investigation).view_notifying_country?(user:)
+      rows << {
+        key: { text: "Notifying country" },
+        value: {
+          text: country_from_code(investigation.notifying_country, Country.notifying_countries)
+        },
+        actions: notifying_country_actions(investigation, user)
+      }
+    end
 
-  def notifying_country_section(investigation, user)
-    {
-      key: { text: "Notifying country" },
-      value: {
-        text: country_from_code(investigation.notifying_country, Country.notifying_countries)
-      },
-      actions: notifying_country_actions(investigation, user)
-    }
+    if policy(investigation).view_overseas_regulator?(user:)
+      rows << {
+        key: { text: "Overseas regulator" },
+        value: {
+          text: overseas_regulator_value(investigation)
+        },
+        actions: overseas_regulator_actions(investigation, user)
+      }
+    end
+
+    rows
   end
 
   def search_result_statement(search_terms, number_of_results)
@@ -262,6 +270,15 @@ module InvestigationsHelper
       text = country[0]
       option = { text:, value: country[1] }
       option[:selected] = true if notifying_country_form.country == text
+      option
+    end
+  end
+
+  def options_for_overseas_regulator(countries, overseas_regulator_form)
+    countries.map do |country|
+      text = country[0]
+      option = { text:, value: country[1] }
+      option[:selected] = true if overseas_regulator_form.overseas_regulator_country == text
       option
     end
   end
@@ -341,7 +358,19 @@ private
       items: [
         href: edit_investigation_notifying_country_path(investigation),
         text: "Change",
-        visuallyHiddenText: "notifying_country"
+        visuallyHiddenText: "notifying country"
+      ]
+    }
+  end
+
+  def overseas_regulator_actions(investigation, user)
+    return {} unless policy(investigation).change_overseas_regulator?(user:)
+
+    {
+      items: [
+        href: edit_investigation_overseas_regulator_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "overseas regulator"
       ]
     }
   end
@@ -468,6 +497,12 @@ private
     else
       t("investigations.risk_validation.not_validated")
     end
+  end
+
+  def overseas_regulator_value(investigation)
+    return if investigation.is_from_overseas_regulator.nil?
+
+    investigation.is_from_overseas_regulator ? country_from_code(investigation.overseas_regulator_country, Country.overseas_regulator_countries) : t("investigations.overseas_regulator.no")
   end
 
   def summary_html(investigation)
