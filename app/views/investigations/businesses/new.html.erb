@@ -1,4 +1,4 @@
-<%= page_title "Add business to case", errors: @business_form.errors.any? %>
+<%= page_title "Provide the business details", errors: @business_form.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.pretty_description.downcase}",
@@ -8,6 +8,9 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
+<h1 class="govuk-heading-l govuk-!-margin-bottom-8">
+  Provide the business details
+</h1>
 <%= form_with(model: @business_form,
               url: investigation_businesses_path(@investigation),
               local: true,
