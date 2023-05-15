@@ -436,8 +436,12 @@ en:
               blank: Enter the reason for removing the product
         notifying_country_form:
           attributes:
-            country:
+            notifying_country_overseas:
               inclusion: Enter the notifying country
+            notifying_country_uk:
+              inclusion: Enter the notifying country
+            overseas_or_uk:
+              inclusion: Please select if the notifying country is overseas or in the UK
         comment_form:
           attributes:
             body:

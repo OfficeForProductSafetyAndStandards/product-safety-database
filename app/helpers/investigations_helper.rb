@@ -260,8 +260,9 @@ module InvestigationsHelper
   def options_for_notifying_country(countries, notifying_country_form)
     countries.map do |country|
       text = country[0]
-      option = { text:, value: country[1] }
-      option[:selected] = true if notifying_country_form.country == text
+      value = country[1]
+      option = { text:, value: }
+      option[:selected] = true if notifying_country_form.country == value
       option
     end
   end

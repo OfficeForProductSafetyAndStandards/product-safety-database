@@ -5,7 +5,8 @@ class Country
     ["England", "country:GB-ENG"],
     ["Scotland", "country:GB-SCT"],
     ["Wales", "country:GB-WLS"],
-    ["Northern Ireland", "country:GB-NIR"]
+    ["Northern Ireland", "country:GB-NIR"],
+    ["Great Britain", "country:GB-GBN"]
   ].freeze
 
   class << self
@@ -15,6 +16,14 @@ class Country
 
     def notifying_countries
       all + ADDITIONAL_COUNTRIES
+    end
+
+    def overseas_notifying_countries
+      all - [["United Kingdom", "country:GB"]]
+    end
+
+    def uk_notifying_countries
+      ADDITIONAL_COUNTRIES
     end
   end
 end
