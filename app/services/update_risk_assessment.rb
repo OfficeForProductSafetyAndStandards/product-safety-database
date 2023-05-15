@@ -2,7 +2,7 @@ class UpdateRiskAssessment
   include Interactor
   include EntitiesToNotify
 
-  delegate :risk_assessment, :user, :assessed_on, :risk_level, :custom_risk_level,
+  delegate :risk_assessment, :user, :assessed_on, :risk_level,
            :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :investigation_product_ids, :risk_assessment_file, to: :context
 
   delegate :investigation, to: :risk_assessment
@@ -18,7 +18,6 @@ class UpdateRiskAssessment
       risk_assessment.assign_attributes(
         assessed_on:,
         risk_level:,
-        custom_risk_level: custom_risk_level.presence,
         assessed_by_team_id: assessed_by_team_id.presence,
         assessed_by_business_id: assessed_by_business_id.presence,
         assessed_by_other: assessed_by_other.presence,

@@ -12,7 +12,6 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
   let(:assessed_by_other) { "" }
 
   let(:risk_level) { "serious" }
-  let(:custom_risk_level) { "" }
   let(:investigation_product_ids) { [create(:investigation_product).id] }
   let(:details) { "" }
   let(:old_file) { nil }
@@ -28,7 +27,6 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
       assessed_by_business_id:,
       assessed_by_other:,
       risk_level:,
-      custom_risk_level:,
       investigation_product_ids:,
       old_file:,
       risk_assessment_file:,
@@ -46,27 +44,8 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
     end
 
     # Risk levels
-    context "with a custom risk level specified" do
-      let(:risk_level) { "other" }
-      let(:custom_risk_level) { "Semi-serious risk" }
-
-      it "is valid" do
-        expect(form).to be_valid
-      end
-    end
-
-    context "with a 'other' risk level but no custom risk level given" do
-      let(:risk_level) { "other" }
-      let(:custom_risk_level) { "" }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
     context "with no risk level specified" do
       let(:risk_level) { "" }
-      let(:custom_risk_level) { "" }
 
       it "is not valid" do
         expect(form).not_to be_valid
@@ -88,7 +67,6 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
     end
 
     # Assessed by
-
     context "with no 'assessed by' option specified" do
       let(:assessed_by) { "" }
 
@@ -187,26 +165,6 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_ad
   end
 
   describe "attributes" do
-    describe "#custom_risk_level" do
-      let(:custom_risk_level) { "Medium risk" }
-
-      context "when risk_level is set to :other" do
-        let(:risk_level) { :other }
-
-        it "returns the value set" do
-          expect(form.custom_risk_level).to eq "Medium risk"
-        end
-      end
-
-      context "when risk_level is not set to :other" do
-        let(:risk_level) { :serious }
-
-        it "always returns nil" do
-          expect(form.custom_risk_level).to be nil
-        end
-      end
-    end
-
     describe "#assessed_by_business_id" do
       let(:assessed_by_business_id) { "123" }
 

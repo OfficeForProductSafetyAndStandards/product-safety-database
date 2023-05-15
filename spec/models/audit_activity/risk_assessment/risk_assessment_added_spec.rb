@@ -90,12 +90,6 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
     end
   end
 
-  describe "#custom_risk_level" do
-    it "returns the risk assessment custom_risk_level" do
-      expect(activity.custom_risk_level).to eq(risk_assessment.custom_risk_level)
-    end
-  end
-
   describe "#assessed_on" do
     it "returns the risk assessment assessed_on" do
       expect(activity.assessed_on).to eq(risk_assessment.assessed_on)

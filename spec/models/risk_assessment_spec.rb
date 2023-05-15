@@ -6,7 +6,6 @@ RSpec.describe RiskAssessment, type: :model do
       described_class.new(
         investigation:,
         risk_level:,
-        custom_risk_level:,
         investigation_products:,
         added_by_user:,
         added_by_team:,
@@ -26,7 +25,6 @@ RSpec.describe RiskAssessment, type: :model do
     let(:assessed_by_other) { nil }
     let(:assessment_date) { Time.zone.today }
     let(:risk_level) { "serious" }
-    let(:custom_risk_level) { nil }
     let(:investigation_products) { [build(:investigation_product)] }
 
     context "with all required attributes" do
@@ -41,16 +39,6 @@ RSpec.describe RiskAssessment, type: :model do
       it "is not valid", :aggregate_failures do
         expect(risk_assessment).not_to be_valid
         expect(risk_assessment.errors.details[:risk_level]).to eql([{ error: :blank }])
-      end
-    end
-
-    context "with a risk_level AND a custom risk level" do
-      let(:risk_level) { "serious" }
-      let(:custom_risk_level) { "not serious" }
-
-      it "is not valid" do
-        expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:custom_risk_level]).to eql([{ error: :present }])
       end
     end
 

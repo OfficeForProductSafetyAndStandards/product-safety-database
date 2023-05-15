@@ -2,7 +2,7 @@
 <% page_title page_heading, errors: @risk_level_form.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
+    text: "Back",
     href: investigation_path(@investigation)
   ) %>
 <% end %>
@@ -32,21 +32,11 @@
     <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put, local: true do |form| %>
       <%= error_summary @risk_level_form.errors %>
 
-      <%- custom = capture do %>
-        <%= govukInput(
-          key: :custom_risk_level,
-          form: form,
-          classes: "govuk-!-width-one-third",
-          label: { text: "Custom risk level", classes: "govuk-visually-hidden" }
-        ) %>
-      <% end %>
-
-      <% radio_items = (Investigation.risk_levels.keys - ["other"]).map do |level|
+      <% radio_items = (Investigation.risk_levels.keys - ["other", "not_conclusive"]).map do |level|
           { text: t(".levels.#{level}"), value: level }
          end
-         radio_items.push(text: "Other", value: "other", conditional: { html: custom })
-         radio_items.push divider: "or"
-         radio_items.push(text: "Not set", value: "")
+         radio_items << { divider: "or" }
+         radio_items << { text: t(".levels.not_conclusive"), value: "not_conclusive" }
       %>
 
       <%= govukRadios(
@@ -56,9 +46,9 @@
         items: radio_items
       ) %>
 
-      <div class="govuk-form-group">
-        <%= govukButton(text: t(".submit_button")) %>
-        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      <div class="govuk-button-group">
+        <%= govukButton(text: t("Save")) %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     <% end %>
   </div>
