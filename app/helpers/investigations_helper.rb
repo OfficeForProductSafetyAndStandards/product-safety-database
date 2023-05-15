@@ -156,13 +156,13 @@ module InvestigationsHelper
       {
         key: { text: "Last updated" },
         value: {
-          text: "#{time_ago_in_words(@investigation.updated_at).capitalize} ago"
+          text: time_ago_or_date(@investigation.updated_at)
         }
       },
       {
         key: { text: "Created" },
         value: {
-          text: "#{time_ago_in_words(@investigation.created_at).capitalize} ago"
+          text: time_ago_or_date(@investigation.created_at)
         }
       },
       {
@@ -472,5 +472,13 @@ private
 
   def summary_html(investigation)
     "<span class='opss-text-limit-scroll-s'>#{investigation.object.description}</span>".html_safe
+  end
+
+  def time_ago_or_date(date)
+    if date > 24.hours.ago
+      "#{time_ago_in_words(date).capitalize} ago"
+    else
+      date.to_formatted_s(:govuk)
+    end
   end
 end
