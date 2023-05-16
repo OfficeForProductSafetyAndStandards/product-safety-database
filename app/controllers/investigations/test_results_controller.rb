@@ -14,12 +14,12 @@ class Investigations::TestResultsController < ApplicationController
 
     service_attributes = @test_result_form
                            .serializable_hash
-                           .merge(investigation:, user: current_user)
+                           .merge(investigation: @investigation_object, user: current_user)
 
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
-      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
+      return redirect_to investigation_supporting_information_index_path(@investigation_object), flash: { success: "The supporting information was updated" }
     end
 
     render :new
@@ -50,12 +50,12 @@ class Investigations::TestResultsController < ApplicationController
     UpdateTestResult.call!(
       @test_result_form.serializable_hash
         .merge(test_result:,
-               investigation:,
+               investigation: @investigation_object,
                user: current_user,
                changes: @test_result_form.changes)
     )
 
-    redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
+    redirect_to investigation_supporting_information_index_path(@investigation_object), flash: { success: "The supporting information was updated" }
   end
 
 private
