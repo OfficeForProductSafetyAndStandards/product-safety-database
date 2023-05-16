@@ -41,7 +41,7 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
     end
 
     context "with an overseas_or_uk parameter" do
-      context "set to uk with no notifying_country_uk parameter" do
+      context "when it is set to uk with no notifying_country_uk parameter" do
         let(:result) { described_class.call(user:, investigation:, overseas_or_uk:, notifying_country_overseas:) }
 
         it "returns a failure" do
@@ -49,7 +49,7 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
         end
       end
 
-      context "set to overseas with no notifying_country_overseas parameter" do
+      context "when it is set to overseas with no notifying_country_overseas parameter" do
         let(:result) { described_class.call(user:, investigation:, overseas_or_uk: "overseas", notifying_country_uk:) }
 
         it "returns a failure" do
