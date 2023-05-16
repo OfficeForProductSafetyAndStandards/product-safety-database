@@ -48,8 +48,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
     expect(page).to have_summary_item(key: "Trading name", value: "NewCo")
     expect(page).to have_summary_item(key: "Registered or legal name", value: "NewCo Ltd")
     expect(page).to have_summary_item(key: "Company number", value: "222 222 22")
-
-    expect(page).to have_summary_item(key: "Address", value: "22 New Street, New Town, Newcity, NE2 2EW")
+    expect(page).to have_summary_item(key: "Address", value: "22 New Street, New Town, Newcity, NE2 2EW, United Kingdom")
 
     expect(page).to have_summary_item(key: "Contact", value: "Mr New, CEO, 01632 960000, contact@newco.example")
 
