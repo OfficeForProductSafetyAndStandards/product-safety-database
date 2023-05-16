@@ -4,7 +4,9 @@
     <% if investigation.investigation_products.empty? %>
       <h2 class="govuk-heading-m">Which product was tested?</h2>
       <span class="govuk-hint">
-        There are no products on this case. <%= link_to "Add a product", new_investigation_product_path(investigation) %> to send it for testing.
+        A product has not been added to this case.
+        <br>
+        <%= link_to "Add the product", new_investigation_product_path(investigation), class: "govuk-link govuk-link--no-visited-state" %> which is the subject of the test report to the case first.
       </span>
     <% elsif @investigation.investigation_products.size == 1 %>
       <h2 class="govuk-heading-m">Product tested</h2>
@@ -20,8 +22,16 @@
   </div>
 <% end %>
 
-
-<%= form.govuk_autocomplete(:legislation, label: "Against which legislation?", label_classes: "govuk-label--m", choices: relevant_legislation, hint: "Select the relevant legislation from the list.") %>
+<%= govukSelect(
+  choices: relevant_legislation,
+  key: :legislation,
+  id: "legislation",
+  form: form,
+  include_blank: true,
+  show_all_values: true,
+  label: { text: "Under which legislation?", classes: "govuk-label--m" },
+  hint: { text: "Select the relevant legislation from the list." },
+) %>
 <%= form.govuk_input :standards_product_was_tested_against, label_classes: "govuk-label--m", hint: "For example, EN71. Use a comma to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
 <%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
