@@ -17,7 +17,16 @@
         Only products already added to the case are listed.
         <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
-      <%= form.govuk_autocomplete :investigation_product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } }, hint: span_html %>
+
+      <%= govukSelect(
+        items: investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } },
+        key: :investigation_product_id,
+        id: "investigation_product",
+        form: form,
+        show_all_values: true,
+        label: { text: "Which product was tested?", classes: "govuk-label--m" },
+        hint: { html: span_html },
+      ) %>
     <% end %>
   </div>
 <% end %>
@@ -32,6 +41,7 @@
   label: { text: "Under which legislation?", classes: "govuk-label--m" },
   hint: { text: "Select the relevant legislation from the list." },
 ) %>
+
 <%= form.govuk_input :standards_product_was_tested_against, label_classes: "govuk-label--m", hint: "For example, EN71. Use a comma to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
 <%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
