@@ -22,40 +22,54 @@
           key: :overseas_or_uk,
           items: [
             {
-              value: 'overseas',
+              value: "overseas",
               text: "Overseas countries",
-              id: "overseas_or_uk",
-              checked: !@investigation.notifying_country.match?(/country:GB/)
+              id: "overseas_or_uk_overseas",
+              checked: params.dig(:investigation, :overseas_or_uk) == "overseas" || !@notifying_country_form.country&.match?(/country:GB/),
+              conditional: {
+                html: govukSelect(
+                  form: form,
+                  key: :notifying_country_overseas,
+                  formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
+                  items: options_for_notifying_country(Country.overseas_notifying_countries, @notifying_country_form),
+                  include_blank: true,
+                  id: "notifying-country-overseas",
+                  name: "investigation[notifying_country_overseas]",
+                  label: {
+                    text: "Select which overseas country",
+                    classes: "govuk-label"
+                  },
+                )
+              }
             },
             {
-              value: 'uk',
+              value: "uk",
               text: "UK nations",
-              id: "overseas_or_uk",
-              checked: @investigation.notifying_country.match?(/country:GB-/)
+              id: "overseas_or_uk_uk",
+              checked: params.dig(:investigation, :overseas_or_uk) == "uk" || @notifying_country_form.country&.match?(/country:GB-/),
+              conditional: {
+                html: govukSelect(
+                  form: form,
+                  key: :notifying_country_uk,
+                  formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
+                  items: options_for_notifying_country(Country.uk_notifying_countries, @notifying_country_form),
+                  include_blank: true,
+                  id: "notifying-country-uk",
+                  name: "investigation[notifying_country_uk]",
+                  label: {
+                    text: "Select which country or collection of countries",
+                    classes: "govuk-label"
+                  },
+                  hint: {
+                    text: "Great Britain (England, Scotland and Wales) does not include Northern Ireland.",
+                    classes: "govuk-!-font-size-16"
+                  },
+                )
+              }
             }
           ]
         )
      %>
-
-      <%= govukSelect(
-        form: form,
-        key: :notifying_country_overseas,
-        formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
-        items: options_for_notifying_country(Country.overseas_notifying_countries, @notifying_country_form),
-        include_blank: true,
-        id: "notifying-country-overseas",
-        name: "investigation[notifying_country_overseas]",
-      ) %>
-
-      <%= govukSelect(
-        form: form,
-        key: :notifying_country_uk,
-        formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
-        items: options_for_notifying_country(Country.uk_notifying_countries, @notifying_country_form),
-        include_blank: true,
-        id: "notifying-country-uk",
-        name: "investigation[notifying_country_uk]",
-      ) %>
 
       <div class="govuk-form-group">
         <%= govukButton(text: t("Save")) %>

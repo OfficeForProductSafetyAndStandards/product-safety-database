@@ -441,7 +441,7 @@ en:
             notifying_country_uk:
               inclusion: Enter the notifying country
             overseas_or_uk:
-              inclusion: Please select if the notifying country is overseas or in the UK
+              inclusion: Select if the notifying country is overseas or in the UK
         comment_form:
           attributes:
             body:
