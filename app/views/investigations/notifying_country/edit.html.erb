@@ -3,7 +3,7 @@
 
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
+    text: "Back",
     href: investigation_path(@investigation)
   ) %>
 <% end %>
@@ -14,9 +14,17 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @notifying_country_form.errors %>
-      <%= render "minimal_investigation_heading", investigation: @investigation, title: "Change the notifying country" %>
+      <%#= render "minimal_investigation_heading", investigation: @investigation, title: "Change the notifying country" %>
 
       <%= govukRadios(
+        fieldset: {
+          legend: {
+            text: "Change the notifying country",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+          hint: { text: "Select the notifying country." },
           idPrefix: "overseas_or_uk",
           name: "investigation[overseas_or_uk]",
           key: :overseas_or_uk,
@@ -32,7 +40,6 @@
                   key: :notifying_country_overseas,
                   formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
                   items: options_for_notifying_country(Country.overseas_notifying_countries, @notifying_country_form),
-                  include_blank: true,
                   id: "notifying-country-overseas",
                   name: "investigation[notifying_country_overseas]",
                   label: {
@@ -46,14 +53,13 @@
               value: "uk",
               text: "UK nations",
               id: "overseas_or_uk_uk",
-              checked: params.dig(:investigation, :overseas_or_uk) == "uk" || @notifying_country_form.country&.match?(/country:GB-/),
+              checked: params.dig(:investigation, :overseas_or_uk) == "uk" || @notifying_country_form.country&.match?(/country:GB/),
               conditional: {
                 html: govukSelect(
                   form: form,
                   key: :notifying_country_uk,
                   formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
                   items: options_for_notifying_country(Country.uk_notifying_countries, @notifying_country_form),
-                  include_blank: true,
                   id: "notifying-country-uk",
                   name: "investigation[notifying_country_uk]",
                   label: {
@@ -71,9 +77,9 @@
         )
      %>
 
-      <div class="govuk-form-group">
-        <%= govukButton(text: t("Save")) %>
-        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     </div>
   </div>
