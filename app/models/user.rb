@@ -88,7 +88,7 @@ class User < ApplicationRecord
   end
 
   def notifying_country_editor?
-    true # has_role? :notifying_country_editor
+    has_role? :notifying_country_editor
   end
 
   def is_opss?
