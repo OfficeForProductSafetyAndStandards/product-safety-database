@@ -9,10 +9,7 @@ class Investigations::TestResults::FundingSourceController < ApplicationControll
     @test_funding_form = SetTestResultFundingOnCaseForm.new(test_funding_request_params)
     if @test_funding_form.valid?
       if @test_funding_form.is_opss_funded?
-        session[:test_opss_funded] = true
-
-        # TODO: redirect to the next step in the flow
-        redirect_to new_investigation_test_result_path(@investigation)
+        redirect_to new_investigation_funding_certificate_path(@investigation)
       else
         redirect_to new_investigation_test_result_path(@investigation)
       end
