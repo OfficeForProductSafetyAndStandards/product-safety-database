@@ -12,10 +12,8 @@
 
 <%= form_with scope: :investigation, model: @notifying_country_form, url: investigation_notifying_country_path(@investigation), html: {novalidate: true}, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-full">
       <%= error_summary @notifying_country_form.errors %>
-      <%#= render "minimal_investigation_heading", investigation: @investigation, title: "Change the notifying country" %>
-
       <%= govukRadios(
         fieldset: {
           legend: {
@@ -38,7 +36,6 @@
                 html: govukSelect(
                   form: form,
                   key: :notifying_country_overseas,
-                  formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
                   items: options_for_notifying_country(Country.overseas_notifying_countries, @notifying_country_form),
                   id: "notifying-country-overseas",
                   name: "investigation[notifying_country_overseas]",
@@ -51,14 +48,13 @@
             },
             {
               value: "uk",
-              text: "UK nations",
+              text: "<abbr>UK</abbr> nations",
               id: "overseas_or_uk_uk",
               checked: params.dig(:investigation, :overseas_or_uk) == "uk" || @notifying_country_form.country&.match?(/country:GB/),
               conditional: {
                 html: govukSelect(
                   form: form,
                   key: :notifying_country_uk,
-                  formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
                   items: options_for_notifying_country(Country.uk_notifying_countries, @notifying_country_form),
                   id: "notifying-country-uk",
                   name: "investigation[notifying_country_uk]",

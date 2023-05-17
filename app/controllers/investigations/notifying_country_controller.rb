@@ -21,7 +21,7 @@ module Investigations
         )
 
         @investigation = investigation.decorate
-        redirect_to investigation_path(@investigation), flash: { success: "The notifying country was updated." }
+        redirect_to investigation_path(@investigation), flash: { success: "The notifying country was updated" }
       else
         @investigation = investigation.decorate
         render :edit
