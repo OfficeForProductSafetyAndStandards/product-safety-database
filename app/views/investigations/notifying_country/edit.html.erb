@@ -22,7 +22,7 @@
             classes: "govuk-fieldset__legend--l"
           }
         },
-          hint: { text: "Select the notifying country." },
+          hint: { text: "Select the notifying country.", class: "govuk-hint govuk-!-margin-bottom-5" },
           idPrefix: "overseas_or_uk",
           name: "investigation[overseas_or_uk]",
           key: :overseas_or_uk,
@@ -48,7 +48,7 @@
             },
             {
               value: "uk",
-              text: "<abbr>UK</abbr> nations",
+              text: sanitize("<abbr>UK</abbr> nations"),
               id: "overseas_or_uk_uk",
               checked: params.dig(:investigation, :overseas_or_uk) == "uk" || @notifying_country_form.country&.match?(/country:GB/),
               conditional: {
