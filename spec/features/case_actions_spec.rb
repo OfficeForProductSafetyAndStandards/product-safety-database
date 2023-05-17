@@ -59,7 +59,7 @@ RSpec.feature "Case actions", :with_stubbed_opensearch, :with_stubbed_antivirus,
       expect(page).to have_link("Add a corrective action", href: new_investigation_corrective_action_path(investigation_1))
       expect(page).to have_link("Add a risk assessment", href: new_investigation_risk_assessment_path(investigation_1))
       expect(page).to have_link("Add a correspondence", href: new_investigation_correspondence_path(investigation_1))
-      expect(page).to have_link("Add a test result", href: new_investigation_test_result_path(investigation_1))
+      expect(page).to have_link("Add a test result", href: new_investigation_funding_source_path(investigation_1))
       expect(page).to have_link("Add a document or attachment", href: new_investigation_document_path(investigation_1))
       expect(page).to have_link("Add a comment", href: new_investigation_activity_comment_path(investigation_1))
     end

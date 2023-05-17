@@ -194,6 +194,8 @@ Rails.application.routes.draw do
 
     resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
       collection do
+        resource :funding_source, controller: "investigations/test_results/funding_source", only: %i[new create], path: "funding-source"
+
         put :create_draft, path: "confirm"
         get :confirm
       end
