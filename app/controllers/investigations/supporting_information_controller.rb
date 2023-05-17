@@ -70,7 +70,7 @@ module Investigations
       when "product"
         redirect_to new_investigation_product_path(investigation)
       when "business"
-        redirect_to new_investigation_business_path(investigation)
+        redirect_to new_investigation_business_types_path(investigation)
       end
     end
 

@@ -256,7 +256,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
   end
 
   describe "#case_title_key" do
-    let(:case_title_key) { decorated_investigation.case_title_key }
+    let(:viewing_user) { create(:user) }
+    let(:case_title_key) { decorated_investigation.case_title_key(viewing_user) }
     let(:user_title)     { "user title" }
 
     context "with unrestricted case" do
@@ -269,6 +270,13 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
 
       it { expect(case_title_key).to eq("Case restricted") }
+    end
+
+    context "with restricted case as a super user" do
+      let(:investigation) { create(:allegation, user_title:, is_private: true) }
+      let(:viewing_user) { create(:user, :super_user) }
+
+      it { expect(case_title_key).to include("Case restricted - user title") }
     end
   end
 

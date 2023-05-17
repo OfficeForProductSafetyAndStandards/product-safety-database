@@ -36,7 +36,7 @@
                 html: govukSelect(
                   form: form,
                   key: :notifying_country_overseas,
-                  items: options_for_notifying_country(Country.overseas_notifying_countries, @notifying_country_form),
+                  items: options_for_notifying_country(Country.overseas_countries, @notifying_country_form),
                   id: "notifying-country-overseas",
                   name: "investigation[notifying_country_overseas]",
                   label: {
@@ -55,7 +55,7 @@
                 html: govukSelect(
                   form: form,
                   key: :notifying_country_uk,
-                  items: options_for_notifying_country(Country.uk_notifying_countries, @notifying_country_form),
+                  items: options_for_notifying_country(Country.uk_countries, @notifying_country_form),
                   id: "notifying-country-uk",
                   name: "investigation[notifying_country_uk]",
                   label: {

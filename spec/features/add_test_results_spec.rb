@@ -117,7 +117,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
   end
 
   def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:, standards:, failure_details: nil)
-    select legislation, from: "Against which legislation?"
+    select legislation, from: "Under which legislation?"
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date
     fill_in "Year",  with: date.year  if date
@@ -137,7 +137,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
   end
 
   def expect_test_result_form_to_be_blank
-    expect(page).to have_field("Against which legislation?", with: nil)
+    expect(page).to have_field("Under which legislation?", with: nil)
     expect(page.find_field("Day").text).to be_blank
     expect(page.find_field("Month").text).to be_blank
     expect(page.find_field("Year").text).to be_blank
@@ -153,7 +153,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
   end
 
   def expect_test_result_form_to_show_input_data(legislation:, date:)
-    expect(page).to have_field("Against which legislation?", with: legislation)
+    expect(page).to have_field("Under which legislation?", with: legislation)
     expect(page).to have_field("Day", with: date.day)
     expect(page).to have_field("Month", with: date.month)
     expect(page).to have_field("Year", with: date.year)

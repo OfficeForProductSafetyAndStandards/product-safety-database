@@ -34,7 +34,7 @@ gem "net-pop"
 gem "net-smtp"
 
 gem "paper_trail"
-gem "pg", "~> 1.4"
+gem "pg", "~> 1.5"
 gem "pghero", "~> 3.3"
 gem "puma", "~> 6.2"
 gem "pundit", "~> 2.3"
@@ -56,6 +56,9 @@ gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
+
+# PRISM Rails engine
+gem "prism", path: "prism"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"

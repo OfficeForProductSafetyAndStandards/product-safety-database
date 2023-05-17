@@ -60,10 +60,6 @@ module ProductsHelper
       .records
   end
 
-  def set_countries
-    @countries = all_countries
-  end
-
   def set_product
     @product = Product.find(params[:id]).decorate
   end

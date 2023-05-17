@@ -213,6 +213,14 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
       it "can edit the notifying country" do
         expect(policy.change_notifying_country?).to be true
       end
+
+      it "can view the overseas regulator" do
+        expect(policy.view_overseas_regulator?).to be true
+      end
+
+      it "can edit the overseas regulator" do
+        expect(policy.change_overseas_regulator?).to be true
+      end
     end
   end
 

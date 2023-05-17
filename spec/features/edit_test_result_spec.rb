@@ -168,7 +168,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
   def change_values_in_form(file_path: "test/fixtures/files/test_result_2.txt")
     # Change some of the fields
-    select "Consumer Protection Act 1987", from: "Against which legislation?"
+    select "Consumer Protection Act 1987", from: "Under which legislation?"
     fill_in "Which standard was the product tested against?", with: "EN72,EN73"
 
     within_fieldset "Date of test" do
@@ -192,7 +192,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   end
 
   def expect_edit_form_to_have_fields_populated_by_original_test_result_values(result:)
-    expect(page).to have_field("Against which legislation?", with: "General Product Safety Regulations 2005")
+    expect(page).to have_field("Under which legislation?", with: "General Product Safety Regulations 2005")
     within_fieldset "Date of test" do
       expect(page).to have_field("Day", with: "1")
       expect(page).to have_field("Month", with: "5")

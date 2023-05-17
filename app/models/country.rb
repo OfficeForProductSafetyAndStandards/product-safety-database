@@ -9,6 +9,10 @@ class Country
     ["Great Britain", "country:GB-GBN"]
   ].freeze
 
+  UNITED_KINGDOM = [
+    ["United Kingdom", "country:GB"]
+  ].freeze
+
   class << self
     def all
       @all ||= JSON.parse(File.read(PATH_TO_COUNTRIES_LIST))
@@ -18,12 +22,12 @@ class Country
       all + ADDITIONAL_COUNTRIES
     end
 
-    def overseas_notifying_countries
-      all - [["United Kingdom", "country:GB"]]
+    def uk_countries
+      ADDITIONAL_COUNTRIES
     end
 
-    def uk_notifying_countries
-      ADDITIONAL_COUNTRIES
+    def overseas_countries
+      all - UNITED_KINGDOM
     end
   end
 end

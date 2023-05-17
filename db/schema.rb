@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_11_145908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -239,9 +239,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.text "hazard_description"
     t.string "hazard_type"
     t.boolean "is_closed", default: false
+    t.boolean "is_from_overseas_regulator"
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
     t.string "notifying_country"
+    t.string "overseas_regulator_country"
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
@@ -278,6 +280,78 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_145950) do
     t.datetime "created_at", precision: nil, null: false
     t.string "name"
     t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "prism_harm_scenario_steps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.bigint "prism_harm_scenario_id"
+    t.decimal "probability"
+    t.string "probability_evidence"
+    t.datetime "updated_at", null: false
+    t.index ["prism_harm_scenario_id"], name: "index_prism_harm_scenario_steps_on_prism_harm_scenario_id"
+  end
+
+  create_table "prism_harm_scenarios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "hazard_type"
+    t.string "level_of_uncertainty"
+    t.boolean "multiple_casualties"
+    t.bigint "prism_risk_assessment_id"
+    t.boolean "sensitivity_analysis"
+    t.string "severity"
+    t.boolean "supporting_evidence"
+    t.datetime "updated_at", null: false
+    t.index ["prism_risk_assessment_id"], name: "index_prism_harm_scenarios_on_prism_risk_assessment_id"
+  end
+
+  create_table "prism_product_hazards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "number_of_hazards"
+    t.bigint "prism_risk_assessment_id"
+    t.string "product_aimed_at"
+    t.string "unintended_risks_for"
+    t.datetime "updated_at", null: false
+    t.index ["prism_risk_assessment_id"], name: "index_prism_product_hazards_on_prism_risk_assessment_id"
+  end
+
+  create_table "prism_product_market_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "other_safety_legislation_standard"
+    t.bigint "prism_risk_assessment_id"
+    t.string "safety_legislation_standards", array: true
+    t.string "selling_organisation"
+    t.integer "total_products_sold"
+    t.datetime "updated_at", null: false
+    t.index ["prism_risk_assessment_id"], name: "index_prism_product_market_details_on_prism_risk_assessment_id"
+  end
+
+  create_table "prism_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "barcode"
+    t.string "batch_number"
+    t.string "brand"
+    t.string "counterfeit"
+    t.string "country_of_origin"
+    t.datetime "created_at", null: false
+    t.string "has_markings"
+    t.string "markings", array: true
+    t.string "name"
+    t.text "other_markings"
+    t.bigint "prism_risk_assessment_id"
+    t.string "risk_tolerability"
+    t.datetime "updated_at", null: false
+    t.index ["prism_risk_assessment_id"], name: "index_prism_products_on_prism_risk_assessment_id"
+  end
+
+  create_table "prism_risk_assessments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "assessed_before"
+    t.string "assessment_organisation"
+    t.string "assessor_name"
+    t.datetime "created_at", null: false
+    t.string "risk_type"
+    t.string "state"
+    t.datetime "updated_at", null: false
   end
 
   create_table "product_exports", force: :cascade do |t|
