@@ -21,9 +21,6 @@ class RiskAssessment < ApplicationRecord
 
   validates :risk_level, presence: true
 
-  validates :custom_risk_level, presence: true, if: -> { other? }
-  validates :custom_risk_level, absence: true, unless: -> { other? }
-
   # Exactly 1 of team, business or "other" required
   validates :assessed_by_business, absence: true, if: -> { assessed_by_team }
   validates :assessed_by_other, presence: true, if: -> { assessed_by_team.nil? && assessed_by_business.nil? }
@@ -34,6 +31,7 @@ class RiskAssessment < ApplicationRecord
     high: "high",
     medium: "medium",
     low: "low",
+    not_conclusive: "not_conclusive",
     other: "other"
   }
 

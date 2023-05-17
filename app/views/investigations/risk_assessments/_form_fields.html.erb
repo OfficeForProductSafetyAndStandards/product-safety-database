@@ -1,24 +1,16 @@
 <%= form.govuk_date_input :assessed_on, legend: "Date of assessment", hint: "For example, 31 1 2020" %>
 
-<%- custom = capture do %>
-  <%= form.govuk_input :custom_risk_level,
-   label: "Other risk level",
-   label_classes: "govuk-visually-hidden",
-   classes: "govuk-input--width-20"
-  %>
-<% end %>
-
-<% radio_items = (Investigation.risk_levels.keys - ["other"]).map do |level|
+<% radio_items = (Investigation.risk_levels.keys - ["other", "not_conclusive"]).map do |level|
   { text: t("investigations.risk_level.show.levels.#{level}"), value: level }
 end
-radio_items.push(text: "Other", value: "other", conditional: { html: custom })
+radio_items << { divider: "or" }
+radio_items << { text: t("investigations.risk_level.show.levels.not_conclusive"), value: "not_conclusive" }
 %>
 
 <%= form.govuk_radios :risk_level,
  legend: "What was the risk level?",
  items: radio_items
 %>
-
 
 <%- teams_html = capture do %>
   <%= form.govuk_select :assessed_by_team_id, label: "Choose team", items: risk_assessment_form.other_teams %>

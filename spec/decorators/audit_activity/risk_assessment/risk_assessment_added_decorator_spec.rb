@@ -9,10 +9,9 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     ).decorate
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, custom_risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products:) }
+  let(:risk_assessment) { create(:risk_assessment, trait, risk_level:, assessed_by_team:, assessed_by_business:, assessed_by_other:, investigation_products:) }
   let(:trait) { :without_file }
   let(:risk_level) { "serious" }
-  let(:custom_risk_level) { nil }
   let(:assessed_by_team) { nil }
   let(:assessed_by_business) { nil }
   let(:assessed_by_other) { "test" }
@@ -25,19 +24,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
   end
 
   describe "#risk_level" do
-    context "when custom_risk_level is nil" do
-      it "returns a generated String based on risk_level" do
-        expect(activity.risk_level).to eq("Serious risk")
-      end
-    end
-
-    context "when custom_risk_level is set" do
-      let(:risk_level) { "other" }
-      let(:custom_risk_level) { "test" }
-
-      it "returns custom_risk_level" do
-        expect(activity.risk_level).to eq(custom_risk_level)
-      end
+    it "returns a generated String based on risk_level" do
+      expect(activity.risk_level).to eq("Serious risk")
     end
   end
 

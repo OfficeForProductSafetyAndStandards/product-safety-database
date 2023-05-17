@@ -32,7 +32,19 @@ module Investigations
           })
         )
 
-        if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
+        # If the risk level has not been set for the investigation, set it to the same
+        # as the risk assessment. This will force the redirect to the supporting information
+        # page below and skip the "Do you want to match this case risk level to the risk assessment level?"
+        # page.
+        if @investigation.risk_level.nil?
+          ChangeCaseRiskLevel.call!(
+            investigation: @investigation,
+            user: current_user,
+            risk_level: result.risk_assessment.risk_level
+          )
+        end
+
+        if result.risk_assessment.risk_level == @investigation.risk_level
           redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
         else
           redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
@@ -59,7 +71,7 @@ module Investigations
 
       @risk_assessment_form = RiskAssessmentForm.new(
         @risk_assessment.serializable_hash(
-          only: %i[assessed_on risk_level custom_risk_level assessed_by_team_id assessed_by_business_id assessed_by_other details]
+          only: %i[assessed_on risk_level assessed_by_team_id assessed_by_business_id assessed_by_other details]
         ).merge(
           current_user:,
           investigation: @investigation,
@@ -96,8 +108,19 @@ module Investigations
           })
         )
 
-        if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
+        # If the risk level has not been set for the investigation, set it to the same
+        # as the risk assessment. This will force the redirect to the supporting information
+        # page below and skip the "Do you want to match this case risk level to the risk assessment level?"
+        # page.
+        if @investigation.risk_level.nil?
+          ChangeCaseRiskLevel.call!(
+            investigation: @investigation,
+            user: current_user,
+            risk_level: result.risk_assessment.risk_level
+          )
+        end
 
+        if result.risk_assessment.risk_level == @investigation.risk_level
           redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
         else
           redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
@@ -120,7 +143,6 @@ module Investigations
         :assessed_by_team_id,
         :assessed_by_business_id,
         :assessed_by_other,
-        :custom_risk_level,
         :existing_risk_assessment_file_file_id,
         assessed_on: %i[day month year],
         investigation_product_ids: []

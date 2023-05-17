@@ -21,14 +21,14 @@ private
   attr_accessor :investigation
 
   def any_changes?
-    investigation.risk_level_changed? || investigation.custom_risk_level_changed?
+    investigation.risk_level_changed?
   end
 
   def set?
-    any_changes? && investigation.risk_level_was.blank? && investigation.custom_risk_level_was.blank?
+    any_changes? && investigation.risk_level_was.blank?
   end
 
   def remove?
-    any_changes? && investigation.risk_level.blank? && investigation.custom_risk_level.blank?
+    any_changes? && investigation.risk_level.blank?
   end
 end

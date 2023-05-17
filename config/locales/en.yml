@@ -279,13 +279,13 @@ en:
           zero: This case does not have a risk assessment. You may want to <a class="govuk-link" href="%{add_risk_assessment_href}">add a risk assessment</a> before setting the case risk level.
           one: This case has <a class="govuk-link" href="%{risk_assessment_href}">1 risk assessment</a> added, assessing the risk as %{risk_assessment_risk_levels}.
           other:  This case has <a class="govuk-link" href="%{supporting_information_href}">%{count} risk assessments</a> added, assessing the risk as %{risk_assessment_risk_levels}.
-        submit_button: "Set risk level"
         legend: "Case risk level"
         levels:
           serious: "Serious risk"
           high: "High risk"
           medium: "Medium risk"
           low: "Low risk"
+          not_conclusive: "Not conclusive"
       success:
         set: "The case risk level was updated"
         changed: "The case risk level was updated"
@@ -528,8 +528,6 @@ en:
               recent_date: Date of assessment must be on or after 1 January 1970
             risk_level:
               blank: Select the risk level
-            custom_risk_level:
-              blank: "Enter other risk level"
             assessed_by:
               blank: Select who completed the assessment
             assessed_by_team_id:
@@ -545,7 +543,7 @@ en:
         update_risk_level_from_risk_assessment_form:
           attributes:
             update_case_risk_level_to_match_investigation:
-              inclusion: Select if you would like to match the case risk level to the risk assessment level
+              inclusion: Select yes if you want to match the case risk level to the risk assessment level
         add_team_to_case_form:
           attributes:
             team_id:
@@ -606,8 +604,6 @@ en:
           attributes:
             risk_level:
               not_allowed: "Invalid option"
-            custom_risk_level:
-              blank: "Set a risk level"
         supporting_information_type_form:
           attributes:
             type:
@@ -768,9 +764,6 @@ en:
               blank: "Enter a valid product category"
             hazard_type:
               blank: "Enter the primary hazard"
-            custom_risk_level:
-              present: "Custom risk level must be blank when risk level is not 'other'"
-              blank: "Custom risk level must be present when risk level is 'other'"
         user:
           attributes:
             mobile_number:

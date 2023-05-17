@@ -10,7 +10,6 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
 
   let(:assessed_on) { Date.parse("2019-01-01") }
   let(:risk_level) { :low }
-  let(:custom_risk_level) { nil }
   let(:assessed_by_team_id) { user.team.id }
   let(:assessed_by_business_id) { nil }
   let(:assessed_by_other) { nil }
@@ -21,7 +20,6 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
            investigation:,
            assessed_on: Date.parse("2019-01-01"),
            risk_level: :low,
-           custom_risk_level: nil,
            assessed_by_team: user.team,
            assessed_by_business: nil,
            assessed_by_other: nil,
@@ -62,7 +60,6 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
           user:,
           assessed_on:,
           risk_level:,
-          custom_risk_level:,
           assessed_by_team_id:,
           assessed_by_business_id:,
           assessed_by_other:,
@@ -77,7 +74,6 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
       context "when no changes have been made" do
         let(:assessed_on) { Date.parse("2019-01-01") }
         let(:risk_level) { :low }
-        let(:custom_risk_level) { nil }
         let(:assessed_by_team_id) { user.team.id }
         let(:assessed_by_business_id) { nil }
         let(:assessed_by_other) { nil }
@@ -106,7 +102,6 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
       context "when changes have been made" do
         let(:assessed_on) { Date.parse("2020-01-02") }
         let(:risk_level) { :serious }
-        let(:custom_risk_level) { nil }
         let(:assessed_by_team_id) { nil }
         let(:assessed_by_business_id) { nil }
         let(:assessed_by_other) { "OtherBusiness Ltd" }

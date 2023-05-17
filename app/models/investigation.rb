@@ -18,6 +18,7 @@ class Investigation < ApplicationRecord
     high: "high",
     medium: "medium",
     low: "low",
+    not_conclusive: "not_conclusive",
     other: "other"
   }
 
@@ -29,8 +30,6 @@ class Investigation < ApplicationRecord
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
-  validates :custom_risk_level, absence: true, if: -> { risk_level != "other" }
-  validates :custom_risk_level, presence: true, if: -> { risk_level == "other" }
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products

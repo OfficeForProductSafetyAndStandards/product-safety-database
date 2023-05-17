@@ -681,7 +681,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+\/update-case-risk-level/)
     end
-    expect_page_to_have_h1("Case risk level")
+    expect_page_to_have_h1("Do you want to match this case risk level to the risk assessment level?")
   end
 
   def expect_to_be_on_case_summary_edit_page(case_id:)
