@@ -2,7 +2,7 @@ class Investigations::TestResults::FundingSourceController < ApplicationControll
   before_action :set_investigation
 
   def new
-    # @test_funding_form = SetTestResultFundingOnCaseForm.new
+    @test_funding_form = SetTestResultFundingOnCaseForm.new
   end
 
   def create
@@ -12,7 +12,7 @@ class Investigations::TestResults::FundingSourceController < ApplicationControll
         session[:test_opss_funded] = true
 
         # TODO: redirect to the next step in the flow
-        # redirect_to new_investigation_test_result_path(@investigation)
+        redirect_to new_investigation_test_result_path(@investigation)
       else
         redirect_to new_investigation_test_result_path(@investigation)
       end

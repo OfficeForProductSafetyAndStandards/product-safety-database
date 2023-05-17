@@ -1,0 +1,43 @@
+<% page_title = "Was the test funded under the Sampling Protocol?" %>
+<%= page_title page_title, errors: @test_funding_form.errors.any? %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink text: "Back", href: investigation_supporting_information_index_path(@investigation) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @test_funding_form, url: investigation_funding_source_path(investigation_pretty_id: @investigation.pretty_id)) do |form| %>
+      <%= error_summary(@test_funding_form.errors, %i[opss_funded]) %>
+
+      <%= form.hidden_field :opss_funded, value: "" %>
+
+      <%= govukRadios(
+        form: form,
+        key: :opss_funded,
+        classes: "",
+        fieldset: {
+          legend: {
+            html: "Was the test funded under the <abbr>OPSS</abbr> Sampling Protocol?".html_safe,
+            is_page_heading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: [
+          {
+            id: "opss_funded",
+            text: "Yes",
+            value: true
+          },
+          {
+            id: "opss_funded_no",
+            text: "No",
+            value: false
+          }
+        ]
+      ) %>
+
+      <%= govukButton(text: "Continue") %>
+    <% end %>
+  </div>
+</div>
