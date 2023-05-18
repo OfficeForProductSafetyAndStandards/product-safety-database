@@ -7,6 +7,6 @@ class SetTestResultFundingOnCaseForm
   validates_inclusion_of :opss_funded, in: %w[true false], message: "Select yes if the test was funded under the OPSS Sampling Protocol"
 
   def is_opss_funded?
-    opss_funded
+    opss_funded == "true"
   end
 end
