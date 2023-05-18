@@ -21,6 +21,9 @@ class TestResultForm
   attribute :failure_details
   attribute :further_test_results
 
+  attribute :tso_certificate_reference_number, :string
+  attribute :tso_certificate_issue_date, :govuk_date
+
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
   validates :standards_product_was_tested_against, presence: true

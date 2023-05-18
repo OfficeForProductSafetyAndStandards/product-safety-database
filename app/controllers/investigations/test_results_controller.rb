@@ -16,6 +16,9 @@ class Investigations::TestResultsController < ApplicationController
                            .serializable_hash
                            .merge(investigation: @investigation_object, user: current_user)
 
+    test_result_certificate_atttributes = session[:test_result_certificate]
+    service_attributes.merge!(test_result_certificate_atttributes) if test_result_certificate_atttributes
+
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?

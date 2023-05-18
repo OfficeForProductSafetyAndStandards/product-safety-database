@@ -3,12 +3,14 @@ class Investigations::TestResults::FundingCertificateController < ApplicationCon
 
   def new
     @test_certificate_form = SetTestResultCertificateOnCaseForm.new
+    session[:test_result_certificate] = nil
   end
 
   def create
     @test_certificate_form = SetTestResultCertificateOnCaseForm.new(test_funding_certificate_params)
     if @test_certificate_form.valid?
-
+      session[:test_result_certificate] = test_funding_certificate_params.to_h
+      redirect_to new_investigation_test_result_path(@investigation)
     else
       render :new
     end
