@@ -75,7 +75,16 @@ en:
   update_phone_call:
     email_subject_text: "%{case_type} updated"
   create_case: "Create a case"
-
+  contacts:
+    form:
+      legend:
+        title: Contacts
+        hint: These are the details for a contact at the business.
+  locations:
+    address_form:
+      legend:
+        title: Official address
+        hint: You can add additional addresses after you have added the business.
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -105,10 +114,20 @@ en:
     genuine: This product record is about a genuine product
 
   businesses:
-      titles:
-        team_businesses: Team businesses
-        your_businesses: Your businesses
-        all_businesses: All Businesses - Search
+    titles:
+      team_businesses: Team businesses
+      your_businesses: Your businesses
+      all_businesses: All Businesses - Search
+    form:
+      trading_name:
+        label: Trading name
+        hint: The name the business is known as.
+      legal_name:
+        label: Registered or legal name
+        hint_html: As it appears on Companies House for <abbr>UK</abbr> businesses (usually ends in 'Ltd' or 'Limited').
+      company_number:
+        label: Company number
+        hint_html: In the <abbr>UK</abbr> this is an eight-digit number assigned to incorporated businesses.
   investigations:
     activities:
       business:

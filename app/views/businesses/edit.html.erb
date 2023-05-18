@@ -3,15 +3,21 @@
   <%= link_to "Back to business", @business, class: "govuk-back-link" %>
 <% end %>
 
-<%= form_with(model: @business, local: true) do |form| %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= @business.trading_name %></h1>
+  </div>
+</div>
+
+<%= form_with(model: @business, local: true, html: { autocomplete: :off, novalidate: true }) do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-two-thirds">
       <%= govukErrorSummary form: form %>
     </div>
   </div>
-  <%= render "business_heading", business: @business %>
+
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <div class="govuk-grid-column-two-thirds">
       <%= render "businesses/form", form: form, business: @business, countries: @countries %>
     </div>
   </div>

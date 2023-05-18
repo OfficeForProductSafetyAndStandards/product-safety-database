@@ -3,6 +3,8 @@
   <%= link_to "Back to business", @business, class: "govuk-back-link" %>
 <% end %>
 
+<h1 class="govuk-heading-l">Edit contact</h1>
+
 <%= form_with(model: @contact, url: business_contact_path(@business, @contact), local: true) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
