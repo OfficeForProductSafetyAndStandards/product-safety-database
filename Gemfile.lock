@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails.git
+  revision: b10ee20b8849b8409205049eaa533e6d6df82063
+  specs:
+    govuk-design-system-rails (0.10.3)
+
 PATH
   remote: prism
   specs:
@@ -243,7 +249,6 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
       view_component (~> 3.0.0)
-    govuk-design-system-rails (0.10.3)
     govuk_notify_rails (2.2.0)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -669,7 +674,7 @@ DEPENDENCIES
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
-  govuk-design-system-rails (~> 0.10.3)
+  govuk-design-system-rails (~> 0.10.3)!
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)
