@@ -23,6 +23,9 @@ private
   end
 
   def test_funding_certificate_params
-    params.require(:set_test_result_certificate_on_case_form).permit(:tso_certificate_reference_number, :tso_certificate_issue_date)
+    params.require(:set_test_result_certificate_on_case_form).permit(
+      :tso_certificate_reference_number,
+      tso_certificate_issue_date: %i[day month year]
+    )
   end
 end
