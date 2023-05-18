@@ -9,7 +9,7 @@ class InvestigationPolicy < ApplicationPolicy
   # changing the case owner, its status (eg 'open' or 'closed'), and whether
   # or not it is 'restricted'.
   def update?(user: @user)
-    return false if record.is_closed?
+    return false if record.is_closed? && !user.has_role?(:super_user)
 
     record.teams_with_edit_access.include?(user.team) || user.has_role?(:super_user)
   end
