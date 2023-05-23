@@ -13,7 +13,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     create(:allegation, edit_access_teams: [team_with_access], risk_assessments: [
       create(:risk_assessment, risk_level: "serious"),
       create(:risk_assessment, risk_level: "high"),
-      create(:risk_assessment, risk_level: "other", custom_risk_level: "urgent")
+      create(:risk_assessment, risk_level: "not_conclusive")
     ])
   end
 
@@ -47,7 +47,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
 
     expect(page).to have_text("This case does not have a risk assessment. You may want to add a risk assessment before setting the case risk level.")
 
-    click_button "Set risk level"
+    click_button "Save"
 
     expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
@@ -77,44 +77,35 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
   scenario "Setting risk level on a case with multiple risk assessments" do
     visit "/cases/#{investigation_with_multiple_risk_assessments.pretty_id}/edit-risk-level"
 
-    expect(page).to have_content("This case has 3 risk assessments added, assessing the risk as serious risk, high risk and urgent.")
+    expect(page).to have_content("This case has 3 risk assessments added, assessing the risk as serious risk, high risk and not conclusive.")
   end
 
   scenario "Changing risk level for an investigation" do
     investigation.update!(risk_level: :medium)
     visit "/cases/#{investigation.pretty_id}"
 
-    # Selecting Other and leaving the input field empty causes a validation error
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Medium risk")
-    choose("Other")
-    click_button "Set risk level"
-
-    expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_error("Set a risk level")
-    expect(page).to have_checked_field("Other")
-
-    # Fill the field with a custom risk level
-    fill_in "Custom risk level", with: "Mildly risky"
-    click_button "Set risk level"
+    choose("Not conclusive")
+    click_button "Save"
 
     expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Mildly risky")
+    expect(page).to have_summary_item(key: "Case risk level", value: "Not conclusive")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk level changed to mildly risky")
+    expect(page).to have_css("h3", text: "Case risk level changed to not conclusive")
 
     # Teams/users with access receive an email with the update
     email = delivered_emails.last
     expect(email.recipient).to eq creator_team.team_recipient_email
     expect(email.personalization).to include(
       name: creator_team.name,
-      verb_with_level: "changed to mildly risky",
+      verb_with_level: "changed to not conclusive",
     )
 
     # Changing the risk level back to a default one
@@ -122,9 +113,9 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(page).to have_checked_field("Other")
+    expect(page).to have_checked_field("Not conclusive")
     choose("High risk")
-    click_button "Set risk level"
+    click_button "Save"
 
     expect_confirmation_banner("The case risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
@@ -142,27 +133,6 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
       name: creator_team.name,
       verb_with_level: "changed to high risk",
     )
-
-    # Selecting Other and introducing a level that matches one of the other options
-    # will result in the other option being pre-selected when changing risk level
-    # in the future
-    within('nav[aria-label="Secondary"]') { click_link "Case" }
-    click_change_risk_level_link
-
-    expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(page).to have_checked_field("High risk")
-    choose("Other")
-    fill_in "Custom risk level", with: "Low"
-    click_button "Set risk level"
-
-    expect_confirmation_banner("The case risk level was updated")
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Low risk")
-
-    click_change_risk_level_link
-
-    expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(find_field("Low risk")).to be_checked
   end
 
   def click_change_risk_level_link

@@ -20,13 +20,13 @@ RSpec.feature "Add a location to a business", :with_stubbed_opensearch, :with_st
     fill_in "Town or city", with: "New Town"
     fill_in "County", with: "Townshire"
     fill_in "Postcode", with: "AB1 2CDE"
-    select "United Kingdom", from: "Country"
+    select "Germany", from: "Country"
 
     click_button "Save"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: "Acme Ltd")
 
     expect(page).to have_text("Headquarters")
-    expect(page).to have_text("Unit 1, 100 High Street, New Town, AB1 2CDE, United Kingdom")
+    expect(page).to have_text("Unit 1, 100 High Street, New Town, AB1 2CDE, Germany")
   end
 end

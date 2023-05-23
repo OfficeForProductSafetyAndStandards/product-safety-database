@@ -131,6 +131,7 @@ Rails.application.routes.draw do
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
+    resource :overseas_regulator, only: %i[update edit], path: "edit-overseas-regulator", controller: "investigations/overseas_regulator"
     resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
     resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
     resource :reference_numbers, only: %i[edit update], controller: "investigations/reference_numbers"

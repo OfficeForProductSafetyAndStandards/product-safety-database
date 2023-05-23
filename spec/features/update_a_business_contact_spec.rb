@@ -24,13 +24,13 @@ RSpec.feature "Update a business contact", :with_stubbed_opensearch, :with_stubb
     # Expect form to be pre-filled
     expect(page).to have_field("Name", with: "Mr Smith")
     expect(page).to have_field("Email", with: "smith@example.com")
-    expect(page).to have_field("Phone number", with: "01632 960 001")
+    expect(page).to have_field("Telephone", with: "01632 960 001")
     expect(page).to have_field("Job title or role description", with: "Manager")
 
     # Change all the values
     fill_in "Name", with: "Mr Jones"
     fill_in "Email", with: "jones@example.com"
-    fill_in "Phone number", with: "07700 900 982"
+    fill_in "Telephone", with: "07700 900 982"
     fill_in "Job title or role description", with: "Director"
 
     click_button "Save"

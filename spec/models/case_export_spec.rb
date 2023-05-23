@@ -10,8 +10,31 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
   let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }
   let(:case_export) { described_class.create!(user:, params:) }
+  let(:team_mappings) do
+    [
+      {
+        "team_name": team.name,
+        "type": "local_authority",
+        "regulator_name": nil,
+        "ts_region": "Scotland",
+        "ts_acronym": "SCOTSS",
+        "ts_area": "Aberdeenshire"
+      },
+      {
+        "team_name": other_team.name,
+        "type": "external",
+        "regulator_name": "Department of Agriculture, Environment and Rural Affairs (DAERA)",
+        "ts_region": nil,
+        "ts_acronym": nil,
+        "ts_area": nil
+      }
+    ].to_json
+  end
 
-  before { Investigation.__elasticsearch__.import scope: "not_deleted", force: true, refresh: :wait }
+  before do
+    Investigation.__elasticsearch__.import scope: "not_deleted", force: true, refresh: :wait
+    allow(JSON).to receive(:load_file!).and_return(JSON.parse(team_mappings, object_class: OpenStruct))
+  end
 
   describe "#export!" do
     let(:result) { case_export.export! }
@@ -144,6 +167,22 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(1, 28)).to eq "Case_Type"
       expect(sheet.cell(2, 28)).to eq investigation.case_type
       expect(sheet.cell(3, 28)).to eq other_team_investigation.case_type
+
+      expect(sheet.cell(1, 29)).to eq "Trading_Standards_Region"
+      expect(sheet.cell(2, 29)).to eq "Scotland"
+      expect(sheet.cell(3, 29)).to eq nil
+
+      expect(sheet.cell(1, 30)).to eq "Trading_Standards_Region_Code"
+      expect(sheet.cell(2, 30)).to eq "SCOTSS"
+      expect(sheet.cell(3, 30)).to eq nil
+
+      expect(sheet.cell(1, 31)).to eq "Regulator_Name"
+      expect(sheet.cell(2, 31)).to eq nil
+      expect(sheet.cell(3, 31)).to eq "Department of Agriculture, Environment and Rural Affairs (DAERA)"
+
+      expect(sheet.cell(1, 32)).to eq "OPSS_Internal_Team"
+      expect(sheet.cell(2, 32)).to eq "false"
+      expect(sheet.cell(3, 32)).to eq "false"
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength

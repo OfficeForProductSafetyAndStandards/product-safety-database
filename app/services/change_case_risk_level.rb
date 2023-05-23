@@ -4,7 +4,7 @@ class ChangeCaseRiskLevel
 
   AUDIT_ACTIVITY_CLASS = AuditActivity::Investigation::RiskLevelUpdated
 
-  delegate :investigation, :risk_level, :custom_risk_level, :user, :change_action, :updated_risk_level, to: :context
+  delegate :investigation, :risk_level, :user, :change_action, :updated_risk_level, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -12,7 +12,7 @@ class ChangeCaseRiskLevel
 
     context.risk_level = nil unless Investigation.risk_levels.key?(context.risk_level)
 
-    investigation.assign_attributes(risk_level: risk_level.presence, custom_risk_level: custom_risk_level.presence)
+    investigation.assign_attributes(risk_level: risk_level.presence)
 
     context.change_action = Investigation::RiskLevelChange.new(investigation).change_action
     return unless change_action

@@ -1,43 +1,11 @@
 require "rails_helper"
 
 RSpec.describe RiskLevelForm do
-  subject(:form) { described_class.new(risk_level:, custom_risk_level:) }
+  subject(:form) { described_class.new(risk_level:) }
 
   let(:standard_level_key) { Investigation.risk_levels.keys.first }
   let(:standard_level_text) do
     I18n.t(".investigations.risk_level.show.levels.#{standard_level_key}")
-  end
-
-  describe "#initialize" do
-    context "when risk level is not set" do
-      let(:risk_level) { Investigation.risk_levels[:other] }
-
-      context "with a custom risk level that does not match a standard level" do
-        let(:custom_risk_level) { "very very risky" }
-
-        it "keeps custom risk level " do
-          expect(form.attributes).to eq(custom_risk_level:, risk_level: Investigation.risk_levels[:other])
-        end
-      end
-
-      context "with a custom risk level that matches with space/capital variations a standard level" do
-        let(:custom_risk_level) { "#{standard_level_key.upcase}  " }
-        let(:risk_level) { Investigation.risk_levels[:other] }
-
-        it "sets risk level attribute as the standard level matching the custom risk level" do
-          expect(form.attributes).to eq(custom_risk_level: nil, risk_level: standard_level_key)
-        end
-      end
-    end
-
-    context "when risk level matches a standard level" do
-      let(:risk_level) { standard_level_key }
-      let(:custom_risk_level) { "whatever level" }
-
-      it "keeps the value for risk level attribute" do
-        expect(form.attributes).to eq(risk_level:, custom_risk_level: nil)
-      end
-    end
   end
 
   describe "#valid?" do
@@ -68,16 +36,10 @@ RSpec.describe RiskLevelForm do
         form.validate
         expect(form.risk_level).to eq risk_level
       end
-
-      it "keeps the original custom_risk_level in the form" do
-        form.validate
-        expect(form.custom_risk_level).to eq custom_risk_level
-      end
     end
 
-    context "when neither the risk_level or the custom_risk_level are set" do
+    context "when the risk_level is not set" do
       let(:risk_level) { nil }
-      let(:custom_risk_level) { nil }
 
       include_examples "valid form"
     end
@@ -85,49 +47,13 @@ RSpec.describe RiskLevelForm do
     context "when risk level is set to any of the standard levels" do
       let(:risk_level) { standard_level_key }
 
-      context "with custom risk level" do
-        let(:custom_risk_level) { "custom risk" }
-
-        include_examples "valid form"
-      end
-
-      context "without custom risk level" do
-        let(:custom_risk_level) { nil }
-
-        include_examples "valid form"
-      end
-    end
-
-    context "when risk level is set to 'other'" do
-      let(:risk_level) { "other" }
-
-      context "with custom_risk_level" do
-        let(:custom_risk_level) { "custom risk" }
-
-        include_examples "valid form"
-      end
-
-      context "without custom_risk_level" do
-        let(:custom_risk_level) { nil }
-
-        include_examples "invalid form", [:custom_risk_level, "Set a risk level"]
-      end
+      include_examples "valid form"
     end
 
     context "when risk level is set to a non allowed value" do
       let(:risk_level) { "random risk" }
 
-      context "with custom_risk_level" do
-        let(:custom_risk_level) { "custom risk" }
-
-        include_examples "invalid form", [:risk_level, "Risk level is not included in the list"]
-      end
-
-      context "without custom_risk_level" do
-        let(:custom_risk_level) { nil }
-
-        include_examples "invalid form", [:risk_level, "Risk level is not included in the list"]
-      end
+      include_examples "invalid form", [:risk_level, "Risk level is not included in the list"]
     end
   end
 end

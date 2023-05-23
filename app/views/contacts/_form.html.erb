@@ -1,6 +1,9 @@
 <% label_classes = local_assigns[:label_classes].presence %>
 
-<%= govukFieldset(legend: legend) do %>
+<fieldset class="govuk-fieldset govuk-!-margin-bottom-6" aria-describedby="contact-hint">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s"><%= t('.legend.title') %></legend>
+  <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
+
   <%= govukInput(
     key: :name,
     form: form,
@@ -13,16 +16,17 @@
     classes: "govuk-!-width-two-thirds",
     label: { text: "Email", classes: label_classes }
   ) %>
-  <%= govukInput(
-    key: :phone_number,
-    form: form,
-    classes: "govuk-!-width-one-third",
-    label: { text: "Phone number", classes: label_classes }
-  ) %>
+
+  <div class="govuk-form-group">
+    <%= form.label :phone_number, "Telephone", class: "govuk-label" %>
+    <div id="telephone-number-hint" class="govuk-hint govuk-!-font-size-16">For international numbers include the country code.</div>
+    <%= form.telephone_field :phone_number, class: "govuk-input govuk-!-width-two-thirds", aria: { describedby: "telephone-number" } %>
+  </div>
+
   <%= govukInput(
     key: :job_title,
     form: form,
     classes: "govuk-!-width-two-thirds",
     label: { text: "Job title or role description", classes: label_classes }
   ) %>
-<% end %>
+</fieldset>

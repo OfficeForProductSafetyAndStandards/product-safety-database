@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_10_203419) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_15_142343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_203419) do
   create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
   create_enum "has_online_recall_information", ["has_online_recall_information_yes", "has_online_recall_information_no", "has_online_recall_information_not_relevant"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
-  create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
+  create_enum "risk_levels", ["serious", "high", "medium", "low", "other", "not_conclusive"]
   create_enum "severities", ["serious", "high", "medium", "low", "unknown_severity", "other"]
   create_enum "usages", ["during_normal_use", "during_misuse", "with_adult_supervision", "without_adult_supervision", "unknown_usage"]
   create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
@@ -239,9 +239,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_203419) do
     t.text "hazard_description"
     t.string "hazard_type"
     t.boolean "is_closed", default: false
+    t.boolean "is_from_overseas_regulator"
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
     t.string "notifying_country"
+    t.string "overseas_regulator_country"
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"

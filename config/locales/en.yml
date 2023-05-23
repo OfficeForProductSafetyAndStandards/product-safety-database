@@ -75,7 +75,16 @@ en:
   update_phone_call:
     email_subject_text: "%{case_type} updated"
   create_case: "Create a case"
-
+  contacts:
+    form:
+      legend:
+        title: Contacts
+        hint: These are the details for a contact at the business.
+  locations:
+    address_form:
+      legend:
+        title: Official address
+        hint: You can add additional addresses after you have added the business.
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -105,10 +114,20 @@ en:
     genuine: This product record is about a genuine product
 
   businesses:
-      titles:
-        team_businesses: Team businesses
-        your_businesses: Your businesses
-        all_businesses: All Businesses - Search
+    titles:
+      team_businesses: Team businesses
+      your_businesses: Your businesses
+      all_businesses: All Businesses - Search
+    form:
+      trading_name:
+        label: Trading name
+        hint: The name the business is known as.
+      legal_name:
+        label: Registered or legal name
+        hint_html: As it appears on Companies House for <abbr>UK</abbr> businesses (usually ends in 'Ltd' or 'Limited').
+      company_number:
+        label: Company number
+        hint_html: In the <abbr>UK</abbr> this is an eight-digit number assigned to incorporated businesses.
   investigations:
     activities:
       business:
@@ -149,8 +168,9 @@ en:
             label: Fulfillment house
           distributor:
             label: Distributor
-
-
+    overseas_regulator:
+      option_yes: "Yes"
+      option_no: "No"
     tabs:
       businesses:
         remove_business_hint: "Removing a business from a case cannot be undone"
@@ -278,13 +298,13 @@ en:
           zero: This case does not have a risk assessment. You may want to <a class="govuk-link" href="%{add_risk_assessment_href}">add a risk assessment</a> before setting the case risk level.
           one: This case has <a class="govuk-link" href="%{risk_assessment_href}">1 risk assessment</a> added, assessing the risk as %{risk_assessment_risk_levels}.
           other:  This case has <a class="govuk-link" href="%{supporting_information_href}">%{count} risk assessments</a> added, assessing the risk as %{risk_assessment_risk_levels}.
-        submit_button: "Set risk level"
         legend: "Case risk level"
         levels:
           serious: "Serious risk"
           high: "High risk"
           medium: "Medium risk"
           low: "Low risk"
+          not_conclusive: "Not conclusive"
       success:
         set: "The case risk level was updated"
         changed: "The case risk level was updated"
@@ -355,6 +375,9 @@ en:
         body: "Permission level changed to '%{new_permission}' from '%{old_permission}'."
       update_notifying_country:
         body: "Notifying country changed from %{previous_country} to %{new_country}."
+      update_overseas_regulator:
+        body_set: Overseas regulator set to %{new_country}
+        body_changed: "Overseas regulator changed from %{previous_country} to %{new_country}"
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
@@ -463,6 +486,12 @@ en:
           attributes:
             country:
               inclusion: Enter the notifying country
+        overseas_regulator_form:
+          attributes:
+            is_from_overseas_regulator:
+              inclusion: Select yes if the allegation was made by an overseas regulator
+            overseas_regulator_country:
+              inclusion: Select which country
         comment_form:
           attributes:
             body:
@@ -518,8 +547,6 @@ en:
               recent_date: Date of assessment must be on or after 1 January 1970
             risk_level:
               blank: Select the risk level
-            custom_risk_level:
-              blank: "Enter other risk level"
             assessed_by:
               blank: Select who completed the assessment
             assessed_by_team_id:
@@ -535,7 +562,7 @@ en:
         update_risk_level_from_risk_assessment_form:
           attributes:
             update_case_risk_level_to_match_investigation:
-              inclusion: Select if you would like to match the case risk level to the risk assessment level
+              inclusion: Select yes if you want to match the case risk level to the risk assessment level
         add_team_to_case_form:
           attributes:
             team_id:
@@ -596,8 +623,6 @@ en:
           attributes:
             risk_level:
               not_allowed: "Invalid option"
-            custom_risk_level:
-              blank: "Set a risk level"
         supporting_information_type_form:
           attributes:
             type:
@@ -758,9 +783,6 @@ en:
               blank: "Enter a valid product category"
             hazard_type:
               blank: "Enter the primary hazard"
-            custom_risk_level:
-              present: "Custom risk level must be blank when risk level is not 'other'"
-              blank: "Custom risk level must be present when risk level is 'other'"
         user:
           attributes:
             mobile_number:

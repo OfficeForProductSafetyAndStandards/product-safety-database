@@ -10,7 +10,6 @@ class RiskAssessmentForm
 
   attribute :assessed_on, :govuk_date
   attribute :risk_level
-  attribute :custom_risk_level
 
   attribute :assessed_by
   attribute :assessed_by_team_id
@@ -36,8 +35,6 @@ class RiskAssessmentForm
   validates :assessed_by_team_id, presence: true, if: -> { assessed_by == "another_team" }
   validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
   validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
-
-  validates :custom_risk_level, presence: true, if: -> { risk_level.to_s == "other" }
 
   validates :assessed_on,
             real_date: true,
@@ -69,15 +66,8 @@ class RiskAssessmentForm
       high: "high",
       medium: "medium",
       low: "low",
-      other: "other"
+      not_conclusive: "not_conclusive"
     }
-  end
-
-  # Ignore custom risk level value if risk_level isn't other
-  def custom_risk_level
-    return nil if risk_level.to_s != "other"
-
-    super
   end
 
   def investigation_products

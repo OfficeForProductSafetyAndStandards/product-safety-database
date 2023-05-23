@@ -3,7 +3,7 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
   SUBTITLE_SLUG = "Risk level changed".freeze
 
   def self.build_metadata(investigation, update_verb)
-    updated_values = investigation.previous_changes.slice(:risk_level, :custom_risk_level)
+    updated_values = investigation.previous_changes.slice(:risk_level)
     {
       updates: updated_values,
       update_verb:
@@ -21,12 +21,9 @@ private
   end
 
   def new_risk_level
-    new_risk_level_value = metadata["updates"]["risk_level"]&.second
+    return "" if metadata["update_verb"] == "removed"
 
-    if new_risk_level_value.present? && new_risk_level_value != "other"
-      I18n.t(".investigations.risk_level.show.levels.#{new_risk_level_value}")
-    else
-      metadata["updates"]["custom_risk_level"]&.second
-    end
+    new_risk_level_value = metadata["updates"]["risk_level"]&.second
+    I18n.t(".investigations.risk_level.show.levels.#{new_risk_level_value}")
   end
 end
