@@ -7,7 +7,10 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def create
-    @test_result_form = TestResultForm.new(test_result_params)
+    create_test_result_params = test_result_params
+    create_test_result_params.merge!(session[:test_result_certificate]) if session[:test_result_certificate].present?
+
+    @test_result_form = TestResultForm.new(create_test_result_params)
     @test_result_form.load_document_file
 
     return render :new if @test_result_form.invalid?(:create_with_investigation_product)
@@ -15,9 +18,6 @@ class Investigations::TestResultsController < ApplicationController
     service_attributes = @test_result_form
                            .serializable_hash
                            .merge(investigation: @investigation_object, user: current_user)
-
-    test_result_certificate_atttributes = session[:test_result_certificate]
-    service_attributes.merge!(test_result_certificate_atttributes) if test_result_certificate_atttributes
 
     result = AddTestResultToInvestigation.call(service_attributes)
 
