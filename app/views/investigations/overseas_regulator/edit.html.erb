@@ -22,7 +22,7 @@
         <%= govukSelect(
           form: form,
           key: :overseas_regulator_country,
-          items: options_for_overseas_regulator(Country.overseas_regulator_countries, @overseas_regulator_form),
+          items: options_for_overseas_regulator(Country.overseas_countries, @overseas_regulator_form),
           include_blank: true,
           label: { text: "Select which country" }
         ) %>

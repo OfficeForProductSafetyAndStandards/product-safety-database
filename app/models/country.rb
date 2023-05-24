@@ -4,7 +4,8 @@ class Country
     ["England", "country:GB-ENG"],
     ["Scotland", "country:GB-SCT"],
     ["Wales", "country:GB-WLS"],
-    ["Northern Ireland", "country:GB-NIR"]
+    ["Northern Ireland", "country:GB-NIR"],
+    ["Great Britain", "country:GB-GBN"]
   ].freeze
 
   UNITED_KINGDOM = [
@@ -20,7 +21,11 @@ class Country
       all + ADDITIONAL_COUNTRIES
     end
 
-    def overseas_regulator_countries
+    def uk_countries
+      ADDITIONAL_COUNTRIES
+    end
+
+    def overseas_countries
       all - UNITED_KINGDOM
     end
   end

@@ -484,8 +484,12 @@ en:
               blank: Enter the reason for removing the product
         notifying_country_form:
           attributes:
-            country:
+            notifying_country_overseas:
               inclusion: Enter the notifying country
+            notifying_country_uk:
+              inclusion: Enter the notifying country
+            overseas_or_uk:
+              inclusion: Select if the notifying country is overseas or in the UK
         overseas_regulator_form:
           attributes:
             is_from_overseas_regulator:
