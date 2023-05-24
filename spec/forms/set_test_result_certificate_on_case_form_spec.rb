@@ -30,7 +30,7 @@ RSpec.describe SetTestResultCertificateOnCaseForm, type: :model do
     it_behaves_like "it does not allow far away dates", :tso_certificate_issue_date, nil, on_or_before: false
 
     context "when tso_certificate_issue_date is missing" do
-      let(:tso_certificate_issue_date) { { day: '', month: '', year: ''} }
+      let(:tso_certificate_issue_date) { { day: "", month: "", year: "" } }
 
       it "is invalid with an invalid type" do
         expect(form).not_to be_valid

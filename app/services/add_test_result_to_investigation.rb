@@ -3,8 +3,8 @@ class AddTestResultToInvestigation
   include EntitiesToNotify
 
   delegate :user, :investigation, :document, :date, :details, :legislation, :result,
-    :standards_product_was_tested_against, :investigation_product_id, :failure_details,
-    :tso_certificate_reference_number, :tso_certificate_issue_date, to: :context
+           :standards_product_was_tested_against, :investigation_product_id, :failure_details,
+           :tso_certificate_reference_number, :tso_certificate_issue_date, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
