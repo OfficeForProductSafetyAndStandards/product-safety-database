@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_opensearch, :with_errors_rendered, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
-  let(:email) { Faker::Internet.safe_email }
+  let(:email) { Faker::Internet.email }
   let(:name) { "Named User" }
 
   context "when the user is not a team admin" do

@@ -8,7 +8,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
   let(:investigation) { create(:allegation, creator: user) }
 
   let(:name) { "Test name" }
-  let(:email) { Faker::Internet.safe_email }
+  let(:email) { Faker::Internet.email }
   let(:date) { Date.parse("2020-02-01") }
 
   let(:file) { Rails.root.join("test/fixtures/files/email_file.txt") }
