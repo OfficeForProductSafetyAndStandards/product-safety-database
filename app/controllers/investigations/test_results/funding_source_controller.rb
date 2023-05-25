@@ -24,6 +24,8 @@ private
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :update?
     @investigation = investigation.decorate
+  rescue ActiveRecord::RecordNotFound
+    render_404_page
   end
 
   def test_funding_request_params
