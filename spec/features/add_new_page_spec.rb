@@ -74,18 +74,6 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
     end
   end
 
-  context "when user selects `product`" do
-    # TODO: Test linking an existing product when this feature is introduced
-    xit "takes user to the new product page" do
-      within_fieldset("What are you adding to the case?") do
-        choose "Product"
-      end
-
-      click_button "Continue"
-      expect_to_be_on_add_product_to_investigation_page(investigation)
-    end
-  end
-
   context "when user selects `business`" do
     it "takes user to the new business page" do
       within_fieldset("What are you adding to the case?") do
