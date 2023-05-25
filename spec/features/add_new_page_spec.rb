@@ -59,7 +59,7 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
       end
 
       click_button "Continue"
-      expect_to_be_on_record_test_result_page
+      expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
     end
   end
 
