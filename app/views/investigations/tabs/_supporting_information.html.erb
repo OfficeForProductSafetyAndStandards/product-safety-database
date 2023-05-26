@@ -70,6 +70,28 @@
               <dt class="govuk-summary-list__key">Added</dt>
               <dd class="govuk-summary-list__value"><%= item.date_added %></dd>
             </div>
+
+            <% if supporting_information_type_id == "test-results" %>
+              <% if item.opss_funded? %>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Funded</dt>
+                  <dd class="govuk-summary-list__value"><%= t("test_results.opss_funded.yes_html") %></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Sample number</dt>
+                  <dd class="govuk-summary-list__value"><%= item.tso_certificate_reference_number %></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Issue date</dt>
+                  <dd class="govuk-summary-list__value"><%= item.funding_issue_date %></dd>
+                </div>
+              <% else %>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Funded</dt>
+                  <dd class="govuk-summary-list__value">No</dd>
+                </div>
+              <% end %>
+            <% end %>
           </dl>
         </li>
       <% end %>
