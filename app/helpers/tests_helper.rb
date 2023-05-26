@@ -3,11 +3,11 @@ module TestsHelper
     rows = [
       {
         key: { text: "Date of test" },
-        value: { text: test_result.date.to_formatted_s(:govuk) }
+        value: { text: test_result.date_of_activity }
       },
       {
         key: { text: "Product tested" },
-        value: { text: "#{test_result.investigation_product.name} (#{test_result.investigation_product.psd_ref})" }
+        value: { text: test_result.product_tested }
       },
       {
         key: { text: "Legislation" },
@@ -23,7 +23,7 @@ module TestsHelper
 
     rows << {
       key: { text: "Result" },
-      value: { text: test_result.decorate.event_type }
+      value: { text: test_result.event_type }
     }
 
     if test_result.result == "failed"
@@ -40,11 +40,10 @@ module TestsHelper
       }
     end
 
-    attachment_description = test_result.document.blob.metadata["description"]
-    if attachment_description.present?
+    if test_result.attachment_description.present?
       rows << {
         key: { text: "Attachment description" },
-        value: { text: attachment_description }
+        value: { text: test_result.attachment_description }
       }
     end
 

@@ -23,6 +23,14 @@ class Test < ApplicationRecord
       end
     end
 
+    def product_tested
+      "#{investigation_product.name} (#{investigation_product.psd_ref})"
+    end
+
+    def attachment_description
+      document.blob.metadata["description"]
+    end
+
     def supporting_information_title
       title
     end
