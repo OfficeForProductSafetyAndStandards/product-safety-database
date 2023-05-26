@@ -43,6 +43,19 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   def details
     metadata.dig("test_result", "details")
   end
+
+  def funded
+    metadata.dig("test_result", "tso_certificate_issue_date").present?
+  end
+
+  def funding_issue_date
+    return if metadata.dig("test_result", "tso_certificate_issue_date").nil?
+
+    Date.parse(metadata.dig("test_result", "tso_certificate_issue_date")).to_formatted_s(:govuk)
+  end
+
+  def tso_certificate_reference_number
+    metadata.dig("test_result", "tso_certificate_reference_number")
   end
 
   def date

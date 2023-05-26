@@ -46,7 +46,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect_activity_page_to_show_created_test_result_values(result: "Passed")
+      expect_activity_page_to_show_created_unfunded_test_result_values(result: "Passed")
 
       click_link "View test result"
 
@@ -107,7 +107,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect_activity_page_to_show_created_test_result_values(result: "Passed")
+      expect_activity_page_to_show_created_funded_test_result_values(result: "Passed", funded_date: date)
 
       click_link "View test result"
 
@@ -167,7 +167,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect_activity_page_to_show_created_test_result_values(result: "Failed")
+      expect_activity_page_to_show_created_unfunded_test_result_values(result: "Failed")
 
       click_link "View test result"
 
@@ -261,7 +261,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
   end
 
-  def expect_activity_page_to_show_created_test_result_values(result:)
+  def expect_activity_page_to_show_created_unfunded_test_result_values(result:)
     expect(page).to have_text("#{result} test: MyBrand washing machine")
     expect(page).to have_text(product.name)
     expect(page).to have_text("Legislation: General Product Safety Regulations 2005")
@@ -269,6 +269,21 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     expect(page).to have_text("Date of test: 1 January 2020")
     expect(page).to have_text("Further details: Test result includes certificate of conformity")
     expect(page).to have_text("File description: test result file")
+    expect(page).to have_text("Funded: No")
+    expect(page).to have_text("Test result includes certificate of conformity")
+    expect(page).to have_link("test_result.txt")
+  end
+
+  def expect_activity_page_to_show_created_funded_test_result_values(result:, funded_date:)
+    expect(page).to have_text("#{result} test: MyBrand washing machine")
+    expect(page).to have_text(product.name)
+    expect(page).to have_text("Legislation: General Product Safety Regulations 2005")
+    expect(page).to have_text("Standards: EN71, EN73")
+    expect(page).to have_text("Date of test: 1 January 2020")
+    expect(page).to have_text("Further details: Test result includes certificate of conformity")
+    expect(page).to have_text("File description: test result file")
+    expect(page).to have_text("Funded: Yes")
+    expect(page).to have_text("Issue date: #{funded_date.to_formatted_s(:govuk)}")
     expect(page).to have_text("Test result includes certificate of conformity")
     expect(page).to have_link("test_result.txt")
   end
