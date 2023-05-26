@@ -26,7 +26,7 @@ module TestsHelper
       }
       rows << {
         key: { text: "Issue date" },
-        value: { text: test_result.tso_certificate_reference_number }
+        value: { text: test_result.funding_issue_date }
       }
     else
       rows << {
