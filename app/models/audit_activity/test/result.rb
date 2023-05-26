@@ -21,33 +21,34 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   end
 
   def attached_file_name
-    metadata["test_result"]["document"]["filename"]
+    metadata.dig("test_result", "document", "filename")
   end
 
   def legislation
-    metadata["test_result"]["legislation"]
+    metadata.dig("test_result", "legislation")
   end
 
   def standards_product_was_tested_against
-    metadata["test_result"]["standards_product_was_tested_against"]
+    metadata.dig("test_result", "standards_product_was_tested_against")
   end
 
   def result
-    metadata["test_result"]["result"]
+    metadata.dig("test_result", "result")
   end
 
   def failure_details
-    metadata["test_result"]["failure_details"]
+    metadata.dig("test_result", "failure_details")
   end
 
   def details
-    metadata["test_result"]["details"]
+    metadata.dig("test_result", "details")
+  end
   end
 
   def date
-    return if metadata["test_result"]["date"].nil?
+    return if metadata.dig("test_result", "date").nil?
 
-    Date.parse(metadata["test_result"]["date"])
+    Date.parse(metadata.dig("test_result", "date"))
   end
 
 private
