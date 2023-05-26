@@ -729,6 +729,10 @@ en:
               too_short: The barcode must be between 5 and 15 digits
               only_integer: Enter a valid barcode number
               not_a_number: Enter a valid barcode number
+        set_test_result_certificate_on_case_form:
+          attributes:
+            tso_certificate_issue_date:
+              blank: Enter the date the test certificate was issued
 
   activerecord:
     models:

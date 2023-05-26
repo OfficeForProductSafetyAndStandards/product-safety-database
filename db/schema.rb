@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_15_142343) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_18_151137) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -445,6 +445,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_15_142343) do
     t.string "legislation"
     t.string "result"
     t.string "standards_product_was_tested_against", default: [], array: true
+    t.date "tso_certificate_issue_date"
+    t.string "tso_certificate_reference_number"
     t.string "type"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"

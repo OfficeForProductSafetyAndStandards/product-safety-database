@@ -34,7 +34,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
 
   describe "#create" do
     let(:params) { { invite_user_to_team_form: { email: } } }
-    let(:email) { Faker::Internet.safe_email }
+    let(:email) { Faker::Internet.email }
     let(:form_errors_double) { instance_double(ActiveModel::Errors).as_null_object }
 
     it "requires secondary authentication", :with_2fa do

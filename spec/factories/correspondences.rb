@@ -3,7 +3,7 @@ FactoryBot.define do
     overview { Faker::Lorem.sentence }
     details { Faker::Lorem.paragraph }
     correspondent_name { Faker::Name.name }
-    email_address { Faker::Internet.safe_email }
+    email_address { Faker::Internet.email }
     email_subject { Faker::Lorem.sentence }
     email_direction { Correspondence::Email.email_directions[:inbound] }
     phone_number { Faker::PhoneNumber.phone_number }

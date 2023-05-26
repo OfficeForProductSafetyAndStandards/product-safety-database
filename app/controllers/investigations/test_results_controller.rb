@@ -7,7 +7,10 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def create
-    @test_result_form = TestResultForm.new(test_result_params)
+    create_test_result_params = test_result_params
+    create_test_result_params.merge!(session[:test_result_certificate]) if session[:test_result_certificate].present?
+
+    @test_result_form = TestResultForm.new(create_test_result_params)
     @test_result_form.load_document_file
 
     return render :new if @test_result_form.invalid?(:create_with_investigation_product)
