@@ -87,5 +87,13 @@ class Test < ApplicationRecord
     def psd_ref
       object.investigation_product.psd_ref
     end
+
+    def opss_funded?
+      object.tso_certificate_issue_date.present?
+    end
+
+    def funding_issue_date
+      object.tso_certificate_issue_date.to_formatted_s(:govuk)
+    end
   end
 end

@@ -113,7 +113,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
-      expect_summary_to_reflect_values(result: "Pass")
+      expect_summary_to_reflect_values(result: "Pass", funded: true)
 
       expect(page).to have_text("test_result.txt")
 
@@ -252,11 +252,16 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     expect(errors_list[4].text).to eq "Provide the test results file"
   end
 
-  def expect_summary_to_reflect_values(result:)
+  def expect_summary_to_reflect_values(result:, funded: false)
     expect(page).to have_summary_item(key: "Date of test", value: "1 January 2020")
     expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Standards", value: "EN71, EN73")
     expect(page).to have_summary_item(key: "Result", value: result)
+    if funded
+      expect(page).to have_summary_item(key: "Funded", value: "Yes Funded under the OPSS Sampling Protocol")
+    else
+      expect(page).to have_summary_item(key: "Funded", value: "No")
+    end
     expect(page).to have_summary_item(key: "Further details", value: "Test result includes certificate of conformity")
     expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
   end

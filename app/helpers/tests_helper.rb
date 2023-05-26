@@ -14,6 +14,27 @@ module TestsHelper
         value: { text: test_result.legislation }
       }
     ]
+
+    if test_result.tso_certificate_issue_date.present?
+      rows << {
+        key: { text: "Funded" },
+        value: { html: I18n.t("test_results.opss_funded.yes_html").html_safe }
+      }
+      rows << {
+        key: { text: "Sample number" },
+        value: { text: test_result.tso_certificate_reference_number }
+      }
+      rows << {
+        key: { text: "Issue date" },
+        value: { text: test_result.tso_certificate_reference_number }
+      }
+    else
+      rows << {
+        key: { text: "Funded" },
+        value: { text: "No" }
+      }
+    end
+
     if test_result.standards_product_was_tested_against.present?
       rows << {
         key: { text: "Standards" },
