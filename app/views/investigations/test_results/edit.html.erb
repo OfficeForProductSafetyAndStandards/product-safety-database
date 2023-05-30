@@ -1,4 +1,4 @@
-<% page_title = "Edit test result" %>
+<% page_title = "Record test result" %>
 <%= page_title page_title, errors: @test_result_form.errors.any? %>
 
 <% content_for :after_header do %>
@@ -12,7 +12,6 @@ investigation_test_result_path(@investigation, @test_result_form.id) %>
 
       <%= error_summary(@test_result_form.errors, %i[legislation standards_product_was_tested_against date result base])%>
 
-      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
       <% unless @test_result_form.tso_certificate_issue_date.nil? %>
