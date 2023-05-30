@@ -15,6 +15,14 @@ investigation_test_result_path(@investigation, @test_result_form.id) %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
+      <% unless @test_result_form.tso_certificate_issue_date.nil? %>
+        <p class="govuk-body govuk-!-margin-bottom-9">
+          <%= sanitize(t(".result_date", date: date_or_recent_time_ago(@test_result_form.tso_certificate_issue_date))) %>
+          <%= sanitize(t(".result_certificate_reference", reference_number: @test_result_form.tso_certificate_reference_number)) unless @test_result_form.tso_certificate_reference_number.blank? %>
+          <%= sanitize(t(".result_certificate_no_reference")) if @test_result_form.tso_certificate_reference_number.blank? %>
+        </p>
+      <% end %>
+
       <%= render "investigations/test_results/form", form: form, test_result_form: @test_result_form, investigation: @investigation, allow_product_linking: true %>
 
       <%= govukButton text: "Update test result" %>

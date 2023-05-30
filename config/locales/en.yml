@@ -332,6 +332,11 @@ en:
         title: "Unrestrict this case"
         label: "Why is the case being unrestricted?"
         action: "Unrestrict this case"
+    test_results:
+      edit:
+        result_date: This test was funded under the <abbr>OPSS</abbr> Sampling Protocol and was issued on %{date}.
+        result_certificate_reference: "(TSO Sample Reference Number: %{reference_number})."
+        result_certificate_no_reference: (No <abbr>TSO</abbr> Sample Reference Number was recorded).
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
