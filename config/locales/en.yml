@@ -335,7 +335,7 @@ en:
     test_results:
       edit:
         result_date: This test was funded under the <abbr>OPSS</abbr> Sampling Protocol and was issued on %{date}.
-        result_certificate_reference: "(TSO Sample Reference Number: %{reference_number})."
+        result_certificate_reference: "(<abbr>TSO</abbr> Sample Reference Number: %{reference_number})."
         result_certificate_no_reference: (No <abbr>TSO</abbr> Sample Reference Number was recorded).
     ts_investigations:
       coronavirus:
