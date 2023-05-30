@@ -382,6 +382,11 @@ en:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
       serious_and_high_risk_level_only: "Serious and high risk cases only"
+  test_results:
+    opss_funded:
+      yes_html: "Yes <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>Funded under the <abbr>OPSS</abbr> Sampling Protocol</span>"
+      no: "No"
+
   errors:
     format: "%{message}"
     messages:
