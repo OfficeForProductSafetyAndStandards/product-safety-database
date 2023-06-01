@@ -24,8 +24,8 @@ private
       return matching_products_ordered_by_case_count.first
     end
 
-    if products.where(authenticity: "counterfeit").count.positive?
-      return products.where(authenticity: "counterfeit").first
+    if products.where(authenticity: "genuine").count.positive?
+      return products.where(authenticity: "genuine").first
     end
 
     products.order(created_at: :asc).first

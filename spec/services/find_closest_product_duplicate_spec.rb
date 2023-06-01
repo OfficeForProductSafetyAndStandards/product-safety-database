@@ -39,13 +39,13 @@ RSpec.describe FindClosestProductDuplicate, :with_stubbed_opensearch, :with_stub
 
   context "when there are duplicates, but one is counterfeit" do
     let(:barcode) { "1234567890123" }
-    let!(:product_a) { create(:product, barcode:, authenticity: "counterfeit") }
+    let!(:product_a) { create(:product, barcode:, authenticity: "genuine") }
 
     before do
-      create(:product, barcode:, authenticity: "genuine")
+      create(:product, barcode:, authenticity: "counterfeit")
     end
 
-    it "returns the counterfeit product only" do
+    it "returns the genuine product only" do
       expect(service.duplicate.id).to eq(product_a.id)
     end
   end
@@ -64,12 +64,12 @@ RSpec.describe FindClosestProductDuplicate, :with_stubbed_opensearch, :with_stub
     end
   end
 
-  context "when there are duplicates, one has cases and the other doesn't, but the ones without cases are counterfeit" do
+  context "when there are duplicates, one has cases and the other doesn't, but the ones without cases are genuine" do
     let(:barcode) { "1234567890123" }
     let!(:product_a) { create(:product, barcode:) }
 
     before do
-      create_list(:product, 2, barcode:, authenticity: "counterfeit")
+      create_list(:product, 2, barcode:, authenticity: "genuine")
       create(:case, products: [product_a])
     end
 
