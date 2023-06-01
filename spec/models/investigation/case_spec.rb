@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Investigation::Case do
-  subject(:kase) { build(:kase, date_received:).build_owner_collaborations_from(create(:user)) }
+  subject(:case) { build(:case, date_received:).build_owner_collaborations_from(create(:user)) }
 
   describe "#valid?" do
     context "with valid date_received" do
