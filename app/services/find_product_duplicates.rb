@@ -11,7 +11,11 @@ class FindProductDuplicates
 
 private
 
+  def cleaned_barcode
+    barcode.gsub(/[^0-9]/, "")
+  end
+
   def find_duplicates
-    Product.where(barcode:)
+    Product.where(barcode: cleaned_barcode)
   end
 end
