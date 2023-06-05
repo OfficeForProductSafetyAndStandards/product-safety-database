@@ -86,16 +86,6 @@ FactoryBot.define do
       end
     end
 
-    trait :with_ucr_numbers do
-      transient do
-        ucr_numbers { [create(:ucr_number)] }
-      end
-
-      after(:build) do |investigation, options|
-        investigation.ucr_numbers = options.ucr_numbers
-      end
-    end
-
     trait :with_products do
       transient do
         products { [create(:product)] }

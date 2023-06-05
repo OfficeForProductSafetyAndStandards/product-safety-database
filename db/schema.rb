@@ -455,10 +455,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_05_103831) do
 
   create_table "ucr_numbers", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "investigation_id"
+    t.bigint "investigation_product_id"
     t.string "number"
     t.datetime "updated_at", null: false
-    t.index ["investigation_id"], name: "index_ucr_numbers_on_investigation_id"
+    t.index ["investigation_product_id"], name: "index_ucr_numbers_on_investigation_product_id"
   end
 
   create_table "unexpected_events", force: :cascade do |t|

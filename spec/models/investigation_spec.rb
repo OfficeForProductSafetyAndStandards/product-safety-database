@@ -160,20 +160,4 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_
       expect(investigation.non_owner_teams_with_access).to match_array([read_only_team, edit_access_team])
     end
   end
-
-  describe "#ucr_numbers" do
-    subject { investigation.ucr_numbers }
-
-    let(:investigation) { create(:case) }
-
-    context "when there are no ucr_numbers" do
-      it { is_expected.to be_empty }
-    end
-
-    context "when there are ucr_codes" do
-      let(:investigation) { create(:case, :with_ucr_numbers) }
-
-      it { is_expected.to be_present }
-    end
-  end
 end

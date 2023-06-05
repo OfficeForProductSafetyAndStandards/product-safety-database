@@ -17,6 +17,7 @@ class InvestigationProduct < ApplicationRecord
   has_many :unexpected_events
   has_many :risk_assessed_products
   has_many :risk_assessments, through: :risk_assessed_products
+  has_many :ucr_numbers
 
   belongs_to :added_by_user, class_name: :User, optional: true
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
