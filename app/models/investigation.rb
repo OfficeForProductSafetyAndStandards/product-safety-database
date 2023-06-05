@@ -79,6 +79,7 @@ class Investigation < ApplicationRecord
   has_many :accidents
   has_many :incidents
   has_many :unexpected_events
+  has_many :ucr_numbers
 
   scope :not_private, -> { where(is_private: false) }
 

@@ -164,4 +164,20 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
   it_behaves_like "a batched search model" do
     let(:factory_name) { :allegation }
   end
+
+  describe "#ucr_numbers", :with_stubbed_opensearch do
+    subject { investigation.ucr_numbers }
+
+    let(:investigation) { create(:case) }
+
+    context "when there are no ucr_numbers" do
+      it { is_expected.to be_empty }
+    end
+
+    context "when there are ucr_codes" do
+      let(:investigation) { create(:case, :with_ucr_numbers) }
+
+      it { is_expected.to be_present }
+    end
+  end
 end
