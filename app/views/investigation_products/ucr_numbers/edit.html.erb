@@ -39,7 +39,8 @@
           </turbo-frame>
         <% end %>
 
-        <%= form.submit "Add",
+        <%= form.submit "Add UCR number",
+          class: "govuk-button",
           data: { turbo_frame: form.field_id(:ucr_numbers)},
           formmethod: "post",
           formaction: add_ucr_number_investigation_product_ucr_numbers_path(id: form.object),
