@@ -1,0 +1,50 @@
+<% page_heading = "Edit the Unique Consignment Reference (UCR) numbers" %>
+
+<% page_title page_heading, errors: @ucr_numbers_form.errors.any? %>
+<%= govukBackLink(
+  text: "Back",
+  href: investigation_path(@investigation_product.investigation)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @ucr_numbers_form, url: investigation_product_ucr_numbers_path, builder: ApplicationFormBuilder, method: :put, html: {novalidate: true}, local: true do |form| %>
+      <%= error_summary @ucr_numbers_form.errors %>
+
+      <fieldset class="govuk-fieldset" aria-describedby="ucr-number-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">
+            Edit the Unique Consignment Reference (<abbr>UCR</abbr>) numbers
+          </h1>
+        </legend>
+
+        <div class="govuk-hint govuk-!-margin-bottom-5" id="ucr-number-hint">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-2">
+            Add and edit <abbr>UCR</abbr> numbers for Asda washing up liquid.
+          </span>
+
+          <span class="govuk-!-display-block govuk-!-font-size-16">
+            <abbr>UCR</abbr> numbers are between 12 and 35 characters long.
+          </span>
+        </div>
+
+        <%= form.fields_for :ucr_numbers do |ff| %>
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="ucr-number-1">
+              <abbr>UCR</abbr> number: 1
+            </label>
+
+            <%= ff.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
+            <%= ff.label :_destroy, "Delete" %>
+            <%= ff.check_box :_destroy, title: "Delete" %>
+          </div>
+        <% end %>
+      </fieldset>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation_product.investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>

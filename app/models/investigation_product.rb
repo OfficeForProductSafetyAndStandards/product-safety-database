@@ -26,6 +26,8 @@ class InvestigationProduct < ApplicationRecord
                        :customs_code, :investigation_id, :number_of_affected_units,
                        :product_id, :updated_at
 
+  accepts_nested_attributes_for :ucr_numbers
+
   delegate :name, to: :product
 
   def product
