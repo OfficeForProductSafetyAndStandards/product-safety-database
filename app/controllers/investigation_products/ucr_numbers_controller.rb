@@ -3,6 +3,9 @@ module InvestigationProducts
     before_action :load_investigation_product
 
     def edit
+      if @investigation_product.ucr_numbers.empty?
+        @ucr_number = @investigation_product.ucr_numbers.build
+      end
     end
 
     def update
