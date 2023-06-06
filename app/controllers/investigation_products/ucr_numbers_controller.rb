@@ -3,23 +3,26 @@ module InvestigationProducts
     before_action :load_investigation_product
 
     def edit
-      @ucr_numbers_form = UcrNumbersForm.from(@investigation_product)
+      @ucr_number = @investigation_product.ucr_numbers.build
     end
 
     def update
-      # if @investigation_product.customs_code.to_s == customs_code_params[:customs_code]
-      #   return redirect_to investigation_path(@investigation_product.investigation)
-      # end
+      @ucr_numbers_form = UcrNumbersForm.new(ucr_numbers_params)
 
-      # result = ChangeCustomsCode.call!(investigation_product: @investigation_product, customs_code: customs_code_params[:customs_code], user: current_user)
+      if @ucr_numbers_form.valid?
+        @investigation_product.assign_attributes(ucr_numbers_attributes: @ucr_numbers_form.ucr_numbers_attributes)
+        @investigation_product.save!
 
-      # redirect_to investigation_path(@investigation_product.investigation), flash: result.changed ? { success: "The case information was updated" } : nil
+        redirect_to edit_investigation_product_ucr_numbers_path(@investigation_product), flash: { success: "UCR numbers updated" }
+      else
+        render :edit
+      end
     end
 
   private
 
-    def customs_code_params
-      params.permit(:customs_code)
+    def ucr_numbers_params
+      params.require(:investigation_product).permit(ucr_numbers_attributes: [:id, :number, :_destroy])
     end
 
     def load_investigation_product

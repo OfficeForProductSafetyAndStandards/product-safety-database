@@ -1,6 +1,6 @@
 <% page_heading = "Edit the Unique Consignment Reference (UCR) numbers" %>
 
-<% page_title page_heading, errors: @ucr_numbers_form.errors.any? %>
+<% page_title page_heading, errors: @investigation_product.errors.any? %>
 <%= govukBackLink(
   text: "Back",
   href: investigation_path(@investigation_product.investigation)
@@ -8,8 +8,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @ucr_numbers_form, url: investigation_product_ucr_numbers_path, builder: ApplicationFormBuilder, method: :put, html: {novalidate: true}, local: true do |form| %>
-      <%= error_summary @ucr_numbers_form.errors %>
+    <%= form_for @investigation_product, url: investigation_product_ucr_numbers_path, method: :put do |form| %>
+      <%= error_summary @investigation_product.errors %>
 
       <fieldset class="govuk-fieldset" aria-describedby="ucr-number-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -28,15 +28,12 @@
           </span>
         </div>
 
-        <%= form.fields_for :ucr_numbers do |ff| %>
+        <%= form.fields_for :ucr_numbers do |ucr_numbers_form| %>
           <div class="govuk-form-group">
-            <label class="govuk-label" for="ucr-number-1">
-              <abbr>UCR</abbr> number: 1
-            </label>
-
-            <%= ff.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
-            <%= ff.label :_destroy, "Delete" %>
-            <%= ff.check_box :_destroy, title: "Delete" %>
+            <%= ucr_numbers_form.hidden_field :id %>
+            <%= ucr_numbers_form.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
+            <%= ucr_numbers_form.label :_destroy, "Delete" %>
+            <%= ucr_numbers_form.check_box :_destroy, title: "Delete" %>
           </div>
         <% end %>
       </fieldset>
