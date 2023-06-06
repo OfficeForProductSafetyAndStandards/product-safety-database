@@ -13,3 +13,4 @@ import './clear_on_reset'
 import './govuk_frontend'
 
 window.GOVUKFrontend = GOVUKFrontend
+import "@hotwired/turbo-rails"

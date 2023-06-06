@@ -29,13 +29,21 @@
         </div>
 
         <%= form.fields_for :ucr_numbers do |ucr_numbers_form| %>
-          <div class="govuk-form-group">
-            <%= ucr_numbers_form.hidden_field :id %>
-            <%= ucr_numbers_form.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
-            <%= ucr_numbers_form.label :_destroy, "Delete" %>
-            <%= ucr_numbers_form.check_box :_destroy, title: "Delete" %>
-          </div>
+          <turbo-frame id="<%= ucr_numbers_form.field_id(:ucr_numbers) %>" class="contents">
+            <div class="govuk-form-group">
+              <%= ucr_numbers_form.hidden_field :id %>
+              <%= ucr_numbers_form.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
+              <%= ucr_numbers_form.label :_destroy, "Delete" %>
+              <%= ucr_numbers_form.check_box :_destroy, title: "Delete" %>
+            </div>
+          </turbo-frame>
         <% end %>
+
+        <%= form.submit "Add",
+          data: { turbo_frame: form.field_id(:ucr_numbers)},
+          formmethod: "post",
+          formaction: add_ucr_number_investigation_product_ucr_numbers_path(id: form.object),
+          name: "add_ucr_number" %>
       </fieldset>
 
       <div class="govuk-button-group">

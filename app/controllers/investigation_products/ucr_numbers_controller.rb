@@ -3,20 +3,24 @@ module InvestigationProducts
     before_action :load_investigation_product
 
     def edit
-      @ucr_number = @investigation_product.ucr_numbers.build
     end
 
     def update
-      @ucr_numbers_form = UcrNumbersForm.new(ucr_numbers_params)
-
-      if @ucr_numbers_form.valid?
-        @investigation_product.assign_attributes(ucr_numbers_attributes: @ucr_numbers_form.ucr_numbers_attributes)
-        @investigation_product.save!
-
+      @investigation_product.assign_attributes(ucr_numbers_params)
+      if @investigation_product.save
         redirect_to edit_investigation_product_ucr_numbers_path(@investigation_product), flash: { success: "UCR numbers updated" }
       else
-        render :edit
+        render :edit, status: 422
       end
+    end
+
+    def add_ucr_number
+      @investigation_product.assign_attributes(ucr_numbers_params)
+      if @investigation_product.save
+        @ucr_number = @investigation_product.ucr_numbers.build
+      end
+
+      render :edit, status: 422
     end
 
   private
