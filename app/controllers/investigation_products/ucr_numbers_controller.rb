@@ -13,7 +13,7 @@ module InvestigationProducts
       if @investigation_product.save
         redirect_to edit_investigation_product_ucr_numbers_path(@investigation_product), flash: { success: "UCR numbers updated" }
       else
-        render :edit, status: 422
+        render :edit, status: :unprocessable_entity
       end
     end
 
@@ -23,13 +23,13 @@ module InvestigationProducts
         @ucr_number = @investigation_product.ucr_numbers.build
       end
 
-      render :edit, status: 422
+      render :edit, status: :unprocessable_entity
     end
 
   private
 
     def ucr_numbers_params
-      params.require(:investigation_product).permit(ucr_numbers_attributes: [:id, :number, :_destroy])
+      params.require(:investigation_product).permit(ucr_numbers_attributes: %i[id number _destroy])
     end
 
     def load_investigation_product
