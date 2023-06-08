@@ -9,6 +9,10 @@ class AuditActivity::Investigation::UpdateCaseSpecificProductInformationDecorato
     metadata.dig("updates", "customs_code", 1)
   end
 
+  def new_ucr_numbers
+    metadata.dig("updates", "ucr_numbers", 1)
+  end
+
   def title(_viewer)
     "Case specific product information updated"
   end

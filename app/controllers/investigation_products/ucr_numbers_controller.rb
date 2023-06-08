@@ -9,9 +9,14 @@ module InvestigationProducts
     end
 
     def update
-      @investigation_product.assign_attributes(ucr_numbers_params)
-      if @investigation_product.save
-        redirect_to edit_investigation_product_ucr_numbers_path(@investigation_product), flash: { success: "UCR numbers updated" }
+      service = ChangeUcrNumbers.call!(
+        investigation_product: @investigation_product,
+        user: current_user,
+        ucr_numbers: ucr_numbers_params
+      )
+
+      if service.success
+        redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The case information was updated" }
       else
         render :edit, status: :unprocessable_entity
       end
