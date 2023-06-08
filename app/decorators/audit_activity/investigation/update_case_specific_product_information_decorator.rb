@@ -10,7 +10,7 @@ class AuditActivity::Investigation::UpdateCaseSpecificProductInformationDecorato
   end
 
   def new_ucr_numbers
-    metadata.dig("updates", "ucr_numbers", 1)
+    metadata["ucr_numbers"]&.join(", ")
   end
 
   def title(_viewer)

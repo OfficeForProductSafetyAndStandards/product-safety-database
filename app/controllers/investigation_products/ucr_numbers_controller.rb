@@ -9,13 +9,12 @@ module InvestigationProducts
     end
 
     def update
-      service = ChangeUcrNumbers.call!(
+      service = ChangeUcrNumbers.call(
         investigation_product: @investigation_product,
         user: current_user,
         ucr_numbers: ucr_numbers_params
       )
-
-      if service.success
+      if service.success?
         redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The case information was updated" }
       else
         render :edit, status: :unprocessable_entity
