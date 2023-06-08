@@ -31,7 +31,7 @@
         form: form,
         key: :is_from_overseas_regulator,
         fieldset: { legend: { html: "<h1 class=\"govuk-fieldset__heading\">Was the allegation made by an overseas regulator?</h1>".html_safe, classes: "govuk-fieldset__legend--l" } },
-        hint: { html: "Select no if the allegation was from the <abbr>UK</abbr> (or <abbr>GB</abbr>).".html_safe, classes: "govuk-!-margin-bottom-5" },
+        hint: { html: "Select no if the allegation was from the <abbr>UK</abbr>.".html_safe, classes: "govuk-!-margin-bottom-5" },
         items: [{ text: t("investigations.overseas_regulator.option_yes"),
                   value: true,
                   conditional: { html: select_menu_html } },
