@@ -10,8 +10,8 @@ class AddBusinessToCaseForm
   attribute :company_number
   attribute :relationship, default: ""
 
-  attribute :locations, default: [Location.new]
-  attribute :contacts, default: [Contact.new]
+  attribute :locations, default: []
+  attribute :contacts, default: []
 
   attribute :locations_attributes
   attribute :contacts_attributes
