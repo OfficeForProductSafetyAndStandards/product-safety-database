@@ -65,7 +65,7 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
   end
 
   context "when one UCR number is already present" do
-    let!(:ucr_number) { create(:ucr_number, investigation_product: investigation_product, number: "1234") }
+    let!(:ucr_number) { create(:ucr_number, investigation_product:, number: "1234") }
 
     let(:ucr_numbers) do
       {

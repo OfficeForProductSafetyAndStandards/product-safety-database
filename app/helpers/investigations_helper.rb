@@ -104,7 +104,7 @@ module InvestigationsHelper
   end
 
   def ucr_number_unordered_list(ucr_numbers)
-    return unless ucr_numbers.present?
+    return if ucr_numbers.blank?
 
     tag.ul class: "govuk-list govuk-list--bullet" do
       content = ucr_numbers.collect do |ucr|
