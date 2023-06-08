@@ -690,7 +690,7 @@ DEPENDENCIES
   net-smtp
   paper_trail
   parallel_tests (~> 4.2.0)
-  pg (~> 1.5)
+  pg (~> 1.4)
   pghero (~> 3.3)
   prism!
   pry (~> 0.14)
