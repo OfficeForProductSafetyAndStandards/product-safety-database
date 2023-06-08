@@ -21,7 +21,7 @@ module Investigations
         )
 
         @investigation = investigation.decorate
-        redirect_to investigation_path(@investigation), flash: { success: "The notifying country was updated." }
+        redirect_to investigation_path(@investigation), flash: { success: "The notifying country was updated" }
       else
         @investigation = investigation.decorate
         render :edit
@@ -31,7 +31,7 @@ module Investigations
   private
 
     def notifying_country_params
-      params.require(:investigation).permit(:country)
+      params.require(:investigation).permit(:notifying_country_uk, :notifying_country_overseas, :overseas_or_uk)
     end
   end
 end

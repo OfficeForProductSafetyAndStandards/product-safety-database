@@ -23,6 +23,14 @@ class Test < ApplicationRecord
       end
     end
 
+    def product_tested
+      "#{investigation_product.name} (#{investigation_product.psd_ref})"
+    end
+
+    def attachment_description
+      document.blob.metadata["description"]
+    end
+
     def supporting_information_title
       title
     end
@@ -78,6 +86,14 @@ class Test < ApplicationRecord
 
     def psd_ref
       object.investigation_product.psd_ref
+    end
+
+    def opss_funded?
+      object.tso_certificate_issue_date.present?
+    end
+
+    def funding_issue_date
+      object.tso_certificate_issue_date.to_formatted_s(:govuk)
     end
   end
 end

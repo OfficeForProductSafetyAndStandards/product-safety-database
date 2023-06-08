@@ -21,6 +21,9 @@ class TestResultForm
   attribute :failure_details
   attribute :further_test_results
 
+  attribute :tso_certificate_reference_number, :string
+  attribute :tso_certificate_issue_date, :govuk_date
+
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
   validates :standards_product_was_tested_against, presence: true
@@ -42,7 +45,7 @@ class TestResultForm
   end
 
   ATTRIBUTES_FROM_TEST_RESULT = %i[
-    id date details legislation result failure_details standards_product_was_tested_against investigation_product_id
+    id date details legislation result failure_details standards_product_was_tested_against investigation_product_id tso_certificate_reference_number tso_certificate_issue_date
   ].freeze
 
   def self.from(test_result)

@@ -12,6 +12,9 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
   let(:test_result)                          { Test::Result.results[:passed] }
   let(:standards_product_was_tested_against) { %w[EN71] }
   let(:investigation_product_id)             { create(:investigation_product).id }
+  let(:tso_certificate_reference_number)     { Faker::Number.number(digits: 10).to_s }
+  let(:tso_certificate_issue_date)           { Date.current }
+
   let(:params) do
     {
       investigation:,
@@ -22,7 +25,9 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
       legislation:,
       result: test_result,
       standards_product_was_tested_against:,
-      investigation_product_id:
+      investigation_product_id:,
+      tso_certificate_reference_number:,
+      tso_certificate_issue_date:
     }
   end
 
@@ -43,6 +48,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stu
       expect(command.test_result).to have_attributes(
         date:, details:, legislation:, result: "passed", investigation_product_id:,
         standards_product_was_tested_against:,
+        tso_certificate_reference_number:, tso_certificate_issue_date:,
         document_blob: document
       )
     end

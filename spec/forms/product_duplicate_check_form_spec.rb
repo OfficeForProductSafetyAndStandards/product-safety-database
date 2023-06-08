@@ -38,17 +38,47 @@ RSpec.describe ProductDuplicateCheckForm do
     end
 
     context "when barcode is provided" do
-      context "when barcode is invalid" do
-        let(:params) { { has_barcode: true, barcode: "ddd" } }
+      before { form.valid? }
 
-        it { is_expected.not_to be_valid }
+      context "when barcode has dashes in" do
+        let(:params) { { has_barcode: true, barcode: "1234-56789-0123" } }
+
+        it { is_expected.to be_valid }
 
         it "persists has_barcode value" do
           expect(form.has_barcode).to eq true
         end
 
         it "persists barcode value" do
-          expect(form.barcode).to eq "ddd"
+          expect(form.barcode).to eq "1234-56789-0123"
+        end
+      end
+
+      context "when barcode has brackets and non-numerics in" do
+        let(:params) { { has_barcode: true, barcode: "1234-56789(0123)" } }
+
+        it { is_expected.to be_valid }
+
+        it "persists has_barcode value" do
+          expect(form.has_barcode).to eq true
+        end
+
+        it "persists barcode value" do
+          expect(form.barcode).to eq "1234-56789(0123)"
+        end
+      end
+
+      context "when barcode breaks the character limit before stripping out blank space" do
+        let(:params) { { has_barcode: true, barcode: "          1234-56789(0123)          " } }
+
+        it { is_expected.to be_valid }
+
+        it "persists has_barcode value" do
+          expect(form.has_barcode).to eq true
+        end
+
+        it "persists barcode value" do
+          expect(form.barcode).to eq "1234-56789(0123)"
         end
       end
 

@@ -7,12 +7,13 @@ class ProductDuplicateCheckForm
   attribute :has_barcode, :boolean
 
   validates :has_barcode, inclusion: { in: [true, false] }
-  validates :barcode, numericality: { only_integer: true }, if: -> { has_barcode }
-  validates :barcode, length: { minimum: 5, maximum: 15 }, if: -> { has_barcode && barcode =~ /\A\d+\z/ }
+  validates :barcode, length: { minimum: 5, maximum: 25 }, presence: true, if: -> { has_barcode == true }
 
   before_validation :strip_barcode
 
   def strip_barcode
-    self.barcode = barcode.strip if barcode.present?
+    return if barcode.blank?
+
+    self.barcode = barcode.strip
   end
 end

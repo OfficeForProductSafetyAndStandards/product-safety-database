@@ -75,7 +75,16 @@ en:
   update_phone_call:
     email_subject_text: "%{case_type} updated"
   create_case: "Create a case"
-
+  contacts:
+    form:
+      legend:
+        title: Contacts
+        hint: These are the details for a contact at the business.
+  locations:
+    address_form:
+      legend:
+        title: Official address
+        hint: You can add additional addresses after you have added the business.
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -105,10 +114,20 @@ en:
     genuine: This product record is about a genuine product
 
   businesses:
-      titles:
-        team_businesses: Team businesses
-        your_businesses: Your businesses
-        all_businesses: All Businesses - Search
+    titles:
+      team_businesses: Team businesses
+      your_businesses: Your businesses
+      all_businesses: All Businesses - Search
+    form:
+      trading_name:
+        label: Trading name
+        hint: The name the business is known as.
+      legal_name:
+        label: Registered or legal name
+        hint_html: As it appears on Companies House for <abbr>UK</abbr> businesses (usually ends in 'Ltd' or 'Limited').
+      company_number:
+        label: Company number
+        hint_html: In the <abbr>UK</abbr> this is an eight-digit number assigned to incorporated businesses.
   investigations:
     activities:
       business:
@@ -313,6 +332,11 @@ en:
         title: "Unrestrict this case"
         label: "Why is the case being unrestricted?"
         action: "Unrestrict this case"
+    test_results:
+      edit:
+        result_date: This test was funded under the <abbr>OPSS</abbr> Sampling Protocol and was issued on %{date}.
+        result_certificate_reference: "(<abbr>TSO</abbr> Sample Reference Number: %{reference_number})."
+        result_certificate_no_reference: (No <abbr>TSO</abbr> Sample Reference Number was recorded).
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
@@ -363,6 +387,11 @@ en:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
       serious_and_high_risk_level_only: "Serious and high risk cases only"
+  test_results:
+    opss_funded:
+      yes_html: "Yes <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>Funded under the <abbr>OPSS</abbr> Sampling Protocol</span>"
+      no: "No"
+
   errors:
     format: "%{message}"
     messages:
@@ -465,8 +494,12 @@ en:
               blank: Enter the reason for removing the product
         notifying_country_form:
           attributes:
-            country:
+            notifying_country_overseas:
               inclusion: Enter the notifying country
+            notifying_country_uk:
+              inclusion: Enter the notifying country
+            overseas_or_uk:
+              inclusion: Select if the notifying country is overseas or in the UK
         overseas_regulator_form:
           attributes:
             is_from_overseas_regulator:
@@ -706,6 +739,10 @@ en:
               too_short: The barcode must be between 5 and 15 digits
               only_integer: Enter a valid barcode number
               not_a_number: Enter a valid barcode number
+        set_test_result_certificate_on_case_form:
+          attributes:
+            tso_certificate_issue_date:
+              blank: Enter the date the test certificate was issued
 
   activerecord:
     models:

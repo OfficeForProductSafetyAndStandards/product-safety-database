@@ -38,7 +38,7 @@ class AuditActivity::Investigation::ChangeOverseasRegulator < AuditActivity::Inv
 private
 
   def country_from_code(code)
-    country = Country.overseas_regulator_countries.find { |c| c[1] == code }
+    country = Country.overseas_countries.find { |c| c[1] == code }
     (country && country[0]) || code
   end
 end

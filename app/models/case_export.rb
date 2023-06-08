@@ -78,6 +78,16 @@ private
     @risk_assessment_counts ||= RiskAssessment.group(:investigation_id).count
   end
 
+  def team_mappings
+    @team_mappings ||= JSON.load_file!(Rails.root.join("app/assets/team-mappings.json"), object_class: OpenStruct)
+  end
+
+  def team_data(team_name)
+    # Returns an `OpenStruct` with all nils to avoid having presence checks later
+    team_mappings.find { |team| team.team_name == team_name } ||
+      OpenStruct.new(team_name: nil, type: nil, regulator_name: nil, ts_region: nil, ts_acronym: nil, ts_area: nil)
+  end
+
   def add_header_row(sheet)
     sheet.add_row %w[ID
                      Status
@@ -106,7 +116,11 @@ private
                      Notifying_Country
                      Reported_As
                      Complainant_Reference
-                     Case_Type]
+                     Case_Type
+                     Trading_Standards_Region
+                     Trading_Standards_Region_Code
+                     Regulator_Name
+                     OPSS_Internal_Team]
   end
 
   def find_cases(ids)
@@ -120,6 +134,8 @@ private
   end
 
   def non_restricted_data(investigation)
+    team_data = team_data(investigation.creator_user&.team&.name)
+
     [
       investigation.pretty_id,
       investigation.is_closed? ? "Closed" : "Open",
@@ -148,11 +164,17 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       investigation.complainant_reference,
-      investigation.case_type
+      investigation.case_type,
+      team_data.ts_region,
+      team_data.ts_acronym,
+      team_data.regulator_name,
+      (team_data.type == "internal")
     ]
   end
 
   def restricted_data(investigation)
+    team_data = team_data(investigation.creator_user&.team&.name)
+
     [
       investigation.pretty_id,
       investigation.is_closed? ? "Closed" : "Open",
@@ -181,7 +203,11 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       "Restricted",
-      investigation.case_type
+      investigation.case_type,
+      team_data.ts_region,
+      team_data.ts_acronym,
+      team_data.regulator_name,
+      (team_data.type == "internal")
     ]
   end
 end

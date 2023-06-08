@@ -3,6 +3,9 @@ require "rails_helper"
 RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user, name: "User One") }
+  let(:notifying_country_uk) { "country:GB-ENG" }
+  let(:notifying_country_overseas) { "country:FR" }
+  let(:overseas_or_uk) { "uk" }
 
   describe ".call" do
     context "with no parameters" do
@@ -14,7 +17,7 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(user:) }
+      let(:result) { described_class.call(user:, overseas_or_uk:, notifying_country_uk:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -22,10 +25,36 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation:) }
+      let(:result) { described_class.call(investigation:, overseas_or_uk:, notifying_country_uk:) }
 
       it "returns a failure" do
         expect(result).to be_failure
+      end
+    end
+
+    context "with no overseas_or_uk parameter" do
+      let(:result) { described_class.call(user:, investigation:, notifying_country_uk:) }
+
+      it "returns a failure" do
+        expect(result).to be_failure
+      end
+    end
+
+    context "with an overseas_or_uk parameter" do
+      context "when it is set to uk with no notifying_country_uk parameter" do
+        let(:result) { described_class.call(user:, investigation:, overseas_or_uk:, notifying_country_overseas:) }
+
+        it "returns a failure" do
+          expect(result).to be_failure
+        end
+      end
+
+      context "when it is set to overseas with no notifying_country_overseas parameter" do
+        let(:result) { described_class.call(user:, investigation:, overseas_or_uk: "overseas", notifying_country_uk:) }
+
+        it "returns a failure" do
+          expect(result).to be_failure
+        end
       end
     end
 
@@ -34,17 +63,20 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
         described_class.call(
           user:,
           investigation:,
-          country:
+          notifying_country_uk:,
+          notifying_country_overseas:,
+          overseas_or_uk:
         )
       end
 
       let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::ChangeNotifyingCountry.to_s).order(:created_at).last }
 
       context "when no changes have been made" do
-        let(:country) { "country:GB-ENG" }
+        let(:notifying_country_uk) { "country:GB-ENG" }
+        let(:overseas_or_uk) { "uk" }
 
         before do
-          investigation.update_column(:notifying_country, country)
+          investigation.update_column(:notifying_country, notifying_country_uk)
         end
 
         it "does not generate an activity entry" do
@@ -59,7 +91,8 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
       end
 
       context "when changes have been made" do
-        let(:country) { "country:GB-NIR" }
+        let(:notifying_country_uk) { "country:GB-NIR" }
+        let(:overseas_or_uk) { "uk" }
 
         it "updates the risk assessment", :aggregate_failures do
           result

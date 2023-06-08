@@ -24,6 +24,12 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       end
       click_button "Continue"
 
+      expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
+        page.choose "No"
+      end
+      click_button "Continue"
+
       expect_to_be_on_record_test_result_page
       expect_test_result_form_to_be_blank
 
@@ -40,13 +46,74 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect_activity_page_to_show_created_test_result_values(result: "Passed")
+      expect_activity_page_to_show_created_unfunded_test_result_values(result: "Passed")
 
       click_link "View test result"
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
       expect_summary_to_reflect_values(result: "Pass")
+
+      expect(page).to have_text("test_result.txt")
+
+      visit "/cases/#{investigation.pretty_id}/test-results/new"
+      expect_test_result_form_to_be_blank
+    end
+  end
+
+  scenario "Adding a passing test result funded by OPSS" do
+    travel_to Date.parse("2 April 2020") do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+      click_link "Add supporting information"
+
+      expect_to_be_on_add_supporting_information_page
+
+      within_fieldset "What type of information are you adding?" do
+        page.choose "Test result"
+      end
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
+        page.choose "Yes"
+      end
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_opss_funding_form_page(case_id: investigation.pretty_id)
+      fill_in "What is the TSO Sample Reference Number?", with: "TSO123"
+      click_button "Continue"
+      expect_certificate_date_error
+
+      fill_in "Day", with: date.day
+      fill_in "Month", with: date.month
+      fill_in "Year", with: date.year
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_page
+      expect_test_result_form_to_be_blank
+
+      click_button "Add test result"
+
+      expect_full_error_list
+
+      fill_in "Further details", with: "Test result includes certificate of conformity"
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Pass", file:, standards: "EN71, EN73")
+
+      expect_confirmation_banner("The supporting information was updated")
+      expect_page_to_have_h1("Supporting information")
+
+      click_link "Activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_activity_page_to_show_created_funded_test_result_values(result: "Passed", funded_date: date)
+
+      click_link "View test result"
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+
+      expect_summary_to_reflect_values(result: "Pass", funded: true)
 
       expect(page).to have_text("test_result.txt")
 
@@ -66,6 +133,12 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
 
       within_fieldset "What type of information are you adding?" do
         page.choose "Test result"
+      end
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
+        page.choose "No"
       end
       click_button "Continue"
 
@@ -94,7 +167,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect_activity_page_to_show_created_test_result_values(result: "Failed")
+      expect_activity_page_to_show_created_unfunded_test_result_values(result: "Failed")
 
       click_link "View test result"
 
@@ -165,6 +238,11 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     end
   end
 
+  def expect_certificate_date_error
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Enter the date the test certificate was issued"
+  end
+
   def expect_full_error_list
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the legislation that relates to this test"
@@ -174,16 +252,21 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     expect(errors_list[4].text).to eq "Provide the test results file"
   end
 
-  def expect_summary_to_reflect_values(result:)
+  def expect_summary_to_reflect_values(result:, funded: false)
     expect(page).to have_summary_item(key: "Date of test", value: "1 January 2020")
     expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Standards", value: "EN71, EN73")
     expect(page).to have_summary_item(key: "Result", value: result)
+    if funded
+      expect(page).to have_summary_item(key: "Funded", value: "Yes Funded under the OPSS Sampling Protocol")
+    else
+      expect(page).to have_summary_item(key: "Funded", value: "No")
+    end
     expect(page).to have_summary_item(key: "Further details", value: "Test result includes certificate of conformity")
     expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
   end
 
-  def expect_activity_page_to_show_created_test_result_values(result:)
+  def expect_activity_page_to_show_created_unfunded_test_result_values(result:)
     expect(page).to have_text("#{result} test: MyBrand washing machine")
     expect(page).to have_text(product.name)
     expect(page).to have_text("Legislation: General Product Safety Regulations 2005")
@@ -191,6 +274,21 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     expect(page).to have_text("Date of test: 1 January 2020")
     expect(page).to have_text("Further details: Test result includes certificate of conformity")
     expect(page).to have_text("File description: test result file")
+    expect(page).to have_text("Funded: No")
+    expect(page).to have_text("Test result includes certificate of conformity")
+    expect(page).to have_link("test_result.txt")
+  end
+
+  def expect_activity_page_to_show_created_funded_test_result_values(result:, funded_date:)
+    expect(page).to have_text("#{result} test: MyBrand washing machine")
+    expect(page).to have_text(product.name)
+    expect(page).to have_text("Legislation: General Product Safety Regulations 2005")
+    expect(page).to have_text("Standards: EN71, EN73")
+    expect(page).to have_text("Date of test: 1 January 2020")
+    expect(page).to have_text("Further details: Test result includes certificate of conformity")
+    expect(page).to have_text("File description: test result file")
+    expect(page).to have_text("Funded: Yes")
+    expect(page).to have_text("Issue date: #{funded_date.to_formatted_s(:govuk)}")
     expect(page).to have_text("Test result includes certificate of conformity")
     expect(page).to have_link("test_result.txt")
   end

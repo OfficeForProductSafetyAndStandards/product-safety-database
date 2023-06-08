@@ -76,7 +76,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
       let(:type) { "testing_result" }
 
       it "redirects to new test result page" do
-        expect(response).to redirect_to(new_investigation_test_result_path(investigation))
+        expect(response).to redirect_to(new_investigation_funding_source_path(investigation))
       end
     end
   end
