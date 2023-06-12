@@ -33,8 +33,10 @@
             <div class="govuk-form-group">
               <%= ucr_numbers_form.hidden_field :id %>
               <%= ucr_numbers_form.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
-              <%= ucr_numbers_form.label :_destroy, "Delete" %>
-              <%= ucr_numbers_form.check_box :_destroy, title: "Delete" %>
+              <% if ucr_numbers_form.object.persisted? %>
+                <%= ucr_numbers_form.label :_destroy, "Delete" %>
+                <%= ucr_numbers_form.check_box :_destroy, title: "Delete" %>
+              <% end %>
             </div>
           </turbo-frame>
         <% end %>
