@@ -77,13 +77,13 @@ RSpec.describe InvestigationProductDecorator, :with_stubbed_opensearch, :with_st
         investigation_product.save!
       end
 
-      it "returns an empty string" do
-        expect(ucr_numbers_list).to eq("")
+      it "returns empty" do
+      expect(ucr_numbers_list).to be_empty
       end
     end
 
     it "returns a list of UCR numbers" do
-      expect(ucr_numbers_list).to eq("12345678, 87654321")
+      expect(ucr_numbers_list).to match_array(["12345678", "87654321"])
     end
   end
 end
