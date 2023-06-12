@@ -29,6 +29,10 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
     end
   end
 
+  it "succeeds" do
+    expect(result).to be_success
+  end
+
   it "sets the UCR numbers on the investigation product" do
     expect { result }.to change { investigation_product.ucr_numbers.count }.from(0).to(1)
   end
@@ -51,6 +55,10 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
       }
     end
 
+    it "succeeds" do
+      expect(result).to be_success
+    end
+
     it "sets the UCR numbers on the investigation product" do
       expect { result }.to change { investigation_product.ucr_numbers.count }.from(0).to(2)
     end
@@ -64,6 +72,24 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
     end
   end
 
+  context "when we try to add a new blank UCR number" do
+    let(:ucr_numbers) do
+      {
+        "ucr_numbers_attributes" => {
+          "0" => { "id" => "", "number" => "" }
+        }
+      }
+    end
+
+    it "succeeds" do
+      expect(result).to be_success
+    end
+
+    it "does not set the UCR numbers on the investigation product" do
+      expect { result }.not_to change { investigation_product.ucr_numbers.count }
+    end
+  end
+
   context "when one UCR number is already present" do
     let!(:ucr_number) { create(:ucr_number, investigation_product:, number: "1234") }
 
@@ -74,6 +100,10 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
           "1" => { "id" => "", "number" => "5678" }
         }
       }
+    end
+
+    it "succeeds" do
+      expect(result).to be_success
     end
 
     it "sets the UCR numbers on the investigation product" do

@@ -26,7 +26,7 @@ class InvestigationProduct < ApplicationRecord
                        :customs_code, :investigation_id, :number_of_affected_units,
                        :product_id, :updated_at
 
-  accepts_nested_attributes_for :ucr_numbers, allow_destroy: true
+  accepts_nested_attributes_for :ucr_numbers, allow_destroy: true, reject_if: proc { |l| l[:number].blank? }
 
   delegate :name, to: :product
 
