@@ -11,6 +11,6 @@ import './mutually_exclusive'
 import './date_input'
 import './clear_on_reset'
 import './govuk_frontend'
+import '@hotwired/turbo-rails'
 
 window.GOVUKFrontend = GOVUKFrontend
-import "@hotwired/turbo-rails"
