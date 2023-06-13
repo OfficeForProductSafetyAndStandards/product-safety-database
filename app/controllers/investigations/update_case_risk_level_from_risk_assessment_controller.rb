@@ -30,8 +30,7 @@ module Investigations
         ChangeCaseRiskLevel.call!(
           investigation: @investigation,
           user: current_user,
-          risk_level: @risk_assessment.risk_level,
-          custom_risk_level: @risk_assessment.custom_risk_level
+          risk_level: @risk_assessment.risk_level
         )
       end
 

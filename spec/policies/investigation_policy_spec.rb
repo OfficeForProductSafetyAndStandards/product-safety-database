@@ -213,6 +213,32 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
       it "can edit the notifying country" do
         expect(policy.change_notifying_country?).to be true
       end
+
+      it "can view the overseas regulator" do
+        expect(policy.view_overseas_regulator?).to be true
+      end
+
+      it "can edit the overseas regulator" do
+        expect(policy.change_overseas_regulator?).to be true
+      end
+    end
+  end
+
+  context "when the investigation has been closed" do
+    let(:investigation) { create(:allegation, is_closed: true) }
+
+    context "when the user is not a super user" do
+      it "cannot update the case" do
+        expect(policy.update?).to be false
+      end
+    end
+
+    context "when the user is a super user" do
+      let(:user) { create(:user, :super_user) }
+
+      it "can update the case" do
+        expect(policy.update?).to be true
+      end
     end
   end
 

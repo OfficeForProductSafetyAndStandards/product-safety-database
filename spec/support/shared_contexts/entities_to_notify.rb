@@ -1,6 +1,6 @@
 RSpec.shared_examples "a service which notifies teams with access" do
-  let(:team_with_edit_access_email)     { Faker::Internet.unique.safe_email }
-  let(:team_with_readonly_access_email) { Faker::Internet.unique.safe_email }
+  let(:team_with_edit_access_email)     { Faker::Internet.unique.email }
+  let(:team_with_readonly_access_email) { Faker::Internet.unique.email }
   let(:team_with_edit_access)           { create(:team, team_recipient_email: team_with_edit_access_email) }
   let(:team_with_readonly_access)       { create(:team, team_recipient_email: team_with_readonly_access_email) }
   let(:user_with_edit_access)           { create(:user, :activated, team: team_with_readonly_access) }

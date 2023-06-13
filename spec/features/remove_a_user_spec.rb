@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_opensearch, :with_errors_rendered, type: :feature do
   let(:team) { create(:team) }
-  let(:email) { Faker::Internet.safe_email }
+  let(:email) { Faker::Internet.email }
   let!(:other_user) { create(:user, :activated, team:, has_viewed_introduction: true) }
 
   context "when the user is a team admin" do

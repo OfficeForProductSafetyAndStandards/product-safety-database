@@ -156,13 +156,13 @@ module InvestigationsHelper
       {
         key: { text: "Last updated" },
         value: {
-          text: "#{time_ago_in_words(@investigation.updated_at).capitalize} ago"
+          text: time_ago_or_date(@investigation.updated_at)
         }
       },
       {
         key: { text: "Created" },
         value: {
-          text: "#{time_ago_in_words(@investigation.created_at).capitalize} ago"
+          text: time_ago_or_date(@investigation.created_at)
         }
       },
       {
@@ -213,8 +213,6 @@ module InvestigationsHelper
     ]
     rows.flatten!
 
-    rows.insert(7, notifying_country_section(investigation, user)) if policy(investigation).view_notifying_country?(user:)
-
     if investigation.coronavirus_related
       rows << {
         key: { text: "COVID-19" },
@@ -227,17 +225,27 @@ module InvestigationsHelper
       }
     end
 
-    rows
-  end
+    if policy(investigation).view_notifying_country?(user:)
+      rows << {
+        key: { text: "Notifying country" },
+        value: {
+          text: country_from_code(investigation.notifying_country, Country.notifying_countries)
+        },
+        actions: notifying_country_actions(investigation, user)
+      }
+    end
 
-  def notifying_country_section(investigation, user)
-    {
-      key: { text: "Notifying country" },
-      value: {
-        text: country_from_code(investigation.notifying_country, Country.notifying_countries)
-      },
-      actions: notifying_country_actions(investigation, user)
-    }
+    if policy(investigation).view_overseas_regulator?(user:)
+      rows << {
+        key: { text: "Overseas regulator" },
+        value: {
+          text: overseas_regulator_value(investigation)
+        },
+        actions: overseas_regulator_actions(investigation, user)
+      }
+    end
+
+    rows
   end
 
   def search_result_statement(search_terms, number_of_results)
@@ -260,8 +268,18 @@ module InvestigationsHelper
   def options_for_notifying_country(countries, notifying_country_form)
     countries.map do |country|
       text = country[0]
+      value = country[1]
+      option = { text:, value: }
+      option[:selected] = true if notifying_country_form.country == value
+      option
+    end
+  end
+
+  def options_for_overseas_regulator(countries, overseas_regulator_form)
+    countries.map do |country|
+      text = country[0]
       option = { text:, value: country[1] }
-      option[:selected] = true if notifying_country_form.country == text
+      option[:selected] = true if overseas_regulator_form.overseas_regulator_country == text
       option
     end
   end
@@ -341,7 +359,19 @@ private
       items: [
         href: edit_investigation_notifying_country_path(investigation),
         text: "Change",
-        visuallyHiddenText: "notifying_country"
+        visuallyHiddenText: "notifying country"
+      ]
+    }
+  end
+
+  def overseas_regulator_actions(investigation, user)
+    return {} unless policy(investigation).change_overseas_regulator?(user:)
+
+    {
+      items: [
+        href: edit_investigation_overseas_regulator_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "overseas regulator"
       ]
     }
   end
@@ -470,7 +500,21 @@ private
     end
   end
 
+  def overseas_regulator_value(investigation)
+    return if investigation.is_from_overseas_regulator.nil?
+
+    investigation.is_from_overseas_regulator ? country_from_code(investigation.overseas_regulator_country, Country.overseas_countries) : t("investigations.overseas_regulator.no")
+  end
+
   def summary_html(investigation)
     "<span class='opss-text-limit-scroll-s'>#{investigation.object.description}</span>".html_safe
+  end
+
+  def time_ago_or_date(date)
+    if date > 24.hours.ago
+      "#{time_ago_in_words(date).capitalize} ago"
+    else
+      date.to_formatted_s(:govuk)
+    end
   end
 end

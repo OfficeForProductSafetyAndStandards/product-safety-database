@@ -1,34 +1,39 @@
-<%= govukFieldset(legend: { text: "The business details", classes: "govuk-fieldset__legend--m" }) do %>
+<fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Name and company number</legend>
+
   <%= govukInput(
     key: :trading_name,
     id: "trading_name",
     form: form,
-    label: { text: "Trading name" },
-    hint: { text: "The name the business is known as" },
+    label: { text: t("businesses.form.trading_name.label") },
+    hint: { text: t("businesses.form.trading_name.hint"), classes: "govuk-!-font-size-16" },
     classes: "govuk-!-width-two-thirds"
   ) %>
   <%= govukInput(
     key: :legal_name,
     id: "legal_name",
     form: form,
-    label: { text: "Registered or legal name" },
-    hint: { text: "As it appears on Companies House for UK businesses (usually ends in ‘Ltd’ or ‘Limited’)" },
+    label: { text: t("businesses.form.legal_name.label") },
+    hint: { html: t("businesses.form.legal_name.hint_html"), classes: "govuk-!-font-size-16" },
     classes: "govuk-!-width-two-thirds"
   ) %>
   <%= govukInput(
     key: :company_number,
     id: "company_number",
     form: form,
-    label: { text: "Company number" },
+    label: { text: t("businesses.form.company_number.label") },
+    hint: { html: t("businesses.form.company_number.hint_html"), classes: "govuk-!-font-size-16" },
     classes: "govuk-!-width-one-third"
   ) %>
-<% end %>
+</fieldset>
+
 <%= form.fields_for :locations, business.primary_location do |ff| %>
   <%= render "locations/address_form", form: ff, countries: countries %>
 <% end %>
 
 <%= form.fields_for :contacts, business.primary_contact do |ff| %>
-  <%= render "contacts/form", form: ff, legend: { text: "The business contact", classes: "govuk-fieldset__legend--m" } %>
+  <%= render "contacts/form", form: ff %>
 <% end %>
 
-<%= form.submit local_assigns[:submit_text] || "Save business", class: "govuk-button", data: { cy: "save" } %>
+
+<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>

@@ -2,7 +2,7 @@ class AddRiskAssessmentToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :user, :assessed_on, :risk_level, :custom_risk_level,
+  delegate :investigation, :user, :assessed_on, :risk_level,
            :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :investigation_product_ids, :risk_assessment_file, :risk_assessment, to: :context
 
   def call
@@ -15,7 +15,6 @@ class AddRiskAssessmentToCase
         added_by_team: user.team,
         assessed_on:,
         risk_level:,
-        custom_risk_level: custom_risk_level.presence,
         assessed_by_team_id: assessed_by_team_id.presence,
         assessed_by_business_id: assessed_by_business_id.presence,
         assessed_by_other: assessed_by_other.presence,

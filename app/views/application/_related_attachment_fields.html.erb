@@ -13,7 +13,7 @@
   </div>
 
 
-  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: error_field) %>", id="<%= id %>">
+  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: error_field) %>" id="<%= id %>">
 
     <%= form.fields_for attachment_name do |subform| %>
 

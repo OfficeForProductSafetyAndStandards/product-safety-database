@@ -278,6 +278,14 @@ module PageExpectations
     expect(page).to have_css(".govuk-label--l", text: "Why is the case being #{future_status}?")
   end
 
+  def expect_to_be_on_record_test_result_opss_funding_decision_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/test-results/funding-source/new")
+  end
+
+  def expect_to_be_on_record_test_result_opss_funding_form_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/test-results/funding-certificate/new")
+  end
+
   def expect_to_be_on_record_test_result_page
     expect_page_to_have_h1("Record test result")
     expect(page).to have_field("Which standard was the product tested against?")
@@ -681,7 +689,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+\/update-case-risk-level/)
     end
-    expect_page_to_have_h1("Case risk level")
+    expect_page_to_have_h1("Do you want to match this case risk level to the risk assessment level?")
   end
 
   def expect_to_be_on_case_summary_edit_page(case_id:)

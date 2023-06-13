@@ -29,6 +29,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
   let(:investigation_with_serious_risk_level) { create(:allegation, products: [product1], creator: user, risk_level: :serious) }
 
+  let(:investigation_with_not_conclusive_risk_level) { create(:allegation, products: [product1], creator: user, risk_level: :not_conclusive) }
+
   let(:investigation_with_no_products) { create(:allegation, products: [], creator: user) }
 
   before do
@@ -91,19 +93,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     click_button "Add risk assessment"
 
-    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_content("The risk assessment says the level of risk is serious risk.")
-
-    click_button "Set risk level"
-
-    expect(page).to have_content("Select if you would like to match the case risk level to the risk assessment level")
-
-    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
-      choose("Yes, set the case risk level to serious risk")
-    end
-
-    click_button "Set risk level"
+    # Skip the 'Case risk level' page as it is automatically updated to match
 
     click_link "Serious risk: MyBrand washing machine model X"
 
@@ -142,74 +132,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     expect(page).to have_link("View risk assessment")
   end
 
-  scenario "Adding a risk assessment done by another team with non-standard risk level" do
-    sign_in(user)
-
-    visit "/cases/#{investigation.pretty_id}/risk-assessments/new"
-    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
-
-    within_fieldset("Date of assessment") do
-      fill_in("Day", with: "3")
-      fill_in("Month", with: "4")
-      fill_in("Year", with: "2020")
-    end
-
-    within_fieldset("What was the risk level?") do
-      choose "Other"
-      # free text field left blank to test validation
-    end
-
-    within_fieldset("Who completed the assessment?") do
-      choose "Another team or market surveilance authority"
-    end
-
-    within_fieldset("Which products were assessed?") do
-      check "MyBrand washing machine model X"
-    end
-
-    click_button "Add risk assessment"
-
-    expect(page).to have_text("Enter other risk level")
-    expect(page).to have_text("Select trading standards or another market surveilance authority")
-
-    within_fieldset("What was the risk level?") do
-      fill_in "Other", with: "Medium-high risk"
-    end
-
-    select "OtherCouncil Trading Standards", from: "Choose team"
-
-    attach_file "Upload the risk assessment", risk_assessment_file
-
-    click_button "Add risk assessment"
-
-    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
-
-    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
-      choose("No, do not set the case risk level")
-    end
-
-    click_button "Set risk level"
-
-    click_link "Medium-high risk: MyBrand washing machine model X"
-
-    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_summary_item(key: "Assessed by", value: "OtherCouncil Trading Standards")
-
-    click_link "Back to case"
-
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-
-    within('nav[aria-label="Secondary"]') { click_link "Case" }
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
-    click_link "Activity"
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_text("Assessed by: OtherCouncil Trading Standards")
-    expect(page).to have_text("Risk level: Medium-high risk")
-  end
-
   scenario "Adding a risk assessment done by a business associated with the case" do
     sign_in(user)
 
@@ -243,13 +165,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     click_button "Add risk assessment"
 
-    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
-
-    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
-      choose("No, do not set the case risk level")
-    end
-
-    click_button "Set risk level"
+    # Skip the 'Case risk level' page as it is automatically updated to match
 
     click_link "Serious risk: MyBrand washing machine model X"
 
@@ -306,13 +222,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     attach_file "Upload the risk assessment", risk_assessment_file
     click_button "Add risk assessment"
 
-    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
-
-    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
-      choose("No, do not set the case risk level")
-    end
-
-    click_button "Set risk level"
+    # Skip the 'Case risk level' page as it is automatically updated to match
 
     click_link "Serious risk: MyBrand washing machine model X"
 
@@ -369,13 +279,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
 
     click_button "Add risk assessment"
 
-    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation_with_single_product.pretty_id)
-
-    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
-      choose("No, do not set the case risk level")
-    end
-
-    click_button "Set risk level"
+    # Skip the 'Case risk level' page as it is automatically updated to match
 
     click_link "High risk: MyBrand washing machine model X"
 
@@ -412,6 +316,42 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :w
     # Skip the 'Case risk level' page as it already matches
 
     expect_to_be_on_supporting_information_page(case_id: investigation_with_serious_risk_level.pretty_id)
+  end
+
+  scenario "Adding a risk assessment to a case where the assessed risk level does not match the existing case risk level" do
+    sign_in(user)
+
+    visit "/cases/#{investigation_with_not_conclusive_risk_level.pretty_id}/risk-assessments/new"
+
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_not_conclusive_risk_level.pretty_id)
+
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "Serious risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "MyCouncil Trading Standards"
+    end
+
+    attach_file "Upload the risk assessment", risk_assessment_file
+
+    click_button "Add risk assessment"
+
+    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation_with_not_conclusive_risk_level.pretty_id)
+
+    within_fieldset("Do you want to match this case risk level to the risk assessment level?") do
+      choose("No, keep the current case risk level unchanged")
+    end
+
+    click_button "Save"
+
+    expect_to_be_on_supporting_information_page(case_id: investigation_with_not_conclusive_risk_level.pretty_id)
   end
 
   scenario "Attempting to add a risk assessment to a case with no associated products" do

@@ -59,7 +59,7 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
       end
 
       click_button "Continue"
-      expect_to_be_on_record_test_result_page
+      expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
     end
   end
 
@@ -71,18 +71,6 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
 
       click_button "Continue"
       expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
-    end
-  end
-
-  context "when user selects `product`" do
-    # TODO: Test linking an existing product when this feature is introduced
-    xit "takes user to the new product page" do
-      within_fieldset("What are you adding to the case?") do
-        choose "Product"
-      end
-
-      click_button "Continue"
-      expect_to_be_on_add_product_to_investigation_page(investigation)
     end
   end
 

@@ -1,7 +1,7 @@
 RSpec.shared_context "with phone call correspondence setup" do
   include ActionDispatch::TestProcess::FixtureFile
 
-  let(:team_recipient_email) { Faker::Internet.safe_email }
+  let(:team_recipient_email) { Faker::Internet.email }
   let(:team)                 { create :team, team_recipient_email: }
   let(:user)                 { create :user, :activated, team: }
   let(:investigation)        { create :allegation, creator: user || create(:user) }

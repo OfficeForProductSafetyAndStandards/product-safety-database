@@ -17,9 +17,7 @@
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
     <div class="app-meta-area">
-      <p class="govuk-body govuk-hint">
-        Added <%= @test_result.created_at.to_formatted_s(:govuk) %>
-      </p>
+      <p class="govuk-body govuk-hint">Added <%= @test_result.date_added %></p>
     </div>
 
     <%= govukSummaryList(rows: test_result_summary_rows(@test_result)) %>
