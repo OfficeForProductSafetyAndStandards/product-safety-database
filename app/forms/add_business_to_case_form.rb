@@ -43,7 +43,7 @@ class AddBusinessToCaseForm
   def primary_contact
     contacts.first
   end
-  
+
 private
 
   def new_location
