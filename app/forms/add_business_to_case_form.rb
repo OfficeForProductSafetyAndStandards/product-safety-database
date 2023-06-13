@@ -18,6 +18,12 @@ class AddBusinessToCaseForm
 
   validates :current_user, :trading_name, presence: true
 
+  def initialize(*args)
+    super
+    self.locations = [Location.new] if locations.empty?
+    self.contacts = [Contact.new] if contacts.empty?
+  end
+
   def business_object
     object = Business.new(
       legal_name:,
