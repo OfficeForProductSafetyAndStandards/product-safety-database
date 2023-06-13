@@ -224,6 +224,24 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
     end
   end
 
+  context "when the investigation has been closed" do
+    let(:investigation) { create(:allegation, is_closed: true) }
+
+    context "when the user is not a super user" do
+      it "cannot update the case" do
+        expect(policy.update?).to be false
+      end
+    end
+
+    context "when the user is a super user" do
+      let(:user) { create(:user, :super_user) }
+
+      it "can update the case" do
+        expect(policy.update?).to be true
+      end
+    end
+  end
+
   context "when the investigation has been restricted" do
     let(:investigation) { create(:allegation, is_private: true) }
 
