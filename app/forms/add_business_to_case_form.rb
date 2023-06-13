@@ -10,13 +10,19 @@ class AddBusinessToCaseForm
   attribute :company_number
   attribute :relationship, default: ""
 
-  attribute :locations, default: [Location.new]
-  attribute :contacts, default: [Contact.new]
+  attribute :locations, default: []
+  attribute :contacts, default: []
 
   attribute :locations_attributes
   attribute :contacts_attributes
 
   validates :current_user, :trading_name, presence: true
+
+  def initialize(*args)
+    super
+    self.locations = [Location.new] if locations.empty?
+    self.contacts = [Contact.new] if contacts.empty?
+  end
 
   def business_object
     object = Business.new(
