@@ -1,5 +1,5 @@
 <div class="govuk-body">
-  Product: <%= activity.investigation_product.name %>
+  Product: <strong><%= activity.investigation_product.name %></strong>
   <br />
   Legislation: <strong><%= activity.legislation %></strong>
   <br />
@@ -19,6 +19,16 @@
   <br />
   <% unless activity.details.empty? %>
     Further details: <strong><%= activity.details %></strong>
+  <% end %>
+  <br />
+  <% if activity.funded %>
+    Funded: <strong>Yes</strong>
+    <br />
+    Issue date: <strong><%= activity.funding_issue_date %></strong>
+    <br />
+    Sample number: <strong><%= activity.tso_certificate_reference_number %></strong>
+  <% else %>
+    Funded: <strong>No</strong>
   <% end %>
   <br />
   <br />

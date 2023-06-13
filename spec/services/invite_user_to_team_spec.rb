@@ -4,7 +4,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
   describe ".call" do
     subject(:result) { described_class.call(params) }
 
-    let(:email) { Faker::Internet.safe_email }
+    let(:email) { Faker::Internet.email }
     let(:team) { create(:team) }
     let(:inviting_user) { create(:user, :activated, team:) }
 

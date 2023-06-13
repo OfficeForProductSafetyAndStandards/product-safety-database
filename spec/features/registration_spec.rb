@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify do
   let(:team) { create(:team) }
   let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, team:) }
-  let(:invitee_email) { Faker::Internet.safe_email }
+  let(:invitee_email) { Faker::Internet.email }
   let(:name) { "Bill Smith" }
 
   before do

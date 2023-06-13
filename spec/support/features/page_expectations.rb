@@ -23,12 +23,10 @@ module PageExpectations
   end
 
   def expect_to_be_on_investigation_add_business_type_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses/type")
-    expect(page).to have_selector("legend", text: "Select business type")
+    expect(page).to have_selector("legend", text: "What is the business type?")
   end
 
   def expect_to_be_on_investigation_add_business_details_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses/details")
     expect(page).to have_selector("legend", text: "The business details")
   end
 
@@ -278,6 +276,14 @@ module PageExpectations
   def expect_to_be_on_change_case_visiblity_page(case_id:, future_status:, action:)
     expect(page).to have_current_path("/cases/#{case_id}/visibility/#{action}")
     expect(page).to have_css(".govuk-label--l", text: "Why is the case being #{future_status}?")
+  end
+
+  def expect_to_be_on_record_test_result_opss_funding_decision_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/test-results/funding-source/new")
+  end
+
+  def expect_to_be_on_record_test_result_opss_funding_form_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/test-results/funding-certificate/new")
   end
 
   def expect_to_be_on_record_test_result_page
@@ -683,7 +689,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+\/update-case-risk-level/)
     end
-    expect_page_to_have_h1("Case risk level")
+    expect_page_to_have_h1("Do you want to match this case risk level to the risk assessment level?")
   end
 
   def expect_to_be_on_case_summary_edit_page(case_id:)

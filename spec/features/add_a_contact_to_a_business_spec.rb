@@ -15,7 +15,7 @@ RSpec.feature "Add a contact to a business", :with_stubbed_opensearch, :with_stu
 
     fill_in "Name", with: "Mr Smith"
     fill_in "Email", with: "smith@example.com"
-    fill_in "Phone number", with: "01632 960 001"
+    fill_in "Telephone", with: "01632 960 001"
     fill_in "Job title or role description", with: "Manager"
 
     click_button "Save"

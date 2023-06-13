@@ -1,16 +1,11 @@
 class Investigations::BusinessesController < ApplicationController
   include BusinessesHelper
   include CountriesHelper
-  include Wicked::Wizard
-  skip_before_action :setup_wizard, only: %i[remove destroy]
-  steps :type, :details
 
-  before_action :set_investigation, only: %i[index update new show]
-  before_action :set_countries, only: %i[update show]
-  before_action :set_business_location_and_contact, only: %i[update new show]
-  before_action :store_business, only: %i[update]
+  before_action :set_investigation
   before_action :set_investigation_business, except: %i[destroy remove]
-  before_action :business_request_params, only: %i[new]
+  before_action :authorize_user_for_business_updates, except: %i[index new remove destroy]
+  before_action :set_countries, only: %i[new create show update]
 
   def index
     @breadcrumbs = {
@@ -22,153 +17,101 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def new
-    clear_session
-    redirect_to wizard_path(steps.first)
+    @business_form = AddBusinessToCaseForm.new(current_user:)
   end
 
   def create
-    authorize @investigation, :update?
-    create!
+    @business_form = AddBusinessToCaseForm.new(business_form_params.merge(current_user:, relationship: session[:business_type]))
+
+    if @business_form.valid?
+      @business = @business_form.business_object
+
+      if @business.save
+        AddBusinessToCase.call!(
+          business: @business,
+          relationship: @business_form.relationship,
+          investigation: @investigation,
+          user: current_user
+        )
+        redirect_to_investigation_businesses_tab success: "The business was created"
+      else
+        render :new
+      end
+    else
+      render :new
+    end
   end
 
-  # This action is used for the edit flow
   def show
-    authorize @investigation, :update?
-    render_wizard
+    @business = Business.find(params[:id])
   end
 
   def update
-    authorize @investigation, :update?
-    if business_valid?
-      if step == :type
-        assign_type
-        redirect_to next_wizard_path
-      else
-        create!
-      end
+    @business = Business.find(params[:id])
+    if @business.update(business_params)
+      redirect_to investigations_business_path(@investigation, @business)
     else
-      render_wizard
+      render :show
     end
   end
 
   def remove
-    @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
-    authorize @investigation, :view_non_protected_details?
     @business = Business.find(params[:id])
     @remove_business_form = RemoveBusinessForm.new
   end
 
   def destroy
-    investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-
-    @business             = investigation.businesses.find(params[:id])
+    @business = @investigation.businesses.find(params[:id])
     @remove_business_form = RemoveBusinessForm.new(remove_business_params)
 
     if @remove_business_form.invalid?
-      @investigation = investigation.decorate
       return render :remove
     end
 
-    return redirect_to investigation_businesses_path(investigation, @business) unless @remove_business_form.remove?
+    return redirect_to investigation_businesses_path(@investigation, @business) unless @remove_business_form.remove?
 
     result = RemoveBusinessFromCase.call!(
       reason: @remove_business_form.reason,
-      investigation:,
+      investigation: @investigation.object,
       business: @business,
       user: current_user
     )
 
     if result.success?
-      redirect_to investigation_businesses_path(investigation, @business), flash: { success: t(".business_successfully_deleted") }
+      redirect_to investigation_businesses_path(@investigation, @business), flash: { success: t(".business_successfully_deleted") }
     else
-      @investigation = investigation.decorate
       render :remove
     end
   end
 
 private
 
-  def create!
-    if @business.valid?
-      AddBusinessToCase.call!(
-        business: @business,
-        relationship: session[:type],
-        investigation: @investigation,
-        user: current_user
-      )
-      redirect_to_investigation_businesses_tab success: "The business was created"
-    else
-      render_wizard
-    end
+  def set_investigation
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :view_non_protected_details?
+    @investigation = investigation.decorate
+  end
+
+  def authorize_user_for_business_updates
+    authorize @investigation, :update?
   end
 
   def set_investigation_business
     @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)
   end
 
-  def assign_type
-    session[:type] = business_type_params[:type] == "other" ? business_type_params[:type_other] : business_type_params[:type]
-  end
-
-  def clear_session
-    session.delete(:business)
-    session.delete(:contact)
-    session.delete(:location)
-  end
-
-  def business_valid?
-    if step == :type
-      if business_type_params[:type].nil?
-        @business.errors.add(:type, "Please select a business type")
-      elsif business_type_params[:type] == "other" && business_type_params[:type_other].blank?
-        @business.errors.add(:type, 'Please enter a business type "Other"')
-      end
-    else
-      @business.valid?
-    end
-    @business.errors.empty?
-  end
-
-  def business_request_params
-    return {} if params[:business].blank?
-
-    business_params
-  end
-
-  def business_step_params
-    business_session_params.merge(business_request_params)
-  end
-
-  def business_session_params
-    session[:business] || {}
-  end
-
-  def set_business_location_and_contact
-    @business = Business.new(business_step_params)
-    @business.locations.build unless @business.primary_location
-    @business.contacts.build unless @business.primary_contact
-    defaults_on_primary_location @business
-  end
-
-  def store_business
-    session[:business] = @business.attributes
-    session[:contact] = @business.contacts.first.attributes
-    session[:location] = @business.locations.first.attributes
-  end
-
-  def business_type_params
-    params.require(:business).permit(:type, :type_other)
+  def business_form_params
+    params.require(:add_business_to_case_form).permit(
+      :legal_name,
+      :trading_name,
+      :company_number,
+      locations_attributes: %i[id name address_line_1 address_line_2 phone_number city county country postal_code],
+      contacts_attributes: %i[id name email phone_number job_title]
+    )
   end
 
   def redirect_to_investigation_businesses_tab(flash)
     redirect_to investigation_businesses_path(@investigation), flash:
-  end
-
-  def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-    @investigation = investigation.decorate
   end
 
   def remove_business_params

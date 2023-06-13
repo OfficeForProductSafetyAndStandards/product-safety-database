@@ -36,7 +36,7 @@ FactoryBot.define do
       user_title { "test project title" }
     end
 
-    factory :kase, class: "Investigation::Case" do
+    factory :case, class: "Investigation::Case" do
       description { "test case" }
       user_title { "test case title" }
     end

@@ -21,7 +21,7 @@ module Investigations
         },
         "Test results" => {
           items: investigation.test_results.order(created_at: :desc).map(&:decorate),
-          new_path: new_investigation_test_result_path(investigation)
+          new_path: new_investigation_funding_source_path(investigation)
         },
         "Other" => {
           items: investigation.generic_supporting_information_attachments.order(created_at: :desc).map(&:decorate),
@@ -64,13 +64,13 @@ module Investigations
       when "image", "generic_information"
         redirect_to new_investigation_document_path(@investigation)
       when "testing_result"
-        redirect_to new_investigation_test_result_path(@investigation)
+        redirect_to new_investigation_funding_source_path(@investigation)
       when "risk_assessment"
         redirect_to new_investigation_risk_assessment_path(@investigation)
       when "product"
         redirect_to new_investigation_product_path(investigation)
       when "business"
-        redirect_to new_investigation_business_path(investigation)
+        redirect_to new_investigation_business_types_path(investigation)
       end
     end
 

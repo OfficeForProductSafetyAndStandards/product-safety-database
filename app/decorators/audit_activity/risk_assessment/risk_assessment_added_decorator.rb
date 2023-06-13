@@ -10,8 +10,6 @@ class AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator < ApplicationD
   end
 
   def risk_level
-    return object.custom_risk_level if object.custom_risk_level.present?
-
     I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")
   end
 

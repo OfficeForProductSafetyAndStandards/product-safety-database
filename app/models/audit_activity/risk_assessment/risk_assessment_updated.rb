@@ -3,7 +3,6 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
     updates = risk_assessment.previous_changes.slice(
       :assessed_on,
       :risk_level,
-      :custom_risk_level,
       :assessed_by_team_id,
       :assessed_by_business_id,
       :assessed_by_other,
@@ -31,7 +30,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def risk_level_changed?
-    new_risk_level || new_custom_risk_level
+    new_risk_level
   end
 
   def assessed_by_changed?
@@ -79,10 +78,6 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
 
   def new_assessed_by_other
     updates["assessed_by_other"]&.second
-  end
-
-  def new_custom_risk_level
-    updates["custom_risk_level"]&.second
   end
 
   def new_product_ids

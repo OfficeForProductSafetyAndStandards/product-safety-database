@@ -72,11 +72,11 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
       fill_in "Month", with: "2"
     end
 
-    # Update some of the fields to include a validation error
     within_fieldset("What was the risk level?") do
-      choose "Other"
+      choose "Not conclusive"
     end
 
+    # Update some of the fields to include a validation error
     within_fieldset("Who completed the assessment?") do
       choose "Someone else"
     end
@@ -93,16 +93,10 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     click_button "Update risk assessment"
 
     # Validation errors
-    expect(page).to have_text("Enter other risk level")
     expect(page).to have_text("You must choose at least one product")
     expect(page).to have_text("Enter organisation name")
 
     # Fix validation errors
-    within_fieldset("What was the risk level?") do
-      choose "Other"
-      fill_in "Other", with: "Medium-high risk"
-    end
-
     within_fieldset("Who completed the assessment?") do
       fill_in "Organisation name", with: "RiskAssessmentsRUs"
     end
@@ -115,21 +109,19 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
 
     expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_content("The risk assessment says the level of risk is medium-high risk.")
-
-    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
-      choose("Yes, set the case risk level to medium-high risk")
+    within_fieldset("Do you want to match this case risk level to the risk assessment level?") do
+      choose("Yes, set the case risk level to not conclusive")
     end
 
-    click_button "Set risk level"
+    click_button "Save"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
-    click_link "Medium-high risk: Doll"
+    click_link "Not conclusive: Doll"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
 
-    expect(page).to have_summary_item(key: "Risk level",          value: "Medium-high risk")
+    expect(page).to have_summary_item(key: "Risk level",          value: "Not conclusive")
     expect(page).to have_summary_item(key: "Assessed by",         value: "RiskAssessmentsRUs")
     expect(page).to have_summary_item(key: "Product assessed",    value: "Doll (#{doll.psd_ref})")
 
@@ -142,7 +134,7 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     expect(page).to have_content("Risk assessment edited")
     expect(page).to have_content("Edited by Joe Bloggs")
     expect(page).to have_content("Changes:")
-    expect(page).to have_content("Risk level: Medium-high risk")
+    expect(page).to have_content("Risk level: Not conclusive")
     expect(page).to have_content("Assessed by: RiskAssessmentsRUs")
     expect(page).to have_content("Product assessed: Doll")
   end

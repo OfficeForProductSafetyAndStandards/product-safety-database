@@ -1,0 +1,101 @@
+<h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The supporting information for this case</h2>
+
+<% @grouped_supporting_information.each_with_index do |supporting_information_type, index| %>
+  <%
+    supporting_information_type_name = supporting_information_type.first
+    supporting_information_type_id = supporting_information_type_name.downcase.gsub(' ', '-')
+    supporting_information_items = supporting_information_type.last[:items]
+    supporting_information_new_path = supporting_information_type.last[:new_path]
+
+    section_classes = class_names(
+      "govuk-!-margin-bottom-9 govuk-!-padding-right-4 govuk-!-padding-left-4",
+      "govuk-!-padding-top-4 opss-border-all" => index.odd?
+    )
+    section_attributes = {
+      "class" => section_classes,
+      "data-info-number" => supporting_information_items.count,
+      "id" => supporting_information_type_id
+    }
+  %>
+  <%= tag.section(**section_attributes) do %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <h3 class="govuk-heading-m">
+          <%= supporting_information_type_name %>
+          <span class="govuk-!-font-weight-regular govuk-!-font-size-24">(<%=supporting_information_items.count%>)</span>
+        </h3>
+      </div>
+      <% if policy(@investigation).update? %>
+        <div class="govuk-grid-column-one-quarter">
+          <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+           <%= link_to supporting_information_new_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" do %>
+             Add <span class="govuk-visually-hidden"><%= supporting_information_type_name %></span>
+           <% end %>
+           </div>
+        </div>
+      <% end %>
+    </div>
+    <% unless supporting_information_items.empty? %>
+      <ul class="govuk-list">
+      <% supporting_information_items.each do |item| %>
+        <li>
+          <dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt">
+            <% if item.try(:event_type) %>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key"><%= supporting_information_type_id == "test-results" ? "Result" : "Type" %></dt>
+                <dd class="govuk-summary-list__value"><%= item.event_type %></dd>
+              </div>
+            <% end %>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Title</dt>
+              <% title = if supporting_information_type_id == "correspondence" && !policy(@investigation).view_protected_details?
+                    tag.p(I18n.t("case.protected_details", data_type: "correspondence"), class: "govuk-hint")
+                  elsif (supporting_information_type_id == "other" && !policy(@investigation).view_protected_details?)
+                    if item.object.try(:investigation_product)
+                      "#{item.supporting_information_title} (#{item.psd_ref})"
+                    else
+                      "#{item.supporting_information_title}"
+                    end
+                  else
+                    link_to item.supporting_information_title, item.show_path, class: "govuk-link govuk-link--no-visited-state"
+                  end
+              %>
+              <dd class="govuk-summary-list__value"><%= title %></dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Event date</dt>
+              <dd class="govuk-summary-list__value"><%= item.date_of_activity %></dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Added</dt>
+              <dd class="govuk-summary-list__value"><%= item.date_added %></dd>
+            </div>
+
+            <% if supporting_information_type_id == "test-results" %>
+              <% if item.opss_funded? %>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Funded</dt>
+                  <dd class="govuk-summary-list__value"><%= t("test_results.opss_funded.yes_html") %></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Sample number</dt>
+                  <dd class="govuk-summary-list__value"><%= item.tso_certificate_reference_number %></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Issue date</dt>
+                  <dd class="govuk-summary-list__value"><%= item.funding_issue_date %></dd>
+                </div>
+              <% else %>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">Funded</dt>
+                  <dd class="govuk-summary-list__value">No</dd>
+                </div>
+              <% end %>
+            <% end %>
+          </dl>
+        </li>
+      <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>

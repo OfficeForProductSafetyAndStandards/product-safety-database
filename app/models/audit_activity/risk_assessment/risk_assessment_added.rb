@@ -38,10 +38,6 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
     metadata["risk_assessment"]["risk_level"]
   end
 
-  def custom_risk_level
-    metadata["risk_assessment"]["custom_risk_level"]
-  end
-
   def assessed_on
     Date.parse(metadata["risk_assessment"]["assessed_on"])
   end

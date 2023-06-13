@@ -11,6 +11,8 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   let(:standards_product_was_tested_against) { %w[test] }
   let(:failure_details) { "Something terrible happened" }
   let(:result) { "passed" }
+  let(:tso_certificate_issue_date) { nil }
+  let(:tso_certificate_reference_number) { nil }
 
   let!(:test_result) do
     AddTestResultToInvestigation.call!(
@@ -22,7 +24,9 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       result:,
       investigation_product_id: investigation_product.id,
       document: fixture_file_upload("test_result.txt"),
-      standards_product_was_tested_against:
+      standards_product_was_tested_against:,
+      tso_certificate_issue_date:,
+      tso_certificate_reference_number:
     ).test_result
   end
 
@@ -114,6 +118,40 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
     end
   end
 
+  context "when opss funded" do
+    let(:tso_certificate_issue_date) { Time.zone.local(2023, 3, 2) }
+
+    before do
+      sign_in(user)
+
+      go_edit_test_result
+    end
+
+    context "without a reference number" do
+      it "has the text to indicate that it is opss funded" do
+        expect(page).to have_text("This test was funded under the OPSS Sampling Protocol and was issued on 2 March 2023. (No TSO Sample Reference Number was recorded).")
+      end
+    end
+
+    context "with a reference number" do
+      let(:tso_certificate_reference_number) { "123" }
+
+      it "has the reference number text" do
+        expect(page).to have_text("This test was funded under the OPSS Sampling Protocol and was issued on 2 March 2023. (TSO Sample Reference Number: 123).")
+      end
+    end
+  end
+
+  context "when not opss funded" do
+    it "does not  have the text to indicate that it is opss funded" do
+      sign_in(user)
+
+      go_edit_test_result
+
+      expect(page).not_to have_text("This test was funded under the OPSS Sampling Protocol")
+    end
+  end
+
   def go_edit_test_result
     visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
 
@@ -168,7 +206,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
   def change_values_in_form(file_path: "test/fixtures/files/test_result_2.txt")
     # Change some of the fields
-    select "Consumer Protection Act 1987", from: "Against which legislation?"
+    select "Consumer Protection Act 1987", from: "Under which legislation?"
     fill_in "Which standard was the product tested against?", with: "EN72,EN73"
 
     within_fieldset "Date of test" do
@@ -192,7 +230,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   end
 
   def expect_edit_form_to_have_fields_populated_by_original_test_result_values(result:)
-    expect(page).to have_field("Against which legislation?", with: "General Product Safety Regulations 2005")
+    expect(page).to have_field("Under which legislation?", with: "General Product Safety Regulations 2005")
     within_fieldset "Date of test" do
       expect(page).to have_field("Day", with: "1")
       expect(page).to have_field("Month", with: "5")

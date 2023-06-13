@@ -7,7 +7,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 gem "activerecord-pg_enum", "~> 2.0"
 gem "active_storage_validations", "~> 1.0.3"
 gem "aws-sdk-s3", "~> 1.120"
-gem "aws-sdk-s3control", "~> 1.62"
+gem "aws-sdk-s3control", "~> 1.63"
 gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
@@ -19,7 +19,7 @@ gem "draper", "~> 4.0"
 gem "elasticsearch"
 gem "elasticsearch-model"
 gem "elasticsearch-rails"
-gem "govuk-design-system-rails", "~> 0.10.3"
+gem "govuk-design-system-rails", "~> 0.10.3", github: "OfficeForProductSafetyAndStandards/govuk-design-system-rails"
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
@@ -34,7 +34,7 @@ gem "net-pop"
 gem "net-smtp"
 
 gem "paper_trail"
-gem "pg", "~> 1.4"
+gem "pg", "~> 1.5"
 gem "pghero", "~> 3.3"
 gem "puma", "~> 6.2"
 gem "pundit", "~> 2.3"
@@ -56,6 +56,9 @@ gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
+
+# PRISM Rails engine
+gem "prism", path: "prism"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"

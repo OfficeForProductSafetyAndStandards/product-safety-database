@@ -34,10 +34,6 @@ module BusinessesHelper
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
   end
 
-  def set_countries
-    @countries = all_countries
-  end
-
   # Never trust parameters from the scary internet, only allow the white list through.
   def business_params
     params.require(:business).permit(

@@ -2,11 +2,14 @@ class ChangeNotifyingCountry
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :country, :user, to: :context
+  delegate :investigation, :notifying_country_uk, :notifying_country_overseas, :overseas_or_uk, :user, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+    context.fail!(error: "No selection made") if overseas_or_uk.blank?
+    context.fail!(error: "No country selected") if overseas_or_uk == "uk" && notifying_country_uk.blank?
+    context.fail!(error: "No country selected") if overseas_or_uk == "overseas" && notifying_country_overseas.blank?
 
     assign_country
     return if investigation.changes.none?
@@ -36,7 +39,8 @@ private
   end
 
   def assign_country
-    investigation.assign_attributes(notifying_country: country)
+    investigation.assign_attributes(notifying_country: notifying_country_uk) if overseas_or_uk == "uk"
+    investigation.assign_attributes(notifying_country: notifying_country_overseas) if overseas_or_uk == "overseas"
   end
 
   def send_notification_email(investigation, user)

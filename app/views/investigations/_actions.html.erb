@@ -14,7 +14,7 @@
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Business&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.businesses.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
       <% if policy(@investigation).update? %>
-        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_business_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a business</span></a></dd>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_business_types_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a business</span></a></dd>
       <% end %>
     </div>
     <div class="govuk-summary-list__row">
@@ -50,7 +50,7 @@
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Test result&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.test_results.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
       <% if policy(@investigation).update? %>
-        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_test_result_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a test result</span></a></dd>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_funding_source_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a test result</span></a></dd>
       <% end %>
     </div>
     <div class="govuk-summary-list__row">

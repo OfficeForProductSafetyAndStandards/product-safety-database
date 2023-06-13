@@ -10,7 +10,7 @@ RSpec.feature "Changing the notifying country of a case", :with_stubbed_mailer, 
     end
 
     # skipping until the notifying country change is carried out on the new case page work.
-    xit "can succesfully change pre-populated notifying_country" do
+    xit "can succesfully change pre-populated notifying country" do
       investigation.update!(notifying_country: "country:GB-ENG")
 
       sign_in_and_visit_change_notifying_country_page("England")
@@ -22,12 +22,12 @@ RSpec.feature "Changing the notifying country of a case", :with_stubbed_mailer, 
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Notifying country changed")
-      expect(page).to have_css("p", text: "Notifying country changed from England to Scotland.")
+      expect(page).to have_css("p", text: "Notifying country changed from England to Scotland")
     end
   end
 
   context "when user is not a notifying_country_editor" do
-    xit "does not allow user to change country" do
+    xit "does not allow user to change notifying country" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}"
       expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
@@ -40,7 +40,7 @@ RSpec.feature "Changing the notifying country of a case", :with_stubbed_mailer, 
     sign_in user
     visit "/cases/#{investigation.pretty_id}"
     expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: country)
-    click_link "Change notifying_country"
+    click_link "Change notifying country"
     expect(page).to have_css("h1", text: "Change notifying country")
     expect(page).to have_select("Notifying country", selected: country)
   end

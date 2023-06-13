@@ -53,13 +53,13 @@ RSpec.feature "Case actions", :with_stubbed_opensearch, :with_stubbed_antivirus,
     visit investigation_path(investigation_1)
     within("#page-content section dl.govuk-summary-list") do
       expect(page).to have_link("Add a product", href: new_investigation_product_path(investigation_1))
-      expect(page).to have_link("Add a business", href: new_investigation_business_path(investigation_1))
+      expect(page).to have_link("Add a business", href: new_investigation_business_types_path(investigation_1))
       expect(page).to have_link("Add an image", href: new_investigation_document_path(investigation_1))
       expect(page).to have_link("Add an accident or incident", href: new_investigation_accident_or_incidents_type_path(investigation_1))
       expect(page).to have_link("Add a corrective action", href: new_investigation_corrective_action_path(investigation_1))
       expect(page).to have_link("Add a risk assessment", href: new_investigation_risk_assessment_path(investigation_1))
       expect(page).to have_link("Add a correspondence", href: new_investigation_correspondence_path(investigation_1))
-      expect(page).to have_link("Add a test result", href: new_investigation_test_result_path(investigation_1))
+      expect(page).to have_link("Add a test result", href: new_investigation_funding_source_path(investigation_1))
       expect(page).to have_link("Add a document or attachment", href: new_investigation_document_path(investigation_1))
       expect(page).to have_link("Add a comment", href: new_investigation_activity_comment_path(investigation_1))
     end

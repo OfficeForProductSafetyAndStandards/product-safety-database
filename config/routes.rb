@@ -11,6 +11,8 @@ end
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
+  mount Prism::Engine, at: "/prism"
+
   unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
     mount Sidekiq::Web => "/sidekiq"
   end
@@ -129,6 +131,7 @@ Rails.application.routes.draw do
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
+    resource :overseas_regulator, only: %i[update edit], path: "edit-overseas-regulator", controller: "investigations/overseas_regulator"
     resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
     resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
     resource :reference_numbers, only: %i[edit update], controller: "investigations/reference_numbers"
@@ -163,8 +166,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :businesses, only: %i[index update show new create destroy], controller: "investigations/businesses" do
-      member { get :remove }
+    resource :business_types, controller: "investigations/business_types", path: "businesses/with-type", only: %i[new create]
+    resources :businesses, controller: "investigations/businesses" do
+      member do
+        get :remove
+      end
     end
 
     resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
@@ -188,6 +194,9 @@ Rails.application.routes.draw do
 
     resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
       collection do
+        resource :funding_source, controller: "investigations/test_results/funding_source", only: %i[new create], path: "funding-source"
+        resource :funding_certificate, controller: "investigations/test_results/funding_certificate", only: %i[new create], path: "funding-certificate"
+
         put :create_draft, path: "confirm"
         get :confirm
       end
