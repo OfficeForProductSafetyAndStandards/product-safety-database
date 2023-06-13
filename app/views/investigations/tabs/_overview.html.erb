@@ -1,6 +1,6 @@
-<% if policy(@investigation).update? %>
-  <%= render('investigations/actions', investigation: @investigation) %>
-<% end %>
+<%= render('investigations/actions', investigation: @investigation) unless @investigation.is_closed? %>
+<%= render('investigations/actions', investigation: @investigation) if @investigation.is_closed? && current_user.is_superuser?  %>
+
 
 <% team_list_html = capture do %>
   <% if @investigation.teams_with_access.length > 1 %>
