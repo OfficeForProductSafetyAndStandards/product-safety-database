@@ -25,4 +25,10 @@ RSpec.describe CorrectiveActionDecorator, :with_stubbed_opensearch, :with_stubbe
       expect(decorated_corrective_action.date_of_activity_for_sorting).to eq(corrective_action.date_decided)
     end
   end
+
+  describe "#case_id" do
+    it "returns the investigation pretty id" do
+      expect(decorated_corrective_action.case_id).to eq(corrective_action.investigation.pretty_id)
+    end
+  end
 end

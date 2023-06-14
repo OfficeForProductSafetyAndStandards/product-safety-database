@@ -101,7 +101,7 @@ private
     return @test_results_sheet if @test_results_sheet
 
     sheet = package.workbook.add_worksheet name: "test_results"
-    sheet.add_row %w[psd_ref product_id legislation standards date_of_test result how_product_failed further_details product_name]
+    sheet.add_row %w[psd_ref product_id legislation standards date_of_test result how_product_failed further_details product_name case_id]
 
     @test_results_sheet = sheet
   end
@@ -110,7 +110,7 @@ private
     return @risk_assessments_sheet if @risk_assessments_sheet
 
     sheet = package.workbook.add_worksheet name: "risk_assessments"
-    sheet.add_row %w[psd_ref product_id date_of_assessment risk_level assessed_by further_details product_name]
+    sheet.add_row %w[psd_ref product_id date_of_assessment risk_level assessed_by further_details product_name case_id]
 
     @risk_assessments_sheet = sheet
   end
@@ -130,7 +130,8 @@ private
                      how_long
                      geographic_scope
                      further_details
-                     product_name]
+                     product_name
+                     case_id]
 
     @corrective_actions_sheet = sheet
   end
@@ -169,7 +170,8 @@ private
       test_result.result,
       test_result.failure_details,
       test_result.details,
-      product.name
+      product.name,
+      test_result.case_id
     ]
   end
 
@@ -181,7 +183,8 @@ private
       risk_assessment.risk_level,
       risk_assessment.decorate.assessed_by,
       risk_assessment.details,
-      product.name
+      product.name,
+      risk_assessment.case_id
     ]
   end
 
@@ -198,7 +201,8 @@ private
       corrective_action.duration,
       corrective_action.geographic_scopes,
       corrective_action.details,
-      product.name
+      product.name,
+      corrective_action.case_id
     ]
   end
 

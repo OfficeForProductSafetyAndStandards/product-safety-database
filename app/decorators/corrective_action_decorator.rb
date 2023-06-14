@@ -65,4 +65,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def psd_ref
     object.investigation_product.psd_ref
   end
+
+  def case_id
+    object.investigation.pretty_id
+  end
 end
