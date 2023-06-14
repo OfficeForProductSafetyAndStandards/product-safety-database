@@ -267,9 +267,6 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     interactor (3.1.2)
     jaro_winkler (1.5.4)
-    jbuilder (2.11.5)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     jmespath (1.6.2)
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
@@ -340,6 +337,14 @@ GEM
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
+    opensearch-api (2.2.0)
+      multi_json
+    opensearch-ruby (2.1.0)
+      opensearch-api (~> 2.1)
+      opensearch-transport (~> 2.0)
+    opensearch-transport (2.1.0)
+      faraday (>= 1.0, < 3)
+      multi_json
     optimist (3.0.1)
     orm_adapter (0.5.0)
     pagy (6.0.4)
@@ -669,7 +674,6 @@ DEPENDENCIES
   devise-encryptable (~> 0.2)
   dotenv-rails (~> 2.8)
   draper (~> 4.0)
-  elasticsearch
   elasticsearch-model
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
@@ -678,7 +682,6 @@ DEPENDENCIES
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)
-  jbuilder (~> 2.11)
   jsbundling-rails
   kaminari (~> 1.2)
   launchy (~> 2.5)
@@ -688,6 +691,7 @@ DEPENDENCIES
   net-imap
   net-pop
   net-smtp
+  opensearch-ruby
   paper_trail
   parallel_tests (~> 4.2.0)
   pg (~> 1.5)
