@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Test::ResultDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
   subject(:decorated_corrective_action) { test_result.decorate }
 
-let(:test_result) { build(:test_result) }
+  let(:test_result) { build(:test_result) }
 
   describe "#title" do
     context "when the test result has passed" do
