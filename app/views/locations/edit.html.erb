@@ -1,9 +1,4 @@
 <%= page_title "Edit location", errors: @location.errors.any? %>
-
-<% content_for :after_header do %>
-  <%= link_to "Back to business", @business, class: "govuk-back-link" %>
-<% end %>
-
 <%= form_with(model: @location, url: business_location_path(@business, @location), local: true) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
