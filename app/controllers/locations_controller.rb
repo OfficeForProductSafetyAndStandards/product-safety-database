@@ -1,12 +1,11 @@
 class LocationsController < ApplicationController
   include CountriesHelper
-  include BreadcrumbHelper
 
   before_action :set_location, only: %i[show edit update remove destroy]
   before_action :create_location, only: %i[create]
   before_action :assign_business, only: %i[show edit update remove create]
   before_action :set_countries, only: %i[create update new edit]
-  before_action :set_breadcrumb, only: %i[new show edit remove]
+  before_action :set_business_breadcrumbs, only: %i[new show edit remove]
 
   def show; end
 
@@ -49,12 +48,6 @@ private
   def create_location
     business = Business.find(params[:business_id])
     @location = business.locations.create!(location_params.merge({ added_by_user: current_user }))
-  end
-
-  def set_breadcrumb
-    breadcrumb "businesses.label", :businesses_path
-    breadcrumb breadcrumb_business_label, breadcrumb_business_path
-    breadcrumb @business.trading_name, business_path(@business) if @business&.persisted?
   end
 
   def set_location

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include SentryConfigurationConcern
   include SecondaryAuthenticationConcern
   include CookiesConcern
+  include BreadcrumbHelper
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!
@@ -95,6 +96,14 @@ class ApplicationController < ActionController::Base
 
   def root_path_for(_resource)
     authenticated_root_path
+  end
+
+protected
+
+  def set_business_breadcrumbs
+    breadcrumb "businesses.label", :businesses_path
+    breadcrumb breadcrumb_business_label, breadcrumb_business_path
+    breadcrumb @business.trading_name, business_path(@business) if @business&.persisted?
   end
 
 private
