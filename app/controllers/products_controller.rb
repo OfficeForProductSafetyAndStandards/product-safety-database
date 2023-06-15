@@ -12,17 +12,11 @@ class ProductsController < ApplicationController
 
   breadcrumb "products.label", :products_path
 
-  # GET /products
-  # GET /products.json
   def index
-    respond_to do |format|
-      format.html do
-        @results = search_for_products(20)
-        @count = count_to_display
-        @products = ProductDecorator.decorate_collection(@results)
-        @page_name = "all_products"
-      end
-    end
+    @results = search_for_products(20)
+    @count = count_to_display
+    @products = ProductDecorator.decorate_collection(@results)
+    @page_name = "all_products"
   end
 
   def show
@@ -32,7 +26,6 @@ class ProductsController < ApplicationController
     breadcrumb breadcrumb_product_label, breadcrumb_product_path
   end
 
-  # GET /products/new
   def new
     @product_form = ProductForm.new
     @product_form.barcode = params[:barcode] if params[:barcode].present?
@@ -42,25 +35,21 @@ class ProductsController < ApplicationController
     render_404_page and return if !policy(@product).show? || @product.owning_team.blank?
   end
 
-  # POST /products
   def create
     @product_form = ProductForm.new product_params
 
-    respond_to do |format|
-      if @product_form.valid?
-        context = CreateProduct.call!(
-          @product_form.serializable_hash.merge(user: current_user)
-        )
-        @product = context.product
-        format.html { render :confirmation }
-      else
-        set_countries
-        format.html { render :new }
-      end
+    if @product_form.valid?
+      context = CreateProduct.call!(
+        @product_form.serializable_hash.merge(user: current_user)
+      )
+      @product = context.product
+      render :confirmation
+    else
+      set_countries
+      render :new
     end
   end
 
-  # GET /products/1/edit
   def edit
     authorize @product, :update?
 
@@ -69,30 +58,22 @@ class ProductsController < ApplicationController
     breadcrumb @product.name, product_path(@product)
   end
 
-  # PATCH/PUT /products/1
-  # PATCH/PUT /products/1.json
   def update
     authorize @product, :update?
 
-    respond_to do |format|
-      @product_form = ProductForm.from @product.object
-      @product_form.attributes = product_params_for_update
+    @product_form = ProductForm.from @product.object
+    @product_form.attributes = product_params_for_update
 
-      if @product_form.valid?
-        format.html do
-          UpdateProduct.call!(
-            product: @product.object,
-            product_params: @product_form.serializable_hash,
-            updating_team: current_user.team
-          )
+    if @product_form.valid?
+      UpdateProduct.call!(
+        product: @product.object,
+        product_params: @product_form.serializable_hash,
+        updating_team: current_user.team
+      )
 
-          redirect_to product_path(@product), flash: { success: "The product record was updated" }
-        end
-        format.json { render :show, status: :ok, location: @product }
-      else
-        format.html { render :edit }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
+      redirect_to product_path(@product), flash: { success: "The product record was updated" }
+    else
+      render :edit
     end
   end
 
