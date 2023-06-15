@@ -3,7 +3,6 @@ class InvestigationsController < ApplicationController
 
   before_action :set_search_params, only: %i[index]
   before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
-  before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
   def index
@@ -132,10 +131,6 @@ private
 
   def editable_keys
     %i[description]
-  end
-
-  def build_breadcrumbs
-    @breadcrumbs = build_breadcrumb_structure
   end
 
   def count_to_display

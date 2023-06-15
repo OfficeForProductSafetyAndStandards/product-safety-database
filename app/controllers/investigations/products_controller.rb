@@ -5,9 +5,7 @@ class Investigations::ProductsController < ApplicationController
 
   before_action :set_investigation
 
-  def index
-    @breadcrumbs = build_breadcrumb_structure
-  end
+  def index; end
 
   def new
     authorize @investigation, :update?

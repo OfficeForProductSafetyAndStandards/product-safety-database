@@ -27,7 +27,6 @@ module Investigations
 
       @currently_not_validated = currently_not_validated?
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated_value)
-      @breadcrumbs = build_back_link_to_case
     end
 
   private

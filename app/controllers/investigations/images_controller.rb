@@ -6,12 +6,6 @@ module Investigations
 
       authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
-      @breadcrumbs = {
-        items: [
-          { text: "Cases", href: all_cases_investigations_path },
-          { text: @investigation.pretty_description }
-        ]
-      }
     end
   end
 end

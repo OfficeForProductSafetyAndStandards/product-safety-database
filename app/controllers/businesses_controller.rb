@@ -6,7 +6,6 @@ class BusinessesController < ApplicationController
   before_action :set_search_params, only: %i[index]
   before_action :set_business, only: %i[show edit update]
   before_action :update_business, only: %i[update]
-  before_action :build_breadcrumbs, only: %i[show]
   before_action :set_countries, only: %i[update edit]
   before_action :set_sort_by_items, only: %i[index your_businesses team_businesses]
 
@@ -82,10 +81,6 @@ private
   def update_business
     @business.assign_attributes(business_params)
     defaults_on_primary_location(@business) if @business.locations.any?
-  end
-
-  def build_breadcrumbs
-    @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
   end
 
   def set_sort_by_items

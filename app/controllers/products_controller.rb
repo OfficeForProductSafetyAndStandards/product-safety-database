@@ -6,7 +6,6 @@ class ProductsController < ApplicationController
   before_action :set_search_params, only: %i[index]
   before_action :set_product, only: %i[show edit update owner]
   before_action :set_countries, only: %i[new update edit]
-  before_action :build_breadcrumbs, only: %i[show]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
 
   # GET /products
@@ -118,10 +117,6 @@ class ProductsController < ApplicationController
   end
 
 private
-
-  def build_breadcrumbs
-    @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
-  end
 
   def set_sort_by_items
     params[:sort_by] = SortByHelper::SORT_BY_RELEVANT if params[:sort_by].blank? && params[:q].present?

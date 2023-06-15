@@ -7,14 +7,7 @@ class Investigations::BusinessesController < ApplicationController
   before_action :authorize_user_for_business_updates, except: %i[index new remove destroy]
   before_action :set_countries, only: %i[new create show update]
 
-  def index
-    @breadcrumbs = {
-      items: [
-        { text: "Cases", href: all_cases_investigations_path },
-        { text: @investigation.pretty_description }
-      ]
-    }
-  end
+  def index; end
 
   def new
     @business_form = AddBusinessToCaseForm.new(current_user:)

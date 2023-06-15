@@ -28,12 +28,6 @@ module Investigations
           new_path: new_investigation_document_path(investigation)
         }
       }
-      @breadcrumbs = {
-        items: [
-          { text: "Cases", href: all_cases_investigations_path },
-          { text: @investigation.pretty_description }
-        ]
-      }
     end
 
     def new
