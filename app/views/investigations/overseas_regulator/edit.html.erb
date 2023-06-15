@@ -8,8 +8,6 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= form_with scope: :investigation, model: @overseas_regulator_form, url: investigation_overseas_regulator_path(@investigation), html: {novalidate: true}, method: :put, local: true do |form| %>

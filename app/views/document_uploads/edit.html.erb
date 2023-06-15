@@ -10,9 +10,6 @@
       href: investigation_supporting_information_index_path(@investigation)
     ) %>
   <% end %>
-
-  <%= render "investigations/pages_top", investigation: @investigation %>
-
 <% else %>
   <% content_for :after_header do %>
     <%= govukBackLink(

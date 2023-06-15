@@ -8,8 +8,6 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with(model: @accident_or_incident_form, local: true,  url: investigation_accident_or_incident_path(@investigation, @accident_or_incident), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>

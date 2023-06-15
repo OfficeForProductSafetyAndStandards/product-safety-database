@@ -230,8 +230,4 @@ module Investigations::DisplayTextHelper
 
     govukSummaryList rows:
   end
-
-  def has_badges?(investigation)
-    investigation.is_private? || investigation.is_closed? || investigation.serious? || investigation.high?
-  end
 end

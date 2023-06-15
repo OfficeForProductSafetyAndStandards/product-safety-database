@@ -6,8 +6,6 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with(model: @email_correspondence_form, local: true, url: investigation_email_path(@investigation, @email), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

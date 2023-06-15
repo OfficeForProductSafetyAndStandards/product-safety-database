@@ -8,8 +8,6 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with model: @comment_form, scope: :comment_form, local: true, builder: ApplicationFormBuilder, method: :post, html: {novalidate: true}, url: investigation_activity_comment_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

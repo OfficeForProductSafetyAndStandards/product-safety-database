@@ -6,8 +6,6 @@
     href: investigation_path(@investigation)
   ) %>
 <% end %>
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
 <p>This case is currently <strong><%= @investigation.visibility_status %>.</strong></p>

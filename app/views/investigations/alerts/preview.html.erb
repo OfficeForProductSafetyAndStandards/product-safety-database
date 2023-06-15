@@ -6,8 +6,6 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with model: @alert_form, local: true, url: investigation_alerts_path(@investigation), method: :post do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

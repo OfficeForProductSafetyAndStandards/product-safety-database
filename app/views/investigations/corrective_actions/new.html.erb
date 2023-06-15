@@ -8,8 +8,6 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with model: @corrective_action_form, scope: :corrective_action, local: true, url: investigation_corrective_actions_path(@investigation.pretty_id), method: :post, html: { novalidate: true }, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

@@ -6,6 +6,4 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= render 'investigations/record_phone_calls/form', correspondence_form: @correspondence_form, investigation: @investigation, url: investigation_phone_calls_path(@investigation) %>
