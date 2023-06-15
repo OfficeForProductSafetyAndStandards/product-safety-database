@@ -1,7 +1,2 @@
 <%= page_title t(".title"), errors: @change_case_visibility_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %><%= render partial: "form", locals: { form_path: unrestrict_investigation_visibility_path(@investigation), i18n_scope: ".investigations.visibility.unrestrict" } %>
+<%= render partial: "form", locals: { form_path: unrestrict_investigation_visibility_path(@investigation), i18n_scope: ".investigations.visibility.unrestrict" } %>

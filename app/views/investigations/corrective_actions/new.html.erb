@@ -1,13 +1,5 @@
 <% page_title = "Record corrective action" %>
 <%= page_title page_title, errors: @corrective_action_form.errors.any? %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <%= form_with model: @corrective_action_form, scope: :corrective_action, local: true, url: investigation_corrective_actions_path(@investigation.pretty_id), method: :post, html: { novalidate: true }, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

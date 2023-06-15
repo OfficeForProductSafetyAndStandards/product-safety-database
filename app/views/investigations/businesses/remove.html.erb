@@ -1,13 +1,5 @@
 <%= page_title "Remove business from case" %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_businesses_path(@investigation)
-  ) %>
-<% end %>
-
 <%= error_summary @remove_business_form.errors %>
-
 <h1 class="govuk-heading-l">Remove <%= @business.trading_name %></h1>
 
 <div class="govuk-grid-row">

@@ -1,20 +1,9 @@
 <% page_heading = @investigation.risk_level_set? ? t(".title.change") : t(".title.set") %>
 <% page_title page_heading, errors: @risk_level_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <h1 class="govuk-heading-l">
-      <%= page_heading %>
-    </h1>
-
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
     <p class="govuk-body">The case risk level will usually match the risk assessment.</p>
-
     <p class="govuk-body">It can differ from risk assessments if necessary - such as when there are conflicting assessments, or where the assessment was provided by a third party.</p>
 
     <div class="govuk-inset-text">

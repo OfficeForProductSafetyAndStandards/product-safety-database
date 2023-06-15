@@ -1,7 +1,4 @@
 <%= page_title "Is this the product?", errors: @confirm_product_form.errors.any? %>
-
-<%= govukBackLink text: "Back", href: new_investigation_product_path(@investigation) %>
-
 <%= error_summary @confirm_product_form.errors %>
 
 <%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>

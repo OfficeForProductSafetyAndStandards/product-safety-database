@@ -1,13 +1,5 @@
 <% page_heading = "Record an #{@accident_or_incident_form.type.downcase}" %>
 <%= page_title page_heading, errors: @accident_or_incident_form.errors.any? %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: new_investigation_accident_or_incidents_type_path(@investigation, type: @accident_or_incident_form.type)
-  ) %>
-<% end %>
-
 <%= form_with model: @accident_or_incident_form, scope: :accident_or_incident_form, local: true, builder: ApplicationFormBuilder, method: :post, html: {novalidate: true}, url: investigation_accident_or_incidents_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

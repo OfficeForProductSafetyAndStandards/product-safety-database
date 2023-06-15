@@ -1,12 +1,5 @@
 <% page_heading = "Confirm ownership change" %>
 <%= page_title page_heading, errors: @investigation.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <%= form_with(
       scope: :change_case_owner_form,
       model: @form,

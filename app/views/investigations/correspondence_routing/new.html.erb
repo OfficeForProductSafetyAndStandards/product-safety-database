@@ -1,13 +1,5 @@
 <% page_heading = "What type of correspondence are you adding?" %>
 <% page_title(page_heading, errors: @correspondence_type_form.errors.any?) %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= error_summary @correspondence_type_form.errors %>

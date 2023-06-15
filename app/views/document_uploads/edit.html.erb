@@ -1,32 +1,10 @@
 <% title = "Edit attachment" %>
 <%= page_title title, errors: @document_upload.errors.any? %>
-
-<% if @parent.is_a?(Investigation) %>
-  <% @investigation = @parent %>
-
-  <% content_for :back_link do %>
-    <%= govukBackLink(
-      text: "Back to #{@investigation.pretty_description.downcase}",
-      href: investigation_supporting_information_index_path(@investigation)
-    ) %>
-  <% end %>
-<% else %>
-  <% content_for :after_header do %>
-    <%= govukBackLink(
-      text: "Back",
-      href: attachments_tab_path(@parent)
-    ) %>
-  <% end %>
-<% end %>
-
 <%= form_with model: @document_upload, local: true, builder: ApplicationFormBuilder, html: { novalidate: true }, url: associated_document_upload_path(@parent, @document_upload), method: :patch do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-
       <%= error_summary(@document_upload.errors, %i[title description])%>
-
       <%= render "page_heading", title: "Edit attachment" %>
-
       <%= render "document_uploads/document_preview", document: @document_upload, dimensions: [480, 320] %>
 
       <%= form.govuk_input :title, label_classes: "govuk-label--m", label: "Document title" %>

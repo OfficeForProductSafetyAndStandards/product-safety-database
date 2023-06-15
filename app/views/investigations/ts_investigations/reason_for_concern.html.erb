@@ -1,11 +1,5 @@
 <% page_heading = "Why is the product of concern?" %>
-
 <%= page_title page_heading, errors: @edit_why_reporting_form.errors.any? %>
-
-<%= govukBackLink(
-  text: "Back",
-  href: wizard_path(:reason_for_creating)
-) %>
 
 <%= form_with scope: :investigation, model: @edit_why_reporting_form, url: wizard_path, method: :put, local: true do |form| %>
   <%= error_summary @edit_why_reporting_form.errors, %i[hazard_type hazard_description anon_compliant_reason] %>

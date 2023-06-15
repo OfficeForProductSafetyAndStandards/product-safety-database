@@ -1,22 +1,10 @@
 <% title = @collaborator.name %>
 <% page_title title, errors: @edit_form.errors.any? %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
     <%= error_summary @edit_form.errors %>
-
     <h1 class="govuk-heading-l"><%= title %></h1>
-
     <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, local: true do |form| %>
-
       <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view case details as it is restricted" :  "Will have default view rights"%>
       <%= govukRadios(
         form: form,

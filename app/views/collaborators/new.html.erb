@@ -1,22 +1,10 @@
 <% title = "Add a team to the case" %>
 <% page_title title, errors: @form.errors.any? %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
     <%= error_summary @form.errors %>
-
     <h1 class="govuk-heading-l"><%= title %></h1>
-
     <%= form_with model: @form, url: investigation_collaborators_path(@investigation), method: :post, local: true do |form| %>
-
       <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @form.team_id) } } %>
       <% if @form.errors.include?(:team_id) %>
         <% error_message = { text: @form.errors.full_messages_for(:team_id).first } %>

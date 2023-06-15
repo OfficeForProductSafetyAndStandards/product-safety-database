@@ -1,18 +1,8 @@
 <% title = "Teams added to the case" %>
 <% page_title title %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
     <h1 class="govuk-heading-l"><%= title %></h1>
-
     <% if policy(@investigation).manage_collaborators? %>
       <%= govukButton(
         text: "Add a team to the case",

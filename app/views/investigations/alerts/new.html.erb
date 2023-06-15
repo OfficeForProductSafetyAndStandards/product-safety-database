@@ -1,11 +1,4 @@
 <%= page_title "Alert trading standards", errors: @alert_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: about_investigation_alerts_path(@investigation)
-  ) %>
-<% end %>
-
 <%= form_with model: @alert_form, local: true, url: preview_investigation_alerts_path(@investigation), method: :post do |form| %>
   <%= govukErrorSummary form: form %>
 

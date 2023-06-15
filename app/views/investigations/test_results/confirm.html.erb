@@ -1,11 +1,5 @@
 <% page_title = "Confirm #{@test_result.pretty_name} details" %>
 <%= page_title page_title %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: new_investigation_test_result_path(@investigation)
-  ) %>
-<% end %>
 
 <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
 <h1 class="govuk-heading-l"><%= page_title %></h1>
