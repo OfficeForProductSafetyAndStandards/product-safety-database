@@ -1,35 +1,34 @@
 module Investigations
   class AccidentOrIncidentsController < ApplicationController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates, only: %i[new create edit update]
+    before_action :set_case_breadcrumbs
+
     def new
-      authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new({ type: params["type"] })
     end
 
     def create
-      authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
       return render(:new) if @accident_or_incident_form.invalid?
 
       AddAccidentOrIncidentToCase.call!(
         @accident_or_incident_form.attributes.merge({
-          investigation:,
+          investigation: @investigation,
           user: current_user,
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     end
 
     def show
-      authorize investigation, :view_non_protected_details?
-      @accident_or_incident = investigation.unexpected_events.find(params[:id]).decorate
+      authorize @investigation, :view_non_protected_details?
+      @accident_or_incident = @investigation.unexpected_events.find(params[:id]).decorate
     end
 
     def edit
-      authorize investigation, :update?
-
-      @accident_or_incident = investigation.unexpected_events.find(params[:id])
-
+      @accident_or_incident = @investigation.unexpected_events.find(params[:id])
       @accident_or_incident_form = AccidentOrIncidentForm.from(@accident_or_incident)
 
       @type = @accident_or_incident.type
@@ -37,9 +36,7 @@ module Investigations
     end
 
     def update
-      authorize investigation, :update?
-
-      @accident_or_incident = investigation.unexpected_events.find(params[:id])
+      @accident_or_incident = @investigation.unexpected_events.find(params[:id])
       @accident_or_incident_form = AccidentOrIncidentForm.from(@accident_or_incident)
       @accident_or_incident_form.assign_attributes(accident_or_incident_params)
 
@@ -47,12 +44,12 @@ module Investigations
         UpdateAccidentOrIncident.call!(
           @accident_or_incident_form.serializable_hash.merge({
             accident_or_incident: @accident_or_incident,
-            investigation:,
+            investigation: @investigation,
             user: current_user
           })
         )
 
-        redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
+        redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
 
       else
         @type = type
@@ -62,10 +59,12 @@ module Investigations
 
   private
 
-    def investigation
-      @investigation ||= Investigation
-                        .find_by!(pretty_id: params[:investigation_pretty_id])
-                        .decorate
+    def set_investigation
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+    end
+
+    def authorize_investigation_updates
+      authorize @investigation, :update?
     end
 
     def type

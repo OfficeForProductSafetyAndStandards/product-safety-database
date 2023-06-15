@@ -1,13 +1,15 @@
 module Investigations
   class AccidentOrIncidentsTypeController < ApplicationController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_case_breadcrumbs
+
     def new
-      authorize investigation, :update?
       @accident_or_incident_type_form = AccidentOrIncidentTypeForm.new(type: params[:type])
-      return render "no_products" if investigation.products.empty?
+      return render "no_products" if @investigation.products.empty?
     end
 
     def create
-      authorize investigation, :update?
       @accident_or_incident_type_form = AccidentOrIncidentTypeForm.new(type:)
       return render(:new) if @accident_or_incident_type_form.invalid?
 
@@ -16,10 +18,12 @@ module Investigations
 
   private
 
-    def investigation
-      @investigation ||= Investigation
-                        .find_by!(pretty_id: params[:investigation_pretty_id])
-                        .decorate
+    def set_investigation
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+    end
+
+    def authorize_investigation_updates
+      authorize @investigation, :update?
     end
 
     def type
