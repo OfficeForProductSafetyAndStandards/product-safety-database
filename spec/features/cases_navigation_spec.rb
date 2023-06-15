@@ -18,6 +18,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       it "explains that the user has no cases" do
         expect(page).to have_content "You have no open cases."
         expect(highlighted_tab).to eq "Your cases"
+        expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Cases")
       end
     end
 
@@ -29,6 +30,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       it "explains that the team has no cases" do
         expect(page).to have_content "The team has no open cases."
         expect(highlighted_tab).to eq "Team cases"
+        expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Cases")
       end
     end
 
@@ -40,20 +42,21 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       it "explains that the team has no assigned cases" do
         expect(page).to have_content "There are no open cases your team has been added to."
         expect(highlighted_tab).to eq "Assigned cases"
+        expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Cases")
       end
     end
   end
 
   context "when there are cases" do
     let(:other_user_same_team) { create(:user, :activated, has_viewed_introduction: true, team:) }
-    let!(:user_case) { create(:allegation, :with_products, creator: user) }
-    let!(:user_case_without_products) { create(:allegation, creator: user) }
-    let!(:other_case) { create(:allegation) }
-    let!(:team_case) { create(:allegation, creator: other_user_same_team) }
+    let!(:user_case) { create(:allegation, :with_products, creator: user, user_title: "User case title") }
+    let!(:user_case_without_products) { create(:allegation, creator: user, user_title: "User case no products title") }
+    let!(:other_case) { create(:allegation, user_title: "Other case title") }
+    let!(:team_case) { create(:allegation, creator: other_user_same_team, user_title: "Team case title") }
 
     let(:different_team) { create :team, name: "Different team" }
     let(:different_user) { create :user, :activated, has_viewed_introduction: true, team: different_team }
-    let!(:different_team_case) { create(:allegation, creator: different_user) }
+    let!(:different_team_case) { create(:allegation, creator: different_user, user_title: "Different team case title") }
 
     before do
       Investigation.import scope: "not_deleted", refresh: true, force: true
@@ -79,6 +82,24 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
         within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case_without_products.id)) do
           expect(page).to have_content("This case has no product")
+        end
+      end
+
+      context "when we click on a case" do
+        before do
+          within "#item_investigation_allegation_#{user_case.id}" do
+            click_on user_case.title
+          end
+        end
+
+        it "takes us to the case page" do
+          expect(page).to have_current_path("/cases/#{user_case.pretty_id}")
+        end
+
+        it "has 'Your cases' in the breadcrumb" do
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Home")
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Cases")
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Your cases")
         end
       end
 
@@ -114,9 +135,12 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     context "when the user is on the team cases page" do
-      it "shows cases that are owned by the users team" do
+      before do
         click_on "All cases"
         click_on "Team cases"
+      end
+
+      it "shows cases that are owned by the users team" do
         expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
         expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
         expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
@@ -124,14 +148,30 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
 
       it "indicates which cases do not have a product attached" do
-        click_on "All cases"
-        click_on "Team cases"
         within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case.id)) do
           expect(page).not_to have_content("This case has no product")
         end
 
         within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case_without_products.id)) do
           expect(page).to have_content("This case has no product")
+        end
+      end
+
+      context "when we click on a case" do
+        before do
+          within "#item_investigation_allegation_#{team_case.id}" do
+            click_on team_case.title
+          end
+        end
+
+        it "takes us to the case page" do
+          expect(page).to have_current_path("/cases/#{team_case.pretty_id}")
+        end
+
+        it "has 'Team cases' in the breadcrumb" do
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Home")
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Cases")
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Team cases")
         end
       end
 
@@ -180,6 +220,24 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       it "highlights the all cases tab" do
         expect(highlighted_tab).to eq "All cases – Search"
+      end
+
+      context "when we click on a case" do
+        before do
+          within "#item_investigation_allegation_#{user_case.id}" do
+            click_on user_case.title
+          end
+        end
+
+        it "takes us to the case page" do
+          expect(page).to have_current_path("/cases/#{user_case.pretty_id}")
+        end
+
+        it "has 'All cases' in the breadcrumb" do
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Home")
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "Cases")
+          expect(page).to have_selector(".govuk-breadcrumbs__link", text: "All cases")
+        end
       end
 
       context "when less than 12 cases" do

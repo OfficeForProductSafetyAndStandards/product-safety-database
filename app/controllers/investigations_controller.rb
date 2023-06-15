@@ -1,8 +1,12 @@
 class InvestigationsController < ApplicationController
   include InvestigationsHelper
+  include BreadcrumbHelper
 
   before_action :set_search_params, only: %i[index]
   before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
+  before_action :set_last_case_view_cookie, only: %i[index your_cases assigned_cases team_cases]
+
+  breadcrumb "cases.label", :your_cases_investigations
 
   # GET /cases
   def index
@@ -20,10 +24,8 @@ class InvestigationsController < ApplicationController
   # GET /cases/1
   def show
     authorize @investigation, :view_non_protected_details?
+    breadcrumb breadcrumb_case_label, breadcrumb_case_path
     @complainant = @investigation.complainant&.decorate
-    respond_to do |format|
-      format.html
-    end
   end
 
   def created
@@ -45,7 +47,6 @@ class InvestigationsController < ApplicationController
 
   def assigned_cases
     @page_name = "assigned_cases"
-
     @search = SearchParams.new(
       {
         "case_owner" => "all",
@@ -131,6 +132,10 @@ private
 
   def editable_keys
     %i[description]
+  end
+
+  def set_last_case_view_cookie
+    cookies[:last_case_view] = params[:action]
   end
 
   def count_to_display

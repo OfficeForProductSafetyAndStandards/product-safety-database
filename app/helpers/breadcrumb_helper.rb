@@ -5,4 +5,16 @@ module BreadcrumbHelper
 
     request.path != authenticated_root_path
   end
+
+  def breadcrumb_case_label
+    setting = cookies.fetch(:last_case_view, "your_cases")
+    setting = "all_cases" if setting == "index"
+    "cases.#{setting}".to_sym
+  end
+
+  def breadcrumb_case_path
+    setting = cookies.fetch(:last_case_view, "your_cases")
+    setting = "all_cases" if setting == "index"
+    "#{setting}_investigations".to_sym
+  end
 end
