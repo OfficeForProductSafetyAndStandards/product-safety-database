@@ -290,6 +290,8 @@ GEM
       kramdown (~> 2.0)
     launchy (2.5.2)
       addressable (~> 2.8)
+    loaf (0.10.0)
+      railties (>= 3.2)
     lograge (0.12.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -685,6 +687,7 @@ DEPENDENCIES
   jsbundling-rails
   kaminari (~> 1.2)
   launchy (~> 2.5)
+  loaf (~> 0.10)
   lograge (~> 0.12)
   m (~> 1.6)
   mini_magick (~> 4.12)

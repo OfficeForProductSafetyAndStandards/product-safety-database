@@ -32,6 +32,7 @@ gem "net-imap"
 gem "net-pop"
 gem "net-smtp"
 
+gem "loaf", "~> 0.10"
 gem "paper_trail"
 gem "pg", "~> 1.5"
 gem "pghero", "~> 3.3"
