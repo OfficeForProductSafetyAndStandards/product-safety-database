@@ -7,21 +7,15 @@
   ) unless @investigation.new_record? %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation unless @investigation.new_record?  %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessments_path, method: :post, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
+      <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level assessed_by investigation_product_ids risk_assessment_file]) %>
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-
-      <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessments_path, method: :post, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
-
-        <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level assessed_by investigation_product_ids risk_assessment_file]) %>
-        <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-        <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
-        <%= render 'investigations/risk_assessments/form_fields', risk_assessment_form: @risk_assessment_form, investigation: @investigation, page_heading: page_heading, form: form %>
-        <%= govukButton(text: "Add risk assessment") %>
-      <% end %>
-
-    </div>
+      <%= render 'investigations/risk_assessments/form_fields', risk_assessment_form: @risk_assessment_form, investigation: @investigation, page_heading: page_heading, form: form %>
+      <%= govukButton(text: "Add risk assessment") %>
+    <% end %>
   </div>
+</div>
