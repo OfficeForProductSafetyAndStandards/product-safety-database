@@ -65,6 +65,8 @@ class ProductsController < ApplicationController
     authorize @product, :update?
 
     @product_form = ProductForm.from @product.object
+    breadcrumb breadcrumb_product_label, breadcrumb_product_path
+    breadcrumb @product.name, product_path(@product)
   end
 
   # PATCH/PUT /products/1
