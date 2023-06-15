@@ -1,7 +1,10 @@
 class ContactsController < ApplicationController
+  include BreadcrumbHelper
+
   before_action :set_contact, only: %i[edit update remove destroy]
   before_action :create_contact, only: %i[create]
   before_action :assign_business, only: %i[edit remove]
+  before_action :set_breadcrumb, only: %i[new show edit remove]
 
   # GET /contacts/new
   def new
@@ -73,12 +76,16 @@ private
     @contact = business.contacts.create!(contact_params.merge({ added_by_user: current_user }))
   end
 
-  # Use callbacks to share common setup or constraints between actions.
+  def set_breadcrumb
+    breadcrumb "businesses.label", :businesses_path
+    breadcrumb breadcrumb_business_label, breadcrumb_business_path
+    breadcrumb @business.trading_name, business_path(@business) if @business&.persisted?
+  end
+
   def set_contact
     @contact = Contact.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def contact_params
     params.require(:contact).permit(:business_id, :name, :email, :phone_number, :job_title)
   end
