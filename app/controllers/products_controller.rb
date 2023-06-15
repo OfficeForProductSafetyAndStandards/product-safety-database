@@ -2,11 +2,15 @@ class ProductsController < ApplicationController
   include CountriesHelper
   include ProductsHelper
   include UrlHelper
+  include BreadcrumbHelper
 
   before_action :set_search_params, only: %i[index]
   before_action :set_product, only: %i[show edit update owner]
   before_action :set_countries, only: %i[new update edit]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
+  before_action :set_last_product_view_cookie, only: %i[index your_products team_products ]
+
+  breadcrumb "products.label", :products_path
 
   # GET /products
   # GET /products.json
@@ -24,6 +28,8 @@ class ProductsController < ApplicationController
   def show
     # Anyone can view timestamped products, but only certain people can view live [retired] products
     return render "/products/retired" unless policy(@product).show?
+
+    breadcrumb breadcrumb_product_label, breadcrumb_product_path
   end
 
   # GET /products/new
@@ -117,6 +123,10 @@ class ProductsController < ApplicationController
   end
 
 private
+
+  def set_last_product_view_cookie
+    cookies[:last_product_view] = params[:action]
+  end
 
   def set_sort_by_items
     params[:sort_by] = SortByHelper::SORT_BY_RELEVANT if params[:sort_by].blank? && params[:q].present?

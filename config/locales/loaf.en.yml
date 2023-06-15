@@ -16,3 +16,8 @@ en:
         your_businesses: Your businesses
         team_businesses: Team businesses
         all_businesses: All businesses - Search
+      products:
+        label: Products
+        your_products: Your products
+        team_products: Team products
+        all_products: All products - Search

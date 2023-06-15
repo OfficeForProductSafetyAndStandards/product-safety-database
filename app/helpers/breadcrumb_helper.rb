@@ -29,4 +29,16 @@ module BreadcrumbHelper
     setting = "all_businesses" if setting == "index"
     setting.to_s.to_sym
   end
+
+  def breadcrumb_product_label
+    setting = cookies.fetch(:last_product_view, "your_products")
+    setting = "all_products" if setting == "index"
+    "products.#{setting}".to_sym
+  end
+
+  def breadcrumb_product_path
+    setting = cookies.fetch(:last_product_view, "your_products")
+    setting = "all_products" if setting == "index"
+    setting.to_s.to_sym
+  end
 end
