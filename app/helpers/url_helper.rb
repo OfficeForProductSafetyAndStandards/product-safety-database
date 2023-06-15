@@ -35,14 +35,6 @@ module UrlHelper
     "#{path_for_model(parent, :documents)}/#{document.id}"
   end
 
-  def new_associated_document_path(parent)
-    "#{path_for_model(parent, :documents)}/new"
-  end
-
-  def new_document_flow_path(parent)
-    "#{path_for_model(parent, :documents)}/new/new"
-  end
-
   def edit_associated_document_path(parent, document)
     "#{associated_document_path(parent, document)}/edit"
   end
@@ -58,14 +50,6 @@ module UrlHelper
 
   def associated_document_upload_path(parent, document_upload)
     "#{path_for_model(parent, :document_uploads)}/#{document_upload.id}"
-  end
-
-  def new_associated_document_upload_path(parent)
-    "#{path_for_model(parent, :document_uploads)}/new"
-  end
-
-  def new_document_upload_flow_path(parent)
-    "#{path_for_model(parent, :document_uploads)}/new/new"
   end
 
   def edit_associated_document_upload_path(parent, document_upload)
