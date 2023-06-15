@@ -14,6 +14,11 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
       expect(page).not_to have_link("Sign out")
       expect(page).not_to have_link("Your account")
     end
+
+    scenario "it does not show the 'Home' link in the breadcrumb" do
+      visit unauthenticated_root_path
+      expect(page).not_to have_css(".govuk-breadcrumbs__link")
+    end
   end
 
   context "when user is signed in" do
@@ -36,6 +41,11 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
       # TODO: Remove comment when account page is re-implemented in app
       # expect(page).to have_link("Your account")
       expect(page).not_to have_link("Sign in")
+    end
+
+    scenario "it does not show the 'Home' link in the breadcrumb" do
+      expect(page).to have_current_path(authenticated_root_path)
+      expect(page).not_to have_css(".govuk-breadcrumbs__link")
     end
 
     context "with OPSS user role" do

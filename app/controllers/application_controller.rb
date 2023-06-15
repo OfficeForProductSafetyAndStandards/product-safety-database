@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
   before_action :has_viewed_introduction
   before_action :set_cache_headers
 
+  before_action :set_home_breadcrumb
+
   helper_method :nav_items, :secondary_nav_items, :current_user, :root_path_for
 
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
@@ -96,6 +98,10 @@ class ApplicationController < ActionController::Base
   end
 
 private
+
+  def set_home_breadcrumb
+    breadcrumb "Home", authenticated_root_path
+  end
 
   def render_404_page
     render "errors/not_found", status: :not_found
