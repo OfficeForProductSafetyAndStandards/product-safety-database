@@ -1,8 +1,4 @@
 <%= page_title "Edit product", errors: @product_form.errors.any? %>
-<% content_for :after_header do %>
-  <%= link_to "Back", product_path(@product_form.id), class: "govuk-back-link" %>
-<% end %>
-
 <%= form_with model: @product_form, scope: :product, url: product_path(@product_form.id), method: :put, local: true, html: {novalidate: true}, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

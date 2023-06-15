@@ -1,10 +1,4 @@
 <%= page_title "Do you have a barcode number?", errors: @product_duplicate_check_form.errors.any? %>
-<% content_for :after_header do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: products_path(@investigation)
-  ) %>
-<% end %>
 <%= form_with model: @product_duplicate_check_form, url: duplicate_check_products_path(@product_duplicate_check_form), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
   <%= error_summary(@product_duplicate_check_form.errors, %i[barcode]) %>
 
