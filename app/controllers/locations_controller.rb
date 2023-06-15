@@ -8,66 +8,36 @@ class LocationsController < ApplicationController
   before_action :set_countries, only: %i[create update new edit]
   before_action :set_breadcrumb, only: %i[new show edit remove]
 
-  # GET /locations/1
-  # GET /locations/1.json
   def show; end
 
-  # GET /locations/new
   def new
     @business = Business.find(params[:business_id])
     @location = @business.locations.build
   end
 
-  # GET /locations/1/edit
   def edit; end
 
-  # POST /locations
-  # POST /locations.json
   def create
-    respond_to do |format|
-      if @location.save
-        format.html do
-          redirect_to business_url(@location.business, anchor: "locations"),
-                      flash: { success: "Location was successfully created." }
-        end
-        format.json { render :show, status: :created, location: @location }
-      else
-        format.html { render :new }
-        format.json { render json: @location.errors, status: :unprocessable_entity }
-      end
+    if @location.save
+      redirect_to business_url(@location.business, anchor: "locations"), flash: { success: "Location was successfully created." }
+    else
+      render :new
     end
   end
 
-  # PATCH/PUT /locations/1
-  # PATCH/PUT /locations/1.json
   def update
-    respond_to do |format|
-      if @location.update(location_params)
-        format.html do
-          redirect_to business_url(@location.business, anchor: "locations"),
-                      flash: { success: "Location was successfully updated." }
-        end
-        format.json { render :show, status: :ok, location: @location }
-      else
-        format.html { render :edit }
-        format.json { render json: @location.errors, status: :unprocessable_entity }
-      end
+    if @location.update(location_params)
+      redirect_to business_url(@location.business, anchor: "locations"), flash: { success: "Location was successfully updated." }
+    else
+      render :edit
     end
   end
 
   def remove; end
 
-  # DELETE /locations/1
-  # DELETE /locations/1.json
   def destroy
     @location.destroy!
-    respond_to do |format|
-      format.html do
-        redirect_to business_url(@location.business, anchor: "locations"),
-                    flash: { success: "Location was successfully deleted." }
-      end
-      format.json { head :no_content }
-    end
+    redirect_to business_url(@location.business, anchor: "locations"), flash: { success: "Location was successfully deleted." }
   end
 
 private
