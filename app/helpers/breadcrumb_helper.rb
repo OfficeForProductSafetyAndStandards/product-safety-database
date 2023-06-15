@@ -17,4 +17,16 @@ module BreadcrumbHelper
     setting = "all_cases" if setting == "index"
     "#{setting}_investigations".to_sym
   end
+
+  def breadcrumb_business_label
+    setting = cookies.fetch(:last_business_view, "your_businesses")
+    setting = "all_businesses" if setting == "index"
+    "businesses.#{setting}".to_sym
+  end
+
+  def breadcrumb_business_path
+    setting = cookies.fetch(:last_business_view, "your_businesses")
+    setting = "all_businesses" if setting == "index"
+    setting.to_s.to_sym
+  end
 end

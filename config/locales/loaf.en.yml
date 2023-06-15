@@ -11,3 +11,8 @@ en:
         team_cases: Team cases
         assigned_cases: Assigned cases
         all_cases: All cases - Search
+      businesses:
+        label: Businesses
+        your_businesses: Your businesses
+        team_businesses: Team businesses
+        all_businesses: All businesses - Search
