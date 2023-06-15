@@ -37,6 +37,7 @@ class BusinessesController < ApplicationController
   def edit
     @business.locations.build unless @business.locations.any?
     breadcrumb breadcrumb_business_label, breadcrumb_business_path
+    breadcrumb @business.trading_name, business_path(@business)
   end
 
   # PATCH/PUT /businesses/1
