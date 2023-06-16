@@ -1,7 +1,9 @@
-class Investigations::PhoneCallsController < ApplicationController
+class Investigations::PhoneCallsController < Investigations::BaseController
+  before_action :set_investigation
+  before_action :authorize_investigation_protected_details
+  before_action :set_case_breadcrumbs
+
   def show
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :view_protected_details?
-    @phone_call = @investigation.phone_calls.find(params[:id]).decorate
+    @phone_call = @investigation_object.phone_calls.find(params[:id]).decorate
   end
 end

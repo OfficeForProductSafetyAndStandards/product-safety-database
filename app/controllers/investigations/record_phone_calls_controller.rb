@@ -1,21 +1,16 @@
-class Investigations::RecordPhoneCallsController < ApplicationController
-  def new
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
+class Investigations::RecordPhoneCallsController < Investigations::BaseController
+  before_action :set_investigation
+  before_action :authorize_investigation_updates
+  before_action :set_case_breadcrumbs
 
+  def new
     @correspondence_form = PhoneCallCorrespondenceForm.new
-    @investigation = investigation.decorate
   end
 
   def create
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
-
     @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
     @correspondence_form.cache_file!
     @correspondence_form.load_transcript_file
-
-    @investigation = investigation.decorate
 
     return render :new unless @correspondence_form.valid?
 
@@ -23,26 +18,19 @@ class Investigations::RecordPhoneCallsController < ApplicationController
       @correspondence_form
         .attributes
         .except("existing_transcript_file_id")
-        .merge(investigation:, user: current_user)
+        .merge(investigation: @investigation_object, user: current_user)
     )
 
     redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
   end
 
   def edit
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
-
     phone_call           = Correspondence::PhoneCall.find(params[:id])
     @correspondence_form = PhoneCallCorrespondenceForm.from(phone_call)
-    @investigation       = investigation.decorate
     @phone_call          = phone_call.decorate
   end
 
   def update
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
-
     phone_call = Correspondence::PhoneCall.find(params[:id])
     correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params.merge(id: phone_call.id))
     correspondence_form.cache_file!
@@ -51,10 +39,9 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     if correspondence_form.valid?
       UpdatePhoneCall.call!(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
 
-      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "The supporting information was updated" }
+      return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     end
 
-    @investigation       = investigation.decorate
     @phone_call          = phone_call.decorate
     @correspondence_form = correspondence_form
 
