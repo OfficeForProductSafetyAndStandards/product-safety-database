@@ -1,16 +1,14 @@
 module Investigations
-  class RiskLevelController < ApplicationController
-    def show
-      @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
-      authorize @investigation, :update?
+  class RiskLevelController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_case_breadcrumbs
 
+    def show
       @risk_level_form = RiskLevelForm.new(risk_level: @investigation.risk_level)
     end
 
     def update
-      @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
-      authorize @investigation, :update?
-
       @risk_level_form = RiskLevelForm.new(params.require(:investigation).permit(:risk_level))
       return render :show unless @risk_level_form.valid?
 
