@@ -9,7 +9,7 @@ class BusinessesController < ApplicationController
   before_action :update_business, only: %i[update]
   before_action :set_countries, only: %i[update edit]
   before_action :set_sort_by_items, only: %i[index your_businesses team_businesses]
-  before_action :set_last_business_view_cookie, only: %i[index your_businesses team_businesses ]
+  before_action :set_last_business_view_cookie, only: %i[index your_businesses team_businesses]
 
   breadcrumb "businesses.label", :businesses_path
 

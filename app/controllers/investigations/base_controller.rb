@@ -27,6 +27,6 @@ private
   def authorize_investigation_change_visibility
     authorize @investigation, :can_unrestrict?
   rescue Pundit::NotAuthorizedError
-    return render_404_page
+    render_404_page
   end
 end

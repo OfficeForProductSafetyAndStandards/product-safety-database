@@ -8,7 +8,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update owner]
   before_action :set_countries, only: %i[new update edit]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
-  before_action :set_last_product_view_cookie, only: %i[index your_products team_products ]
+  before_action :set_last_product_view_cookie, only: %i[index your_products team_products]
 
   breadcrumb "products.label", :products_path
 
