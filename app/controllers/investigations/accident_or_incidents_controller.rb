@@ -1,5 +1,5 @@
 module Investigations
-  class AccidentOrIncidentsController < ApplicationController
+  class AccidentOrIncidentsController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates, only: %i[new create edit update]
     before_action :set_case_breadcrumbs
@@ -58,14 +58,6 @@ module Investigations
     end
 
   private
-
-    def set_investigation
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-    end
-
-    def authorize_investigation_updates
-      authorize @investigation, :update?
-    end
 
     def type
       params[:accident_or_incident_form][:type]

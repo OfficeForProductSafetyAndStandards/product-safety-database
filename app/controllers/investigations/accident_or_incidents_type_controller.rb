@@ -1,5 +1,5 @@
 module Investigations
-  class AccidentOrIncidentsTypeController < ApplicationController
+  class AccidentOrIncidentsTypeController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates
     before_action :set_case_breadcrumbs
@@ -17,14 +17,6 @@ module Investigations
     end
 
   private
-
-    def set_investigation
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-    end
-
-    def authorize_investigation_updates
-      authorize @investigation, :update?
-    end
 
     def type
       return unless params[:investigation] && params[:investigation][:type]
