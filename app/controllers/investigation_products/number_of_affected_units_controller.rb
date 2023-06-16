@@ -1,15 +1,14 @@
 module InvestigationProducts
-  class NumberOfAffectedUnitsController < ApplicationController
+  class NumberOfAffectedUnitsController < Investigations::BaseController
+    before_action :set_investigation_product
+    before_action :authorize_investigation_updates
+    before_action :set_case_breadcrumbs
+
     def edit
-      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
-      authorize @investigation_product.investigation, :update?
       @number_of_affected_units_form = NumberOfAffectedUnitsForm.from(@investigation_product)
     end
 
     def update
-      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
-      authorize @investigation_product.investigation, :update?
-
       @number_of_affected_units_form = NumberOfAffectedUnitsForm.new(number_of_affected_units_params)
       return render(:edit) if @number_of_affected_units_form.invalid?
 
@@ -22,6 +21,11 @@ module InvestigationProducts
     end
 
   private
+
+    def set_investigation_product
+      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
+      @investigation = @investigation_product.investigation.decorate
+    end
 
     def number_of_affected_units_params
       params.require(:number_of_affected_units_form).permit(:affected_units_status, :exact_units, :approx_units)

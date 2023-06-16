@@ -12,14 +12,15 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     visit "/cases/#{investigation.pretty_id}/products"
 
     click_link "Add a product to the case"
-
     expect(page).to have_text("Enter a PSD product record reference number")
+    expect_to_have_case_breadcrumbs
 
     click_button "Continue"
 
     expect(page).to have_error_summary
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a PSD product record reference number"
+    expect_to_have_case_breadcrumbs
 
     fill_in "reference", with: "invalid"
 
@@ -28,6 +29,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     expect(page).to have_error_summary
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a PSD product record reference number"
+    expect_to_have_case_breadcrumbs
 
     fill_in "reference", with: "PsD-#{wrong_product.id}"
 
@@ -35,29 +37,34 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
 
     expect(page).to have_text("Is this the correct product record to add to your case?")
     expect(page).to have_text("#{wrong_product.brand} #{wrong_product.name}")
+    expect_to_have_case_breadcrumbs
 
     click_button "Save and continue"
 
     expect(page).to have_error_summary
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select yes if this is the correct product record to add to your case"
+    expect_to_have_case_breadcrumbs
 
     choose "No - Enter the PSD reference number again"
     click_button "Save and continue"
 
     expect(page).to have_text("Enter a PSD product record reference number")
+    expect_to_have_case_breadcrumbs
 
     fill_in "reference", with: right_product.id
     click_button "Continue"
 
     expect(page).to have_text("Is this the correct product record to add to your case?")
     expect(page).to have_text("#{right_product.brand} #{right_product.name}")
+    expect_to_have_case_breadcrumbs
 
     choose "Yes"
     click_button "Save and continue"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
     expect(page).to have_text("The product record was added to the case")
+    expect_to_have_case_breadcrumbs
 
     click_link "Add a product to the case"
 
@@ -67,6 +74,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     expect(page).to have_error_summary
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter a product record which has not already been added to the case"
+    expect_to_have_case_breadcrumbs
 
     close_case_change_product_then_reopen_it
 
@@ -74,12 +82,14 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
 
     expect(page).to have_text("Is this the correct product record to add to your case?")
     expect(page).to have_text("#{right_product.brand} #{right_product.name}")
+    expect_to_have_case_breadcrumbs
 
     choose "Yes"
     click_button "Save and continue"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
     expect(page).to have_text("The product record was added to the case")
+    expect_to_have_case_breadcrumbs
 
     expect(page).to have_selector("h3", text: right_product.name)
     expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref} - The PSD reference number for this product record", exact: true)

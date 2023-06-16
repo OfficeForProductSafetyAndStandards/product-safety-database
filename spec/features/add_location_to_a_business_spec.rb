@@ -9,6 +9,7 @@ RSpec.feature "Add a location to a business", :with_stubbed_opensearch, :with_st
     visit "/businesses/#{business.id}"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: "Acme Ltd")
+    expect_to_have_business_breadcrumbs
 
     click_link "Add location"
     expect_to_be_on_add_business_to_location_page(business_id: business.id)
@@ -26,6 +27,7 @@ RSpec.feature "Add a location to a business", :with_stubbed_opensearch, :with_st
     click_button "Save"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: "Acme Ltd")
+    expect_to_have_business_breadcrumbs
 
     expect(page).to have_text("Headquarters")
     expect(page).to have_text("Unit 1, 100 High Street, New Town, AB1 2CDE, Germany")

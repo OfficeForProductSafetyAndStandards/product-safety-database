@@ -1,11 +1,13 @@
-class Investigations::BusinessesController < ApplicationController
+class Investigations::BusinessesController < Investigations::BaseController
   include BusinessesHelper
   include CountriesHelper
 
   before_action :set_investigation
   before_action :set_investigation_business, except: %i[destroy remove]
+  before_action :authorize_investigation_non_protected_details
   before_action :authorize_user_for_business_updates, except: %i[index new remove destroy]
   before_action :set_countries, only: %i[new create show update]
+  before_action :set_case_breadcrumbs
 
   def index; end
 
@@ -79,10 +81,8 @@ class Investigations::BusinessesController < ApplicationController
 
 private
 
-  def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-    @investigation = investigation.decorate
+  def authorize_user_for_non_protected_details
+    authorize @investigation, :view_non_protected_details?
   end
 
   def authorize_user_for_business_updates
