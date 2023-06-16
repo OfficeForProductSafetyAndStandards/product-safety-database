@@ -1,7 +1,9 @@
-class Investigations::OwnershipController < ApplicationController
+class Investigations::OwnershipController < Investigations::BaseController
   include Wicked::Wizard
+
   before_action :set_investigation
-  before_action :authorize_user
+  before_action :authorize_investigation_change_owner_or_status
+  before_action :set_case_breadcrumbs
 
   steps :"select-owner", :confirm
 
@@ -9,9 +11,7 @@ class Investigations::OwnershipController < ApplicationController
     return redirect_to wizard_path(:"select-owner") if form_params[:owner_id].blank? && (step != :"select-owner")
 
     @potential_owner = form.owner&.decorate
-
     get_potential_assignees if step == :"select-owner"
-    @investigation = @investigation.decorate
     render_wizard
   end
 
@@ -23,7 +23,6 @@ class Investigations::OwnershipController < ApplicationController
   def update
     unless form.valid?
       get_potential_assignees if step == :"select-owner"
-      @investigation = @investigation.decorate
       return render_wizard
     end
 
@@ -42,14 +41,6 @@ class Investigations::OwnershipController < ApplicationController
   end
 
 private
-
-  def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-  end
-
-  def authorize_user
-    authorize @investigation, :change_owner_or_status?
-  end
 
   def session_store_key
     "update_case_owner_#{@investigation.pretty_id}_params"

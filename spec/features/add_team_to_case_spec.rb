@@ -20,6 +20,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
     click_link "Change the teams added"
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true },
@@ -29,6 +30,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
     click_link "Add a team to the case"
 
     expect_to_be_on_add_team_to_case_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     click_button "Add team to this case"
 
@@ -61,6 +63,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
     click_button "Add team to this case"
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
@@ -75,8 +78,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed
     expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
 
-    click_link "Back"
-
+    click_link investigation.pretty_id
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards Birmingham Trading Standards Southampton Trading Standards")
