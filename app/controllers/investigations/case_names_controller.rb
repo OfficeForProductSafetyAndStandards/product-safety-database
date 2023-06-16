@@ -1,16 +1,14 @@
 module Investigations
-  class CaseNamesController < ApplicationController
-    def edit
-      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-      authorize @investigation, :update?
+  class CaseNamesController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_case_breadcrumbs
 
+    def edit
       @case_name_form = CaseNameForm.new(user_title: @investigation.user_title, current_user:)
     end
 
     def update
-      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-      authorize @investigation, :update?
-
       @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
 
       if @case_name_form.valid?
