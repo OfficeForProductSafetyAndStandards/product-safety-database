@@ -12,6 +12,7 @@ class LocationsController < ApplicationController
   def new
     @business = Business.find(params[:business_id])
     @location = @business.locations.build
+    breadcrumb @business.trading_name, business_path(@business)
   end
 
   def edit; end

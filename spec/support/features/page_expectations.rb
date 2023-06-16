@@ -47,6 +47,21 @@ module PageExpectations
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
+  def expect_to_have_case_breadcrumbs
+    expect(page).to have_breadcrumb("Cases")
+    expect(page).to have_breadcrumb(investigation.pretty_id)
+  end
+
+  def expect_to_have_business_breadcrumbs
+    expect(page).to have_breadcrumb("Businesses")
+    expect(page).to have_breadcrumb(business.trading_name)
+  end
+
+  def expect_to_have_product_breadcrumbs
+    expect(page).to have_breadcrumb("Products")
+    expect(page).to have_breadcrumb(product.name)
+  end
+
   def expect_to_view_supporting_information_sections(can_view_protected_details:)
     within("section#correspondence") do
       phone_call_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"

@@ -40,4 +40,8 @@ module PageMatchers
   def have_h2(text)
     have_selector("h2", text:)
   end
+
+  def have_breadcrumb(text)
+    have_selector(".govuk-breadcrumbs__list-item", text:)
+  end
 end

@@ -1,4 +1,5 @@
 class ContactsController < ApplicationController
+  # TODO: Move into business directory as a nested resource
   before_action :set_contact, only: %i[edit update remove destroy]
   before_action :create_contact, only: %i[create]
   before_action :assign_business, only: %i[edit remove]
@@ -7,6 +8,7 @@ class ContactsController < ApplicationController
   def new
     @business = Business.find(params[:business_id])
     @contact = @business.contacts.build
+    breadcrumb @business.trading_name, business_path(@business)
   end
 
   def edit; end
