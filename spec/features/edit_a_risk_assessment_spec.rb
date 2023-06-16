@@ -125,8 +125,7 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     expect(page).to have_summary_item(key: "Assessed by",         value: "RiskAssessmentsRUs")
     expect(page).to have_summary_item(key: "Product assessed",    value: "Doll (#{doll.psd_ref})")
 
-    click_link "Back to case"
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    click_link investigation.pretty_id
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
