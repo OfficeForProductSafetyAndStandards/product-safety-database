@@ -14,6 +14,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       visit "/cases/#{investigation.pretty_id}/corrective-actions/#{corrective_action.id}"
 
       click_link "Edit corrective action"
+      expect_to_have_case_breadcrumbs
 
       within_fieldset("What action is being taken?") { expect(page).to have_checked_field(CorrectiveAction.actions[corrective_action.action]) }
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
@@ -55,6 +56,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       click_link "Supporting information (1)"
       click_link corrective_action.decorate.supporting_information_title
       click_link "Edit corrective action"
+      expect_to_have_case_breadcrumbs
 
       # check error rendering and attachment details are retained
       fill_in "Year", with: "abcdefdef"
@@ -108,10 +110,9 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
       fill_in "Attachment description", with: "New test result"
 
       click_on "Update corrective action"
-
       click_on CorrectiveAction.first.decorate.supporting_information_title
-
       expect_to_be_on_corrective_action_summary_page(is_other_action: true)
+      expect_to_have_case_breadcrumbs
 
       expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
 
@@ -144,7 +145,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_
         expect(page).to have_css("h1.govuk-heading-l", text: new_action)
       end
 
-      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link investigation.pretty_id
       click_link "Activity"
 
       expect(page).to have_content "Business: Removed"
