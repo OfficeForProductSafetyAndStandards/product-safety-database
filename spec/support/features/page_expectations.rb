@@ -62,6 +62,10 @@ module PageExpectations
     expect(page).to have_breadcrumb(product.name)
   end
 
+  def expect_to_have_account_breadcrumbs
+    expect(page).to have_breadcrumb("Your account")
+  end
+
   def expect_to_view_supporting_information_sections(can_view_protected_details:)
     within("section#correspondence") do
       phone_call_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
