@@ -12,6 +12,10 @@ private
     authorize @investigation, :view_non_protected_details?
   end
 
+  def authorize_investigation_protected_details
+    authorize @investigation, :view_protected_details?
+  end
+
   def authorize_investigation_updates
     authorize @investigation, :update?
   end

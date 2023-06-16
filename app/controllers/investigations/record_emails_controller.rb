@@ -1,23 +1,17 @@
-class Investigations::RecordEmailsController < ApplicationController
+class Investigations::RecordEmailsController < Investigations::BaseController
+  before_action :set_investigation
+  before_action :authorize_investigation_updates
+  before_action :set_case_breadcrumbs
+
   def new
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :update?
-
     @email_correspondence_form = EmailCorrespondenceForm.new
-
-    @email = @investigation.emails.new
-
-    @investigation = @investigation.decorate
+    @email = @investigation_object.emails.new
   end
 
   def create
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :update?
-
     @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params)
 
     if @email_correspondence_form.valid?
-
       AddEmailToCase.call!(
         @email_correspondence_form.attributes.except(
           "email_file_id",
@@ -25,46 +19,33 @@ class Investigations::RecordEmailsController < ApplicationController
         ).merge({
           email_file: @email_correspondence_form.email_file || @email_correspondence_form.cached_email_file,
           email_attachment: @email_correspondence_form.email_attachment || @email_correspondence_form.cached_email_attachment,
-          investigation: @investigation,
+          investigation: @investigation_object,
           user: current_user
         })
       )
 
       redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     else
-
       @email = @investigation.emails.new
       @email_correspondence_form.cache_files!
 
       @email_correspondence_form.email_file_action = "keep" if @email_correspondence_form.email_file.present?
       @email_correspondence_form.email_attachment_action = "keep" if @email_correspondence_form.email_attachment.present?
 
-      @investigation = @investigation.decorate
-
       render :new
     end
   end
 
   def edit
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :update?
-
-    @email = @investigation.emails.find(params[:id])
+    @email = @investigation_object.emails.find(params[:id])
     @email_correspondence_form = EmailCorrespondenceForm.from(@email)
-
-    @investigation = @investigation.decorate
   end
 
   def update
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :update?
-
     @email = @investigation.emails.find(params[:id])
-
     @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params.merge(id: @email.id))
 
     if @email_correspondence_form.valid?
-
       UpdateEmail.call!(
         @email_correspondence_form.attributes.merge({
           email: @email,
@@ -74,9 +55,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
       redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     else
-      @investigation = @investigation.decorate
       @email_correspondence_form.cache_files!
-
       render :edit
     end
   end
