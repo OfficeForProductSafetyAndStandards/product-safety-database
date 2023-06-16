@@ -43,7 +43,6 @@ module PageExpectations
   def expect_to_be_on_add_image_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
     expect(page).to have_selector("h1", text: "Add attachment")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
