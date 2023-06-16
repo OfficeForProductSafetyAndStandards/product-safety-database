@@ -19,11 +19,13 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
     expect(page).to have_link("Businesses tab", href: investigation_businesses_path(investigation))
     expect(page).to have_unchecked_field("No")
     expect(page).to have_unchecked_field("Yes")
+    expect_to_have_case_breadcrumbs
 
     click_on "Submit"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Select yes if you want to remove the business from the case"
+    expect_to_have_case_breadcrumbs
 
     within_fieldset("Do you want to remove the business from the case?") do
       choose "No"
@@ -47,6 +49,7 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
       fill_in "Reason for removing the business from the case", with: "This business no longer exists"
     end
 
+    expect_to_have_case_breadcrumbs
     expect(page).to have_link("Cancel", href: investigation_businesses_path(investigation))
 
     click_on "Submit"
@@ -72,13 +75,13 @@ RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_s
     supporting_information = AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action.decorate
 
     visit "/cases/#{investigation.pretty_id}/businesses"
-
+    expect_to_have_case_breadcrumbs
     click_on "Remove this business"
 
     expect(page).to have_css(".hmcts-banner__message", text: "Cannot remove the business from the case because it's associated with following supporting information ")
     expect(page).to have_link(supporting_information.supporting_information_title, href: supporting_information.show_path)
 
-    click_on "Back to #{investigation.decorate.pretty_description.downcase}"
+    click_on investigation.pretty_id
     click_on "Activity"
     expect(page).not_to have_css("h3", text: "Removed: #{business.trading_name}")
   end
