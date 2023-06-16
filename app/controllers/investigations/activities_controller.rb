@@ -1,5 +1,5 @@
 module Investigations
-  class ActivitiesController < ApplicationController
+  class ActivitiesController < Investigations::BaseController
     include ActionView::Helpers::SanitizeHelper
     before_action :set_investigation_with_associations
     before_action :set_case_breadcrumbs

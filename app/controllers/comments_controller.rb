@@ -1,5 +1,7 @@
-class CommentsController < ApplicationController
+class CommentsController < Investigations::BaseController
   before_action :set_investigation
+  before_action :authorize_investigation_commenting
+  before_action :set_case_breadcrumbs
 
   def new
     @investigation = @investigation.decorate
@@ -26,8 +28,7 @@ class CommentsController < ApplicationController
 
 private
 
-  def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+  def authorize_investigation_commenting
     authorize @investigation, :comment?
   end
 
