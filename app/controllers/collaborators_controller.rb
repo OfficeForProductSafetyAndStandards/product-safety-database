@@ -1,23 +1,19 @@
-class CollaboratorsController < ApplicationController
-  before_action do
-    find_investigation_from_params
-  end
+class CollaboratorsController < Investigations::BaseController
+  # TODO: Move this into investigation controller directory
+  before_action :set_investigation
+  before_action :authorize_investigation_manage_collaborators, except: %i[index]
+  before_action :set_case_breadcrumbs
 
   def index
     @collaborators = @investigation.collaboration_accesses.sorted_by_team_name
   end
 
   def new
-    authorize @investigation, :manage_collaborators?
-
     @form = AddTeamToCaseForm.new
-
     @teams = teams_without_access
   end
 
   def create
-    authorize @investigation, :manage_collaborators?
-
     @form = AddTeamToCaseForm.new(params.require(:add_team_to_case_form).permit(:team_id, :permission_level, :message, :include_message))
 
     unless @form.valid?
@@ -37,8 +33,6 @@ class CollaboratorsController < ApplicationController
   end
 
   def edit
-    authorize @investigation, :manage_collaborators?
-
     @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
 
@@ -46,8 +40,6 @@ class CollaboratorsController < ApplicationController
   end
 
   def update
-    authorize @investigation, :manage_collaborators?
-
     @collaboration = @investigation.collaboration_accesses.find_by(id: params[:id])
 
     return redirect_to investigation_collaborators_path(@investigation) unless @collaboration # Usually due to double form submission
@@ -83,11 +75,9 @@ class CollaboratorsController < ApplicationController
 
 private
 
-  # rubocop:disable Naming/MemoizedInstanceVariableName
-  def find_investigation_from_params
-    @investigation ||= Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+  def authorize_investigation_manage_collaborators
+    authorize @investigation, :manage_collaborators?
   end
-  # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def teams_without_access
     Team.not_deleted.where.not(id: team_ids_with_access).order(:name)
