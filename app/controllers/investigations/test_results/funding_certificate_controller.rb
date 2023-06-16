@@ -1,5 +1,7 @@
-class Investigations::TestResults::FundingCertificateController < ApplicationController
+class Investigations::TestResults::FundingCertificateController < Investigations::BaseController
   before_action :set_investigation
+  before_action :authorize_investigation_updates
+  before_action :set_case_breadcrumbs
 
   def new
     @test_certificate_form = SetTestResultCertificateOnCaseForm.new
@@ -17,14 +19,6 @@ class Investigations::TestResults::FundingCertificateController < ApplicationCon
   end
 
 private
-
-  def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
-    @investigation = investigation.decorate
-  rescue ActiveRecord::RecordNotFound
-    render_404_page
-  end
 
   def test_funding_certificate_params
     params.require(:set_test_result_certificate_on_case_form).permit(

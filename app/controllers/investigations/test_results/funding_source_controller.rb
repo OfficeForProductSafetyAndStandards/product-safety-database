@@ -1,5 +1,7 @@
-class Investigations::TestResults::FundingSourceController < ApplicationController
+class Investigations::TestResults::FundingSourceController < Investigations::BaseController
   before_action :set_investigation
+  before_action :authorize_investigation_updates
+  before_action :set_case_breadcrumbs
 
   def new
     @test_funding_form = SetTestResultFundingOnCaseForm.new
@@ -19,14 +21,6 @@ class Investigations::TestResults::FundingSourceController < ApplicationControll
   end
 
 private
-
-  def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
-    @investigation = investigation.decorate
-  rescue ActiveRecord::RecordNotFound
-    render_404_page
-  end
 
   def test_funding_request_params
     params.require(:set_test_result_funding_on_case_form).permit(:opss_funded)
