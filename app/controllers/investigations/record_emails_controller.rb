@@ -1,7 +1,7 @@
 class Investigations::RecordEmailsController < Investigations::BaseController
   before_action :set_investigation
   before_action :authorize_investigation_updates
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   def new
     @email_correspondence_form = EmailCorrespondenceForm.new

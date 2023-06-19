@@ -2,7 +2,7 @@ module Investigations
   class ReportedReasonController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def edit
       @reported_reason_form = ReportedReasonForm.from(@investigation)

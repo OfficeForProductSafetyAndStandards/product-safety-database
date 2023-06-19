@@ -2,7 +2,7 @@ module Investigations
   class VisibilityController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_change_visibility
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def show
       @last_update_visibility_activity = @investigation.activities.where(type: "AuditActivity::Investigation::UpdateVisibility").order(:created_at).first

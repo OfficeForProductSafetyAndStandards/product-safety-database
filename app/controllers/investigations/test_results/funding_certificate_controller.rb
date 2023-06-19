@@ -1,7 +1,7 @@
 class Investigations::TestResults::FundingCertificateController < Investigations::BaseController
   before_action :set_investigation
   before_action :authorize_investigation_updates
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   def new
     @test_certificate_form = SetTestResultCertificateOnCaseForm.new

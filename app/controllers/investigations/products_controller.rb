@@ -4,7 +4,7 @@ class Investigations::ProductsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_investigation
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   def index; end
 

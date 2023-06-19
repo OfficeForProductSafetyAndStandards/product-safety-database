@@ -1,7 +1,7 @@
 class Investigations::BusinessTypesController < Investigations::BaseController
   before_action :set_investigation
   before_action :authorize_investigation_non_protected_details
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   def new
     @business_type_form = SetBusinessTypeOnCaseForm.new

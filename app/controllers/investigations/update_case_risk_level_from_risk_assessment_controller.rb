@@ -2,7 +2,7 @@ module Investigations
   class UpdateCaseRiskLevelFromRiskAssessmentController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def show
       @risk_assessment = @investigation_object.risk_assessments.find(params[:risk_assessment_id])

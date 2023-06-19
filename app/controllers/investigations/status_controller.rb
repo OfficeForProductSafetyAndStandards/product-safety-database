@@ -1,7 +1,7 @@
 module Investigations
   class StatusController < Investigations::BaseController
     before_action :set_investigation
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def close
       change_case_status(new_status: "closed", template: :close, flash: "closed")

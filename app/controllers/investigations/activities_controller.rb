@@ -2,7 +2,7 @@ module Investigations
   class ActivitiesController < Investigations::BaseController
     include ActionView::Helpers::SanitizeHelper
     before_action :set_investigation_with_associations
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def show
       @investigation = @investigation.decorate

@@ -7,7 +7,7 @@ class Investigations::BusinessesController < Investigations::BaseController
   before_action :authorize_investigation_non_protected_details
   before_action :authorize_user_for_business_updates, except: %i[index new remove destroy]
   before_action :set_countries, only: %i[new create show update]
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   def index; end
 

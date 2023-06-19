@@ -3,7 +3,7 @@ class Investigations::OwnershipController < Investigations::BaseController
 
   before_action :set_investigation
   before_action :authorize_investigation_change_owner_or_status
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   steps :"select-owner", :confirm
 

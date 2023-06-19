@@ -2,7 +2,7 @@ class CollaboratorsController < Investigations::BaseController
   # TODO: Move this into investigation controller directory
   before_action :set_investigation
   before_action :authorize_investigation_manage_collaborators, except: %i[index]
-  before_action :set_case_breadcrumbs
+  before_action :set_investigation_breadcrumbs
 
   def index
     @collaborators = @investigation.collaboration_accesses.sorted_by_team_name

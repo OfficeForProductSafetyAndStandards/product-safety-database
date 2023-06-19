@@ -2,7 +2,7 @@ module Investigations
   class NotifyingCountryController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_change_notifying_country
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def edit
       @notifying_country_form = NotifyingCountryForm.from(@investigation)

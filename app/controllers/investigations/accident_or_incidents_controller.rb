@@ -2,7 +2,7 @@ module Investigations
   class AccidentOrIncidentsController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates, only: %i[new create edit update]
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def new
       @accident_or_incident_form = AccidentOrIncidentForm.new({ type: params["type"] })

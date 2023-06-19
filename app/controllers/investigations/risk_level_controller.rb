@@ -2,7 +2,7 @@ module Investigations
   class RiskLevelController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def show
       @risk_level_form = RiskLevelForm.new(risk_level: @investigation.risk_level)

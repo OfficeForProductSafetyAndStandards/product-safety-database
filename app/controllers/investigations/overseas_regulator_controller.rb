@@ -2,7 +2,7 @@ module Investigations
   class OverseasRegulatorController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_change_overseas_regulator
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def edit
       @overseas_regulator_form = OverseasRegulatorForm.from(@investigation)

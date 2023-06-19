@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
 
 protected
 
-  def set_case_breadcrumbs
+  def set_investigation_breadcrumbs
     breadcrumb "cases.label", :businesses_path
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
     breadcrumb @investigation.pretty_id, investigation_path(@investigation) if @investigation&.persisted?

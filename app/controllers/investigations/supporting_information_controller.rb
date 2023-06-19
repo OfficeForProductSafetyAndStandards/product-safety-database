@@ -2,7 +2,7 @@ module Investigations
   class SupportingInformationController < Investigations::BaseController
     before_action :set_investigation
     before_action :authorize_investigation_updates, only: %i[new add_to_case create]
-    before_action :set_case_breadcrumbs
+    before_action :set_investigation_breadcrumbs
 
     def index
       authorize @investigation, :view_non_protected_details?
