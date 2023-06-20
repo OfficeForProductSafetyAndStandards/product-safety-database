@@ -42,7 +42,7 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
     let(:risk_assessments_sheet) { exported_data.sheet("risk_assessments") }
     let(:corrective_actions_sheet) { exported_data.sheet("corrective_actions") }
 
-    it "exports product data" do
+    it "exports product data", :aggregate_failures do
       expect(product_sheet.cell(1, 1)).to eq "psd_ref"
       expect(product_sheet.cell(2, 1)).to eq product.psd_ref
       expect(product_sheet.cell(3, 1)).to eq other_product.psd_ref
@@ -151,6 +151,10 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(test_result_sheet.cell(2, 9)).to eq product.name
       expect(test_result_sheet.cell(3, 9)).to eq product.name
 
+      expect(test_result_sheet.cell(1, 10)).to eq "case_id"
+      expect(test_result_sheet.cell(2, 10)).to eq test.investigation.pretty_id
+      expect(test_result_sheet.cell(3, 10)).to eq test_2.investigation.pretty_id
+
       expect(risk_assessments_sheet.cell(1, 1)).to eq "psd_ref"
       expect(risk_assessments_sheet.cell(2, 1)).to eq product.psd_ref
       expect(risk_assessments_sheet.cell(3, 1)).to eq product.psd_ref
@@ -178,6 +182,10 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(risk_assessments_sheet.cell(1, 7)).to eq "product_name"
       expect(risk_assessments_sheet.cell(2, 7)).to eq product.name
       expect(risk_assessments_sheet.cell(3, 7)).to eq product.name
+
+      expect(risk_assessments_sheet.cell(1, 8)).to eq "case_id"
+      expect(risk_assessments_sheet.cell(2, 8)).to eq risk_assessment.investigation.pretty_id
+      expect(risk_assessments_sheet.cell(3, 8)).to eq risk_assessment_2.investigation.pretty_id
 
       expect(corrective_actions_sheet.cell(1, 1)).to eq "psd_ref"
       expect(corrective_actions_sheet.cell(2, 1)).to eq product.psd_ref
@@ -226,6 +234,10 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(corrective_actions_sheet.cell(1, 12)).to eq "product_name"
       expect(corrective_actions_sheet.cell(2, 12)).to eq product.name
       expect(corrective_actions_sheet.cell(3, 12)).to eq product.name
+
+      expect(corrective_actions_sheet.cell(1, 13)).to eq "case_id"
+      expect(corrective_actions_sheet.cell(2, 13)).to eq corrective_action.investigation.pretty_id
+      expect(corrective_actions_sheet.cell(3, 13)).to eq corrective_action_2.investigation.pretty_id
     end
   end
 
