@@ -17,6 +17,11 @@ module InvestigationProducts
 
   private
 
+    def set_investigation_product
+      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
+      @investigation = @investigation_product.investigation.decorate
+    end
+
     def batch_number_params
       params.permit(:batch_number)
     end

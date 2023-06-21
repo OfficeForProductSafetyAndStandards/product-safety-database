@@ -18,6 +18,11 @@ module InvestigationProducts
 
   private
 
+    def set_investigation_product
+      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
+      @investigation = @investigation_product.investigation.decorate
+    end
+
     def customs_code_params
       params.permit(:customs_code)
     end
