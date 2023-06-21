@@ -1,5 +1,7 @@
-class Investigations::BusinessTypesController < ApplicationController
+class Investigations::BusinessTypesController < Investigations::BaseController
   before_action :set_investigation
+  before_action :authorize_investigation_non_protected_details
+  before_action :set_investigation_breadcrumbs
 
   def new
     @business_type_form = SetBusinessTypeOnCaseForm.new
@@ -16,12 +18,6 @@ class Investigations::BusinessTypesController < ApplicationController
   end
 
 private
-
-  def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-    @investigation = investigation.decorate
-  end
 
   def business_request_params
     params.require(:set_business_type_on_case_form).permit(:type)

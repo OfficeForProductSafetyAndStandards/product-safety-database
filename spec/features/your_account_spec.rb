@@ -28,11 +28,13 @@ RSpec.feature "Your Account", :with_stubbed_opensearch, :with_stubbed_mailer, ty
     click_link "Change name"
 
     expect_to_be_on_change_name_page
+    expect_to_have_account_breadcrumbs
 
     fill_in "Full name", with: ""
     click_button "Save"
 
     expect(page).to have_link("Enter your full name", href: "#name")
+    expect_to_have_account_breadcrumbs
 
     fill_in "Full name", with: "Joe Smith"
     click_button "Save"

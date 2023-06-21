@@ -25,6 +25,7 @@ RSpec.feature "Editing a business location", :with_stubbed_opensearch, :with_stu
     click_link "Edit location"
 
     expect_to_be_on_edit_location_for_a_business_page(business_id: business.id, location_id: location.id)
+    expect_to_have_business_breadcrumbs
 
     # Expect fields to be prefilled
     expect(page).to have_field("Location name", with: "Headquarters")

@@ -1,14 +1,5 @@
 <% page_heading = "Has the case risk level been validated?" %>
 <% page_title page_heading, errors: @risk_validation_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with scope: :investigation, model: @risk_validation_form, builder: ApplicationFormBuilder, url: investigation_risk_validations_path(@investigation), html: {novalidate: true}, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

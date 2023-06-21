@@ -43,6 +43,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
     click_set_risk_level_link
 
     expect_to_be_on_set_risk_level_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
     choose "Serious risk"
 
     expect(page).to have_text("This case does not have a risk assessment. You may want to add a risk assessment before setting the case risk level.")
@@ -88,6 +89,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Medium risk")
+    expect_to_have_case_breadcrumbs
     choose("Not conclusive")
     click_button "Save"
 
@@ -114,6 +116,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_opensearc
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Not conclusive")
+    expect_to_have_case_breadcrumbs
     choose("High risk")
     click_button "Save"
 

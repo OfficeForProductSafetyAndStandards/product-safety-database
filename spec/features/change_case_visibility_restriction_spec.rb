@@ -38,10 +38,12 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
         click_link "Change the case restriction"
 
         expect_to_be_on_case_visiblity_page(case_id:, status: "restricted", action: "unrestrict")
+        expect_to_have_case_breadcrumbs
 
         click_on "Continue"
 
         expect_to_be_on_change_case_visiblity_page(case_id:, future_status: "unrestricted", action: "unrestrict")
+        expect_to_have_case_breadcrumbs
         fill_in "Why is the case being unrestricted?", with: "Unrestricted reason"
         click_button "Unrestrict this case"
 

@@ -219,6 +219,11 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     end
   end
 
+  scenario "it does not show a breadcrumb on the login page" do
+    visit "/sign-in"
+    expect(page).not_to have_css(".govuk-breadcrumbs__link")
+  end
+
   scenario "user introduces email address with incorrect format" do
     visit "/sign-in"
 

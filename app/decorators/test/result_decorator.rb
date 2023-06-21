@@ -95,5 +95,9 @@ class Test < ApplicationRecord
     def funding_issue_date
       object.tso_certificate_issue_date.to_formatted_s(:govuk)
     end
+
+    def case_id
+      object.investigation.pretty_id
+    end
   end
 end

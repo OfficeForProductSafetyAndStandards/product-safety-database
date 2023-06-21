@@ -37,10 +37,12 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     click_link "Serious risk: Teddy Bear"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
+    expect_to_have_case_breadcrumbs
 
     click_link "Edit risk assessment"
 
     expect_to_be_on_edit_risk_assessement_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
+    expect_to_have_case_breadcrumbs
 
     # Expect page to be pre-filled with existing values
     within_fieldset("Date of assessment") do
@@ -108,6 +110,7 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     click_button "Update risk assessment"
 
     expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     within_fieldset("Do you want to match this case risk level to the risk assessment level?") do
       choose("Yes, set the case risk level to not conclusive")
@@ -125,8 +128,7 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
     expect(page).to have_summary_item(key: "Assessed by",         value: "RiskAssessmentsRUs")
     expect(page).to have_summary_item(key: "Product assessed",    value: "Doll (#{doll.psd_ref})")
 
-    click_link "Back to case"
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    click_link investigation.pretty_id
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

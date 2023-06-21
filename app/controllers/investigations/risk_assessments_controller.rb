@@ -1,22 +1,17 @@
 module Investigations
-  class RiskAssessmentsController < ApplicationController
+  class RiskAssessmentsController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
+
     def new
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-
-      authorize @investigation, :update?
-
       @risk_assessment_form = RiskAssessmentForm.new(current_user:, investigation: @investigation)
-
       return render "no_products" if @risk_assessment_form.investigation_products.empty?
     end
 
     def create
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-
-      authorize @investigation, :update?
-
       @risk_assessment_form = RiskAssessmentForm.new(
-        risk_assessment_params.merge(current_user:, investigation: @investigation)
+        risk_assessment_params.merge(current_user:, investigation: @investigation_object)
       )
 
       @risk_assessment_form.cache_file!
@@ -26,7 +21,7 @@ module Investigations
 
         result = AddRiskAssessmentToCase.call!(
           @risk_assessment_form.attributes.merge({
-            investigation: @investigation,
+            investigation: @investigation_object,
             user: current_user,
             assessed_by_team_id: @risk_assessment_form.assessed_by_team_id
           })
@@ -38,7 +33,7 @@ module Investigations
         # page.
         if @investigation.risk_level.nil?
           ChangeCaseRiskLevel.call!(
-            investigation: @investigation,
+            investigation: @investigation_object,
             user: current_user,
             risk_level: result.risk_assessment.risk_level
           )
@@ -50,31 +45,25 @@ module Investigations
           redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
         end
       else
-        @investigation = @investigation.decorate
+        @investigation = @investigation_object.decorate
         render :new
       end
     end
 
     def show
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-
-      @risk_assessment = @investigation.risk_assessments.find(params[:id]).decorate
-      @investigation = @investigation.decorate
+      @risk_assessment = @investigation_object.risk_assessments.find(params[:id]).decorate
+      @investigation = @investigation_object.decorate
     end
 
     def edit
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-
-      authorize @investigation, :update?
-
-      @risk_assessment = @investigation.risk_assessments.find(params[:id])
+      @risk_assessment = @investigation_object.risk_assessments.find(params[:id])
 
       @risk_assessment_form = RiskAssessmentForm.new(
         @risk_assessment.serializable_hash(
           only: %i[assessed_on risk_level assessed_by_team_id assessed_by_business_id assessed_by_other details]
         ).merge(
           current_user:,
-          investigation: @investigation,
+          investigation: @investigation_object,
           assessed_by:,
           investigation_product_ids: @risk_assessment.investigation_product_ids,
           old_file: @risk_assessment.risk_assessment_file_blob
@@ -82,19 +71,15 @@ module Investigations
       )
 
       @risk_assessment = @risk_assessment.decorate
-      @investigation = @investigation.decorate
+      @investigation = @investigation_object.decorate
     end
 
     def update
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-
-      authorize @investigation, :update?
-
-      @risk_assessment = @investigation.risk_assessments.find(params[:id])
+      @risk_assessment = @investigation_object.risk_assessments.find(params[:id])
 
       @risk_assessment_form = RiskAssessmentForm.new(
         current_user:,
-        investigation: @investigation,
+        investigation: @investigation_object,
         old_file: @risk_assessment.risk_assessment_file_blob
       )
 
@@ -114,7 +99,7 @@ module Investigations
         # page.
         if @investigation.risk_level.nil?
           ChangeCaseRiskLevel.call!(
-            investigation: @investigation,
+            investigation: @investigation_object,
             user: current_user,
             risk_level: result.risk_assessment.risk_level
           )

@@ -1,8 +1,4 @@
 <% page_title "Add contact", errors: @contact.errors.any? %>
-<% content_for :after_header do %>
-  <%= link_to "Back to business", @business, class: "govuk-back-link" %>
-<% end %>
-
 <h1 class="govuk-heading-l">Add contact</h1>
 
 <%= form_with(model: @contact, url: business_contacts_path(@business), local: true) do |form| %>

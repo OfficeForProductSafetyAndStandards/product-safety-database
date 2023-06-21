@@ -22,18 +22,15 @@ RSpec.feature "Deleting a business location", :with_stubbed_opensearch, :with_st
     click_link "Remove location"
 
     expect_to_be_on_remove_location_for_a_business_page(business_id: business.id, location_id: location.id)
-
-    expect(page).to have_link("Back", href: "/businesses/#{business.id}")
-
     expect(page).to have_text("Headquarters")
     expect(page).to have_text("Unit 1")
     expect(page).to have_text("ABC 123")
     expect(page).to have_text("01632 960 001")
+    expect_to_have_business_breadcrumbs
 
     click_button "Remove location"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: "Acme Ltd")
-
     expect(page).not_to have_text("Headquarters")
     expect(page).to have_text("No locations")
   end

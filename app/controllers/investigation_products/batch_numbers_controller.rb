@@ -1,6 +1,8 @@
 module InvestigationProducts
-  class BatchNumbersController < ApplicationController
-    before_action :load_investigation_product
+  class BatchNumbersController < Investigations::BaseController
+    before_action :set_investigation_product
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
 
     def edit; end
 
@@ -17,11 +19,6 @@ module InvestigationProducts
 
     def batch_number_params
       params.permit(:batch_number)
-    end
-
-    def load_investigation_product
-      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
-      authorize @investigation_product.investigation, :update?
     end
   end
 end

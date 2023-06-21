@@ -1,11 +1,5 @@
 <% page_heading = "Edit how many units are affected" %>
-
 <% page_title page_heading, errors: @number_of_affected_units_form.errors.any? %>
-<%= govukBackLink(
-  text: "Back",
-  href: investigation_path(@investigation_product.investigation)
-) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @number_of_affected_units_form, url: investigation_product_number_of_affected_units_path, builder: ApplicationFormBuilder, method: :put, html: {novalidate: true}, local: true do |form| %>

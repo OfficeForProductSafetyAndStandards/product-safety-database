@@ -11,6 +11,7 @@ RSpec.describe "Collaborations", :with_stubbed_opensearch, :with_stubbed_mailer 
 
   it "lists all the teams" do
     visit "/cases/#{investigation.pretty_id}/teams"
+    expect_to_have_case_breadcrumbs
 
     expect(page).to have_css("table tbody tr:nth-child(1) th:nth-child(1)", text: "#{owner_team.name} Case creator")
     expect(page).to have_css("table tbody tr:nth-child(1) td:nth-child(2)", text: "Case owner")

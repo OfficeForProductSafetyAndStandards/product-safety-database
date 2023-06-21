@@ -39,13 +39,8 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_opensearc
     visit "/cases/#{investigation.pretty_id}/emails/#{email.id}"
 
     click_link "Edit email"
-
     expect_to_be_on_edit_email_page(case_id: investigation.pretty_id, email_id: email.id)
-
-    # Check back link works
-    click_link "Back"
-    expect_to_be_on_email_page(case_id: investigation.pretty_id, email_id: email.id)
-    click_link "Edit email"
+    expect_to_have_case_breadcrumbs
 
     # Check that form is pre-filled with existing values
     expect_to_be_on_edit_email_page(case_id: investigation.pretty_id, email_id: email.id)
@@ -94,7 +89,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_opensearc
     end
 
     click_button "Update email"
-
+    expect_to_have_case_breadcrumbs
     expect(page).to have_text("Date sent must be a real date")
 
     # Field should retain invalid value
@@ -159,10 +154,9 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_opensearc
     end
 
     click_button "Update email"
-
     click_link "Email on 4 March 2020"
-
     expect_to_be_on_email_page(case_id: investigation.pretty_id, email_id: email.id)
+    expect_to_have_case_breadcrumbs
 
     expect(page).not_to have_text("attachment_filename.txt")
   end

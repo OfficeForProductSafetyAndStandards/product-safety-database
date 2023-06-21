@@ -1,10 +1,5 @@
 <% page_heading = "Do you want to add a reference number?" %>
 <%= page_title page_heading, errors: @reference_number_form.errors.any? %>
-
-<%= govukBackLink(
-  text: "Back",
-  href: wizard_path(:reason_for_creating)
-) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= form_with scope: :investigation, model: @reference_number_form, url: wizard_path, method: :put, local: true do |form| %>

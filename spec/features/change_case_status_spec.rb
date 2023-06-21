@@ -34,6 +34,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       click_link "Close this case"
 
       expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
+      expect_to_have_case_breadcrumbs
 
       # Navigate via the case overview table
       visit "/cases/#{investigation.pretty_id}"
@@ -45,6 +46,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       end
 
       expect_to_be_on_close_case_page(case_id: investigation.pretty_id)
+      expect_to_have_case_breadcrumbs
 
       fill_in "Why are you closing the case?", with: "Case has been resolved."
 
@@ -64,6 +66,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       visit "/cases/#{investigation.pretty_id}/status/close"
       expect(page).to have_css("h1", text: "Close case")
       expect(page).to have_css("p", text: "The case is already closed. Do you want to re-open it?")
+      expect_to_have_case_breadcrumbs
 
       visit "/cases/#{investigation.pretty_id}"
 
@@ -74,6 +77,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       end
 
       expect_to_be_on_reopen_case_page(case_id: investigation.pretty_id)
+      expect_to_have_case_breadcrumbs
 
       fill_in "Why are you re-opening the case?", with: "Case has not been resolved."
 
@@ -102,11 +106,8 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
       before do
         sign_in user
         visit "/cases/#{other_investigation.pretty_id}"
-
         click_link "Close this case"
-
         fill_in "Why are you closing the case?", with: "Case has been resolved."
-
         click_button "Close case"
 
         visit "/products/#{product.id}"
@@ -138,9 +139,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
         visit "/cases/#{other_investigation.pretty_id}"
 
         click_link "Close this case"
-
         fill_in "Why are you closing the case?", with: "Case has been resolved."
-
         click_button "Close case"
 
         visit "/products/#{product.id}"

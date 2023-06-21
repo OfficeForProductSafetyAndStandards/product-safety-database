@@ -1,13 +1,4 @@
 <%= page_title "Add business to case", errors: @business_type_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with(model: @business_type_form, url: investigation_business_types_path(investigation_pretty_id: @investigation.pretty_id)) do |form| %>
   <%= govukErrorSummary form: form %>
 

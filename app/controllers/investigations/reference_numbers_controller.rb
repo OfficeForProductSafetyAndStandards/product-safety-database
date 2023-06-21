@@ -1,14 +1,12 @@
 module Investigations
-  class ReferenceNumbersController < ApplicationController
-    def edit
-      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-      authorize @investigation, :update?
-    end
+  class ReferenceNumbersController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
+
+    def edit; end
 
     def update
-      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
-      authorize @investigation, :update?
-
       if @investigation.complainant_reference == reference_number_params[:complainant_reference]
         return redirect_to investigation_path(@investigation)
       end

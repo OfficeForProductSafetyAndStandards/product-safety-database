@@ -12,6 +12,7 @@ RSpec.feature "Add a location to a business", :with_stubbed_opensearch, :with_st
 
     click_link "Add location"
     expect_to_be_on_add_business_to_location_page(business_id: business.id)
+    expect_to_have_business_breadcrumbs
 
     fill_in "Location name", with: "Headquarters"
 

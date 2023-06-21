@@ -1,6 +1,8 @@
 module InvestigationProducts
-  class CustomsCodesController < ApplicationController
-    before_action :load_investigation_product
+  class CustomsCodesController < Investigations::BaseController
+    before_action :set_investigation_product
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
 
     def edit; end
 
@@ -18,11 +20,6 @@ module InvestigationProducts
 
     def customs_code_params
       params.permit(:customs_code)
-    end
-
-    def load_investigation_product
-      @investigation_product = InvestigationProduct.find(params[:investigation_product_id])
-      authorize @investigation_product.investigation, :update?
     end
   end
 end

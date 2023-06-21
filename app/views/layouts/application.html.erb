@@ -57,7 +57,7 @@
     <% if content.present? %>
       <div class="govuk-width-container">
         <%= yield :after_header %>
-
+        <%= render "layouts/breadcrumbs" if display_breadcrumbs? %>
         <main id="main-content" class="govuk-main-wrapper app-main-class" role="main">
           <% if alert.present? %>
             <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
