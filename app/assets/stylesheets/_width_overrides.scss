@@ -13,6 +13,10 @@
 
   .govuk-header__logo {
     width: 74% !important;
+
+    &.no-width {
+      width: 33.33% !important;
+    }
   }
 
   .psd-header__secondary-navigation {

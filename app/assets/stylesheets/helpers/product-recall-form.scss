@@ -1,0 +1,30 @@
+#recall-form {
+  div.image-select {
+    div.govuk-checkboxes__item {
+      border-bottom: 1px solid #b1b4b6;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+
+      div.opss-checkboxes-thumbnails_img {
+        display: block;
+        width: 100px;
+        height: 75px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
+
+    .govuk-checkboxes__hint {
+      padding: 0;
+      margin-bottom: 0;
+    }
+
+    code {
+      font-size: 15px;
+      color: #505a5f;
+    }
+  }
+}

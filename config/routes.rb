@@ -238,6 +238,12 @@ Rails.application.routes.draw do
         post :confirm
       end
     end
+
+    resources :recalls, only: %i[show update], controller: "products/recalls" do
+      collection do
+        post :pdf
+      end
+    end
   end
 
   resource :businesses, only: [], path: "businesses" do
