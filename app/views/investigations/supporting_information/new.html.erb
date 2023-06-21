@@ -1,12 +1,3 @@
 <% page_heading = "What type of information are you adding?" %>
 <% page_title(page_heading, errors: @supporting_information_type_form.errors.any?) %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= render "investigations/supporting_information/form", page_heading: page_heading, cancel_path: investigation_supporting_information_index_path(@investigation) %>

@@ -1,35 +1,33 @@
 module Investigations
-  class SafetyAndComplianceController < ApplicationController
+  class SafetyAndComplianceController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
+
     def edit
-      @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
       @reported_reason = params[:reported_reason]
-      authorize @investigation, :update?
       @edit_why_reporting_form = EditWhyReportingForm.from(@investigation, @reported_reason)
     end
 
     def update
-      investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
-      authorize investigation, :update?
-
       @edit_why_reporting_form = EditWhyReportingForm.new(why_reporting_form_params)
       if @edit_why_reporting_form.valid?
         result = ChangeSafetyAndComplianceData.call!(
           @edit_why_reporting_form.serializable_hash.merge({
-            investigation:,
+            investigation: @investigation,
             user: current_user
           })
         )
 
         flash[:success] = "The case information was updated" if result.changes_made
-
-        @investigation = investigation.decorate
         redirect_to investigation_path(@investigation)
       else
-        @investigation = investigation.decorate
         @reported_reason = @edit_why_reporting_form.reported_reason
         render :edit
       end
     end
+
+  private
 
     def why_reporting_form_params
       params.require(:investigation)

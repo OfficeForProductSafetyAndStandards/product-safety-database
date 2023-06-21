@@ -35,14 +35,6 @@ module UrlHelper
     "#{path_for_model(parent, :documents)}/#{document.id}"
   end
 
-  def new_associated_document_path(parent)
-    "#{path_for_model(parent, :documents)}/new"
-  end
-
-  def new_document_flow_path(parent)
-    "#{path_for_model(parent, :documents)}/new/new"
-  end
-
   def edit_associated_document_path(parent, document)
     "#{associated_document_path(parent, document)}/edit"
   end
@@ -60,31 +52,11 @@ module UrlHelper
     "#{path_for_model(parent, :document_uploads)}/#{document_upload.id}"
   end
 
-  def new_associated_document_upload_path(parent)
-    "#{path_for_model(parent, :document_uploads)}/new"
-  end
-
-  def new_document_upload_flow_path(parent)
-    "#{path_for_model(parent, :document_uploads)}/new/new"
-  end
-
   def edit_associated_document_upload_path(parent, document_upload)
     "#{associated_document_upload_path(parent, document_upload)}/edit"
   end
 
   def remove_associated_document_upload_path(parent, document_upload)
     "#{associated_document_upload_path(parent, document_upload)}/remove"
-  end
-
-  def build_back_link_to_case
-    case_id = request.referer&.match(/cases\/(\d+-\d+)/)&.captures&.first
-    return nil if case_id.blank?
-
-    investigation = Investigation.find_by!(pretty_id: case_id).decorate
-    {
-      is_simple_link: true,
-      text: "Back to #{investigation.pretty_description}",
-      href: investigation_path(investigation)
-    }
   end
 end

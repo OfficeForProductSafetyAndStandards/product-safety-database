@@ -1,37 +1,17 @@
-class Investigations::SummaryController < ApplicationController
-  # GET /cases/1/summary/edit
-  def edit
-    investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
+class Investigations::SummaryController < Investigations::BaseController
+  before_action :set_investigation
+  before_action :authorize_investigation_updates
+  before_action :set_investigation_breadcrumbs
 
-    @form = ChangeCaseSummaryForm.new(summary: investigation.description)
-    @investigation = investigation.decorate
+  def edit
+    @form = ChangeCaseSummaryForm.new(summary: @investigation.description)
   end
 
-  # PATCH /cases/1/summary
   def update
-    investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :update?
-
     @form = ChangeCaseSummaryForm.new(params.require(:change_case_summary_form).permit(:summary))
+    return render :edit, status: :unprocessable_entity unless @form.valid?
 
-    unless @form.valid?
-      @investigation = investigation.decorate
-
-      return respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @form.errors, status: :unprocessable_entity }
-      end
-    end
-
-    ChangeCaseSummary.call!(investigation:, summary: @form.summary, user: current_user)
-
-    respond_to do |format|
-      format.html do
-        redirect_to investigation_path(investigation),
-                    flash: { success: "Case was successfully updated" }
-      end
-      format.json { render :show, status: :ok, location: investigation }
-    end
+    ChangeCaseSummary.call!(investigation: @investigation_object, summary: @form.summary, user: current_user)
+    redirect_to investigation_path(@investigation), flash: { success: "Case was successfully updated" }
   end
 end

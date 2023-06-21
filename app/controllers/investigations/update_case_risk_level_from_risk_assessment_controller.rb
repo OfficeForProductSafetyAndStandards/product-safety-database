@@ -1,29 +1,18 @@
 module Investigations
-  class UpdateCaseRiskLevelFromRiskAssessmentController < ApplicationController
+  class UpdateCaseRiskLevelFromRiskAssessmentController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
+
     def show
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-
-      authorize @investigation, :update?
-
-      @risk_assessment = @investigation.risk_assessments.find(params[:risk_assessment_id])
-
+      @risk_assessment = @investigation_object.risk_assessments.find(params[:risk_assessment_id])
       @update_risk_level_from_risk_assessment_form = UpdateRiskLevelFromRiskAssessmentForm.new
-
-      @investigation = @investigation.decorate
       @risk_assessment = @risk_assessment.decorate
     end
 
     def update
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-
-      authorize @investigation, :update?
-
-      @risk_assessment = @investigation.risk_assessments.find(params[:risk_assessment_id]).decorate
-
+      @risk_assessment = @investigation_object.risk_assessments.find(params[:risk_assessment_id]).decorate
       @update_risk_level_from_risk_assessment_form = UpdateRiskLevelFromRiskAssessmentForm.new(form_params)
-
-      @investigation = @investigation.decorate
-
       return render :show unless @update_risk_level_from_risk_assessment_form.valid?
 
       if @update_risk_level_from_risk_assessment_form.update_case_risk_level_to_match_investigation

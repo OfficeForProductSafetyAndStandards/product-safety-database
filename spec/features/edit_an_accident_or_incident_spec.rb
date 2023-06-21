@@ -43,12 +43,14 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
     click_link "Supporting information (2)"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
+    expect_to_have_case_breadcrumbs
 
     click_link "Doll #{doll.psd_ref}: Normal use"
 
     click_link "Edit incident"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{incident.id}/edit")
+    expect_to_have_case_breadcrumbs
 
     within_fieldset("Do you know when the incident happened?") do
       expect(page).to have_checked_field("No")
@@ -81,13 +83,13 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
     click_button "Update incident"
 
     expect(page).not_to have_error_messages
+    expect_to_have_case_breadcrumbs
 
     click_link "Teddy Bear #{teddy_bear.psd_ref}: Misuse"
 
     expect(page).to have_content "Incident involving Teddy Bear"
 
-    click_link "Back to case: #{investigation.pretty_id}"
-
+    click_link investigation.pretty_id
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -108,6 +110,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
     click_link "Supporting information (2)"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
+    expect_to_have_case_breadcrumbs
 
     click_link "Teddy Bear #{teddy_bear.psd_ref}: Normal use"
 
@@ -145,10 +148,10 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
     click_link "Doll #{doll.psd_ref}: Misuse"
 
     expect(page).not_to have_error_messages
-
     expect(page).to have_content "Accident involving Doll"
+    expect_to_have_case_breadcrumbs
 
-    click_link "Back to case: #{investigation.pretty_id}"
+    click_link investigation.pretty_id
 
     click_on "Activity"
 

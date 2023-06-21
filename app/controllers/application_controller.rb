@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include SentryConfigurationConcern
   include SecondaryAuthenticationConcern
   include CookiesConcern
+  include BreadcrumbHelper
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!
@@ -17,6 +18,8 @@ class ApplicationController < ActionController::Base
   before_action :has_accepted_declaration
   before_action :has_viewed_introduction
   before_action :set_cache_headers
+
+  before_action :set_home_breadcrumb
 
   helper_method :nav_items, :secondary_nav_items, :current_user, :root_path_for
 
@@ -95,7 +98,25 @@ class ApplicationController < ActionController::Base
     authenticated_root_path
   end
 
+protected
+
+  def set_investigation_breadcrumbs
+    breadcrumb "cases.label", :businesses_path
+    breadcrumb breadcrumb_case_label, breadcrumb_case_path
+    breadcrumb @investigation.pretty_id, investigation_path(@investigation) if @investigation&.persisted?
+  end
+
+  def set_business_breadcrumbs
+    breadcrumb "businesses.label", :businesses_path
+    breadcrumb breadcrumb_business_label, breadcrumb_business_path
+    breadcrumb @business.trading_name, business_path(@business) if @business&.persisted?
+  end
+
 private
+
+  def set_home_breadcrumb
+    breadcrumb "Home", authenticated_root_path
+  end
 
   def render_404_page
     render "errors/not_found", status: :not_found

@@ -1,11 +1,6 @@
 <% page_heading = "Edit the reference number" %>
 <%= page_title page_heading, errors: @investigation.errors.any? %>
 
-<%= govukBackLink(
-  text: "Back",
-  href: investigation_path(@investigation)
-) %>
-
 <% hint_html = capture do %>
   <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this case.</div>
 

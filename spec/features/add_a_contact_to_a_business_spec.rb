@@ -12,6 +12,7 @@ RSpec.feature "Add a contact to a business", :with_stubbed_opensearch, :with_stu
 
     click_link "Add contact"
     expect_to_be_on_add_contact_to_a_business_page(business_id: business.id)
+    expect_to_have_business_breadcrumbs
 
     fill_in "Name", with: "Mr Smith"
     fill_in "Email", with: "smith@example.com"

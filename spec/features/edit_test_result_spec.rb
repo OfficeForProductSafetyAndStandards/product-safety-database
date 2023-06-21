@@ -42,7 +42,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
     expect_result_page_to_show_updated_values
 
-    click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+    click_link investigation.pretty_id
     click_link "Activity"
 
     expect_activity_page_to_show_edited_test_result_values
@@ -67,7 +67,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
       expect_result_page_to_show_updated_values
 
-      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link investigation.pretty_id
       click_link "Activity"
 
       expect_activity_page_to_show_edited_test_result_values
@@ -98,7 +98,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
       expect(page).to have_link("test_result.txt")
 
-      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link investigation.pretty_id
       click_link "Activity"
 
       expect(page).not_to have_content(page.find("p", text: "Edited by #{investigation.creator_user.decorate.display_name(viewer: user)}").find(:xpath, ".."))
@@ -145,9 +145,7 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
   context "when not opss funded" do
     it "does not  have the text to indicate that it is opss funded" do
       sign_in(user)
-
       go_edit_test_result
-
       expect(page).not_to have_text("This test was funded under the OPSS Sampling Protocol")
     end
   end
@@ -156,13 +154,8 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
     visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
 
     click_link "Edit test result"
-
     expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
-
-    # Check back link works
-    click_link "Back"
-    expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
-    click_link "Edit test result"
+    expect_to_have_case_breadcrumbs
   end
 
   def expect_failed_test_without_failure_details_to_show_not_provided

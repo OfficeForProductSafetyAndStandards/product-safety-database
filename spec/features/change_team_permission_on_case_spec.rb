@@ -11,6 +11,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
     visit "/cases/#{investigation.pretty_id}/teams"
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
@@ -20,12 +21,14 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
     click_on "Change Southampton Trading Standards’s permission level"
 
     expect_to_be_on_edit_case_permissions_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     click_button "Update team"
 
     expect(page).to have_title("Error: #{team.name}")
     expect(page).to have_selector("a", text: "This team already has this permission level. Select a different option or return to the case.")
     expect(page).to have_selector("a", text: "Select whether you want to include a message")
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Permission level" do
       choose "Remove #{team.name} from the case"
@@ -55,6 +58,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
     expect(notification_email.personalization_value(:optional_message)).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this case with us before.")
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true }
@@ -64,8 +68,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
       { team_name: "Southampton Trading Standards" }
     ])
 
-    click_link "Back"
-
+    click_link investigation.pretty_id
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards")
@@ -83,8 +86,8 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
     sign_in user
 
     visit "/cases/#{investigation.pretty_id}/teams"
-
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
@@ -94,6 +97,7 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
     click_on "Change Southampton Trading Standards’s permission level"
 
     expect_to_be_on_edit_case_permissions_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Permission level" do
       choose "View full case"
@@ -120,14 +124,14 @@ RSpec.feature "Changing a team's permissions on a case", :with_stubbed_opensearc
     expect(notification_email.personalization_value(:new_permission)).to eq("view full case")
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true },
       { team_name: "Southampton Trading Standards", permission_level: "View full case" }
     ])
 
-    click_link "Back"
-
+    click_link investigation.pretty_id
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards Southampton Trading Standards")

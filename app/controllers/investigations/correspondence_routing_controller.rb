@@ -1,12 +1,14 @@
 module Investigations
-  class CorrespondenceRoutingController < ApplicationController
+  class CorrespondenceRoutingController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_updates
+    before_action :set_investigation_breadcrumbs
+
     def new
-      authorize investigation, :update?
       correspondence_type_form
     end
 
     def create
-      authorize investigation, :update?
       return render "new" unless correspondence_type_form.valid?
 
       case correspondence_type_form.type
@@ -18,10 +20,6 @@ module Investigations
     end
 
   private
-
-    def investigation
-      @investigation ||= Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-    end
 
     def correspondence_type_form
       @correspondence_type_form ||= CorrespondenceTypeForm.new(type: params[:type])

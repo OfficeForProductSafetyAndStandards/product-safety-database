@@ -1,15 +1,6 @@
 <% page_heading =  I18n.t(".investigations.visibility.show", future_status: @investigation.visibility_action.capitalize) %>
 <% page_title page_heading %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
 <p>This case is currently <strong><%= @investigation.visibility_status %>.</strong></p>
 
 <% if @investigation.is_private? %>
@@ -25,5 +16,5 @@
   <p>If the case is going to court or it contains commercially sensitive information you should consider restricting the case.<p>
 <% end %>
 <% continue_path = @investigation.is_private? ? unrestrict_investigation_visibility_path(@investigation.pretty_id) : restrict_investigation_visibility_path(@investigation.pretty_id) %>
-<%= govukButton(text: "Continue", href: continue_path)%>
+<%= govukButton(text: "Continue", href: continue_path) %>
 <%= permission_notice(text: "Only the case owner can change case restriction") %>

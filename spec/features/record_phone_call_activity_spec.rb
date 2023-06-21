@@ -21,20 +21,24 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     click_link "Add supporting information"
 
     expect_to_be_on_add_supporting_information_page
+    expect_to_have_case_breadcrumbs
     choose "Correspondence"
     click_button "Continue"
 
     expect_to_be_on_add_correspondence_page
+    expect_to_have_case_breadcrumbs
     choose "Record phone call"
     click_button "Continue"
 
     expect_to_be_on_record_phone_call_page
+    expect_to_have_case_breadcrumbs
 
     # Test required fields
     click_button "Add phone call"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date of call"
+    expect_to_have_case_breadcrumbs
 
     # Test date validation
     fill_in "Day", with: "333"
@@ -56,6 +60,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     fill_in_record_phone_call_form(name:, phone:, date:)
 
     expect_to_be_on_record_phone_call_details_page
+    expect_to_have_case_breadcrumbs
 
     # Test required fields
     click_button "Add phone call"
@@ -68,8 +73,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     click_link "Phone call on 5 May 2020"
 
     expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
+    expect_to_have_case_breadcrumbs
 
-    click_on "Back to case: #{investigation.pretty_id}"
+    click_on investigation.pretty_id
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -126,8 +132,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     click_button "Add phone call"
 
     click_link "Test summary"
+    expect_to_have_case_breadcrumbs
 
-    click_on "Back to case: #{investigation.pretty_id}"
+    click_on investigation.pretty_id
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

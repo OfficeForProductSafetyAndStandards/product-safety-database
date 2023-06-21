@@ -1,12 +1,4 @@
 <%= page_title "Create a product record", errors: @product_form.errors.any? %>
-
-<% content_for :after_header do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: products_path(@investigation)
-  ) %>
-<% end %>
-
 <%= form_with model: @product_form, scope: :product, url: products_path(@investigation), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

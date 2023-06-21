@@ -1,28 +1,19 @@
 <% page_heading =  "Edit risk assessment" %>
 <%= page_title page_heading, errors: @risk_assessment_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: investigation_risk_assessment_path(@investigation, @risk_assessment)
-  ) %>
-<% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
 
+    <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessment_path(@investigation.pretty_id, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level assessed_by investigation_product_ids risk_assessment_file])%>
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-      <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessment_path(@investigation.pretty_id, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
+      <%= render "form_fields", form: form, risk_assessment_form: @risk_assessment_form, investigation: @investigation %>
 
-        <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level assessed_by investigation_product_ids risk_assessment_file])%>
-        <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-        <h1 class="govuk-heading-l"><%= page_heading %></h1>
+      <%= govukButton(text: "Update risk assessment") %>
+    <% end %>
 
-        <%= render "form_fields", form: form, risk_assessment_form: @risk_assessment_form, investigation: @investigation %>
-
-        <%= govukButton(text: "Update risk assessment") %>
-      <% end %>
-
-    </div>
   </div>
+</div>

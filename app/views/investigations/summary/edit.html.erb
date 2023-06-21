@@ -1,19 +1,7 @@
 <%= page_title "Update summary", errors: @form.errors.any? %>
-
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <%= error_summary @form.errors %>
-
     <%= form_with(model: @form,
                   url: investigation_summary_path(@investigation),
                   method: :patch,
@@ -32,8 +20,6 @@
         <%= form.submit "Save", class: "govuk-button govuk-link--no-visited-state" %>
         <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
-
     <% end %>
-
   </div>
 </div>

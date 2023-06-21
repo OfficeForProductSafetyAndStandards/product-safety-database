@@ -30,20 +30,6 @@ module InvestigationsHelper
     query_params.except(:page, :sort_by, :page_name)
   end
 
-  def build_breadcrumb_structure
-    {
-      items: [
-        {
-          text: "Cases",
-          href: investigations_path
-        },
-        {
-          text: @investigation.pretty_description
-        }
-      ]
-    }
-  end
-
   def safety_and_compliance_rows(investigation)
     rows = []
 
