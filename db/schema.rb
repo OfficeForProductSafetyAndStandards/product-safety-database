@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_18_151137) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_22_094745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -274,6 +274,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_18_151137) do
     t.string "postal_code"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["business_id"], name: "index_locations_on_business_id"
+  end
+
+  create_table "online_marketplaces", force: :cascade do |t|
+    t.boolean "approved_by_opss"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_online_marketplaces_on_name", unique: true
   end
 
   create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -1,0 +1,2 @@
+class OnlineMarketplace < ApplicationRecord
+end
