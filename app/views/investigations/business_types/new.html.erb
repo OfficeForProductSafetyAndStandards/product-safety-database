@@ -27,8 +27,16 @@
             </div>
 
             <div class="govuk-radios__item">
-              <%= form.radio_button :type, "online_marketplace", id: "business_type_online", class: "govuk-radios__input", aria: { describedby: "business_type_online-hint" } %>
-              <%= form.label :type_online, t(".types.online_marketplace.label"), class: "govuk-label govuk-radios__label", for: "business_type_online" %>
+              <%= form.radio_button :type, "online_seller", id: "business_type_online_seller", class: "govuk-radios__input", aria: { describedby: "business_type_online_seller-hint" } %>
+              <%= form.label :type_online_seller, t(".types.online_seller.label"), class: "govuk-label govuk-radios__label", for: "business_type_online_seller" %>
+              <div id="business_type_online_seller-hint" class="govuk-hint govuk-radios__hint govuk-!-font-size-16">
+                <%= t(".types.online_seller.hint") %>
+              </div>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button :type, "online_marketplace", id: "business_type_online_marketplace", class: "govuk-radios__input", aria: { describedby: "business_type_online-hint" } %>
+              <%= form.label :type_online_marketplace, t(".types.online_marketplace.label"), class: "govuk-label govuk-radios__label", for: "business_type_online_marketplace" %>
               <div id="business_type_online-hint" class="govuk-hint govuk-radios__hint govuk-!-font-size-16">
                 <%= t(".types.online_marketplace.hint") %>
               </div>
