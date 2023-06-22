@@ -1,0 +1,28 @@
+<% content_for :page_title, "Start page" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Determine and evaluate the level of risk presented by a consumer product</h1>
+    <p class="govuk-body-l">The assessment is part of the recently introduced Product Safety Risk Assessment Methodology (PRISM) and intended for organisations responsible for market surveillance and enforcement.</p>
+    <p class="govuk-body">Although <abbr title="Product Safety Risk Assessment Methodology">PRISM</abbr> is primarily aimed at evaluating the risks associated with non-food consumer goods, regulatory bodies in charge of other product categories may also find it beneficial, either in whole or in part.</p>
+    <p class="govuk-body">You can find the <abbr title="Product Safety Risk Assessment Methodology">PRISM</abbr> guide, case studies and statistical data sets to support your risk assessments on the <a href="https://www.gov.uk/guidance/product-safety-risk-assessment-methodology-prism" class="govuk-link" target="_blank">guidance page<span class="govuk-visually-hidden"> (opens in new tab)</span></a>. The explanation of <abbr title="Office for Product Safety and Standards">OPSS</abbr> terminology concerned with risk and risk-related matters can be found on the <a href="https://www.gov.uk/guidance/opss-risk-lexicon" class="govuk-link" target="_blank"><abbr title="Office for Product Safety and Standards">OPSS</abbr> risk lexicon page<span class="govuk-visually-hidden"> (opens in new tab)</span></a>.</p>
+    <p class="govuk-body">Use this service to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li><a href="<%= perform_risk_triage_path(back_to: "start_page") %>" class="govuk-link">Risk triage</a> to determine whether the product needs a full safety risk assessment.</li>
+      <li>Search for products on the Product Safety Database (PSD).</li>
+      <li>Assess and evaluate the risk level of the non-food consumer product.</li>
+      <li>Save and submit assessment results to the <abbr title="Product Safety Database">PSD</abbr>.</li>
+    </ul>
+    <h2 class="govuk-heading-m">Before you start</h2>
+    <p class="govuk-body">You will need:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Product Safety Database (PSD) login credentials - we’ll ask you to sign in or <a href="mailto:opss.enquiries@beis.gov.uk" class="govuk-link">request a new account</a> before starting the full risk assessment.</li>
+      <li>Information about the product, including details of the manufacturer/supplier, number of products sold, and other information accompanying the product.</li>
+      <li>Details of safety concerns associated with the product including number and nature of hazards.</li>
+      <li>Product test reports, legislative requirements and standards.</li>
+      <li>Research studies, statistical data sets or other evidence showing the average probability of product hazard occurring.</li>
+      <li>Risk assessments that have been undertaken previously for the product or closely related products.</li>
+    </ul>
+    <%= govuk_start_button(text: "Start now", href: full_risk_assessment_required_path) %>
+  </div>
+</div>

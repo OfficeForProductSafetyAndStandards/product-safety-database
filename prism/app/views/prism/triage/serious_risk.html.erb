@@ -1,0 +1,35 @@
+<% content_for :page_title, "Is the product likely to pose a serious risk that would justify exemption from a full risk assessment?" %>
+<% @back_link_href = full_risk_assessment_required_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form_model, url: serious_risk_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%=
+        f.govuk_collection_radio_buttons :poses_a_serious_risk,
+        [
+          OpenStruct.new(id: true, name: "Yes"),
+          OpenStruct.new(id: false, name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "Is the product likely to pose a serious risk that would justify exemption from a full risk assessment?", size: "l" },
+        hint: { text: 'For example, products containing prohibited chemicals, non-compliant category III personal protective equipment and other products subject to <abbr title="Office for Product Safety and Standards">OPSS</abbr> safety alerts are likely to present a serious risk of harm and exempt from a full risk assessment.'.html_safe },
+        bold_labels: false,
+        inline: true
+      %>
+      <%= govuk_details(summary_text: "Help with understanding serious risk products") do %>
+        <p>
+          In some limited circumstances it is appropriate to treat a non-compliant product as likely to present a serious risk, without the need to undertake a full risk assessment.
+        </p>
+        <p>
+          For further information please refer to the OPSS guide on products and hazards deemed serious risk:
+        </p>
+        <p>
+          <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1121889/prism-products-and-hazards-deemed-serious-risk-v01.pdf" class="govuk-link" target="_blank">Products and hazards deemed serious risk<span class="govuk-visually-hidden"> (opens in new tab)</span></a> (PDF, 105 KB, 2 pages)
+        </p>
+      <% end %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
