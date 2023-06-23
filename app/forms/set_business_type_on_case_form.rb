@@ -11,6 +11,7 @@ class SetBusinessTypeOnCaseForm
   ].freeze
 
   validates_inclusion_of :type, in: BUSINESS_TYPES
+  validates :online_marketplace_id, presence: true, if: -> { is_online_marketplace? }
 
   def set_params_on_session(session)
     session[:business_type] = type

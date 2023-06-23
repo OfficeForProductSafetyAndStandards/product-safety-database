@@ -22,29 +22,31 @@
             <% online_marketplace_first_half = @online_marketplaces.slice(0..number_of_market_places/2) %>
             <% online_marketplace_second_half = @online_marketplaces.slice(number_of_market_places/2+1, number_of_market_places) %>
 
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
-                <div class="govuk-radios govuk-radios--small">
-                  <% online_marketplace_first_half.each do |marketplace| %>
+            <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @business_type_form&.errors[:online_marketplace_id].present? %>">
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
+                  <div class="govuk-radios govuk-radios--small">
+                    <% online_marketplace_first_half.each do |marketplace| %>
+                      <div class="govuk-radios__item">
+                        <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input" %>
+                        <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
+                      </div>
+                    <% end %>
                     <div class="govuk-radios__item">
-                      <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input" %>
-                      <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
+                      <%= form.radio_button :online_marketplace_id, nil, checked: false, class: "govuk-radios__input" %>
+                      <%= form.label :online_marketplace_id, t(".types.other.label"), value: nil, class: "govuk-label govuk-radios__label" %>
                     </div>
-                  <% end %>
-                  <div class="govuk-radios__item">
-                    <%= form.radio_button :online_marketplace_id, nil, checked: false, class: "govuk-radios__input" %>
-                    <%= form.label :online_marketplace_id, t(".types.other.label"), value: nil, class: "govuk-label govuk-radios__label" %>
                   </div>
                 </div>
-              </div>
-              <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
-                <div class="govuk-radios govuk-radios--small">
-                  <% online_marketplace_second_half.each do |marketplace| %>
-                    <div class="govuk-radios__item">
-                      <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input" %>
-                      <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
-                    </div>
-                  <% end %>
+                <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
+                  <div class="govuk-radios govuk-radios--small">
+                    <% online_marketplace_second_half.each do |marketplace| %>
+                      <div class="govuk-radios__item">
+                        <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input" %>
+                        <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
+                      </div>
+                    <% end %>
+                  </div>
                 </div>
               </div>
             </div>
