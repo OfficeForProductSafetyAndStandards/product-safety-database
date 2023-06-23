@@ -11,7 +11,7 @@ class Investigations::BusinessTypesController < Investigations::BaseController
   def create
     @business_type_form = SetBusinessTypeOnCaseForm.new(business_request_params)
     if @business_type_form.valid?
-      session[:business_type] = @business_type_form.type
+      @business_type_form.set_params_on_session(session)
       redirect_to new_investigation_business_path(@investigation)
     else
       render :new

@@ -33,4 +33,40 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
       end
     end
   end
+
+  describe "#set_params_on_session" do
+    context "when type is online_marketplace" do
+      let(:type) { "online_marketplace" }
+      let(:online_marketplace_id) { "123" }
+      let(:params) do
+        {
+          type:,
+          online_marketplace_id:
+        }
+      end
+
+      it "sets the type and online_marketplace_id on the session" do
+        session = {}
+        form.set_params_on_session(session)
+        expect(session[:business_type]).to eq(type)
+        expect(session[:online_marketplace_id]).to eq(online_marketplace_id)
+      end
+    end
+
+    context "when type is not online_marketplace" do
+      let(:type) { "retailer" }
+      let(:params) do
+        {
+          type:
+        }
+      end
+
+      it "sets the type on the session" do
+        session = {}
+        form.set_params_on_session(session)
+        expect(session[:business_type]).to eq(type)
+        expect(session[:online_marketplace_id]).to be_nil
+      end
+    end
+  end
 end
