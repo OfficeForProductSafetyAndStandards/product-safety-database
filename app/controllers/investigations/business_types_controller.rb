@@ -2,6 +2,7 @@ class Investigations::BusinessTypesController < Investigations::BaseController
   before_action :set_investigation
   before_action :authorize_investigation_non_protected_details
   before_action :set_investigation_breadcrumbs
+  before_action :set_online_marketplaces
 
   def new
     @business_type_form = SetBusinessTypeOnCaseForm.new
@@ -18,6 +19,10 @@ class Investigations::BusinessTypesController < Investigations::BaseController
   end
 
 private
+
+  def set_online_marketplaces
+    @online_marketplaces = OnlineMarketplace.approved.order(:name)
+  end
 
   def business_request_params
     params.require(:set_business_type_on_case_form).permit(:type)

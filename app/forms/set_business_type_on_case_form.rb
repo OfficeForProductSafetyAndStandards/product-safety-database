@@ -4,6 +4,7 @@ class SetBusinessTypeOnCaseForm
   include ActiveModel::Serialization
 
   attribute :type
+  attribute :online_marketplace_id
 
   BUSINESS_TYPES = %w[
     retailer online_marketplace manufacturer exporter importer fulfillment_house distributor
