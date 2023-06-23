@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AddBusinessToCaseForm, :with_stubbed_opensearch, :with_stubbed_mailer do
-  subject(:form) { described_class.new(business_form_params.merge(current_user: current_user)) }
+  subject(:form) { described_class.new(business_form_params.merge(current_user:)) }
 
   let(:business_form_params) do
     {

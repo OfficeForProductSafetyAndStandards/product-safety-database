@@ -14,7 +14,7 @@ class CreateOnlineMarketplaces < ActiveRecord::Migration[7.0]
       marketplaces = ["Amazon", "eBay", "AliExpress", "Wish", "Etsy", "AliBaba", "Asos Marketplace", "Banggood",
                       "Bonanza", "Depop", "DesertCart", "Ecrater", "Facebook Marketplace", "Farfetch", "Fishpond",
                       "Folksy", "ForDeal", "Fruugo", "Grandado", "Groupon", "Gumtree", "Houzz", "Instagram",
-                      "Joom", "Light In The Box", "OnBuy",  "NotOnTheHighStreet", "Manomano", "PatPat", "Pinterest",
+                      "Joom", "Light In The Box", "OnBuy", "NotOnTheHighStreet", "Manomano", "PatPat", "Pinterest",
                       "Rakuten", "Shein", "Shpock", "Stockx", "Temu", "Vinted", "Wayfair", "Wowcher", "Zalando"]
 
       marketplaces.each do |marketplace|
