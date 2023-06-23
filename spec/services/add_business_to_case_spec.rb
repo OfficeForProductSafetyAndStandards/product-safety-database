@@ -9,67 +9,65 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
   let(:creator)       { user }
   let(:owner)         { user }
 
-  describe ".call" do
-    def expected_email_subject
-      "Business added"
+  context "with no parameters" do
+    let(:result) { described_class.call }
+
+    it "returns a failure" do
+      expect(result).to be_failure
+    end
+  end
+
+  context "with no investigation parameter" do
+    let(:result) { described_class.call(business:, user:) }
+
+    it "returns a failure" do
+      expect(result).to be_failure
+    end
+  end
+
+  context "with no product parameter" do
+    let(:result) { described_class.call(investigation:, user:) }
+
+    it "returns a failure" do
+      expect(result).to be_failure
+    end
+  end
+
+  context "with the required parameter" do
+    it "saves the the businesses" do
+      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
     end
 
-    def expected_email_body(name)
-      "Business was added to the case by #{name}."
-    end
-
-    context "with no parameters" do
-      let(:result) { described_class.call }
-
-      it "returns a failure" do
-        expect(result).to be_failure
-      end
-    end
-
-    context "with no investigation parameter" do
-      let(:result) { described_class.call(business:, user:) }
-
-      it "returns a failure" do
-        expect(result).to be_failure
-      end
-    end
-
-    context "with no product parameter" do
-      let(:result) { described_class.call(investigation:, user:) }
-
-      it "returns a failure" do
-        expect(result).to be_failure
-      end
-    end
-
-    context "with the required parameter" do
-      it "saves the the businesses" do
-        expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+    context "with a primary location" do
+      before do
+        business.locations.new(attributes_for(:location).except(:name))
       end
 
-      context "with a primary location" do
-        before do
-          business.locations.new(attributes_for(:location).except(:name))
-        end
-
-        it "has set the default name", :aggregate_failures do
-          result
-
-          expect(Business.last.primary_location.name).to eq("Registered office address")
-          expect(Business.last.primary_location.added_by_user).to eq(creator)
-        end
-      end
-
-      it "creates and audit log", :aggregate_failures do
+      it "has set the default name", :aggregate_failures do
         result
 
-        business = Business.last
-        activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-        expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
-        expect(activity.added_by_user).to eq(user)
+        expect(Business.last.primary_location.name).to eq("Registered office address")
+        expect(Business.last.primary_location.added_by_user).to eq(creator)
       end
-
-      it_behaves_like "a service which notifies the case owner"
     end
+
+    it "creates and audit log", :aggregate_failures do
+      result
+
+      business = Business.last
+      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      expect(activity.added_by_user).to eq(user)
+    end
+
+    it_behaves_like "a service which notifies the case owner"
+  end
+
+  def expected_email_subject
+    "Business added"
+  end
+
+  def expected_email_body(name)
+    "Business was added to the case by #{name}."
   end
 end
