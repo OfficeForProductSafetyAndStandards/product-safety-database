@@ -17,11 +17,9 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:investigation)    { create(:enquiry, creator: user) }
   let(:other_user)       { create(:user, :activated) }
 
-  # rubocop:disable RSpec/LetSetup
   let!(:marketplace_1)   { create(:online_marketplace, :approved) }
   let!(:marketplace_2)   { create(:online_marketplace, :approved) }
-  let!(:marketplace_3)   { create(:online_marketplace) }
-  # rubocop:enable RSpec/LetSetup
+  let!(:unapproved_marketplace) { create(:online_marketplace) }
 
   before do
     ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
@@ -47,6 +45,8 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_unchecked_field("Manufacturer")
     expect(page).to have_unchecked_field("Exporter")
     expect(page).to have_unchecked_field("Importer")
+    expect(page).to have_unchecked_field("Online seller")
+    expect(page).to have_unchecked_field("Online marketplace")
     expect(page).to have_unchecked_field("Fulfillment house")
     expect(page).to have_unchecked_field("Distributor")
 
