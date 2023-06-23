@@ -25,6 +25,6 @@ private
   end
 
   def business_request_params
-    params.require(:set_business_type_on_case_form).permit(:type)
+    params.require(:set_business_type_on_case_form).permit(:type, :online_marketplace_id)
   end
 end
