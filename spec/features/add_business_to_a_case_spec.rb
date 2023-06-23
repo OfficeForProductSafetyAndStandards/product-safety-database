@@ -110,6 +110,65 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
       .to have_sibling(".govuk-body", text: "Role: retailer")
   end
 
+  scenario "Adding an online marketplace business" do
+    sign_in user
+    visit "/cases/#{investigation.pretty_id}/businesses"
+
+    click_link "Add business"
+    expect_to_have_case_breadcrumbs
+
+    # Don't select a business type
+    click_on "Continue"
+
+    expect_to_be_on_investigation_add_business_type_page
+    expect_to_have_case_breadcrumbs
+    expect(page).to have_error_summary("Select a business type")
+
+    expect(page).to have_unchecked_field("Retailer")
+    expect(page).to have_unchecked_field("Manufacturer")
+    expect(page).to have_unchecked_field("Exporter")
+    expect(page).to have_unchecked_field("Importer")
+    expect(page).to have_unchecked_field("Online seller")
+    expect(page).to have_unchecked_field("Online marketplace")
+    expect(page).to have_unchecked_field("Fulfillment house")
+    expect(page).to have_unchecked_field("Distributor")
+
+    choose "Online marketplace"
+    expect(page).to have_unchecked_field(marketplace_1.name)
+    expect(page).to have_unchecked_field(marketplace_2.name)
+    expect(page).not_to have_unchecked_field(unapproved_marketplace.name)
+    choose marketplace_1.name
+
+    click_on "Continue"
+
+    expect_to_be_on_investigation_add_business_details_page
+    expect_to_have_case_breadcrumbs
+
+    within_fieldset "Name and company number" do
+      fill_in "Trading name", with: trading_name
+    end
+
+    click_on "Save"
+
+    expect_to_be_on_investigation_businesses_page
+    expect(page).not_to have_error_messages
+    expect_to_have_case_breadcrumbs
+
+    within("section##{trading_name.parameterize}") do
+      expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
+      expect(page.find("dt", text: "Online marketplace")).to have_sibling("dd", text: marketplace_1.name)
+    end
+
+    # Check that adding  the business was recorded in the
+    # activity log for the investigation.
+    click_link "Activity"
+    expect(page).to have_text("Business added")
+    expect_to_have_case_breadcrumbs
+
+    expect(page.find("h3", text: "Business added"))
+      .to have_sibling(".govuk-body", text: "Role: online_marketplace")
+  end
+
   scenario "Not being able to add a business to another team's case" do
     sign_in other_user
     visit "/cases/#{investigation.pretty_id}/businesses"

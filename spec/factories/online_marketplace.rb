@@ -3,7 +3,7 @@ FactoryBot.define do
     name { Faker::Company.name }
 
     trait :approved do
-      approved { true }
+      approved_by_opss { true }
     end
   end
 end
