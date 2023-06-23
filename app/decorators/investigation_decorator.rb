@@ -7,7 +7,7 @@ class InvestigationDecorator < ApplicationDecorator
   PRODUCT_DISPLAY_LIMIT = 6
 
   def title
-    user_title
+    user_title || pretty_id
   end
 
   def display_product_summary_list?
