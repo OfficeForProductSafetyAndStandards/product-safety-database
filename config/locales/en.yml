@@ -171,6 +171,8 @@ en:
             label: Fulfillment house
           distributor:
             label: Distributor
+          other:
+            label: Other online platform
     overseas_regulator:
       option_yes: "Yes"
       option_no: "No"

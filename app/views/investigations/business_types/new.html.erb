@@ -32,8 +32,8 @@
                     </div>
                   <% end %>
                   <div class="govuk-radios__item">
-                    <%= form.radio_button :online_marketplace_id, "", class: "govuk-radios__input" %>
-                    <%= form.label :online_marketplace_id, "Other marketplace", value: "", class: "govuk-label govuk-radios__label" %>
+                    <%= form.radio_button :online_marketplace_id, nil, checked: false, class: "govuk-radios__input" %>
+                    <%= form.label :online_marketplace_id, t(".types.other.label"), value: nil, class: "govuk-label govuk-radios__label" %>
                   </div>
                 </div>
               </div>
@@ -48,7 +48,6 @@
                 </div>
               </div>
             </div>
-
           <% end %>
 
           <% radio_items = [
