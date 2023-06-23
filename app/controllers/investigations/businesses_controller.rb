@@ -16,7 +16,13 @@ class Investigations::BusinessesController < Investigations::BaseController
   end
 
   def create
-    @business_form = AddBusinessToCaseForm.new(business_form_params.merge(current_user:, relationship: session[:business_type]))
+    @business_form = AddBusinessToCaseForm.new(
+      business_form_params.merge(
+        current_user:,
+        relationship: session[:business_type],
+        online_marketplace_id: session[:online_marketplace_id],
+      )
+    )
 
     if @business_form.valid?
       @business = @business_form.business_object
@@ -25,6 +31,7 @@ class Investigations::BusinessesController < Investigations::BaseController
         AddBusinessToCase.call!(
           business: @business,
           relationship: @business_form.relationship,
+          online_marketplace: @business_form.online_marketplace,
           investigation: @investigation,
           user: current_user
         )

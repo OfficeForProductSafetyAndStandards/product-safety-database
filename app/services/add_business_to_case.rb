@@ -2,7 +2,7 @@ class AddBusinessToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :user, :relationship, :business, :skip_email, to: :context
+  delegate :investigation, :user, :relationship, :business, :skip_email, :online_marketplace, to: :context
 
   def call
     context.fail!(error: "No business supplied")      unless business.is_a?(Business)
@@ -11,7 +11,7 @@ class AddBusinessToCase
 
     Business.transaction do
       business.primary_location&.assign_attributes(name: "Registered office address", added_by_user: user)
-      investigation_business = business.investigation_businesses.build(investigation:, relationship:)
+      investigation_business = business.investigation_businesses.build(investigation:, relationship:, online_marketplace:)
       business.save!
 
       send_notification_email(
