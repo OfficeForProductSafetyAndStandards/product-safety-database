@@ -20,7 +20,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
 
   def new_online_recall_information
     if (online_recall_information = metadata.dig("updates", "online_recall_information", 1)).present?
-      return h.link_to "#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank" if valid_url?(online_recall_information)
+      return h.link_to "#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noreferrer noopener", target: "_blank" if valid_url?(online_recall_information)
 
       return online_recall_information
     end

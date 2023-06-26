@@ -29,7 +29,7 @@
          document,
          class: "govuk-link app-block-link govuk-!-margin-right-3 govuk-link--no-visited-state",
          target: '_blank',
-         rel: 'noopener' %>
+         rel: "noreferrer noopener" %>
 
       <% unless do_not_show_edit_and_remove_links %>
         <%= render "documents/document_card_links", document: document, parent: parent %>
