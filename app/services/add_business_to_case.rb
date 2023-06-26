@@ -9,9 +9,7 @@ class AddBusinessToCase
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
-    if create_other_online_marketplace?
-      online_marketplace = OnlineMarketplace.create!(name: other_marketplace_name, approved_by_opss: false)
-    end
+    create_online_marketplace if online_marketplace.blank? && other_marketplace_name.present?
 
     Business.transaction do
       business.primary_location&.assign_attributes(name: "Registered office address", added_by_user: user)
@@ -26,8 +24,8 @@ class AddBusinessToCase
 
 private
 
-  def create_other_online_marketplace?
-    other_marketplace_name.present?
+  def create_online_marketplace
+    context.online_marketplace = OnlineMarketplace.create!(name: other_marketplace_name, approved_by_opss: false)
   end
 
   def create_audit_activity_for_business_added(business, investigation_business)
