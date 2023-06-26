@@ -187,7 +187,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_unchecked_field(marketplace_1.name)
     expect(page).to have_unchecked_field(marketplace_2.name)
 
-    fill_in "Other marketplace", with: "Another amazing marketplace"
+    fill_in "Other online platform", with: "Another amazing marketplace"
 
     click_on "Continue"
 
