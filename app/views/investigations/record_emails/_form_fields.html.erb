@@ -48,7 +48,7 @@
 
     <p class="govuk-body">
       Current file:
-      <%= link_to "#{email.email_file.filename} (opens in new tab)", email.email_file, target: "_blank", rel: 'noopener' %>
+      <%= link_to "#{email.email_file.filename} (opens in new tab)", email.email_file, target: "_blank", rel: "noreferrer noopener" %>
     </p>
 
     <%= form.hidden_field :email_file_id  %>
@@ -118,7 +118,7 @@
 
       <p class="govuk-body">
         Currently attached file:
-        <%= link_to "#{email.email_attachment.filename} (opens in new tab)", email.email_attachment, target: "_blank", rel: 'noopener' %>
+        <%= link_to "#{email.email_attachment.filename} (opens in new tab)", email.email_attachment, target: "_blank", rel: "noreferrer noopener" %>
       </p>
 
       <%= form.govuk_radios :email_attachment_action,
