@@ -23,6 +23,12 @@ class SetBusinessTypeOnCaseForm
     end
   end
 
+  def clear_params_from_session(session)
+    session.delete(:business_type)
+    session.delete(:online_marketplace_id)
+    session.delete(:other_marketplace_name)
+  end
+
 private
 
   def is_approved_online_marketplace?

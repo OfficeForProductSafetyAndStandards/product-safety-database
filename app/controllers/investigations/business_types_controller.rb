@@ -6,6 +6,7 @@ class Investigations::BusinessTypesController < Investigations::BaseController
 
   def new
     @business_type_form = SetBusinessTypeOnCaseForm.new
+    @business_type_form.clear_params_from_session(session)
   end
 
   def create

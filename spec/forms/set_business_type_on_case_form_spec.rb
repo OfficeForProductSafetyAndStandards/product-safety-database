@@ -39,7 +39,8 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
       let(:params) do
         {
           type:,
-          online_marketplace_id:
+          online_marketplace_id:,
+          other_marketplace_name: nil
         }
       end
 
@@ -120,6 +121,22 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
         expect(session[:business_type]).to eq(type)
         expect(session[:online_marketplace_id]).to be_nil
       end
+    end
+  end
+
+  describe '#clear_params_from_session' do
+    it 'clears the business_type, online_marketplace_id and other_marketplace_name from the session' do
+      session = {
+        business_type: 'retailer',
+        online_marketplace_id: '123',
+        other_marketplace_name: 'Other marketplace'
+      }
+
+      form.clear_params_from_session(session)
+
+      expect(session[:business_type]).to be_nil
+      expect(session[:online_marketplace_id]).to be_nil
+      expect(session[:other_marketplace_name]).to be_nil
     end
   end
 end
