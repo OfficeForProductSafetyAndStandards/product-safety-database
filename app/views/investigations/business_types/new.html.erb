@@ -28,7 +28,7 @@
                   <div class="govuk-radios govuk-radios--small">
                     <% online_marketplace_first_half.each do |marketplace| %>
                       <div class="govuk-radios__item">
-                        <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input" %>
+                        <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input js-radio-handle-other" %>
                         <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
                       </div>
                     <% end %>
@@ -38,7 +38,7 @@
                   <div class="govuk-radios govuk-radios--small">
                     <% online_marketplace_second_half.each do |marketplace| %>
                       <div class="govuk-radios__item">
-                        <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input" %>
+                        <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input js-radio-handle-other" %>
                         <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
                       </div>
                     <% end %>
@@ -47,7 +47,7 @@
               </div>
             </div>
 
-            <%= form.govuk_input :other_marketplace_name, label: t(".types.other.label") %>
+            <%= form.govuk_input :other_marketplace_name, label: t(".types.other.label"), classes: "js-input-handle-other" %>
           <% end %>
 
           <% radio_items = [
