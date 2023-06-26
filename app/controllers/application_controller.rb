@@ -61,6 +61,7 @@ class ApplicationController < ActionController::Base
     items.push text: "Cases", href: your_cases_investigations_path, active: highlight_cases?
     items.push text: "Businesses", href: your_businesses_path, active: highlight_businesses?
     items.push text: "Products", href: your_products_path, active: highlight_products?
+    items.push text: "Risk assessments", href: your_prism_risk_assessments_path, active: params[:controller] == "prism_risk_assessments" if current_user.is_prism_user?
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
   end

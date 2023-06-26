@@ -1,0 +1,2 @@
+class PrismRiskAssessment < ApplicationRecord
+end

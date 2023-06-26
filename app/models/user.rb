@@ -103,6 +103,10 @@ class User < ApplicationRecord
     has_role? :super_user
   end
 
+  def is_prism_user?
+    has_role? :prism
+  end
+
   def can_validate_risk_level?
     has_role? :risk_level_validator
   end

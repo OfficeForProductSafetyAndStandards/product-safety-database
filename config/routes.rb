@@ -252,6 +252,10 @@ Rails.application.routes.draw do
     resource :number_of_affected_units, only: %i[edit update], path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
   end
 
+  resource :prism_risk_assessments, only: [], path: "prism-risk-assessments" do
+    get "your-prism-risk-assessments", to: "prism_risk_assessments#your_prism_risk_assessments", as: "your"
+  end
+
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do
       member do
