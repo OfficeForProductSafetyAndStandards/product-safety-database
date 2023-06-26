@@ -2,12 +2,16 @@ class AddBusinessToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :user, :relationship, :business, :skip_email, :online_marketplace, to: :context
+  delegate :investigation, :user, :relationship, :business, :skip_email, :online_marketplace, :other_marketplace_name, to: :context
 
   def call
     context.fail!(error: "No business supplied")      unless business.is_a?(Business)
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
+
+    if create_other_online_marketplace?
+      online_marketplace = OnlineMarketplace.create!(name: other_marketplace_name, approved_by_opss: false)
+    end
 
     Business.transaction do
       business.primary_location&.assign_attributes(name: "Registered office address", added_by_user: user)
@@ -21,6 +25,10 @@ class AddBusinessToCase
   end
 
 private
+
+  def create_other_online_marketplace?
+    other_marketplace_name.present?
+  end
 
   def create_audit_activity_for_business_added(business, investigation_business)
     AuditActivity::Business::Add.create!(

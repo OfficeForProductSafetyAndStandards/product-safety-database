@@ -90,7 +90,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
     it_behaves_like "a service which notifies the case owner"
   end
 
-  context "with an online marketplace" do
+  context "with an approved online marketplace" do
     subject(:result) { described_class.call(investigation:, business:, user:, online_marketplace:) }
 
     let(:online_marketplace) { create(:online_marketplace) }
@@ -115,6 +115,48 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     it_behaves_like "a service which notifies the case owner"
+  end
+
+  context "when given just the name of a new 'other' online marketplace" do
+    subject(:result) { described_class.call(investigation:, business:, user:, other_marketplace_name:) }
+
+    let(:other_marketplace_name) { Faker::Company.name }
+
+    it "saves the the businesses" do
+      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+    end
+
+    it "creates a new online marketplace as unapproved" do
+      result
+
+      expect(Business.last.investigation_businesses.find_by!(investigation:).online_marketplace.approved_by_opss).to be_falsey
+    end
+
+    it "associates the new online marketplace to the investigation_business" do
+      result
+
+      expect(Business.last.investigation_businesses.find_by!(investigation:).online_marketplace.name).to eq(other_marketplace_name)
+    end
+
+    it "creates and audit log", :aggregate_failures do
+      result
+
+      business = Business.last
+      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      expect(activity.added_by_user).to eq(user)
+    end
+
+    it_behaves_like "a service which notifies the case owner"
+
+    context "when the name is not unique" do
+      let(:online_marketplace) { create(:online_marketplace) }
+      let(:other_marketplace_name) { online_marketplace.name }
+
+      it "prevents another online marketplace being created" do
+        expect { result }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Name has already been taken")
+      end
+    end
   end
 
   def expected_email_subject
