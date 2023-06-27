@@ -155,9 +155,12 @@ en:
           retailer:
             label: Retailer
             hint: This includes traditional retailers and retailers selling directly to customers via their own online presence.
+          online_seller:
+            label: Online seller
+            hint: This includes businesses primarily selling products to end users via an online marketplace such as Amazon.
           online_marketplace:
-            label: Online seller - via an online marketplace
-            hint: Select this option if the business only sells products via online marketplaces such as Amazon.
+            label: Online marketplace
+            hint: Online platforms whose primary business is connecting traders and consumers and hosting third party sellers/sales.
           manufacturer:
             label: Manufacturer
           exporter:
@@ -168,6 +171,8 @@ en:
             label: Fulfillment house
           distributor:
             label: Distributor
+          other:
+            label: Other online platform
     overseas_regulator:
       option_yes: "Yes"
       option_no: "No"
@@ -458,6 +463,9 @@ en:
             type:
               blank: Select a business type
               inclusion: Select a business type
+            online_marketplace_id:
+              blank: Select an online marketplace
+              inclusion: Select an online marketplace
 
         remove_business_form:
           attributes:

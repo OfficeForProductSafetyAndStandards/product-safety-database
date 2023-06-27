@@ -27,7 +27,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_investigation_add_business_details_page
-    expect(page).to have_selector("legend", text: "The business details")
+    expect(page).to have_selector("legend", text: "Name and company number")
   end
 
   def expect_to_be_on_remove_business_page
