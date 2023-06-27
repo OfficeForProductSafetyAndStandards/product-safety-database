@@ -15,14 +15,11 @@
 
       <ul class="govuk-list govuk-list--bullet">
         <li>to the
-          <%
-            # rubocop:disable Rails/LinkToBlank
-            html = capture do
-          %>
+          <% html = capture do %>
             terms and conditions<span class="govuk-visually-hidden"> (opens in new tab)</span>
           <% end %>
 
-          <%= link_to html, help_terms_and_conditions_path, target: "_blank" %>
+          <%= link_to html, help_terms_and_conditions_path, target: "_blank", rel: "noreferrer noopener" %>
 
           and
 
@@ -30,8 +27,7 @@
             privacy policy<span class="govuk-visually-hidden"> (opens in new tab)</span>
           <% end %>
 
-          <%= link_to html, help_privacy_notice_path, target: "_blank" %>
-          <% # rubocop:enable Rails/LinkToBlank %'> %>
+          <%= link_to html, help_privacy_notice_path, target: "_blank", rel: "noreferrer noopener" %>
         </li>
         <li>not to share information from the Product Safety Database outside your organisation</li>
         <li>that you have the right to share the information you enter</li>

@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails.git
-  revision: b10ee20b8849b8409205049eaa533e6d6df82063
+  revision: 3243b6f04f4313dc82eeff7a3c1a8e152a8161db
   specs:
-    govuk-design-system-rails (0.10.3)
+    govuk-design-system-rails (0.10.5)
 
 PATH
   remote: prism
@@ -10,8 +10,10 @@ PATH
     prism (0.1.0)
       aasm (~> 5.5)
       aws-sdk-s3 (~> 1.122)
+      devise (~> 4.9)
       govuk-components (~> 4.0)
-      kaminari (~> 1.2)
+      govuk_design_system_formbuilder (~> 4.0)
+      pagy (~> 6.0)
       pg (~> 1.5)
       rails (>= 7.0.4.3)
       wicked (~> 2.0)
@@ -249,6 +251,11 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
       view_component (~> 3.0.0)
+    govuk_design_system_formbuilder (4.0.0)
+      actionview (>= 6.1)
+      activemodel (>= 6.1)
+      activesupport (>= 6.1)
+      html-attributes-utils (~> 1)
     govuk_notify_rails (2.2.0)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -680,7 +687,7 @@ DEPENDENCIES
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
-  govuk-design-system-rails (~> 0.10.3)!
+  govuk-design-system-rails (~> 0.10.5)!
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)

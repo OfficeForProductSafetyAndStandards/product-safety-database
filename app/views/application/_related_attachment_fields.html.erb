@@ -28,7 +28,7 @@
       <% if file_blob.present? %>
         <p id="current-attachment-details">
           Currently selected file:
-          <%= link_to "#{file_blob.filename} (opens in new tab)", file_blob, target: "_blank", rel: 'noopener' %>
+          <%= link_to "#{file_blob.filename} (opens in new tab)", file_blob, target: "_blank", rel: "noreferrer noopener" %>
         </p>
 
         <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>

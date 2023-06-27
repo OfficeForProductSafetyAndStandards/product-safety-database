@@ -21,7 +21,7 @@
                 <%= image_tag(image.file_upload) %>
                 <span class="govuk-visually-hidden">(opens in new tab)</span>
               <% end %>
-              <%= link_to link_content, image.file_upload, target: "_blank", rel: 'noopener', title: "Opens in a new tab" %>
+              <%= link_to link_content, image.file_upload, target: "_blank", rel: "noreferrer noopener", title: "Opens in a new tab" %>
               <figcaption><%= image.title %></figcaption>
             </figure>
           </dd>

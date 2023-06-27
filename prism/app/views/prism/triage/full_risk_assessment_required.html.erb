@@ -1,0 +1,23 @@
+<% content_for :page_title, "Does the product require a full risk assessment?" %>
+<% @back_link_href = root_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form_model, url: full_risk_assessment_required_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%=
+        f.govuk_collection_radio_buttons :full_risk_assessment_required,
+        [
+          OpenStruct.new(id: true, name: "Yes", description: "It’s clear that the product non-compliance will present risk and a full risk assessment will be required."),
+          OpenStruct.new(id: false, name: "Not clear", description: "I would like to undertake risk triage to determine whether the product needs a full risk assessment or give an early indication of what the risk level is likely to be.")
+        ],
+        :id,
+        :name,
+        :description,
+        legend: { text: "Does the product require a full risk assessment?", size: "l" },
+        bold_labels: false
+      %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
