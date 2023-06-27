@@ -345,6 +345,9 @@ en:
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
+  prism_risk_assessments:
+    titles:
+      your_prism_risk_assessments: Risk assessments
   audit_activity:
     investigation:
       coronavirus_related: Case is related to the coronavirus outbreak.

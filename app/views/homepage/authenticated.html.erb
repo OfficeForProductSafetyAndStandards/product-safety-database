@@ -84,7 +84,11 @@
               Add further information to the case
             </h3>
             <p class="govuk-body-s govuk-!-margin-bottom-1">
-              The case can be found in the Cases area, where you can continue to add information and your supporting case information.
+              <% if current_user.is_prism_user? %>
+              You can access the case within the Cases area, where you have the option to add or modify supporting case information, including product <a href="<%= your_prism_risk_assessments_path %>" class="govuk-link govuk-link--no-visited-state">risk assessments</a>.
+              <% else %>
+              You can access the case within the Cases area, where you have the option to add or modify supporting case information.
+              <% end %>
             </p>
           </div>
         </li>
