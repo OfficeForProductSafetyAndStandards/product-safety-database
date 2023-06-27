@@ -1,6 +1,10 @@
 class Investigation < ApplicationRecord
   require_dependency "investigation"
   class EnquiryDecorator < InvestigationDecorator
+    def title
+      user_title || pretty_id
+    end
+
   private
 
     def should_display_date_received?

@@ -9,6 +9,8 @@ class AddBusinessToCaseForm
   attribute :trading_name
   attribute :company_number
   attribute :relationship, default: ""
+  attribute :online_marketplace_id
+  attribute :other_marketplace_name
 
   attribute :locations, default: []
   attribute :contacts, default: []
@@ -42,6 +44,10 @@ class AddBusinessToCaseForm
 
   def primary_contact
     contacts.first
+  end
+
+  def online_marketplace
+    OnlineMarketplace.find_by(id: online_marketplace_id)
   end
 
 private
