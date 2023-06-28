@@ -3,13 +3,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @form_model, url: serious_risk_path, method: :patch do |f| %>
+    <%= form_with model: @prism_risk_assessment, url: serious_risk_path, method: :patch do |f| %>
       <%= f.govuk_error_summary %>
       <%=
-        f.govuk_collection_radio_buttons :poses_a_serious_risk,
+        f.govuk_collection_radio_buttons :risk_type,
         [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
+          OpenStruct.new(id: "serious_risk", name: "Yes"),
+          OpenStruct.new(id: "normal_risk", name: "No")
         ],
         :id,
         :name,

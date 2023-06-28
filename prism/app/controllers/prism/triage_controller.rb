@@ -1,6 +1,7 @@
 module Prism
   class TriageController < ApplicationController
     skip_before_action :authenticate_user!, only: %i[index full_risk_assessment_required full_risk_assessment_required_choose perform_risk_triage]
+    before_action :set_prism_risk_assessment, only: %i[serious_risk_rebuttable serious_risk_rebuttable_choose]
 
     def index; end
 
@@ -21,47 +22,54 @@ module Prism
     end
 
     def serious_risk
-      @form_model = Prism::Form::SeriousRisk.new
+      @prism_risk_assessment = Prism::RiskAssessment.new
     end
 
     def serious_risk_choose
-      @form_model = Prism::Form::SeriousRisk.new(serious_risk_params)
+      @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params)
+      @prism_risk_assessment.created_by_user_id = current_user.id
 
-      return render :serious_risk unless @form_model.valid?
-
-      if serious_risk_params[:poses_a_serious_risk] == "false"
-        redirect_to tasks_path
+      if @prism_risk_assessment.save(context: :serious_risk)
+        if @prism_risk_assessment.serious_risk?
+          redirect_to serious_risk_rebuttable_path(@prism_risk_assessment)
+        else
+          redirect_to tasks_path(@prism_risk_assessment)
+        end
       else
-        redirect_to serious_risk_rebuttable_path
+        render :serious_risk
       end
     end
 
-    def serious_risk_rebuttable
-      @form_model = Prism::Form::SeriousRiskRebuttable.new
-    end
+    def serious_risk_rebuttable; end
 
     def serious_risk_rebuttable_choose
-      @form_model = Prism::Form::SeriousRiskRebuttable.new(serious_risk_rebuttable_params)
+      @prism_risk_assessment.assign_attributes(serious_risk_rebuttable_params)
 
-      return render :serious_risk_rebuttable unless @form_model.valid?
-
-      redirect_to tasks_serious_risk_path
+      if @prism_risk_assessment.save(context: :serious_risk_rebuttable)
+        redirect_to tasks_path(@prism_risk_assessment)
+      else
+        render :serious_risk_rebuttable
+      end
     end
 
     def perform_risk_triage; end
 
   private
 
+    def set_prism_risk_assessment
+      @prism_risk_assessment = Prism::RiskAssessment.find(params[:id])
+    end
+
     def full_risk_assessment_required_params
       params.require(:form_full_risk_assessment_required).permit(:full_risk_assessment_required)
     end
 
     def serious_risk_params
-      params.require(:form_serious_risk).permit(:poses_a_serious_risk)
+      params.require(:risk_assessment).permit(:risk_type)
     end
 
     def serious_risk_rebuttable_params
-      params.require(:form_serious_risk_rebuttable).permit(:less_than_serious_risk, :description)
+      params.require(:risk_assessment).permit(:less_than_serious_risk, :serious_risk_rebuttable_factors)
     end
   end
 end

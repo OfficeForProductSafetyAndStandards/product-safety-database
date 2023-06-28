@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_23_100933) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_27_093900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -297,6 +297,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_23_100933) do
     t.bigint "prism_harm_scenario_id"
     t.decimal "probability"
     t.string "probability_evidence"
+    t.string "probability_type"
     t.datetime "updated_at", null: false
     t.index ["prism_harm_scenario_id"], name: "index_prism_harm_scenario_steps_on_prism_harm_scenario_id"
   end
@@ -310,7 +311,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_23_100933) do
     t.bigint "prism_risk_assessment_id"
     t.boolean "sensitivity_analysis"
     t.string "severity"
-    t.boolean "supporting_evidence"
     t.datetime "updated_at", null: false
     t.index ["prism_risk_assessment_id"], name: "index_prism_harm_scenarios_on_prism_risk_assessment_id"
   end
@@ -327,9 +327,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_23_100933) do
 
   create_table "prism_product_market_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "other_safety_legislation_standard"
     t.bigint "prism_risk_assessment_id"
-    t.string "safety_legislation_standards", array: true
+    t.jsonb "routing_questions"
     t.string "selling_organisation"
     t.integer "total_products_sold"
     t.datetime "updated_at", null: false
@@ -340,25 +339,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_23_100933) do
     t.string "barcode"
     t.string "batch_number"
     t.string "brand"
-    t.string "counterfeit"
+    t.string "category"
     t.string "country_of_origin"
     t.datetime "created_at", null: false
-    t.string "has_markings"
-    t.string "markings", array: true
+    t.text "description"
+    t.string "markings"
     t.string "name"
-    t.text "other_markings"
+    t.string "placed_on_market_before_eu_exit"
     t.bigint "prism_risk_assessment_id"
-    t.string "risk_tolerability"
+    t.jsonb "routing_questions"
+    t.string "subcategory"
     t.datetime "updated_at", null: false
     t.index ["prism_risk_assessment_id"], name: "index_prism_products_on_prism_risk_assessment_id"
   end
 
   create_table "prism_risk_assessments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "assessed_before"
     t.string "assessment_organisation"
     t.string "assessor_name"
     t.datetime "created_at", null: false
+    t.uuid "created_by_user_id"
     t.string "risk_type"
+    t.jsonb "routing_questions"
+    t.string "serious_risk_rebuttable_factors"
     t.string "state"
     t.datetime "updated_at", null: false
   end

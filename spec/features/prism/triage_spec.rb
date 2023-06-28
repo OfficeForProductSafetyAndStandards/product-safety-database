@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "PRISM triage", type: :feature do
+  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk) }
+
   scenario "visiting the start page" do
     visit prism.root_path
 
@@ -65,13 +67,13 @@ RSpec.feature "PRISM triage", type: :feature do
       expect(page).to have_text("Is the product likely to pose a serious risk that would justify exemption from a full risk assessment?")
 
       choose "No"
+      click_button "Continue"
 
-      # TODO(ruben): Change once the task page is ready
-      expect { click_button "Continue" }.to raise_exception(ActionController::MissingExactTemplate)
+      expect(page).to have_text("Determine and evaluate the level of product risk")
     end
 
     scenario "selecting that a product does have rebuttable factors to posing a serious risk" do
-      visit prism.serious_risk_rebuttable_path
+      visit prism.serious_risk_rebuttable_path(prism_risk_assessment)
 
       expect(page).to have_text("Are there any factors to indicate the product risk to be less than serious?")
 
@@ -84,21 +86,21 @@ RSpec.feature "PRISM triage", type: :feature do
 
       expect(page).to have_text("Enter a description")
 
-      fill_in "form_serious_risk_rebuttable[description]", with: "Lorem ipsum"
+      fill_in "risk_assessment[serious_risk_rebuttable_factors]", with: "Lorem ipsum"
+      click_button "Continue"
 
-      # TODO(ruben): Change once the task page is ready
-      expect { click_button "Continue" }.to raise_exception(ActionController::MissingExactTemplate)
+      expect(page).to have_text("Evaluate the product deemed serious risk")
     end
 
     scenario "selecting that a product does not have rebuttable factors to posing a serious risk" do
-      visit prism.serious_risk_rebuttable_path
+      visit prism.serious_risk_rebuttable_path(prism_risk_assessment)
 
       expect(page).to have_text("Are there any factors to indicate the product risk to be less than serious?")
 
       choose "No"
+      click_button "Continue"
 
-      # TODO(ruben): Change once the task page is ready
-      expect { click_button "Continue" }.to raise_exception(ActionController::MissingExactTemplate)
+      expect(page).to have_text("Evaluate the product deemed serious risk")
     end
   end
 end
