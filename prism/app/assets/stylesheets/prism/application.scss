@@ -20,6 +20,7 @@ $govuk-fonts-path: "";
 $govuk-global-styles: true;
 
 @import "govuk-frontend/govuk/all";
+@import "task_list";
 
 .opss-nojs-hide {
   display: none;

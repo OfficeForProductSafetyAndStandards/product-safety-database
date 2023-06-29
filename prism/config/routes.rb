@@ -8,12 +8,11 @@ Prism::Engine.routes.draw do
     get "serious-risk", to: "triage#serious_risk"
     patch "serious-risk", to: "triage#serious_risk_choose"
     put "serious-risk", to: "triage#serious_risk_choose"
-    get "serious-risk-rebuttable", to: "triage#serious_risk_rebuttable"
-    patch "serious-risk-rebuttable", to: "triage#serious_risk_rebuttable_choose"
-    put "serious-risk-rebuttable", to: "triage#serious_risk_rebuttable_choose"
+    get "serious-risk-rebuttable/:id", to: "triage#serious_risk_rebuttable", as: "serious_risk_rebuttable"
+    patch "serious-risk-rebuttable/:id", to: "triage#serious_risk_rebuttable_choose"
+    put "serious-risk-rebuttable/:id", to: "triage#serious_risk_rebuttable_choose"
     get "perform-risk-triage", to: "triage#perform_risk_triage"
   end
 
-  get "tasks", to: "tasks#index"
-  get "tasks-serious-risk", to: "tasks#index_serious_risk"
+  get "tasks/:id", to: "tasks#index", as: "tasks"
 end

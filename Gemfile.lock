@@ -16,6 +16,7 @@ PATH
       pagy (~> 6.0)
       pg (~> 1.5)
       rails (>= 7.0.4.3)
+      store_attribute (~> 1.1)
       wicked (~> 2.0)
 
 GEM
@@ -600,6 +601,8 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
+    store_attribute (1.1.0)
+      activerecord (>= 6.0)
     strings (0.2.1)
       strings-ansi (~> 0.2)
       unicode-display_width (>= 1.5, < 3.0)

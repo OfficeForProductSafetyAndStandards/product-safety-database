@@ -37,13 +37,14 @@ en:
           attributes:
             full_risk_assessment_required:
               inclusion: Select whether the product requires a full risk assessment
-        prism/form/serious_risk:
+  activerecord:
+    errors:
+      models:
+        prism/risk_assessment:
           attributes:
-            poses_a_serious_risk:
+            risk_type:
               inclusion: Select whether the product poses a serious risk
-        prism/form/serious_risk_rebuttable:
-          attributes:
             less_than_serious_risk:
               inclusion: Select whether there are any factors
-            description:
+            serious_risk_rebuttable_factors:
               blank: Enter a description
