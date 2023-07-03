@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails.git
-  revision: b10ee20b8849b8409205049eaa533e6d6df82063
+  revision: 3243b6f04f4313dc82eeff7a3c1a8e152a8161db
   specs:
-    govuk-design-system-rails (0.10.3)
+    govuk-design-system-rails (0.10.5)
 
 PATH
   remote: prism
@@ -10,10 +10,13 @@ PATH
     prism (0.1.0)
       aasm (~> 5.5)
       aws-sdk-s3 (~> 1.122)
+      devise (~> 4.9)
       govuk-components (~> 4.0)
-      kaminari (~> 1.2)
+      govuk_design_system_formbuilder (~> 4.0)
+      pagy (~> 6.0)
       pg (~> 1.5)
       rails (>= 7.0.4.3)
+      store_attribute (~> 1.1)
       wicked (~> 2.0)
 
 GEM
@@ -249,6 +252,11 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
       view_component (~> 3.0.0)
+    govuk_design_system_formbuilder (4.0.0)
+      actionview (>= 6.1)
+      activemodel (>= 6.1)
+      activesupport (>= 6.1)
+      html-attributes-utils (~> 1)
     govuk_notify_rails (2.2.0)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -267,9 +275,6 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     interactor (3.1.2)
     jaro_winkler (1.5.4)
-    jbuilder (2.11.5)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     jmespath (1.6.2)
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
@@ -293,6 +298,8 @@ GEM
       kramdown (~> 2.0)
     launchy (2.5.2)
       addressable (~> 2.8)
+    loaf (0.10.0)
+      railties (>= 3.2)
     lograge (0.12.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -340,6 +347,14 @@ GEM
       racc (~> 1.4)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
+    opensearch-api (2.2.0)
+      multi_json
+    opensearch-ruby (2.1.0)
+      opensearch-api (~> 2.1)
+      opensearch-transport (~> 2.0)
+    opensearch-transport (2.1.0)
+      faraday (>= 1.0, < 3)
+      multi_json
     optimist (3.0.1)
     orm_adapter (0.5.0)
     pagy (6.0.4)
@@ -586,6 +601,8 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
+    store_attribute (1.1.0)
+      activerecord (>= 6.0)
     strings (0.2.1)
       strings-ansi (~> 0.2)
       unicode-display_width (>= 1.5, < 3.0)
@@ -669,25 +686,25 @@ DEPENDENCIES
   devise-encryptable (~> 0.2)
   dotenv-rails (~> 2.8)
   draper (~> 4.0)
-  elasticsearch
   elasticsearch-model
   elasticsearch-rails
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
-  govuk-design-system-rails (~> 0.10.3)!
+  govuk-design-system-rails (~> 0.10.5)!
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)
-  jbuilder (~> 2.11)
   jsbundling-rails
   kaminari (~> 1.2)
   launchy (~> 2.5)
+  loaf (~> 0.10)
   lograge (~> 0.12)
   m (~> 1.6)
   mini_magick (~> 4.12)
   net-imap
   net-pop
   net-smtp
+  opensearch-ruby
   paper_trail
   parallel_tests (~> 4.2.0)
   pg (~> 1.5)

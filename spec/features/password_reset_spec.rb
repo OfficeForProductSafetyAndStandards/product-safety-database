@@ -55,6 +55,12 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     expect(page).to have_link("Enter your email address in the correct format, like name@example.com", href: "#email")
   end
 
+  scenario "it does not show a breadcrumb" do
+    visit "/sign-in"
+    click_link "Forgot your password?"
+    expect(page).not_to have_css(".govuk-breadcrumbs__link")
+  end
+
   context "with a valid token" do
     scenario "entering a valid password resets your password" do
       request_password_reset

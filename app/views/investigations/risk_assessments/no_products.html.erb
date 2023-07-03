@@ -1,20 +1,8 @@
 <% page_heading =  "Add risk assessment" %>
 <%= page_title page_heading, errors: @risk_assessment_form.errors.any? %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: investigation_path(@investigation)
-  ) unless @investigation.new_record? %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
     <p>You need to <%= link_to "add a product to the case", new_investigation_product_path(@investigation) %> before you can add a risk assessment.</p>
-
   </div>
 </div>

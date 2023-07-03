@@ -1,15 +1,8 @@
 <% page_heading = "Edit the batch numbers" %>
-
 <%= page_title page_heading %>
-<%= govukBackLink(
-  text: "Back",
-  href: investigation_path(@investigation_product.investigation)
-) %>
-
 <%= form_with model: @investigation_product, url: investigation_product_batch_numbers_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       <% hint_html = capture do %>
         <span class="govuk-!-display-block govuk-!-margin-bottom-2">
           You can add and edit batch numbers for <%= @investigation_product.name %>.

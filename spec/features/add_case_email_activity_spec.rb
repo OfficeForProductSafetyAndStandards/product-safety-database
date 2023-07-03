@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Add case email activity", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
@@ -26,17 +26,21 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     click_link "Add supporting information"
 
     expect_to_be_on_add_supporting_information_page
+    expect_to_have_case_breadcrumbs
     choose "Correspondence"
     click_button "Continue"
 
     expect_to_be_on_add_correspondence_page
+    expect_to_have_case_breadcrumbs
     choose "Record email"
     click_button "Continue"
 
     expect_to_be_on_record_email_page
+    expect_to_have_case_breadcrumbs
 
     click_button "Add email"
     expect(page).to have_error_summary "Please provide either an email file or a subject and body"
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Email content" do
       attach_file "Upload a file", file
@@ -75,9 +79,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
     expect(page).to have_summary_item(key: "Email", value: "email_file.txt (0 Bytes)")
 
-    click_link "Back to case"
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-
+    click_link investigation.pretty_id
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -110,10 +112,12 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     click_link "Add supporting information"
 
     expect_to_be_on_add_supporting_information_page
+    expect_to_have_case_breadcrumbs
     choose "Correspondence"
     click_button "Continue"
 
     expect_to_be_on_add_correspondence_page
+    expect_to_have_case_breadcrumbs
     choose "Record email"
 
     click_button "Continue"
@@ -127,6 +131,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
 
     click_button "Add email"
 
+    expect_to_have_case_breadcrumbs
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date sent"
 
@@ -138,13 +143,10 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     click_link "Test summary"
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
-
     expect(page).to have_text("attachment_filename.txt")
     expect(page).to have_text("Test attachment description")
 
-    click_link "Back to case"
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-
+    click_link investigation.pretty_id
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

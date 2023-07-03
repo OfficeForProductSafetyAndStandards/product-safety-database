@@ -7,6 +7,7 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_o
 
   before do
     sign_in_and_navigate_to_add_to_case_page
+    create_list(:online_marketplace, 2, :approved)
   end
 
   context "when user does not select anything to add to case" do

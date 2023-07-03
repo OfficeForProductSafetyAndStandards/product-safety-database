@@ -2,13 +2,16 @@ class BusinessesController < ApplicationController
   include BusinessesHelper
   include UrlHelper
   include CountriesHelper
+  include BreadcrumbHelper
 
   before_action :set_search_params, only: %i[index]
   before_action :set_business, only: %i[show edit update]
   before_action :update_business, only: %i[update]
-  before_action :build_breadcrumbs, only: %i[show]
   before_action :set_countries, only: %i[update edit]
   before_action :set_sort_by_items, only: %i[index your_businesses team_businesses]
+  before_action :set_last_business_view_cookie, only: %i[index your_businesses team_businesses]
+
+  breadcrumb "businesses.label", :businesses_path
 
   # GET /businesses
   # GET /businesses.json
@@ -27,11 +30,14 @@ class BusinessesController < ApplicationController
   # GET /businesses/1.json
   def show
     @business = @business.decorate
+    breadcrumb breadcrumb_business_label, breadcrumb_business_path
   end
 
   # GET /businesses/1/edit
   def edit
     @business.locations.build unless @business.locations.any?
+    breadcrumb breadcrumb_business_label, breadcrumb_business_path
+    breadcrumb @business.trading_name, business_path(@business)
   end
 
   # PATCH/PUT /businesses/1
@@ -84,8 +90,8 @@ private
     defaults_on_primary_location(@business) if @business.locations.any?
   end
 
-  def build_breadcrumbs
-    @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
+  def set_last_business_view_cookie
+    cookies[:last_business_view] = params[:action]
   end
 
   def set_sort_by_items

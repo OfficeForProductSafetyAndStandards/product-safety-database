@@ -1,15 +1,6 @@
 <% page_heading = "Edit corrective action" %>
 <% page_title page_heading %>
 
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back",
-    href: investigation_corrective_action_path(@investigation, @corrective_action_form.id)
-  ) %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_action_path(@investigation, @corrective_action_form.id), method: :put, builder: ApplicationFormBuilder, html: { novalidate: true }, local: true do |form| %>

@@ -22,15 +22,19 @@ Gem::Specification.new do |spec|
     Dir["{app,config,db,lib}/**/*", "CHANGELOG.md", "Rakefile", "README.md"]
   end
 
+  # This should be kept in sync with the Ruby version used by the main app
   spec.required_ruby_version = ">= 3.2.1"
 
+  # Ensure any gems that are also used in the main app have the same version constraints
+  # Run `bundle install` for both this engine and the main app when adding or changing gems
   spec.add_runtime_dependency "aasm", "~> 5.5"
   spec.add_runtime_dependency "aws-sdk-s3", "~> 1.122"
+  spec.add_runtime_dependency "devise", "~> 4.9"
   spec.add_runtime_dependency "govuk-components", "~> 4.0"
-  spec.add_runtime_dependency "kaminari", "~> 1.2"
+  spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 4.0"
+  spec.add_runtime_dependency "pagy", "~> 6.0"
   spec.add_runtime_dependency "pg", "~> 1.5"
   spec.add_runtime_dependency "rails", ">= 7.0.4.3"
+  spec.add_runtime_dependency "store_attribute", "~> 1.1"
   spec.add_runtime_dependency "wicked", "~> 2.0"
-
-  spec.add_development_dependency "rspec-rails"
 end

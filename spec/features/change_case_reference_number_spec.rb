@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Edit an investigation's reference number", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Edit an case's reference number", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:team_mate) { create(:user, :activated, has_viewed_introduction: true, team: user.team) }
   let(:original_reference_number) { "123" }
@@ -15,8 +15,8 @@ RSpec.feature "Edit an investigation's reference number", :with_stubbed_opensear
 
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}/reference_numbers/edit", ignore_query: true
     expect(page).to have_css("h1", text: "Edit the reference number")
-
     expect(page).to have_field("complainant_reference", with: original_reference_number)
+    expect_to_have_case_breadcrumbs
 
     fill_in :complainant_reference, with: new_reference_number
 

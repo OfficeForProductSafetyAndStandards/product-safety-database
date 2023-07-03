@@ -27,7 +27,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_investigation_add_business_details_page
-    expect(page).to have_selector("legend", text: "The business details")
+    expect(page).to have_selector("legend", text: "Name and company number")
   end
 
   def expect_to_be_on_remove_business_page
@@ -43,8 +43,26 @@ module PageExpectations
   def expect_to_be_on_add_image_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
     expect(page).to have_selector("h1", text: "Add attachment")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
+  end
+
+  def expect_to_have_case_breadcrumbs
+    expect(page).to have_breadcrumb("Cases")
+    expect(page).to have_breadcrumb(investigation.pretty_id)
+  end
+
+  def expect_to_have_business_breadcrumbs
+    expect(page).to have_breadcrumb("Businesses")
+    expect(page).to have_breadcrumb(business.trading_name)
+  end
+
+  def expect_to_have_product_breadcrumbs
+    expect(page).to have_breadcrumb("Products")
+    expect(page).to have_breadcrumb(product.name)
+  end
+
+  def expect_to_have_account_breadcrumbs
+    expect(page).to have_breadcrumb("Your account")
   end
 
   def expect_to_view_supporting_information_sections(can_view_protected_details:)
@@ -238,13 +256,11 @@ module PageExpectations
   def expect_to_be_on_edit_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.to_param}/edit")
     expect(page).to have_selector("h2", text: "Edit attachment")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_remove_attachment_confirmation_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_case_created_page

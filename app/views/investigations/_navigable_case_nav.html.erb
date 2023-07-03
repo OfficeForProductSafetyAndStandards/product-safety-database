@@ -1,6 +1,4 @@
 <% display_link = local_assigns[:display_link].nil? ? policy(@investigation).update? : local_assigns[:display_link] %>
-<%= render "investigations/pages_top", investigation: investigation %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
     <span class="govuk-caption-m <%= " opss-visibility-hidden" if current_tab == "overview" %>"><%= current_tab == "overview" ? "Case page" : investigation.pretty_description %></span>

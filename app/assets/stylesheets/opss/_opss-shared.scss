@@ -5,6 +5,10 @@
   display: inline-block;
 }
 
+@mixin refresh-link($color, $size) {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="' + $size + '" height="' + $size + '" viewBox="0 0 24 24"><path d="M13.5 2c-5.629 0-10.212 4.436-10.475 10h-3.025l4.537 5.917 4.463-5.917h-2.975c.26-3.902 3.508-7 7.475-7 4.136 0 7.5 3.364 7.5 7.5s-3.364 7.5-7.5 7.5c-2.381 0-4.502-1.119-5.876-2.854l-1.847 2.449c1.919 2.088 4.664 3.405 7.723 3.405 5.798 0 10.5-4.702 10.5-10.5s-4.702-10.5-10.5-10.5z" fill="' + $color + '"/></svg>');
+}
+
 @function calculaterem($s) {
   $remsize: $s / 16px;
   @return #{$remsize}rem;
@@ -28,12 +32,20 @@
   hyphens: auto;
 }
 
+@mixin hover-underline() {
+  text-decoration-thickness: .15em !important;
+  text-decoration-thickness: .1875rem !important;
+}
+
 $std-font-family: "GDS Transport", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
 form.opss-cookie-form {
   // for the cookie banner
   display: flex;
 }
+
+// input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {color:  govuk-colour("mid-grey"); }
+// input[type="checkbox"]:disabled + label {opacity: 1 !important; }
 
 // not normalised by gds library - starts
 figure,
@@ -48,11 +60,6 @@ figcaption {
 @include govuk-media-query($from: desktop) {
   .govuk-width-container > main.govuk-main-wrapper {
     padding-top: govuk-spacing(8);
-  }
-
-  .govuk-width-container > .govuk-breadcrumbs + main.govuk-main-wrapper,
-  .govuk-width-container > .govuk-back-link + main.govuk-main-wrapper {
-    padding-top: govuk-spacing(2);
   }
 }
 
@@ -77,10 +84,12 @@ main.govuk-main-wrapper {
 .govuk-heading-m a,
 .govuk-heading-s a,
 .app-task-list li,
-.app-task-list li a {
+.app-task-list li a,
+.govuk-grid-column-one-half > div > div > label {
   @include word-wrap;
 }
 
+// tbody th  {-webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto; }
 .govuk-summary-list .govuk-link,
 .opss-table td a,
 .opss-table tbody tr th:first-child,
@@ -99,12 +108,28 @@ h1.govuk-label-wrapper label.govuk-label--l {
   hyphens: unset;
 }
 
+// .opss-secondary-text-colour {color: $govuk-secondary-text-colour; }
+// .opss-weight-normal {font-weight: normal;
+//   *[class^="govuk-heading"] & {
+//     font-weight: 400;
+//   }
+// }
+
+.govuk-back-link:hover,
+.govuk-breadcrumbs__link:hover {
+  @include hover-underline;
+}
+
 main {
-  a.govuk-link:hover {
+  a.govuk-link:hover,
+  .govuk-details .govuk-details__summary-text:hover {
     text-decoration-skip-ink: none;
     text-decoration: underline !important;
-    text-decoration-thickness: .1875rem !important;
-    text-decoration-thickness: .15em !important;
+    @include hover-underline;
+  }
+
+  .opss-button-link:hover {
+    @include hover-underline;
   }
 
   a.govuk-link:active,
@@ -124,6 +149,10 @@ main {
   }
 }
 
+p.opss-max-width {
+  max-width: none !important;
+}
+
 .opss-font-size-14,
 .govuk-\!-font-size-14 {
   // future proof the 14px which is required for legacy dashboard designs
@@ -133,7 +162,6 @@ main {
 }
 
 @media (min-width: 40.0625em) {
-
   // future proof the 14px which is required for legacy dashboard designs
   .opss-font-size-14,
   .govuk-\!-font-size-14 {
@@ -154,12 +182,12 @@ body.js-enabled .opss-nojs-hide {
 .js-enabled {
   .opss-js-enabled-hidden {
     display: none;
+    // @include govuk-visually-hidden;
   }
 }
 
 .opss-br-desktop {
   display: none;
-
   @include govuk-media-query($from: desktop) {
     display: block;
     line-height: 0;
@@ -172,14 +200,12 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-hidden-desktop {
   visibility: visible;
-
   @include govuk-media-query($from: desktop) {
     visibility: hidden;
   }
 }
 
 @include govuk-media-query($from: mobile, $until: desktop, $and: false, $media-type: "all") {
-
   // for desktop only
   .opss-keep-for-desktop {
     display: none;
@@ -199,7 +225,6 @@ body.js-enabled .opss-nojs-hide {
 }
 
 @include govuk-media-query($from: mobile, $until: tablet, $and: false, $media-type: "all") {
-
   // for mobile only
   .opss-float-left--mobile {
     display: block;
@@ -210,6 +235,14 @@ body.js-enabled .opss-nojs-hide {
 
   .opss-padding-bottom-4-mobile {
     padding-bottom: govuk-spacing(4);
+  }
+
+  .opss-padding-bottom-3-mobile {
+    padding-bottom: govuk-spacing(3);
+  }
+
+  .opss-padding-bottom-2-mobile {
+    padding-bottom: govuk-spacing(2);
   }
 }
 
@@ -254,7 +287,6 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-margin-bottom-1-desktop {
   margin-bottom: govuk-spacing(4);
-
   @include govuk-media-query($from: desktop) {
     margin-bottom: govuk-spacing(1);
   }
@@ -262,7 +294,6 @@ body.js-enabled .opss-nojs-hide {
 
 .opss-margin-top-1-mobile {
   margin-top: govuk-spacing(4);
-
   @include govuk-media-query($from: tablet) {
     margin-top: govuk-spacing(1);
   }
@@ -329,7 +360,6 @@ body.js-enabled .opss-nojs-hide {
 }
 
 @include govuk-media-query($from: desktop) {
-
   // use on
   .opss-right-box-arrow {
     position: relative;
@@ -363,7 +393,6 @@ body.js-enabled .opss-nojs-hide {
 }
 
 .opss-warning-text--s {
-
   // make warning text smaller and allow several in succession
   strong {
     @include opss-font-size($s: 16px, $l: 1.3);
@@ -438,21 +467,27 @@ samp {
   text-underline-offset: .1em;
 }
 
-.opss-download-link-sm {
+span.opss-download-link-sm {
   @include down-load-link(rgba($govuk-link-colour, .9), 16);
   width: 10px;
   height: 10px;
   margin-right: 5px;
 }
 
-.opss-download-link-m {
+span.opss-download-link-m {
   @include down-load-link(rgba($govuk-link-colour, .9), 20);
   width: 17px;
   height: 17px;
   margin-right: 5px;
-
   position: relative;
   top: 2px;
+}
+
+a.opss-download-link-m {
+  @include down-load-link(rgba($govuk-link-colour, .9), 20);
+  background-position: left;
+  background-size: auto;
+  padding-left: 25px;
 }
 
 .opss-2-col-flow,
@@ -524,6 +559,10 @@ samp {
         width: 36% !important;
         @include word-wrap;
       }
+
+      // dt + dd { // FF dosen't like
+      //   text-align: center;
+      // }
     }
   }
 
@@ -546,13 +585,13 @@ samp {
 
         span {
           @include opss-font-size($s: 14px, $l: 1.2);
+          // position: relative; top: -1px;
         }
       }
     }
   }
 
   @-moz-document url-prefix("") {
-
     // firefox only: col flow bug
     .opss-2-col-flow,
     .opss-3-col-flow {
@@ -589,7 +628,7 @@ samp {
     @include opss-font-size($s: 16px, $l: 1.2);
 
     &:before {
-      content: "—";
+      content: "-";
       margin-left: - govuk-spacing(4);
       color: $govuk-secondary-text-colour;
     }
@@ -649,6 +688,10 @@ ul.opss-left-nav {
     }
   }
 
+  // &  >  li  >  ul.govuk-list { // 2nd nested ULs
+  //   padding-top: govuk-spacing(1); margin: govuk-spacing(4) 0 govuk-spacing(2) 0;
+  // }
+
   & > li:first-child {
     padding-top: 5px;
   }
@@ -683,6 +726,19 @@ ul.opss-left-nav {
 
 a.opss-secondary-text sup[class$="font-size-14"] {
   color: $govuk-secondary-text-colour;
+}
+
+.opss-body-inverse {
+  color: govuk-colour("white");
+}
+
+.govuk-button.govuk-link--inverse {
+  color: $govuk-brand-colour;
+  background-color: govuk-colour("white");
+
+  &:hover {
+    background-color: govuk-colour("light-grey");
+  }
 }
 
 div[class$="inset-text"] > ol li:last-child {
@@ -737,9 +793,13 @@ div[class$="inset-text"] > ol li:last-child {
     box-shadow: 3px 4px 6px 0 #ebebeb;
   }
 
+  // 2px 2px 10px govuk-colour("mid-grey");
   .opss-border-all {
     border-width: 1px;
   }
+
+  // .opss-border-all--padding-sm {padding: govuk-spacing(1); }
+  // a.opss-border-all--padding-sm {padding: 7px 13px 8px 11px; }
 
   a[class*="font-size-14"].opss-border-all {
     line-height: 1.2 !important;
@@ -749,12 +809,6 @@ div[class$="inset-text"] > ol li:last-child {
 .opss-border-all-perm {
   // for all screen sizes
   border-width: 1px;
-}
-
-@include govuk-media-query($until: tablet) {
-  .opss-border-all {
-    padding: govuk-spacing(0) !important;
-  }
 }
 
 .opss-details--sm {
@@ -785,11 +839,15 @@ div[class$="inset-text"] > ol li:last-child {
 
 .opss-button-link {
   background-color: transparent !important;
+  border-top: none !important;
+  border-right: none !important;
   border-bottom: none !important;
+  border-left: none !important;
   box-shadow: none !important;
   padding: 0;
   color: $govuk-link-colour;
   text-decoration: underline;
+  cursor: pointer;
 
   &:visited {
     color: $govuk-link-colour;
@@ -820,6 +878,15 @@ div[class$="inset-text"] > ol li:last-child {
   background-repeat: no-repeat;
 }
 
+input[type="button"].opss-button-refresh,
+button.opss-button-refresh {
+  @include refresh-link(rgb($govuk-link-colour, .9), 18);
+  background-position-x: 0;
+  background-position-y: 0;
+  background-size: 18px 18px;
+  padding-left: 24px;
+}
+
 .opss-details-img {
   max-height: 300px;
   max-width: 100%;
@@ -838,6 +905,7 @@ div[class$="inset-text"] > ol li:last-child {
 
 section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figure.opss-margin-bottom-1-desktop {
   max-height: 105px;
+
   // quick fix for smooth page loading on case products pg - when img height loads = zero pg movement
 }
 
@@ -924,7 +992,6 @@ dl.opss-summary-list-aside {
 }
 
 .opss-summary-list-mixed {
-
   // this class was the solution for rows which did and didn't have action links, prior to GDS v4 and .opss-summary-list-mixed
   & > div {
     // std summary list but allows for a mixture of 2 & 3 cols in 1 list
@@ -939,6 +1006,7 @@ dl.opss-summary-list-aside {
       dt + dd {
         min-width: 40%;
         width: auto;
+
         // 1. protects against rogue legacy psd invalid html
       }
     }
@@ -949,6 +1017,7 @@ dl.opss-summary-list-aside {
       -ms-word-break: break-all;
       word-break: break-all;
       word-break: break-word;
+
       // no adding hypens
     }
 
@@ -1066,14 +1135,12 @@ dl.opss-summary-list-aside {
   }
 
   @-moz-document url-prefix("") {
-
     // firefox only: align 1st dd (without a 2nd) correctly
     .govuk-summary-list__row dd:last-child {
       width: inherit;
     }
 
     &.opss-summary-list-mixed--narrow-actions > div {
-
       // firefox only: col flow bug
       dd[class$="__actions"] {
         width: auto;
@@ -1084,7 +1151,6 @@ dl.opss-summary-list-aside {
 
 @include govuk-media-query($from: desktop) {
   .opss-summary-list-mixed.opss-summary-list-mixed--sm {
-
     // a narrow and small font version
     dt {
       width: 25% !important;
@@ -1103,7 +1169,6 @@ dl.opss-summary-list-aside {
 
     dt,
     dd {
-      @include opss-font-size($s: 16px, $l: 1.2);
       padding-top: govuk-spacing(1);
       padding-bottom: govuk-spacing(1);
     }
@@ -1140,23 +1205,53 @@ dl.opss-summary-list-aside {
       }
     }
   }
+
+  .opss-select--min-width-300 {
+    min-width: 300px;
+  }
+
+  .opss-select--min-width-350 {
+    min-width: 350px;
+  }
 }
 
-// bespoke styles for Cases accordian section on a product page ... starts
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt {
-  width: 35%;
+.opss-summary-list-mixed.opss-summary-list-mixed--sm-font {
+  dt,
+  dd {
+    @include opss-font-size($s: 16px, $l: 1.2);
+  }
 }
 
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd,
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd + dd {
-  width: 25%;
+@include govuk-media-query($until: desktop) {
+  // bespoke styles for Cases accordian section on a product page
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt,
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd {
+    width: 100% !important;
+    display: revert;
+  }
 }
 
-.opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd:last-of-type {
-  width: 15%;
-}
+@include govuk-media-query($from: desktop) {
+  // bespoke styles for Cases accordian section on a product page
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dt {
+    width: 35%;
+  }
 
-// bespoke styles for Cases accordian section on a product page ... ends
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd,
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd + dd {
+    width: 25%;
+  }
+
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd:last-of-type {
+    width: 15%;
+  }
+
+  .opss-summary-list-mixed.opss-summary-list-mixed--4-cols dd {
+    .opss-tag--plain {
+      min-width: auto;
+    }
+  }
+}
 
 dd dl.opss-nested-definition-list {
   margin: 0;
@@ -1242,6 +1337,12 @@ dd dl.opss-nested-definition-list {
       font-weight: normal;
     }
 
+    & > .govuk-form-group > .govuk-fieldset .opss-grouping__legend--s {
+      top: - govuk-spacing(2) - 3;
+      padding-left: govuk-spacing(2);
+      padding-right: govuk-spacing(2);
+    }
+
     & > dl {
       margin-bottom: 0;
 
@@ -1251,10 +1352,63 @@ dd dl.opss-nested-definition-list {
       }
     }
 
+    // &  >  dl  >  div:last-child {
+    //   border-bottom: none;
+    // }
+
     & dl:last-of-type > div:last-child {
       border-bottom: none;
     }
+
+    .govuk-radios--inline .govuk-radios__conditional {
+      border-left: none;
+      padding-left: govuk-spacing(0);
+      margin-left: govuk-spacing(0);
+    }
+
+    .govuk-radios--small .govuk-radios__conditional {
+      .govuk-label,
+      .govuk-select {
+        @include opss-font-size($s: 16px, $l: 1.2);
+      }
+
+      .govuk-label {
+        padding-top: govuk-spacing(2);
+      }
+    }
+
+    &.govuk-grid-column-one-half .govuk-select {
+      width: 100%;
+    }
+
+    body:not(.js-enabled) & {
+      .govuk-radios--inline.govuk-radios--small:last-child {
+        .govuk-radios__item input[data-aria-controls] + .govuk-radios__label {
+          background-color: govuk-colour("light-grey");
+          padding-left: 45px;
+          margin-left: - 40px;
+
+          &:before {
+            left: 5px;
+          }
+
+          &:after {
+            left: 12px;
+          }
+        }
+
+        .govuk-radios__conditional {
+          width: fit-content;
+          background-color: govuk-colour("light-grey");
+          padding: 0 govuk-spacing(2) govuk-spacing(2) govuk-spacing(2);
+        }
+      }
+    }
   }
+}
+
+label.opss-grouping__heading--norm {
+  font-weight: bold;
 }
 
 @include govuk-media-query($from: tablet) {
@@ -1427,6 +1581,11 @@ dd dl.opss-nested-definition-list {
     @include govuk-font($size: 19);
   }
 
+  // tbody tr:last-child td a {
+  //   @include govuk-font($size: 16);
+  // }
+
+  // tbody tr:not(:first-child):not(:last-child) td, tbody tr:not(:first-child):not(:last-child) th,
   tbody tr:nth-child(2) th,
   tbody tr:nth-child(2) td {
     padding-top: govuk-spacing(0);
@@ -1444,6 +1603,7 @@ dd dl.opss-nested-definition-list {
     padding-top: govuk-spacing(0);
   }
 
+  // th[colspan="3"], tfoot th {padding-top: govuk-spacing(7); }
   tbody tr:first-child th,
   tbody tr:not(:last-child) > *,
   tfoot tr th {
@@ -1461,7 +1621,6 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table--borders {
-
     // add horizontal lines to simple single rows table in one parent tbody
     tbody tr {
       th,
@@ -1505,7 +1664,6 @@ dd dl.opss-nested-definition-list {
   }
 
   &.opss-table-items--first-col-50 {
-
     // no hidden 1st col
     @include govuk-media-query($from: tablet) {
       thead th:nth-child(1) {
@@ -1572,20 +1730,18 @@ dd dl.opss-nested-definition-list {
 
   .opss-desktop-margin-bottom-240px {
     margin-bottom: 240px !important;
-    // aligns bottom of tbody
   }
 
   .opss-desktop-margin-bottom-220px {
     margin-bottom: 220px !important;
-    // aligns bottom of tbody
   }
 }
 
 @media only screen and (min-width: 641px) and (max-width: 961px) {
-
   // jump to mobile sizing at tablet size for tight cols
   .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
     @include govuk-font($size: 16);
+    min-width: fit-content;
   }
 }
 
@@ -1611,25 +1767,4 @@ dd dl.opss-nested-definition-list {
     margin-bottom: -2px;
     margin-right: govuk-spacing(1) - 2;
   }
-}
-
-.opss-colour-block-title {
-  background-color: #0b0c0c;
-  padding: 10px 20px;
-  margin-bottom: 15px;
-}
-
-.opss-colour-block-title.opss-colour-block-title--blue {
-  background-color: #1d70b8;
-}
-
-.opss-colour-block-title h2,
-.opss-colour-block-title h3 {
-  color: #ffffff;
-  text-align: center;
-  margin: 0;
-}
-
-.opss-brand-text {
-  color: #1d70b8;
 }

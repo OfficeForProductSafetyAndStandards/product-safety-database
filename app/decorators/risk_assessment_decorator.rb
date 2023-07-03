@@ -53,6 +53,10 @@ class RiskAssessmentDecorator < ApplicationDecorator
     h.safe_join(values, h.tag.br)
   end
 
+  def case_id
+    object.investigation.pretty_id
+  end
+
 private
 
   def products_description

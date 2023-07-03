@@ -1,14 +1,5 @@
 <% page_heading = "Change case owner" %>
 <%= page_title page_heading %>
-<% content_for :back_link do %>
-  <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
-  ) %>
-<% end %>
-
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= render "investigations/ownership/owner_form", investigation: @investigation, change_case_owner_form: @form do %>

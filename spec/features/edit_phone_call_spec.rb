@@ -11,7 +11,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     visit "/cases/#{investigation.pretty_id}/phone-calls/#{correspondence.id}"
 
     click_on "Edit phone call"
-
+    expect_to_have_case_breadcrumbs
     expect(page).to have_title("Edit phone call: #{correspondence.title}")
 
     # Test update without changing anything
@@ -24,6 +24,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     visit "/cases/#{investigation.pretty_id}/phone-calls/#{correspondence.id}"
 
     click_on "Edit phone call"
+    expect_to_have_case_breadcrumbs
 
     within_fieldset("Who was the call with?") do
       expect(page).to have_field("Name",         with: correspondence.correspondent_name)
@@ -46,13 +47,11 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     page.first("details summary span", text: "Replace this file").click
     attach_file "Upload a file", new_transcript
     click_on "Update phone call"
-
     click_on correspondence.overview
 
     expect(page).to have_summary_item(key: "Transcript", value: "#{new_transcript.basename} (30 Bytes)")
 
-    click_on "Back to case: #{investigation.pretty_id}"
-
+    click_on investigation.pretty_id
     click_on "Activity"
 
     activity = correspondence.activities.order(created_at: :desc).find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
@@ -89,7 +88,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_opensearch, :wit
     expect(page).to have_summary_item(key: "Transcript",   value: "#{new_transcript.basename} (30 Bytes)")
     expect(page).to have_summary_item(key: "Notes",        value: new_details)
 
-    click_on "Back to case: #{investigation.pretty_id}"
+    click_on investigation.pretty_id
     click_on "Activity"
 
     activity = correspondence.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Changing case ownership", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, creator: user) }
@@ -16,6 +16,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       create_opss_teams
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
+      expect_to_have_case_breadcrumbs
     end
 
     scenario "does not show inactive users or teams" do
@@ -29,31 +30,20 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       expect(page).not_to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
     end
 
-    scenario "shows OPSS management team" do
+    scenario "shows correct fields" do
       expect(page).to have_field("OPSS Incident Management")
-      # expect(find_field("OPSS Incident Management")).to eq true
-    end
-
-    scenario "does not show OPSS Trading Standards Co-ordination team" do
       expect(page).not_to have_field("OPSS Trading Standards Co-ordination")
-    end
-
-    scenario "does not show OPSS Enforcement team" do
       expect(page).not_to have_field("OPSS Enforcement")
-    end
-
-    scenario "does not show OPSS Operational support unit team" do
       expect(page).not_to have_field("OPSS Operational support unit")
-    end
-
-    scenario "has current owner pre-selected" do
       expect(page).to have_checked_field(user.name)
+      expect_to_have_case_breadcrumbs
     end
 
     scenario "change owner to the same user" do
       choose user.name
       click_button "Continue"
 
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
       expect_page_to_show_case_owner(user)
@@ -66,11 +56,13 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       click_button "Continue"
 
       expect(page).to have_summary_error("Select case owner")
+      expect_to_have_case_breadcrumbs
 
       choose("Someone else in your team")
       select another_active_user.name, from: "change_case_owner_form_select_team_member"
       click_button "Continue"
 
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
       expect_confirmation_banner("Case owner changed to #{another_active_user.name}")
@@ -82,6 +74,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       choose user.team.name
       click_button "Continue"
 
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
       expect_confirmation_banner("Case owner changed to #{user.team.name}")
@@ -94,6 +87,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       select another_active_user_another_team.name, from: "change_case_owner_form_select_someone_else"
       click_button "Continue"
 
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
       expect_page_to_show_case_owner(another_active_user_another_team)
@@ -112,17 +106,11 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       visit "/cases/#{investigation.pretty_id}/assign/new"
     end
 
-    scenario "shows OPSS management team" do
+    scenario "shows correct fields" do
       expect(page).to have_field("OPSS Incident Management")
-      # expect(find_field("OPSS Incident Management")).to eq true
-    end
-
-    scenario "shows OPSS Trading Standards Co-ordination team" do
       expect(page).to have_field("OPSS Trading Standards Co-ordination")
-    end
-
-    scenario "shows OPSS Enforcement team" do
       expect(page).to have_field("OPSS Enforcement")
+      expect_to_have_case_breadcrumbs
     end
   end
 
@@ -153,6 +141,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
     scenario "shows other teams in the `Other teams added to the case` section" do
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
+      expect_to_have_case_breadcrumbs
       expect(page).to have_css(".govuk-radios__divider", text: "Other teams added to the case")
       expect(page).to have_field(other_team_with_edit_access.name)
       expect(page).to have_field(other_team_with_read_only_access.name)
@@ -165,6 +154,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
     scenario "does not show `Other teams added to the case` section" do
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
+      expect_to_have_case_breadcrumbs
       expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
       expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
     end

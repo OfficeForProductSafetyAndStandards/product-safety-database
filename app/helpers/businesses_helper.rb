@@ -48,20 +48,4 @@ module BusinessesHelper
   def set_business
     @business = Business.find(params[:id])
   end
-
-private
-
-  def build_breadcrumb_structure
-    {
-      items: [
-        {
-          text: "Businesses",
-          href: businesses_path
-        },
-        {
-          text: @business.trading_name
-        }
-      ]
-    }
-  end
 end

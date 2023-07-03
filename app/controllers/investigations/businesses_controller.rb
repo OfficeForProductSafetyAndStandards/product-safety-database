@@ -1,27 +1,29 @@
-class Investigations::BusinessesController < ApplicationController
+class Investigations::BusinessesController < Investigations::BaseController
   include BusinessesHelper
   include CountriesHelper
 
   before_action :set_investigation
   before_action :set_investigation_business, except: %i[destroy remove]
+  before_action :authorize_investigation_non_protected_details
   before_action :authorize_user_for_business_updates, except: %i[index new remove destroy]
   before_action :set_countries, only: %i[new create show update]
+  before_action :set_investigation_breadcrumbs
 
-  def index
-    @breadcrumbs = {
-      items: [
-        { text: "Cases", href: all_cases_investigations_path },
-        { text: @investigation.pretty_description }
-      ]
-    }
-  end
+  def index; end
 
   def new
     @business_form = AddBusinessToCaseForm.new(current_user:)
   end
 
   def create
-    @business_form = AddBusinessToCaseForm.new(business_form_params.merge(current_user:, relationship: session[:business_type]))
+    @business_form = AddBusinessToCaseForm.new(
+      business_form_params.merge(
+        current_user:,
+        relationship: session[:business_type],
+        online_marketplace_id: session[:online_marketplace_id],
+        other_marketplace_name: session[:other_marketplace_name],
+      )
+    )
 
     if @business_form.valid?
       @business = @business_form.business_object
@@ -30,6 +32,8 @@ class Investigations::BusinessesController < ApplicationController
         AddBusinessToCase.call!(
           business: @business,
           relationship: @business_form.relationship,
+          online_marketplace: @business_form.online_marketplace,
+          other_marketplace_name: @business_form.other_marketplace_name,
           investigation: @investigation,
           user: current_user
         )
@@ -86,10 +90,8 @@ class Investigations::BusinessesController < ApplicationController
 
 private
 
-  def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-    @investigation = investigation.decorate
+  def authorize_user_for_non_protected_details
+    authorize @investigation, :view_non_protected_details?
   end
 
   def authorize_user_for_business_updates

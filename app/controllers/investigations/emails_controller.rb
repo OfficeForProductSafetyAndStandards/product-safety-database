@@ -1,7 +1,9 @@
-class Investigations::EmailsController < ApplicationController
+class Investigations::EmailsController < Investigations::BaseController
+  before_action :set_investigation
+  before_action :authorize_investigation_protected_details
+  before_action :set_investigation_breadcrumbs
+
   def show
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :view_protected_details?
-    @email = @investigation.emails.find(params[:id]).decorate
+    @email = @investigation_object.emails.find(params[:id]).decorate
   end
 end

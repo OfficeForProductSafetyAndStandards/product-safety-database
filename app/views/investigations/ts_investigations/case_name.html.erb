@@ -1,11 +1,5 @@
 <% page_heading = "What is the case name?" %>
-
 <%= page_title page_heading, errors: @case_name_form.errors.any? %>
-<%= govukBackLink(
-  text: "Back",
-  href: wizard_path(:reference_number)
-) %>
-
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

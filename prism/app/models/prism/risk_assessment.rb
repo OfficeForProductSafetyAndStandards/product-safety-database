@@ -1,4 +1,5 @@
 require "aasm"
+require "store_attribute"
 
 module Prism
   class RiskAssessment < ApplicationRecord
@@ -10,26 +11,33 @@ module Prism
     has_many :harm_scenarios
 
     enum risk_type: {
-      "prohibited_chemicals" => "prohibited_chemicals",
-      "non_compliant_category_iii_ppe" => "non_compliant_category_iii_ppe",
-      "assessed_by_opss_as_serious_risk" => "assessed_by_opss_as_serious_risk",
-      "other" => "other",
+      "normal_risk" => "normal_risk",
+      "serious_risk" => "serious_risk",
     }
 
-    enum assessed_before: {
-      "yes" => "yes",
-      "no" => "no",
-      "dont_know" => "dont_know",
-    }
+    store_attribute :routing_questions, :less_than_serious_risk, :boolean
 
-    aasm do
+    validates :risk_type, inclusion: %w[normal_risk serious_risk], on: :serious_risk
+    validates :less_than_serious_risk, inclusion: [true, false], on: :serious_risk_rebuttable
+    validates :serious_risk_rebuttable_factors, presence: true, if: -> { less_than_serious_risk }, on: :serious_risk_rebuttable
+
+    before_save :clear_serious_risk_rebuttable_factors
+
+    # The state machine is used only on submission
+    # Tasks within a risk assessment are handled by the wizard
+    aasm column: :state do
       state :draft, initial: true
-      state :assessment_details_completed
-      state :existing_product_chosen
-      state :product_market_details_completed
-      state :product_hazards_completed
-      state :product_harm_scenarios_completed
       state :submitted
+
+      event :submit do
+        transitions from: :draft, to: :submitted
+      end
+    end
+
+  private
+
+    def clear_serious_risk_rebuttable_factors
+      self.serious_risk_rebuttable_factors = nil unless less_than_serious_risk
     end
   end
 end

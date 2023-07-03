@@ -1,17 +1,11 @@
 module Investigations
-  class ActivitiesController < ApplicationController
+  class ActivitiesController < Investigations::BaseController
     include ActionView::Helpers::SanitizeHelper
+    before_action :set_investigation_with_associations
+    before_action :set_investigation_breadcrumbs
 
     def show
-      set_investigation_with_associations
       @investigation = @investigation.decorate
-
-      @breadcrumbs = {
-        items: [
-          { text: "Cases", href: all_cases_investigations_path },
-          { text: @investigation.pretty_description }
-        ]
-      }
     end
 
   private

@@ -18,6 +18,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
     visit "/cases/#{investigation.pretty_id}"
 
     click_link "Add a comment"
+    expect_to_have_case_breadcrumbs
 
     add_comment
 
@@ -49,6 +50,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
 
       visit "/cases/#{investigation.pretty_id}"
       click_link "Add a comment"
+      expect_to_have_case_breadcrumbs
 
       add_comment
 

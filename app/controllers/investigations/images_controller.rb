@@ -1,17 +1,9 @@
 module Investigations
-  class ImagesController < ApplicationController
-    def index
-      investigation = Investigation
-                        .find_by!(pretty_id: params[:investigation_pretty_id])
+  class ImagesController < Investigations::BaseController
+    before_action :set_investigation
+    before_action :authorize_investigation_non_protected_details
+    before_action :set_investigation_breadcrumbs
 
-      authorize investigation, :view_non_protected_details?
-      @investigation = investigation.decorate
-      @breadcrumbs = {
-        items: [
-          { text: "Cases", href: all_cases_investigations_path },
-          { text: @investigation.pretty_description }
-        ]
-      }
-    end
+    def index; end
   end
 end

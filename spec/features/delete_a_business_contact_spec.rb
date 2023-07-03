@@ -22,13 +22,11 @@ RSpec.feature "Deleting a business contact", :with_stubbed_opensearch, :with_stu
     click_link "Remove contact"
 
     expect_to_be_on_remove_contact_for_a_business_page(business_id: business.id, contact_id: contact.id)
-
-    expect(page).to have_link("Back", href: "/businesses/#{business.id}")
-
     expect(page).to have_text("Mr Smith")
     expect(page).to have_text("smith@example.com")
     expect(page).to have_text("Manager")
     expect(page).to have_text("01632 960 001")
+    expect_to_have_business_breadcrumbs
 
     click_button "Remove contact"
 

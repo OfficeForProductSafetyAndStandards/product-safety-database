@@ -1,32 +1,8 @@
 <% page_heading = "Attachment" %>
 <%= page_title page_heading %>
-
-<% if @parent.is_a?(Investigation) %>
-  <% @investigation = @parent %>
-
-  <% content_for :back_link do %>
-    <%= govukBackLink(
-      text: "Back to #{@investigation.pretty_description.downcase}",
-      href: investigation_supporting_information_index_path(@investigation)
-    ) %>
-  <% end %>
-
-  <%= render "investigations/pages_top", investigation: @investigation %>
-
-<% else %>
-  <% content_for :after_header do %>
-    <%= govukBackLink(
-      text: "Back",
-      href: attachments_tab_path(@parent)
-    ) %>
-  <% end %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
         Added <%= @document_upload.created_at.to_formatted_s(:govuk) %>
