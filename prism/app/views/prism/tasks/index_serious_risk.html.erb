@@ -1,5 +1,4 @@
 <% content_for :page_title, "Evaluate the product deemed serious risk" %>
-<% @back_link_href = serious_risk_rebuttable_path(@prism_risk_assessment) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -7,29 +6,7 @@
     <% if @prism_risk_assessment.draft? %>
       <p class="govuk-body govuk-!-font-weight-bold">Risk evaluation incomplete</p>
     <% end %>
-    <p class="govuk-body">You have completed <%= sections_complete %> of <%= sections.length %> sections.</p>
-    <ol class="govuk-list govuk-list--number govuk-heading-m">
-      <% sections.each_with_index do |section, section_index| %>
-        <li>
-          <h2 class="govuk-heading-m"><%= section[:title] %></h2>
-          <ul class="govuk-task-list">
-            <% section[:tasks].each_with_index do |task, task_index| %>
-              <li class="govuk-task-list__item<% if task.last.present? %> govuk-task-list__item--with-link<% end %>">
-                <div class="govuk-task-list__task-name-and-hint">
-                  <% if task.last.present? %>
-                    <a class="govuk-link govuk-task-list__link" href="<%= task.last %>" aria-describedby="task-list-<%= section_index %>-<%= task_index %>-status"><%= task.first %></a>
-                  <% else %>
-                    <div><%= task.first %></div>
-                  <% end %>
-                </div>
-                <div class="govuk-task-list__status" id="task-list-<%= section_index %>-<%= task_index %>-status">
-                  <%= govuk_tag(text: "Cannot start yet", colour: "grey") %>
-                </div>
-              </li>
-            <% end %>
-          </ul>
-        </li>
-      <% end %>
-    </ol>
+    <p class="govuk-body">You have completed <%= sections_complete %> of <%= serious_risk_sections.count %> sections.</p>
+    <%= render partial: "task_list", locals: { sections: serious_risk_sections } %>
   </div>
 </div>

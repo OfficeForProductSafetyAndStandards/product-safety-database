@@ -20,6 +20,7 @@ module Prism
     validates :risk_type, inclusion: %w[normal_risk serious_risk], on: :serious_risk
     validates :less_than_serious_risk, inclusion: [true, false], on: :serious_risk_rebuttable
     validates :serious_risk_rebuttable_factors, presence: true, if: -> { less_than_serious_risk }, on: :serious_risk_rebuttable
+    validates :assessor_name, :assessment_organisation, presence: true, on: :add_assessment_details
 
     before_save :clear_serious_risk_rebuttable_factors
 

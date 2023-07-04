@@ -33,7 +33,7 @@ module Prism
         if @prism_risk_assessment.serious_risk?
           redirect_to serious_risk_rebuttable_path(@prism_risk_assessment)
         else
-          redirect_to tasks_path(@prism_risk_assessment)
+          redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
         end
       else
         render :serious_risk
@@ -46,7 +46,7 @@ module Prism
       @prism_risk_assessment.assign_attributes(serious_risk_rebuttable_params)
 
       if @prism_risk_assessment.save(context: :serious_risk_rebuttable)
-        redirect_to tasks_path(@prism_risk_assessment)
+        redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
       else
         render :serious_risk_rebuttable
       end
