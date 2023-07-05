@@ -14,5 +14,7 @@ Prism::Engine.routes.draw do
     get "perform-risk-triage", to: "triage#perform_risk_triage"
   end
 
-  get "tasks/:id", to: "tasks#index", as: "tasks"
+  resources :risk_assessment, only: [] do
+    resources :tasks, only: %i[index show update]
+  end
 end

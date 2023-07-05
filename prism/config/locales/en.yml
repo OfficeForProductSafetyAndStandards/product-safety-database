@@ -48,3 +48,49 @@ en:
               inclusion: Select whether there are any factors
             serious_risk_rebuttable_factors:
               blank: Enter a description
+            assessor_name:
+              blank: Enter the full name of the assessor
+            assessment_organisation:
+              blank: Enter the name of the assessment organisation
+  prism:
+    tasks:
+      task_list:
+        sections:
+          define:
+            title: Define the product
+            tasks:
+              add_assessment_details:
+                title: Add assessment details
+              add_evaluation_details:
+                title: Add evaluation details
+              search_or_add_a_new_product:
+                title: Search or add a new product
+              add_details_about_products_in_use_and_safety:
+                title: Add details about products in use and safety
+          identify:
+            title: Identify product hazards and subjects of harm
+            tasks:
+              add_a_number_of_hazards_and_subjects_of_harm:
+                title: Add a number of hazards and subjects of harm
+          create:
+            title: Create product harm scenarios
+            tasks:
+              choose_hazard_type:
+                title: Choose hazard type
+              add_a_harm_scenario_and_probability_of_harm:
+                title: Add a harm scenario and probability of harm
+              determine_severity_of_harm:
+                title: Determine severity of harm
+              add_uncertainty_and_sensitivity_analysis:
+                title: Add uncertainty and sensitivity analysis
+              confirm_overall_product_risk:
+                title: Confirm overall product risk
+          evaluate:
+            title: Evaluate product risk and submit assessment
+            tasks:
+              complete_product_risk_evaluation:
+                title: Complete product risk evaluation
+              review_and_submit_results_of_the_assessment:
+                title: Review and submit results of the assessment
+              review_and_submit_results_of_the_evaluation:
+                title: Review and submit results of the evaluation
