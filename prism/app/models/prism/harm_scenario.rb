@@ -1,7 +1,7 @@
 module Prism
   class HarmScenario < ApplicationRecord
     belongs_to :risk_assessment
-    has_many :harm_scenario_steps
+    has_many :harm_scenario_steps, autosave: true
 
     enum hazard_type: {
       "mechanical" => "mechanical",
