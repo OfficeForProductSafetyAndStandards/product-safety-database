@@ -11,7 +11,7 @@
     "accessible-autocomplete": "2.0.4",
     "esbuild": "^0.18.11",
     "govuk-frontend": "4.6.0",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.25",
     "sass": "^1.63.6",
     "standard": "^17.1.0",
     "stylelint": "^14.16.1",
