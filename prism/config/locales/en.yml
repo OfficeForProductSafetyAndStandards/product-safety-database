@@ -52,6 +52,21 @@ en:
               blank: Enter the full name of the assessor
             assessment_organisation:
               blank: Enter the name of the assessment organisation
+        prism/product_market_detail:
+          attributes:
+            selling_organisation:
+              blank: Enter the name of the business that sold the product
+            total_products_sold_estimatable:
+              inclusion: Select whether the total number of products in use can be calculated
+            total_products_sold:
+              blank: Enter the estimated number of products in use
+              not_a_number: The estimated number of products in use must be a whole number
+              not_an_integer: The estimated number of products in use must be a whole number
+            safety_legislation_standards:
+              blank: Select the product safety legislation and standards that are relevant to your product
+              inclusion: Select the product safety legislation and standards that are relevant to your product
+            other_safety_legislation_standard:
+              blank: Enter the name of the safety legislation or standard
   prism:
     tasks:
       task_list:

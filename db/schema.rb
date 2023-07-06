@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_03_134002) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_05_110026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -308,31 +308,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_134002) do
     t.string "hazard_type"
     t.string "level_of_uncertainty"
     t.boolean "multiple_casualties"
-    t.bigint "prism_risk_assessment_id"
+    t.uuid "risk_assessment_id"
     t.boolean "sensitivity_analysis"
     t.string "severity"
     t.datetime "updated_at", null: false
-    t.index ["prism_risk_assessment_id"], name: "index_prism_harm_scenarios_on_prism_risk_assessment_id"
+    t.index ["risk_assessment_id"], name: "index_prism_harm_scenarios_on_risk_assessment_id"
   end
 
   create_table "prism_product_hazards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "number_of_hazards"
-    t.bigint "prism_risk_assessment_id"
     t.string "product_aimed_at"
+    t.uuid "risk_assessment_id"
     t.string "unintended_risks_for"
     t.datetime "updated_at", null: false
-    t.index ["prism_risk_assessment_id"], name: "index_prism_product_hazards_on_prism_risk_assessment_id"
+    t.index ["risk_assessment_id"], name: "index_prism_product_hazards_on_risk_assessment_id"
   end
 
   create_table "prism_product_market_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.bigint "prism_risk_assessment_id"
+    t.string "other_safety_legislation_standard"
+    t.uuid "risk_assessment_id"
     t.jsonb "routing_questions"
+    t.string "safety_legislation_standards", default: [], array: true
     t.string "selling_organisation"
     t.integer "total_products_sold"
     t.datetime "updated_at", null: false
-    t.index ["prism_risk_assessment_id"], name: "index_prism_product_market_details_on_prism_risk_assessment_id"
+    t.index ["risk_assessment_id"], name: "index_prism_product_market_details_on_risk_assessment_id"
   end
 
   create_table "prism_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -346,11 +348,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_134002) do
     t.string "markings"
     t.string "name"
     t.string "placed_on_market_before_eu_exit"
-    t.bigint "prism_risk_assessment_id"
+    t.uuid "risk_assessment_id"
     t.jsonb "routing_questions"
     t.string "subcategory"
     t.datetime "updated_at", null: false
-    t.index ["prism_risk_assessment_id"], name: "index_prism_products_on_prism_risk_assessment_id"
+    t.index ["risk_assessment_id"], name: "index_prism_products_on_risk_assessment_id"
   end
 
   create_table "prism_risk_assessments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -1,0 +1,35 @@
+<% content_for :page_title, "Add details about products in use and safety" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @product_market_detail, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Define the product</span>
+        Add details about products in use and safety
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l">Placeholder product</p>
+      <% end %>
+      <%= f.govuk_text_field :selling_organisation, label: { text: "Name of the business that sold the product", size: "m" }, hint: { text: "This information is essential for product traceability." } %>
+      <%= f.govuk_radio_buttons_fieldset :total_products_sold_estimatable, legend: { text: "Can the total number of products in use be estimated?", size: "m" } do %>
+        <%= f.govuk_radio_button :total_products_sold_estimatable, true, label: { text: "Yes" }, hint: { text: "Based on information provided by the business or other evidence." }, link_errors: true do %>
+          <%= f.govuk_number_field :total_products_sold, label: { text: "Estimated number of products in use" }, width: 4 %>
+        <% end %>
+        <%= f.govuk_radio_button :total_products_sold_estimatable, false, label: { text: "No" }, hint: { text: "Insufficient information available to make a reasonable estimate." } %>
+      <% end %>
+      <%= f.govuk_check_boxes_fieldset :safety_legislation_standards, legend: { text: "Product safety legislation and standards", size: "m" }, hint: { text: "Review the provided legislations and standards and choose the ones that you feel are relevant to your product." } do %>
+        <%= f.govuk_check_box :safety_legislation_standards, :regulation_4404, label: { text: "Regulation No 44/04 UN ECE approval of restraining devices for child occupants (child restraint systems)" }, link_errors: true,checked: @product_market_detail.safety_legislation_standards.include?("regulation_4404") %>
+        <%= f.govuk_check_box :safety_legislation_standards, :regulation_129, label: { text: "Regulation No 129 UN ECE R129 approval of enhanced child restraint systems (i-size)" }, checked: @product_market_detail.safety_legislation_standards.include?("regulation_129") %>
+        <%= f.govuk_check_box :safety_legislation_standards, :bs_en_17072_2018, label: { text: "BS EN 17072:2018" }, checked: @product_market_detail.safety_legislation_standards.include?("bs_en_17072_2018") %>
+        <%= f.govuk_check_box :safety_legislation_standards, :bs_en_17022_2018, label: { text: "BS EN 17022:2018" }, checked: @product_market_detail.safety_legislation_standards.include?("bs_en_17022_2018") %>
+        <%= f.govuk_check_box :safety_legislation_standards, :other, label: { text: "Other" }, checked: @product_market_detail.safety_legislation_standards.include?("other") do %>
+          <%= f.govuk_text_field :other_safety_legislation_standard, label: { text: "Name of safety legislation or standard" } %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

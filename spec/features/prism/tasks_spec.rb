@@ -40,8 +40,7 @@ RSpec.feature "PRISM tasks", type: :feature do
       fill_in "Name of assessor", with: "Test name"
       fill_in "Name of assessment organisation", with: "Test organisation"
 
-      # TODO(ruben): change once the next task is ready
-      expect { click_button "Save and continue" }.to raise_error(ActionView::MissingTemplate)
+      click_button "Save and continue"
 
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
@@ -58,6 +57,29 @@ RSpec.feature "PRISM tasks", type: :feature do
       click_button "Save as draft"
 
       expect(page).to have_text("Determine and evaluate the level of product risk")
+    end
+
+    context "when completing the final task of a section" do
+      before do
+        prism_risk_assessment.tasks_status["add_assessment_details"] = "completed"
+        prism_risk_assessment.tasks_status["search_or_add_a_new_product"] = "completed"
+        prism_risk_assessment.save!
+      end
+
+      scenario "task completion" do
+        visit prism.risk_assessment_tasks_path(prism_risk_assessment)
+
+        click_link "Add details about products in use and safety"
+
+        fill_in "Name of the business that sold the product", with: "Test organisation"
+        choose "No"
+        check "BS EN 17022:2018"
+
+        click_button "Save and complete tasks in this section"
+
+        expect(page).to have_text("Determine and evaluate the level of product risk")
+        expect(page).to have_text("You have completed 1 of 4 sections.")
+      end
     end
   end
 

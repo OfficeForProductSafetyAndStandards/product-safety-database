@@ -36,6 +36,11 @@ module Prism
     end
 
     def show
+      case step
+      when :add_details_about_products_in_use_and_safety
+        @product_market_detail = @prism_risk_assessment.product_market_detail || @prism_risk_assessment.build_product_market_detail
+      end
+
       render_wizard
     end
 
@@ -43,12 +48,15 @@ module Prism
       case step
       when :add_assessment_details
         @prism_risk_assessment.assign_attributes(add_assessment_details_params)
+      when :add_details_about_products_in_use_and_safety
+        @product_market_detail = @prism_risk_assessment.product_market_detail || @prism_risk_assessment.build_product_market_detail
+        @product_market_detail.assign_attributes(add_details_about_products_in_use_and_safety_params)
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
 
-      if params[:draft] == "true"
-        # Save as draft button clicked
+      if params[:draft] == "true" || params[:final] == "true"
+        # "Save as draft" or final save button of the section clicked
         # Manually save, then finish the wizard
         if @prism_risk_assessment.save(context: step)
           redirect_to risk_assessment_task_path(@prism_risk_assessment, Wicked::FINISH_STEP)
@@ -85,6 +93,15 @@ module Prism
 
     def add_assessment_details_params
       params.require(:risk_assessment).permit(:assessor_name, :assessment_organisation, :draft)
+    end
+
+    def add_details_about_products_in_use_and_safety_params
+      allowed_params = params
+        .require(:product_market_detail)
+        .permit(:selling_organisation, :total_products_sold_estimatable, :total_products_sold, :other_safety_legislation_standard, :final, safety_legislation_standards: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:safety_legislation_standards].reject!(&:blank?)
+      allowed_params
     end
 
     def finish_wizard_path
