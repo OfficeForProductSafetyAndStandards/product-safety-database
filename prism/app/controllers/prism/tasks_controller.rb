@@ -39,6 +39,8 @@ module Prism
       case step
       when :add_details_about_products_in_use_and_safety
         @product_market_detail = @prism_risk_assessment.product_market_detail || @prism_risk_assessment.build_product_market_detail
+      when :add_a_number_of_hazards_and_subjects_of_harm
+        @product_hazard = @prism_risk_assessment.product_hazard || @prism_risk_assessment.build_product_hazard
       end
 
       render_wizard
@@ -51,6 +53,9 @@ module Prism
       when :add_details_about_products_in_use_and_safety
         @product_market_detail = @prism_risk_assessment.product_market_detail || @prism_risk_assessment.build_product_market_detail
         @product_market_detail.assign_attributes(add_details_about_products_in_use_and_safety_params)
+      when :add_a_number_of_hazards_and_subjects_of_harm
+        @product_hazard = @prism_risk_assessment.product_hazard || @prism_risk_assessment.build_product_hazard
+        @product_hazard.assign_attributes(add_a_number_of_hazards_and_subjects_of_harm_params)
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
@@ -101,6 +106,15 @@ module Prism
         .permit(:selling_organisation, :total_products_sold_estimatable, :total_products_sold, :other_safety_legislation_standard, :final, safety_legislation_standards: [])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
       allowed_params[:safety_legislation_standards].reject!(&:blank?)
+      allowed_params
+    end
+
+    def add_a_number_of_hazards_and_subjects_of_harm_params
+      allowed_params = params
+        .require(:product_hazard)
+        .permit(:number_of_hazards, :product_aimed_at, :product_aimed_at_description, :final, unintended_risks_for: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:unintended_risks_for].reject!(&:blank?)
       allowed_params
     end
 

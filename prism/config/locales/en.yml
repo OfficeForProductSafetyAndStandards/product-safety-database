@@ -67,6 +67,18 @@ en:
               inclusion: Select the product safety legislation and standards that are relevant to your product
             other_safety_legislation_standard:
               blank: Enter the name of the safety legislation or standard
+        prism/product_hazard:
+          attributes:
+            number_of_hazards:
+              blank: Select the number of hazards identified
+              inclusion: Select the number of hazards identified
+            product_aimed_at:
+              blank: Select who the product is aimed at
+              inclusion: Select who the product is aimed at
+            product_aimed_at_description:
+              blank: Enter a description of the particular group of users
+            unintended_risks_for:
+              inclusion: Select who else might be at risk
   prism:
     tasks:
       task_list:
