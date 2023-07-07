@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_05_110026) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_05_124426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -319,8 +319,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_05_110026) do
     t.datetime "created_at", null: false
     t.string "number_of_hazards"
     t.string "product_aimed_at"
+    t.string "product_aimed_at_description"
     t.uuid "risk_assessment_id"
-    t.string "unintended_risks_for"
+    t.string "unintended_risks_for", default: [], array: true
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_product_hazards_on_risk_assessment_id"
   end

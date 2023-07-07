@@ -39,9 +39,22 @@ module Prism
         govuk_tag(text: "Cannot start yet", colour: "grey")
       when "not_started"
         govuk_tag(text: "Not started", colour: "grey")
+      when "in_progress"
+        govuk_tag(text: "In progress")
       when "completed"
-        govuk_tag(text: "Completed", colour: "blue")
+        govuk_tag(text: "Completed")
       end
+    end
+
+    def number_of_hazards_radios
+      [
+        OpenStruct.new(id: "one", name: "1"),
+        OpenStruct.new(id: "two", name: "2"),
+        OpenStruct.new(id: "three", name: "3"),
+        OpenStruct.new(id: "four", name: "4"),
+        OpenStruct.new(id: "five", name: "5"),
+        OpenStruct.new(id: "more_than_five", name: "More than 5"),
+      ]
     end
   end
 end
