@@ -79,6 +79,15 @@ en:
               blank: Enter a description of the particular group of users
             unintended_risks_for:
               inclusion: Select who else might be at risk
+        prism/harm_scenario:
+          attributes:
+            hazard_type:
+              blank: Select a hazard type
+              inclusion: Select a hazard type
+            other_hazard_type:
+              blank: Enter the hazard type
+            description:
+              blank: Enter a hazard description
   prism:
     tasks:
       task_list:

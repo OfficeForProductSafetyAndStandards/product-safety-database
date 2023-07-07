@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_05_124426) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -308,6 +308,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_05_124426) do
     t.string "hazard_type"
     t.string "level_of_uncertainty"
     t.boolean "multiple_casualties"
+    t.string "other_hazard_type"
     t.uuid "risk_assessment_id"
     t.boolean "sensitivity_analysis"
     t.string "severity"

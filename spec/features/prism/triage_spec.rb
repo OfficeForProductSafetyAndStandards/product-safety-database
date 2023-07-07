@@ -39,8 +39,8 @@ RSpec.feature "PRISM triage", type: :feature do
     expect(page).to have_text("Perform risk triage")
   end
 
-  context "when signed in" do
-    let(:user) { create(:user) }
+  context "when signed in as a user with the PRISM role" do
+    let(:user) { create(:user, :activated, roles: %w[prism]) }
 
     before do
       sign_in user
@@ -101,6 +101,20 @@ RSpec.feature "PRISM triage", type: :feature do
       click_button "Continue"
 
       expect(page).to have_text("Evaluate the product deemed serious risk")
+    end
+  end
+
+  context "when signed in as a user without the PRISM role" do
+    let(:user) { create(:user, :activated) }
+
+    before do
+      sign_in user
+    end
+
+    scenario "visiting the start page" do
+      visit prism.root_path
+
+      expect(page).to have_current_path("/403")
     end
   end
 end

@@ -15,6 +15,16 @@ Prism::Engine.routes.draw do
   end
 
   resources :risk_assessment, only: [] do
-    resources :tasks, only: %i[index show update]
+    resources :tasks, only: %i[index show update] do
+      # Allow a `harm_scenario_id` after the wizard step name for
+      # all harm scenario steps
+      member do
+        constraints id: /#{Regexp.union(HARM_SCENARIO_STEPS)}/ do
+          get ":harm_scenario_id", to: "tasks#show"
+          patch ":harm_scenario_id", to: "tasks#update"
+          put ":harm_scenario_id", to: "tasks#update"
+        end
+      end
+    end
   end
 end
