@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "PRISM tasks", type: :feature do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :activated, roles: %w[prism]) }
 
   before do
     sign_in user
@@ -80,6 +80,12 @@ RSpec.feature "PRISM tasks", type: :feature do
         expect(page).to have_text("Determine and evaluate the level of product risk")
         expect(page).to have_text("You have completed 1 of 4 sections.")
       end
+    end
+
+    scenario "accessing a step out-of-order" do
+      visit prism.risk_assessment_task_path(prism_risk_assessment, id: "search_or_add_a_new_product")
+
+      expect(page).to have_current_path(prism.risk_assessment_tasks_path(prism_risk_assessment))
     end
   end
 

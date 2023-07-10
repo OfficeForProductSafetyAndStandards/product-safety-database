@@ -2,17 +2,17 @@ module Prism
   module TasksHelper
     def normal_risk_sections
       {
-        "define" => Prism::TasksController::NORMAL_RISK_DEFINE_STEPS.map(&:to_s),
-        "identify" => Prism::TasksController::NORMAL_RISK_IDENTIFY_STEPS.map(&:to_s),
-        "create" => Prism::TasksController::NORMAL_RISK_CREATE_STEPS.map(&:to_s),
-        "evaluate" => Prism::TasksController::NORMAL_RISK_EVALUATE_STEPS.map(&:to_s),
+        "define" => NORMAL_RISK_DEFINE_STEPS.map(&:to_s),
+        "identify" => NORMAL_RISK_IDENTIFY_STEPS.map(&:to_s),
+        "create" => NORMAL_RISK_CREATE_STEPS.map(&:to_s),
+        "evaluate" => NORMAL_RISK_EVALUATE_STEPS.map(&:to_s),
       }
     end
 
     def serious_risk_sections
       {
-        "define" => Prism::TasksController::SERIOUS_RISK_DEFINE_STEPS.map(&:to_s),
-        "evaluate" => Prism::TasksController::SERIOUS_RISK_EVALUATE_STEPS.map(&:to_s),
+        "define" => SERIOUS_RISK_DEFINE_STEPS.map(&:to_s),
+        "evaluate" => SERIOUS_RISK_EVALUATE_STEPS.map(&:to_s),
       }
     end
 
