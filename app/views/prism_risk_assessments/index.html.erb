@@ -3,15 +3,11 @@
 <%= render "prism_risk_assessments/heading/#{@page_name}" %>
 
 <div class="govuk-grid-row">
-  <section class="govuk-grid-column-three-quarters" id="page-content">
+  <section class="govuk-grid-column-full" id="page-content">
     <h2 class="govuk-heading-m">Draft risk assessments</h2>
-    <% if @draft_risk_assessments.any? %>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full" role="region" aria-label="Draft risk assessments">
-          <%= render "table", products: @draft_risk_assessments %>
-          <%= paginate @draft_risk_assessments.object %>
-        </div>
-      </div>
+    <% if @draft_prism_risk_assessments.any? %>
+      <%= render "table", prism_risk_assessments: @draft_prism_risk_assessments, type: "draft" %>
+      <%= paginate @draft_prism_risk_assessments, param_name: :draft_page %>
     <% elsif ["team_prism_risk_assessments", "your_prism_risk_assessments"].include?(@page_name) %>
       <%= render "prism_risk_assessments/no_prism_risk_assessments", page_name: @page_name, type: "draft" %>
     <% end %>
@@ -19,15 +15,11 @@
 </div>
 
 <div class="govuk-grid-row">
-  <section class="govuk-grid-column-three-quarters">
+  <section class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Submitted risk assessments</h2>
-    <% if @submitted_risk_assessments.any? %>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full" role="region" aria-label="Submitted risk assessments">
-          <%= render "table", products: @submitted_risk_assessments %>
-          <%= paginate @submitted_risk_assessments.object %>
-        </div>
-      </div>
+    <% if @submitted_prism_risk_assessments.any? %>
+      <%= render "table", prism_risk_assessments: @submitted_prism_risk_assessments, type: "submitted" %>
+      <%= paginate @submitted_prism_risk_assessments, param_name: :submitted_page %>
     <% elsif ["team_prism_risk_assessments", "your_prism_risk_assessments"].include?(@page_name) %>
       <%= render "prism_risk_assessments/no_prism_risk_assessments", page_name: @page_name, type: "submitted" %>
     <% end %>
@@ -35,7 +27,7 @@
 </div>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-full">
     <%= govukButton(text: "Start a new risk assessment", href: prism.serious_risk_path) %>
   </div>
 </div>

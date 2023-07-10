@@ -69,7 +69,7 @@ module Prism
   private
 
     def prism_risk_assessment
-      @prism_risk_assessment ||= Prism::RiskAssessment.find(params[:risk_assessment_id])
+      @prism_risk_assessment ||= Prism::RiskAssessment.find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
     end
 
     def set_wizard_steps
