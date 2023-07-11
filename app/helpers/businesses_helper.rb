@@ -1,6 +1,4 @@
 module BusinessesHelper
-  include BusinessSearchHelper
-
   def defaults_on_primary_location(business)
     business.primary_location.name ||= "Registered office address"
     business.primary_location.added_by_user = current_user
@@ -8,10 +6,30 @@ module BusinessesHelper
   end
 
   def search_for_businesses(page_size = Business.count, user = current_user)
-    Business.full_search(search_query(user))
+    query = Business.includes(investigations: %i[owner_user owner_team])
+
+    if @search.q
+      @search.q.strip!
+      query = query.where("trading_name ilike ?", "%#{@search.q}%")
+        .or(Business.where("legal_name ilike ?", "%#{@search.q}%"))
+    end
+
+    if @search.case_status == "open_only"
+      query = query.where(investigations: { is_closed: false })
+    end
+
+    case @search.case_owner
+    when "me"
+      query = query.where(users: { id: user.id })
+    when "my_team"
+      team = user.team
+      query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+    end
+
+    query
+      .order(sorting_params)
       .page(page_number)
       .per(page_size)
-      .records
   end
 
   def business_export_params
@@ -20,8 +38,8 @@ module BusinessesHelper
 
   def sorting_params
     return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
-    return { name_for_sorting: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
-    return { name_for_sorting: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
+    return { trading_name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
+    return { trading_name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
 
     { created_at: :desc }
   end
@@ -34,7 +52,10 @@ module BusinessesHelper
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  def page_number
+    params[:page].to_i > 500 ? "500" : params[:page]
+  end
+
   def business_params
     params.require(:business).permit(
       :legal_name,
