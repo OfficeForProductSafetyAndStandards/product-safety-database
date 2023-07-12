@@ -57,7 +57,7 @@ module Prism
   private
 
     def set_prism_risk_assessment
-      @prism_risk_assessment = Prism::RiskAssessment.find(params[:id])
+      @prism_risk_assessment = Prism::RiskAssessment.find_by!(id: params[:id], created_by_user_id: current_user.id)
     end
 
     def full_risk_assessment_required_params
