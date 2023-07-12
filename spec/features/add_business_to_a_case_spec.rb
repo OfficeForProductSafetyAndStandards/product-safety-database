@@ -73,18 +73,10 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     end
 
     within_fieldset "Contacts" do
-      fill_in "Name",                          with: name
+      fill_in "Name", with: name
       fill_in "Email",                         with: email
       fill_in "Telephone",                     with: phone_number
       fill_in "Job title or role description", with: job_title
-  end
-
-    click_on "Save"
-
-    expect(page).to have_error_summary("Country cannot be blank")
-
-    within_fieldset "Official address" do
-      select country, from: "Country"
     end
 
     click_on "Save"
@@ -97,6 +89,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     click_on "Save"
 
+    expect(page).to have_error_summary("Country cannot be blank")
+
+    within_fieldset "Official address" do
+      select country, from: "Country"
+    end
+
+    click_on "Save"
 
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
