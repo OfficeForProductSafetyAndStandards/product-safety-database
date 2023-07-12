@@ -846,7 +846,6 @@ en:
         eu_wide: "EU Wide"
         worldwide: "Worldwide"
         unknown: "Unknown"
-
       actions:
         ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on the marketing of the product and any accompanying measures"
         destruction_of_the_product: "Destruction of the product"
@@ -858,6 +857,10 @@ en:
         temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban on the supply, offer to supply and display of the product"
         warning_consumers_of_the_risks: "Warning consumers of the risks"
         withdrawal_of_the_product_from_the_market: "Withdrawal of the product from the market"
+        product_back_into_compliance: "Product brought back into compliance"
+        seizure_of_goods: "Seizure of goods"
+        modification_programme: "Modification programme"
+        referred_to_overseas_regulator: "Referred to an overseas regulator"
         other: "Other"
   enter_email_address: "Enter your email address"
   file_added: "The file was added"

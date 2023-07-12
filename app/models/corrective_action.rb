@@ -13,7 +13,11 @@ class CorrectiveAction < ApplicationRecord
     removal_of_the_listing_by_the_online_marketplace: "Removal from online marketplace",
     temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban",
     warning_consumers_of_the_risks: "Warn consumers of risks",
-    withdrawal_of_the_product_from_the_market: "Withdrawal"
+    withdrawal_of_the_product_from_the_market: "Withdrawal",
+    product_back_into_compliance: "Product back into compliance",
+    seizure_of_goods: "Seizure of goods",
+    modification_programme: "Modification programme",
+    referred_to_overseas_regulator: "Referred to overseas regulator",
   }.freeze
 
   belongs_to :investigation
@@ -60,6 +64,14 @@ class CorrectiveAction < ApplicationRecord
         i18n.t(:warning_consumers_of_the_risks),
       withdrawal_of_the_product_from_the_market:
         i18n.t(:withdrawal_of_the_product_from_the_market),
+      product_back_into_compliance:
+        i18n.t(:product_back_into_compliance),
+      seizure_of_goods:
+        i18n.t(:seizure_of_goods),
+      modification_programme:
+        i18n.t(:modification_programme),
+      referred_to_overseas_regulator:
+        i18n.t(:referred_to_overseas_regulator),
       other:
         i18n.t(:other)
     }
