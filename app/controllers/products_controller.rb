@@ -84,7 +84,7 @@ class ProductsController < ApplicationController
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_products" })
     @results = search_for_products(20)
-    @count = @results.total_count
+    @count = @results.length
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "your_products"
 
@@ -98,7 +98,7 @@ class ProductsController < ApplicationController
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_products" })
     @results = search_for_products(20)
-    @count = @results.total_count
+    @count = @results.length
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "team_products"
 
@@ -106,6 +106,14 @@ class ProductsController < ApplicationController
   end
 
 private
+
+  def set_search_params
+    @search = SearchParams.new(query_params.except(:page_name))
+  end
+
+  def query_params
+    params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
+  end
 
   def set_last_product_view_cookie
     cookies[:last_product_view] = params[:action]
