@@ -1,7 +1,4 @@
 module ProductsHelper
-  include ProductSearchHelper
-
-  SUGGESTED_PRODUCTS_LIMIT = 4
   PARAMS_FOR_CREATE = [:brand,
                        :name,
                        :subcategory,
@@ -18,7 +15,6 @@ module ProductsHelper
   PARAMS_FOR_UPDATE = PARAMS_FOR_CREATE.without(:category, :authenticity,
                                                 :brand, :name)
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
     params.require(:product).permit(PARAMS_FOR_CREATE).with_defaults(markings: [])
   end
@@ -28,8 +24,42 @@ module ProductsHelper
   end
 
   def search_for_products(page_size = Product.count, user = current_user)
-    Product.full_search(search_query(user))
-      .page(page_number).per(page_size).records
+    query = Product.includes(investigations: %i[owner_user owner_team])
+
+    if @search.q
+      @search.q.strip!
+      query = query.where("name ILIKE ?", "%#{@search.q}%")
+        .or(Product.where("description ILIKE ?", "%#{@search.q}%"))
+        .or(Product.where("CONCAT('psd-', id) = LOWER(?)", @search.q))
+        .or(Product.where(id: @search.q))
+    end
+
+    if @search.category.present?
+      query = query.where(category: @search.category)
+    end
+
+    if @search.case_status == "open_only"
+      query = query.where(investigations: { is_closed: false })
+    end
+
+    if @search.retired_status == "active" || @search.retired_status.blank?
+      query = query.where(retired_at: nil)
+    elsif @search.retired_status == "retired"
+      query = query.where.not(retired_at: nil)
+    end
+
+    case @search.case_owner
+    when "me"
+      query = query.where(users: { id: user.id })
+    when "my_team"
+      team = user.team
+      query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+    end
+
+    query
+      .order(sorting_params)
+      .page(page_number)
+      .per(page_size)
   end
 
   def product_export_params
@@ -38,8 +68,8 @@ module ProductsHelper
 
   def sorting_params
     return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
-    return { name_for_sorting: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
-    return { name_for_sorting: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
+    return { name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
+    return { name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
 
     { created_at: :desc }
   end
@@ -48,16 +78,8 @@ module ProductsHelper
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
   end
 
-  def search_for_product_code(product_code, excluded_ids)
-    match_product_code = { match: { product_code: } }
-    Product.search(query: {
-      bool: {
-        must: match_product_code,
-        must_not: have_excluded_id(excluded_ids),
-      }
-    })
-      .page(1).per(SUGGESTED_PRODUCTS_LIMIT)
-      .records
+  def page_number
+    params[:page].to_i > 500 ? "500" : params[:page]
   end
 
   def set_product
@@ -130,13 +152,5 @@ private
 
   def skip_selected_item_for_selected_option?(item, product_form)
     item[:divider] || item[:value].inquiry.missing? && product_form.id.nil?
-  end
-
-  def have_excluded_id(excluded_ids)
-    {
-      ids: {
-        values: excluded_ids.map(&:to_s)
-      }
-    }
   end
 end

@@ -10,8 +10,9 @@ module BusinessesHelper
 
     if @search.q
       @search.q.strip!
-      query = query.where("trading_name ilike ?", "%#{@search.q}%")
-        .or(Business.where("legal_name ilike ?", "%#{@search.q}%"))
+      query = query.where("trading_name ILIKE ?", "%#{@search.q}%")
+        .or(Business.where("legal_name ILIKE ?", "%#{@search.q}%"))
+        .or(Business.where(company_number: @search.q))
     end
 
     if @search.case_status == "open_only"
