@@ -43,25 +43,25 @@ class CorrectiveAction < ApplicationRecord
       ban_on_the_marketing_of_the_product_and_any_accompanying_measures:
         i18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures),
       destruction_of_the_product:
-             i18n.t(:destruction_of_the_product),
+        i18n.t(:destruction_of_the_product),
       import_rejected_at_border:
-             i18n.t(:import_rejected_at_border),
+        i18n.t(:import_rejected_at_border),
       making_the_marketing_of_the_product_subject_to_prior_conditions:
-             i18n.t(:making_the_marketing_of_the_product_subject_to_prior_conditions),
+        i18n.t(:making_the_marketing_of_the_product_subject_to_prior_conditions),
       marking_the_product_with_appropriate_warnings_on_the_risks:
-             i18n.t(:marking_the_product_with_appropriate_warnings_on_the_risks),
+        i18n.t(:marking_the_product_with_appropriate_warnings_on_the_risks),
       recall_of_the_product_from_end_users:
-             i18n.t(:recall_of_the_product_from_end_users, scope: %i[corrective_action attributes actions]),
+        i18n.t(:recall_of_the_product_from_end_users, scope: %i[corrective_action attributes actions]),
       removal_of_the_listing_by_the_online_marketplace:
-             i18n.t(:removal_of_the_listing_by_the_online_marketplace, scope: %i[corrective_action attributes actions]),
+        i18n.t(:removal_of_the_listing_by_the_online_marketplace, scope: %i[corrective_action attributes actions]),
       temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product:
-             i18n.t(:temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product),
+        i18n.t(:temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product),
       warning_consumers_of_the_risks:
-             i18n.t(:warning_consumers_of_the_risks),
+        i18n.t(:warning_consumers_of_the_risks),
       withdrawal_of_the_product_from_the_market:
-             i18n.t(:withdrawal_of_the_product_from_the_market),
+        i18n.t(:withdrawal_of_the_product_from_the_market),
       other:
-             i18n.t(:other)
+        i18n.t(:other)
     }
   end
 
