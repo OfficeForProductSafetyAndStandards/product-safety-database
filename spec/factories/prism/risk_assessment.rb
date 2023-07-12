@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :prism_risk_assessment, class: "Prism::RiskAssessment" do
     risk_type { "normal_risk" }
+    state { "draft" }
     tasks_status do
       {
         "add_assessment_details" => "not_started",
@@ -27,6 +28,14 @@ FactoryBot.define do
           "review_and_submit_results_of_the_evaluation" => "not_started"
         }
       end
+    end
+
+    trait :submitted do
+      state { "submitted" }
+    end
+
+    trait :with_harm_scenario do
+      harm_scenarios { [association(:prism_harm_scenario)] }
     end
   end
 end
