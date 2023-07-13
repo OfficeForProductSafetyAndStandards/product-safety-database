@@ -31,6 +31,7 @@ module InvestigationOpensearch
                  pretty_id
                  hazard_description
                  non_compliant_reason
+                 complainant_reference
                  risk_level],
         methods: %i[title creator_id owner_id product_subcategories product_barcodes product_descriptions product_codes tiebreaker_id],
         include: {
@@ -96,7 +97,7 @@ module InvestigationOpensearch
     end
 
     def self.exact_fields
-      %w[pretty_id]
+      %w[pretty_id complainant_reference]
     end
   end
 end
