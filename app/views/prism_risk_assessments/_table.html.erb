@@ -1,0 +1,28 @@
+<table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table--borders">
+  <caption class="govuk-table__caption govuk-visually-hidden">Risk assessments: a simple data table.</caption>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Product name</th>
+      <th scope="col" class="govuk-table__header">Hazard description</th>
+      <th scope="col" class="govuk-table__header">Last updated</th>
+      <th scope="col" class="govuk-table__header">Status</th>
+      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden"><% if type == "submitted" %>View assessment<% else %>Make changes<% end %></span></th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <% prism_risk_assessments.each do |prism_risk_assessment| %>
+      <%= render "table_row", prism_risk_assessment: prism_risk_assessment, type: type %>
+    <% end %>
+  </tbody>
+  <% if prism_risk_assessments.size > 11 %>
+    <tfoot class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Product name</th>
+        <th scope="col" class="govuk-table__header">Hazard description</th>
+        <th scope="col" class="govuk-table__header">Last updated</th>
+        <th scope="col" class="govuk-table__header">Status</th>
+        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden"><% if type == "submitted" %>View assessment<% else %>Make changes<% end %></span></th>
+      </tr>
+    </tfoot>
+  <% end %>
+</table>

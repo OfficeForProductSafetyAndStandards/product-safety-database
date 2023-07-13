@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "PRISM triage", type: :feature do
-  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk) }
+  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, created_by_user_id: user&.id) }
 
   scenario "visiting the start page" do
     visit prism.root_path

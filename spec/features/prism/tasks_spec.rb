@@ -8,7 +8,7 @@ RSpec.feature "PRISM tasks", type: :feature do
   end
 
   context "with normal risk" do
-    let(:prism_risk_assessment) { create(:prism_risk_assessment) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: user.id) }
 
     scenario "tasks page" do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
@@ -90,7 +90,7 @@ RSpec.feature "PRISM tasks", type: :feature do
   end
 
   context "with serious risk" do
-    let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, created_by_user_id: user.id) }
 
     scenario "tasks page" do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
