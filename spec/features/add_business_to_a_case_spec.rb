@@ -155,6 +155,10 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
       fill_in "Trading name", with: trading_name
     end
 
+    within_fieldset "Official address" do
+      select "France", from: "Country"
+    end
+
     click_on "Save"
 
     expect_to_be_on_investigation_businesses_page
@@ -203,6 +207,10 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     within_fieldset "Name and company number" do
       fill_in "Trading name", with: trading_name
+    end
+
+    within_fieldset "Official address" do
+      select "France", from: "Country"
     end
 
     click_on "Save"
