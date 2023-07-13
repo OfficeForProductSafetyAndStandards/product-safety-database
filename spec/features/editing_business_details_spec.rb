@@ -1,15 +1,15 @@
 require "rails_helper"
 
 RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch do
-  let(:user)      { create(:user, :activated) }
-  let(:business)  { create(:business, trading_name: "OldCo") }
+  let(:user)     { create(:user, :activated) }
+  let(:business) { create(:business, trading_name: "OldCo") }
   let!(:investigation) { create(:allegation, businesses: [business]) }
 
   before do
     create(:contact, business:)
   end
 
-  scenario "Updating a business’s details" do
+  scenario "Updating a business's details" do
     sign_in user
     visit "/businesses/#{business.id}"
 
@@ -41,6 +41,13 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
     end
 
     click_button "Save"
+    expect(page).to have_error_summary("Country cannot be blank")
+
+    within_fieldset "Official address" do
+      select "France", from: "Country"
+    end
+
+    click_on "Save"
 
     expect_to_be_on_business_page(business_id: business.id, business_name: "NewCo")
     expect_confirmation_banner("The business was updated")
@@ -48,7 +55,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
     expect(page).to have_summary_item(key: "Trading name", value: "NewCo")
     expect(page).to have_summary_item(key: "Registered or legal name", value: "NewCo Ltd")
     expect(page).to have_summary_item(key: "Company number", value: "222 222 22")
-    expect(page).to have_summary_item(key: "Address", value: "22 New Street, New Town, Newcity, NE2 2EW, United Kingdom")
+    expect(page).to have_summary_item(key: "Address", value: "22 New Street, New Town, Newcity, NE2 2EW, France")
 
     expect(page).to have_summary_item(key: "Contact", value: "Mr New, CEO, 01632 960000, contact@newco.example")
 

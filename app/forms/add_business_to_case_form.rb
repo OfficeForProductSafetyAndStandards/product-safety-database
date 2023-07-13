@@ -19,6 +19,7 @@ class AddBusinessToCaseForm
   attribute :contacts_attributes
 
   validates :current_user, :trading_name, presence: true
+  validate :validate_country_set_for_location
 
   def initialize(*args)
     super
@@ -51,6 +52,12 @@ class AddBusinessToCaseForm
   end
 
 private
+
+  def validate_country_set_for_location
+    return if location_attrs[:country].present?
+
+    errors.add(:base, "Country cannot be blank")
+  end
 
   def new_location
     location = Location.new(location_attrs)
