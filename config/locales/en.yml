@@ -1,34 +1,3 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
   mail:
@@ -877,19 +846,22 @@ en:
         eu_wide: "EU Wide"
         worldwide: "Worldwide"
         unknown: "Unknown"
-
       actions:
-          ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on the marketing of the product and any accompanying measures"
-          destruction_of_the_product: "Destruction of the product"
-          import_rejected_at_border: "Import rejected at border"
-          making_the_marketing_of_the_product_subject_to_prior_conditions: "Making the marketing of the product subject to prior conditions"
-          marking_the_product_with_appropriate_warnings_on_the_risks: "Marking the product with appropriate warnings on the risks"
-          recall_of_the_product_from_end_users:  "Recall of the product from end users"
-          removal_of_the_listing_by_the_online_marketplace: "Removal of the listing by the online marketplace"
-          temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban on the supply, offer to supply and display of the product"
-          warning_consumers_of_the_risks: "Warning consumers of the risks"
-          withdrawal_of_the_product_from_the_market: "Withdrawal of the product from the market"
-          other: "Other"
+        ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on the marketing of the product and any accompanying measures"
+        destruction_of_the_product: "Destruction of the product"
+        import_rejected_at_border: "Import rejected at border"
+        making_the_marketing_of_the_product_subject_to_prior_conditions: "Making the marketing of the product subject to prior conditions"
+        marking_the_product_with_appropriate_warnings_on_the_risks: "Marking the product with appropriate warnings on the risks"
+        recall_of_the_product_from_end_users:  "Recall of the product from end users"
+        removal_of_the_listing_by_the_online_marketplace: "Removal of the listing by the online marketplace"
+        temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban on the supply, offer to supply and display of the product"
+        warning_consumers_of_the_risks: "Warning consumers of the risks"
+        withdrawal_of_the_product_from_the_market: "Withdrawal of the product from the market"
+        product_back_into_compliance: "Product brought back into compliance"
+        seizure_of_goods: "Seizure of goods"
+        modification_programme: "Modification programme"
+        referred_to_overseas_regulator: "Referred to an overseas regulator"
+        other: "Other"
   enter_email_address: "Enter your email address"
   file_added: "The file was added"
   file_updated: "File has been updated"
