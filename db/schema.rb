@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_14_104710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -84,6 +84,42 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
     t.string "summary"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
+  end
+
+  create_table "barcode_lookup_products", force: :cascade do |t|
+    t.string "age_group"
+    t.string "asin"
+    t.string "barcode_formats"
+    t.string "barcode_number"
+    t.string "brand"
+    t.string "category"
+    t.string "color"
+    t.string "contributors"
+    t.datetime "created_at", null: false
+    t.string "description"
+    t.string "energy_efficiency_class"
+    t.string "format"
+    t.string "gender"
+    t.string "height"
+    t.string "images"
+    t.string "ingredients"
+    t.datetime "last_api_update_at"
+    t.string "length"
+    t.string "manufacturer"
+    t.string "material"
+    t.string "model"
+    t.string "mpn"
+    t.string "multipack"
+    t.string "nutrition_facts"
+    t.string "pattern"
+    t.integer "product_id"
+    t.datetime "release_date"
+    t.string "size"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.string "weight"
+    t.string "width"
+    t.index ["barcode_number"], name: "index_barcode_lookup_products_on_barcode_number", unique: true
   end
 
   create_table "business_exports", force: :cascade do |t|

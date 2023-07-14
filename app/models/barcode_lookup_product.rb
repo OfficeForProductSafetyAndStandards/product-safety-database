@@ -1,0 +1,2 @@
+class BarcodeLookupProduct < ApplicationRecord
+end
