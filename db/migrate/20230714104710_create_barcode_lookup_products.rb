@@ -33,13 +33,15 @@ class CreateBarcodeLookupProducts < ActiveRecord::Migration[7.0]
         t.datetime :release_date
         t.string :description
         t.string :images
-        t.datetime :last_api_update_at
+
+        # SPIKE - this becomes the 'version' here, there's no other indication otherwise of when the product data was last updated
+        # Use this in the future to determine if we need to update the stored product data from the API
+        t.datetime :last_update
+
+        t.json :raw_api_data
 
         t.timestamps
       end
-
-      add_index :barcode_lookup_products, :barcode_number, unique: true, name: "index_barcode_lookup_products_on_barcode_number"
-
     end
   end
 end

@@ -103,7 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_104710) do
     t.string "height"
     t.string "images"
     t.string "ingredients"
-    t.datetime "last_api_update_at"
+    t.datetime "last_update"
     t.string "length"
     t.string "manufacturer"
     t.string "material"
@@ -113,13 +113,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_104710) do
     t.string "nutrition_facts"
     t.string "pattern"
     t.integer "product_id"
+    t.json "raw_api_data"
     t.datetime "release_date"
     t.string "size"
     t.string "title"
     t.datetime "updated_at", null: false
     t.string "weight"
     t.string "width"
-    t.index ["barcode_number"], name: "index_barcode_lookup_products_on_barcode_number", unique: true
   end
 
   create_table "business_exports", force: :cascade do |t|
