@@ -13,6 +13,8 @@ class Investigations::BusinessesController < Investigations::BaseController
 
   def new
     @business_form = AddBusinessToCaseForm.new(current_user:)
+    @business_form.locations = [Location.new]
+    @business_form.contacts = [Contact.new]
   end
 
   def create
