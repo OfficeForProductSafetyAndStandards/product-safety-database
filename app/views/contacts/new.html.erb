@@ -1,6 +1,8 @@
 <% page_title "Add contact", errors: @contact.errors.any? %>
 <h1 class="govuk-heading-l">Add contact</h1>
 
+<h1 class="govuk-heading-l">Add contact</h1>
+
 <%= form_with(model: @contact, url: business_contacts_path(@business), local: true) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

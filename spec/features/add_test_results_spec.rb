@@ -131,6 +131,67 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     end
   end
 
+  scenario "Adding a passing test result funded by OPSS" do
+    travel_to Date.parse("2 April 2020") do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+      click_link "Add supporting information"
+
+      expect_to_be_on_add_supporting_information_page
+
+      within_fieldset "What type of information are you adding?" do
+        page.choose "Test result"
+      end
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
+        page.choose "Yes"
+      end
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_opss_funding_form_page(case_id: investigation.pretty_id)
+      fill_in "What is the TSO Sample Reference Number?", with: "TSO123"
+      click_button "Continue"
+      expect_certificate_date_error
+
+      fill_in "Day", with: date.day
+      fill_in "Month", with: date.month
+      fill_in "Year", with: date.year
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_page
+      expect_test_result_form_to_be_blank
+
+      click_button "Add test result"
+
+      expect_full_error_list
+
+      fill_in "Further details", with: "Test result includes certificate of conformity"
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Pass", file:, standards: "EN71, EN73")
+
+      expect_confirmation_banner("The supporting information was updated")
+      expect_page_to_have_h1("Supporting information")
+
+      click_link "Activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_activity_page_to_show_created_funded_test_result_values(result: "Passed", funded_date: date)
+
+      click_link "View test result"
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+
+      expect_summary_to_reflect_values(result: "Pass", funded: true)
+
+      expect(page).to have_text("test_result.txt")
+
+      visit "/cases/#{investigation.pretty_id}/test-results/new"
+      expect_test_result_form_to_be_blank
+    end
+  end
+
   scenario "Adding a failing test result (with validation errors)" do
     travel_to Date.parse("2 April 2020") do
       sign_in(user)

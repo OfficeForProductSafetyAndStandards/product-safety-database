@@ -64,6 +64,15 @@ class Investigations::TestResultsController < Investigations::BaseController
 
 private
 
+  def set_investigation
+    @investigation_object = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = @investigation_object.decorate
+  end
+
+  def authorize_investigation_update
+    authorize @investigation_object, :update?
+  end
+
   def test_params
     test_session_params.merge(test_result_request_params)
   end
