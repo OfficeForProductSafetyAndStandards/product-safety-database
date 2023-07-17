@@ -82,6 +82,40 @@ RSpec.feature "PRISM tasks", type: :feature do
       end
     end
 
+    context "when completing a task that allows dynamic form fields" do
+      before do
+        prism_risk_assessment.tasks_status["add_assessment_details"] = "completed"
+        prism_risk_assessment.tasks_status["search_or_add_a_new_product"] = "completed"
+        prism_risk_assessment.tasks_status["add_details_about_products_in_use_and_safety"] = "completed"
+        prism_risk_assessment.tasks_status["add_a_number_of_hazards_and_subjects_of_harm"] = "completed"
+        prism_risk_assessment.save!
+      end
+
+      scenario "task completion" do
+        visit prism.risk_assessment_tasks_path(prism_risk_assessment)
+
+        click_link "Choose hazard type"
+
+        choose "Fire and explosion"
+        fill_in "Hazard description", with: "Test description"
+
+        click_button "Save and continue"
+
+        click_button "Save and continue"
+
+        expect(page).to have_text("Enter at least one step")
+
+        fill_in "Step description", with: "Test description"
+        choose "Decimal number"
+        fill_in "Enter the probability as a decimal number.", with: "0.5"
+        choose "Sole judgement or estimation"
+
+        # TODO(ruben): enable JavaScript to allow testing the addition of multiple steps
+        # TODO(ruben): change once the next page is ready
+        expect { click_button "Save and continue" }.to raise_error(ActionView::MissingTemplate)
+      end
+    end
+
     scenario "accessing a step out-of-order" do
       visit prism.risk_assessment_task_path(prism_risk_assessment, id: "search_or_add_a_new_product")
 

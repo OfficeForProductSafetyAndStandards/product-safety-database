@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_17_110412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -294,12 +294,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
   create_table "prism_harm_scenario_steps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.bigint "prism_harm_scenario_id"
-    t.decimal "probability"
+    t.uuid "harm_scenario_id"
+    t.decimal "probability_decimal"
     t.string "probability_evidence"
+    t.integer "probability_frequency"
     t.string "probability_type"
     t.datetime "updated_at", null: false
-    t.index ["prism_harm_scenario_id"], name: "index_prism_harm_scenario_steps_on_prism_harm_scenario_id"
+    t.index ["harm_scenario_id"], name: "index_prism_harm_scenario_steps_on_harm_scenario_id"
   end
 
   create_table "prism_harm_scenarios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
