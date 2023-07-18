@@ -21,7 +21,7 @@ module Products
 
     def find_barcode_lookup_product
       # SPIKE - fix routes here, shouldn't be product_id but barcode_lookup_product_id
-      @barcode_lookup_product = BarcodeLookupProduct.find(params[:product_id])
+      @barcode_lookup_product = BarcodeLookupProduct.find(params[:product_id]).decorate
     end
 
   end
