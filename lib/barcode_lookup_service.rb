@@ -11,6 +11,10 @@ class BarcodeLookupService
 
     uri = URI(url)
     response = Net::HTTP.get(uri)
+    if response == ""
+      return {}
+    end
+
     parsed_response = JSON.parse(response)
 
     if parsed_response["products"].present?
