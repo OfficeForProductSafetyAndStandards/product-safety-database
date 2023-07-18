@@ -17,7 +17,12 @@ module Products
     def confirm
       # SPIKE this should be a service here
       product = Product.create_from_barcode_lookup_product(@barcode_lookup_product.decorate)
-      redirect_to product_path(product)
+      product.update!(
+        barcode_lookup_product_id: @barcode_lookup_product.id,
+        owning_team: current_user.team
+      )
+
+      redirect_to edit_product_path(product)
     end
 
   private
