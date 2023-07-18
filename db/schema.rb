@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_14_104710) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_18_150239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -418,6 +418,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_104710) do
     t.uuid "added_by_user_id"
     t.enum "authenticity", enum_type: "authenticities"
     t.string "barcode", limit: 15
+    t.integer "barcode_lookup_product_id"
     t.text "brand"
     t.string "category"
     t.string "country_of_origin"
