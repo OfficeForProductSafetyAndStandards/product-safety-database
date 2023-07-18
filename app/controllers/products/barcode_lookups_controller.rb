@@ -15,6 +15,9 @@ module Products
     end
 
     def confirm
+      # SPIKE this should be a service here
+      product = Product.create_from_barcode_lookup_product(@barcode_lookup_product.decorate)
+      redirect_to product_path(product)
     end
 
   private

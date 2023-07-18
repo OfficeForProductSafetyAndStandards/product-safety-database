@@ -80,6 +80,23 @@ class Product < ApplicationRecord
     end
   end
 
+  def self.create_from_barcode_lookup_product(barcode_lookup_product)
+    Product.create!(
+      name: barcode_lookup_product.title,
+      brand: barcode_lookup_product.brand,
+      barcode: barcode_lookup_product.barcode_number,
+      description: barcode_lookup_product.description
+    )
+
+    # SPIKE this works in theory but needs to be a bg task
+    # barcode_lookup_product.image_urls.each_with_index do |url, index|
+    #   downloaded_image = URI.parse(url).open
+    #   product.documents.attach(io: downloaded_image, filename: "#{index}.jpg")
+    # end
+
+    # product
+  end
+
   def stale?
     return false if created_at > 18.months.ago
     return false if investigations.where(date_closed: nil).any?
