@@ -231,6 +231,15 @@ Rails.application.routes.draw do
     collection do
       get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
       post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
+
+      get :barcode_lookup, to: "products/barcode_lookups#new", path: "barcode-lookup"
+      post :barcode_lookup, to: "products/barcode_lookups#create", path: "barcode-lookup"
+    end
+
+    resource :barcode_lookups, controller: "products/barcode_lookups", only: %i[show], path: "barcode-lookup" do
+      member do
+        post :confirm
+      end
     end
 
     resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do

@@ -2,7 +2,7 @@ class BarcodeLookupProduct < ApplicationRecord
   # serialize :barcode_formats, JSON
   # serialize :images, JSON
 
-  def self.from_api_response(api_response)
+  def self.create_from_api_response(api_response)
     attributes = api_response.slice(
       "barcode_number", "barcode_formats", "mpn", "model", "asin", "title",
       "category", "manufacturer", "brand", "contributors", "age_group",

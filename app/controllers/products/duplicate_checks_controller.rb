@@ -21,6 +21,11 @@ module Products
         return redirect_to product_duplicate_checks_path(first_duplicate_product)
       end
 
+      barcode_lookup_product = BarcodeLookupService.lookup(@product_duplicate_check_form.barcode)
+      if barcode_lookup_product.is_a?(BarcodeLookupProduct)
+        return redirect_to product_barcode_lookups_path(barcode_lookup_product)
+      end
+
       if @product_duplicate_check_form.has_barcode
         redirect_to new_product_path(barcode: @product_duplicate_check_form.barcode)
       else
