@@ -22,7 +22,7 @@ module Products
         owning_team: current_user.team
       )
 
-      redirect_to edit_product_path(product)
+      redirect_to product_path(product)
     end
 
   private
