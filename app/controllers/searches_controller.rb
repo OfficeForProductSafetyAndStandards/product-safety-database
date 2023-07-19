@@ -6,7 +6,7 @@ class SearchesController < ApplicationController
     if @search.q.blank?
       redirect_to investigations_path(query_params.except(:page_name))
     else
-      @answer = search_for_investigations(20)
+      @answer = opensearch_for_investigations(20)
       @investigations = @answer.records(includes: [{ owner_team: :organisation, owner_user: :organisation }, :products])
     end
   end

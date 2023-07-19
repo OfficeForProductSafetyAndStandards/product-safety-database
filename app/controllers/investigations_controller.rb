@@ -12,7 +12,7 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @answer         = search_for_investigations(20)
+        @answer         = opensearch_for_investigations(20)
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
@@ -40,7 +40,7 @@ class InvestigationsController < ApplicationController
                                  "page_name" => "team_cases" })
     @answer         = search_for_investigations(20)
     @investigations = InvestigationDecorator
-                        .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+                        .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
     render "investigations/index"
   end
@@ -59,7 +59,7 @@ class InvestigationsController < ApplicationController
     )
     @answer         = search_for_investigations(20)
     @investigations = InvestigationDecorator
-                        .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+                        .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
     render "investigations/index"
   end
@@ -72,7 +72,7 @@ class InvestigationsController < ApplicationController
                                  "page_name" => @page_name })
     @answer         = search_for_investigations(20)
     @investigations = InvestigationDecorator
-                        .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+                        .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
     render "investigations/index"
   end
