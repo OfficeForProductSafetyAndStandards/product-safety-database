@@ -64,6 +64,21 @@
 
     <%= @product.summary_list %>
 
+    <% if @product.barcode_lookup_product.present? %>
+
+      <%= govukAccordion id: "barcode-lookup-accordion", classes: "govuk-!-margin-top-9 opss-accordion--sm-all", items: [
+        {
+          heading: {
+            html: "Third-party information"
+          },
+          content: {
+            html: render("additional_barcode_lookup_info", lookup_product: @product.barcode_lookup_product )
+          }
+        }
+      ]
+      %>
+    <% end %>
+
     <%= govukAccordion id: "product-accordion", classes: "govuk-!-margin-top-9 opss-accordion--sm-all", items: [
       {
         heading: {

@@ -64,6 +64,7 @@ class Product < ApplicationRecord
 
   belongs_to :added_by_user, class_name: :User, optional: true
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
+  belongs_to :barcode_lookup_product, optional: true
 
   redacted_export_with :id, :added_by_user_id, :authenticity, :barcode,
                        :brand, :category, :country_of_origin, :created_at,

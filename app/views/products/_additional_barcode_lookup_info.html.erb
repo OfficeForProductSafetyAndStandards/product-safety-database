@@ -1,0 +1,94 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
+      {
+        key: { text: "Barcode" },
+        value: { text: lookup_product.barcode_formats.split(",").join("<br>").html_safe },
+      },
+      {
+        key: { text: "mpn" },
+        value: { text: lookup_product.mpn },
+      },
+      {
+        key: { text: "model" },
+        value: { text: lookup_product.model },
+      },
+      {
+        key: { text: "asin" },
+        value: { text: lookup_product.asin },
+      },
+      {
+        key: { text: "contributors" },
+        value: { text: lookup_product.contributors },
+      },
+      {
+        key: { text: "age group" },
+        value: { text: lookup_product.age_group },
+      },
+      {
+        key: { text: "ingredients" },
+        value: { text: lookup_product.ingredients },
+      },
+      {
+        key: { text: "nutrition facts" },
+        value: { text: lookup_product.nutrition_facts },
+      },
+      {
+        key: { text: "energy efficiency class" },
+        value: { text: lookup_product.energy_efficiency_class },
+      },
+      {
+        key: { text: "color" },
+        value: { text: lookup_product.color },
+      },
+      {
+        key: { text: "gender" },
+        value: { text: lookup_product.gender },
+      },
+      {
+        key: { text: "material" },
+        value: { text: lookup_product.material },
+      },
+      {
+        key: { text: "pattern" },
+        value: { text: lookup_product.pattern },
+      },
+      {
+        key: { text: "format" },
+        value: { text: lookup_product.format },
+      },
+      {
+        key: { text: "multipack" },
+        value: { text: lookup_product.multipack },
+      },
+      {
+        key: { text: "size" },
+        value: { text: lookup_product.size },
+      },
+      {
+        key: { text: "length" },
+        value: { text: lookup_product.length },
+      },
+      {
+        key: { text: "width" },
+        value: { text: lookup_product.width },
+      },
+      {
+        key: { text: "height" },
+        value: { text: lookup_product.height },
+      },
+      {
+        key: { text: "weight" },
+        value: { text: lookup_product.weight },
+      },
+      {
+        key: { text: "release date" },
+        value: { text: lookup_product.release_date },
+      },
+      {
+        key: { text: "last update" },
+        value: { text: lookup_product.last_update },
+      }
+    ] %>
+  </div>
+</div>
