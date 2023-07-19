@@ -13,15 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
       el.querySelector('.opss-step-heading').innerText = 'Step ' + (i + 1)
       stepHint.innerText = stepHintText
 
+      // Hide or show the hint depending on if it has any content
       if (stepHintText === '') {
         stepHint.style.display = 'none'
       } else {
         stepHint.style.display = 'block'
       }
+
+      // Update added fields to use the correct child index
+      el.innerHTML = el.innerHTML.replace(/-new-record-/g, '-' + el.dataset.index + '-')
     })
 
     // Re-init GOV.UK Frontend to pick up new form fields
-    window.GOVUKFrontend.initAll({ scope: document.querySelector('opss-harm-scenario-steps') })
+    window.GOVUKFrontend.initAll({ scope: document.querySelector('opss-steps') })
   }
 
   // Detect added or removed steps

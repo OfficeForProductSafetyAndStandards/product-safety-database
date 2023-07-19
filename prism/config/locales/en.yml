@@ -70,10 +70,8 @@ en:
         prism/product_hazard:
           attributes:
             number_of_hazards:
-              blank: Select the number of hazards identified
               inclusion: Select the number of hazards identified
             product_aimed_at:
-              blank: Select who the product is aimed at
               inclusion: Select who the product is aimed at
             product_aimed_at_description:
               blank: Enter a description of the particular group of users
@@ -82,7 +80,6 @@ en:
         prism/harm_scenario:
           attributes:
             hazard_type:
-              blank: Select a hazard type
               inclusion: Select a hazard type
             other_hazard_type:
               blank: Enter the hazard type
@@ -90,23 +87,36 @@ en:
               blank: Enter a hazard description
             harm_scenario_steps:
               blank: Enter at least one step
+            severity:
+              inclusion: Select a severity level
+            multiple_casualties:
+              inclusion: Select whether the harm can result in multiple casualties
+            level_of_uncertainty:
+              inclusion: Select the level of uncertainty
+            sensitivity_analysis:
+              inclusion: Select whether sensitivity analysis has been undertaken
         prism/harm_scenario_step:
           attributes:
             description:
               blank: Enter a step description
             probability_type:
-              blank: Select which format you would like to express the probability of harm in
               inclusion: Select which format you would like to express the probability of harm in
             probability_decimal:
               blank: Enter the probability as a decimal number
               not_a_number: Enter the probability as a decimal number
+              greater_than: Enter the probability as a decimal number more than 0
+              less_than_or_equal_to: Enter the probability as a decimal number less than or equal to 1
             probability_frequency:
               blank: Enter the probability as a frequency number
               not_a_number: Enter the probability as a frequency number
               not_an_integer: Enter the probability as a frequency number
+              greater_than: Enter the probability as a frequency number more than 0
             probability_evidence:
-              blank: Select how you decided on the probability of harm
               inclusion: Select how you decided on the probability of harm
+            probability_evidence_description_limited:
+              blank: Enter a description of the evidence
+            probability_evidence_description_strong:
+              blank: Enter a description of the evidence
   prism:
     tasks:
       task_list:
@@ -166,6 +176,11 @@ en:
         chemical: Chemical
         lack_of_protection: Lack of protection
         other: Other
+      severity:
+        level_1: Level 1
+        level_2: Level 2
+        level_3: Level 3
+        level_4: Level 4
     harm_scenario_steps:
       step_0_hint: Step 1 should cover the existence of a hazard which can foreseeably cause harm during the lifetime of the product. For example, the car seat is occupied by an infant while the vehicle is in use.
       step_1_hint: Step 2 should describe how the user (and/or other subjects) becomes exposed to risk. For example, the vehicle containing the seat/child is involved in a frontal collision of sufficient magnitude that the protection offered by the seat is necessary.

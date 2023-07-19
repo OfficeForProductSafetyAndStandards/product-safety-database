@@ -111,8 +111,10 @@ RSpec.feature "PRISM tasks", type: :feature do
         choose "Sole judgement or estimation"
 
         # TODO(ruben): enable JavaScript to allow testing the addition of multiple steps
-        # TODO(ruben): change once the next page is ready
-        expect { click_button "Save and continue" }.to raise_error(ActionView::MissingTemplate)
+
+        click_button "Save and continue"
+
+        expect(page).to have_text("Determine severity of harm")
       end
     end
 

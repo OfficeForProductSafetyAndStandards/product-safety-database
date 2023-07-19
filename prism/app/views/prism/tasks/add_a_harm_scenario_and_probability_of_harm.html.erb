@@ -18,7 +18,7 @@
         <p class="govuk-body">Affected users: <%= affected_users %></p>
       <% end %>
       <p class="govuk-text">The scenario will normally contain two or more steps. The nature of probability is such that the more steps there are, in general the lower the probability will be. It is rare that more than five steps are necessary.</p>
-      <div id="opss-harm-scenario-steps">
+      <div id="opss-steps">
         <template data-nested-form-target="template">
           <%= f.fields_for :harm_scenario_steps, Prism::HarmScenarioStep.new, child_index: "NEW_RECORD" do |step_fields| %>
             <%= render partial: "harm_scenario_step_fields", locals: { f: step_fields, show_index: false } %>
@@ -30,9 +30,9 @@
       </div>
       <div data-nested-form-target="target"></div>
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-      <a href="#" class="govuk-link govuk-link--no-visited-state" data-action="nested-form#add">Add another step</a>
+      <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" data-action="nested-form#add">Add another step</a></p>
       <h2 class="govuk-heading-m govuk-!-padding-top-4">Overall probability of harm</h2>
-      <p class="govuk-body-l"><%= overall_probability_of_harm %></p>
+      <p class="govuk-body-l"><%= overall_probability_of_harm[:probability_human] %></p>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>
