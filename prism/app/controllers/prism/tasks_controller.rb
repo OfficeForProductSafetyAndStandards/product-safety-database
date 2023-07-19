@@ -24,6 +24,9 @@ module Prism
         @product_hazard = @prism_risk_assessment.product_hazard || @prism_risk_assessment.build_product_hazard
       when :choose_hazard_type
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by(id: params[:harm_scenario_id]) || @prism_risk_assessment.harm_scenarios.build
+      when :add_a_harm_scenario_and_probability_of_harm
+        @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
+        @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
       end
 
       render_wizard
@@ -49,6 +52,17 @@ module Prism
         unless @harm_scenario.save(context: step)
           return render_wizard
         end
+      when :add_a_harm_scenario_and_probability_of_harm
+        @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
+        @harm_scenario.assign_attributes(add_a_harm_scenario_and_probability_of_harm_params)
+        # We have to save the harm scenario manually since one-to-many association record updates
+        # do not mark the parent record as dirty, therefore saving the parent does not save changes
+        # to the child even when using `autosave: true` on the association.
+        # See https://github.com/rails/rails/issues/17466 for more details.
+        unless @harm_scenario.save(context: step)
+          @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+          return render_wizard
+        end
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
@@ -62,8 +76,20 @@ module Prism
           render_wizard
         end
       else
-        render_wizard(@prism_risk_assessment, context: step)
+        params = HARM_SCENARIO_STEPS.include?(step.to_s) ? { harm_scenario_id: @harm_scenario.id } : {}
+        render_wizard(@prism_risk_assessment, { context: step }, params)
       end
+    rescue ActiveRecord::NestedAttributes::TooManyRecords
+      # The user has specified more than the maximum number of harm scenario steps.
+      # We get around the lack of meaningful feedback to the user
+      # by setting a virtual attribute to a value which is then
+      # validated by the model so we can show a nice error message.
+      if @harm_scenario
+        @harm_scenario.too_many_harm_scenario_steps = true
+        @harm_scenario.save!(context: step)
+      end
+
+      render_wizard
     end
 
   private
@@ -119,6 +145,10 @@ module Prism
 
     def choose_hazard_type_params
       params.require(:harm_scenario).permit(:hazard_type, :other_hazard_type, :description, :draft)
+    end
+
+    def add_a_harm_scenario_and_probability_of_harm_params
+      params.require(:harm_scenario).permit(harm_scenario_steps_attributes: %i[id _destroy description probability_type probability_decimal probability_frequency probability_evidence])
     end
 
     def finish_wizard_path

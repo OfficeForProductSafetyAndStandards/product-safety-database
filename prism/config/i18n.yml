@@ -1,0 +1,5 @@
+---
+translations:
+  - file: "<%= Prism::Engine.root %>/app/javascript/locales/en.json"
+    patterns:
+      - "en.prism.*"

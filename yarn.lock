@@ -180,6 +180,11 @@
   resolved "https://registry.yarnpkg.com/@hmcts/frontend/-/frontend-0.0.41-alpha.tgz#a1f3bd75a640e92be914d42f18ce52d3dea770d2"
   integrity sha512-1EJhRYycSMsTUYAx+FsrQ3O9mB9WVsoULikd4J9Xu9nSMk2D4mABIzRdcqvXvlIIMSmVDXJD2xDxInJBg57TsA==
 
+"@hotwired/stimulus@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.2.1.tgz#e3de23623b0c52c247aba4cd5d530d257008676b"
+  integrity sha512-HGlzDcf9vv/EQrMJ5ZG6VWNs8Z/xMN+1o2OhV1gKiSG6CqZt5MCBB1gRg5ILiN3U0jEAxuDTNPRfBcnZBDmupQ==
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.10.tgz#5a3ffe32cc9306365fb3fd572596cd602d5e12d2"
@@ -380,6 +385,11 @@ balanced-match@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-2.0.0.tgz#dc70f920d78db8b858535795867bf48f820633d9"
   integrity sha512-1ugUSr8BHXRnK23KfuYS+gVMC3LB8QGH9W1iGtDPsNWoQbgtXSExkBu2aDR4epiGWZOjZsj6lDl/N/AqqTC3UA==
+
+bignumber.js@*:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.1.tgz#c4df7dc496bd849d4c9464344c1aa74228b4dac6"
+  integrity sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==
 
 binary-extensions@^2.0.0:
   version "2.2.0"
@@ -1231,6 +1241,14 @@ html-tags@^3.2.0:
   resolved "https://registry.yarnpkg.com/html-tags/-/html-tags-3.2.0.tgz#dbb3518d20b726524e4dd43de397eb0a95726961"
   integrity sha512-vy7ClnArOZwCnqZgvv+ddgHgJiAFXe3Ge9ML5/mBctVJoUoYPCdxVucOywjDARn6CVoh3dRSFdPHy2sX80L0Wg==
 
+i18n-js@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-4.3.0.tgz#f1098e21a762faf8b8d09453abfdb6a28ee0f57b"
+  integrity sha512-PX93eT6WPV6Ym6mHtFKGDRZB0zwDX7HUPkgprjsZ28J6/Ohw1nvRYuM93or3pWv2VLxs6XfBf7X9Fc/YAZNEtQ==
+  dependencies:
+    bignumber.js "*"
+    make-plural "*"
+
 ignore@^5.1.1, ignore@^5.2.0, ignore@^5.2.1:
   version "5.2.4"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
@@ -1583,6 +1601,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+make-plural@*:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/make-plural/-/make-plural-7.3.0.tgz#2889dbafca2fb097037c47967d3e3afa7e48a52c"
+  integrity sha512-/K3BC0KIsO+WK2i94LkMPv3wslMrazrQhfi5We9fMbLlLjzoOSJWr7TAdupLlDWaJcWxwoNosBkhFDejiu5VDw==
 
 map-obj@^1.0.0:
   version "1.0.1"
@@ -2209,6 +2232,11 @@ standard@^17.1.0:
     eslint-plugin-react "^7.32.2"
     standard-engine "^15.0.0"
     version-guard "^1.1.1"
+
+stimulus-rails-nested-form@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/stimulus-rails-nested-form/-/stimulus-rails-nested-form-4.1.0.tgz#bfce185cff908170a4eb9973875b72517c3bc83a"
+  integrity sha512-ORqcTsg3sa4PGFEyUkbvcPG56F4K2fx1qJCUQIgngO1GaW5taKcvDkT0HvdTqtQAFe/1lN4CpJAqoSCt+nYF/Q==
 
 string-width@^4.2.3:
   version "4.2.3"

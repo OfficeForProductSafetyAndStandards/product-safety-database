@@ -14,7 +14,7 @@ Prism::Engine.routes.draw do
     get "perform-risk-triage", to: "triage#perform_risk_triage"
   end
 
-  resources :risk_assessment, only: [] do
+  resources :risk_assessment, path: "risk-assessment", only: [] do
     resources :tasks, only: %i[index show update] do
       # Allow a `harm_scenario_id` after the wizard step name for
       # all harm scenario steps
