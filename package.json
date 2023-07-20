@@ -14,7 +14,7 @@
     "govuk-frontend": "4.6.0",
     "i18n-js": "^4.3.0",
     "postcss": "^8.4.26",
-    "sass": "^1.63.6",
+    "sass": "^1.64.0",
     "standard": "^17.1.0",
     "stimulus-rails-nested-form": "^4.1.0",
     "stylelint": "^14.16.1",
