@@ -50,6 +50,25 @@
             <%= form.govuk_input :other_marketplace_name, label: t(".types.other.label"), classes: "js-input-handle-other" %>
           <% end %>
 
+          <% authorised_representative_radios = capture do %>
+            <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @business_type_form&.errors[:authorised_representative_choice].present? %>">
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="govuk-radios govuk-radios--small">
+                    <div class="govuk-radios__item">
+                      <%= form.radio_button :authorised_representative_choice, t(".types.authorised_representative.uk.value"), class: "govuk-radios__input" %>
+                      <%= form.label :authorised_representative_choice, t(".types.authorised_representative.uk.label"), value: t(".types.authorised_representative.uk.value"), class: "govuk-label govuk-radios__label" %>
+                    </div>
+                    <div class="govuk-radios__item">
+                      <%= form.radio_button :authorised_representative_choice, t(".types.authorised_representative.eu.value"), class: "govuk-radios__input" %>
+                      <%= form.label :authorised_representative_choice, t(".types.authorised_representative.eu.label"), value: t(".types.authorised_representative.eu.value"), class: "govuk-label govuk-radios__label" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
           <% radio_items = [
             { value: "retailer", text: t(".types.retailer.label"), hint: { text: t(".types.retailer.hint") } },
             { value: "online_seller", text: t(".types.online_seller.label"), hint: { text: t(".types.online_seller.hint") } },
@@ -58,9 +77,9 @@
             { value: "exporter", text: t(".types.exporter.label") },
             { value: "importer", text: t(".types.importer.label") },
             { value: "fulfillment_house", text: t(".types.fulfillment_house.label") },
-            { value: "distributor", text: t(".types.distributor.label") }
-
-            ] %>
+            { value: "distributor", text: t(".types.distributor.label") },
+            { value: "authorised_representative", text: t(".types.authorised_representative.label"), conditional: { html: authorised_representative_radios }},
+          ] %>
 
           <%= form.govuk_radios :type,
             legend: "",

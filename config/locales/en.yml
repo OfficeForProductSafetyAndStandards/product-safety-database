@@ -130,6 +130,14 @@ en:
           online_marketplace:
             label: Online marketplace
             hint: Online platforms whose primary business is connecting traders and consumers and hosting third party sellers/sales.
+          authorised_representative:
+            label: Authorised representative
+            uk:
+              label: UK Authorised representative
+              value: uk_authorised_representative
+            eu:
+              label: EU Authorised representative
+              value: eu_authorised_representative
           manufacturer:
             label: Manufacturer
           exporter:
@@ -438,6 +446,9 @@ en:
             online_marketplace_id:
               blank: Select an online marketplace
               inclusion: Select an online marketplace
+            authorised_representative_choice:
+              blank: Select an authorised representative region
+              inclusion: Select an authorised representative region
 
         remove_business_form:
           attributes:
