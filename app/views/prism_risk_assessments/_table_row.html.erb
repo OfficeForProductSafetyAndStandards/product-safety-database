@@ -2,9 +2,9 @@
   <th scope="row" class="govuk-table__header">
     <%= prism_risk_assessment.prism_product&.name || "Unknown" %>
   </th>
-  <th class="govuk-table__header">
+  <td class="govuk-table__cell">
     <%= prism_risk_assessment.prism_harm_scenarios&.first&.description || "None" %>
-  </th>
+  </td>
   <td class="govuk-table__cell">
     <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
   </td>

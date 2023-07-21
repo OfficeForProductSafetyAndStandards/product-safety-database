@@ -1,0 +1,28 @@
+<% content_for :page_title, "Determine severity of harm" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @harm_scenario.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Create product harm scenarios</span>
+        Determine severity of harm
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= hazard_type %></p>
+        <p class="govuk-body">Placeholder product</p>
+        <p class="govuk-body"><%= @harm_scenario.description %></p>
+        <p class="govuk-body">Affected users: <%= affected_users %></p>
+        <p class="govuk-body">Overall probability of harm: <%= overall_probability_of_harm[:probability_human] %></p>
+      <% end %>
+      <p class="govuk-body">Choose the level of severity of harm most appropriate for the product.</p>
+      <%= f.govuk_collection_radio_buttons :severity, severity_radios, :id, :name, :description, legend: nil, bold_labels: false %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

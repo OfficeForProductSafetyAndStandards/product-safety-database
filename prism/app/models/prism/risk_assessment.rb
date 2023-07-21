@@ -5,10 +5,10 @@ module Prism
   class RiskAssessment < ApplicationRecord
     include AASM
 
-    has_one :product, autosave: true
-    has_one :product_market_detail, autosave: true
-    has_one :product_hazard, autosave: true
-    has_many :harm_scenarios, autosave: true
+    has_one :product, autosave: true, dependent: :destroy
+    has_one :product_market_detail, autosave: true, dependent: :destroy
+    has_one :product_hazard, autosave: true, dependent: :destroy
+    has_many :harm_scenarios, autosave: true, dependent: :destroy
 
     enum risk_type: {
       "normal_risk" => "normal_risk",

@@ -27,6 +27,8 @@ module Prism
       when :add_a_harm_scenario_and_probability_of_harm
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
         @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+      when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis
+        @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
       end
 
       render_wizard
@@ -61,6 +63,16 @@ module Prism
         # See https://github.com/rails/rails/issues/17466 for more details.
         unless @harm_scenario.save(context: step)
           @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+          return render_wizard
+        end
+      when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis
+        @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
+        @harm_scenario.assign_attributes(send("#{step}_params"))
+        # We have to save the harm scenario manually since one-to-many association record updates
+        # do not mark the parent record as dirty, therefore saving the parent does not save changes
+        # to the child even when using `autosave: true` on the association.
+        # See https://github.com/rails/rails/issues/17466 for more details.
+        unless @harm_scenario.save(context: step)
           return render_wizard
         end
       end
@@ -148,7 +160,19 @@ module Prism
     end
 
     def add_a_harm_scenario_and_probability_of_harm_params
-      params.require(:harm_scenario).permit(harm_scenario_steps_attributes: %i[id _destroy description probability_type probability_decimal probability_frequency probability_evidence])
+      params.require(:harm_scenario).permit(:draft, harm_scenario_steps_attributes: %i[id _destroy description probability_type probability_decimal probability_frequency probability_evidence probability_evidence_description_limited probability_evidence_description_strong])
+    end
+
+    def determine_severity_of_harm_params
+      params.require(:harm_scenario).permit(:severity, :draft)
+    end
+
+    def determine_severity_of_harm_casualties_params
+      params.require(:harm_scenario).permit(:multiple_casualties, :draft)
+    end
+
+    def add_uncertainty_and_sensitivity_analysis_params
+      params.require(:harm_scenario).permit(:level_of_uncertainty, :sensitivity_analysis, :draft)
     end
 
     def finish_wizard_path
