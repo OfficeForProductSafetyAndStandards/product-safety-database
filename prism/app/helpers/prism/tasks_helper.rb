@@ -214,5 +214,26 @@ module Prism
         govuk_tag(text: "Serious risk", colour: "red")
       end
     end
+
+    def file_icon_url(content_type)
+      case content_type
+      when "application/pdf"
+        image_path("prism/icons/pdf-file.png")
+      when "image/jpeg"
+        image_path("prism/icons/jpg-file.png")
+      when "image/gif"
+        image_path("prism/icons/gif-file.png")
+      when "image/png"
+        image_path("prism/icons/png-file.png")
+      when "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        image_path("prism/icons/doc-file.png")
+      when "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        image_path("prism/icons/ppt-file.png")
+      when "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        image_path("prism/icons/xls-file.png")
+      else
+        image_path("prism/icons/blank-file.png")
+      end
+    end
   end
 end

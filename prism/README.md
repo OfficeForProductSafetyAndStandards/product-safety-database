@@ -46,3 +46,7 @@ User-uploaded files are saved to AWS S3 - ask someone on the team to invite you.
 ## Licence
 
 [MIT licence](../LICENSE)
+
+## Acknowledgements
+
+File icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com).

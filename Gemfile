@@ -5,7 +5,7 @@ ruby "3.2.1"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 2.0"
-gem "active_storage_validations", "~> 1.0.3"
+gem "active_storage_validations", "~> 1.0.4"
 gem "aws-sdk-s3", "~> 1.120"
 gem "aws-sdk-s3control", "~> 1.63"
 gem "bootsnap", require: false

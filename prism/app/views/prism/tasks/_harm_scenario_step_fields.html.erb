@@ -40,9 +40,17 @@
     <%= f.govuk_radio_button :probability_evidence, "sole_judgement_or_estimation", label: { text: "Sole judgement or estimation" }, link_errors: true %>
     <%= f.govuk_radio_button :probability_evidence, "some_limited_empirical_evidence", label: { text: "Some limited empirical evidence" } do %>
       <%= f.govuk_text_area :probability_evidence_description_limited, label: { text: "Describe the evidence including any links to reference materials." } %>
+      <%= f.fields_for :harm_scenario_step_evidence do |ef| %>
+        <%= ef.govuk_file_field :evidence_file, label: { text: "Attach a document in support of your decision." }, hint: { text: "Acceptable file formats: pdf, Word, Excel, PowerPoint, jpeg, gif and png." }, accept: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.gif,.png" %>
+        <%= render partial: "attachment", locals: { file: ef.object.evidence_file } %>
+      <% end %>
     <% end %>
     <%= f.govuk_radio_button :probability_evidence, "strong_empirical_evidence", label: { text: "Strong empirical evidence" } do %>
       <%= f.govuk_text_area :probability_evidence_description_strong, label: { text: "Describe the evidence including any links to reference materials." } %>
+      <%= f.fields_for :harm_scenario_step_evidence do |ef| %>
+        <%= ef.govuk_file_field :evidence_file, label: { text: "Attach a document in support of your decision." }, hint: { text: "Acceptable file formats: pdf, Word, Excel, PowerPoint, jpeg, gif and png." }, accept: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.gif,.png" %>
+        <%= render partial: "attachment", locals: { file: ef.object.evidence_file } %>
+      <% end %>
     <% end %>
   <% end %>
   <%= f.hidden_field :_destroy %>

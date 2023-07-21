@@ -40,3 +40,13 @@ body.js-enabled .opss-nojs-hide {
   padding: 0;
   list-style: none;
 }
+
+.opss-file-attachment {
+  margin-top: govuk-spacing(2);
+  padding: govuk-spacing(2);
+  background-color: govuk-colour("light-grey");
+
+  img {
+    vertical-align: middle;
+  }
+}
