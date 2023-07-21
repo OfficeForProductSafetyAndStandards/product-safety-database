@@ -24,6 +24,7 @@ class Investigations::BusinessesController < Investigations::BaseController
         relationship: session[:business_type],
         online_marketplace_id: session[:online_marketplace_id],
         other_marketplace_name: session[:other_marketplace_name],
+        authorised_representative_choice: session[:authorised_representative_choice],
       )
     )
 
@@ -36,6 +37,7 @@ class Investigations::BusinessesController < Investigations::BaseController
           relationship: @business_form.relationship,
           online_marketplace: @business_form.online_marketplace,
           other_marketplace_name: @business_form.other_marketplace_name,
+          authorised_representative_choice: @business_form.authorised_representative_choice,
           investigation: @investigation,
           user: current_user
         )

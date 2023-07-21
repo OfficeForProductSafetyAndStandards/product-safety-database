@@ -22,6 +22,8 @@ class SetBusinessTypeOnCaseForm
       session[:online_marketplace_id] = online_marketplace_id
     elsif is_other_online_marketplace?
       session[:other_marketplace_name] = other_marketplace_name
+    elsif is_authorised_representative?
+      session[:authorised_representative_choice] = authorised_representative_choice
     end
   end
 
@@ -29,6 +31,7 @@ class SetBusinessTypeOnCaseForm
     session.delete(:business_type)
     session.delete(:online_marketplace_id)
     session.delete(:other_marketplace_name)
+    session.delete(:authorised_representative_choice)
   end
 
 private
