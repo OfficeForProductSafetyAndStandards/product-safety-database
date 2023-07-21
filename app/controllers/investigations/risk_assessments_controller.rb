@@ -1,7 +1,7 @@
 module Investigations
   class RiskAssessmentsController < Investigations::BaseController
     before_action :set_investigation
-    before_action :authorize_investigation_updates
+    before_action :authorize_investigation_updates, except: %i[show]
     before_action :set_investigation_breadcrumbs
 
     def new
