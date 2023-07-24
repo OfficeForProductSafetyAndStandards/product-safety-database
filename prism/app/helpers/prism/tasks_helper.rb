@@ -1,5 +1,3 @@
-require_relative "../../../lib/prism/risk_matrix"
-
 module Prism
   module TasksHelper
     def normal_risk_sections
@@ -171,37 +169,13 @@ module Prism
     def overall_probability_of_harm
       return unless @harm_scenario
 
-      # Get the probability of harm for all harm scenario steps
-      probabilities = []
-      steps = @harm_scenario.harm_scenario_steps.select(:probability_type, :probability_decimal, :probability_frequency)
-      steps.each do |step|
-        probabilities << if step.probability_type == "frequency"
-                           step.probability_frequency.zero? ? 0 : (1.0 / step.probability_frequency)
-                         else
-                           step.probability_decimal
-                         end
-      end
-      probabilities = probabilities.reject(&:zero?)
-
-      if probabilities.blank?
-        return {
-          probability: nil,
-          probability_human: "N/A",
-        }
-      end
-
-      probability = (1.0 / probabilities.reduce(:*)).round
-
-      {
-        probability:,
-        probability_human: "1 in #{number_with_delimiter(probability)}",
-      }
+      Prism::ProbabilityService.overall_probability_of_harm(harm_scenario: @harm_scenario)
     end
 
     def overall_risk_level_tag
       return unless @harm_scenario
 
-      risk_level = RiskMatrix.risk_level(probability_frequency: overall_probability_of_harm[:probability], severity_level: @harm_scenario.severity.to_sym)
+      risk_level = Prism::RiskMatrixService.risk_level(probability_frequency: overall_probability_of_harm.probability, severity_level: @harm_scenario.severity.to_sym)
 
       case risk_level
       when "low"

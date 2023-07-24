@@ -27,4 +27,8 @@ Prism::Engine.routes.draw do
       end
     end
   end
+
+  scope "/api" do
+    get "overall-probability-of-harm", to: "api#overall_probability_of_harm"
+  end
 end
