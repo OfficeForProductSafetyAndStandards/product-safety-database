@@ -166,6 +166,10 @@ module Prism
       I18n.t("prism.harm_scenarios.severity.#{@harm_scenario.severity}")
     end
 
+    def probability_of_harm(type:, probability:)
+      type == "frequency" ? "1 in #{probability}" : probability
+    end
+
     def overall_probability_of_harm
       return unless @harm_scenario
 
@@ -187,6 +191,16 @@ module Prism
       when "serious"
         govuk_tag(text: "Serious risk", colour: "red")
       end
+    end
+
+    def harm_scenario_step_summary(harm_scenario_step)
+      file = harm_scenario_step.harm_scenario_step_evidence&.evidence_file
+      [
+        harm_scenario_step.description,
+        "Probability of harm: #{probability_of_harm(**harm_scenario_step.probability_of_harm)}",
+        "Evidence: #{t("prism.harm_scenario_steps.probability_evidence.#{harm_scenario_step.probability_evidence}")}",
+        ("<a href=\"#{main_app.rails_storage_proxy_path(file)}\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">#{file.blob.filename}</a>" if file && file.metadata["safe"] == true),
+      ].join("<br>")
     end
 
     def file_icon_url(content_type)

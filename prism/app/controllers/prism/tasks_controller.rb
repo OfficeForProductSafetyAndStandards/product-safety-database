@@ -28,7 +28,7 @@ module Prism
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
         @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
         @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
-      when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis
+      when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis, :check_your_harm_scenario
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
       end
 
@@ -67,7 +67,7 @@ module Prism
           @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
           return render_wizard
         end
-      when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis
+      when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis, :check_your_harm_scenario
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
         @harm_scenario.assign_attributes(send("#{step}_params"))
         # We have to save the harm scenario manually since one-to-many association record updates
@@ -90,8 +90,13 @@ module Prism
           render_wizard
         end
       else
-        params = HARM_SCENARIO_STEPS.include?(step.to_s) ? { harm_scenario_id: @harm_scenario.id } : {}
-        render_wizard(@prism_risk_assessment, { context: step }, params)
+        step_params = HARM_SCENARIO_STEPS.include?(step.to_s) ? { harm_scenario_id: @harm_scenario.id } : {}
+
+        if HARM_SCENARIO_STEPS.include?(step.to_s) && params[:harm_scenario][:back_to] == "summary"
+          redirect_to wizard_path(:check_your_harm_scenario)
+        else
+          render_wizard(@prism_risk_assessment, { context: step }, step_params)
+        end
       end
     rescue ActiveRecord::NestedAttributes::TooManyRecords
       # The user has specified more than the maximum number of harm scenario steps.
@@ -158,23 +163,27 @@ module Prism
     end
 
     def choose_hazard_type_params
-      params.require(:harm_scenario).permit(:hazard_type, :other_hazard_type, :description, :draft)
+      params.require(:harm_scenario).permit(:hazard_type, :other_hazard_type, :description, :back_to, :draft)
     end
 
     def add_a_harm_scenario_and_probability_of_harm_params
-      params.require(:harm_scenario).permit(:draft, harm_scenario_steps_attributes: [:id, :_destroy, :description, :probability_type, :probability_decimal, :probability_frequency, :probability_evidence, :probability_evidence_description_limited, :probability_evidence_description_strong, { harm_scenario_step_evidence_attributes: %i[id evidence_file] }])
+      params.require(:harm_scenario).permit(:back_to, :draft, harm_scenario_steps_attributes: [:id, :_destroy, :description, :probability_type, :probability_decimal, :probability_frequency, :probability_evidence, :probability_evidence_description_limited, :probability_evidence_description_strong, { harm_scenario_step_evidence_attributes: %i[id evidence_file] }])
     end
 
     def determine_severity_of_harm_params
-      params.require(:harm_scenario).permit(:severity, :draft)
+      params.require(:harm_scenario).permit(:severity, :back_to, :draft)
     end
 
     def determine_severity_of_harm_casualties_params
-      params.require(:harm_scenario).permit(:multiple_casualties, :draft)
+      params.require(:harm_scenario).permit(:multiple_casualties, :back_to, :draft)
     end
 
     def add_uncertainty_and_sensitivity_analysis_params
-      params.require(:harm_scenario).permit(:level_of_uncertainty, :sensitivity_analysis, :draft)
+      params.require(:harm_scenario).permit(:level_of_uncertainty, :sensitivity_analysis, :back_to, :draft)
+    end
+
+    def check_your_harm_scenario_params
+      params.require(:harm_scenario).permit(:confirmed)
     end
 
     def finish_wizard_path

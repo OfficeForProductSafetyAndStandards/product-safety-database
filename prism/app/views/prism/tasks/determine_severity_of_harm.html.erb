@@ -20,6 +20,7 @@
       <% end %>
       <p class="govuk-body">Choose the level of severity of harm most appropriate for the product.</p>
       <%= f.govuk_collection_radio_buttons :severity, severity_radios, :id, :name, :description, legend: nil, bold_labels: false %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>

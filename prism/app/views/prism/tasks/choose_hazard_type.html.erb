@@ -30,6 +30,7 @@
         <% end %>
       <% end %>
       <%= f.govuk_text_area :description, label: { text: "Hazard description", size: "m" }, hint: { text: "Describe the specific hazard found in the product, for example absence of fuse." } %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>

@@ -10,6 +10,8 @@ module Prism
     accepts_nested_attributes_for :harm_scenario_step_evidences, reject_if: :all_blank
 
     attribute :too_many_harm_scenario_steps, :boolean, default: false
+    attribute :confirmed, :boolean, default: false
+    attribute :back_to, :string # This is just here to allow `back_to` to be sent to the controller
 
     enum hazard_type: {
       "mechanical" => "mechanical",
@@ -49,11 +51,16 @@ module Prism
     validates :sensitivity_analysis, inclusion: [true, false], on: :add_uncertainty_and_sensitivity_analysis
 
     before_save :clear_other_hazard_type
+    before_save :set_confirmed_at
 
   private
 
     def clear_other_hazard_type
       self.other_hazard_type = nil unless hazard_type == "other"
+    end
+
+    def set_confirmed_at
+      self.confirmed_at = Time.zone.now if confirmed
     end
   end
 end

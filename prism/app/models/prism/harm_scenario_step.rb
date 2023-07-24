@@ -33,6 +33,13 @@ module Prism
     after_find :set_probability_evidence_description_virtual_attributes
     before_validation :set_probability_evidence_description
     before_save :clear_probability
+    before_save :clear_harm_scenario_step_evidence
+
+    def probability_of_harm
+      return unless probability_type
+
+      { type: probability_type, probability: probability_frequency || probability_decimal }
+    end
 
   private
 
@@ -61,6 +68,10 @@ module Prism
     def clear_probability
       self.probability_decimal = nil if probability_type == "frequency"
       self.probability_frequency = nil if probability_type == "decimal"
+    end
+
+    def clear_harm_scenario_step_evidence
+      harm_scenario_step_evidence.destroy! if probability_evidence == "sole_judgement_or_estimation" && harm_scenario_step_evidence.present?
     end
   end
 end
