@@ -117,6 +117,14 @@ en:
               blank: Enter a description of the evidence
             probability_evidence_description_strong:
               blank: Enter a description of the evidence
+            harm_scenario_step_evidence:
+              blank: Attach a document in support of your decision
+        prism/harm_scenario_step_evidence:
+          attributes:
+            evidence_file:
+              blank: Attach a document in support of your decision
+              content_type_invalid: Attach a document in a valid format
+              file_size_out_of_range: Attach a document smaller than 30MB
   prism:
     tasks:
       task_list:

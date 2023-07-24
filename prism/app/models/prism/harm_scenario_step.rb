@@ -1,6 +1,9 @@
 module Prism
   class HarmScenarioStep < ApplicationRecord
     belongs_to :harm_scenario
+    has_one :harm_scenario_step_evidence
+
+    accepts_nested_attributes_for :harm_scenario_step_evidence, reject_if: :all_blank
 
     default_scope { order(created_at: :asc) }
 
@@ -25,6 +28,7 @@ module Prism
     validates :probability_evidence, inclusion: %w[sole_judgement_or_estimation some_limited_empirical_evidence strong_empirical_evidence]
     validates :probability_evidence_description_limited, presence: true, if: -> { probability_evidence == "some_limited_empirical_evidence" }
     validates :probability_evidence_description_strong, presence: true, if: -> { probability_evidence == "strong_empirical_evidence" }
+    validates :harm_scenario_step_evidence, presence: true, if: -> { %w[some_limited_empirical_evidence strong_empirical_evidence].include?(probability_evidence) }
 
     after_find :set_probability_evidence_description_virtual_attributes
     before_validation :set_probability_evidence_description

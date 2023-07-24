@@ -5,7 +5,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @harm_scenario, data: { controller: "nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }, url: wizard_path, method: :patch do |f| %>
-      <%= f.govuk_error_summary %>
+      <%= f.govuk_error_summary(presenter: Prism::HarmScenarioStepErrorSummaryPresenter) %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Create product harm scenarios</span>
         Add harm scenario

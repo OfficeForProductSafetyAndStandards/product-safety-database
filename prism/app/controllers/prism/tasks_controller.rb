@@ -27,6 +27,7 @@ module Prism
       when :add_a_harm_scenario_and_probability_of_harm
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
         @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+        @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
       when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
       end
@@ -63,6 +64,7 @@ module Prism
         # See https://github.com/rails/rails/issues/17466 for more details.
         unless @harm_scenario.save(context: step)
           @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+          @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
           return render_wizard
         end
       when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis
@@ -160,7 +162,7 @@ module Prism
     end
 
     def add_a_harm_scenario_and_probability_of_harm_params
-      params.require(:harm_scenario).permit(:draft, harm_scenario_steps_attributes: %i[id _destroy description probability_type probability_decimal probability_frequency probability_evidence probability_evidence_description_limited probability_evidence_description_strong])
+      params.require(:harm_scenario).permit(:draft, harm_scenario_steps_attributes: [:id, :_destroy, :description, :probability_type, :probability_decimal, :probability_frequency, :probability_evidence, :probability_evidence_description_limited, :probability_evidence_description_strong, { harm_scenario_step_evidence_attributes: %i[id evidence_file] }])
     end
 
     def determine_severity_of_harm_params

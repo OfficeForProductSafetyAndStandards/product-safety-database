@@ -3,9 +3,11 @@ module Prism
     MAX_HARM_SCENARIO_STEPS = 30
 
     belongs_to :risk_assessment
-    has_many :harm_scenario_steps, dependent: :destroy
+    has_many :harm_scenario_steps, index_errors: true, dependent: :destroy
+    has_many :harm_scenario_step_evidences, through: :harm_scenario_steps, dependent: :destroy
 
     accepts_nested_attributes_for :harm_scenario_steps, limit: MAX_HARM_SCENARIO_STEPS, allow_destroy: true, reject_if: :all_blank
+    accepts_nested_attributes_for :harm_scenario_step_evidences, reject_if: :all_blank
 
     attribute :too_many_harm_scenario_steps, :boolean, default: false
 
