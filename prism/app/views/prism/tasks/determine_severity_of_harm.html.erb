@@ -16,7 +16,7 @@
         <p class="govuk-body">Placeholder product</p>
         <p class="govuk-body"><%= @harm_scenario.description %></p>
         <p class="govuk-body">Affected users: <%= affected_users %></p>
-        <p class="govuk-body">Overall probability of harm: <%= overall_probability_of_harm[:probability_human] %></p>
+        <p class="govuk-body">Overall probability of harm: <%= overall_probability_of_harm.probability_human %></p>
       <% end %>
       <p class="govuk-body">Choose the level of severity of harm most appropriate for the product.</p>
       <%= f.govuk_collection_radio_buttons :severity, severity_radios, :id, :name, :description, legend: nil, bold_labels: false %>

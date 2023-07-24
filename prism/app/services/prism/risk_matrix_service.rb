@@ -1,5 +1,5 @@
 module Prism
-  class RiskMatrix
+  class RiskMatrixService
     RISK_MATRIX = {
       more_than_or_equal_to_1_in_2: {
         level_1: "high",
