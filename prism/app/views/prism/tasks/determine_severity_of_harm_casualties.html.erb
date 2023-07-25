@@ -32,6 +32,7 @@
         bold_labels: false,
         inline: true
       %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>

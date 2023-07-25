@@ -33,6 +33,7 @@
       <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" data-action="nested-form#add">Add another step</a></p>
       <h2 class="govuk-heading-m govuk-!-padding-top-4">Overall probability of harm</h2>
       <p class="govuk-body-l" id="overall-probability-of-harm"><%= overall_probability_of_harm.probability_human %></p>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>

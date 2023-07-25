@@ -156,6 +156,8 @@ en:
                 title: Determine severity of harm
               add_uncertainty_and_sensitivity_analysis:
                 title: Add uncertainty and sensitivity analysis
+              check_your_harm_scenario:
+                title: Check your harm scenario
               confirm_overall_product_risk:
                 title: Confirm overall product risk
           evaluate:
@@ -189,7 +191,15 @@ en:
         level_2: Level 2
         level_3: Level 3
         level_4: Level 4
+      level_of_uncertainty:
+        low: Low
+        medium: Medium
+        high: High
     harm_scenario_steps:
       step_0_hint: Step 1 should cover the existence of a hazard which can foreseeably cause harm during the lifetime of the product. For example, the car seat is occupied by an infant while the vehicle is in use.
       step_1_hint: Step 2 should describe how the user (and/or other subjects) becomes exposed to risk. For example, the vehicle containing the seat/child is involved in a frontal collision of sufficient magnitude that the protection offered by the seat is necessary.
       step_2_hint: Step 3 should describe how exposure to the risk results in harm. For example, the occupant of the seat suffers injury as a result of the collision.
+      probability_evidence:
+        sole_judgement_or_estimation: Sole judgement or estimation
+        some_limited_empirical_evidence: Some limited empirical evidence
+        strong_empirical_evidence: Strong empirical evidence
