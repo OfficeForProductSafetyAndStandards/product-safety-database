@@ -52,6 +52,10 @@ en:
               blank: Enter the full name of the assessor
             assessment_organisation:
               blank: Enter the name of the assessment organisation
+            harm_scenarios:
+              invalid:
+                one: Complete all parts of the harm scenario
+                other: "Complete %{invalid} of %{count} harm scenarios"
         prism/product_market_detail:
           attributes:
             selling_organisation:

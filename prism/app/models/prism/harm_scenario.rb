@@ -53,6 +53,11 @@ module Prism
     before_save :clear_other_hazard_type
     before_save :set_confirmed_at
 
+    def valid_for_completion?
+      valid?(%i[choose_hazard_type add_a_harm_scenario_and_probability_of_harm determine_severity_of_harm determine_severity_of_harm_casualties add_uncertainty_and_sensitivity_analysis]) &&
+        harm_scenario_steps.count.positive?
+    end
+
   private
 
     def clear_other_hazard_type

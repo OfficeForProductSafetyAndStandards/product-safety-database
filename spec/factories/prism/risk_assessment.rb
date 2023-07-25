@@ -11,7 +11,9 @@ FactoryBot.define do
         "choose_hazard_type" => "not_started",
         "add_a_harm_scenario_and_probability_of_harm" => "not_started",
         "determine_severity_of_harm" => "not_started",
+        "determine_severity_of_harm_casualties" => "not_started",
         "add_uncertainty_and_sensitivity_analysis" => "not_started",
+        "check_your_harm_scenario" => "not_started",
         "confirm_overall_product_risk" => "not_started",
         "complete_product_risk_evaluation" => "not_started",
         "review_and_submit_results_of_the_assessment" => "not_started"

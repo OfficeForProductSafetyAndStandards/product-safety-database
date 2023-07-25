@@ -20,7 +20,7 @@
       <p class="govuk-text">The scenario will normally contain two or more steps. The nature of probability is such that the more steps there are, in general the lower the probability will be. It is rare that more than five steps are necessary.</p>
       <div id="opss-steps">
         <template data-nested-form-target="template">
-          <%= f.fields_for :harm_scenario_steps, Prism::HarmScenarioStep.new, child_index: "NEW_RECORD" do |step_fields| %>
+          <%= f.fields_for :harm_scenario_steps, Prism::HarmScenarioStep.new(harm_scenario_step_evidence: Prism::HarmScenarioStepEvidence.new), child_index: "NEW_RECORD" do |step_fields| %>
             <%= render partial: "harm_scenario_step_fields", locals: { f: step_fields, show_index: false } %>
           <% end %>
         </template>
