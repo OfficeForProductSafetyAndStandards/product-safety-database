@@ -908,3 +908,6 @@ en:
       fulfillment_house: "Fulfillment house"
       distributor: "Distributor"
       other: "Other"
+      authorised_reprsentative:
+        uk_authorised_representative: "UK Authorised representative"
+        eu_authorised_representative: "EU Authorised representative"

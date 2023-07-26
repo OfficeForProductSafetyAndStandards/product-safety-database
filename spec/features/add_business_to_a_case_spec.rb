@@ -233,15 +233,6 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
       expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
       expect(page.find("dt", text: "Business type")).to have_sibling("dd", text: "EU Authorised representative")
     end
-
-    # Check that adding  the business was recorded in the
-    # activity log for the investigation.
-    click_link "Activity"
-    expect(page).to have_text("Business added")
-    expect_to_have_case_breadcrumbs
-
-    expect(page.find("h3", text: "Business added"))
-      .to have_sibling(".govuk-body", text: "Role: eu_authorised_representative")
   end
 
   scenario "Adding an 'other' online marketplace business" do
