@@ -68,6 +68,30 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
         end
       end
     end
+
+    context "when type is authorised_representative" do
+      let(:type) { "authorised_representative" }
+      let(:authorised_representative_choice) { "eu" }
+      let(:params) do
+        {
+          type:,
+          authorised_representative_choice:,
+        }
+      end
+
+      it "is valid" do
+        expect(form).to be_valid
+      end
+
+      context "when authorised_representative_choice is missing" do
+        let(:authorised_representative_choice) { nil }
+
+        it "is invalid with an invalid authorised_representative_choice" do
+          expect(form).not_to be_valid
+          expect(form.errors[:authorised_representative_choice]).to include("Select an authorised representative region")
+        end
+      end
+    end
   end
 
   describe "#set_params_on_session" do

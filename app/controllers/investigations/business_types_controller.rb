@@ -26,6 +26,6 @@ private
   end
 
   def business_request_params
-    params.require(:set_business_type_on_case_form).permit(:type, :online_marketplace_id, :other_marketplace_name)
+    params.require(:set_business_type_on_case_form).permit(:type, :online_marketplace_id, :other_marketplace_name, :authorised_representative_choice)
   end
 end
