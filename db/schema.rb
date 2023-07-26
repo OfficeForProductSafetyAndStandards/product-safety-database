@@ -201,6 +201,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_24_144332) do
   end
 
   create_table "investigation_businesses", id: :serial, force: :cascade do |t|
+    t.string "authorised_representative_choice"
     t.integer "business_id"
     t.datetime "created_at", precision: nil, null: false
     t.integer "investigation_id"
