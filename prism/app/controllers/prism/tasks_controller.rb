@@ -30,6 +30,8 @@ module Prism
         @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
       when :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis, :check_your_harm_scenario
         @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
+      when :confirm_overall_product_risk
+        @harm_scenarios = @prism_risk_assessment.harm_scenarios
       end
 
       render_wizard
@@ -77,6 +79,8 @@ module Prism
         unless @harm_scenario.save(context: step)
           return render_wizard
         end
+      when :confirm_overall_product_risk
+        @harm_scenarios = @prism_risk_assessment.harm_scenarios
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
@@ -90,7 +94,7 @@ module Prism
           render_wizard
         end
       else
-        step_params = HARM_SCENARIO_STEPS.include?(step.to_s) ? { harm_scenario_id: @harm_scenario.id } : {}
+        step_params = HARM_SCENARIO_STEPS.include?(next_step.to_s) ? { harm_scenario_id: @harm_scenario.id } : {}
 
         if HARM_SCENARIO_STEPS.include?(step.to_s) && params[:harm_scenario][:back_to] == "summary"
           redirect_to wizard_path(:check_your_harm_scenario)

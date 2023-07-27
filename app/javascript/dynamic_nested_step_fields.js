@@ -35,13 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Detect added or removed steps
-  const dynamicNestedStepFieldsNewObserver = new MutationObserver(dynamicNestedStepFieldsCallback)
-  const dynamicNestedStepFieldsExistingObserver = new MutationObserver(dynamicNestedStepFieldsCallback)
-  dynamicNestedStepFieldsNewObserver.observe(document.querySelector('form[data-controller="nested-form"]'), { childList: true })
-  dynamicNestedStepFieldsExistingObserver.observe(document.querySelector('form[data-controller="nested-form"]'), { subtree: true, attributeFilter: ['style'] })
+  if (document.querySelector('form[data-controller="nested-form"]')) {
+    const dynamicNestedStepFieldsNewObserver = new MutationObserver(dynamicNestedStepFieldsCallback)
+    const dynamicNestedStepFieldsExistingObserver = new MutationObserver(dynamicNestedStepFieldsCallback)
+    dynamicNestedStepFieldsNewObserver.observe(document.querySelector('form[data-controller="nested-form"]'), { childList: true })
+    dynamicNestedStepFieldsExistingObserver.observe(document.querySelector('form[data-controller="nested-form"]'), { subtree: true, attributeFilter: ['style'] })
 
-  // Attach events to existing steps
-  if (typeof attachOpssStepEventHandler === 'function') {
-    attachOpssStepEventHandler()
+    // Attach events to existing steps
+    if (typeof attachOpssStepEventHandler === 'function') {
+      attachOpssStepEventHandler()
+    }
   }
 })

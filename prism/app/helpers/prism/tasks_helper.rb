@@ -57,10 +57,14 @@ module Prism
       ]
     end
 
-    def hazard_type
-      return unless @harm_scenario
+    def hazard_type(harm_scenario = nil)
+      return unless @harm_scenario || harm_scenario
 
-      @harm_scenario.other? ? @harm_scenario.other_hazard_type : I18n.t("prism.harm_scenarios.hazard_types.#{@harm_scenario.hazard_type}")
+      record = @harm_scenario || harm_scenario
+
+      return "Unknown" if record.hazard_type.nil?
+
+      record.other? ? record.other_hazard_type : I18n.t("prism.harm_scenarios.hazard_types.#{record.hazard_type}")
     end
 
     def affected_users
@@ -160,26 +164,45 @@ module Prism
       ]
     end
 
-    def severity_of_harm
-      return unless @harm_scenario
+    def severity_of_harm(harm_scenario = nil)
+      return unless @harm_scenario || harm_scenario
 
-      I18n.t("prism.harm_scenarios.severity.#{@harm_scenario.severity}")
+      record = @harm_scenario || harm_scenario
+
+      return "Unknown" if record.severity.nil?
+
+      I18n.t("prism.harm_scenarios.severity.#{record.severity}")
+    end
+
+    def level_of_uncertainty(harm_scenario = nil)
+      return unless @harm_scenario || harm_scenario
+
+      record = @harm_scenario || harm_scenario
+
+      return "Unknown" if record.level_of_uncertainty.nil?
+
+      I18n.t("prism.harm_scenarios.level_of_uncertainty.#{record.level_of_uncertainty}")
     end
 
     def probability_of_harm(type:, probability:)
       type == "frequency" ? "1 in #{probability}" : probability
     end
 
-    def overall_probability_of_harm
-      return unless @harm_scenario
+    def overall_probability_of_harm(harm_scenario = nil)
+      return unless @harm_scenario || harm_scenario
 
-      Prism::ProbabilityService.overall_probability_of_harm(harm_scenario: @harm_scenario)
+      record = @harm_scenario || harm_scenario
+      Prism::ProbabilityService.overall_probability_of_harm(harm_scenario: record)
     end
 
-    def overall_risk_level_tag
-      return unless @harm_scenario
+    def overall_risk_level_tag(harm_scenario = nil)
+      return unless @harm_scenario || harm_scenario
 
-      risk_level = Prism::RiskMatrixService.risk_level(probability_frequency: overall_probability_of_harm.probability, severity_level: @harm_scenario.severity.to_sym)
+      record = @harm_scenario || harm_scenario
+
+      return govuk_tag(text: "Unknown", colour: "grey") if record.severity.nil?
+
+      risk_level = Prism::RiskMatrixService.risk_level(probability_frequency: overall_probability_of_harm(record).probability, severity_level: record.severity.to_sym)
 
       case risk_level
       when "low"

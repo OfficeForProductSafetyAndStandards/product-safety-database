@@ -50,3 +50,8 @@ body.js-enabled .opss-nojs-hide {
     vertical-align: middle;
   }
 }
+
+.opss-table__cell--error {
+  padding-left: 10px;
+  border-left: 5px solid $govuk-error-colour;
+}

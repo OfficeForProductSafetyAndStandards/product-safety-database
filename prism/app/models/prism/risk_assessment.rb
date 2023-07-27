@@ -21,6 +21,7 @@ module Prism
     validates :less_than_serious_risk, inclusion: [true, false], on: :serious_risk_rebuttable
     validates :serious_risk_rebuttable_factors, presence: true, if: -> { less_than_serious_risk }, on: :serious_risk_rebuttable
     validates :assessor_name, :assessment_organisation, presence: true, on: :add_assessment_details
+    validate :check_all_harm_scenarios, on: :confirm_overall_product_risk
 
     before_save :clear_serious_risk_rebuttable_factors
 
@@ -36,6 +37,11 @@ module Prism
     end
 
   private
+
+    def check_all_harm_scenarios
+      harm_scenario_statuses = harm_scenarios.collect(&:valid_for_completion?)
+      errors.add(:harm_scenarios, :invalid, invalid: harm_scenario_statuses.tally[false], count: harm_scenario_statuses.length) if harm_scenario_statuses.include?(false)
+    end
 
     def clear_serious_risk_rebuttable_factors
       self.serious_risk_rebuttable_factors = nil unless less_than_serious_risk
