@@ -162,11 +162,11 @@ en:
                 title: Add uncertainty and sensitivity analysis
               check_your_harm_scenario:
                 title: Check your harm scenario
-              confirm_overall_product_risk:
-                title: Confirm overall product risk
           evaluate:
             title: Evaluate product risk and submit assessment
             tasks:
+              confirm_overall_product_risk:
+                title: Determine overall risk level of harm scenarios
               complete_product_risk_evaluation:
                 title: Complete product risk evaluation
               review_and_submit_results_of_the_assessment:

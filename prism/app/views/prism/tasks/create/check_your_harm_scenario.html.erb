@@ -79,7 +79,14 @@
         end
       %>
       <%= f.hidden_field :confirmed, value: true %>
-      <%= f.govuk_submit "Confirm and create scenario" %>
+      <% if @harm_scenario.confirmed? %>
+        <div class="govuk-button-group">
+          <%= f.govuk_submit "Confirm changes", name: "final", value: "true" %>
+          <%= govuk_button_link_to "Delete scenario", remove_harm_scenario_risk_assessment_tasks_path(harm_scenario_id: @harm_scenario.id), { warning: true } %>
+        </div>
+      <% else %>
+        <%= f.govuk_submit "Confirm and create scenario", name: "final", value: "true" %>
+      <% end %>
     <% end %>
   </div>
 </div>

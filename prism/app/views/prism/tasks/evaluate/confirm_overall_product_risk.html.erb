@@ -42,9 +42,9 @@
           end
         end
       %>
-      <%= govuk_button_link_to "Add another scenario", wizard_path(:choose_hazard_type), { secondary: true } %>
-      <br>
-      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
     <% end %>
   </div>
 </div>

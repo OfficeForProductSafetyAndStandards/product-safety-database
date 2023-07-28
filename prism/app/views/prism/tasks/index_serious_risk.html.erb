@@ -3,10 +3,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Evaluate the product deemed serious risk</h1>
-    <% if @prism_risk_assessment.draft? %>
+    <% if !@prism_risk_assessment.submitted? %>
       <p class="govuk-body govuk-!-font-weight-bold">Risk evaluation incomplete</p>
     <% end %>
-    <p class="govuk-body">You have completed <%= sections_complete %> of <%= serious_risk_sections.count %> sections.</p>
-    <%= render partial: "task_list", locals: { sections: serious_risk_sections } %>
+    <p class="govuk-body">You have completed <%= serious_risk_sections_complete %> of <%= serious_risk_sections.count %> sections.</p>
+    <%= render partial: "task_list", locals: { sections: serious_risk_sections, repeatable_sections: [] } %>
   </div>
 </div>
