@@ -11,6 +11,12 @@ class ProductDecorator < ApplicationDecorator
     "Product: #{name}"
   end
 
+  def unformatted_description
+    # Bypasses `FormattedDescription` for situations where
+    # we want the raw value of the field.
+    description
+  end
+
   def details_list(date_case_closed: nil, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
@@ -143,6 +149,29 @@ class ProductDecorator < ApplicationDecorator
 
     h.govukSummaryList(
       classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
+      rows:
+    )
+  end
+
+  def product_name_with_cases
+    rows = [
+      {
+        key: { text: "Product" },
+        value: { text: "#{name_with_brand} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(psd-#{id})</span>".html_safe }
+      }
+    ]
+
+    if object.investigations.any?
+      object.investigations.each_with_index do |investigation, i|
+        rows << {
+          key: { text: i.zero? ? "Case(s)" : "" },
+          value: { text: "#{investigation.user_title} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(#{investigation.pretty_id})</span>".html_safe }
+        }
+      end
+    end
+
+    h.govukSummaryList(
+      classes: "govuk-summary-list govuk-summary-list--no-border",
       rows:
     )
   end
