@@ -66,7 +66,8 @@ private
        primary_location_phone_number
        primary_location_postal_code
        created_at
-       updated_at]
+       updated_at
+       case_id]
   end
 
   def attributes_business_info_sheet(business)
@@ -89,7 +90,8 @@ private
       business.primary_location&.phone_number,
       business.primary_location&.postal_code,
       business.created_at,
-      business.updated_at
+      business.updated_at,
+      investigation_business&.investigation&.pretty_id
     ]
   end
 end
