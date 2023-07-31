@@ -12,14 +12,15 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
            non_compliant_reason: "On fire, lots of fire",
            risk_level: "serious").decorate
   end
-  let!(:other_investigation)    { create(:allegation).decorate }
+  let!(:other_investigation) { create(:allegation).decorate }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   # Create a new product version to ensure only the current version is rendered
   let(:country_of_origin)       { "country:GB-ENG" }
-  let!(:product)                { create(:product, :with_versions, investigations: [investigation], country_of_origin:, description: initial_product_description, new_description: new_product_description).decorate }
-  let!(:other_product)          { create(:product, investigations: [other_investigation], country_of_origin: nil).decorate }
-  let!(:investigation_product)  { create(:investigation_product, product:, investigation:) }
+  let!(:product)                { create(:product, :with_versions, country_of_origin:, description: initial_product_description, new_description: new_product_description).decorate }
+  let!(:other_product)          { create(:product, country_of_origin: nil).decorate }
+  let!(:investigation_product)  { create(:investigation_product, product:, investigation:, affected_units_status: "approx", number_of_affected_units: 49, batch_number: "2112", customs_code: "6987") }
+  let!(:investigation_product_2) { create(:investigation_product, product: other_product, investigation: other_investigation) }
   let!(:risk_assessment)        { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:risk_assessment_2)      { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:test)                   { create(:test_result, investigation:, investigation_product:, failure_details: "something bad").decorate }
@@ -30,7 +31,9 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let(:params)                  { {} }
   let(:product_export)          { described_class.create!(user:, params:) }
 
-  before { Product.import force: true, refresh: :wait }
+  before do
+    Product.import force: true, refresh: :wait
+  end
 
   describe "#export!" do
     let(:result) { product_export.export! }
@@ -71,8 +74,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(3, 5)).to eq other_product.brand
 
       expect(product_sheet.cell(1, 6)).to eq "case_id"
-      expect(product_sheet.cell(2, 6)).to eq product.case_ids.first.to_s
-      expect(product_sheet.cell(3, 6)).to eq other_product.case_ids.first.to_s
+      expect(product_sheet.cell(2, 6)).to eq investigation.pretty_id
+      expect(product_sheet.cell(3, 6)).to eq other_investigation.pretty_id
 
       expect(product_sheet.cell(1, 7)).to eq "category"
       expect(product_sheet.cell(2, 7)).to eq product.category
@@ -269,10 +272,10 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(products_sheet.cell(5, 1)).to eq multiple_case_product.psd_ref
 
       expect(products_sheet.cell(1, 6)).to eq "case_id"
-      expect(products_sheet.cell(2, 6)).to eq product.case_ids.first.to_s
-      expect(products_sheet.cell(3, 6)).to eq other_product.case_ids.first.to_s
-      expect(products_sheet.cell(4, 6)).to eq multiple_case_product.case_ids[0].to_s
-      expect(products_sheet.cell(5, 6)).to eq multiple_case_product.case_ids[1].to_s
+      expect(products_sheet.cell(2, 6)).to eq investigation.pretty_id
+      expect(products_sheet.cell(3, 6)).to eq other_investigation.pretty_id
+      expect(products_sheet.cell(4, 6)).to eq investigation_a.pretty_id
+      expect(products_sheet.cell(5, 6)).to eq investigation_b.pretty_id
     end
   end
 end
