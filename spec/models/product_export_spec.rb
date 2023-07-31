@@ -1,5 +1,4 @@
 # rubocop:disable RSpec/LetSetup
-# rubocop:disable RSpec/MultipleExpectations
 # rubocop:disable RSpec/ExampleLength
 require "rails_helper"
 
@@ -328,7 +327,7 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:products_sheet) { exported_data.sheet("product_info") }
 
-    it "exports the product into multiple rows, each with a different case", :aggregate_failures  do
+    it "exports the product into multiple rows, each with a different case", :aggregate_failures do
       expect(products_sheet.cell(1, 1)).to eq "psd_ref"
       expect(products_sheet.cell(2, 1)).to eq product.psd_ref
       expect(products_sheet.cell(3, 1)).to eq other_product.psd_ref
@@ -344,6 +343,5 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   end
 end
 
-# rubocop:enable RSpec/MultipleExpectations
 # rubocop:enable RSpec/ExampleLength
 # rubocop:enable RSpec/LetSetup
