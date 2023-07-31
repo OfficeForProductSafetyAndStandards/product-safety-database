@@ -87,10 +87,6 @@ class ProductDecorator < ApplicationDecorator
     object.markings.join(", ")
   end
 
-  def case_ids
-    object.investigations.map(&:pretty_id).uniq
-  end
-
   def counterfeit_row_value
     if product.counterfeit?
       return { html: "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe, secondary_text: { text: counterfeit_explanation } }

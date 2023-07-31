@@ -49,8 +49,8 @@ private
   end
 
   def add_product_to_sheets(product)
-    product.case_ids.each do |case_id|
-      product_info_sheet.add_row(attributes_for_info_sheet(product, case_id:), types: :text)
+    product.investigations.uniq.each do |investigation|
+      product_info_sheet.add_row(attributes_for_info_sheet(product, investigation:), types: :text)
     end
 
     product.test_results.sort.each do |test_result|
@@ -136,14 +136,16 @@ private
     @corrective_actions_sheet = sheet
   end
 
-  def attributes_for_info_sheet(product, case_id:)
+  def attributes_for_info_sheet(product, investigation:)
+    pretty_id = investigation.pretty_id
+
     [
       product.psd_ref,
       product.id,
       product.authenticity,
       product.barcode,
       product.brand,
-      case_id,
+      pretty_id,
       product.category,
       format_country_code(code: product.country_of_origin),
       product.created_at.to_formatted_s(:xmlschema),
