@@ -125,6 +125,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(2, 18)).to eq product.when_placed_on_market
       expect(product_sheet.cell(3, 18)).to eq other_product.when_placed_on_market
 
+      expect(product_sheet.cell(1, 20)).to eq "affected_units_status"
+      expect(product_sheet.cell(2, 20)).to eq investigation_product.affected_units_status
+      expect(product_sheet.cell(3, 20)).to eq investigation_product_2.affected_units_status
+
+      expect(product_sheet.cell(1, 21)).to eq "number_of_affected_units"
+      expect(product_sheet.cell(2, 21)).to eq investigation_product.number_of_affected_units
+      expect(product_sheet.cell(3, 21)).to eq investigation_product_2.number_of_affected_units
+
+      expect(product_sheet.cell(1, 22)).to eq "batch_number"
+      expect(product_sheet.cell(2, 22)).to eq investigation_product.batch_number
+      expect(product_sheet.cell(3, 22)).to eq investigation_product_2.batch_number
+
+      expect(product_sheet.cell(1, 23)).to eq "customs_code"
+      expect(product_sheet.cell(2, 23)).to eq investigation_product.customs_code
+      expect(product_sheet.cell(3, 23)).to eq investigation_product_2.customs_code
+
       expect(test_result_sheet.cell(1, 1)).to eq "psd_ref"
       expect(test_result_sheet.cell(2, 1)).to eq product.psd_ref
       expect(test_result_sheet.cell(3, 1)).to eq product.psd_ref
@@ -165,6 +181,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(test_result_sheet.cell(2, 10)).to eq test.investigation.pretty_id
       expect(test_result_sheet.cell(3, 10)).to eq test_2.investigation.pretty_id
 
+      expect(test_result_sheet.cell(1, 11)).to eq "reported_reason"
+      expect(test_result_sheet.cell(2, 11)).to eq test.investigation.reported_reason
+      expect(test_result_sheet.cell(3, 11)).to eq test_2.investigation.reported_reason
+
+      expect(test_result_sheet.cell(1, 12)).to eq "hazard_type"
+      expect(test_result_sheet.cell(2, 12)).to eq test.investigation.hazard_type
+      expect(test_result_sheet.cell(3, 12)).to eq test_2.investigation.hazard_type
+
+      expect(test_result_sheet.cell(1, 13)).to eq "non_compliant_reason"
+      expect(test_result_sheet.cell(2, 13)).to eq test.investigation.non_compliant_reason
+      expect(test_result_sheet.cell(3, 13)).to eq test_2.investigation.non_compliant_reason
+
+      expect(test_result_sheet.cell(1, 14)).to eq "risk_level"
+      expect(test_result_sheet.cell(2, 14)).to eq test.investigation.risk_level_description
+      expect(test_result_sheet.cell(3, 14)).to eq test_2.investigation.risk_level_description
+
       expect(risk_assessments_sheet.cell(1, 1)).to eq "psd_ref"
       expect(risk_assessments_sheet.cell(2, 1)).to eq product.psd_ref
       expect(risk_assessments_sheet.cell(3, 1)).to eq product.psd_ref
@@ -196,6 +228,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(risk_assessments_sheet.cell(1, 8)).to eq "case_id"
       expect(risk_assessments_sheet.cell(2, 8)).to eq risk_assessment.investigation.pretty_id
       expect(risk_assessments_sheet.cell(3, 8)).to eq risk_assessment_2.investigation.pretty_id
+
+      expect(risk_assessments_sheet.cell(1, 9)).to eq "reported_reason"
+      expect(risk_assessments_sheet.cell(2, 9)).to eq risk_assessment.investigation.reported_reason
+      expect(risk_assessments_sheet.cell(3, 9)).to eq risk_assessment_2.investigation.reported_reason
+
+      expect(risk_assessments_sheet.cell(1, 10)).to eq "hazard_type"
+      expect(risk_assessments_sheet.cell(2, 10)).to eq risk_assessment.investigation.hazard_type
+      expect(risk_assessments_sheet.cell(3, 10)).to eq risk_assessment_2.investigation.hazard_type
+
+      expect(risk_assessments_sheet.cell(1, 11)).to eq "non_compliant_reason"
+      expect(risk_assessments_sheet.cell(2, 11)).to eq risk_assessment.investigation.non_compliant_reason
+      expect(risk_assessments_sheet.cell(3, 11)).to eq risk_assessment_2.investigation.non_compliant_reason
+
+      expect(risk_assessments_sheet.cell(1, 12)).to eq "risk_level"
+      expect(risk_assessments_sheet.cell(2, 12)).to eq risk_assessment.investigation.risk_level_description
+      expect(risk_assessments_sheet.cell(3, 12)).to eq risk_assessment_2.investigation.risk_level_description
 
       expect(corrective_actions_sheet.cell(1, 1)).to eq "psd_ref"
       expect(corrective_actions_sheet.cell(2, 1)).to eq product.psd_ref
@@ -248,6 +296,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(corrective_actions_sheet.cell(1, 13)).to eq "case_id"
       expect(corrective_actions_sheet.cell(2, 13)).to eq corrective_action.investigation.pretty_id
       expect(corrective_actions_sheet.cell(3, 13)).to eq corrective_action_2.investigation.pretty_id
+
+      expect(corrective_actions_sheet.cell(1, 14)).to eq "reported_reason"
+      expect(corrective_actions_sheet.cell(2, 14)).to eq corrective_action.investigation.reported_reason
+      expect(corrective_actions_sheet.cell(3, 14)).to eq corrective_action_2.investigation.reported_reason
+
+      expect(corrective_actions_sheet.cell(1, 15)).to eq "hazard_type"
+      expect(corrective_actions_sheet.cell(2, 15)).to eq corrective_action.investigation.hazard_type
+      expect(corrective_actions_sheet.cell(3, 15)).to eq corrective_action_2.investigation.hazard_type
+
+      expect(corrective_actions_sheet.cell(1, 16)).to eq "non_compliant_reason"
+      expect(corrective_actions_sheet.cell(2, 16)).to eq corrective_action.investigation.non_compliant_reason
+      expect(corrective_actions_sheet.cell(3, 16)).to eq corrective_action_2.investigation.non_compliant_reason
+
+      expect(corrective_actions_sheet.cell(1, 17)).to eq "risk_level"
+      expect(corrective_actions_sheet.cell(2, 17)).to eq corrective_action.investigation.risk_level_description
+      expect(corrective_actions_sheet.cell(3, 17)).to eq corrective_action_2.investigation.risk_level_description
     end
   end
 
