@@ -164,7 +164,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 25)).to eq "England"
       expect(sheet.cell(3, 25)).to eq "England"
 
-      expect(sheet.cell(1, 26)).to eq "Reported_As"
+      expect(sheet.cell(1, 26)).to eq "Reported_Reason"
       expect(sheet.cell(2, 26)).to eq investigation.reported_reason
       expect(sheet.cell(3, 26)).to eq other_team_investigation.reported_reason
 
@@ -191,6 +191,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(1, 32)).to eq "OPSS_Internal_Team"
       expect(sheet.cell(2, 32)).to eq "false"
       expect(sheet.cell(3, 32)).to eq "false"
+
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength

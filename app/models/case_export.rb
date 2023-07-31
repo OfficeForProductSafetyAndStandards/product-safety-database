@@ -114,7 +114,7 @@ private
                      Date_Validated
                      Case_Creator_Team
                      Notifying_Country
-                     Reported_As
+                     Reported_Reason
                      Complainant_Reference
                      Case_Type
                      Trading_Standards_Region
