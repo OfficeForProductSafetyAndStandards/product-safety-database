@@ -483,8 +483,8 @@ span.opss-download-link-m {
   top: 2px;
 }
 
-a.opss-download-link-m {
-  @include down-load-link(rgba($govuk-link-colour, .9), 20);
+input.opss-download-link-m {
+  @include down-load-link(rgba(govuk-colour("white"), .9), 20);
   background-position: left;
   background-size: auto;
   padding-left: 25px;
