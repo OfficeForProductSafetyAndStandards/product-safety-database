@@ -4,7 +4,14 @@
 require "rails_helper"
 
 RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
-  let!(:investigation)          { create(:allegation).decorate }
+  let!(:investigation) do
+    create(:allegation,
+           reported_reason: "unsafe",
+           hazard_type: "Electromagnetic disturbance",
+           hazard_description: "Much fire",
+           non_compliant_reason: "On fire, lots of fire",
+           risk_level: "serious").decorate
+  end
   let!(:other_investigation)    { create(:allegation).decorate }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
