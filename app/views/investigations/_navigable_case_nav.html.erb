@@ -14,7 +14,7 @@
 
   <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
     <div class="opss-text-align-right">
-      <% if display_link %>
+      <% if display_link && link_text.present? %>
         <%= link_to link_text, href, data: { cy: link_text.parameterize }, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
       <% end %>
     </div>

@@ -13,18 +13,8 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
   scenario "Adding a passing test result (with validation errors)" do
     travel_to Date.parse("2 April 2020") do
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/supporting-information"
-      expect_to_have_case_breadcrumbs
-
-      click_link "Add supporting information"
-
-      expect_to_be_on_add_supporting_information_page
-      expect_to_have_case_breadcrumbs
-
-      within_fieldset "What type of information are you adding?" do
-        page.choose "Test result"
-      end
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add a test result"
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
       expect_to_have_case_breadcrumbs
@@ -68,17 +58,8 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
   scenario "Adding a passing test result funded by OPSS" do
     travel_to Date.parse("2 April 2020") do
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/supporting-information"
-      expect_to_have_case_breadcrumbs
-
-      click_link "Add supporting information"
-
-      expect_to_be_on_add_supporting_information_page
-
-      within_fieldset "What type of information are you adding?" do
-        page.choose "Test result"
-      end
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add a test result"
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
       expect_to_have_case_breadcrumbs
@@ -134,18 +115,8 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
   scenario "Adding a failing test result (with validation errors)" do
     travel_to Date.parse("2 April 2020") do
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/supporting-information"
-      expect_to_have_case_breadcrumbs
-
-      click_link "Add supporting information"
-
-      expect_to_be_on_add_supporting_information_page
-      expect_to_have_case_breadcrumbs
-
-      within_fieldset "What type of information are you adding?" do
-        page.choose "Test result"
-      end
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add a test result"
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
       expect_to_have_case_breadcrumbs
@@ -199,7 +170,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
     sign_in(other_user)
     visit "/cases/#{investigation.pretty_id}/activity"
 
-    expect(page).not_to have_link("Add supporting information")
+    expect(page).not_to have_link("Add a test result")
   end
 
   def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:, standards:, failure_details: nil)
