@@ -37,49 +37,61 @@ private
 
   def add_businesses_worksheet(business_ids, book)
     book.add_worksheet name: "Businesses" do |sheet|
-      sheet.add_row %w[ID
-                       trading_name
-                       legal_name
-                       company_number
-                       types
-                       primary_contact_email
-                       primary_contact_job_title
-                       primary_contact_phone_number
-                       primary_location_address_line_1
-                       primary_location_address_line_2
-                       primary_location_city
-                       primary_location_country
-                       primary_location_county
-                       primary_location_phone_number
-                       primary_location_postal_code
-                       created_at
-                       updated_at]
+      sheet.add_row(headings_for_business_info_sheet)
 
       business_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_business_ids|
         Business
           .includes(:investigations, :locations, :contacts)
           .find(batch_business_ids).each do |business|
-          sheet.add_row [
-            business.id,
-            business.trading_name,
-            business.legal_name,
-            business.company_number,
-            business.investigation_businesses.first.try(:relationship),
-            business.primary_contact.try(:email),
-            business.primary_contact.try(:job_title),
-            business.primary_contact.try(:phone_number),
-            business.primary_location.try(:address_line_1),
-            business.primary_location.try(:address_line_2),
-            business.primary_location.try(:city),
-            business.primary_location.try(:country),
-            business.primary_location.try(:county),
-            business.primary_location.try(:phone_number),
-            business.primary_location.try(:postal_code),
-            business.created_at,
-            business.updated_at
-          ], types: :text
+          sheet.add_row attributes_business_info_sheet(business), types: :text
         end
       end
     end
+  end
+
+  def headings_for_business_info_sheet
+    %w[ID
+       trading_name
+       legal_name
+       company_number
+       types
+       primary_contact_email
+       primary_contact_job_title
+       primary_contact_phone_number
+       primary_location_address_line_1
+       primary_location_address_line_2
+       primary_location_city
+       primary_location_country
+       primary_location_county
+       primary_location_phone_number
+       primary_location_postal_code
+       created_at
+       updated_at
+       case_id]
+  end
+
+  def attributes_business_info_sheet(business)
+    investigation_business = business.investigation_businesses.first
+
+    [
+      business.id,
+      business.trading_name,
+      business.legal_name,
+      business.company_number,
+      investigation_business&.relationship,
+      business.primary_contact&.email,
+      business.primary_contact&.job_title,
+      business.primary_contact&.phone_number,
+      business.primary_location&.address_line_1,
+      business.primary_location&.address_line_2,
+      business.primary_location&.city,
+      business.primary_location&.country,
+      business.primary_location&.county,
+      business.primary_location&.phone_number,
+      business.primary_location&.postal_code,
+      business.created_at,
+      business.updated_at,
+      investigation_business&.investigation&.pretty_id
+    ]
   end
 end

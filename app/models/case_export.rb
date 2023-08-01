@@ -114,13 +114,14 @@ private
                      Date_Validated
                      Case_Creator_Team
                      Notifying_Country
-                     Reported_As
+                     Reported_Reason
                      Complainant_Reference
                      Case_Type
                      Trading_Standards_Region
                      Trading_Standards_Region_Code
                      Regulator_Name
-                     OPSS_Internal_Team]
+                     OPSS_Internal_Team
+                     Non_Compliant_Reason]
   end
 
   def find_cases(ids)
@@ -168,7 +169,8 @@ private
       team_data.ts_region,
       team_data.ts_acronym,
       team_data.regulator_name,
-      (team_data.type == "internal")
+      (team_data.type == "internal"),
+      investigation.non_compliant_reason
     ]
   end
 
