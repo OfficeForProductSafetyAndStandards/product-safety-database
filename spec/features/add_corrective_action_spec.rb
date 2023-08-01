@@ -7,9 +7,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
   context "when the viewing user only has read only access" do
     scenario "cannot add supporting information" do
       sign_in(read_only_user)
-      visit "/cases/#{investigation.pretty_id}/supporting-information"
-
-      expect(page).not_to have_link("Add supporting information")
+      visit "/cases/#{investigation.pretty_id}"
+      expect(page).not_to have_link("Add a corrective action")
     end
 
     scenario "cannot view the new corrective action form" do
@@ -37,10 +36,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
   scenario "Adding a corrective action (with validation errors)" do
     sign_in(user)
-
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
-
-    click_link "Add Corrective actions"
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add a corrective action"
 
     expect_to_be_on_record_corrective_action_for_case_page
     expect(page).not_to have_error_messages

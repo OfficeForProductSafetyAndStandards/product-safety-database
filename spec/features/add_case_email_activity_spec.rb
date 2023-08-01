@@ -22,13 +22,8 @@ RSpec.feature "Add case email activity", :with_stubbed_opensearch, :with_stubbed
   before { sign_in(user) }
 
   scenario "with email file" do
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
-    click_link "Add supporting information"
-
-    expect_to_be_on_add_supporting_information_page
-    expect_to_have_case_breadcrumbs
-    choose "Correspondence"
-    click_button "Continue"
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
     expect_to_have_case_breadcrumbs
@@ -108,13 +103,8 @@ RSpec.feature "Add case email activity", :with_stubbed_opensearch, :with_stubbed
   end
 
   scenario "with summary and subject and body and attachment" do
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
-    click_link "Add supporting information"
-
-    expect_to_be_on_add_supporting_information_page
-    expect_to_have_case_breadcrumbs
-    choose "Correspondence"
-    click_button "Continue"
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
     expect_to_have_case_breadcrumbs
