@@ -20,8 +20,4 @@ RSpec.describe Business do
       end
     end
   end
-
-  it_behaves_like "a batched search model" do
-    let(:factory_name) { :business }
-  end
 end

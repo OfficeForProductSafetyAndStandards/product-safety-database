@@ -4,7 +4,7 @@ RSpec.describe "Deleting a case", :with_opensearch, :with_stubbed_mailer, type: 
   let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }
 
   before do
-    Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for
+    Investigation.reindex
   end
 
   context "when case has products associated with it" do
