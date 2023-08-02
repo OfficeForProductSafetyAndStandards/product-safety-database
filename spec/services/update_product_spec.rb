@@ -28,22 +28,10 @@ RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
     end
 
     context "with all the required parameters" do
-      let(:perform_product_search) { Product.full_search(OpensearchQuery.new(product_params[:name], {}, {})) }
-
-      before do
-        allow(product.__elasticsearch__).to receive(:update_document)
-        allow(product.investigations).to receive(:import)
-      end
-
       it "updates the product", :aggregate_failures do
         expect(result).to be_a_success
 
         expect(product.reload).to have_attributes(product_params)
-      end
-
-      it "reindexes the product" do
-        result
-        expect(product.__elasticsearch__).to have_received(:update_document)
       end
 
       # rubocop:disable RSpec/VerifiedDoubles
@@ -51,7 +39,7 @@ RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
         not_deleted = spy("investigations")
         allow(product.investigations).to receive(:not_deleted) { not_deleted }
         result
-        expect(not_deleted).to have_received(:import)
+        expect(not_deleted).to have_received(:reindex)
       end
       # rubocop:enable RSpec/VerifiedDoubles
 
