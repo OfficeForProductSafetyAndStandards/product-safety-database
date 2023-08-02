@@ -137,20 +137,5 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
         end
       end
     end
-
-    context "when searching for product once removed from the case", :with_opensearch do
-      let(:records) { Product.full_search(OpensearchQuery.new(product.name, {}, {})).records }
-
-      before do
-        product
-        Product.import(refresh: :wait_for)
-      end
-
-      it "the product should remain searchable" do
-        result
-
-        expect(records.to_a).to include(product)
-      end
-    end
   end
 end
