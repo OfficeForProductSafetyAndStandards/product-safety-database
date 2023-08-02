@@ -14,8 +14,7 @@ RSpec.feature "Business export", :with_opensearch, :with_stubbed_antivirus, :wit
   before do
     create(:business, trading_name: "ABC")
     create(:business, trading_name: "XYZ")
-    Investigation.import scope: "not_deleted", force: true, refresh: :wait_for
-    Business.import force: true, refresh: :wait_for
+    Investigation.reindex
 
     sign_in(user)
   end

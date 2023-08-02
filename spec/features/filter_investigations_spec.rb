@@ -38,7 +38,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   before do
     create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
     other_team_investigation.touch # Tests sort order
-    Investigation.import scope: "not_deleted", refresh: :wait_for, force: true
+    Investigation.reindex
     sign_in(user)
     visit all_cases_investigations_path
   end
@@ -73,7 +73,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   context "when there are multiple pages of cases" do
     before do
       20.times { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
-      Investigation.import scope: "not_deleted", refresh: :wait_for, force: true
+      Investigation.reindex
     end
 
     it "maintains the filters when clicking on additional pages" do

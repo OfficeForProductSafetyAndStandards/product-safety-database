@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Searching products", :with_stubbed_mailer, type: :feature do
   let(:team) { create :team }
   let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
 
@@ -15,8 +15,7 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
     create(:allegation, products: [other_product])
     create(:allegation, creator: other_user_same_team, products: [team_product])
     create(:allegation, creator: user, products: [closed_product], is_closed: true)
-    Investigation.import scope: "not_deleted", refresh: true, force: true
-    Product.import refresh: true, force: true
+    Investigation.reindex
   end
 
   scenario "No products" do
@@ -67,7 +66,6 @@ RSpec.feature "Searching products", :with_opensearch, :with_stubbed_mailer, type
 
     # Add more products and reload page
     10.times { create(:allegation, creator: other_user_same_team, products: [create(:product)]) }
-    Product.import refresh: true, force: true
 
     visit "/products"
 

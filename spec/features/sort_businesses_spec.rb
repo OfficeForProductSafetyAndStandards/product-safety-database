@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Business sorting", :with_stubbed_mailer, type: :feature do
   let(:organisation)          { create(:organisation) }
   let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }
 
@@ -24,8 +24,7 @@ RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: 
   # rubocop:enable RSpec/LetSetup
 
   before do
-    Investigation.import scope: "not_deleted", refresh: :wait_for
-    Business.import refresh: :wait_for
+    Investigation.reindex
     sign_in(user)
     visit businesses_path
   end

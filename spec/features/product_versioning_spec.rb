@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create :user, :activated, has_viewed_introduction: true }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
@@ -79,9 +79,6 @@ RSpec.feature "Product versioning", :with_opensearch, :with_stubbed_antivirus, :
 
     click_link "Images (1)"
     expect(page).to have_selector("dd.govuk-summary-list__value", text: initial_image_description)
-
-    # Search should only index current version
-    Product.import refresh: :wait_for
 
     visit all_products_path
 
