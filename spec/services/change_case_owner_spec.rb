@@ -299,18 +299,6 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
         end
       end
     end
-
-    context "with search index", :with_opensearch do
-      before { set_old_owner }
-
-      it "indexes correctly the new owner" do
-        result
-        search = Investigation.__elasticsearch__.search(query: { bool: { must: { term: { owner_id: new_owner.id } } } })
-        Investigation.reindex
-
-        expect(search.results.first.owner_id).to eq(new_owner.id)
-      end
-    end
   end
 
   def set_old_owner

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddBusinessToCaseForm, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe AddBusinessToCaseForm, :with_stubbed_mailer do
   subject(:form) { described_class.new(business_form_params.merge(current_user:)) }
 
   let(:country) { "United Kingdom" }

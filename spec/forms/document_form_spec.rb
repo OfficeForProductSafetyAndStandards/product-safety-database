@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe DocumentForm, :with_test_queue_adapter do
   subject(:form) { described_class.new(params) }
 
   let(:title) { Faker::Hipster.word }

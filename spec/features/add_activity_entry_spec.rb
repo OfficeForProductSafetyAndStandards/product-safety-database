@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let!(:creator_user) { create(:user, :activated, email: "creator@example.com", team: team_without_email, organisation: team_without_email.organisation) }
   let(:team_without_email) { create(:team, team_recipient_email: nil) }
 

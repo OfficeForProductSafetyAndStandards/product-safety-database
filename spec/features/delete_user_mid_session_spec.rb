@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Deleting a user while they are in an active session", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Deleting a user while they are in an active session", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
 
   scenario "Deleting a signed in user" do

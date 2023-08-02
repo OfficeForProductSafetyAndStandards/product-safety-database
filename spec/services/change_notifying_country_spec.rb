@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe ChangeNotifyingCountry, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user, name: "User One") }
   let(:notifying_country_uk) { "country:GB-ENG" }

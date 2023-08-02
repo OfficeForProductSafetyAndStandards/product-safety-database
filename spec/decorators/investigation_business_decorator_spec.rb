@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InvestigationBusinessDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe InvestigationBusinessDecorator, :with_stubbed_mailer do
   subject(:decorated_object) { investigation_business.decorate }
 
   let(:investigation) { create(:allegation, creator: user) }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   let(:decorated_accident) do
     described_class.decorate(
       AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded.new(

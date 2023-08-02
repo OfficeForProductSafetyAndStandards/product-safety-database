@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe InvestigationActionsForm, :with_stubbed_mailer do
   describe "validations" do
     context "when an action has been set" do
       let(:form) { described_class.new(investigation_action: "close_case") }

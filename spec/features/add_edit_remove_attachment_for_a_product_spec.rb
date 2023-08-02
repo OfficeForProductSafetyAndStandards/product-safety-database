@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_opensearch, :with_stubbed_antivirus, type: :feature do
+RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antivirus, type: :feature do
   let(:user)    { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product, owning_team: user.team) }
 

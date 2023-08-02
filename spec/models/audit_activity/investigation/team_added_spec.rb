@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::TeamAdded, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::Investigation::TeamAdded, :with_stubbed_mailer do
   let(:investigation) { create(:allegation, creator: user, edit_access_teams: [team]) }
   let(:user) { create(:user) }
   let(:team) { create(:team) }

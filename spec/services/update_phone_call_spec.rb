@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:result) { described_class.call(**params) }
 
   include_context "with phone call correspondence setup"

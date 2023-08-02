@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CreateProduct, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe CreateProduct, :with_test_queue_adapter do
   let(:attributes) { attributes_for(:product_washing_machine) }
 
   describe ".call" do

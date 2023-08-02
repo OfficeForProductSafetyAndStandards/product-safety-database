@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::CorrectiveAction::BaseDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::CorrectiveAction::BaseDecorator, :with_stubbed_mailer do
   include ActionDispatch::TestProcess::FixtureFile
 
   subject(:decorated_activity) { described_class.decorate(AuditActivity::CorrectiveAction::Base.new(business:)) }

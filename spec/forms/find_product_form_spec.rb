@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FindProductForm, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe FindProductForm, :with_stubbed_mailer do
   subject(:form) { described_class.new(reference:, investigation:) }
 
   let(:investigation) { create(:allegation) }

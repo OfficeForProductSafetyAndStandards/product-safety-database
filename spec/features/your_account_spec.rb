@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Your Account", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Your Account", :with_stubbed_mailer, type: :feature do
   let(:user) do
     create(
       :user,

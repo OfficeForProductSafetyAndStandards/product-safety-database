@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe OwnershipHelper do
-  describe "#add_your_team_values", :with_stubbed_opensearch, :with_stubbed_mailer do
+  describe "#add_your_team_values", :with_stubbed_mailer do
     let(:user)           { create(:user) }
     let(:another_user)   { create(:user) }
     let!(:investigation) { create(:allegation, creator: user) }
@@ -53,7 +53,7 @@ RSpec.describe OwnershipHelper do
     end
   end
 
-  describe "#opss_hint_text", :with_stubbed_opensearch, :with_stubbed_mailer do
+  describe "#opss_hint_text", :with_stubbed_mailer do
     let(:opss_user)                { create(:user, :opss_user) }
     let(:other_user)               { create(:user) }
     let(:incident_management_team) { create(:team, name: "OPSS Incident Management") }

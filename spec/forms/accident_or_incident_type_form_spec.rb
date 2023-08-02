@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AccidentOrIncidentTypeForm, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe AccidentOrIncidentTypeForm, :with_test_queue_adapter do
   # Default set of valid attributes
   let(:type) { "Accident" }
   let(:params) do

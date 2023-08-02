@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_mailer do
   describe "#corrective_action_summary_list_rows" do
     let(:business)                           { create(:business) }
     let(:corrective_action)                  { create(:corrective_action, date_decided: 2.weeks.ago, has_online_recall_information:, business:).decorate }

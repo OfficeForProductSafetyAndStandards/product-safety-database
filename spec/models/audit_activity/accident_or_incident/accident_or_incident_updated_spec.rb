@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:investigation) { create(:allegation, :with_products, creator: user) }

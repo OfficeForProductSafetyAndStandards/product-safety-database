@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Edit corrective action", :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_antivirus do
+RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_antivirus do
   include_context "with corrective action setup for updates"
   let(:has_online_recall_information) { "has_online_recall_information_yes" }
 

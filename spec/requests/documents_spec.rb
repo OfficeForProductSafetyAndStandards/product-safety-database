@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Managing documents attached to a case", :with_stubbed_mailer, :with_stubbed_opensearch, :with_errors_rendered, type: :request do
+RSpec.describe "Managing documents attached to a case", :with_stubbed_mailer, :with_errors_rendered, type: :request do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user) { create(:user) }
   let(:investigation) { create(:allegation, :with_document, creator: case_creator) }

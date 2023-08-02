@@ -13,7 +13,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
     params[:existing_transcript_file_id] = existing_transcript_file_id
   end
 
-  describe ".from", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+  describe ".from", :with_stubbed_antivirus, :with_stubbed_mailer do
     let(:correspondence_date) { Date.current }
     let(:phone_call) { AddPhoneCallToCase.call!(investigation:, user:, **params).correspondence }
 

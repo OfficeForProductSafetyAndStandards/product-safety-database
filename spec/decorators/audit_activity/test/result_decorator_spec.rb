@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) do
     AuditActivity::Test::Result.create!(
       investigation: test_result.investigation,

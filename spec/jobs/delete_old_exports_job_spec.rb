@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DeleteOldExportsJob, :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :job do
+RSpec.describe DeleteOldExportsJob, :with_stubbed_antivirus, :with_stubbed_mailer, type: :job do
   subject(:job) { described_class.new }
 
   let(:user) { create(:user) }

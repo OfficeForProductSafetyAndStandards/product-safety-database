@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter, type: :feature do
+RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter, type: :feature do
   include_context "with read only team and user"
   include_context "with add corrective action setup"
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Changing case ownership", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, creator: user) }

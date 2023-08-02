@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case actions", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create :user, :opss_user, :activated, has_viewed_introduction: true }
   let(:investigation_1) { create :allegation, creator: user }
   let(:washing_machine) { create :product_washing_machine }
