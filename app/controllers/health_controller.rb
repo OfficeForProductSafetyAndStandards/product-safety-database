@@ -11,13 +11,13 @@ class HealthController < ApplicationController
     # Check database connection
     ActiveRecord::Migrator.current_version
 
-    opensearch_client = Elasticsearch::Client.new(Rails.application.config_for(:opensearch))
+    opensearch_client = OpenSearch::Client.new(Rails.application.config_for(:opensearch))
     opensearch_client.instance_variable_set("@verified", true)
 
     # Check Opensearch cluster health
     raise "Opensearch is down" if opensearch_client.cluster.health[:status] == "red"
 
-    raise "No cases in Opensearch index" if opensearch_client.count(index: Investigation.index_name)["count"].zero?
+    raise "No cases in Opensearch index" if opensearch_client.count(index: Investigation.searchkick_index_name)["count"].zero?
 
     # Check Sidekiq queue length (in time) is within an acceptable limit
     raise "Sidekiq queue latency is above 30 seconds" if Sidekiq::Queue.new(ENV["SIDEKIQ_QUEUE"] || "psd").latency > 30
