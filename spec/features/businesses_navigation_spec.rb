@@ -21,8 +21,7 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
     InvestigationBusiness.create!(business_id: closed_business.id, investigation_id: closed_case.id)
     InvestigationBusiness.create!(business_id: other_business.id, investigation_id: other_case.id)
 
-    Investigation.import scope: "not_deleted", refresh: true, force: true
-    Business.import refresh: true, force: true
+    Investigation.reindex
   end
 
   scenario "No businesses" do
@@ -73,7 +72,6 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
 
     # Add more businesses and reload page
     create_list(:business, 8)
-    Business.import refresh: true, force: true
 
     visit "/businesses"
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added") # sort filter drop down

@@ -17,8 +17,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
   let!(:hazardous_product) { create(:product, name: "STU", category: "Waste", investigations: [investigation]) }
 
   before do
-    Product.import force: true, refresh: :wait_for
-    Investigation.import scope: "not_deleted", force: true, refresh: :wait_for
+    Investigation.reindex
 
     sign_in(user)
   end

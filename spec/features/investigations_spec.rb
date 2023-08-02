@@ -24,7 +24,7 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
   scenario "lists cases correctly sorted" do
     # it is necessary to re-import and wait for the indexing to be done.
-    Investigation.import scope: "not_deleted", refresh: :wait_for
+    Investigation.reindex
 
     sign_in(user)
     visit investigations_path

@@ -64,7 +64,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       it "treats formulas as text" do
         create(:allegation, description: "=A1")
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path, params: { q: "A1" }
 
@@ -80,7 +80,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       it "exports coronavirus flag" do
         create(:allegation, coronavirus_related: true)
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -97,7 +97,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         product_category = Faker::Hipster.unique.word
         category = Faker::Hipster.unique.word
         create(:allegation, product_category:, products: [create(:product, category:)])
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -118,7 +118,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           risk_level: (Investigation.risk_levels.values - %w[other]).sample
         )
 
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -139,7 +139,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
         ChangeCaseOwner.call!(investigation: case_with_team_owner, user:, owner: team)
 
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -160,7 +160,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       it "exports risk_assessments count" do
         create(:risk_assessment)
 
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -173,7 +173,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       it "exports created_at and updated_at" do
         investigation = create(:allegation)
 
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -188,7 +188,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       it "exports risk_validated_at" do
         investigation = create(:allegation, risk_validated_at: Date.current)
 
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -200,7 +200,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       it "exports notifying_country" do
         create(:allegation)
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -212,7 +212,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       it "exports reported_as" do
         create(:allegation, reported_reason: "unsafe")
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -224,7 +224,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       it "exports complainant_reference" do
         create(:allegation, complainant_reference: "testing")
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
 
         get generate_case_exports_path
 
@@ -239,8 +239,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           creator_user = build(:user)
           allegation = create(:allegation, creator: creator_user)
           allow(allegation).to receive(:creator_user).and_return(nil)
-
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
 
           get generate_case_exports_path
 
@@ -256,8 +255,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           team = create(:team)
           creator_user = create(:user, team:)
           create(:allegation, creator: creator_user)
-
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
 
           get generate_case_exports_path
 
@@ -271,8 +269,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       context "when investigation is open" do
         it "date_closed column is empty" do
           create(:allegation)
-
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
 
           get generate_case_exports_path
 
@@ -287,8 +284,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         it "date_closed column is empty" do
           closed_at_date = Date.new(2021, 1, 1)
           create(:allegation, is_closed: true, date_closed: closed_at_date)
-
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
 
           get generate_case_exports_path, params: { case_status: "closed", format: :xlsx }
 
@@ -303,8 +299,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         context "when user is on the team that owns the case" do
           it "shows description, title and user owner name" do
             investigation = create(:allegation, creator: user, is_private: true)
-
-            Investigation.import scope: "not_deleted", refresh: true, force: true
+            Investigation.reindex
 
             get generate_case_exports_path
 
@@ -326,8 +321,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
             other_team = create(:team)
             other_user = create(:user, team: other_team)
             create(:allegation, creator: other_user, is_private: true)
-
-            Investigation.import scope: "not_deleted", refresh: true, force: true
+            Investigation.reindex
 
             get generate_case_exports_path
 

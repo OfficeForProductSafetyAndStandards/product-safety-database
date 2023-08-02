@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
   let(:user)             { create :user, :activated, has_viewed_introduction: true }
   let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago, authenticity: "counterfeit") }
   let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago, authenticity: "genuine") }
@@ -31,7 +31,6 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
     end
 
     scenario "lists products according to search relevance" do
-      Product.import refresh: :wait_for
       visit products_path
 
       within "#item-0" do

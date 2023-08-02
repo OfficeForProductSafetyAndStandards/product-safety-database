@@ -45,7 +45,7 @@ class BusinessesController < ApplicationController
   def update
     respond_to do |format|
       if @business.save
-        @business.investigations.not_deleted.import
+        @business.investigations.reindex
         format.html { redirect_to @business, flash: { success: "The business was updated" } }
         format.json { render :show, status: :ok, location: @business }
       else

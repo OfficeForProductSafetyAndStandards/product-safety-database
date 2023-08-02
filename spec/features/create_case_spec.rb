@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating a case", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:investigation_with_same_user_title) do
     create(:allegation,
            creator: user,
@@ -12,10 +12,6 @@ RSpec.feature "Creating a case", :with_opensearch, :with_stubbed_antivirus, :wit
   let(:reference_number) { "12345" }
   let(:case_name) { "Red hot case" }
   let!(:product) { create(:product) }
-
-  before do
-    Product.import force: true, refresh: :wait_for
-  end
 
   describe "as a TS user" do
     let(:user) { create(:user, :activated) }
