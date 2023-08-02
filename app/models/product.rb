@@ -1,7 +1,6 @@
 class Product < ApplicationRecord
   include CountriesHelper
   include Documentable
-  include Searchable
   include Retireable
 
   self.ignored_columns = %w[batch_number customs_code number_of_affected_units affected_units_status]
@@ -27,26 +26,6 @@ class Product < ApplicationRecord
   }
 
   MARKINGS = %w[UKCA UKNI CE].freeze
-
-  index_name [ENV.fetch("OS_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
-
-  settings do
-    mappings do
-      indexes :name_for_sorting, type: :keyword
-    end
-  end
-
-  def as_indexed_json(*)
-    as_json(
-      include: {
-        investigations: {
-          only: %i[category is_closed],
-          methods: :owner_id
-        }
-      },
-      methods: %i[tiebreaker_id name_for_sorting psd_ref retired?]
-    )
-  end
 
   # TODO: Remove this once attachments have been migrated
   has_many_attached :documents
@@ -109,10 +88,6 @@ class Product < ApplicationRecord
   # uploads as they were at the time of the versioned product.
   def document_uploads
     DocumentUpload.where(id: document_upload_ids)
-  end
-
-  def name_for_sorting
-    name
   end
 
   def psd_ref(timestamp: nil, investigation_was_closed: false)
