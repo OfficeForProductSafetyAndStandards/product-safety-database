@@ -8,8 +8,6 @@ class Investigation < ApplicationRecord
               not_in_future: true,
               on: :about_enquiry
 
-    index_name [ENV.fetch("OS_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
-
     attribute :date_received, :govuk_date
 
     has_one :add_audit_activity,
