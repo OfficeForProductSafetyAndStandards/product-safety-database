@@ -1,16 +1,7 @@
 class Business < ApplicationRecord
   include BusinessesHelper
-  include Searchable
   include Documentable
   include AttachmentConcern
-
-  index_name [ENV.fetch("OS_NAMESPACE", "default_namespace"), Rails.env, "business"].join("_")
-
-  settings do
-    mappings do
-      indexes :company_number, type: :keyword
-    end
-  end
 
   validates :trading_name, presence: true
 
@@ -31,24 +22,6 @@ class Business < ApplicationRecord
 
   redacted_export_with :id, :added_by_user_id, :company_number, :created_at,
                        :legal_name, :trading_name, :updated_at
-
-  settings do
-    mappings do
-      indexes :name_for_sorting, type: :keyword
-    end
-  end
-
-  def as_indexed_json(*)
-    as_json(
-      include: {
-        investigations: {
-          only: %i[is_closed],
-          methods: :owner_id
-        }
-      },
-      methods: %i[tiebreaker_id name_for_sorting]
-    )
-  end
 
   def supporting_information
     corrective_actions + risk_assessments
@@ -72,9 +45,5 @@ class Business < ApplicationRecord
 
   def locations_have_errors?
     locations&.any? { |location| location.errors.any? } || false
-  end
-
-  def name_for_sorting
-    trading_name
   end
 end
