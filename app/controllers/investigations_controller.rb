@@ -15,7 +15,7 @@ class InvestigationsController < ApplicationController
         @answer         = opensearch_for_investigations(20)
         @count          = count_to_display
         @investigations = InvestigationDecorator
-                            .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+                            .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
         @page_name = "all_cases"
       end
     end

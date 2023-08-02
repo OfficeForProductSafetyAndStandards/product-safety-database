@@ -3,7 +3,7 @@ module InvestigationsHelper
 
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
     # Opensearch is only used for searching across all investigations
-    Investigation.not_deleted.full_search(search_query(user)).page(page_number).per(page_size)
+    Investigation.search(params[:q], page: page_number, per_page: page_size)
   end
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)

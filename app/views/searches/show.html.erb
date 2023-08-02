@@ -11,7 +11,7 @@
         <%= render_sort_by form, @search.sort_by_items(with_relevant_option: true), @search.selected_sort_by, @search.sort_dir %>
       </div>
       <div class="govuk-grid-row">
-        <%= search_result_statement(@search.q, @answer.results.total_count) %>
+        <%= search_result_statement(@search.q, @answer.total_count) %>
       </div>
       <% if @investigations.any? %>
         <div class="govuk-grid-row">
@@ -34,7 +34,7 @@
               </thead>
 
               <% @investigations.each do |investigation| %>
-                <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
+                <% result = @answer.find { |rs| rs.id.to_i == investigation.id } %>
                 <% if !policy(investigation).view_non_protected_details? %>
                   <%= render "investigations/restricted_table_body", investigation: investigation.decorate %>
                 <% elsif result.respond_to?(:highlight) %>
@@ -60,7 +60,7 @@
               <% end %>
             </table>
 
-            <%= paginate @answer.results %>
+            <%= paginate @answer %>
           </div>
         </div>
       <% end %>
