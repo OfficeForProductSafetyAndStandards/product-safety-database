@@ -17,7 +17,6 @@ class RemoveProductFromCase
     end
 
     investigation.__elasticsearch__.update_document
-    product.__elasticsearch__.index_document
 
     context.activity = create_audit_activity_for_product_removed
 
