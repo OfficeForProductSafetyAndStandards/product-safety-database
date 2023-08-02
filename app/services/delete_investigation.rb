@@ -11,8 +11,7 @@ class DeleteInvestigation
     ActiveRecord::Base.transaction do
       investigation.mark_as_deleted!
       investigation.update!(deleted_by: deleted_by.id)
-
-      investigation.__elasticsearch__.delete_document
+      investigation.reindex
     end
   end
 end
