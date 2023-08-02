@@ -72,6 +72,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_model_serializers (0.10.13)
+      actionpack (>= 4.1, < 7.1)
+      activemodel (>= 4.1, < 7.1)
+      case_transform (>= 0.2)
+      jsonapi-renderer (>= 0.1.1.beta1, < 0.3)
     active_storage_validations (1.0.4)
       activejob (>= 5.2.0)
       activemodel (>= 5.2.0)
@@ -150,6 +155,8 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
+    case_transform (0.2)
+      activesupport
     caxlsx (3.4.1)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
@@ -199,19 +206,6 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     e2mmap (0.1.0)
-    elasticsearch (7.17.7)
-      elasticsearch-api (= 7.17.7)
-      elasticsearch-transport (= 7.17.7)
-    elasticsearch-api (7.17.7)
-      multi_json
-    elasticsearch-model (7.2.1)
-      activesupport (> 3)
-      elasticsearch (~> 7)
-      hashie
-    elasticsearch-rails (7.2.1)
-    elasticsearch-transport (7.17.7)
-      faraday (~> 1)
-      multi_json
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
@@ -286,6 +280,7 @@ GEM
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
     json (2.6.3)
+    jsonapi-renderer (0.2.2)
     jwt (2.7.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -560,6 +555,9 @@ GEM
       tilt
     scout_apm (5.3.3)
       parser
+    searchkick (5.3.0)
+      activemodel (>= 6.1)
+      hashie
     selenium-webdriver (4.9.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -694,6 +692,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  active_model_serializers (~> 0.10.0)
   active_storage_validations (~> 1.0.4)
   activerecord-pg_enum (~> 2.0)
   awesome_print (~> 1.9)
@@ -712,8 +711,6 @@ DEPENDENCIES
   devise-encryptable (~> 0.2)
   dotenv-rails (~> 2.8)
   draper (~> 4.0)
-  elasticsearch-model
-  elasticsearch-rails
   factory_bot_rails (~> 6.2)
   faker (~> 3.2)
   govuk-design-system-rails (~> 0.10.5)!
@@ -761,6 +758,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.15)
   sassc-rails
   scout_apm (~> 5.3)
+  searchkick (~> 5.3)
   selenium-webdriver (~> 4.9)
   sentry-rails
   sentry-sidekiq
