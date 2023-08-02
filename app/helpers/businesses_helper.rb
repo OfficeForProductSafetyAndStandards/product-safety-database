@@ -53,6 +53,10 @@ module BusinessesHelper
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
   end
 
+  def page_number
+    params[:page].to_i > 500 ? "500" : params[:page]
+  end
+
   def business_params
     params.require(:business).permit(
       :legal_name,
