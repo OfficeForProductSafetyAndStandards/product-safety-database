@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)                  { create(:user, :opss_user, :activated) }
   let(:investigation)         { create(:enquiry, :with_products, creator: user) }
   let(:removal_reason)        { "I made a mistake" }

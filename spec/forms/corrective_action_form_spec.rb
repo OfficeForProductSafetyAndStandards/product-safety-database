@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe CorrectiveActionForm, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
   subject(:corrective_action_form) do
     described_class.new(

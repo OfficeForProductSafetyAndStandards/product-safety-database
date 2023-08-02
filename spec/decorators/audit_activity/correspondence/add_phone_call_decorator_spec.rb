@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorated_activity) { activity.decorate }
 
   include_context "with phone call correspondence setup"

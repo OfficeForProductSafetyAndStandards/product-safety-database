@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 
   subject(:activity) { investigation.reload.activities.where(type: described_class.to_s).first }

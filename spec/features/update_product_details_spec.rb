@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_opensearch, type: :feature do
+RSpec.feature "Updating product details", :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
 
   let(:product) do

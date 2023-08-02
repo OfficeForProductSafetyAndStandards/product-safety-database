@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorated_activity) { accident.reload.investigation.activities.find_by!(type: "AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated").decorate }
 
   let(:accident) { create(:accident, date:, is_date_known:, usage:, severity:, severity_other:, additional_info:) }

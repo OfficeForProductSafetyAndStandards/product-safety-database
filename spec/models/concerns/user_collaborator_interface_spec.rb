@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UserCollaboratorInterface, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe UserCollaboratorInterface, :with_stubbed_mailer do
   subject(:user) { create(:user) }
 
   describe "#team" do

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Updating the status of a case", :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_notify, type: :request do
+RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:user_from_owner_team) { create(:user, :activated) }
   let(:user_from_collaborator_team) { create(:user, :activated) }
   let(:other_user) { create(:user, :activated) }

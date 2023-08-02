@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Edit a case name", :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.feature "Edit a case name", :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:team_mate) { create(:user, :activated, has_viewed_introduction: true, team: user.team) }
   let(:original_case_name) { "the original case name" }

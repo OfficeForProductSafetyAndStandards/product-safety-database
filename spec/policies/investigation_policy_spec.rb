@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
   subject(:policy) { described_class.new(user, investigation) }
 
   let(:team) { create(:team) }

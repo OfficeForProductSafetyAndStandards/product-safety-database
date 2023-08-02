@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Remove a business from a case", :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.feature "Remove a business from a case", :with_stubbed_mailer do
   let(:business)      { create(:business) }
   let(:user)          { create(:user, :activated, has_accepted_declaration: true) }
   let(:investigation) { create(:allegation, :with_business, business_to_add: business, creator: user) }

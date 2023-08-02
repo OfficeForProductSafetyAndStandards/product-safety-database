@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "View a risk assessment on a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "View a risk assessment on a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:risk_assessment_file_path) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new(risk_assessment_file_path) }
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }

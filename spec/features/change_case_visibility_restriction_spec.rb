@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.feature "Change case restriction status", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   let(:user) { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:case_id) { investigation.pretty_id }
 

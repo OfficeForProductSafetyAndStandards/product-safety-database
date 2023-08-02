@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Add a location to a business", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Add a location to a business", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)     { create(:user, :activated, has_viewed_introduction: true) }
   let(:business) { create(:business, trading_name: "Acme Ltd") }
 

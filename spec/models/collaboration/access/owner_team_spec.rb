@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_mailer do
   subject(:owner_team_collaboration) { investigation.owner_team_collaboration }
 
   let(:investigation) { create(:allegation) }

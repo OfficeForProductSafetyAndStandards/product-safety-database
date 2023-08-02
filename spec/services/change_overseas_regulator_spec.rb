@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeOverseasRegulator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe ChangeOverseasRegulator, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:investigation) { create(:allegation, is_from_overseas_regulator: true, overseas_regulator_country: "country:AM") }
   let(:user) { create(:user, name: "User One") }
 

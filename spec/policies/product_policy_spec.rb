@@ -26,7 +26,7 @@ RSpec.describe ProductPolicy do
 
     let(:product) { build(:product) }
 
-    context "when there is no owning team", :with_stubbed_opensearch, :with_stubbed_mailer do
+    context "when there is no owning team", :with_stubbed_mailer do
       let(:team) { create(:team) }
       let(:user) { create(:user, team:) }
       let(:product) { create(:product, owning_team: nil) }

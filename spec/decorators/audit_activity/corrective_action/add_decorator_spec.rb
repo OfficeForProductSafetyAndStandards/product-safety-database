@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorated_activity) do
     described_class.decorate(
       AuditActivity::CorrectiveAction::Add.new(

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AccidentOrIncidentForm, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe AccidentOrIncidentForm, :with_test_queue_adapter do
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user) }
 

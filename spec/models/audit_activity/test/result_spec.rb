@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Test::Result, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::Test::Result, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) { described_class.new(metadata:) }
 
   let(:test_result) { create(:test_result) }

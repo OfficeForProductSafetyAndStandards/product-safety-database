@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:audit_activity) do
     create(
       :legacy_audit_add_activity_corrective_action,

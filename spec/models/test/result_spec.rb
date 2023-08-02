@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Test::Result, :with_stubbed_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe Test::Result, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   describe "validations" do
     context "when missing an investigation" do
       let(:test_result) { build(:test_result, investigation: nil) }

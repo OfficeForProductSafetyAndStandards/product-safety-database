@@ -47,7 +47,7 @@ RSpec.describe Product do
     end
   end
 
-  describe "#unique_investigation_products", :with_stubbed_opensearch, :with_stubbed_mailer do
+  describe "#unique_investigation_products", :with_stubbed_mailer do
     let(:investigation) { create(:allegation) }
     let(:investigation_2) { create(:allegation) }
     let(:product) { create(:product) }
@@ -66,7 +66,7 @@ RSpec.describe Product do
     end
   end
 
-  describe "#stale?", :with_stubbed_opensearch, :with_stubbed_notify, :with_stubbed_mailer do
+  describe "#stale?", :with_stubbed_notify, :with_stubbed_mailer do
     context "when the product is less than 18 months old" do
       let(:product) { build :product, created_at: 1.day.ago }
 
@@ -128,7 +128,7 @@ RSpec.describe Product do
     end
   end
 
-  describe ".retire_stale_products!", :with_stubbed_opensearch, :with_stubbed_notify, :with_stubbed_mailer do
+  describe ".retire_stale_products!", :with_stubbed_notify, :with_stubbed_mailer do
     let!(:young_product) { create :product, created_at: 1.day.ago }
     let(:open_case) { create :allegation, :with_products }
     let!(:product_with_open_case) { open_case.products.first }

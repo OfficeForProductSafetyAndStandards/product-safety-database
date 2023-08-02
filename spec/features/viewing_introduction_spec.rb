@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Viewing the introduction", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Viewing the introduction", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: false) }
 
   scenario "Viewing the steps in order" do

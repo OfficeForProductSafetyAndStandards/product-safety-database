@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) { described_class.new(metadata:) }
 
   let(:phone_call) { create(:correspondence_phone_call) }

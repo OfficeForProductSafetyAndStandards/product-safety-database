@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe UpdateDocument, :with_test_queue_adapter do
   let(:investigation) { create(:allegation) }
   let(:product) { create(:product_washing_machine) }
   let(:business) { create(:business) }

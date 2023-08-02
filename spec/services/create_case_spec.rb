@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe CreateCase, :with_test_queue_adapter do
   let(:investigation) { build(:enquiry) }
   let(:user) { create(:user) }
   let(:product) { create(:product) }

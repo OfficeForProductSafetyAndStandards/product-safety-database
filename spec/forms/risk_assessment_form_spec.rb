@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RiskAssessmentForm, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
   # Default set of valid attributes
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user) }
