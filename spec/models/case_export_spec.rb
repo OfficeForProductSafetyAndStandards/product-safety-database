@@ -40,7 +40,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   end
 
   before do
-    Investigation.__elasticsearch__.import scope: "not_deleted", force: true, refresh: :wait
+    Investigation.reindex
     allow(JSON).to receive(:load_file!).and_return(JSON.parse(team_mappings, object_class: OpenStruct))
   end
 

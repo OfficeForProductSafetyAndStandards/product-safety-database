@@ -9,8 +9,6 @@ RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_notify, :with_stu
   let(:params) { {} }
   let(:business_export) { described_class.create!(user:, params:) }
 
-  before { Business.__elasticsearch__.import force: true, refresh: :wait }
-
   describe "#export!" do
     before do
       create(:location, business:)

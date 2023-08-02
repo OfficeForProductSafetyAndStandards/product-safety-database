@@ -47,7 +47,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
   before do
     # Import products syncronously into Opensearch
-    Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for, force: true
+    Investigation.reindex
   end
 
   scenario "searching for a case using a keyword from a product name" do
@@ -287,7 +287,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         before do
           ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
           mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
-          Investigation.__elasticsearch__.import scope: "not_deleted", refresh: :wait_for
+          Investigation.reindex
 
           sign_in(user)
           visit "/cases"
