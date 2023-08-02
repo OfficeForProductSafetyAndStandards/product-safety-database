@@ -12,22 +12,17 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    Searchkick.disable_callbacks
-  end
-
-  config.before(:each, with_opensearch: true) do
     uri = URI(ENV.fetch("OPENSEARCH_URL"))
     WebMock.disable_net_connect!(allow: "#{uri.host}:#{uri.port}")
+    Investigation.reindex
+
+    Searchkick.disable_callbacks
   end
 
   config.around(:each, with_opensearch: true) do |example|
     Searchkick.callbacks(nil) do
       example.run
     end
-  end
-
-  config.after(:each, with_opensearch: true) do
-    WebMock.disable_net_connect!
   end
 
   config.example_status_persistence_file_path = "examples.txt"
