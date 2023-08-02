@@ -693,12 +693,5 @@ if run_seeds
     u.roles.create!(name: "risk_level_validator")
   end
 
-  Investigation.__elasticsearch__.create_index! force: true
-  Investigation.import scope: "not_deleted"
-
-  Product.__elasticsearch__.create_index! force: true
-  Product.import
-
-  Business.__elasticsearch__.create_index! force: true
-  Business.import
+  Investigation.reindex
 end
