@@ -26,7 +26,7 @@ RSpec.shared_context "with Opensearch", shared_context: :metadata do
   end
 
   def opensearch_models
-    [Investigation, Product, Business]
+    [Investigation]
   end
 
   before do
