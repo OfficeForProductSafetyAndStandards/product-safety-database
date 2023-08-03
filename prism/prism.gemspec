@@ -28,10 +28,13 @@ Gem::Specification.new do |spec|
   # Ensure any gems that are also used in the main app have the same version constraints
   # Run `bundle install` for both this engine and the main app when adding or changing gems
   spec.add_runtime_dependency "aasm", "~> 5.5"
+  spec.add_runtime_dependency "active_storage_validations", "~> 1.0"
   spec.add_runtime_dependency "aws-sdk-s3", "~> 1.122"
   spec.add_runtime_dependency "devise", "~> 4.9"
   spec.add_runtime_dependency "govuk-components", "~> 4.0"
   spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 4.0"
+  spec.add_runtime_dependency "i18n-js", "~> 4.2"
+  spec.add_runtime_dependency "listen", "~> 3.8"
   spec.add_runtime_dependency "pagy", "~> 6.0"
   spec.add_runtime_dependency "pg", "~> 1.5"
   spec.add_runtime_dependency "rails", ">= 7.0.4.3"

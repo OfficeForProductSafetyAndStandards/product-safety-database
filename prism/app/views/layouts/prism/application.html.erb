@@ -120,6 +120,7 @@
     </div>
   </footer>
   <%= javascript_include_tag "application", nonce: true %>
+  <%= javascript_include_tag "prism/application", nonce: true %>
   <%= javascript_tag nonce: true do -%>
     window.GOVUKFrontend.initAll()
   <% end -%>

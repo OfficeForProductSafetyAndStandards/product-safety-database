@@ -84,6 +84,10 @@ RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_notify, :with_stu
       expect(sheet.cell(1, 15)).to eq "primary_location_postal_code"
       expect(sheet.cell(2, 15)).to eq business.primary_location.try(:postal_code)
       expect(sheet.cell(3, 15)).to eq business_2.primary_location.try(:postal_code)
+
+      expect(sheet.cell(1, 18)).to eq "case_id"
+      expect(sheet.cell(2, 18)).to eq investigation.pretty_id
+      expect(sheet.cell(3, 18)).to be_nil
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength

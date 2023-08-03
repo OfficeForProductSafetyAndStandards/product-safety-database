@@ -3,10 +3,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Determine and evaluate the level of product risk</h1>
-    <% if @prism_risk_assessment.draft? %>
+    <% if !@prism_risk_assessment.submitted? %>
       <p class="govuk-body govuk-!-font-weight-bold">Assessment incomplete</p>
     <% end %>
-    <p class="govuk-body">You have completed <%= sections_complete %> of <%= normal_risk_sections.count %> sections.</p>
-    <%= render partial: "task_list", locals: { sections: normal_risk_sections } %>
+    <p class="govuk-body">You have completed <%= normal_risk_sections_complete %> of <%= normal_risk_sections.count %> sections.</p>
+    <%= render partial: "task_list", locals: { sections: normal_risk_sections, repeatable_sections: %w[create] } %>
   </div>
 </div>

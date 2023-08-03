@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -201,6 +201,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
   end
 
   create_table "investigation_businesses", id: :serial, force: :cascade do |t|
+    t.string "authorised_representative_choice"
     t.integer "business_id"
     t.datetime "created_at", precision: nil, null: false
     t.integer "investigation_id"
@@ -291,18 +292,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "prism_harm_scenario_step_evidences", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "harm_scenario_step_id"
+    t.datetime "updated_at", null: false
+    t.index ["harm_scenario_step_id"], name: "index_prism_harm_scenario_step_evidences_on_harm_scenario_step"
+  end
+
   create_table "prism_harm_scenario_steps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.bigint "prism_harm_scenario_id"
-    t.decimal "probability"
+    t.uuid "harm_scenario_id"
+    t.decimal "probability_decimal"
     t.string "probability_evidence"
+    t.text "probability_evidence_description"
+    t.integer "probability_frequency"
     t.string "probability_type"
     t.datetime "updated_at", null: false
-    t.index ["prism_harm_scenario_id"], name: "index_prism_harm_scenario_steps_on_prism_harm_scenario_id"
+    t.index ["harm_scenario_id"], name: "index_prism_harm_scenario_steps_on_harm_scenario_id"
   end
 
   create_table "prism_harm_scenarios", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "confirmed_at", precision: nil
     t.datetime "created_at", null: false
     t.text "description"
     t.string "hazard_type"
@@ -312,6 +323,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_101607) do
     t.uuid "risk_assessment_id"
     t.boolean "sensitivity_analysis"
     t.string "severity"
+    t.json "tasks_status", default: {}
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_harm_scenarios_on_risk_assessment_id"
   end

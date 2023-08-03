@@ -105,7 +105,34 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
       expect(Business.last.investigation_businesses.find_by!(investigation:).online_marketplace).to eq(online_marketplace)
     end
 
-    it "creates and audit log", :aggregate_failures do
+    it "creates an audit log", :aggregate_failures do
+      result
+
+      business = Business.last
+      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      expect(activity.added_by_user).to eq(user)
+    end
+
+    it_behaves_like "a service which notifies the case owner"
+  end
+
+  context "with a choice for authorised_representative" do
+    subject(:result) { described_class.call(investigation:, business:, user:, authorised_representative_choice:) }
+
+    let(:authorised_representative_choice) { "EU Authorised representative" }
+
+    it "saves the the businesses" do
+      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+    end
+
+    it "sets the authorised_representative_choice on investigation_business" do
+      result
+
+      expect(Business.last.investigation_businesses.find_by!(investigation:).authorised_representative_choice).to eq("EU Authorised representative")
+    end
+
+    it "creates an audit log", :aggregate_failures do
       result
 
       business = Business.last

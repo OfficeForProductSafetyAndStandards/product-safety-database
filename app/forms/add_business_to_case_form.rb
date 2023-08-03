@@ -11,6 +11,7 @@ class AddBusinessToCaseForm
   attribute :relationship, default: ""
   attribute :online_marketplace_id
   attribute :other_marketplace_name
+  attribute :authorised_representative_choice
 
   attribute :locations, default: []
   attribute :contacts, default: []

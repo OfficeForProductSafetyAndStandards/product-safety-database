@@ -217,7 +217,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         get generate_case_exports_path
 
         aggregate_failures do
-          expect(exported_data.cell(1, 26)).to eq "Reported_As"
+          expect(exported_data.cell(1, 26)).to eq "Reported_Reason"
           expect(exported_data.cell(2, 26)).to eq "unsafe"
         end
       end

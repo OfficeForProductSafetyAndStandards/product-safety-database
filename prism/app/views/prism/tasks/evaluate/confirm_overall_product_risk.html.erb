@@ -1,0 +1,50 @@
+<% content_for :page_title, "Harm scenarios" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @prism_risk_assessment.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with model: @prism_risk_assessment, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Determine overall product risk</span>
+        Harm scenarios
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l">Placeholder product</p>
+      <% end %>
+      <%=
+        govuk_table do |table|
+          table.with_caption(text: "Hazards and risks", size: "m")
+
+          table.with_head do |head|
+            head.with_row do |row|
+              row.with_cell(text: "Hazard name")
+              row.with_cell(text: "Probability of harm")
+              row.with_cell(text: "Severity")
+              row.with_cell(text: "Risk level")
+              row.with_cell(text: '<span class="govuk-visually-hidden">View harm scenario</span>'.html_safe)
+            end
+          end
+
+          @harm_scenarios.each do |harm_scenario|
+            classes = @prism_risk_assessment.errors.any? && !harm_scenario.valid_for_completion? ? %w[opss-table__cell--error] : []
+            table.with_body do |body|
+              body.with_row do |row|
+                row.with_cell(text: hazard_type(harm_scenario), classes:)
+                row.with_cell(text: overall_probability_of_harm(harm_scenario).probability_human)
+                row.with_cell(text: severity_of_harm(harm_scenario))
+                row.with_cell(text: overall_risk_level_tag(harm_scenario))
+                row.with_cell(text: "<a href=\"#{wizard_path(:check_your_harm_scenario, { harm_scenario_id: harm_scenario.id })}\" class=\"govuk-link\">View</a>".html_safe)
+              end
+            end
+          end
+        end
+      %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

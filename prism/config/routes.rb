@@ -14,17 +14,32 @@ Prism::Engine.routes.draw do
     get "perform-risk-triage", to: "triage#perform_risk_triage"
   end
 
-  resources :risk_assessment, only: [] do
-    resources :tasks, only: %i[index show update] do
-      # Allow a `harm_scenario_id` after the wizard step name for
-      # all harm scenario steps
-      member do
-        constraints id: /#{Regexp.union(HARM_SCENARIO_STEPS)}/ do
-          get ":harm_scenario_id", to: "tasks#show"
-          patch ":harm_scenario_id", to: "tasks#update"
-          put ":harm_scenario_id", to: "tasks#update"
+  resources :risk_assessment, path: "risk-assessment", only: [] do
+    resources :tasks, only: %i[index] do
+      collection do
+        scope module: :tasks do
+          resources :define, only: %i[show update]
+          resources :identify, only: %i[show update]
+          resources :create, only: [] do
+            # Allow a `harm_scenario_id` after the wizard step name for all harm scenario steps
+            member do
+              get ":harm_scenario_id", to: "create#show", as: ""
+              patch ":harm_scenario_id", to: "create#update"
+              put ":harm_scenario_id", to: "create#update"
+            end
+          end
+          resources :evaluate, only: %i[show update]
+        end
+        scope "/harm-scenarios" do
+          get "create", to: "tasks#create_harm_scenario", as: "create_harm_scenario"
+          get "remove/:harm_scenario_id", to: "tasks#remove_harm_scenario", as: "remove_harm_scenario"
+          delete "delete/:harm_scenario_id", to: "tasks#delete_harm_scenario", as: "delete_harm_scenario"
         end
       end
     end
+  end
+
+  scope "/api" do
+    get "overall-probability-of-harm", to: "api#overall_probability_of_harm"
   end
 end

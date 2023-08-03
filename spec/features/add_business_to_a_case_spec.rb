@@ -139,6 +139,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_unchecked_field("Online marketplace")
     expect(page).to have_unchecked_field("Fulfillment house")
     expect(page).to have_unchecked_field("Distributor")
+    expect(page).to have_unchecked_field("Authorised representative")
 
     choose "Online marketplace"
     expect(page).to have_unchecked_field(marketplace_1.name)
@@ -178,6 +179,60 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect(page.find("h3", text: "Business added"))
       .to have_sibling(".govuk-body", text: "Role: online_marketplace")
+  end
+
+  scenario "Adding a EU authorised rep business" do
+    sign_in user
+    visit "/cases/#{investigation.pretty_id}/businesses"
+
+    click_link "Add business"
+    expect_to_have_case_breadcrumbs
+
+    # Don't select a business type
+    click_on "Continue"
+
+    expect_to_be_on_investigation_add_business_type_page
+    expect_to_have_case_breadcrumbs
+    expect(page).to have_error_summary("Select a business type")
+
+    expect(page).to have_unchecked_field("Retailer")
+    expect(page).to have_unchecked_field("Manufacturer")
+    expect(page).to have_unchecked_field("Exporter")
+    expect(page).to have_unchecked_field("Importer")
+    expect(page).to have_unchecked_field("Online seller")
+    expect(page).to have_unchecked_field("Online marketplace")
+    expect(page).to have_unchecked_field("Fulfillment house")
+    expect(page).to have_unchecked_field("Distributor")
+    expect(page).to have_unchecked_field("Authorised representative")
+
+    choose "Authorised representative"
+    expect(page).to have_unchecked_field("UK Authorised representative")
+    expect(page).to have_unchecked_field("EU Authorised representative")
+    choose "EU Authorised representative"
+
+    click_on "Continue"
+
+    expect_to_be_on_investigation_add_business_details_page
+    expect_to_have_case_breadcrumbs
+
+    within_fieldset "Name and company number" do
+      fill_in "Trading name", with: trading_name
+    end
+
+    within_fieldset "Official address" do
+      select "France", from: "Country"
+    end
+
+    click_on "Save"
+
+    expect_to_be_on_investigation_businesses_page
+    expect(page).not_to have_error_messages
+    expect_to_have_case_breadcrumbs
+
+    within("section##{trading_name.parameterize}") do
+      expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
+      expect(page.find("dt", text: "Business type")).to have_sibling("dd", text: "EU Authorised representative")
+    end
   end
 
   scenario "Adding an 'other' online marketplace business" do

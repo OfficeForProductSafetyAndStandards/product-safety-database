@@ -139,8 +139,7 @@ Rails.application.routes.draw do
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resource :reported_reason, only: %i[edit update], path: "edit-reported-reason", controller: "investigations/reported_reason"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
-    resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
-    get "add-to-case", to: "investigations/supporting_information#add_to_case", as: "add_to_case"
+    resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index]
 
     resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
 
@@ -236,6 +235,12 @@ Rails.application.routes.draw do
     resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
       member do
         post :confirm
+      end
+    end
+
+    resources :recalls, only: %i[show update], controller: "products/recalls" do
+      collection do
+        post :pdf
       end
     end
   end

@@ -11,7 +11,7 @@
 <% end %>
 
 <% @investigation.businesses.each_with_index do |business, index| %>
-  <% investigation_business = @investigation.investigation_businesses.find_by(business_id: business.id) %>
+  <% investigation_business = @investigation.investigation_businesses.find_by(business_id: business.id).decorate %>
 <section id="<%= business.trading_name.parameterize %>" class="govuk-!-margin-bottom-9">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
@@ -35,7 +35,7 @@
         Business type
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= investigation_business.relationship&.humanize %>
+        <%= investigation_business.pretty_relationship %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">

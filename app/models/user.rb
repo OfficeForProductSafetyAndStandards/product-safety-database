@@ -119,6 +119,11 @@ class User < ApplicationRecord
     has_role? :restricted_case_viewer
   end
 
+  def can_use_product_recall_tool?
+    false
+    # !Rails.env.production? || team.name == "OPSS Incident Management"
+  end
+
   def has_role?(role)
     roles.exists?(name: role) || team.roles.exists?(name: role)
   end

@@ -1,18 +1,25 @@
 # rubocop:disable RSpec/LetSetup
-# rubocop:disable RSpec/MultipleExpectations
 # rubocop:disable RSpec/ExampleLength
 require "rails_helper"
 
 RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
-  let!(:investigation)          { create(:allegation).decorate }
-  let!(:other_investigation)    { create(:allegation).decorate }
+  let!(:investigation) do
+    create(:allegation,
+           reported_reason: "unsafe",
+           hazard_type: "Electromagnetic disturbance",
+           hazard_description: "Much fire",
+           non_compliant_reason: "On fire, lots of fire",
+           risk_level: "serious").decorate
+  end
+  let!(:other_investigation) { create(:allegation).decorate }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   # Create a new product version to ensure only the current version is rendered
   let(:country_of_origin)       { "country:GB-ENG" }
-  let!(:product)                { create(:product, :with_versions, investigations: [investigation], country_of_origin:, description: initial_product_description, new_description: new_product_description).decorate }
-  let!(:other_product)          { create(:product, investigations: [other_investigation], country_of_origin: nil).decorate }
-  let!(:investigation_product)  { create(:investigation_product, product:, investigation:) }
+  let!(:product)                { create(:product, :with_versions, country_of_origin:, description: initial_product_description, new_description: new_product_description).decorate }
+  let!(:other_product)          { create(:product, country_of_origin: nil).decorate }
+  let!(:investigation_product)  { create(:investigation_product, product:, investigation:, affected_units_status: "approx", number_of_affected_units: 49, batch_number: "2112", customs_code: "6987") }
+  let!(:investigation_product_2) { create(:investigation_product, product: other_product, investigation: other_investigation) }
   let!(:risk_assessment)        { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:risk_assessment_2)      { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:test)                   { create(:test_result, investigation:, investigation_product:, failure_details: "something bad").decorate }
@@ -23,7 +30,9 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let(:params)                  { {} }
   let(:product_export)          { described_class.create!(user:, params:) }
 
-  before { Product.import force: true, refresh: :wait }
+  before do
+    Product.import force: true, refresh: :wait
+  end
 
   describe "#export!" do
     let(:result) { product_export.export! }
@@ -64,8 +73,8 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(3, 5)).to eq other_product.brand
 
       expect(product_sheet.cell(1, 6)).to eq "case_id"
-      expect(product_sheet.cell(2, 6)).to eq product.case_ids.first.to_s
-      expect(product_sheet.cell(3, 6)).to eq other_product.case_ids.first.to_s
+      expect(product_sheet.cell(2, 6)).to eq investigation.pretty_id
+      expect(product_sheet.cell(3, 6)).to eq other_investigation.pretty_id
 
       expect(product_sheet.cell(1, 7)).to eq "category"
       expect(product_sheet.cell(2, 7)).to eq product.category
@@ -115,6 +124,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(product_sheet.cell(2, 18)).to eq product.when_placed_on_market
       expect(product_sheet.cell(3, 18)).to eq other_product.when_placed_on_market
 
+      expect(product_sheet.cell(1, 20)).to eq "affected_units_status"
+      expect(product_sheet.cell(2, 20)).to eq investigation_product.affected_units_status
+      expect(product_sheet.cell(3, 20)).to eq investigation_product_2.affected_units_status
+
+      expect(product_sheet.cell(1, 21)).to eq "number_of_affected_units"
+      expect(product_sheet.cell(2, 21)).to eq investigation_product.number_of_affected_units
+      expect(product_sheet.cell(3, 21)).to eq investigation_product_2.number_of_affected_units
+
+      expect(product_sheet.cell(1, 22)).to eq "batch_number"
+      expect(product_sheet.cell(2, 22)).to eq investigation_product.batch_number
+      expect(product_sheet.cell(3, 22)).to eq investigation_product_2.batch_number
+
+      expect(product_sheet.cell(1, 23)).to eq "customs_code"
+      expect(product_sheet.cell(2, 23)).to eq investigation_product.customs_code
+      expect(product_sheet.cell(3, 23)).to eq investigation_product_2.customs_code
+
       expect(test_result_sheet.cell(1, 1)).to eq "psd_ref"
       expect(test_result_sheet.cell(2, 1)).to eq product.psd_ref
       expect(test_result_sheet.cell(3, 1)).to eq product.psd_ref
@@ -155,6 +180,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(test_result_sheet.cell(2, 10)).to eq test.investigation.pretty_id
       expect(test_result_sheet.cell(3, 10)).to eq test_2.investigation.pretty_id
 
+      expect(test_result_sheet.cell(1, 11)).to eq "reported_reason"
+      expect(test_result_sheet.cell(2, 11)).to eq test.investigation.reported_reason
+      expect(test_result_sheet.cell(3, 11)).to eq test_2.investigation.reported_reason
+
+      expect(test_result_sheet.cell(1, 12)).to eq "hazard_type"
+      expect(test_result_sheet.cell(2, 12)).to eq test.investigation.hazard_type
+      expect(test_result_sheet.cell(3, 12)).to eq test_2.investigation.hazard_type
+
+      expect(test_result_sheet.cell(1, 13)).to eq "non_compliant_reason"
+      expect(test_result_sheet.cell(2, 13)).to eq test.investigation.non_compliant_reason
+      expect(test_result_sheet.cell(3, 13)).to eq test_2.investigation.non_compliant_reason
+
+      expect(test_result_sheet.cell(1, 14)).to eq "risk_level"
+      expect(test_result_sheet.cell(2, 14)).to eq test.investigation.risk_level_description
+      expect(test_result_sheet.cell(3, 14)).to eq test_2.investigation.risk_level_description
+
       expect(risk_assessments_sheet.cell(1, 1)).to eq "psd_ref"
       expect(risk_assessments_sheet.cell(2, 1)).to eq product.psd_ref
       expect(risk_assessments_sheet.cell(3, 1)).to eq product.psd_ref
@@ -186,6 +227,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(risk_assessments_sheet.cell(1, 8)).to eq "case_id"
       expect(risk_assessments_sheet.cell(2, 8)).to eq risk_assessment.investigation.pretty_id
       expect(risk_assessments_sheet.cell(3, 8)).to eq risk_assessment_2.investigation.pretty_id
+
+      expect(risk_assessments_sheet.cell(1, 9)).to eq "reported_reason"
+      expect(risk_assessments_sheet.cell(2, 9)).to eq risk_assessment.investigation.reported_reason
+      expect(risk_assessments_sheet.cell(3, 9)).to eq risk_assessment_2.investigation.reported_reason
+
+      expect(risk_assessments_sheet.cell(1, 10)).to eq "hazard_type"
+      expect(risk_assessments_sheet.cell(2, 10)).to eq risk_assessment.investigation.hazard_type
+      expect(risk_assessments_sheet.cell(3, 10)).to eq risk_assessment_2.investigation.hazard_type
+
+      expect(risk_assessments_sheet.cell(1, 11)).to eq "non_compliant_reason"
+      expect(risk_assessments_sheet.cell(2, 11)).to eq risk_assessment.investigation.non_compliant_reason
+      expect(risk_assessments_sheet.cell(3, 11)).to eq risk_assessment_2.investigation.non_compliant_reason
+
+      expect(risk_assessments_sheet.cell(1, 12)).to eq "risk_level"
+      expect(risk_assessments_sheet.cell(2, 12)).to eq risk_assessment.investigation.risk_level_description
+      expect(risk_assessments_sheet.cell(3, 12)).to eq risk_assessment_2.investigation.risk_level_description
 
       expect(corrective_actions_sheet.cell(1, 1)).to eq "psd_ref"
       expect(corrective_actions_sheet.cell(2, 1)).to eq product.psd_ref
@@ -238,6 +295,22 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(corrective_actions_sheet.cell(1, 13)).to eq "case_id"
       expect(corrective_actions_sheet.cell(2, 13)).to eq corrective_action.investigation.pretty_id
       expect(corrective_actions_sheet.cell(3, 13)).to eq corrective_action_2.investigation.pretty_id
+
+      expect(corrective_actions_sheet.cell(1, 14)).to eq "reported_reason"
+      expect(corrective_actions_sheet.cell(2, 14)).to eq corrective_action.investigation.reported_reason
+      expect(corrective_actions_sheet.cell(3, 14)).to eq corrective_action_2.investigation.reported_reason
+
+      expect(corrective_actions_sheet.cell(1, 15)).to eq "hazard_type"
+      expect(corrective_actions_sheet.cell(2, 15)).to eq corrective_action.investigation.hazard_type
+      expect(corrective_actions_sheet.cell(3, 15)).to eq corrective_action_2.investigation.hazard_type
+
+      expect(corrective_actions_sheet.cell(1, 16)).to eq "non_compliant_reason"
+      expect(corrective_actions_sheet.cell(2, 16)).to eq corrective_action.investigation.non_compliant_reason
+      expect(corrective_actions_sheet.cell(3, 16)).to eq corrective_action_2.investigation.non_compliant_reason
+
+      expect(corrective_actions_sheet.cell(1, 17)).to eq "risk_level"
+      expect(corrective_actions_sheet.cell(2, 17)).to eq corrective_action.investigation.risk_level_description
+      expect(corrective_actions_sheet.cell(3, 17)).to eq corrective_action_2.investigation.risk_level_description
     end
   end
 
@@ -254,7 +327,7 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:products_sheet) { exported_data.sheet("product_info") }
 
-    it "exports the product into multiple rows, each with a different case" do
+    it "exports the product into multiple rows, each with a different case", :aggregate_failures do
       expect(products_sheet.cell(1, 1)).to eq "psd_ref"
       expect(products_sheet.cell(2, 1)).to eq product.psd_ref
       expect(products_sheet.cell(3, 1)).to eq other_product.psd_ref
@@ -262,14 +335,13 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
       expect(products_sheet.cell(5, 1)).to eq multiple_case_product.psd_ref
 
       expect(products_sheet.cell(1, 6)).to eq "case_id"
-      expect(products_sheet.cell(2, 6)).to eq product.case_ids.first.to_s
-      expect(products_sheet.cell(3, 6)).to eq other_product.case_ids.first.to_s
-      expect(products_sheet.cell(4, 6)).to eq multiple_case_product.case_ids[0].to_s
-      expect(products_sheet.cell(5, 6)).to eq multiple_case_product.case_ids[1].to_s
+      expect(products_sheet.cell(2, 6)).to eq investigation.pretty_id
+      expect(products_sheet.cell(3, 6)).to eq other_investigation.pretty_id
+      expect(products_sheet.cell(4, 6)).to eq investigation_a.pretty_id
+      expect(products_sheet.cell(5, 6)).to eq investigation_b.pretty_id
     end
   end
 end
 
-# rubocop:enable RSpec/MultipleExpectations
 # rubocop:enable RSpec/ExampleLength
 # rubocop:enable RSpec/LetSetup

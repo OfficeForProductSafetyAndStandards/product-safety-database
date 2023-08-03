@@ -52,6 +52,10 @@ en:
               blank: Enter the full name of the assessor
             assessment_organisation:
               blank: Enter the name of the assessment organisation
+            harm_scenarios:
+              invalid:
+                one: Complete all parts of the harm scenario
+                other: "Complete %{invalid} of %{count} harm scenarios"
         prism/product_market_detail:
           attributes:
             selling_organisation:
@@ -70,10 +74,8 @@ en:
         prism/product_hazard:
           attributes:
             number_of_hazards:
-              blank: Select the number of hazards identified
               inclusion: Select the number of hazards identified
             product_aimed_at:
-              blank: Select who the product is aimed at
               inclusion: Select who the product is aimed at
             product_aimed_at_description:
               blank: Enter a description of the particular group of users
@@ -82,12 +84,51 @@ en:
         prism/harm_scenario:
           attributes:
             hazard_type:
-              blank: Select a hazard type
               inclusion: Select a hazard type
             other_hazard_type:
               blank: Enter the hazard type
             description:
               blank: Enter a hazard description
+            harm_scenario_steps:
+              blank: Enter at least one step
+            severity:
+              inclusion: Select a severity level
+            multiple_casualties:
+              inclusion: Select whether the harm can result in multiple casualties
+            level_of_uncertainty:
+              inclusion: Select the level of uncertainty
+            sensitivity_analysis:
+              inclusion: Select whether sensitivity analysis has been undertaken
+        prism/harm_scenario_step:
+          attributes:
+            description:
+              blank: Enter a step description
+            probability_type:
+              inclusion: Select which format you would like to express the probability of harm in
+            probability_decimal:
+              blank: Enter the probability as a decimal number
+              not_a_number: Enter the probability as a decimal number
+              greater_than: Enter the probability as a decimal number more than 0
+              less_than_or_equal_to: Enter the probability as a decimal number less than or equal to 1
+            probability_frequency:
+              blank: Enter the probability as a frequency number
+              not_a_number: Enter the probability as a frequency number
+              not_an_integer: Enter the probability as a frequency number
+              greater_than: Enter the probability as a frequency number more than 0
+            probability_evidence:
+              inclusion: Select how you decided on the probability of harm
+            probability_evidence_description_limited:
+              blank: Enter a description of the evidence
+            probability_evidence_description_strong:
+              blank: Enter a description of the evidence
+            harm_scenario_step_evidence:
+              blank: Attach a document in support of your decision
+        prism/harm_scenario_step_evidence:
+          attributes:
+            evidence_file:
+              blank: Attach a document in support of your decision
+              content_type_invalid: Attach a document in a valid format
+              file_size_out_of_range: Attach a document smaller than 30MB
   prism:
     tasks:
       task_list:
@@ -119,14 +160,50 @@ en:
                 title: Determine severity of harm
               add_uncertainty_and_sensitivity_analysis:
                 title: Add uncertainty and sensitivity analysis
-              confirm_overall_product_risk:
-                title: Confirm overall product risk
+              check_your_harm_scenario:
+                title: Check your harm scenario
           evaluate:
             title: Evaluate product risk and submit assessment
             tasks:
+              confirm_overall_product_risk:
+                title: Determine overall risk level of harm scenarios
               complete_product_risk_evaluation:
                 title: Complete product risk evaluation
               review_and_submit_results_of_the_assessment:
                 title: Review and submit results of the assessment
               review_and_submit_results_of_the_evaluation:
                 title: Review and submit results of the evaluation
+    product_hazard:
+      product_aimed_at:
+        particular_group_of_users: Particular group of users
+        general_population: General population
+    harm_scenarios:
+      hazard_types:
+        mechanical: Mechanical
+        size_and_shape: Size and shape
+        electrical: Electrical
+        fire_and_explosion: Fire and explosion
+        thermal: Thermal
+        ergonomic: Ergonomic
+        noise_and_vibration: Noise and vibration
+        microbiological: Microbiological
+        chemical: Chemical
+        lack_of_protection: Lack of protection
+        other: Other
+      severity:
+        level_1: Level 1
+        level_2: Level 2
+        level_3: Level 3
+        level_4: Level 4
+      level_of_uncertainty:
+        low: Low
+        medium: Medium
+        high: High
+    harm_scenario_steps:
+      step_0_hint: Step 1 should cover the existence of a hazard which can foreseeably cause harm during the lifetime of the product. For example, the car seat is occupied by an infant while the vehicle is in use.
+      step_1_hint: Step 2 should describe how the user (and/or other subjects) becomes exposed to risk. For example, the vehicle containing the seat/child is involved in a frontal collision of sufficient magnitude that the protection offered by the seat is necessary.
+      step_2_hint: Step 3 should describe how exposure to the risk results in harm. For example, the occupant of the seat suffers injury as a result of the collision.
+      probability_evidence:
+        sole_judgement_or_estimation: Sole judgement or estimation
+        some_limited_empirical_evidence: Some limited empirical evidence
+        strong_empirical_evidence: Strong empirical evidence

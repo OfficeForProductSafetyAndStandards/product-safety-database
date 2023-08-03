@@ -12,14 +12,15 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
   context "when the viewing user only has read only access" do
     scenario "cannot add supporting information" do
       sign_in(read_only_user)
-      visit "/cases/#{investigation.pretty_id}/supporting-information"
-
-      expect(page).not_to have_link("Add supporting information")
+      visit "/cases/#{investigation.pretty_id}"
+      expect(page).not_to have_link("Add an incident or accident")
     end
   end
 
   scenario "Adding an accident or incident with date unknown, no custom severity and no additional info" do
-    navigate_to_accident_or_incident_type_page
+    sign_in(user)
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add an accident or incident"
 
     expect_to_be_on_accident_or_incident_type_page
     expect_to_have_case_breadcrumbs
@@ -60,7 +61,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
     expect(page).to have_content "Supporting information"
     expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
-    expect_to_be_on_supporting_information_page
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
     click_on "Activity"
 
@@ -78,10 +79,8 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
     sign_in(user)
-
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
-
-    click_link "Add Accident or incidents"
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add an accident or incident"
 
     expect_to_be_on_accident_or_incident_type_page
     expect_to_have_case_breadcrumbs
@@ -126,7 +125,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
 
     expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
-    expect_to_be_on_supporting_information_page
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
     click_on "Activity"
 
@@ -151,10 +150,6 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
     expect(item).to have_text("Product usage: #{usage}")
   end
 
-  def expect_to_be_on_supporting_information_page
-    expect(page).to have_css("h1", text: "Supporting information")
-  end
-
   def expect_ordered_error_list
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select yes if you know when the accident happened"
@@ -171,15 +166,5 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensear
     if additional_info.present?
       expect(page).to have_summary_item(key: "Additional Information", value: additional_info)
     end
-  end
-
-  def navigate_to_accident_or_incident_type_page
-    sign_in(user)
-
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
-
-    click_link "Add Accident or incidents"
-
-    expect_to_be_on_accident_or_incident_type_page
   end
 end
