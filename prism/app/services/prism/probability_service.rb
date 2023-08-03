@@ -1,7 +1,7 @@
 module Prism
   class ProbabilityService
     def self.overall_probability_of_harm(harm_scenario:, probabilities_decimal: nil, probabilities_frequency: nil)
-      probabilities = if probabilities_decimal.blank? && probabilities_frequency.blank?
+      probabilities = if harm_scenario.present?
                         # Get the probability of harm for all harm scenario steps
                         probabilities = []
                         steps = harm_scenario.harm_scenario_steps.select(:probability_type, :probability_decimal, :probability_frequency)

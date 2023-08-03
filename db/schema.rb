@@ -323,6 +323,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
     t.uuid "risk_assessment_id"
     t.boolean "sensitivity_analysis"
     t.string "severity"
+    t.json "tasks_status", default: {}
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_harm_scenarios_on_risk_assessment_id"
   end

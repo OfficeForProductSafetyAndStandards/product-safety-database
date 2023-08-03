@@ -60,9 +60,6 @@
                 "choose_hazard_type": {
                   "title": "Choose hazard type"
                 },
-                "confirm_overall_product_risk": {
-                  "title": "Confirm overall product risk"
-                },
                 "determine_severity_of_harm": {
                   "title": "Determine severity of harm"
                 }
@@ -90,6 +87,9 @@
               "tasks": {
                 "complete_product_risk_evaluation": {
                   "title": "Complete product risk evaluation"
+                },
+                "confirm_overall_product_risk": {
+                  "title": "Determine overall risk level of harm scenarios"
                 },
                 "review_and_submit_results_of_the_assessment": {
                   "title": "Review and submit results of the assessment"
