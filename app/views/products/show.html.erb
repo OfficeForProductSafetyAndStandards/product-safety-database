@@ -103,6 +103,6 @@
       <% end %>
     <% end %>
 
-    <%= render 'products/recalls/product_recall_notice' %>
+    <%= render 'products/recalls/product_recall_notice' if current_user.can_use_product_recall_tool? %>
   </section>
 </div>
