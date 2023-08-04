@@ -9,6 +9,8 @@ module Prism
     accepts_nested_attributes_for :harm_scenario_steps, limit: MAX_HARM_SCENARIO_STEPS, allow_destroy: true, reject_if: :all_blank
     accepts_nested_attributes_for :harm_scenario_step_evidences, reject_if: :all_blank
 
+    default_scope { order(created_at: :asc) }
+
     attribute :too_many_harm_scenario_steps, :boolean, default: false
     attribute :confirmed, :boolean, default: false
     attribute :back_to, :string # This is just here to allow `back_to` to be sent to the controller
@@ -56,6 +58,10 @@ module Prism
     def valid_for_completion?
       valid?(%i[choose_hazard_type add_a_harm_scenario_and_probability_of_harm determine_severity_of_harm determine_severity_of_harm_casualties add_uncertainty_and_sensitivity_analysis]) &&
         harm_scenario_steps.count.positive?
+    end
+
+    def confirmed?
+      confirmed_at.present?
     end
 
   private

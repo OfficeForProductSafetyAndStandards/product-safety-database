@@ -4,8 +4,6 @@ module Prism
     skip_before_action :authorize_user
 
     def overall_probability_of_harm
-      return render json: { error: "At least one of probabilities_decimal and probabilities_frequency must be provided", status: 400 } unless params[:probabilities_decimal].present? || params[:probabilities_frequency].present?
-
       # Process probabilities by handling `nil`, splitting into an array and casting to decimals
       probabilities_decimal = params[:probabilities_decimal].to_s.split(",").map(&:to_f)
       probabilities_frequency = params[:probabilities_frequency].to_s.split(",").map(&:to_f)

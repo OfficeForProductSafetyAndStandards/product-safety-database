@@ -88,6 +88,7 @@ RSpec.feature "PRISM tasks", type: :feature do
         prism_risk_assessment.tasks_status["search_or_add_a_new_product"] = "completed"
         prism_risk_assessment.tasks_status["add_details_about_products_in_use_and_safety"] = "completed"
         prism_risk_assessment.tasks_status["add_a_number_of_hazards_and_subjects_of_harm"] = "completed"
+        prism_risk_assessment.state = "identify_completed"
         prism_risk_assessment.save!
       end
 
@@ -119,7 +120,7 @@ RSpec.feature "PRISM tasks", type: :feature do
     end
 
     scenario "accessing a step out-of-order" do
-      visit prism.risk_assessment_task_path(prism_risk_assessment, id: "search_or_add_a_new_product")
+      visit prism.risk_assessment_define_path(prism_risk_assessment, id: "search_or_add_a_new_product")
 
       expect(page).to have_current_path(prism.risk_assessment_tasks_path(prism_risk_assessment))
     end
