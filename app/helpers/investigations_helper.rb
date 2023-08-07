@@ -1,6 +1,4 @@
 module InvestigationsHelper
-  include InvestigationSearchHelper
-
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
     # Opensearch is only used for searching across all investigations
     Investigation.search(params.fetch(:q, "*"), page: page_number, per_page: page_size)
@@ -109,8 +107,28 @@ module InvestigationsHelper
     )
   end
 
+  def sorting_params
+    return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
+    return { trading_name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
+    return { trading_name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
+
+    { updated_at: :desc }
+  end
+
+  def sort_column
+    Investigation.column_names.include?(params[:sort_by]) ? params[:sort_by] : :updated_at
+  end
+
+  def sort_direction
+    SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
+  end
+
   def export_params
     query_params.except(:page, :sort_by, :page_name)
+  end
+
+  def page_number
+    params[:page].to_i > 500 ? "500" : params[:page]
   end
 
   def safety_and_compliance_rows(investigation)
