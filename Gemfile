@@ -2,9 +2,9 @@ source "https://rubygems.org"
 
 ruby "3.2.1"
 
-gem 'active_model_serializers', '~> 0.10.0'
-gem "active_storage_validations", "~> 1.0.4"
+gem "active_model_serializers", "~> 0.10.0"
 gem "activerecord-pg_enum", "~> 2.0"
+gem "active_storage_validations", "~> 1.0.4"
 gem "aws-sdk-s3", "~> 1.120"
 gem "aws-sdk-s3control", "~> 1.63"
 gem "bootsnap", require: false
@@ -45,8 +45,8 @@ gem "redcarpet", "~> 3.5"
 gem "redis-rails", "~> 5.0"
 gem "rest-client", "~> 2.1"
 gem "sassc-rails"
-gem "searchkick", "~> 5.3"
 gem "scout_apm", "~> 5.3"
+gem "searchkick", "~> 5.3"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 7.1"
