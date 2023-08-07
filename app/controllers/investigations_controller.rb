@@ -100,6 +100,10 @@ class InvestigationsController < ApplicationController
 
 private
 
+  def set_search_params
+    @search = SearchParams.new(query_params.except(:page_name))
+  end
+
   def update!
     return unless request.patch?
 
