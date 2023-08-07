@@ -6,5 +6,4 @@ class InvestigationSerializer < ActiveModel::Serializer
 
   has_many :businesses, serializer: BusinessSerializer
   has_many :products, serializer: ProductSerializer
-
 end
