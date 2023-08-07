@@ -103,6 +103,10 @@ class User < ApplicationRecord
     has_role? :super_user
   end
 
+  def is_prism_user?
+    has_role? :prism
+  end
+
   def can_validate_risk_level?
     has_role? :risk_level_validator
   end
@@ -113,6 +117,11 @@ class User < ApplicationRecord
 
   def can_view_restricted_cases?
     has_role? :restricted_case_viewer
+  end
+
+  def can_use_product_recall_tool?
+    false
+    # !Rails.env.production? || team.name == "OPSS Incident Management"
   end
 
   def has_role?(role)

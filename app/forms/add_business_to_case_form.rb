@@ -9,6 +9,9 @@ class AddBusinessToCaseForm
   attribute :trading_name
   attribute :company_number
   attribute :relationship, default: ""
+  attribute :online_marketplace_id
+  attribute :other_marketplace_name
+  attribute :authorised_representative_choice
 
   attribute :locations, default: []
   attribute :contacts, default: []
@@ -17,6 +20,7 @@ class AddBusinessToCaseForm
   attribute :contacts_attributes
 
   validates :current_user, :trading_name, presence: true
+  validate :validate_country_set_for_location
 
   def initialize(*args)
     super
@@ -44,7 +48,17 @@ class AddBusinessToCaseForm
     contacts.first
   end
 
+  def online_marketplace
+    OnlineMarketplace.find_by(id: online_marketplace_id)
+  end
+
 private
+
+  def validate_country_set_for_location
+    return if location_attrs[:country].present?
+
+    errors.add(:base, "Country cannot be blank")
+  end
 
   def new_location
     location = Location.new(location_attrs)

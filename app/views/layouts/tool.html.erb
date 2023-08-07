@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="govuk-template app-html-class" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title><%= yield :page_title %><% if content_for?(:page_title) %> - <% end %>Product Safety Database - GOV.UK</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="blue" />
+
+    <link rel="shortcut icon" type="image/x-icon" href="<%= image_path("favicon.ico") %>" />
+    <link rel="mask-icon" color="#0b0c0c" href="<%= image_path("govuk-mask-icon.svg") %>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= image_path("govuk-apple-touch-icon-180x180.png") %>" />
+    <link rel="apple-touch-icon" sizes="167x167" href="<%= image_path("govuk-apple-touch-icon-167x167.png") %>" />
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= image_path("govuk-apple-touch-icon-152x152.png") %>" />
+    <link rel="apple-touch-icon" href="<%= image_path("govuk-apple-touch-icon.png") %>" />
+
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag "application" %>
+
+    <%= csrf_meta_tags %>
+
+    <meta property="og:image" content="<%= image_path("govuk-opengraph-image.png") %>" />
+
+    <%= yield :other_head_tags %>
+
+    <% if Rails.env.production? && analytics_cookies_accepted? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126364208-1"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-126364208-1');
+      </script>
+    <% end %>
+  </head>
+
+  <body class="govuk-template__body app-body-class">
+    <script type="text/javascript">
+      document.body.className = ((document.body.className) ? document.body.className + " js-enabled" : "js-enabled");
+    </script>
+
+    <a class="govuk-skip-link" href="#main-content">Skip to main content</a>
+
+    <%= render "layouts/cookie_banner" %>
+
+    <%= render "components/tool_header",
+               productName: "Formatting product recall information",
+               assetPath: "media/images" %>
+
+
+    <% content = yield %>
+
+    <% if content.present? %>
+      <div class="govuk-width-container">
+        <%= yield :after_header %>
+
+        <main id="main-content" class="govuk-main-wrapper app-main-class" role="main">
+          <% if alert.present? %>
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+              <h2 id="error-summary-title" class="govuk-error-summary__title govuk-!-margin-bottom-1">
+                <%= alert %>
+              </h2>
+            </div>
+          <% end %>
+
+          <% %i[success information warning].each do |key| %>
+            <% if flash[key] %>
+              <%= govukNotificationBanner text: flash[key], type: key %>
+            <% end %>
+          <% end %>
+
+          <%= content %>
+        </main>
+      </div>
+    <% end %>
+
+    <footer class="govuk-footer" role="contentinfo">
+      <div class="govuk-width-container">
+        <div class="govuk-footer__meta">
+          <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+            <div class="opss-footer__body">
+              Email <%= mail_to t(:enquiries_email), t(:enquiries_email), subject: "Help requested on the Product Safety Database", class: "govuk-footer__link" %> for help using this service.
+            </div>
+
+            <br />
+
+            <ul class="govuk-footer__inline-list">
+              <%
+                # We shouldn't normally link to target: '_blank' without rel:'noopener', because it introduces
+                # security vulnerability. However, in this case we control the target url, so we should be safe
+                # rubocop:disable Rails/LinkToBlank
+              %>
+
+              <li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>How to use the <%= psd_abbr title: false %><span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_about_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank",
+                        title: "Opens in a new tab",
+                        rel: "noreferrer noopener"
+              %></li><li class="govuk-footer__inline-list-item"><%=
+                link_to "Accessibility", help_accessibility_path, class: "govuk-footer__link govuk-!-margin-right-2"
+              %></li><li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>Privacy policy<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_privacy_notice_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
+              %></li><li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>Terms and conditions<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_terms_and_conditions_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
+              %></li><li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>Cookies<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_cookies_policy_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
+              %></li>
+
+            </ul>
+
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+            <div class="opss-footer__body">
+               Built by the
+               <% html = capture do %>Office for Product Safety and Standards<span class="govuk-visually-hidden"> (opens in new tab)</span><% end %>
+               <%= link_to html, "https://www.gov.uk/government/organisations/office-for-product-safety-and-standards", target: :_blank, rel: 'noopener', class: "govuk-footer__link" %>
+            </div>
+
+            <div class="opss-footer__body">
+              <br />
+              This is a new service – your
+              <% html = capture do %>feedback<span class="govuk-visually-hidden"> (opens in new tab)</span><% end %>
+              <%= link_to html, "https://www.gov.uk/done/product-safety-database", target: :_blank, rel: 'noopener', class: "govuk-footer__link" %>
+              will help us to improve it.
+            </div>
+            <% # rubocop:enable Rails/LinkToBlank %>
+          </div>
+
+          <div class="govuk-footer__meta-item">
+            <a class="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

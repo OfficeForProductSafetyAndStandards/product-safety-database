@@ -1,0 +1,17 @@
+<% content_for :page_title, "Are you sure you want delete this scenario?" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: delete_harm_scenario_risk_assessment_tasks_path(harm_scenario_id: @harm_scenario.id), method: :delete do |f| %>
+      <h1 class="govuk-heading-l">
+        Are you sure you want delete this scenario?
+      </h1>
+      <p class="govuk-body">This action will permanently remove the scenario from the system and cannot be undone. Please ensure that you want to proceed with this deletion.</p>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Delete scenario", warning: true %>
+        <a href="<%= risk_assessment_tasks_path(@prism_risk_assessment) %>" class="govuk-link">Cancel</a>
+      </div>
+    <% end %>
+  </div>
+</div>

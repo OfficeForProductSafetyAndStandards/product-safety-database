@@ -27,7 +27,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_investigation_add_business_details_page
-    expect(page).to have_selector("legend", text: "The business details")
+    expect(page).to have_selector("legend", text: "Name and company number")
   end
 
   def expect_to_be_on_remove_business_page
@@ -198,16 +198,6 @@ module PageExpectations
   def expect_to_be_on_supporting_information_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/supporting-information")
     expect(page).to have_selector("h1", text: "Supporting information")
-  end
-
-  def expect_to_be_on_add_supporting_information_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information/new")
-    expect(page).to have_selector("h1", text: "What type of information are you adding?")
-  end
-
-  def expect_to_be_on_add_to_case_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/add-to-case")
-    expect(page).to have_selector("h1", text: "What are you adding to the case?")
   end
 
   def expect_to_be_on_add_attachment_to_a_case_page

@@ -1,0 +1,157 @@
+<%= page_title "Product recall tool" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-l">
+      Formatted product recall information
+    </h1>
+    <p class="govuk-body">
+      From here you can download a formatted <abbr title="Portable Document Format">PDF</abbr> and &lsquo;copy and paste&rsquo; the Markdown formatted content into the product recall and alerts site.
+    </p>
+    <h2 class="govuk-heading-m">
+      Product Safety Report
+    </h2>
+    <section class="govuk-!-padding-top-6 govuk-!-padding-right-4 govuk-!-padding-left-4 govuk-!-margin-top-6 govuk-!-margin-bottom-8 opss-border-all">
+      <h2 class="govuk-heading-s">
+        <%= @form.pdf_title %>
+      </h2>
+      <%= form_with model: @form, url: pdf_product_recalls_path, method: :post, id: "product-safety-report-form", builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+        <% @form.attributes.each do |attribute_name, attribute_value| %>
+          <% if attribute_value.is_a?(Array) %>
+            <% attribute_value.each do |member| %>
+              <%= form.hidden_field attribute_name, value: member, multiple: true %>
+            <% end %>
+          <% else %>
+            <%= form.hidden_field attribute_name, value: attribute_value %>
+          <% end %>
+        <% end %>
+        <%= form.hidden_field :type, value: "product_safety_report" %>
+        <%= form.submit "Download the PDF", class: "govuk-button opss-download-link-m", role: "button" %>
+      <% end %>
+    </section>
+    <h3 class="govuk-heading-s">
+      Markdown template
+    </h3>
+    <div class="govuk-form-group" data-controller="clipboard" data-clipboard-success-content-value="Copied">
+      <textarea class="govuk-textarea" id="markdown_template_product_safety_report" name="markdown_template_product_safety_report" rows="20" data-clipboard-target="source">
+Title:
+Product Safety Report: <%= @product.name %> (<%= @form.attributes["alert_number"] %>)
+
+Summary:
+Product Safety Report for <%= @product.name %> presenting a risk of <%= @form.attributes["risk_type"] %>.
+
+Body:
+
+## Summary
+
+Product: <%= @product.name %>
+
+Hazard: <%= @form.attributes["risk_type"] %>
+
+Risk Level: <%= @form.attributes["risk_level"].presence || "Unknown" %>
+
+Corrective action: <%= @form.attributes["corrective_actions"].map { |action| action == "Other" ? "Other: #{@form.attributes['other_corrective_action']}" : action }.join(", ") %>
+
+## Product information
+
+| Type |  |
+| - | - |
+| Product Identifiers | <%= @form.attributes["product_identifiers"] %> |
+| Country of Origin | <%= country_from_code(@form.attributes["country_of_origin"]) %> |
+| Product Description | <%= @form.attributes["product_description"] %> |
+| Product Report and Image | **Insert link to uploaded PDF** |
+
+## Hazard
+
+<%= @form.attributes["risk_type"] %>
+
+## Corrective action
+
+<%= @form.attributes["corrective_actions"].map { |action| action == "Other" ? "Other: #{@form.attributes['other_corrective_action']}" : action }.join(", ") %>
+
+### Additional information
+
+PSD case number: <%= @form.attributes["alert_number"] %>
+
+Notified by: <%= @product.owning_team.name %>
+      </textarea>
+      <div class="govuk-form-group">
+        <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
+          Copy to clipboard
+        </button>
+      </div>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+    <h2 class="govuk-heading-m">
+      Product Recall
+    </h2>
+    <section class="govuk-!-padding-top-6 govuk-!-padding-right-4 govuk-!-padding-left-4 govuk-!-margin-top-6 govuk-!-margin-bottom-8 opss-border-all">
+      <h2 class="govuk-heading-s">
+        <%= @form.pdf_title %>
+      </h2>
+      <%= form_with model: @form, url: pdf_product_recalls_path, method: :post, id: "product-recall-form", builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+        <% @form.attributes.each do |attribute_name, attribute_value| %>
+          <% if attribute_value.is_a?(Array) %>
+            <% attribute_value.each do |member| %>
+              <%= form.hidden_field attribute_name, value: member, multiple: true %>
+            <% end %>
+          <% else %>
+            <%= form.hidden_field attribute_name, value: attribute_value %>
+          <% end %>
+        <% end %>
+        <%= form.hidden_field :type, value: "product_recall" %>
+        <%= form.submit "Download the PDF", class: "govuk-button opss-download-link-m", role: "button" %>
+      <% end %>
+    </section>
+    <h3 class="govuk-heading-s">
+      Markdown template
+    </h3>
+    <div class="govuk-form-group" data-controller="clipboard" data-clipboard-success-content-value="Copied">
+      <textarea class="govuk-textarea" id="markdown_template_product_recall" name="markdown_template_product_recall" rows="20" data-clipboard-target="source">
+Title:
+Product Recall: <%= @product.name %> (<%= @form.attributes["alert_number"] %>)
+
+Summary:
+Product Recall for <%= @product.name %> presenting a risk of <%= @form.attributes["risk_type"] %>.
+
+Body:
+
+## Summary
+
+Product: <%= @product.name %>
+
+Hazard: <%= @form.attributes["risk_type"] %>
+
+Corrective action: <%= @form.attributes["corrective_actions"].map { |action| action == "Other" ? "Other: #{@form.attributes['other_corrective_action']}" : action }.join(", ") %>
+
+## Product information
+
+| Type |  |
+| - | - |
+| Product Identifiers | <%= @form.attributes["product_identifiers"] %> |
+| Country of Origin | <%= country_from_code(@form.attributes["country_of_origin"]) %> |
+| Product Description | <%= @form.attributes["product_description"] %> |
+| Product Report and Image | **Insert link to uploaded PDF** |
+
+## Hazard
+
+<%= @form.attributes["risk_type"] %>
+
+## Corrective action
+
+<%= @form.attributes["corrective_actions"].map { |action| action == "Other" ? "Other: #{@form.attributes['other_corrective_action']}" : action }.join(", ") %>
+
+### Additional information
+
+PSD case number: <%= @form.attributes["alert_number"] %>
+
+Notified by: <%= @product.owning_team.name %>
+      </textarea>
+      <div class="govuk-form-group">
+        <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
+          Copy to clipboard
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

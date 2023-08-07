@@ -1,0 +1,20 @@
+<% content_for :page_title, "Add assessment details" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @prism_risk_assessment.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @prism_risk_assessment, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Define the product</span>
+        Add assessment details
+      </h1>
+      <%= f.govuk_text_field :assessor_name, label: { text: "Name of assessor", size: "m" }, hint: { text: "Full name of the individual carrying out the assessment." } %>
+      <%= f.govuk_text_field :assessment_organisation, label: { text: "Name of assessment organisation", size: "m" }, hint: { text: "For example, the name of the organisation that employs the assessor." } %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

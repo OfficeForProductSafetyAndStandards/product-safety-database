@@ -1,0 +1,18 @@
+<tr class="govuk-table__row">
+  <th scope="row" class="govuk-table__header">
+    <%= prism_risk_assessment.prism_product&.name || "Unknown" %>
+  </th>
+  <td class="govuk-table__cell">
+    <%= prism_risk_assessment.prism_harm_scenarios&.first&.description || "None" %>
+  </td>
+  <td class="govuk-table__cell">
+    <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
+  </td>
+  <td class="govuk-table__cell">
+    <% if type == "submitted" %><%= govukTag(text: "Submitted", classes: "govuk-tag--green") %><% else %><%= govukTag(text: "Draft", classes: "govuk-tag--grey") %><% end %>
+  </td>
+  <td class="govuk-table__cell">
+    <%# TODO(ruben): Add link to view submitted assessment %>
+    <% if type == "submitted" %><a href="#" class="govuk-link">View assessment</a><% else %><a href="<%= prism.risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">Make changes</a><% end %>
+  </td>
+</tr>

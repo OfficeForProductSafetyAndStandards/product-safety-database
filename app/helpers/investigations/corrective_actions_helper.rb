@@ -32,7 +32,7 @@ module Investigations
 
     def online_recall_information_text_for(online_recall_information, has_online_recall_information:)
       if has_online_recall_information&.inquiry&.has_online_recall_information_yes?
-        return link_to("#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank") if valid_url?(online_recall_information)
+        return link_to("#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noreferrer noopener", target: "_blank") if valid_url?(online_recall_information)
 
         return online_recall_information
       end

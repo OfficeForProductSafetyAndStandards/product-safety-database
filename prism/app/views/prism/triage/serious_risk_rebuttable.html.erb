@@ -1,0 +1,17 @@
+<% content_for :page_title, "Are there any factors to indicate the product risk to be less than serious?" %>
+<% @back_link_href = serious_risk_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @prism_risk_assessment, url: serious_risk_rebuttable_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_radio_buttons_fieldset(:less_than_serious_risk, legend: { text: "Are there any factors to indicate the product risk to be less than serious?", size: "l" }) do %>
+        <%= f.govuk_radio_button :less_than_serious_risk, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_area :serious_risk_rebuttable_factors, label: { text: "Describe unique circumstances of the product that might suggest the risk to be less than serious." } %>
+        <% end %>
+        <%= f.govuk_radio_button :less_than_serious_risk, false, label: { text: "No" } %>
+      <% end %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

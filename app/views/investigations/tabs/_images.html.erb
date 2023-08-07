@@ -36,14 +36,14 @@
         <dd class="govuk-summary-list__value">
           <% if analyzed && safe %>
             <figure>
-              <%= link_to image, class: "govuk-link govuk-link--no-visited-state", target: "_blank", title: "Opens in a new tab" do %>
+              <%= link_to image, class: "govuk-link govuk-link--no-visited-state", rel: "noreferrer noopener", target: "_blank", title: "Opens in a new tab" do %>
                 <%= render("documents/image_tag", image: image, dimensions: [300, 200], class_name: "") %>
               <% end %>
               <figcaption><%= image_title %></figcaption>
             </figure>
           <% else %>
             <figure>
-              <a target="_blank" rel="noopener" href="#">
+              <a target="_blank" rel="noreferrer noopener" href="#">
                 <%= image_tag "img-icon.png", alt: "Blank image", class: "opss-blank-img" %>
               </a>
               <% if !analyzed %>

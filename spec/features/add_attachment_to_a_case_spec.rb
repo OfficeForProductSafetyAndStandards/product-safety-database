@@ -11,14 +11,13 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
+  before do
+    sign_in(user)
+  end
+
   scenario "Adding an attachment that is not an image" do
-    sign_in user
-    visit "/cases/#{investigation.pretty_id}/supporting-information/new"
-
-    expect_to_be_on_add_supporting_information_page
-
-    choose "Other document or attachment"
-    click_button "Continue"
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add a document or attachment"
 
     expect_to_be_on_add_attachment_to_a_case_page
 
@@ -49,13 +48,8 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   end
 
   scenario "Adding an image" do
-    sign_in user
-    visit "/cases/#{investigation.pretty_id}/supporting-information/new"
-
-    expect_to_be_on_add_supporting_information_page
-
-    choose "Other document or attachment"
-    click_button "Continue"
+    visit "/cases/#{investigation.pretty_id}"
+    click_link "Add a document or attachment"
 
     expect_to_be_on_add_attachment_to_a_case_page
 
@@ -83,13 +77,9 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
   context "when image is too large" do
     it "shows error" do
       allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.bytes }
-      sign_in user
-      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
 
-      expect_to_be_on_add_supporting_information_page
-
-      choose "Case image"
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add an image"
 
       expect_to_be_on_add_attachment_to_a_case_page
 
@@ -109,13 +99,8 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
   context "when image is too small" do
     it "shows error" do
-      sign_in user
-      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
-
-      expect_to_be_on_add_supporting_information_page
-
-      choose "Case image"
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add an image"
 
       expect_to_be_on_add_attachment_to_a_case_page
 
@@ -136,13 +121,9 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
     # rubocop:disable RSpec/AnyInstance
     it "shows error" do
       allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.bytes }
-      sign_in user
-      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
 
-      expect_to_be_on_add_supporting_information_page
-
-      choose "Case image"
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add an image"
 
       expect_to_be_on_add_attachment_to_a_case_page
 
@@ -162,13 +143,8 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_opensearch, :with_stu
 
   context "when an imagine fails the antivirus check", :with_stubbed_failing_antivirus do
     it "shows error" do
-      sign_in user
-      visit "/cases/#{investigation.pretty_id}/supporting-information/new"
-
-      expect_to_be_on_add_supporting_information_page
-
-      choose "Case image"
-      click_button "Continue"
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add an image"
 
       expect_to_be_on_add_attachment_to_a_case_page
 

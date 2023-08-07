@@ -23,4 +23,21 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_opensearch, :with_
       expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
     end
   end
+
+  describe "#title" do
+    context "with a user_title" do
+      let(:investigation) { create(:enquiry, user_title:) }
+      let(:user_title)    { "user title" }
+
+      it { expect(decorated_investigation.title).to eq(user_title) }
+    end
+
+    context "without a user_title" do
+      let(:investigation) { create(:enquiry, user_title: nil) }
+
+      it "uses the pretty_id" do
+        expect(decorated_investigation.title).to eq(investigation.pretty_id)
+      end
+    end
+  end
 end

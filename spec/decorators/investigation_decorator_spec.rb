@@ -255,6 +255,23 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
     end
   end
 
+  describe "#title" do
+    context "with a user_title" do
+      let(:investigation) { create(:case, user_title:) }
+      let(:user_title)    { "user title" }
+
+      it { expect(decorated_investigation.title).to eq(user_title) }
+    end
+
+    context "without a user_title" do
+      let(:investigation) { create(:case, user_title: nil) }
+
+      it "uses the pretty_id" do
+        expect(decorated_investigation.title).to eq(investigation.pretty_id)
+      end
+    end
+  end
+
   describe "#case_title_key" do
     let(:viewing_user) { create(:user) }
     let(:case_title_key) { decorated_investigation.case_title_key(viewing_user) }

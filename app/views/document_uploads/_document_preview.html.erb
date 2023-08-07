@@ -23,7 +23,7 @@
             <%= render("document_uploads/image_tag", image: document, dimensions: dimensions) %>
             <span class="govuk-visually-hidden">(opens in new tab)</span>
           <% end %>
-          <%= link_to link_content, document, target: "_blank", rel: 'noopener' %>
+          <%= link_to link_content, document, target: "_blank", rel: "noreferrer noopener" %>
         <% end %>
       </div>
     <% else %>
@@ -32,7 +32,7 @@
   <% else %>
     <div class="app-document-preview ">
        <div class="app-document-preview__image">
-           <a target="_blank" rel="noopener" href="#">
+           <a target="_blank" rel="noreferrer noopener" href="#">
              <%= image_tag "img-icon.png", alt: "" %>
              <span class="govuk-visually-hidden">(opens in new tab)</span>
            </a>

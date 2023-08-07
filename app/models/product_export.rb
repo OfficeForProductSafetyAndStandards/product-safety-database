@@ -1,5 +1,5 @@
 class ProductExport < ApplicationRecord
-  include ProductSearchHelper
+  include SearchHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
@@ -49,8 +49,8 @@ private
   end
 
   def add_product_to_sheets(product)
-    product.case_ids.each do |case_id|
-      product_info_sheet.add_row(attributes_for_info_sheet(product, case_id:), types: :text)
+    product.investigation_products.uniq(&:investigation_id).each do |investigation_product|
+      product_info_sheet.add_row(attributes_for_info_sheet(product, investigation_product:), types: :text)
     end
 
     product.test_results.sort.each do |test_result|
@@ -92,7 +92,11 @@ private
                      updated_at
                      webpage
                      when_placed_on_market
-                     owning_team]
+                     owning_team
+                     affected_units_status
+                     number_of_affected_units
+                     batch_number
+                     customs_code]
 
     @product_info_sheet = sheet
   end
@@ -101,7 +105,20 @@ private
     return @test_results_sheet if @test_results_sheet
 
     sheet = package.workbook.add_worksheet name: "test_results"
-    sheet.add_row %w[psd_ref product_id legislation standards date_of_test result how_product_failed further_details product_name case_id]
+    sheet.add_row %w[psd_ref
+                     product_id
+                     legislation
+                     standards
+                     date_of_test
+                     result
+                     how_product_failed
+                     further_details
+                     product_name
+                     case_id
+                     reported_reason
+                     hazard_type
+                     non_compliant_reason
+                     risk_level]
 
     @test_results_sheet = sheet
   end
@@ -110,7 +127,18 @@ private
     return @risk_assessments_sheet if @risk_assessments_sheet
 
     sheet = package.workbook.add_worksheet name: "risk_assessments"
-    sheet.add_row %w[psd_ref product_id date_of_assessment risk_level assessed_by further_details product_name case_id]
+    sheet.add_row %w[psd_ref
+                     product_id
+                     date_of_assessment
+                     risk_level
+                     assessed_by
+                     further_details
+                     product_name
+                     case_id
+                     reported_reason
+                     hazard_type
+                     non_compliant_reason
+                     risk_level]
 
     @risk_assessments_sheet = sheet
   end
@@ -131,19 +159,25 @@ private
                      geographic_scope
                      further_details
                      product_name
-                     case_id]
+                     case_id
+                     reported_reason
+                     hazard_type
+                     non_compliant_reason
+                     risk_level]
 
     @corrective_actions_sheet = sheet
   end
 
-  def attributes_for_info_sheet(product, case_id:)
+  def attributes_for_info_sheet(product, investigation_product:)
+    pretty_id = investigation_product.investigation.pretty_id
+
     [
       product.psd_ref,
       product.id,
       product.authenticity,
       product.barcode,
       product.brand,
-      case_id,
+      pretty_id,
       product.category,
       format_country_code(code: product.country_of_origin),
       product.created_at.to_formatted_s(:xmlschema),
@@ -156,11 +190,17 @@ private
       product.updated_at.to_formatted_s(:xmlschema),
       product.webpage,
       product.when_placed_on_market,
-      product.owning_team.try(:name)
+      product.owning_team.try(:name),
+      investigation_product.affected_units_status,
+      investigation_product.number_of_affected_units,
+      investigation_product.batch_number,
+      investigation_product.customs_code
     ]
   end
 
   def attributes_for_test_results_sheet(product, test_result)
+    investigation = test_result.investigation.decorate
+
     [
       product.psd_ref,
       product.id,
@@ -171,11 +211,16 @@ private
       test_result.failure_details,
       test_result.details,
       product.name,
-      test_result.case_id
+      test_result.case_id,
+      investigation.reported_reason,
+      investigation.hazard_type,
+      investigation.non_compliant_reason,
+      investigation.risk_level_description
     ]
   end
 
   def attributes_for_risk_assessments_sheet(product, risk_assessment)
+    investigation = risk_assessment.investigation.decorate
     [
       product.psd_ref,
       product.id,
@@ -184,11 +229,16 @@ private
       risk_assessment.decorate.assessed_by,
       risk_assessment.details,
       product.name,
-      risk_assessment.case_id
+      risk_assessment.case_id,
+      investigation.reported_reason,
+      investigation.hazard_type,
+      investigation.non_compliant_reason,
+      investigation.risk_level_description
     ]
   end
 
   def attributes_for_corrective_actions_sheet(product, corrective_action)
+    investigation = corrective_action.investigation.decorate
     [
       product.psd_ref,
       product.id,
@@ -202,7 +252,11 @@ private
       corrective_action.geographic_scopes,
       corrective_action.details,
       product.name,
-      corrective_action.case_id
+      corrective_action.case_id,
+      investigation.reported_reason,
+      investigation.hazard_type,
+      investigation.non_compliant_reason,
+      investigation.risk_level_description
     ]
   end
 
@@ -210,5 +264,43 @@ private
     return if code.blank?
 
     code.split(":")&.last
+  end
+
+  def filter_params(user)
+    must_match_filters = [
+      get_category_filter,
+      get_status_filter,
+      get_retired_filter
+    ].compact
+
+    should_match_filters = [
+      get_owner_filter(user)
+    ].compact.flatten
+
+    { must: must_match_filters, should: should_match_filters }
+  end
+
+  def get_category_filter
+    if params[:category].present?
+      { match_phrase: { "category" => @search.category } }
+    end
+  end
+
+  def get_status_filter
+    if @search.case_status == "open_only"
+      { term: { "investigations.is_closed" => "false" } }
+    end
+  end
+
+  def get_retired_filter
+    return if @search.retired_status == "all"
+
+    if @search.retired_status == "active" || @search.retired_status.blank?
+      return { term: { "retired?" => false } }
+    end
+
+    if @search.retired_status == "retired"
+      { term: { "retired?" => true } }
+    end
   end
 end

@@ -1,9 +1,92 @@
 module InvestigationsHelper
   include InvestigationSearchHelper
 
+  def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
+    # Opensearch is only used for searching across all investigations
+    Investigation.not_deleted.full_search(search_query(user)).page(page_number).per(page_size)
+  end
+
   def search_for_investigations(page_size = Investigation.count, user = current_user)
-    result = Investigation.not_deleted.full_search(search_query(user))
-    result.page(page_number).per(page_size)
+    # This method is not used for searching across all investigations
+    # (see `opensearch_for_investigations` above), but it implements all filters
+    # for potential future use.
+    query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses)
+
+    if @search.q
+      @search.q.strip!
+      query = query.where("description ILIKE ?", "%#{@search.q}%")
+        .or(Investigation.where(pretty_id: @search.q))
+    end
+
+    case @search.case_type
+    when "allegation"
+      query = query.where(type: "Investigation::Allegation")
+    when "project"
+      query = query.where(type: "Investigation::Project")
+    when "enquiry"
+      query = query.where(type: "Investigation::Enquiry")
+    end
+
+    if @search.priority == "serious_and_high_risk_level_only"
+      query = query.where(risk_level: %i[serious high])
+    end
+
+    if @search.hazard_type.present?
+      query = query.where(hazard_type: @search.hazard_type)
+    end
+
+    case @search.case_status
+    when "open"
+      query = query.where(is_closed: false)
+    when "closed"
+      query = query.where(is_closed: true)
+    end
+
+    case @search.created_by
+    when "me"
+      query = query.where(creator_users_investigations: { id: user.id })
+    when "my_team"
+      team = user.team
+      query = query.where(creator_users_investigations: { id: team.users.map(&:id) }, creator_teams_investigations: { id: team.id })
+    when "others"
+      query = if @search.created_by_other_id.blank?
+                query.where.not(creator_users_investigations: { id: user.team.user_ids })
+              elsif (team = Team.find_by(id: @search.created_by_other_id))
+                query.where(creator_users_investigations: { id: team.users.map(&:id) }, creator_teams_investigations: { id: team.id })
+              else
+                query.where(creator_users_investigations: { id: @search.created_by_other_id })
+              end
+    end
+
+    case @search.case_owner
+    when "me"
+      query = query.where(users: { id: user.id })
+    when "my_team"
+      team = user.team
+      query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+    when "others"
+      query = if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+                query.where(users: { id: team.users.map(&:id) })
+              else
+                query.where(users: { id: @search.case_owner_is_someone_else_id })
+              end
+    end
+
+    case @search.teams_with_access
+    when "my_team"
+      query = query.where(collaboration_accesses_investigations: { collaborator_type: "Team", collaborator_id: user.team.id })
+    when "other"
+      query = if @search.teams_with_access_other_id.present?
+                query.where(collaboration_accesses_investigations: { collaborator_type: "Team", collaborator_id: @search.teams_with_access_other_id })
+              else
+                query.where.not(collaboration_accesses_investigations: { collaborator_type: "Team", collaborator_id: user.team.id })
+              end
+    end
+
+    query
+      .order(@search.sorting_params)
+      .page(page_number)
+      .per(page_size)
   end
 
   def query_params

@@ -6,6 +6,12 @@ RSpec.describe Location do
   let(:county) { "L" }
   let(:country) { "C" }
 
+  describe "factory" do
+    it "is valid" do
+      expect(build(:location)).to be_valid
+    end
+  end
+
   describe "#short" do
     context "with a county" do
       it "returns a string containing county and country" do

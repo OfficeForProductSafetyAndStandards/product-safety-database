@@ -11,6 +11,7 @@
 <% end %>
 
 <% @investigation.businesses.each_with_index do |business, index| %>
+  <% investigation_business = @investigation.investigation_businesses.find_by(business_id: business.id).decorate %>
 <section id="<%= business.trading_name.parameterize %>" class="govuk-!-margin-bottom-9">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
@@ -34,7 +35,7 @@
         Business type
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= @investigation.investigation_businesses.find_by(business_id: business.id).relationship&.humanize %>
+        <%= investigation_business.pretty_relationship %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -65,6 +66,16 @@
         <% end %>
       </dd>
     </div>
+    <% if investigation_business&.relationship == 'online_marketplace' %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Online marketplace
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= investigation_business.online_marketplace&.name || "Other" %>
+        </dd>
+      </div>
+    <% end %>
     <% business.locations.each do |location| %>
       <div class="govuk-summary-list__row govuk-summary-list__row--no-border">
         <dt class="govuk-summary-list__key">
