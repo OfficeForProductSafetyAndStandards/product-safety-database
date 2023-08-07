@@ -225,11 +225,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@rails/actioncable@^7.0":
-  version "7.0.5"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.5.tgz#bbc11203e0d3d5084002abfcf01d621fdf5f3a9d"
-  integrity sha512-SOBA2heB9lTw0VYIx8M/ed7inSf4I9sR8OIlJprhgkfQ3WJtrxPJ6DDATR1Z3RYaIR7HlT2Olj08v1lfGIGuHA==
-
 "@types/json5@^0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
@@ -2238,15 +2233,15 @@ standard@^17.1.0:
     standard-engine "^15.0.0"
     version-guard "^1.1.1"
 
-stimulus-rails-nested-form@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/stimulus-rails-nested-form/-/stimulus-rails-nested-form-4.1.0.tgz#bfce185cff908170a4eb9973875b72517c3bc83a"
-  integrity sha512-ORqcTsg3sa4PGFEyUkbvcPG56F4K2fx1qJCUQIgngO1GaW5taKcvDkT0HvdTqtQAFe/1lN4CpJAqoSCt+nYF/Q==
-
 stimulus-clipboard@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/stimulus-clipboard/-/stimulus-clipboard-4.0.1.tgz#acc9212b479fedc633ecdec8f191a28c1d826a6b"
   integrity sha512-dem+ihC3Q8+gbyGINdd+dK+9d5vUTnOwoH+n3KcDJvbxrFcq9lV8mWjyhEaDquGxYy3MmqSdz9FHQbG88TBqGg==
+
+stimulus-rails-nested-form@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/stimulus-rails-nested-form/-/stimulus-rails-nested-form-4.1.0.tgz#bfce185cff908170a4eb9973875b72517c3bc83a"
+  integrity sha512-ORqcTsg3sa4PGFEyUkbvcPG56F4K2fx1qJCUQIgngO1GaW5taKcvDkT0HvdTqtQAFe/1lN4CpJAqoSCt+nYF/Q==
 
 string-width@^4.2.3:
   version "4.2.3"
