@@ -2,7 +2,7 @@ module InvestigationSearchkick
   extend ActiveSupport::Concern
 
   included do
-    searchkick
+    searchkick word_middle: %i[title product.name], callbacks: :async
 
     def search_data
       InvestigationSerializer.new(self).to_h

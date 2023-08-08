@@ -1,3 +1,3 @@
 class ProductSerializer < ActiveModel::Serializer
-  attributes :product_code, :subcategory, :description, :barcode
+  attributes :name, :product_code, :subcategory, :description, :barcode
 end
