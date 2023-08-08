@@ -1,7 +1,8 @@
 module InvestigationsHelper
   def opensearch_for_investigations(page_size = Investigation.count, _user = current_user)
     # Opensearch is only used for searching across all investigations
-    Investigation.search(params.fetch(:q, "*"), page: page_number, per_page: page_size)
+    query = (@search.q.presence || "*")
+    Investigation.search(query, misspellings: { edit_distance: 2 }, page: page_number, per_page: page_size)
   end
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)
