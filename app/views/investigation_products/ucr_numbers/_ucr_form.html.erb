@@ -1,0 +1,9 @@
+<div class="nested-form-wrapper govuk-grid-row" data-new-record="<%= f.object.new_record? %>">
+  <div class="govuk-grid-column-three-quarters">
+    <%= f.text_field :number, class: "govuk-input", maxlength: 45 %>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <button type="button" data-action="nested-form#remove" class="govuk-button govuk-button--warning">Remove</button>
+    <%= f.hidden_field :_destroy %>
+  </div>
+</div>

@@ -8,7 +8,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @investigation_product, url: investigation_product_ucr_numbers_path, method: :put do |form| %>
+    <%= form_for @investigation_product, url: investigation_product_ucr_numbers_path, method: :put, data: { controller: 'nested-form', nested_form_wrapper_selector_value: '.nested-form-wrapper' } do |form| %>
       <%= error_summary @investigation_product.errors %>
 
       <fieldset class="govuk-fieldset" aria-describedby="ucr-number-hint">
@@ -28,26 +28,23 @@
           </span>
         </div>
 
-        <%= form.fields_for :ucr_numbers do |ucr_numbers_form| %>
-          <turbo-frame id="<%= ucr_numbers_form.field_id(:ucr_numbers) %>" class="contents">
-            <div class="govuk-form-group">
-              <%= ucr_numbers_form.hidden_field :id %>
-              <%= ucr_numbers_form.text_field :number, class: "govuk-input govuk-!-width-three-quarters", maxlength: 45 %>
-              <% if ucr_numbers_form.object.persisted? %>
-                <%= ucr_numbers_form.label :_destroy, "Delete" %>
-                <%= ucr_numbers_form.check_box :_destroy, title: "Delete" %>
-              <% end %>
-            </div>
-          </turbo-frame>
+      </fieldset>
+
+      <!-- Stimulus Rails Nested Form -->
+        <template data-nested-form-target="template">
+          <%= form.fields_for :ucr_numbers, UcrNumber.new, child_index: 'NEW_RECORD' do |ucr_fields| %>
+            <%= render "ucr_form", f: ucr_fields %>
+          <% end %>
+        </template>
+
+        <%= form.fields_for :ucr_numbers do |ucr_fields| %>
+          <%= render "ucr_form", f: ucr_fields %>
         <% end %>
 
-        <%= form.submit "Add UCR number",
-          class: "govuk-button",
-          data: { turbo_frame: form.field_id(:ucr_numbers)},
-          formmethod: "post",
-          formaction: add_ucr_number_investigation_product_ucr_numbers_path(id: form.object),
-          name: "add_ucr_number" %>
-      </fieldset>
+        <div data-nested-form-target="target"></div>
+        <button type="button" data-action="nested-form#add" class="govuk-button">Add UCR number</button>
+      <!-- End Stimulus Rails Nested Form -->
+      
 
       <div class="govuk-button-group">
         <%= form.submit "Save", class: "govuk-button" %>
