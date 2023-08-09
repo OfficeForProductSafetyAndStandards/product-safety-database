@@ -6,4 +6,8 @@ class InvestigationSerializer < ActiveModel::Serializer
 
   has_many :businesses, serializer: BusinessSerializer
   has_many :products, serializer: ProductSerializer
+  # has_many :users, serializer: UserSerializer
+  # has_many :teams_with_access, serializer: TeamAccessSerializer
+  has_many :collaborations, serializer: CollaborationSerializer
+
 end
