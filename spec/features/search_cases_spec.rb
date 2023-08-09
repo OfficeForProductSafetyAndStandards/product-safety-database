@@ -131,7 +131,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_text("T12 mobile phone")
   end
 
-  context "with fuzzy matching" do
+  xcontext "with fuzzy matching" do
     pending "this is failing as fuzziness rules have now changed - await new rules from business"
 
     it "does not allow any edits for words less than 6 letters long" do
