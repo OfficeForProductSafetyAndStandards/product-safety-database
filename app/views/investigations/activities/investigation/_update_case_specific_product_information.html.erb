@@ -6,6 +6,9 @@
   <% if activity.new_customs_code %>
     <%= "Customs code:" %> <b><%= activity.new_customs_code %></b><br>
   <% end %>
+  <% if activity.new_ucr_numbers %>
+    <%= "UCR numbers:" %> <b><%= activity.new_ucr_numbers %></b><br>
+  <% end %>
   <% if activity.new_number_of_affected_units %>
     <%= "Number of affected units:" %> <b><%= activity.new_number_of_affected_units %></b><br>
   <% end %>

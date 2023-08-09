@@ -60,7 +60,7 @@
     </h4>
     <%= govukSummaryList(
       classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
-      rows: investigation_product_rows(investigation_product, current_user),
+      rows: investigation_product_rows(investigation_product.decorate, current_user),
       attributes: {
         id: "product-#{index}"
       }

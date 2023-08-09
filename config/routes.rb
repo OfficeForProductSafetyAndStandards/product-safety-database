@@ -254,7 +254,14 @@ Rails.application.routes.draw do
   resources :investigation_products, only: %i[], param: :id do
     resource :batch_numbers, only: %i[edit update], path: "edit-batch-numbers", controller: "investigation_products/batch_numbers"
     resource :customs_code, only: %i[edit update], path: "edit-customs-code", controller: "investigation_products/customs_codes"
-    resource :number_of_affected_units, only: %i[edit update], path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
+    resource :ucr_numbers, only: %i[edit update destroy], path: "edit-ucr-numbers", controller: "investigation_products/ucr_numbers" do
+      collection do
+        post :add_ucr_number
+      end
+      get "/delete/:id" => "investigation_products/ucr_numbers#destroy", as: "delete"
+    end
+
+    resource :number_of_affected_units, only: %i[edit update], param: :id, path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
   end
 
   resource :prism_risk_assessments, only: [], path: "prism-risk-assessments" do

@@ -1,0 +1,51 @@
+<% page_heading = "Edit the Unique Consignment Reference (UCR) numbers" %>
+
+<% page_title page_heading, errors: @investigation_product.errors.any? %>
+<%= govukBackLink(
+  text: "Back",
+  href: investigation_path(@investigation_product.investigation)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @investigation_product, url: investigation_product_ucr_numbers_path, method: :put, data: { controller: 'nested-form', nested_form_wrapper_selector_value: '.nested-form-wrapper' } do |form| %>
+      <%= error_summary @investigation_product.errors %>
+
+      <fieldset class="govuk-fieldset" aria-describedby="ucr-number-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">
+            Edit the Unique Consignment Reference (<abbr>UCR</abbr>) numbers
+          </h1>
+        </legend>
+
+        <div class="govuk-hint govuk-!-margin-bottom-5" id="ucr-number-hint">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-2">
+            Add and edit <abbr>UCR</abbr> numbers for Asda washing up liquid.
+          </span>
+
+          <span class="govuk-!-display-block govuk-!-font-size-16">
+            <abbr>UCR</abbr> numbers are between 12 and 35 characters long.
+          </span>
+        </div>
+      </fieldset>
+
+      <template data-nested-form-target="template">
+        <%= form.fields_for :ucr_numbers, UcrNumber.new, child_index: 'NEW_RECORD' do |ucr_fields| %>
+          <%= render "ucr_form", f: ucr_fields %>
+        <% end %>
+      </template>
+
+      <%= form.fields_for :ucr_numbers do |ucr_fields| %>
+        <%= render "ucr_form", f: ucr_fields %>
+      <% end %>
+
+      <div data-nested-form-target="target"></div>
+      <button type="button" data-action="nested-form#add" class="govuk-button govuk-button--secondary opss-nojs-hide">Add UCR number</button>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation_product.investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>
