@@ -6,7 +6,6 @@ RSpec.describe InvestigationProductDecorator, :with_stubbed_opensearch, :with_st
   let(:investigation) { create(:allegation, creator: user) }
   let(:investigation_product) { create(:investigation_product, investigation:, product:) }
   let(:user) { create(:user, :opss_user) }
-  let(:product) { create(:product) }
 
   before do
     allow(helper).to receive(:current_user).and_return(user)
@@ -55,35 +54,6 @@ RSpec.describe InvestigationProductDecorator, :with_stubbed_opensearch, :with_st
       expect(result).to summarise("Last updated", text: "10 minutes ago")
       expect(result).to summarise("Created", text: "10 minutes ago")
       expect(result).to summarise("Product record owner", text: "Your team is the product record owner")
-    end
-  end
-
-  describe "#ucr_numbers_list" do
-    subject(:ucr_numbers_list) do
-      decorated_object.ucr_numbers_list
-    end
-
-    let(:ucr_2) { create(:ucr_number, number: "87654321") }
-    let(:ucr_1) { create(:ucr_number, number: "12345678") }
-
-    before do
-      investigation_product.ucr_numbers = [ucr_1, ucr_2]
-      investigation_product.save!
-    end
-
-    context "when there are no UCR numbers" do
-      before do
-        investigation_product.ucr_numbers = []
-        investigation_product.save!
-      end
-
-      it "returns empty" do
-        expect(ucr_numbers_list).to be_empty
-      end
-    end
-
-    it "returns a list of UCR numbers" do
-      expect(ucr_numbers_list).to match_array(%w[12345678 87654321])
     end
   end
 end
