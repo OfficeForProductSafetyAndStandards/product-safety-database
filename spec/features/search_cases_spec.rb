@@ -132,8 +132,9 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
   end
 
   context "with fuzzy matching" do
+    pending "this is failing as fuzziness rules have now changed - await new rules from business"
+
     it "does not allow any edits for words less than 6 letters long" do
-      pending "this is failing as fuzziness rules have now changed - await new rules from business"
       sign_in(user)
       visit "/cases"
 
@@ -152,7 +153,6 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     it "allows 1 edit for words more than 6 letters but less than 13 long" do
-      pending "this is failing as fuzziness rules have now changed - await new rules from business"
       sign_in(user)
       visit "/cases"
 
@@ -171,7 +171,6 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     it "does not allow 2 edits for words more than 6 letters but less than 13 long" do
-      pending "this is failing as fuzziness rules have now changed - await new rules from business"
       sign_in(user)
       visit "/cases"
 
@@ -190,7 +189,6 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     it "allows 2 edits for words more than 12 long" do
-      pending "this is failing as fuzziness rules have now changed - await new rules from business"
       sign_in(user)
       visit "/cases"
 
@@ -209,7 +207,6 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
 
     it "does not allow 3 edits for words more than 12 long" do
-      pending "this is failing as fuzziness rules have now changed - await new rules from business"
       sign_in(user)
       visit "/cases"
 

@@ -1,8 +1,80 @@
 module InvestigationsHelper
-  def opensearch_for_investigations(page_size = Investigation.count, _user = current_user)
+  def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
     # Opensearch is only used for searching across all investigations
+    @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
-    Investigation.search(query, misspellings: { edit_distance: 2 }, page: page_number, per_page: page_size)
+
+    wheres = {}
+
+    case @search.case_type
+    when "allegation"
+      wheres[:type] = "Investigation::Allegation"
+    when "project"
+      wheres[:type] = "Investigation::Project"
+    when "enquiry"
+      wheres[:type] = "Investigation::Enquiry"
+    end
+
+    if @search.priority == "serious_and_high_risk_level_only"
+      wheres[:risk_level] = %i[serious high]
+    end
+
+    if @search.hazard_type.present?
+      wheres[:hazard_type] = @search.hazard_type
+    end
+
+    case @search.case_status
+    when "open"
+      wheres[:is_closed] = false
+    when "closed"
+      wheres[:is_closed] = true
+    end
+
+    # case @search.created_by
+    # when "me"
+    #   wheres[:creator_users_investigations] = { id: user.id }
+    # when "my_team"
+    #   team = user.team
+    #   wheres[:creator_users_investigations] = { id: team.users.map(&:id) }
+    #   wheres[:creator_teams_investigations] = { id: team.id }
+    # when "others"
+    #   if @search.created_by_other_id.blank?
+    #     wheres[:not] = { creator_users_investigations: { id: user.team.user_ids } }
+    #   elsif (team = Team.find_by(id: @search.created_by_other_id))
+    #     wheres[:creator_users_investigations] = { id: team.users.map(&:id) }
+    #     wheres[:creator_teams_investigations] = { id: team.id }
+    #   else
+    #     wheres[:creator_users_investigations] = { id: @search.created_by_other_id }
+    #   end
+    # end
+
+    case @search.case_owner
+    when "me"
+      wheres[:owner_id] = user.id
+    when "my_team"
+      team = user.team
+      wheres[:owner_id] = team.users.map(&:id)
+      wheres[:team_ids_with_access] = team.id
+    when "others"
+      wheres[:owner_id] = if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+                            team.users.map(&:id)
+                          else
+                            @search.case_owner_is_someone_else_id
+                          end
+    end
+
+    case @search.teams_with_access
+    when "my_team"
+      wheres[:collaborations] = { collaborator_type: "Team", collaborator_id: user.team.id }
+    when "other"
+      if @search.teams_with_access_other_id.present?
+        wheres[:collaborations] = { collaborator_type: "Team", collaborator_id: @search.teams_with_access_other_id }
+      else
+        wheres[:not] = { collaborations: { collaborator_type: "Team", collaborator_id: user.team.id } }
+      end
+    end
+
+    Investigation.search(query, where: wheres, misspellings: { edit_distance: 2 }, page: page_number, per_page: page_size)
   end
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)
