@@ -30,31 +30,37 @@ module InvestigationsHelper
       wheres[:is_closed] = true
     end
 
-    # case @search.created_by
-    # when "me"
-    #   wheres[:creator_users_investigations] = { id: user.id }
-    # when "my_team"
-    #   team = user.team
-    #   wheres[:creator_users_investigations] = { id: team.users.map(&:id) }
-    #   wheres[:creator_teams_investigations] = { id: team.id }
-    # when "others"
-    #   if @search.created_by_other_id.blank?
-    #     wheres[:not] = { creator_users_investigations: { id: user.team.user_ids } }
-    #   elsif (team = Team.find_by(id: @search.created_by_other_id))
-    #     wheres[:creator_users_investigations] = { id: team.users.map(&:id) }
-    #     wheres[:creator_teams_investigations] = { id: team.id }
-    #   else
-    #     wheres[:creator_users_investigations] = { id: @search.created_by_other_id }
-    #   end
-    # end
+    case @search.created_by
+    when "me"
+      wheres[:creator_user] = user.id
+    when "my_team"
+      team = user.team
+      wheres[:_or] = [
+        { creator_user: team.users.pluck(:id) },
+        { creator_team: team.id }
+      ]
+    when "others"
+      if @search.created_by_other_id.blank?
+        wheres[:_not] = [{ creator_users_investigations: { id: user.team.user_ids } }]
+      elsif (team = Team.find_by(id: @search.created_by_other_id))
+        wheres[:_or] = [
+          { creator_user: team.users.pluck(:id) },
+          { creator_team: team.id }
+        ]
+      else
+        wheres[:creator_users_investigations] = @search.created_by_other_id
+      end
+    end
 
     case @search.case_owner
     when "me"
       wheres[:owner_id] = user.id
     when "my_team"
       team = user.team
-      wheres[:owner_id] = team.users.map(&:id)
-      wheres[:team_ids_with_access] = team.id
+      wheres[:_or] = [
+        { owner_id: team.users.pluck(:id) },
+        { team_ids_with_access: team.id }
+      ]
     when "others"
       wheres[:owner_id] = if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
                             team.users.map(&:id)
@@ -65,12 +71,12 @@ module InvestigationsHelper
 
     case @search.teams_with_access
     when "my_team"
-      wheres[:collaborations] = { collaborator_type: "Team", collaborator_id: user.team.id }
+      wheres[:team_ids_with_access] = user.team.id
     when "other"
       if @search.teams_with_access_other_id.present?
-        wheres[:collaborations] = { collaborator_type: "Team", collaborator_id: @search.teams_with_access_other_id }
+        wheres[:team_ids_with_access] = @search.teams_with_access_other_id
       else
-        wheres[:not] = { collaborations: { collaborator_type: "Team", collaborator_id: user.team.id } }
+        wheres[:not] = { team_ids_with_access: user.team.id }
       end
     end
 
