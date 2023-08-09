@@ -647,10 +647,6 @@ GEM
       pastel (~> 0.8)
       strings (~> 0.2.0)
       tty-screen (~> 0.8)
-    turbo-rails (1.4.0)
-      actionpack (>= 6.0.0)
-      activejob (>= 6.0.0)
-      railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -779,7 +775,6 @@ DEPENDENCIES
   strong_migrations (~> 1.4)
   super_diff
   tty-table
-  turbo-rails
   validate_email (~> 0.1)
   web-console
   webmock (~> 3.18)

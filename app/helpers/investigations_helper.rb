@@ -158,29 +158,11 @@ module InvestigationsHelper
         actions: customs_code_actions(investigation_product, user)
       },
       {
-        key: { html: "UCR numbers" },
-        value: {
-          html: ucr_number_unordered_list(investigation_product&.ucr_numbers_list) || ""
-        },
-        actions: ucr_numbers_actions(investigation_product, user)
-      },
-      {
         key: { text: "Units affected" },
         value: units_affected(investigation_product),
         actions: number_of_affected_units_actions(investigation_product, user)
       }
     ]
-  end
-
-  def ucr_number_unordered_list(ucr_numbers)
-    return if ucr_numbers.blank?
-
-    tag.ul class: "govuk-list govuk-list--bullet" do
-      content = ucr_numbers.collect do |ucr|
-        content_tag :li, ucr
-      end
-      content.join.html_safe
-    end
   end
 
   def units_affected(investigation_product)
@@ -531,18 +513,6 @@ private
         href: edit_investigation_product_customs_code_path(investigation_product),
         text: "Edit",
         visuallyHiddenText: "  the customs codes for #{investigation_product.name}"
-      ]
-    }
-  end
-
-  def ucr_numbers_actions(investigation_product, user)
-    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
-
-    {
-      items: [
-        href: edit_investigation_product_ucr_numbers_path(investigation_product),
-        text: "Edit",
-        visuallyHiddenText: "  the UCR numbers for #{investigation_product.name}"
       ]
     }
   end
