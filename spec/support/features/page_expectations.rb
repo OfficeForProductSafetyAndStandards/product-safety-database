@@ -707,11 +707,6 @@ module PageExpectations
     expect(page).to have_css("h1", text: "Edit the batch numbers")
   end
 
-  def expect_to_be_on_edit_ucr_numbers_page(investigation_product_id:)
-    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-ucr-numbers/edit")
-    expect(page).to have_css("h1", text: "Edit the Unique Consignment Reference (UCR) numbers")
-  end
-
   def expect_to_be_on_edit_customs_code_page(investigation_product_id:)
     expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-customs-code/edit")
     expect(page).to have_css("h1", text: "Edit the customs code")

@@ -17,7 +17,6 @@ class InvestigationProduct < ApplicationRecord
   has_many :unexpected_events
   has_many :risk_assessed_products
   has_many :risk_assessments, through: :risk_assessed_products
-  has_many :ucr_numbers
 
   belongs_to :added_by_user, class_name: :User, optional: true
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
@@ -25,8 +24,6 @@ class InvestigationProduct < ApplicationRecord
   redacted_export_with :id, :affected_units_status, :batch_number, :created_at,
                        :customs_code, :investigation_id, :number_of_affected_units,
                        :product_id, :updated_at
-
-  accepts_nested_attributes_for :ucr_numbers, allow_destroy: true, reject_if: proc { |l| l[:number].blank? }
 
   delegate :name, to: :product
 
