@@ -16,6 +16,5 @@ import './date_input'
 import './clear_on_reset'
 import './clear_radios_on_other_input'
 import './govuk_frontend'
-import '@hotwired/turbo-rails'
 
 window.GOVUKFrontend = GOVUKFrontend
