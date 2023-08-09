@@ -27,24 +27,20 @@
             <abbr>UCR</abbr> numbers are between 12 and 35 characters long.
           </span>
         </div>
-
       </fieldset>
 
-      <!-- Stimulus Rails Nested Form -->
-        <template data-nested-form-target="template">
-          <%= form.fields_for :ucr_numbers, UcrNumber.new, child_index: 'NEW_RECORD' do |ucr_fields| %>
-            <%= render "ucr_form", f: ucr_fields %>
-          <% end %>
-        </template>
-
-        <%= form.fields_for :ucr_numbers do |ucr_fields| %>
+      <template data-nested-form-target="template">
+        <%= form.fields_for :ucr_numbers, UcrNumber.new, child_index: 'NEW_RECORD' do |ucr_fields| %>
           <%= render "ucr_form", f: ucr_fields %>
         <% end %>
+      </template>
 
-        <div data-nested-form-target="target"></div>
-        <button type="button" data-action="nested-form#add" class="govuk-button">Add UCR number</button>
-      <!-- End Stimulus Rails Nested Form -->
-      
+      <%= form.fields_for :ucr_numbers do |ucr_fields| %>
+        <%= render "ucr_form", f: ucr_fields %>
+      <% end %>
+
+      <div data-nested-form-target="target"></div>
+      <button type="button" data-action="nested-form#add" class="govuk-button govuk-button--secondary opss-nojs-hide">Add UCR number</button>
 
       <div class="govuk-button-group">
         <%= form.submit "Save", class: "govuk-button" %>

@@ -3,7 +3,8 @@
     <%= f.text_field :number, class: "govuk-input", maxlength: 45 %>
   </div>
   <div class="govuk-grid-column-one-quarter">
-    <button type="button" data-action="nested-form#remove" class="govuk-button govuk-button--warning">Remove</button>
+    <%= link_to "Remove", "#", class: "govuk-link govuk-link--no-visited-state opss-nojs-hide", data: { action: "nested-form#remove" } %>
+    <%= link_to "Remove", delete_investigation_product_ucr_numbers_path(f.object.investigation_product.id, f.object), method: :delete, class: "govuk-link govuk-link--no-visited-state opss-js-enabled-hidden" if f.object.persisted? %>
     <%= f.hidden_field :_destroy %>
   </div>
 </div>

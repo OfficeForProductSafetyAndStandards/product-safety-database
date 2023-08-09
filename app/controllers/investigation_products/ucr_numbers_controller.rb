@@ -3,9 +3,7 @@ module InvestigationProducts
     before_action :load_investigation_product
 
     def edit
-      if @investigation_product.ucr_numbers.empty?
-        @ucr_number = @investigation_product.ucr_numbers.build
-      end
+      @ucr_number = @investigation_product.ucr_numbers.build
     end
 
     def update
@@ -15,7 +13,7 @@ module InvestigationProducts
         ucr_numbers: ucr_numbers_params
       )
       if service.success?
-        redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The case information was updated" }
+        redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The UCR numbers were updated" }
       else
         render :edit, status: :unprocessable_entity
       end
@@ -28,6 +26,12 @@ module InvestigationProducts
       end
 
       render :edit, status: :unprocessable_entity
+    end
+
+    def destroy
+      @ucr_number = @investigation_product.ucr_numbers.find(params[:id])
+      @ucr_number.destroy!
+      redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The UCR numbers were deleted" }
     end
 
   private
