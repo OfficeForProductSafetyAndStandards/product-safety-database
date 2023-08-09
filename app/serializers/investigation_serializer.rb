@@ -4,10 +4,17 @@ class InvestigationSerializer < ActiveModel::Serializer
              :pretty_id, :hazard_description, :non_compliant_reason,
              :complainant_reference, :risk_level, :title
 
+  has_one :creator_user do
+    object.creator_user&.id
+  end
+
+  has_one :creator_team do
+    object.creator_team&.id
+  end
+
   has_many :businesses, serializer: BusinessSerializer
   has_many :products, serializer: ProductSerializer
-  # has_many :users, serializer: UserSerializer
-  # has_many :teams_with_access, serializer: TeamAccessSerializer
-  has_many :collaborations, serializer: CollaborationSerializer
-
+  # has_many :teams_with_access do
+  #   object.teams_with_access.pluck(:id)
+  # end
 end
