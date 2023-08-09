@@ -57,6 +57,7 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "stimulus-rails"
 gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
+gem "turbo-rails"
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
