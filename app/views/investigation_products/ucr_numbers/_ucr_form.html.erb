@@ -1,0 +1,10 @@
+<div class="nested-form-wrapper govuk-grid-row" data-new-record="<%= f.object.new_record? %>">
+  <div class="govuk-grid-column-three-quarters">
+    <%= f.text_field :number, class: "govuk-input", maxlength: 45 %>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <%= link_to "Remove", "#", class: "govuk-link govuk-link--no-visited-state opss-nojs-hide", data: { action: "nested-form#remove" } %>
+    <%= link_to "Remove", delete_investigation_product_ucr_numbers_path(f.object.investigation_product.id, f.object), method: :delete, class: "govuk-link govuk-link--no-visited-state opss-js-enabled-hidden" if f.object.persisted? %>
+    <%= f.hidden_field :_destroy %>
+  </div>
+</div>

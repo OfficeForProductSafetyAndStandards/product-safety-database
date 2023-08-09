@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_opensearch do
   subject(:investigation) { create(:allegation) }
 
   describe "#build_owner_collaborations_from", :with_stubbed_opensearch do
@@ -14,7 +14,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "supporting information", :with_stubbed_opensearch do
+  describe "supporting information" do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation)                           { create(:allegation, creator: user) }
     let(:generic_supporting_information_filename) { "a generic supporting information" }
@@ -43,7 +43,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#teams_with_access", :with_stubbed_opensearch do
+  describe "#teams_with_access" do
     let(:owner)  { investigation.owner_team }
     let(:user)   { create(:user, team: owner) }
     let(:team_a) { create(:team, name: "a team") }
@@ -61,7 +61,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#risk_level_currently_validated?", :with_stubbed_opensearch do
+  describe "#risk_level_currently_validated?" do
     it "returns true if risk_validated_by is not nil" do
       investigation.update!(risk_validated_by: "Anyone")
       expect(investigation).to be_risk_level_currently_validated
@@ -72,7 +72,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#owner_team", :with_stubbed_opensearch do
+  describe "#owner_team" do
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }
       let(:investigation) { create(:allegation, creator: create(:user, team:)) }
@@ -97,7 +97,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "ownership", :with_stubbed_opensearch do
+  describe "ownership" do
     let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation) { create(:project, creator: user) }
 
@@ -113,7 +113,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#categories", :with_stubbed_opensearch do
+  describe "#categories" do
     let(:product_category) { Faker::Hipster.unique.word }
 
     before do
@@ -150,7 +150,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#non_owner_teams_with_access", :with_stubbed_opensearch do
+  describe "#non_owner_teams_with_access" do
     let(:user)             { create(:user, :activated, has_viewed_introduction: true) }
     let(:read_only_team)   { create(:team) }
     let(:edit_access_team) { create(:team) }
@@ -159,9 +159,5 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     it "returns teams with read access or edit access but excludes the owner team" do
       expect(investigation.non_owner_teams_with_access).to match_array([read_only_team, edit_access_team])
     end
-  end
-
-  it_behaves_like "a batched search model" do
-    let(:factory_name) { :allegation }
   end
 end

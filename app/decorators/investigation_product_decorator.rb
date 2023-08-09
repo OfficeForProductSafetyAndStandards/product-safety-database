@@ -28,4 +28,8 @@ class InvestigationProductDecorator < Draper::Decorator
       ]
     )
   end
+
+  def ucr_numbers_list
+    ucr_numbers.pluck(:number)
+  end
 end

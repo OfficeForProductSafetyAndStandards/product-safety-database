@@ -164,6 +164,35 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
 
         expect(delivered_emails.last.personalization[:subject_text]).to eq "Case units affected updated"
       end
+
+      it "allows editing of UCR numbers" do
+        within("dl#product-0") do
+          click_link "Edit the UCR numbers for #{InvestigationProduct.first.product.name}"
+        end
+
+        expect_to_be_on_edit_ucr_numbers_page(investigation_product_id: InvestigationProduct.first.id)
+
+        fill_in "investigation_product_ucr_numbers_attributes_0_number", with: "ucr-123"
+
+        click_button "Save"
+
+        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+        expect(page).to have_content("The UCR numbers were updated")
+
+        within("dl#product-0") do
+          expect(page).to have_css("dt.govuk-summary-list__key", text: "UCR numbers")
+          expect(page).to have_css("dd.govuk-summary-list__value", text: "ucr-123")
+        end
+
+        click_link "Activity"
+
+        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect(page).to have_css("h3", text: "Case specific product information updated")
+        expect(page).to have_content("UCR numbers: ucr-123")
+
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Case UCR numbers updated"
+      end
     end
 
     context "when user does not have permissions to update the investigation" do
