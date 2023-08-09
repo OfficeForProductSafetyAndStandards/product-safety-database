@@ -178,7 +178,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_opensearch, :with
 
         expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-        expect(page).to have_content("The case information was updated")
+        expect(page).to have_content("The UCR numbers were updated")
 
         within("dl#product-0") do
           expect(page).to have_css("dt.govuk-summary-list__key", text: "UCR numbers")
