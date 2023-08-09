@@ -180,6 +180,22 @@ module InvestigationsHelper
     )
   end
 
+  def case_export_params
+    params.permit(
+      :q,
+      :case_status,
+      :case_type,
+      :case_owner,
+      :priority,
+      :teams_with_access,
+      :case_owner_is_someone_else_id,
+      :teams_with_access_other_id,
+      :created_by,
+      :created_by_other_id,
+      :hazard_type
+    )
+  end
+
   def sorting_params
     return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
     return { trading_name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
@@ -194,10 +210,6 @@ module InvestigationsHelper
 
   def sort_direction
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
-  end
-
-  def export_params
-    query_params.except(:page, :sort_by, :page_name)
   end
 
   def page_number
