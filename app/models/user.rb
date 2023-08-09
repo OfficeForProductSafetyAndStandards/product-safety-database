@@ -120,8 +120,8 @@ class User < ApplicationRecord
   end
 
   def can_use_product_recall_tool?
-    false
-    # !Rails.env.production? || team.name == "OPSS Incident Management"
+    true
+    # team.name == "OPSS Incident Management"
   end
 
   def has_role?(role)
