@@ -28,9 +28,9 @@ module ProductsHelper
 
     if @search.q
       @search.q.strip!
-      query = query.where("name ILIKE ?", "%#{@search.q}%")
-        .or(Product.where("description ILIKE ?", "%#{@search.q}%"))
-        .or(Product.where("CONCAT('psd-', id) = LOWER(?)", @search.q))
+      query = query.where("products.name ILIKE ?", "%#{@search.q}%")
+        .or(Product.where("products.description ILIKE ?", "%#{@search.q}%"))
+        .or(Product.where("CONCAT('psd-', products.id) = LOWER(?)", @search.q))
         .or(Product.where(id: @search.q))
     end
 
