@@ -80,7 +80,14 @@ module InvestigationsHelper
       end
     end
 
-    Investigation.search(query, where: wheres, misspellings: { edit_distance: 2 }, page: page_number, per_page: page_size)
+    Investigation.search(
+      query,
+      where: wheres,
+      order: @search.sorting_params,
+      misspellings: { edit_distance: 2 },
+      page: page_number,
+      per_page: page_size
+    )
   end
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)
