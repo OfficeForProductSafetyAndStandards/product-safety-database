@@ -41,14 +41,14 @@ module InvestigationsHelper
       ]
     when "others"
       if @search.created_by_other_id.blank?
-        wheres[:_not] = [{ creator_users_investigations: { id: user.team.user_ids } }]
+        wheres[:_not] = [{ creator_user: user.team.user_ids }]
       elsif (team = Team.find_by(id: @search.created_by_other_id))
         wheres[:_or] = [
           { creator_user: team.users.pluck(:id) },
           { creator_team: team.id }
         ]
       else
-        wheres[:creator_users_investigations] = @search.created_by_other_id
+        wheres[:creator_user] = @search.created_by_other_id
       end
     end
 
