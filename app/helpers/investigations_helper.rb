@@ -62,13 +62,15 @@ module InvestigationsHelper
         { team_ids_with_access: team.id }
       ]
     when "others"
-      if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
-        wheres[:owner_id] = team.users.map(&:id)
+      if @search.case_owner_is_someone_else_id.present?
+        team = Team.find_by(id: @search.case_owner_is_someone_else_id)
+        wheres[:owner_id] = if team
+                              team.users.pluck(:id)
+                            else
+                              @search.case_owner_is_someone_else_id
+                            end
       else
-        team = user.team
-        wheres[:_not] = {
-          owner_id: team.users.pluck(:id)
-        }
+        wheres[:_not] = { owner_id: user.team.users.pluck(:id) }
       end
     end
 
