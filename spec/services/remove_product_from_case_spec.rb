@@ -69,7 +69,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           it "creates an audit activity", :aggregate_failures do
             result
             activity = investigation.reload.activities.find_by!(type: AuditActivity::Product::Destroy.name)
-            expect(activity).to have_attributes(title: nil, body: nil, investigation_product_id: investigation_product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.attributes.to_json) })
+            expect(activity).to have_attributes(title: nil, body: nil, investigation_product_id: investigation_product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.reload.attributes.to_json) })
             expect(activity.added_by_user).to eq(user)
           end
 
@@ -101,7 +101,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
             investigation_product_id: investigation_product.id,
             metadata: {
               "reason" => reason,
-              "product" => JSON.parse(product.attributes.to_json)
+              "product" => JSON.parse(product.reload.attributes.to_json)
             }
           )
           expect(activity.added_by_user).to eq(user)
