@@ -58,7 +58,6 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:sheet) { exported_data.sheet("Cases") }
 
-    # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength
     it "exports the case data", :aggregate_failures do
       expect(exported_data.sheets).to eq %w[Cases]
@@ -196,7 +195,6 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 33)).to eq investigation.non_compliant_reason
       expect(sheet.cell(3, 33)).to eq other_team_investigation.non_compliant_reason
     end
-    # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength
   end
 end
