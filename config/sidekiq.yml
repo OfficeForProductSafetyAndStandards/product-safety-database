@@ -3,6 +3,7 @@
 :queues:
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
+  - searchkick
 :scheduler:
   :schedule:
     delete_unsafe_files_job:
