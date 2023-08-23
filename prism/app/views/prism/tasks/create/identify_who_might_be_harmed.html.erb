@@ -1,0 +1,33 @@
+<% content_for :page_title, "Identify who might be harmed" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @harm_scenario.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Create product harm scenarios</span>
+        Identify who might be harmed
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l">Placeholder product</p>
+      <% end %>
+      <%= f.govuk_radio_buttons_fieldset :product_aimed_at, legend: { text: "Who is the product aimed at?", size: "m" } do %>
+        <%= f.govuk_radio_button :product_aimed_at, "particular_group_of_users", label: { text: "Particular group of users" }, hint: { text: "For example, children, men or women, the elderly, certain ethnic or cultural groups, etc." }, link_errors: true do %>
+          <%= f.govuk_text_field :product_aimed_at_description, label: { text: "Description of user type including age group if applicable. For example, children 2-3 years." } %>
+        <% end %>
+        <%= f.govuk_radio_button :product_aimed_at, "general_population", label: { text: "General population" }, hint: { text: "Product is not aimed at a particular group but broadly at the general population." } %>
+      <% end %>
+      <%= f.govuk_check_boxes_fieldset :unintended_risks_for, legend: { text: "Who else might be at risk?", size: "m" }, hint: { text: "Select all that are applicable." } do %>
+        <%= f.govuk_check_box :unintended_risks_for, :unintended_users, label: { text: "Unintended users" }, hint: { text: "For example, young children using products intended for their parents or older children, and professional products being used by non-professional users." }, link_errors: true, checked: @harm_scenario.unintended_risks_for.include?("unintended_users") %>
+        <%= f.govuk_check_box :unintended_risks_for, :non_users, label: { text: "Non-users" }, hint: { text: "For example, products that present fire hazards with the potential to cause a multi-occupied building to catch fire, and products that either in normal use or as a result of failure can produce projectiles placing people in the general vicinity at risk." }, checked: @harm_scenario.unintended_risks_for.include?("non_users") %>
+      <% end %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

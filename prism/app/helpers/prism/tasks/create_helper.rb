@@ -11,9 +11,11 @@ module Prism
     end
 
     def affected_users
-      return unless @prism_risk_assessment.product_hazard
+      return unless @harm_scenario || harm_scenario
 
-      I18n.t("prism.product_hazard.product_aimed_at.#{@prism_risk_assessment.product_hazard.product_aimed_at}")
+      record = @harm_scenario || harm_scenario
+
+      I18n.t("prism.harm_scenarios.product_aimed_at.#{record.product_aimed_at}")
     end
 
     def severity_radios
@@ -117,16 +119,6 @@ module Prism
       I18n.t("prism.harm_scenarios.severity.#{record.severity}")
     end
 
-    def level_of_uncertainty(harm_scenario = nil)
-      return unless @harm_scenario || harm_scenario
-
-      record = @harm_scenario || harm_scenario
-
-      return "Unknown" if record.level_of_uncertainty.nil?
-
-      I18n.t("prism.harm_scenarios.level_of_uncertainty.#{record.level_of_uncertainty}")
-    end
-
     def probability_of_harm(type:, probability:)
       type == "frequency" ? "1 in #{probability}" : probability
     end
@@ -138,25 +130,11 @@ module Prism
       Prism::ProbabilityService.overall_probability_of_harm(harm_scenario: record)
     end
 
-    def overall_risk_level_tag(harm_scenario = nil)
+    def overall_risk_level(harm_scenario = nil)
       return unless @harm_scenario || harm_scenario
 
       record = @harm_scenario || harm_scenario
-
-      return govuk_tag(text: "Unknown", colour: "grey") if record.severity.nil?
-
-      risk_level = Prism::RiskMatrixService.risk_level(probability_frequency: overall_probability_of_harm(record).probability, severity_level: record.severity.to_sym)
-
-      case risk_level
-      when "low"
-        govuk_tag(text: "Low risk", colour: "green")
-      when "medium"
-        govuk_tag(text: "Medium risk", colour: "yellow")
-      when "high"
-        govuk_tag(text: "High risk", colour: "orange")
-      when "serious"
-        govuk_tag(text: "Serious risk", colour: "red")
-      end
+      Prism::RiskMatrixService.risk_level(probability_frequency: overall_probability_of_harm(record).probability, severity_level: record.severity.to_sym)
     end
 
     def harm_scenario_step_summary(harm_scenario_step)

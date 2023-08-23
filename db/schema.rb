@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_23_142231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -317,13 +317,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "hazard_type"
-    t.string "level_of_uncertainty"
     t.boolean "multiple_casualties"
     t.string "other_hazard_type"
+    t.string "product_aimed_at"
+    t.string "product_aimed_at_description"
     t.uuid "risk_assessment_id"
-    t.boolean "sensitivity_analysis"
     t.string "severity"
     t.json "tasks_status", default: {}
+    t.string "unintended_risks_for", default: [], array: true
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_harm_scenarios_on_risk_assessment_id"
   end
@@ -331,10 +332,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
   create_table "prism_product_hazards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "number_of_hazards"
-    t.string "product_aimed_at"
-    t.string "product_aimed_at_description"
     t.uuid "risk_assessment_id"
-    t.string "unintended_risks_for", default: [], array: true
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_product_hazards_on_risk_assessment_id"
   end
@@ -374,8 +372,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
     t.string "assessor_name"
     t.datetime "created_at", null: false
     t.uuid "created_by_user_id"
+    t.string "level_of_uncertainty"
     t.string "risk_type"
     t.jsonb "routing_questions"
+    t.boolean "sensitivity_analysis"
     t.string "serious_risk_rebuttable_factors"
     t.string "state"
     t.json "tasks_status", default: {}

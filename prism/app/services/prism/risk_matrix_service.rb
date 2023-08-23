@@ -52,15 +52,27 @@ module Prism
     }.freeze
 
     def self.risk_level(probability_frequency:, severity_level:)
-      raise "Severity level must be one of `:level_1`, `:level_2`, `:level_3` or `:level_4`" unless %i[level_1 level_2 level_3 level_4].include?(severity_level)
+      risk_level = RISK_MATRIX[probability_frequency_band(probability_frequency:)]&.[](severity_level)
 
-      RISK_MATRIX[probability_frequency_band(probability_frequency:)][severity_level]
+      if risk_level
+        OpenStruct.new(
+          risk_level:,
+          risk_level_tag_html: risk_level_tag(risk_level:)
+        )
+      else
+        OpenStruct.new(
+          risk_level: nil,
+          risk_level_tag_html: risk_level_tag(risk_level: "unknown")
+        )
+      end
     end
 
     private_class_method def self.probability_frequency_band(probability_frequency:)
       # `probability_frequency` is the `n` in "1 in n".
       # Lower numbers indicate a greater probability.
       # The bands below overlap but the first case is returned.
+      return unless probability_frequency.is_a?(Integer)
+
       case probability_frequency
       when ..2
         :more_than_or_equal_to_1_in_2
@@ -79,6 +91,22 @@ module Prism
       else
         :less_than_1_in_1000000
       end
+    end
+
+    private_class_method def self.risk_level_tag(risk_level:)
+      component = case risk_level
+                  when "low"
+                    GovukComponent::TagComponent.new(text: "Low risk", colour: "green")
+                  when "medium"
+                    GovukComponent::TagComponent.new(text: "Medium risk", colour: "yellow")
+                  when "high"
+                    GovukComponent::TagComponent.new(text: "High risk", colour: "orange")
+                  when "serious"
+                    GovukComponent::TagComponent.new(text: "Serious risk", colour: "red")
+                  when "unknown"
+                    GovukComponent::TagComponent.new(text: "Unknown risk", colour: "grey")
+                  end
+      component.render_in(ActionView::Base.new(ActionView::LookupContext.new([]), {}, nil))
     end
   end
 end

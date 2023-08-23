@@ -1,4 +1,4 @@
-<% content_for :page_title, "Harm scenarios" %>
+<% content_for :page_title, "Review the overall product risk level" %>
 <% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
 <% @errors = @prism_risk_assessment.errors.any? %>
 
@@ -7,24 +7,26 @@
     <%= form_with model: @prism_risk_assessment, url: wizard_path, method: :patch do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l">Determine overall product risk</span>
-        Harm scenarios
+        <span class="govuk-caption-l">Evaluate product risk and submit assessment</span>
+        Review the overall product risk level
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <p class="govuk-body-l">Placeholder product</p>
+        <% if @prism_risk_assessment.product_market_detail&.total_products_sold.present? %><p class="govuk-body">Number of products in use: <%= @prism_risk_assessment.product_market_detail&.total_products_sold %></p><% end %>
       <% end %>
+      <%= govuk_inset_text(text: "The overall risk level takes into account the total number of products in use, if available.") %>
       <%=
         govuk_table do |table|
-          table.with_caption(text: "Hazards and risks", size: "m")
+          table.with_caption(text: "Harm scenarios", size: "m")
 
           table.with_head do |head|
             head.with_row do |row|
               row.with_cell(text: "Hazard name")
               row.with_cell(text: "Probability of harm")
               row.with_cell(text: "Severity")
-              row.with_cell(text: "Risk level")
-              row.with_cell(text: '<span class="govuk-visually-hidden">View harm scenario</span>'.html_safe)
+              row.with_cell(text: "Scenario risk level")
+              row.with_cell(text: '<span class="govuk-visually-hidden">Change harm scenario</span>'.html_safe)
             end
           end
 
@@ -35,8 +37,8 @@
                 row.with_cell(text: hazard_type(harm_scenario), classes:)
                 row.with_cell(text: overall_probability_of_harm(harm_scenario).probability_human)
                 row.with_cell(text: severity_of_harm(harm_scenario))
-                row.with_cell(text: overall_risk_level_tag(harm_scenario))
-                row.with_cell(text: "<a href=\"#{wizard_path(:check_your_harm_scenario, { harm_scenario_id: harm_scenario.id })}\" class=\"govuk-link\">View</a>".html_safe)
+                row.with_cell(text: overall_risk_level(harm_scenario).risk_level_tag_html)
+                row.with_cell(text: "<a href=\"#{task_path("create", "check_your_harm_scenario", harm_scenario.id)}\" class=\"govuk-link\">Change</a>".html_safe)
               end
             end
           end

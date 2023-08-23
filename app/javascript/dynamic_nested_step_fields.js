@@ -1,5 +1,4 @@
 /* global MutationObserver */
-/* global attachOpssStepEventHandler */
 
 'use strict'
 
@@ -25,11 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
       el.innerHTML = el.innerHTML.replace(/-new-record-/g, '-' + el.dataset.index + '-')
     })
 
-    // Re-attach events to newly-added step
-    if (typeof attachOpssStepEventHandler === 'function') {
-      attachOpssStepEventHandler()
-    }
-
     // Re-init GOV.UK Frontend to pick up new form fields
     window.GOVUKFrontend.initAll({ scope: document.querySelector('opss-steps') })
   }
@@ -40,10 +34,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const dynamicNestedStepFieldsExistingObserver = new MutationObserver(dynamicNestedStepFieldsCallback)
     dynamicNestedStepFieldsNewObserver.observe(document.querySelector('form[data-controller="nested-form"]'), { childList: true })
     dynamicNestedStepFieldsExistingObserver.observe(document.querySelector('form[data-controller="nested-form"]'), { subtree: true, attributeFilter: ['style'] })
-
-    // Attach events to existing steps
-    if (typeof attachOpssStepEventHandler === 'function') {
-      attachOpssStepEventHandler()
-    }
   }
 })

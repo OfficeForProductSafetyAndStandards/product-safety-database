@@ -21,7 +21,7 @@ module Prism
                         probabilities_frequency.map { |probability| probability.zero? ? 0 : 1.0 / probability } + probabilities_decimal
                       end
 
-      probabilities = probabilities.reject(&:zero?)
+      probabilities = probabilities.reject { |probability| probability.blank? || probability.zero? }
 
       # If there are no harm scenarios or they all had a probability of zero, return
       if probabilities.blank?

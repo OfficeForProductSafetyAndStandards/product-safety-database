@@ -1,0 +1,43 @@
+<% content_for :page_title, "Estimate probability of harm" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @harm_scenario.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary(presenter: Prism::HarmScenarioStepErrorSummaryPresenter) %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Create product harm scenarios</span>
+        Estimate probability of harm
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= hazard_type %></p>
+        <p class="govuk-body">Placeholder product</p>
+        <p class="govuk-body"><%= @harm_scenario.description %></p>
+        <p class="govuk-body">Affected users: <%= affected_users %></p>
+        <p class="govuk-body">Severity of harm: <%= severity_of_harm %></p>
+        <p class="govuk-body">Multiple casualties: <%= @harm_scenario.multiple_casualties ? "yes" : "no" %></p>
+      <% end %>
+      <p class="govuk-text">At this stage a probability is attached to each of the steps within the harm scenario. They will then be multiplied together to give an overall probability of harm.</p>
+      <%= govuk_details(summary_text: "Help with identifying probability of harm") do %>
+        <p>Identifying a reliable probability can be challenging, and the starting point should be to obtain and consider any relevant empirical evidence that can inform probability decisions.</p>
+        <p>However, some degree of probability estimation by the assessor will therefore nearly always be required, and will often be the sole or main means of determining probabilities.</p>
+        <p>To help with defining steps to harm and probability of harm please refer to the examples of PRISM risk assessments on the PRISM <a href="https://www.gov.uk/guidance/product-safety-risk-assessment-methodology-prism" class="govuk-link" rel="noreferrer noopener" target="_blank">guidance page</a>.</p>
+      <% end %>
+      <%= f.fields_for :harm_scenario_steps do |step_fields| %>
+        <%= render partial: "harm_scenario_step_probability_fields", locals: { f: step_fields } %>
+      <% end %>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <h2 class="govuk-heading-m govuk-!-padding-top-4">Overall probability of harm</h2>
+      <p class="govuk-body-l" id="overall-probability-of-harm"><%= overall_probability_of_harm.probability_human %></p>
+      <h2 class="govuk-heading-m">Risk level</h2>
+      <p class="govuk-body" id="overall-risk-level"><%= overall_risk_level.risk_level_tag_html %></p>
+      <%= f.hidden_field :severity_level, value: @harm_scenario.severity %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

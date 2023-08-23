@@ -36,19 +36,19 @@
           summary_list.with_row do |row|
             row.with_key(text: "Affected users")
             row.with_value(text: affected_users)
-            row.with_action(text: "Change", href: wizard_path(:add_a_number_of_hazards_and_subjects_of_harm, back_to: "summary"), visually_hidden_text: "affected users")
+            row.with_action(text: "Change", href: wizard_path(:identify_who_might_be_harmed, back_to: "summary"), visually_hidden_text: "affected users")
           end
           @harm_scenario.harm_scenario_steps.each_with_index do |harm_scenario_step, index|
             summary_list.with_row do |row|
               row.with_key(text: "Step #{index + 1}")
               row.with_value(text: harm_scenario_step_summary(harm_scenario_step).html_safe)
-              row.with_action(text: "Change", href: wizard_path(:add_a_harm_scenario_and_probability_of_harm, back_to: "summary", anchor: "step-#{index}"), visually_hidden_text: "harm scenario step")
+              row.with_action(text: "Change", href: wizard_path(:add_steps_to_harm, back_to: "summary", anchor: "step-#{index}"), visually_hidden_text: "harm scenario step #{index + 1}")
             end
           end
           summary_list.with_row do |row|
             row.with_key(text: "Overall probability of harm")
             row.with_value(text: overall_probability_of_harm.probability_human)
-            row.with_action(text: "Change", href: wizard_path(:add_a_harm_scenario_and_probability_of_harm, back_to: "summary"), visually_hidden_text: "overall probability of harm")
+            row.with_action(text: "Change", href: wizard_path(:estimate_probability_of_harm, back_to: "summary"), visually_hidden_text: "overall probability of harm")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Severity level")
@@ -58,26 +58,9 @@
         end
       %>
       <h2 class="govuk-heading-m">
-        Uncertainty and sensitivity analysis
+        Scenario risk level
       </h2>
-      <%=
-        govuk_summary_list do |summary_list|
-          summary_list.with_row do |row|
-            row.with_key(text: "Level of uncertainty")
-            row.with_value(text: level_of_uncertainty)
-            row.with_action(text: "Change", href: wizard_path(:add_uncertainty_and_sensitivity_analysis, back_to: "summary"), visually_hidden_text: "level of uncertainty")
-          end
-          summary_list.with_row do |row|
-            row.with_key(text: "Has sensitivity analysis been undertaken?")
-            row.with_value(text: @harm_scenario.sensitivity_analysis ? "Yes" : "No")
-            row.with_action(text: "Change", href: wizard_path(:add_uncertainty_and_sensitivity_analysis, back_to: "summary"), visually_hidden_text: "sensitivity analysis")
-          end
-          summary_list.with_row do |row|
-            row.with_key(text: "Risk level")
-            row.with_value(text: overall_risk_level_tag.html_safe)
-          end
-        end
-      %>
+      <p class="govuk-body"><%= overall_risk_level.risk_level_tag_html.html_safe %></p>
       <%= f.hidden_field :confirmed, value: true %>
       <% if @harm_scenario.confirmed? %>
         <div class="govuk-button-group">
