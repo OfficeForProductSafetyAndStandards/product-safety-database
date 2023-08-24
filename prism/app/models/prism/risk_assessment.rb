@@ -15,6 +15,12 @@ module Prism
       "serious_risk" => "serious_risk",
     }
 
+    enum level_of_uncertainty: {
+      "low" => "low",
+      "medium" => "medium",
+      "high" => "high",
+    }
+
     store_attribute :routing_questions, :less_than_serious_risk, :boolean
 
     validates :risk_type, inclusion: %w[normal_risk serious_risk], on: :serious_risk
@@ -22,6 +28,8 @@ module Prism
     validates :serious_risk_rebuttable_factors, presence: true, if: -> { less_than_serious_risk }, on: :serious_risk_rebuttable
     validates :assessor_name, :assessment_organisation, presence: true, on: %i[add_assessment_details add_evaluation_details]
     validate :check_all_harm_scenarios, on: :confirm_overall_product_risk
+    validates :level_of_uncertainty, inclusion: %w[low medium high], on: :add_level_of_uncertainty_and_sensitivity_analysis
+    validates :sensitivity_analysis, inclusion: [true, false], on: :add_level_of_uncertainty_and_sensitivity_analysis
 
     before_save :clear_serious_risk_rebuttable_factors
 

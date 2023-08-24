@@ -9,7 +9,7 @@ module Prism
 
     def show
       case step
-      when :add_a_number_of_hazards_and_subjects_of_harm
+      when :add_a_number_of_hazards
         @product_hazard = @prism_risk_assessment.product_hazard || @prism_risk_assessment.build_product_hazard
       end
 
@@ -18,9 +18,9 @@ module Prism
 
     def update
       case step
-      when :add_a_number_of_hazards_and_subjects_of_harm
+      when :add_a_number_of_hazards
         @product_hazard = @prism_risk_assessment.product_hazard || @prism_risk_assessment.build_product_hazard
-        @product_hazard.assign_attributes(add_a_number_of_hazards_and_subjects_of_harm_params)
+        @product_hazard.assign_attributes(add_a_number_of_hazards_params)
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
@@ -59,13 +59,8 @@ module Prism
       risk_assessment_tasks_path(@prism_risk_assessment)
     end
 
-    def add_a_number_of_hazards_and_subjects_of_harm_params
-      allowed_params = params
-        .require(:product_hazard)
-        .permit(:number_of_hazards, :product_aimed_at, :product_aimed_at_description, :final, unintended_risks_for: [])
-      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
-      allowed_params[:unintended_risks_for].reject!(&:blank?)
-      allowed_params
+    def add_a_number_of_hazards_params
+      params.require(:product_hazard).permit(:number_of_hazards, :final)
     end
   end
 end

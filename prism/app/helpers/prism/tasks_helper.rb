@@ -4,7 +4,7 @@ module Prism
       {
         "define" => NORMAL_RISK_DEFINE_STEPS.map(&:to_s),
         "identify" => NORMAL_RISK_IDENTIFY_STEPS.map(&:to_s),
-        "create" => NORMAL_RISK_CREATE_STEPS.map(&:to_s) - NORMAL_RISK_CREATE_STEPS_HIDDEN.map(&:to_s),
+        "create" => NORMAL_RISK_CREATE_STEPS.map(&:to_s),
         "evaluate" => NORMAL_RISK_EVALUATE_STEPS.map(&:to_s),
       }
     end

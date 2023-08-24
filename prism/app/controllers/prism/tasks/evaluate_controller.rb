@@ -20,6 +20,8 @@ module Prism
       case step
       when :confirm_overall_product_risk
         @harm_scenarios = @prism_risk_assessment.harm_scenarios
+      when :add_level_of_uncertainty_and_sensitivity_analysis
+        @prism_risk_assessment.assign_attributes(add_level_of_uncertainty_and_sensitivity_analysis_params)
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
@@ -56,6 +58,10 @@ module Prism
 
     def finish_wizard_path
       risk_assessment_tasks_path(@prism_risk_assessment)
+    end
+
+    def add_level_of_uncertainty_and_sensitivity_analysis_params
+      params.require(:risk_assessment).permit(:level_of_uncertainty, :sensitivity_analysis, :draft)
     end
   end
 end

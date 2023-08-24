@@ -10,8 +10,9 @@ module Prism
 
     def show
       case step
-      when :add_a_harm_scenario_and_probability_of_harm
+      when :add_steps_to_harm
         @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+      when :estimate_probability_of_harm
         @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
       end
 
@@ -20,16 +21,23 @@ module Prism
 
     def update
       case step
-      when :add_a_harm_scenario_and_probability_of_harm
-        @harm_scenario.assign_attributes(add_a_harm_scenario_and_probability_of_harm_params)
+      when :add_steps_to_harm
+        @harm_scenario.assign_attributes(add_steps_to_harm_params)
         # We have to save the harm scenario manually here since we need to build the steps
         # if it fails to save.
         unless @harm_scenario.save(context: step)
           @harm_scenario.harm_scenario_steps.build if @harm_scenario.harm_scenario_steps.blank?
+          return render_wizard
+        end
+      when :estimate_probability_of_harm
+        @harm_scenario.assign_attributes(estimate_probability_of_harm_params)
+        # We have to save the harm scenario manually here since we need to build the step
+        # evidences if it fails to save.
+        unless @harm_scenario.save(context: step)
           @harm_scenario.harm_scenario_steps.each { |hss| hss.build_harm_scenario_step_evidence if hss.harm_scenario_step_evidence.blank? }
           return render_wizard
         end
-      when :choose_hazard_type, :determine_severity_of_harm, :determine_severity_of_harm_casualties, :add_uncertainty_and_sensitivity_analysis, :check_your_harm_scenario
+      when :choose_hazard_type, :identify_who_might_be_harmed, :determine_severity_of_harm, :check_your_harm_scenario
         @harm_scenario.assign_attributes(send("#{step}_params"))
       end
 
@@ -90,20 +98,25 @@ module Prism
       params.require(:harm_scenario).permit(:hazard_type, :other_hazard_type, :description, :back_to, :draft)
     end
 
-    def add_a_harm_scenario_and_probability_of_harm_params
-      params.require(:harm_scenario).permit(:back_to, :draft, harm_scenario_steps_attributes: [:id, :_destroy, :description, :probability_type, :probability_decimal, :probability_frequency, :probability_evidence, :probability_evidence_description_limited, :probability_evidence_description_strong, { harm_scenario_step_evidence_attributes: %i[id evidence_file] }])
+    def identify_who_might_be_harmed_params
+      allowed_params = params
+        .require(:harm_scenario)
+        .permit(:product_aimed_at, :product_aimed_at_description, :draft, unintended_risks_for: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:unintended_risks_for].reject!(&:blank?)
+      allowed_params
+    end
+
+    def add_steps_to_harm_params
+      params.require(:harm_scenario).permit(:back_to, :draft, harm_scenario_steps_attributes: %i[id _destroy description])
     end
 
     def determine_severity_of_harm_params
-      params.require(:harm_scenario).permit(:severity, :back_to, :draft)
+      params.require(:harm_scenario).permit(:severity, :multiple_casualties, :back_to, :draft)
     end
 
-    def determine_severity_of_harm_casualties_params
-      params.require(:harm_scenario).permit(:multiple_casualties, :back_to, :draft)
-    end
-
-    def add_uncertainty_and_sensitivity_analysis_params
-      params.require(:harm_scenario).permit(:level_of_uncertainty, :sensitivity_analysis, :back_to, :draft)
+    def estimate_probability_of_harm_params
+      params.require(:harm_scenario).permit(:back_to, :draft, harm_scenario_steps_attributes: [:id, :probability_type, :probability_decimal, :probability_frequency, :probability_evidence, :probability_evidence_description_limited, :probability_evidence_description_strong, { harm_scenario_step_evidence_attributes: %i[id evidence_file] }])
     end
 
     def check_your_harm_scenario_params
