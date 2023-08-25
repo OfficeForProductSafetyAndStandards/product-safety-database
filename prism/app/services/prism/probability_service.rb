@@ -27,25 +27,48 @@ module Prism
       if probabilities.blank?
         return OpenStruct.new(
           probability: nil,
+          probability_decimal: nil,
           probability_human: "N/A",
         )
       end
 
       # Multiply all the probabilities together, transform into a frequency and round
       # since we don't want any decimal places
-      probability = (1.0 / probabilities.reduce(:*)).round
+      probability_decimal = probabilities.reduce(:*)
+      probability = (1.0 / probability_decimal).round
 
       # If probability is zero, return
       if probability.zero?
         return OpenStruct.new(
           probability: nil,
+          probability_decimal: nil,
           probability_human: "N/A",
         )
       end
 
       OpenStruct.new(
         probability:,
+        probability_decimal:,
         probability_human: "1 in #{ActiveSupport::NumberHelper.number_to_delimited(probability)}",
+      )
+    end
+
+    def self.combined_probability_of_harm(harm_scenarios:)
+      probabilities = harm_scenarios.map { |harm_scenario| overall_probability_of_harm(harm_scenario:) }
+      probability_decimal = probabilities.map(&:probability_decimal).sum
+
+      if probability_decimal.blank?
+        return OpenStruct.new(
+          probability: nil,
+          probability_decimal: nil,
+        )
+      end
+
+      probability = (1.0 / probability_decimal).round
+
+      OpenStruct.new(
+        probability:,
+        probability_decimal:,
       )
     end
   end

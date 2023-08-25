@@ -137,6 +137,22 @@ module Prism
       Prism::RiskMatrixService.risk_level(probability_frequency: overall_probability_of_harm(record).probability, severity_level: record.severity.to_sym)
     end
 
+    def highest_risk_level(harm_scenarios)
+      risk_levels = harm_scenarios.map do |harm_scenario|
+        Prism::RiskMatrixService.risk_level(
+          probability_frequency: Prism::ProbabilityService.overall_probability_of_harm(harm_scenario:).probability,
+          severity_level: harm_scenario.severity.to_sym
+        ).risk_level
+      end
+      Prism::RiskMatrixService.highest_risk_level(risk_levels:)
+    end
+
+    def combined_risk_level(harm_scenarios, items_in_use)
+      combined_probability = Prism::ProbabilityService.combined_probability_of_harm(harm_scenarios:).probability
+      risk_level = Prism::RiskMatrixService.risk_level(probability_frequency: combined_probability, severity_level: harm_scenarios.first.severity.to_sym).risk_level
+      Prism::RiskMatrixService.combined_risk_level(risk_level:, items_in_use:)
+    end
+
     def harm_scenario_step_summary(harm_scenario_step)
       file = harm_scenario_step.harm_scenario_step_evidence&.evidence_file
       [

@@ -56,6 +56,8 @@ en:
               invalid:
                 one: Complete all parts of the harm scenario
                 other: "Complete %{invalid} of %{count} harm scenarios"
+            overall_product_risk_methodology:
+              inclusion: Select whether to use the highest risk level or combine all risk levels
             level_of_uncertainty:
               inclusion: Select the level of uncertainty
             sensitivity_analysis:

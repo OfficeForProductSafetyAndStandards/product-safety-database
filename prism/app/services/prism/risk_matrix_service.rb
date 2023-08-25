@@ -51,20 +51,69 @@ module Prism
       },
     }.freeze
 
+    COMBINED_RISK_MATRIX = {
+      less_than_100000: {
+        low: "low",
+        medium: "medium",
+        high: "high",
+        serious: "serious",
+      },
+      from_100000_to_500000: {
+        low: "medium",
+        medium: "high",
+        high: "high",
+        serious: "serious",
+      },
+      from_500000_to_1000000: {
+        low: "medium",
+        medium: "high",
+        high: "serious",
+        serious: "serious",
+      },
+      more_than_1000000: {
+        low: "high",
+        medium: "serious",
+        high: "serious",
+        serious: "serious",
+      },
+    }.freeze
+
     def self.risk_level(probability_frequency:, severity_level:)
       risk_level = RISK_MATRIX[probability_frequency_band(probability_frequency:)]&.[](severity_level)
 
-      if risk_level
-        OpenStruct.new(
-          risk_level:,
-          risk_level_tag_html: risk_level_tag(risk_level:)
-        )
-      else
-        OpenStruct.new(
-          risk_level: nil,
-          risk_level_tag_html: risk_level_tag(risk_level: "unknown")
-        )
-      end
+      OpenStruct.new(
+        risk_level:,
+        risk_level_tag_html: risk_level_tag(risk_level:)
+      )
+    end
+
+    def self.highest_risk_level(risk_levels:)
+      highest_risk_level = case risk_levels
+                           in [*, "serious", *]
+                             "serious"
+                           in [*, "high", *]
+                             "high"
+                           in [*, "medium", *]
+                             "medium"
+                           in [*, "low", *]
+                             "low"
+                           else
+                             "unknown"
+                           end
+
+      OpenStruct.new(
+        risk_level: highest_risk_level,
+        risk_level_tag_html: risk_level_tag(risk_level: highest_risk_level)
+      )
+    end
+
+    def self.combined_risk_level(risk_level:, items_in_use:)
+      combined_risk_level = COMBINED_RISK_MATRIX[items_in_use_band(items_in_use:)]&.[](risk_level.to_sym)
+
+      OpenStruct.new(
+        risk_level: combined_risk_level,
+        risk_level_tag_html: risk_level_tag(risk_level: combined_risk_level)
+      )
     end
 
     private_class_method def self.probability_frequency_band(probability_frequency:)
@@ -93,6 +142,22 @@ module Prism
       end
     end
 
+    private_class_method def self.items_in_use_band(items_in_use:)
+      # The bands below overlap but the first case is returned.
+      return unless items_in_use.is_a?(Integer)
+
+      case items_in_use
+      when ...100_000
+        :less_than_100000
+      when 100_000..500_000
+        :from_100000_to_500000
+      when 500_000..1_000_000
+        :from_500000_to_1000000
+      else
+        :more_than_1000000
+      end
+    end
+
     private_class_method def self.risk_level_tag(risk_level:)
       component = case risk_level
                   when "low"
@@ -103,7 +168,7 @@ module Prism
                     GovukComponent::TagComponent.new(text: "High risk", colour: "orange")
                   when "serious"
                     GovukComponent::TagComponent.new(text: "Serious risk", colour: "red")
-                  when "unknown"
+                  else
                     GovukComponent::TagComponent.new(text: "Unknown risk", colour: "grey")
                   end
       component.render_in(ActionView::Base.new(ActionView::LookupContext.new([]), {}, nil))
