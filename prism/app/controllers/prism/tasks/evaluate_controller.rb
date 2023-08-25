@@ -11,6 +11,8 @@ module Prism
       case step
       when :confirm_overall_product_risk
         @harm_scenarios = @prism_risk_assessment.harm_scenarios
+        @identical_severity_levels = @harm_scenarios.map(&:severity).uniq.length <= 1
+        @items_in_use = @prism_risk_assessment.product_market_detail.total_products_sold
       end
 
       render_wizard
@@ -20,6 +22,9 @@ module Prism
       case step
       when :confirm_overall_product_risk
         @harm_scenarios = @prism_risk_assessment.harm_scenarios
+        @identical_severity_levels = @harm_scenarios.map(&:severity).uniq.length <= 1
+        @items_in_use = @prism_risk_assessment.product_market_detail.total_products_sold
+        @prism_risk_assessment.assign_attributes(confirm_overall_product_risk_params)
       when :add_level_of_uncertainty_and_sensitivity_analysis
         @prism_risk_assessment.assign_attributes(add_level_of_uncertainty_and_sensitivity_analysis_params)
       end
@@ -58,6 +63,10 @@ module Prism
 
     def finish_wizard_path
       risk_assessment_tasks_path(@prism_risk_assessment)
+    end
+
+    def confirm_overall_product_risk_params
+      params.require(:risk_assessment).permit(:overall_product_risk_methodology, :overall_product_risk_plus_label, :draft)
     end
 
     def add_level_of_uncertainty_and_sensitivity_analysis_params

@@ -43,17 +43,20 @@ module Prism
 
       @harm_scenario.tasks_status[step.to_s] = "completed"
 
-      if params[:draft] == "true" || params[:final] == "true"
+      if params[:draft] == "true" || params[:final] == "true" || params[:harm_scenario][:back_to] == "summary"
         # "Save as draft" or final save button of the section clicked.
         # Manually save, then finish the wizard.
         if @harm_scenario.save(context: step)
           @prism_risk_assessment.complete_create_section! if step == wizard_steps.last
-          redirect_to wizard_path(Wicked::FINISH_STEP)
+
+          if params[:harm_scenario][:back_to] == "summary"
+            redirect_to wizard_path(:check_your_harm_scenario)
+          else
+            redirect_to wizard_path(Wicked::FINISH_STEP)
+          end
         else
           render_wizard
         end
-      elsif params[:harm_scenario][:back_to] == "summary"
-        redirect_to wizard_path(:check_your_harm_scenario)
       else
         render_wizard(@harm_scenario, { context: step }, { harm_scenario_id: @harm_scenario.id })
       end

@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Update added fields to use the correct child index
-      el.innerHTML = el.innerHTML.replace(/-new-record-/g, '-' + el.dataset.index + '-')
+      if (el.innerHTML.indexOf('-new-record-') !== -1) {
+        el.innerHTML = el.innerHTML.replace(/-new-record-/g, '-' + el.dataset.index + '-')
+      }
     })
 
     // Re-init GOV.UK Frontend to pick up new form fields
