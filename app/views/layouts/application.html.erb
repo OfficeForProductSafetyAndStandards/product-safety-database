@@ -13,31 +13,27 @@
     <link rel="apple-touch-icon" sizes="167x167" href="<%= image_path("govuk-apple-touch-icon-167x167.png") %>" />
     <link rel="apple-touch-icon" sizes="152x152" href="<%= image_path("govuk-apple-touch-icon-152x152.png") %>" />
     <link rel="apple-touch-icon" href="<%= image_path("govuk-apple-touch-icon.png") %>" />
-
-    <%= javascript_include_tag "application" %>
-    <%= stylesheet_link_tag "application" %>
-
-    <%= csrf_meta_tags %>
-
     <meta property="og:image" content="<%= image_path("govuk-opengraph-image.png") %>" />
-
+    <%= javascript_include_tag "application", nonce: true %>
+    <%= stylesheet_link_tag "application" %>
+    <%= csrf_meta_tags %>
     <%= yield :other_head_tags %>
 
     <% if Rails.env.production? && analytics_cookies_accepted? %>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126364208-1"></script>
-      <script>
+      <%= javascript_include_tag "https://www.googletagmanager.com/gtag/js?id=UA-126364208-1", async: true, nonce: true %>
+      <%= javascript_tag nonce: true do %>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'UA-126364208-1');
-      </script>
+      <% end %>
     <% end %>
   </head>
 
   <body class="govuk-template__body app-body-class">
-    <script type="text/javascript">
+    <%= javascript_tag nonce: true do -%>
       document.body.className = ((document.body.className) ? document.body.className + " js-enabled" : "js-enabled");
-    </script>
+    <% end %>
 
     <a class="govuk-skip-link" href="#main-content">Skip to main content</a>
 
