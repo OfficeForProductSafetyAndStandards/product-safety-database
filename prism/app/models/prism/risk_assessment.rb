@@ -9,21 +9,28 @@ module Prism
     has_one :product_market_detail, autosave: true, dependent: :destroy
     has_one :product_hazard, autosave: true, dependent: :destroy
     has_many :harm_scenarios, autosave: true, dependent: :destroy
+    has_one :evaluation, autosave: true, dependent: :destroy
+
+    # This is used on the "Review the overall product risk level"
+    # page in case there are no other fields to make strong params
+    # work.
+    attribute :_dummy, :string
 
     enum risk_type: {
       "normal_risk" => "normal_risk",
       "serious_risk" => "serious_risk",
     }
 
-    enum level_of_uncertainty: {
-      "low" => "low",
-      "medium" => "medium",
-      "high" => "high",
-    }
-
     enum overall_product_risk_methodology: {
       "highest": "highest",
       "combined": "combined",
+    }
+
+    enum overall_product_risk_level: {
+      "low" => "low",
+      "medium" => "medium",
+      "high" => "high",
+      "serious" => "serious",
     }
 
     store_attribute :routing_questions, :less_than_serious_risk, :boolean
@@ -34,8 +41,6 @@ module Prism
     validates :assessor_name, :assessment_organisation, presence: true, on: %i[add_assessment_details add_evaluation_details]
     validate :check_all_harm_scenarios, on: :confirm_overall_product_risk
     validates :overall_product_risk_methodology, inclusion: %w[highest combined], if: -> { multiple_harm_scenarios_with_identical_severity_levels? }, on: :confirm_overall_product_risk
-    validates :level_of_uncertainty, inclusion: %w[low medium high], on: :add_level_of_uncertainty_and_sensitivity_analysis
-    validates :sensitivity_analysis, inclusion: [true, false], on: :add_level_of_uncertainty_and_sensitivity_analysis
 
     before_save :clear_serious_risk_rebuttable_factors
     before_save :clear_overall_product_risk_plus_label

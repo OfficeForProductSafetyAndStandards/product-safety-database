@@ -1,6 +1,25 @@
 {
   "en": {
     "prism": {
+      "evaluation": {
+        "estimated_products_in_use": {
+          "one": "estimated 1 product in use",
+          "other": "estimated %{items_in_use} products in use",
+          "zero": "unknown products in use"
+        },
+        "level_of_uncertainty": {
+          "high": "High level of uncertainty",
+          "low": "Low level of uncertainty",
+          "medium": "Medium level of uncertainty"
+        },
+        "multiple_casualties": {
+          "false": "No multiple casualties",
+          "true": "Yes"
+        },
+        "people_at_increased_risk": {
+          "false": "No"
+        }
+      },
       "harm_scenario_steps": {
         "probability_evidence": {
           "sole_judgement_or_estimation": "Sole judgement or estimation",
@@ -34,13 +53,6 @@
           "level_2": "Level 2",
           "level_3": "Level 3",
           "level_4": "Level 4"
-        }
-      },
-      "risk_assessment": {
-        "level_of_uncertainty": {
-          "high": "High",
-          "low": "Low",
-          "medium": "Medium"
         }
       },
       "tasks": {
@@ -97,11 +109,20 @@
                 "confirm_overall_product_risk": {
                   "title": "Review the overall product risk level"
                 },
+                "consider_perception_and_tolerability_of_the_risk": {
+                  "title": "Consider perception and tolerability of the risk"
+                },
+                "consider_the_nature_of_the_risk": {
+                  "title": "Consider the nature of the risk"
+                },
                 "review_and_submit_results_of_the_assessment": {
                   "title": "Review and submit results of the assessment"
                 },
                 "review_and_submit_results_of_the_evaluation": {
                   "title": "Review and submit results of the evaluation"
+                },
+                "risk_evaluation_outcome": {
+                  "title": "Risk evalation outcome"
                 }
               },
               "title": "Evaluate product risk and submit assessment"
