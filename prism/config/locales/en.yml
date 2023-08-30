@@ -153,6 +153,18 @@ en:
               inclusion: Select whether relevant action is planned or underway by another MSA or other organisation
             factors_to_take_into_account:
               inclusion: Select whether there are factors to take account of in relation to risk management decisions
+            other_hazards:
+              inclusion: Select whether the product has any other hazards that can and do cause harm
+            low_likelihood_high_severity:
+              inclusion: Select whether this is a low likelihood but high severity risk
+            risk_to_non_users:
+              inclusion: Select whether there is a risk to non-users
+            aimed_at_vulnerable_users:
+              inclusion: Select whether this is a type of product aimed at vulnerable users
+            designed_to_provide_protective_function:
+              inclusion: Select whether the product is designed to provide a protective function
+            user_control_over_risk:
+              inclusion: Select whether users can exert any control over the risk
   prism:
     tasks:
       task_list:
@@ -238,9 +250,9 @@ en:
         strong_empirical_evidence: Strong empirical evidence
     evaluation:
       estimated_products_in_use:
-        zero: unknown products in use
-        one: estimated 1 product in use
-        other: estimated %{items_in_use} products in use
+        zero: Unknown
+        one: Estimated 1 product in use
+        other: Estimated %{items_in_use} products in use
       level_of_uncertainty:
         low: Low level of uncertainty
         medium: Medium level of uncertainty
@@ -250,3 +262,6 @@ en:
         "false": "No multiple casualties"
       people_at_increased_risk:
         "false": "No"
+      risk_to_non_users:
+        "true": Non-users might be at risk
+        "false": Non-users might not be at risk

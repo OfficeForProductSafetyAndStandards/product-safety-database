@@ -1,0 +1,97 @@
+<% content_for :page_title, "Consider perception and tolerability of the risk" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @evaluation.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @evaluation, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Evaluate product risk and submit assessments</span>
+        Consider perception and tolerability of the risk
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">Overall product risk recorded in the assessment</p>
+        <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
+      <% end %>
+      <%=
+        f.govuk_collection_radio_buttons :other_hazards,
+        [
+          OpenStruct.new(id: true, name: "Yes"),
+          OpenStruct.new(id: false, name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?" },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_collection_radio_buttons :low_likelihood_high_severity,
+        [
+          OpenStruct.new(id: "yes", name: "Yes"),
+          OpenStruct.new(id: "no", name: "No"),
+          OpenStruct.new(id: "unknown", name: "Unknown")
+        ],
+        :id,
+        :name,
+        legend: { text: "Is this a low likelihood but high severity risk?" },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_collection_radio_buttons :risk_to_non_users,
+        [
+          OpenStruct.new(id: true, name: "Yes"),
+          OpenStruct.new(id: false, name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "Is there a risk to non-users?" },
+        hint: { text: question_hint_panel(risk_to_non_users).html_safe },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_collection_radio_buttons :aimed_at_vulnerable_users,
+        [
+          OpenStruct.new(id: "yes", name: "Yes"),
+          OpenStruct.new(id: "no", name: "No"),
+          OpenStruct.new(id: "unknown", name: "Unknown")
+        ],
+        :id,
+        :name,
+        legend: { text: "Is this a type of product aimed at vulnerable users?" },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_collection_radio_buttons :designed_to_provide_protective_function,
+        [
+          OpenStruct.new(id: "yes", name: "Yes"),
+          OpenStruct.new(id: "no", name: "No"),
+          OpenStruct.new(id: "unknown", name: "Unknown")
+        ],
+        :id,
+        :name,
+        legend: { text: "Is the product designed to provide a protective function?" },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_collection_radio_buttons :user_control_over_risk,
+        [
+          OpenStruct.new(id: true, name: "Yes"),
+          OpenStruct.new(id: false, name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "Can users exert any control over the risk?" },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_text_area :other_risk_perception_matters,
+        label: { text: "Are there other matters that will influence the way the risk is perceived?", size: "m" },
+        hint: { text: "Describe the other matters influencing perception of the risk." }
+      %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

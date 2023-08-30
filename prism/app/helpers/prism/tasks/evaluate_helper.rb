@@ -1,7 +1,7 @@
 module Prism
   module Tasks::EvaluateHelper
     def overall_product_risk_level
-      return unless @prism_risk_assessment && @harm_scenarios && @items_in_use
+      return unless @prism_risk_assessment && @harm_scenarios
 
       if @harm_scenarios.length == 1
         overall_risk_level(@harm_scenarios.first)
@@ -22,8 +22,6 @@ module Prism
     end
 
     def estimated_products_in_use
-      return unless @items_in_use
-
       I18n.t("prism.evaluation.estimated_products_in_use", items_in_use: ActiveSupport::NumberHelper.number_to_delimited(@items_in_use), count: @items_in_use || 0)
     end
 
@@ -43,6 +41,12 @@ module Prism
       return unless @harm_scenarios
 
       @harm_scenarios.map(&:product_aimed_at_description).reject(&:blank?).join(", ").presence || I18n.t("prism.evaluation.people_at_increased_risk.false")
+    end
+
+    def risk_to_non_users
+      return unless @harm_scenarios
+
+      I18n.t("prism.evaluation.risk_to_non_users.#{@harm_scenarios.map(&:unintended_risks_for).flatten.length.positive?}")
     end
   end
 end
