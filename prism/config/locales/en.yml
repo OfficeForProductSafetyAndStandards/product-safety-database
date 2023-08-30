@@ -165,6 +165,8 @@ en:
               inclusion: Select whether the product is designed to provide a protective function
             user_control_over_risk:
               inclusion: Select whether users can exert any control over the risk
+            risk_tolerability:
+              inclusion: Select whether the risk is tolerable or intolerable
   prism:
     tasks:
       task_list:
