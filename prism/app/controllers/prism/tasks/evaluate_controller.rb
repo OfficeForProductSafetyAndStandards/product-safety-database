@@ -3,6 +3,9 @@ module Prism
     include Wicked::Wizard
 
     before_action :prism_risk_assessment
+    before_action :harm_scenarios
+    before_action :items_in_use
+    before_action :evaluation, except: %i[confirm_overall_product_risk add_level_of_uncertainty_and_sensitivity_analysis]
     before_action :set_wizard_steps
     before_action :setup_wizard
     before_action :validate_step
@@ -10,7 +13,9 @@ module Prism
     def show
       case step
       when :confirm_overall_product_risk
-        @harm_scenarios = @prism_risk_assessment.harm_scenarios
+        @identical_severity_levels = @harm_scenarios.map(&:severity).uniq.length <= 1
+      when :add_level_of_uncertainty_and_sensitivity_analysis
+        @evaluation = @prism_risk_assessment.evaluation || @prism_risk_assessment.build_evaluation
       end
 
       render_wizard
@@ -19,7 +24,13 @@ module Prism
     def update
       case step
       when :confirm_overall_product_risk
-        @harm_scenarios = @prism_risk_assessment.harm_scenarios
+        @identical_severity_levels = @harm_scenarios.map(&:severity).uniq.length <= 1
+        @prism_risk_assessment.assign_attributes(confirm_overall_product_risk_params)
+      when :add_level_of_uncertainty_and_sensitivity_analysis
+        @evaluation = @prism_risk_assessment.evaluation || @prism_risk_assessment.build_evaluation
+        @evaluation.assign_attributes(add_level_of_uncertainty_and_sensitivity_analysis_params)
+      when :consider_the_nature_of_the_risk, :consider_perception_and_tolerability_of_the_risk
+        @evaluation.assign_attributes(send("#{step}_params"))
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
@@ -41,7 +52,19 @@ module Prism
   private
 
     def prism_risk_assessment
-      @prism_risk_assessment ||= Prism::RiskAssessment.find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+      @prism_risk_assessment ||= Prism::RiskAssessment.includes(:product_market_detail, :harm_scenarios, :evaluation).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+    end
+
+    def harm_scenarios
+      @harm_scenarios ||= @prism_risk_assessment.harm_scenarios
+    end
+
+    def items_in_use
+      @items_in_use ||= @prism_risk_assessment.product_market_detail.total_products_sold
+    end
+
+    def evaluation
+      @evaluation ||= @prism_risk_assessment.evaluation
     end
 
     def set_wizard_steps
@@ -56,6 +79,25 @@ module Prism
 
     def finish_wizard_path
       risk_assessment_tasks_path(@prism_risk_assessment)
+    end
+
+    def confirm_overall_product_risk_params
+      params.require(:risk_assessment).permit(:overall_product_risk_methodology, :overall_product_risk_plus_label, :_dummy, :draft)
+    end
+
+    def add_level_of_uncertainty_and_sensitivity_analysis_params
+      params.require(:evaluation).permit(:level_of_uncertainty, :sensitivity_analysis, :draft)
+    end
+
+    def consider_the_nature_of_the_risk_params
+      allowed_params = params.require(:evaluation).permit(:number_of_products_expected_to_change, :uncertainty_level_implications_for_risk_management, :comparable_risk_level, :multiple_casualties, :significant_risk_differential, :people_at_increased_risk, :relevant_action_by_others, :factors_to_take_into_account, :draft, other_types_of_harm: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:other_types_of_harm].reject!(&:blank?)
+      allowed_params
+    end
+
+    def consider_perception_and_tolerability_of_the_risk_params
+      params.require(:evaluation).permit(:other_hazards, :low_likelihood_high_severity, :risk_to_non_users, :aimed_at_vulnerable_users, :designed_to_provide_protective_function, :user_control_over_risk, :other_risk_perception_matters, :draft)
     end
   end
 end

@@ -9,10 +9,28 @@ module Prism
     has_one :product_market_detail, autosave: true, dependent: :destroy
     has_one :product_hazard, autosave: true, dependent: :destroy
     has_many :harm_scenarios, autosave: true, dependent: :destroy
+    has_one :evaluation, autosave: true, dependent: :destroy
+
+    # This is used on the "Review the overall product risk level"
+    # page in case there are no other fields to make strong params
+    # work.
+    attribute :_dummy, :string
 
     enum risk_type: {
       "normal_risk" => "normal_risk",
       "serious_risk" => "serious_risk",
+    }
+
+    enum overall_product_risk_methodology: {
+      "highest": "highest",
+      "combined": "combined",
+    }
+
+    enum overall_product_risk_level: {
+      "low" => "low",
+      "medium" => "medium",
+      "high" => "high",
+      "serious" => "serious",
     }
 
     store_attribute :routing_questions, :less_than_serious_risk, :boolean
@@ -22,8 +40,11 @@ module Prism
     validates :serious_risk_rebuttable_factors, presence: true, if: -> { less_than_serious_risk }, on: :serious_risk_rebuttable
     validates :assessor_name, :assessment_organisation, presence: true, on: %i[add_assessment_details add_evaluation_details]
     validate :check_all_harm_scenarios, on: :confirm_overall_product_risk
+    validates :overall_product_risk_methodology, inclusion: %w[highest combined], if: -> { multiple_harm_scenarios_with_identical_severity_levels? }, on: :confirm_overall_product_risk
 
     before_save :clear_serious_risk_rebuttable_factors
+    before_save :clear_overall_product_risk_plus_label
+    before_save :clear_overall_product_risk_methodology
 
     aasm column: :state, whiny_transitions: false do
       state :draft, initial: true
@@ -76,8 +97,24 @@ module Prism
       errors.add(:harm_scenarios, :invalid, invalid: harm_scenario_statuses.tally[false], count: harm_scenario_statuses.length) if harm_scenario_statuses.include?(false)
     end
 
+    def multiple_harm_scenarios?
+      harm_scenarios.length > 1
+    end
+
+    def multiple_harm_scenarios_with_identical_severity_levels?
+      multiple_harm_scenarios? && harm_scenarios.map(&:severity).uniq.length <= 1
+    end
+
     def clear_serious_risk_rebuttable_factors
       self.serious_risk_rebuttable_factors = nil unless less_than_serious_risk
+    end
+
+    def clear_overall_product_risk_plus_label
+      self.overall_product_risk_plus_label = nil unless multiple_harm_scenarios?
+    end
+
+    def clear_overall_product_risk_methodology
+      self.overall_product_risk_methodology = nil unless multiple_harm_scenarios_with_identical_severity_levels?
     end
   end
 end

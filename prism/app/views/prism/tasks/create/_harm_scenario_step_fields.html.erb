@@ -5,53 +5,5 @@
   <% step_hint = t("prism.harm_scenario_steps.step_#{f.index}_hint", default: "&nbsp;").html_safe %>
   <% step_hint_display = step_hint == "&nbsp;" ? "display: none;" : "" %>
   <%= f.govuk_text_area :description, label: { text: "Step description", size: "s" }, hint: { text: step_hint, class: "opss-step-hint", style: step_hint_display } %>
-  <%= f.govuk_radio_buttons_fieldset :probability_type, legend: { text: "In what format would you like to express the probability of harm?", size: "s" } do %>
-    <%= f.govuk_radio_button :probability_type, "decimal", label: { text: "Decimal number" }, hint: { text: "For example, 0.25" }, link_errors: true do %>
-      <%= f.govuk_number_field :probability_decimal, label: { text: "Enter the probability as a decimal number." }, width: 4, class: %w[opss-step-probability-decimal] %>
-    <% end %>
-    <%= f.govuk_radio_button :probability_type, "frequency", label: { text: "Frequency number" }, hint: { text: "For example, 1 in 1000" } do %>
-      <%= f.govuk_number_field :probability_frequency, label: { text: "Enter the probability as a frequency number." }, width: 4, prefix_text: "1 in", class: %w[opss-step-probability-frequency] %>
-    <% end %>
-  <% end %>
-  <%= govuk_details(summary_text: "Help with defining probability of harm") do %>
-    <p>
-      Identifying a reliable probability can be challenging, and the starting point should be to obtain and consider any relevant empirical evidence that can inform probability decisions.
-    </p>
-    <p>
-      Some degree of probability estimation by the assessor will therefore nearly always be required, and will often be the sole or main means of determining probabilities.
-    </p>
-    <p>
-      To help with defining steps to harm and probability of harm please refer to risk assessment case studies.
-    </p>
-    <p>
-      Please note that the detail of the risk assessments including the probabilities highlighted should not be transferred to other assessments. They are provided primarily to illustrate the application of <abbr title="Product Safety Risk Assessment Methodology">PRISM</abbr> and not as an <abbr title="Office for Product Safety and Standards">OPSS</abbr> position on the issues featured.
-    </p>
-    <p>
-      <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1122454/prism-worked-example-car-seat.pdf" class="govuk-link">Risk assessment example: non-compliant car seat (PDF, 182 KB, 5 pages)</a>
-    </p>
-    <p>
-      <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1122457/prism-worked-example-electric-heater.pdf" class="govuk-link">Risk assessment example: non-compliant room / space heater (PDF, 182 KB, 6 pages)</a>
-    </p>
-    <p>
-      <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1127314/prism-worked-example-remote-control-for-lighting-chain.pdf" class="govuk-link">Risk assessment example: non-compliant remote control for lighting chain (PDF, 184 KB, 5 pages)</a>
-    </p>
-  <% end %>
-  <%= f.govuk_radio_buttons_fieldset :probability_evidence, legend: { text: "How did you decide on the probability of harm?", size: "s" } do %>
-    <%= f.govuk_radio_button :probability_evidence, "sole_judgement_or_estimation", label: { text: "Sole judgement or estimation" }, link_errors: true %>
-    <%= f.govuk_radio_button :probability_evidence, "some_limited_empirical_evidence", label: { text: "Some limited empirical evidence" } do %>
-      <%= f.govuk_text_area :probability_evidence_description_limited, label: { text: "Describe the evidence including any links to reference materials." } %>
-      <%= f.fields_for :harm_scenario_step_evidence do |ef| %>
-        <%= ef.govuk_file_field :evidence_file, label: { text: "Attach a document in support of your decision." }, hint: { text: "Acceptable file formats: pdf, Word, Excel, PowerPoint, jpeg, gif and png." }, accept: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.gif,.png" %>
-        <%= render partial: "attachment", locals: { file: ef.object.evidence_file } %>
-      <% end %>
-    <% end %>
-    <%= f.govuk_radio_button :probability_evidence, "strong_empirical_evidence", label: { text: "Strong empirical evidence" } do %>
-      <%= f.govuk_text_area :probability_evidence_description_strong, label: { text: "Describe the evidence including any links to reference materials." } %>
-      <%= f.fields_for :harm_scenario_step_evidence do |ef| %>
-        <%= ef.govuk_file_field :evidence_file, label: { text: "Attach a document in support of your decision." }, hint: { text: "Acceptable file formats: pdf, Word, Excel, PowerPoint, jpeg, gif and png." }, accept: ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.gif,.png" %>
-        <%= render partial: "attachment", locals: { file: ef.object.evidence_file } %>
-      <% end %>
-    <% end %>
-  <% end %>
   <%= f.hidden_field :_destroy %>
 </div>

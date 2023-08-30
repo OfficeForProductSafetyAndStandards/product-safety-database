@@ -1,6 +1,29 @@
 {
   "en": {
     "prism": {
+      "evaluation": {
+        "estimated_products_in_use": {
+          "one": "Estimated 1 product in use",
+          "other": "Estimated %{items_in_use} products in use",
+          "zero": "Unknown"
+        },
+        "level_of_uncertainty": {
+          "high": "High level of uncertainty",
+          "low": "Low level of uncertainty",
+          "medium": "Medium level of uncertainty"
+        },
+        "multiple_casualties": {
+          "false": "No multiple casualties",
+          "true": "Yes"
+        },
+        "people_at_increased_risk": {
+          "false": "No"
+        },
+        "risk_to_non_users": {
+          "false": "Non-users might not be at risk",
+          "true": "Non-users might be at risk"
+        }
+      },
       "harm_scenario_steps": {
         "probability_evidence": {
           "sole_judgement_or_estimation": "Sole judgement or estimation",
@@ -25,10 +48,9 @@
           "size_and_shape": "Size and shape",
           "thermal": "Thermal"
         },
-        "level_of_uncertainty": {
-          "high": "High",
-          "low": "Low",
-          "medium": "Medium"
+        "product_aimed_at": {
+          "general_population": "General population",
+          "particular_group_of_users": "Particular group of users"
         },
         "severity": {
           "level_1": "Level 1",
@@ -37,22 +59,13 @@
           "level_4": "Level 4"
         }
       },
-      "product_hazard": {
-        "product_aimed_at": {
-          "general_population": "General population",
-          "particular_group_of_users": "Particular group of users"
-        }
-      },
       "tasks": {
         "task_list": {
           "sections": {
             "create": {
               "tasks": {
-                "add_a_harm_scenario_and_probability_of_harm": {
-                  "title": "Add a harm scenario and probability of harm"
-                },
-                "add_uncertainty_and_sensitivity_analysis": {
-                  "title": "Add uncertainty and sensitivity analysis"
+                "add_steps_to_harm": {
+                  "title": "Add steps to harm"
                 },
                 "check_your_harm_scenario": {
                   "title": "Check your harm scenario"
@@ -62,6 +75,12 @@
                 },
                 "determine_severity_of_harm": {
                   "title": "Determine severity of harm"
+                },
+                "estimate_probability_of_harm": {
+                  "title": "Estimate probability of harm"
+                },
+                "identify_who_might_be_harmed": {
+                  "title": "Identify who might be harmed"
                 }
               },
               "title": "Create product harm scenarios"
@@ -85,28 +104,40 @@
             },
             "evaluate": {
               "tasks": {
+                "add_level_of_uncertainty_and_sensitivity_analysis": {
+                  "title": "Add level of uncertainty and sensitivity analysis"
+                },
                 "complete_product_risk_evaluation": {
                   "title": "Complete product risk evaluation"
                 },
                 "confirm_overall_product_risk": {
-                  "title": "Determine overall risk level of harm scenarios"
+                  "title": "Review the overall product risk level"
+                },
+                "consider_perception_and_tolerability_of_the_risk": {
+                  "title": "Consider perception and tolerability of the risk"
+                },
+                "consider_the_nature_of_the_risk": {
+                  "title": "Consider the nature of the risk"
                 },
                 "review_and_submit_results_of_the_assessment": {
                   "title": "Review and submit results of the assessment"
                 },
                 "review_and_submit_results_of_the_evaluation": {
                   "title": "Review and submit results of the evaluation"
+                },
+                "risk_evaluation_outcome": {
+                  "title": "Risk evalation outcome"
                 }
               },
               "title": "Evaluate product risk and submit assessment"
             },
             "identify": {
               "tasks": {
-                "add_a_number_of_hazards_and_subjects_of_harm": {
-                  "title": "Add a number of hazards and subjects of harm"
+                "add_a_number_of_hazards": {
+                  "title": "Add a number of hazards"
                 }
               },
-              "title": "Identify product hazards and subjects of harm"
+              "title": "Identify product hazards"
             }
           }
         }

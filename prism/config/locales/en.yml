@@ -56,6 +56,10 @@ en:
               invalid:
                 one: Complete all parts of the harm scenario
                 other: "Complete %{invalid} of %{count} harm scenarios"
+            overall_product_risk_methodology:
+              inclusion: Select whether to use the highest risk level or combine all risk levels
+            overall_product_risk_level:
+              inclusion: The overall product risk level must be low, medium, high or serious
         prism/product_market_detail:
           attributes:
             selling_organisation:
@@ -75,12 +79,6 @@ en:
           attributes:
             number_of_hazards:
               inclusion: Select the number of hazards identified
-            product_aimed_at:
-              inclusion: Select who the product is aimed at
-            product_aimed_at_description:
-              blank: Enter a description of the particular group of users
-            unintended_risks_for:
-              inclusion: Select who else might be at risk
         prism/harm_scenario:
           attributes:
             hazard_type:
@@ -89,16 +87,18 @@ en:
               blank: Enter the hazard type
             description:
               blank: Enter a hazard description
+            product_aimed_at:
+              inclusion: Select who the product is aimed at
+            product_aimed_at_description:
+              blank: Enter a description of the particular group of users
+            unintended_risks_for:
+              inclusion: Select who else might be at risk
             harm_scenario_steps:
               blank: Enter at least one step
             severity:
               inclusion: Select a severity level
             multiple_casualties:
               inclusion: Select whether the harm can result in multiple casualties
-            level_of_uncertainty:
-              inclusion: Select the level of uncertainty
-            sensitivity_analysis:
-              inclusion: Select whether sensitivity analysis has been undertaken
         prism/harm_scenario_step:
           attributes:
             description:
@@ -129,6 +129,42 @@ en:
               blank: Attach a document in support of your decision
               content_type_invalid: Attach a document in a valid format
               file_size_out_of_range: Attach a document smaller than 30MB
+        prism/evaluation:
+          attributes:
+            level_of_uncertainty:
+              inclusion: Select the level of uncertainty
+            sensitivity_analysis:
+              inclusion: Select whether sensitivity analysis has been undertaken
+            other_types_of_harm:
+              inclusion: Select other types of harm the hazard could cause
+            number_of_products_expected_to_change:
+              inclusion: Select whether the number of products estimated to be in use is expected to change
+            uncertainty_level_implications_for_risk_management:
+              inclusion: Select whether the uncertainty level has implications for risk management decisions
+            comparable_risk_level:
+              inclusion: Select how the risk level compares to that of comparable products
+            multiple_casualties:
+              inclusion: Select whether there is potential for multiple casualties in a single incident
+            significant_risk_differential:
+              inclusion: Select whether there is a significant risk differential
+            people_at_increased_risk:
+              inclusion: Select whether people are at increased risk
+            relevant_action_by_others:
+              inclusion: Select whether relevant action is planned or underway by another MSA or other organisation
+            factors_to_take_into_account:
+              inclusion: Select whether there are factors to take account of in relation to risk management decisions
+            other_hazards:
+              inclusion: Select whether the product has any other hazards that can and do cause harm
+            low_likelihood_high_severity:
+              inclusion: Select whether this is a low likelihood but high severity risk
+            risk_to_non_users:
+              inclusion: Select whether there is a risk to non-users
+            aimed_at_vulnerable_users:
+              inclusion: Select whether this is a type of product aimed at vulnerable users
+            designed_to_provide_protective_function:
+              inclusion: Select whether the product is designed to provide a protective function
+            user_control_over_risk:
+              inclusion: Select whether users can exert any control over the risk
   prism:
     tasks:
       task_list:
@@ -145,38 +181,44 @@ en:
               add_details_about_products_in_use_and_safety:
                 title: Add details about products in use and safety
           identify:
-            title: Identify product hazards and subjects of harm
+            title: Identify product hazards
             tasks:
-              add_a_number_of_hazards_and_subjects_of_harm:
-                title: Add a number of hazards and subjects of harm
+              add_a_number_of_hazards:
+                title: Add a number of hazards
           create:
             title: Create product harm scenarios
             tasks:
               choose_hazard_type:
                 title: Choose hazard type
-              add_a_harm_scenario_and_probability_of_harm:
-                title: Add a harm scenario and probability of harm
+              identify_who_might_be_harmed:
+                title: Identify who might be harmed
+              add_steps_to_harm:
+                title: Add steps to harm
               determine_severity_of_harm:
                 title: Determine severity of harm
-              add_uncertainty_and_sensitivity_analysis:
-                title: Add uncertainty and sensitivity analysis
+              estimate_probability_of_harm:
+                title: Estimate probability of harm
               check_your_harm_scenario:
                 title: Check your harm scenario
           evaluate:
             title: Evaluate product risk and submit assessment
             tasks:
               confirm_overall_product_risk:
-                title: Determine overall risk level of harm scenarios
+                title: Review the overall product risk level
+              add_level_of_uncertainty_and_sensitivity_analysis:
+                title: Add level of uncertainty and sensitivity analysis
+              consider_the_nature_of_the_risk:
+                title: Consider the nature of the risk
+              consider_perception_and_tolerability_of_the_risk:
+                title: Consider perception and tolerability of the risk
+              risk_evaluation_outcome:
+                title: Risk evalation outcome
               complete_product_risk_evaluation:
                 title: Complete product risk evaluation
               review_and_submit_results_of_the_assessment:
                 title: Review and submit results of the assessment
               review_and_submit_results_of_the_evaluation:
                 title: Review and submit results of the evaluation
-    product_hazard:
-      product_aimed_at:
-        particular_group_of_users: Particular group of users
-        general_population: General population
     harm_scenarios:
       hazard_types:
         mechanical: Mechanical
@@ -190,15 +232,14 @@ en:
         chemical: Chemical
         lack_of_protection: Lack of protection
         other: Other
+      product_aimed_at:
+        particular_group_of_users: Particular group of users
+        general_population: General population
       severity:
         level_1: Level 1
         level_2: Level 2
         level_3: Level 3
         level_4: Level 4
-      level_of_uncertainty:
-        low: Low
-        medium: Medium
-        high: High
     harm_scenario_steps:
       step_0_hint: Step 1 should cover the existence of a hazard which can foreseeably cause harm during the lifetime of the product. For example, the car seat is occupied by an infant while the vehicle is in use.
       step_1_hint: Step 2 should describe how the user (and/or other subjects) becomes exposed to risk. For example, the vehicle containing the seat/child is involved in a frontal collision of sufficient magnitude that the protection offered by the seat is necessary.
@@ -207,3 +248,20 @@ en:
         sole_judgement_or_estimation: Sole judgement or estimation
         some_limited_empirical_evidence: Some limited empirical evidence
         strong_empirical_evidence: Strong empirical evidence
+    evaluation:
+      estimated_products_in_use:
+        zero: Unknown
+        one: Estimated 1 product in use
+        other: Estimated %{items_in_use} products in use
+      level_of_uncertainty:
+        low: Low level of uncertainty
+        medium: Medium level of uncertainty
+        high: High level of uncertainty
+      multiple_casualties:
+        "true": "Yes"
+        "false": "No multiple casualties"
+      people_at_increased_risk:
+        "false": "No"
+      risk_to_non_users:
+        "true": Non-users might be at risk
+        "false": Non-users might not be at risk

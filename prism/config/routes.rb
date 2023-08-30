@@ -40,6 +40,6 @@ Prism::Engine.routes.draw do
   end
 
   scope "/api" do
-    get "overall-probability-of-harm", to: "api#overall_probability_of_harm"
+    get "overall-probability-of-harm-and-risk-level", to: "api#overall_probability_of_harm_and_risk_level"
   end
 end

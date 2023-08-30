@@ -1,0 +1,48 @@
+<% content_for :page_title, "Add level of uncertainty and sensitivity analysis" %>
+<% @back_link_href = risk_assessment_tasks_path(@prism_risk_assessment) %>
+<% @errors = @evaluation.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @evaluation, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Evaluate product risk and submit assessments</span>
+        Add level of uncertainty and sensitivity analysis
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">Overall product risk recorded in the assessment</p>
+        <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
+      <% end %>
+      <%=
+        f.govuk_collection_radio_buttons :level_of_uncertainty,
+        [
+          OpenStruct.new(id: "low", name: "Low"),
+          OpenStruct.new(id: "medium", name: "Medium"),
+          OpenStruct.new(id: "high", name: "High")
+        ],
+        :id,
+        :name,
+        legend: { text: "What is the level of uncertainty associated with the risk assessment?" },
+        hint: { text: "Every risk assessment that involves some degree of estimation will come with an associated degree of uncertainty; this is normal and does not in itself mean that the risk assessment is flawed." },
+        bold_labels: false
+      %>
+      <%=
+        f.govuk_collection_radio_buttons :sensitivity_analysis,
+        [
+          OpenStruct.new(id: true, name: "Yes"),
+          OpenStruct.new(id: false, name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "Has sensitivity analysis been undertaken?" },
+        hint: { text: "The implications of the uncertainty can be considered by undertaking a sensitivity analysis. For example, where there is uncertainty surrounding one or more of the probabilities within a harm scenario, then different probabilities can be applied (which can be higher, lower, or both than the orignal figures used) to fairly reflect the extent of the uncertainty." },
+        bold_labels: false,
+        inline: true
+      %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

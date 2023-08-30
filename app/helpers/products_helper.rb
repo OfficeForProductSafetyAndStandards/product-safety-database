@@ -95,8 +95,8 @@ module ProductsHelper
 
   def items_for_authenticity(product_form)
     items = [
-      { text: "Yes",    value: "counterfeit" },
-      { text: "No",     value: "genuine" }
+      { text: "Yes", value: "counterfeit" },
+      { text: "No", value: "genuine" }
     ]
 
     return items if product_form.authenticity.blank?
@@ -106,8 +106,8 @@ module ProductsHelper
 
   def items_for_before_2021_radio(product_form)
     items = [
-      { text: "Yes",    value: "before_2021" },
-      { text: "No",     value: "on_or_after_2021" },
+      { text: "Yes", value: "before_2021" },
+      { text: "No", value: "on_or_after_2021" },
       { text: "Unable to ascertain", value: "unknown_date" }
     ]
     return items if product_form.when_placed_on_market.blank?
@@ -116,12 +116,14 @@ module ProductsHelper
   end
 
   def options_for_country_of_origin(countries, product_form)
-    countries.map do |country|
+    options = [{ text: "Unknown", value: nil }]
+    options << countries.map do |country|
       text = country[0]
       option = { text:, value: country[1] }
       option[:selected] = true if product_form.country_of_origin == text
       option
     end
+    options.flatten
   end
 
 private

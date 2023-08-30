@@ -87,7 +87,7 @@ RSpec.feature "PRISM tasks", type: :feature do
         prism_risk_assessment.tasks_status["add_assessment_details"] = "completed"
         prism_risk_assessment.tasks_status["search_or_add_a_new_product"] = "completed"
         prism_risk_assessment.tasks_status["add_details_about_products_in_use_and_safety"] = "completed"
-        prism_risk_assessment.tasks_status["add_a_number_of_hazards_and_subjects_of_harm"] = "completed"
+        prism_risk_assessment.tasks_status["add_a_number_of_hazards"] = "completed"
         prism_risk_assessment.state = "identify_completed"
         prism_risk_assessment.save!
       end
@@ -102,14 +102,15 @@ RSpec.feature "PRISM tasks", type: :feature do
 
         click_button "Save and continue"
 
+        choose "General population"
+
+        click_button "Save and continue"
+
         click_button "Save and continue"
 
         expect(page).to have_text("Enter at least one step")
 
         fill_in "Step description", with: "Test description"
-        choose "Decimal number"
-        fill_in "Enter the probability as a decimal number.", with: "0.5"
-        choose "Sole judgement or estimation"
 
         # TODO(ruben): enable JavaScript to allow testing the addition of multiple steps
 

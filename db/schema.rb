@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_29_123357) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -292,6 +292,32 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "prism_evaluations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "aimed_at_vulnerable_users"
+    t.string "comparable_risk_level"
+    t.datetime "created_at", null: false
+    t.string "designed_to_provide_protective_function"
+    t.boolean "factors_to_take_into_account"
+    t.string "level_of_uncertainty"
+    t.string "low_likelihood_high_severity"
+    t.boolean "multiple_casualties"
+    t.string "number_of_products_expected_to_change"
+    t.boolean "other_hazards"
+    t.text "other_risk_perception_matters"
+    t.string "other_types_of_harm", default: [], array: true
+    t.boolean "people_at_increased_risk"
+    t.string "relevant_action_by_others"
+    t.uuid "risk_assessment_id"
+    t.boolean "risk_to_non_users"
+    t.string "risk_tolerability"
+    t.boolean "sensitivity_analysis"
+    t.string "significant_risk_differential"
+    t.boolean "uncertainty_level_implications_for_risk_management"
+    t.datetime "updated_at", null: false
+    t.boolean "user_control_over_risk"
+    t.index ["risk_assessment_id"], name: "index_prism_evaluations_on_risk_assessment_id"
+  end
+
   create_table "prism_harm_scenario_step_evidences", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "harm_scenario_step_id"
@@ -317,13 +343,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "hazard_type"
-    t.string "level_of_uncertainty"
     t.boolean "multiple_casualties"
     t.string "other_hazard_type"
+    t.string "product_aimed_at"
+    t.string "product_aimed_at_description"
     t.uuid "risk_assessment_id"
-    t.boolean "sensitivity_analysis"
     t.string "severity"
     t.json "tasks_status", default: {}
+    t.string "unintended_risks_for", default: [], array: true
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_harm_scenarios_on_risk_assessment_id"
   end
@@ -331,10 +358,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
   create_table "prism_product_hazards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "number_of_hazards"
-    t.string "product_aimed_at"
-    t.string "product_aimed_at_description"
     t.uuid "risk_assessment_id"
-    t.string "unintended_risks_for", default: [], array: true
     t.datetime "updated_at", null: false
     t.index ["risk_assessment_id"], name: "index_prism_product_hazards_on_risk_assessment_id"
   end
@@ -374,6 +398,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_094750) do
     t.string "assessor_name"
     t.datetime "created_at", null: false
     t.uuid "created_by_user_id"
+    t.string "overall_product_risk_level"
+    t.string "overall_product_risk_methodology"
+    t.string "overall_product_risk_plus_label"
     t.string "risk_type"
     t.jsonb "routing_questions"
     t.string "serious_risk_rebuttable_factors"
