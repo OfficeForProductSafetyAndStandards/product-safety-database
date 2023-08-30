@@ -108,7 +108,7 @@ module Prism
     end
 
     def self.combined_risk_level(risk_level:, items_in_use:)
-      combined_risk_level = COMBINED_RISK_MATRIX[items_in_use_band(items_in_use:)]&.[](risk_level.to_sym)
+      combined_risk_level = items_in_use.present? ? COMBINED_RISK_MATRIX[items_in_use_band(items_in_use:)]&.[](risk_level.to_sym) : risk_level
 
       OpenStruct.new(
         risk_level: combined_risk_level,
