@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Product owner contact details", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Product owner contact details", :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
   let(:product) { create(:product, subcategory: "Lamp", owning_team_id: nil) }
   let(:first_investigation) { create(:allegation, creator: user) }
