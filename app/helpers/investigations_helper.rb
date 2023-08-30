@@ -70,7 +70,7 @@ module InvestigationsHelper
                               @search.case_owner_is_someone_else_id
                             end
       else
-        wheres[:_not] = { owner_id: user.team.users.pluck(:id) }
+        wheres[:_not] = { owner_id: user.id }
       end
     end
 
