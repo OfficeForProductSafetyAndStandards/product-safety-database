@@ -36,6 +36,14 @@ module RedactedExport
       self[table].uniq!
     end
 
+    def with_all_tables
+      ActiveRecord::Base.connection.tables.map do |table|
+        self[table] ||= []
+      end
+
+      self
+    end
+
     def to_sql
       io = StringIO.new
       io.puts <<~SQL_OUTPUT
