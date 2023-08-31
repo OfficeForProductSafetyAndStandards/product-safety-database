@@ -58,10 +58,8 @@ en:
                 other: "Complete %{invalid} of %{count} harm scenarios"
             overall_product_risk_methodology:
               inclusion: Select whether to use the highest risk level or combine all risk levels
-            level_of_uncertainty:
-              inclusion: Select the level of uncertainty
-            sensitivity_analysis:
-              inclusion: Select whether sensitivity analysis has been undertaken
+            overall_product_risk_level:
+              inclusion: The overall product risk level must be low, medium, high or serious
         prism/product_market_detail:
           attributes:
             selling_organisation:
@@ -131,6 +129,44 @@ en:
               blank: Attach a document in support of your decision
               content_type_invalid: Attach a document in a valid format
               file_size_out_of_range: Attach a document smaller than 30MB
+        prism/evaluation:
+          attributes:
+            level_of_uncertainty:
+              inclusion: Select the level of uncertainty
+            sensitivity_analysis:
+              inclusion: Select whether sensitivity analysis has been undertaken
+            other_types_of_harm:
+              inclusion: Select other types of harm the hazard could cause
+            number_of_products_expected_to_change:
+              inclusion: Select whether the number of products estimated to be in use is expected to change
+            uncertainty_level_implications_for_risk_management:
+              inclusion: Select whether the uncertainty level has implications for risk management decisions
+            comparable_risk_level:
+              inclusion: Select how the risk level compares to that of comparable products
+            multiple_casualties:
+              inclusion: Select whether there is potential for multiple casualties in a single incident
+            significant_risk_differential:
+              inclusion: Select whether there is a significant risk differential
+            people_at_increased_risk:
+              inclusion: Select whether people are at increased risk
+            relevant_action_by_others:
+              inclusion: Select whether relevant action is planned or underway by another MSA or other organisation
+            factors_to_take_into_account:
+              inclusion: Select whether there are factors to take account of in relation to risk management decisions
+            other_hazards:
+              inclusion: Select whether the product has any other hazards that can and do cause harm
+            low_likelihood_high_severity:
+              inclusion: Select whether this is a low likelihood but high severity risk
+            risk_to_non_users:
+              inclusion: Select whether there is a risk to non-users
+            aimed_at_vulnerable_users:
+              inclusion: Select whether this is a type of product aimed at vulnerable users
+            designed_to_provide_protective_function:
+              inclusion: Select whether the product is designed to provide a protective function
+            user_control_over_risk:
+              inclusion: Select whether users can exert any control over the risk
+            risk_tolerability:
+              inclusion: Select whether the risk is tolerable or intolerable
   prism:
     tasks:
       task_list:
@@ -173,17 +209,18 @@ en:
                 title: Review the overall product risk level
               add_level_of_uncertainty_and_sensitivity_analysis:
                 title: Add level of uncertainty and sensitivity analysis
+              consider_the_nature_of_the_risk:
+                title: Consider the nature of the risk
+              consider_perception_and_tolerability_of_the_risk:
+                title: Consider perception and tolerability of the risk
+              risk_evaluation_outcome:
+                title: Risk evalation outcome
               complete_product_risk_evaluation:
                 title: Complete product risk evaluation
               review_and_submit_results_of_the_assessment:
                 title: Review and submit results of the assessment
               review_and_submit_results_of_the_evaluation:
                 title: Review and submit results of the evaluation
-    risk_assessment:
-      level_of_uncertainty:
-        low: Low
-        medium: Medium
-        high: High
     harm_scenarios:
       hazard_types:
         mechanical: Mechanical
@@ -213,3 +250,20 @@ en:
         sole_judgement_or_estimation: Sole judgement or estimation
         some_limited_empirical_evidence: Some limited empirical evidence
         strong_empirical_evidence: Strong empirical evidence
+    evaluation:
+      estimated_products_in_use:
+        zero: Unknown
+        one: Estimated 1 product in use
+        other: Estimated %{items_in_use} products in use
+      level_of_uncertainty:
+        low: Low level of uncertainty
+        medium: Medium level of uncertainty
+        high: High level of uncertainty
+      multiple_casualties:
+        "true": "Yes"
+        "false": "No multiple casualties"
+      people_at_increased_risk:
+        "false": "No"
+      risk_to_non_users:
+        "true": Non-users might be at risk
+        "false": Non-users might not be at risk

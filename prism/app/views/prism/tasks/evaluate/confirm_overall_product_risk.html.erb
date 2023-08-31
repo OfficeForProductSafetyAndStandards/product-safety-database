@@ -44,6 +44,7 @@
           end
         end
       %>
+      <%= f.hidden_field :_dummy, value: "dummy" %>
       <% risk_level_plus_label = capture do %>
         <div>
           <button type="button" class="govuk-button govuk-button--secondary" data-action="visibility#toggleTargets">Add a risk level plus label</button>

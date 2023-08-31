@@ -5,6 +5,15 @@ RSpec.describe ProductForm do
 
   let(:attributes) { attributes_for(:product) }
 
+  describe "country_of_origin validation" do
+    before { form.country_of_origin = "" }
+
+    it "is invalid", :aggregate_failures do
+      expect(form).not_to be_valid
+      expect(form.errors.full_messages_for(:country_of_origin)).to eq ["Country of origin cannot be blank"]
+    end
+  end
+
   describe "brand validation" do
     context "when setting an empty string" do
       before { form.brand = " " }
