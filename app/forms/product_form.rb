@@ -33,6 +33,7 @@ class ProductForm
   validates :category, presence: true
   validates :subcategory, presence: true
   validates :name, presence: true
+  validates :country_of_origin, presence: true
   validates :when_placed_on_market, presence: true
   validates :description, length: { maximum: 10_000 }
 
