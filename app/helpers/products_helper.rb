@@ -116,7 +116,7 @@ module ProductsHelper
   end
 
   def options_for_country_of_origin(countries, product_form)
-    options = [{ text: "Unknown", value: nil }]
+    options = [{ text: "Unknown", value: "Unknown" }]
     options << countries.map do |country|
       text = country[0]
       option = { text:, value: country[1] }
