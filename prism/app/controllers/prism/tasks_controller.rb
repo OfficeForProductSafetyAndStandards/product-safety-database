@@ -1,6 +1,7 @@
 module Prism
   class TasksController < ApplicationController
     before_action :prism_risk_assessment
+    before_action :set_prism_risk_assessment_created_by_user_id, only: %i[index]
     before_action :set_prism_risk_assessment_tasks_status, only: %i[index]
     before_action :ensure_one_harm_scenario, only: %i[index]
     before_action :harm_scenario, only: %i[remove_harm_scenario delete_harm_scenario]
@@ -30,7 +31,17 @@ module Prism
   private
 
     def prism_risk_assessment
-      @prism_risk_assessment ||= Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+      @prism_risk_assessment ||= if action_name == "index"
+                                   Prism::RiskAssessment.includes(:harm_scenarios).where(id: params[:risk_assessment_id], created_by_user_id: current_user.id).or(Prism::RiskAssessment.where(id: params[:risk_assessment_id], created_by_user_id: nil)).first!
+                                 else
+                                   Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+                                 end
+    end
+
+    def set_prism_risk_assessment_created_by_user_id
+      return unless @prism_risk_assessment.created_by_user_id.nil?
+
+      @prism_risk_assessment.update!(created_by_user_id: current_user.id)
     end
 
     def set_prism_risk_assessment_tasks_status
