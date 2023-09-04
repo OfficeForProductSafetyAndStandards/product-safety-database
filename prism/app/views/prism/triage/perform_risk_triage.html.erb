@@ -1,5 +1,5 @@
 <% content_for :page_title, "Perform risk triage" %>
-<% @back_link_href = params[:back_to] == "start_page" ? root_path : full_risk_assessment_required_path %>
+<% @back_link_href = params[:id].present? ? full_risk_assessment_required_path(params[:id]) : root_path %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

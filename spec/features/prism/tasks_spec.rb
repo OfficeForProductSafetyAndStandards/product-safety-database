@@ -147,4 +147,20 @@ RSpec.feature "PRISM tasks", type: :feature do
       expect(page).to have_selector("#task-list-0-1-status", text: "Cannot start yet")
     end
   end
+
+  context "when signed in as a user without the PRISM role" do
+    let(:non_prism_user) { create(:user, :activated) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: nil) }
+
+    before do
+      sign_out
+      sign_in non_prism_user
+    end
+
+    scenario "visiting the task list" do
+      visit prism.risk_assessment_tasks_path(prism_risk_assessment)
+
+      expect(page).to have_current_path("/403")
+    end
+  end
 end
