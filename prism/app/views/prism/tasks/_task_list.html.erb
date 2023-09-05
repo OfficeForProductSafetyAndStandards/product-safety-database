@@ -17,12 +17,12 @@
               <li class="govuk-task-list__item<% if harm_scenario_tasks_status(harm_scenario)[task] != "cannot_start_yet" %> govuk-task-list__item--with-link<% end %>">
                 <div class="govuk-task-list__task-name-and-hint">
                   <% if harm_scenario_tasks_status(harm_scenario)[task] != "cannot_start_yet" %>
-                    <a class="govuk-link govuk-task-list__link" href="<%= task_path(section, task, harm_scenario.id) %>" aria-describedby="task-list-<%= section_index %>-<%= task_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></a>
+                    <a class="govuk-link govuk-task-list__link" href="<%= task_path(section, task, harm_scenario.id) %>" aria-describedby="task-list-<%= section_index %>-<%= task_index %>-<%= harm_scenario_index %>-status" data-test="task-list-<%= section_index %>-<%= task_index %>-<%= harm_scenario_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></a>
                   <% else %>
-                    <div><%= t(".sections.#{section}.tasks.#{task}.title") %></div>
+                    <div data-test="task-list-<%= section_index %>-<%= task_index %>-<%= harm_scenario_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></div>
                   <% end %>
                 </div>
-                <div class="govuk-task-list__status" id="task-list-<%= section_index %>-<%= task_index %>-status">
+                <div class="govuk-task-list__status" id="task-list-<%= section_index %>-<%= task_index %>-<%= harm_scenario_index %>-status">
                   <%= task_status_tag(harm_scenario_tasks_status(harm_scenario)[task]) %>
                 </div>
               </li>
@@ -38,9 +38,9 @@
             <li class="govuk-task-list__item<% if tasks_status[task] != "cannot_start_yet" %> govuk-task-list__item--with-link<% end %>">
               <div class="govuk-task-list__task-name-and-hint">
                 <% if tasks_status[task] != "cannot_start_yet" %>
-                  <a class="govuk-link govuk-task-list__link" href="<%= task_path(section, task) %>" aria-describedby="task-list-<%= section_index %>-<%= task_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></a>
+                  <a class="govuk-link govuk-task-list__link" href="<%= task_path(section, task) %>" aria-describedby="task-list-<%= section_index %>-<%= task_index %>-status" data-test="task-list-<%= section_index %>-<%= task_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></a>
                 <% else %>
-                  <div><%= t(".sections.#{section}.tasks.#{task}.title") %></div>
+                  <div data-test="task-list-<%= section_index %>-<%= task_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></div>
                 <% end %>
               </div>
               <div class="govuk-task-list__status" id="task-list-<%= section_index %>-<%= task_index %>-status">
