@@ -68,10 +68,10 @@
   <div class="govuk-width-container">
     <%= govuk_phase_banner(tag: { text: "Beta" }, classes: "govuk-!-display-none-print") do %>This is a new service – your feedback will help us to improve it.
     <% end %>
-    <% if @back_link_href.present? %>
+    <% if @back_link_href.present? || defined?(previous_wizard_path) %>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-          <%= govuk_back_link(href: @back_link_href) %>
+          <%= govuk_back_link(href: @back_link_href || (previous_wizard_path != wizard_path ? previous_wizard_path : risk_assessment_tasks_path(@prism_risk_assessment))) %>
         </div>
       </div>
     <% end %>
