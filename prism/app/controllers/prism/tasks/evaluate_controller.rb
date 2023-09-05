@@ -29,7 +29,7 @@ module Prism
       when :add_level_of_uncertainty_and_sensitivity_analysis
         @evaluation = @prism_risk_assessment.evaluation || @prism_risk_assessment.build_evaluation
         @evaluation.assign_attributes(add_level_of_uncertainty_and_sensitivity_analysis_params)
-      when :consider_the_nature_of_the_risk, :consider_perception_and_tolerability_of_the_risk
+      when :consider_the_nature_of_the_risk, :consider_perception_and_tolerability_of_the_risk, :risk_evaluation_outcome
         @evaluation.assign_attributes(send("#{step}_params"))
       end
 
@@ -98,6 +98,10 @@ module Prism
 
     def consider_perception_and_tolerability_of_the_risk_params
       params.require(:evaluation).permit(:other_hazards, :low_likelihood_high_severity, :risk_to_non_users, :aimed_at_vulnerable_users, :designed_to_provide_protective_function, :user_control_over_risk, :other_risk_perception_matters, :draft)
+    end
+
+    def risk_evaluation_outcome_params
+      params.require(:evaluation).permit(:risk_tolerability, :draft)
     end
   end
 end

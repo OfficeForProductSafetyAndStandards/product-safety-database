@@ -10,6 +10,7 @@ FactoryBot.define do
     has_markings { Product.has_markings.keys.sample }
     markings { [Product::MARKINGS.sample] }
     when_placed_on_market { "before_2021" }
+    country_of_origin { "United Kingdom" }
 
     trait :with_versions do
       transient do
