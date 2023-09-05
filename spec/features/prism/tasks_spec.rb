@@ -1,5 +1,8 @@
 require "rails_helper"
 
+# This spec tests generic features of the task list.
+# See `risk_assessment_spec.rb` for a full set of tests
+# for the entire workflow.
 RSpec.feature "PRISM tasks", type: :feature do
   let(:user) { create(:user, :activated, roles: %w[prism]) }
 
@@ -10,14 +13,14 @@ RSpec.feature "PRISM tasks", type: :feature do
   context "with normal risk" do
     let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: user.id) }
 
-    scenario "tasks page" do
+    scenario "tasks page", :aggregate_failures do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_text("Determine and evaluate the level of product risk")
       expect(page).to have_text("You have completed 0 of 4 sections.")
     end
 
-    scenario "task list" do
+    scenario "task list", :aggregate_failures do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_link("Add assessment details")
@@ -66,13 +69,13 @@ RSpec.feature "PRISM tasks", type: :feature do
         prism_risk_assessment.save!
       end
 
-      scenario "task completion" do
+      scenario "task completion", :aggregate_failures do
         visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
         click_link "Add details about products in use and safety"
 
         fill_in "Name of the business that sold the product", with: "Test organisation"
-        choose "No"
+        choose "No" # Can the total number of products in use be estimated?
         check "BS EN 17022:2018"
 
         click_button "Save and complete tasks in this section"
@@ -97,12 +100,12 @@ RSpec.feature "PRISM tasks", type: :feature do
 
         click_link "Choose hazard type"
 
-        choose "Fire and explosion"
+        choose "Fire and explosion" # What is the hazard type?
         fill_in "Hazard description", with: "Test description"
 
         click_button "Save and continue"
 
-        choose "General population"
+        choose "General population" # Who is the product aimed at?
 
         click_button "Save and continue"
 
@@ -112,7 +115,7 @@ RSpec.feature "PRISM tasks", type: :feature do
 
         fill_in "Step description", with: "Test description"
 
-        # TODO(ruben): enable JavaScript to allow testing the addition of multiple steps
+        # Enable JavaScript in tests to allow testing the addition of multiple steps
 
         click_button "Save and continue"
 
@@ -121,7 +124,7 @@ RSpec.feature "PRISM tasks", type: :feature do
     end
 
     scenario "accessing a step out-of-order" do
-      visit prism.risk_assessment_define_path(prism_risk_assessment, id: "search_or_add_a_new_product")
+      visit prism.risk_assessment_define_path(prism_risk_assessment, id: "add_details_about_products_in_use_and_safety")
 
       expect(page).to have_current_path(prism.risk_assessment_tasks_path(prism_risk_assessment))
     end
@@ -130,14 +133,14 @@ RSpec.feature "PRISM tasks", type: :feature do
   context "with serious risk" do
     let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, created_by_user_id: user.id) }
 
-    scenario "tasks page" do
+    scenario "tasks page", :aggregate_failures do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_text("Evaluate the product deemed serious risk")
       expect(page).to have_text("You have completed 0 of 2 sections.")
     end
 
-    scenario "task list" do
+    scenario "task list", :aggregate_failures do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_link("Add evaluation details")

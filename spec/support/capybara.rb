@@ -5,3 +5,5 @@ require "capybara-screenshot/rspec"
 Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, respect_data_method: true, redirect_limit: 6)
 end
+
+Capybara.test_id = "data-test"
