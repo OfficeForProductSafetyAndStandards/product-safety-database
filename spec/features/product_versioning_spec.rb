@@ -48,7 +48,7 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
     click_button "Save and continue"
 
     visit product_path(product)
-    click_link "Edit the product record"
+    click_link "Edit this product record"
 
     fill_in "Description of product", with: new_product_description
     click_button "Save"

@@ -1,6 +1,6 @@
 <tr class="govuk-table__row">
   <th scope="row" class="govuk-table__header">
-    <%= prism_risk_assessment.prism_product&.name || "Unknown" %>
+    <%= prism_risk_assessment.product_name || "Unknown" %>
   </th>
   <td class="govuk-table__cell">
     <%= prism_risk_assessment.prism_harm_scenarios&.first&.description || "None" %>

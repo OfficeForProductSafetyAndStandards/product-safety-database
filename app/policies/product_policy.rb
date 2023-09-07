@@ -24,6 +24,10 @@ class ProductPolicy < ApplicationPolicy
     user.is_opss?
   end
 
+  def can_create_prism_risk_assessment?
+    user.is_prism_user?
+  end
+
 private
 
   def record_is_unowned_and_attatched_to_an_open_case_owned_by_users_team?
