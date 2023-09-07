@@ -1,7 +1,7 @@
 require "rails_helper"
 require "support/feature_helpers"
 
-RSpec.feature "Creating an account from an invitation", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, :with_2fa do
+RSpec.feature "Creating an account from an invitation", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, :with_2fa do
   let(:invited_user) { create(:user, :invited, direct_otp: nil) }
   let(:existing_user) { create(:user) }
 
@@ -44,7 +44,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_opensearch
     expect_to_be_signed_in
   end
 
-  scenario "Creating an account from an invitation when signed in as another user", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+  scenario "Creating an account from an invitation when signed in as another user", :with_stubbed_antivirus, :with_stubbed_mailer do
     sign_in existing_user
 
     visit "/users/#{invited_user.id}/complete-registration?invitation=#{invited_user.invitation_token}"

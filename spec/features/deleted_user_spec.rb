@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Deleted user", :with_stubbed_mailer, :with_stubbed_opensearch, type: :feature do
+RSpec.feature "Deleted user", :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
 
   scenario "deleted while signed in" do

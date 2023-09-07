@@ -69,7 +69,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           it "creates an audit activity", :aggregate_failures do
             result
             activity = investigation.reload.activities.find_by!(type: AuditActivity::Product::Destroy.name)
-            expect(activity).to have_attributes(title: nil, body: nil, investigation_product_id: investigation_product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.attributes.to_json) })
+            expect(activity).to have_attributes(title: nil, body: nil, investigation_product_id: investigation_product.id, metadata: { "reason" => reason, "product" => JSON.parse(product.reload.attributes.to_json) })
             expect(activity.added_by_user).to eq(user)
           end
 
@@ -101,7 +101,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
             investigation_product_id: investigation_product.id,
             metadata: {
               "reason" => reason,
-              "product" => JSON.parse(product.attributes.to_json)
+              "product" => JSON.parse(product.reload.attributes.to_json)
             }
           )
           expect(activity.added_by_user).to eq(user)
@@ -135,21 +135,6 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
             expect(product.reload.owning_team).to eq(investigation.owner_team)
           end
         end
-      end
-    end
-
-    context "when searching for product once removed from the case", :with_opensearch do
-      let(:records) { Product.full_search(OpensearchQuery.new(product.name, {}, {})).records }
-
-      before do
-        product
-        Product.import(refresh: :wait_for)
-      end
-
-      it "the product should remain searchable" do
-        result
-
-        expect(records.to_a).to include(product)
       end
     end
   end

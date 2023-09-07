@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Deleting a business location", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Deleting a business location", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)     { create(:user, :activated, has_viewed_introduction: true) }
   let(:business) { create(:business, trading_name: "Acme Ltd") }
   let!(:location) do

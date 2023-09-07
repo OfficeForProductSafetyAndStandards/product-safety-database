@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_mailer do
   let(:investigation) { create(:allegation, is_private: false) }
   let(:metadata) { described_class.build_metadata(investigation, rationale) }
   let(:rationale) { "Test" }

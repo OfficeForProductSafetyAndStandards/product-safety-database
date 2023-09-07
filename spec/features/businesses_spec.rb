@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
   let(:user)            { create :user, :activated, has_viewed_introduction: true }
   let!(:business_one)   { create(:business, trading_name: "great value",    created_at: 1.day.ago) }
   let!(:business_two)   { create(:business, trading_name: "mediocre stuff", created_at: 2.days.ago) }
@@ -9,7 +9,6 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
   before do
     create_list :business, 18, created_at: 4.days.ago
     sign_in(user)
-    Business.import refresh: :wait_for
     visit businesses_path
   end
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Collaborations", :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe "Collaborations", :with_stubbed_mailer do
   let(:owner_team)     { create :team }
   let(:user)           { create :user, :activated, has_viewed_introduction: true, team: owner_team }
   let(:editor_team)    { create :team, name: "editor" }

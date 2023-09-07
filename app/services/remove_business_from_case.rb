@@ -14,8 +14,7 @@ class RemoveBusinessFromCase
     end
 
     investigation.businesses.delete(business)
-    investigation.__elasticsearch__.update_document
-    business.__elasticsearch__.update_document
+    investigation.reindex
 
     send_notification_email(create_audit_activity_for_business_removed)
   end

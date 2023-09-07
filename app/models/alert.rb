@@ -1,5 +1,4 @@
 class Alert < ApplicationRecord
-  include Searchable
   include Documentable
 
   attr_accessor :investigation_url

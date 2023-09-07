@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FindClosestProductDuplicate, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe FindClosestProductDuplicate, :with_stubbed_mailer do
   subject(:service) do
     described_class.call(barcode:)
   end

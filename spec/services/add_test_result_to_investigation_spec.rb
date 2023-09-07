@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddTestResultToInvestigation, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:user)                                 { create(:user, :activated) }
   let!(:investigation)                       { create :allegation, creator: user }
 

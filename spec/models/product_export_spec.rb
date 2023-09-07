@@ -2,7 +2,7 @@
 # rubocop:disable RSpec/ExampleLength
 require "rails_helper"
 
-RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:investigation) do
     create(:allegation,
            reported_reason: "unsafe",
@@ -29,10 +29,6 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let!(:user)                   { create(:user, :activated, has_viewed_introduction: true) }
   let(:params)                  { {} }
   let(:product_export)          { described_class.create!(user:, params:) }
-
-  before do
-    Product.import force: true, refresh: :wait
-  end
 
   describe "#export!" do
     let(:result) { product_export.export! }

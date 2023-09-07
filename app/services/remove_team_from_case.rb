@@ -14,7 +14,7 @@ class RemoveTeamFromCase
     end
 
     send_notification_email unless context.silent
-    investigation.reload.__elasticsearch__.update_document
+    investigation.reindex
   end
 
 private

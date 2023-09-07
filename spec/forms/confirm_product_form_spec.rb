@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ConfirmProductForm, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe ConfirmProductForm, :with_stubbed_mailer do
   subject(:form) { described_class.new(product_id:, correct:) }
 
   let(:find_product_form) { FindProductForm.new(reference: product.id.to_s) }

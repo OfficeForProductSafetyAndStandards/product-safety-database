@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddRiskAssessmentToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :with_test_queue_adapter do
+RSpec.describe AddRiskAssessmentToCase, :with_stubbed_mailer, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
   let(:investigation_product) { create(:investigation_product) }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::TeamPermissionChanged, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::Investigation::TeamPermissionChanged, :with_stubbed_mailer do
   let(:team) { create(:team) }
   let(:message) { "This is a message" }
   let(:old_permission) { "readonly" }

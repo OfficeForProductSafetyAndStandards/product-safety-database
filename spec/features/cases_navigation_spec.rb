@@ -59,7 +59,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     let!(:different_team_case) { create(:allegation, creator: different_user, user_title: "Different team case title") }
 
     before do
-      Investigation.import scope: "not_deleted", refresh: true, force: true
+      Investigation.reindex
     end
 
     context "when the user is on the your cases page" do
@@ -112,7 +112,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       context "when more than 11 cases" do
         before do
           create_list(:allegation, 11, creator: user)
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
           visit "/cases/your-cases"
         end
 
@@ -184,7 +184,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       context "when more than 11 cases" do
         before do
           create_list(:allegation, 11, creator: other_user_same_team)
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
           visit "/cases/team-cases"
         end
 
@@ -249,7 +249,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       context "when more than 11 cases" do
         before do
           create_list(:allegation, 11)
-          Investigation.import scope: "not_deleted", refresh: true, force: true
+          Investigation.reindex
           visit "/cases/all-cases"
         end
 
@@ -274,7 +274,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     context "when the different team case is assigned to the user's team" do
       before do
         AddTeamToCase.call(user:, investigation: different_team_case, team:, collaboration_class: Collaboration::Access::Edit)
-        Investigation.import scope: "not_deleted", refresh: true, force: true
+        Investigation.reindex
         click_on "All cases"
       end
 

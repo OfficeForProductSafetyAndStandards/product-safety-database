@@ -16,8 +16,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let!(:retired_sanitiser_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.zone.now, category: "Hand sanitiser") }
 
   before do
-    Investigation.import scope: "not_deleted", refresh: :wait_for
-    Product.import refresh: :wait_for
+    Investigation.reindex
   end
 
   context "when user is non OPSS" do
@@ -37,7 +36,6 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     context "when there are multiple pages of products" do
       before do
         17.times { Product.create(name: "TestProduct") }
-        Product.import refresh: :wait_for
         visit products_path
       end
 

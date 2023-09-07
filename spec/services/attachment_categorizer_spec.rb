@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AttachmentCategorizer, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe AttachmentCategorizer, :with_test_queue_adapter do
   describe "#related_investigation" do
     let(:investigation) { create(:allegation) }
 

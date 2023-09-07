@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Collaboration::Access, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe Collaboration::Access, :with_stubbed_mailer do
   describe ".changeable" do
     before do
       create(:allegation, edit_access_teams: [create(:team)], read_only_teams: [create(:team)])

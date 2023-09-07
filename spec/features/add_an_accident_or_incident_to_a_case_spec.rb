@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding an accident or incident to a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   include_context "with read only team and user"
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product1) { create(:product_washing_machine, name: "MyBrand Washing Machine") }

@@ -27,14 +27,12 @@ class ChangeCaseOwner
 
       (old_collaboration || owner).own!(investigation)
 
-      investigation.reload.__elasticsearch__.update_document
+      investigation.reindex
 
       create_audit_activity_for_case_owner_changed
     end
 
     investigation.reload
-    investigation.products.each { |product| product.__elasticsearch__.update_document }
-    investigation.businesses.each { |business| business.__elasticsearch__.update_document }
     send_notification_email unless context.silent
   end
 

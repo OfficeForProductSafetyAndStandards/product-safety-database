@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case product tab", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Case product tab", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:original_investigation) { create(:allegation, creator: user) }
   let(:product) { original_investigation.products.first }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Business::Add, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::Business::Add, :with_stubbed_mailer do
   subject(:audit_activity) { create :legacy_audit_business_added_status }
 
   describe "#metadata" do

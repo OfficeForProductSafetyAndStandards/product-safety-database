@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a risk assessment to a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:risk_assessment_file) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
 

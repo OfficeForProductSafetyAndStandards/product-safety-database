@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Manage Images", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user_different_org) { create(:user, :activated) }
 

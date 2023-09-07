@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EmailCorrespondenceForm, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe EmailCorrespondenceForm, :with_stubbed_mailer do
   subject(:form) do
     described_class.new(
       attachment_description:,

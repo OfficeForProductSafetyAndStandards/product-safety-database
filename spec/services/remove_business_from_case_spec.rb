@@ -71,19 +71,4 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
       end
     end
   end
-
-  context "when searching for the business once removed from the case" do
-    let(:records) { Business.full_search(OpensearchQuery.new(business.trading_name, {}, {})).records }
-
-    before do
-      business
-      Business.import refresh: :wait_for
-    end
-
-    it "is searchable from the business index" do
-      result
-
-      expect(records.to_a).to include(business)
-    end
-  end
 end

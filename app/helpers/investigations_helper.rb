@@ -1,9 +1,98 @@
 module InvestigationsHelper
-  include InvestigationSearchHelper
-
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
     # Opensearch is only used for searching across all investigations
-    Investigation.not_deleted.full_search(search_query(user)).page(page_number).per(page_size)
+    @search.q.strip! if @search.q
+    query = (@search.q.presence || "*")
+
+    wheres = {}
+
+    case @search.case_type
+    when "allegation"
+      wheres[:type] = "Investigation::Allegation"
+    when "project"
+      wheres[:type] = "Investigation::Project"
+    when "enquiry"
+      wheres[:type] = "Investigation::Enquiry"
+    end
+
+    if @search.priority == "serious_and_high_risk_level_only"
+      wheres[:risk_level] = %i[serious high]
+    end
+
+    if @search.hazard_type.present?
+      wheres[:hazard_type] = @search.hazard_type
+    end
+
+    case @search.case_status
+    when "open"
+      wheres[:is_closed] = false
+    when "closed"
+      wheres[:is_closed] = true
+    end
+
+    case @search.created_by
+    when "me"
+      wheres[:creator_user] = user.id
+    when "my_team"
+      team = user.team
+      wheres[:_or] = [
+        { creator_user: team.users.pluck(:id) },
+        { creator_team: team.id }
+      ]
+    when "others"
+      if @search.created_by_other_id.blank?
+        wheres[:_not] = { creator_user: user.team.user_ids }
+      elsif (team = Team.find_by(id: @search.created_by_other_id))
+        wheres[:_or] = [
+          { creator_user: team.users.pluck(:id) },
+          { creator_team: team.id }
+        ]
+      else
+        wheres[:creator_user] = @search.created_by_other_id
+      end
+    end
+
+    case @search.case_owner
+    when "me"
+      wheres[:owner_id] = user.id
+    when "my_team"
+      team = user.team
+      wheres[:_or] = [
+        { owner_id: team.users.pluck(:id) },
+        { team_ids_with_access: team.id }
+      ]
+    when "others"
+      if @search.case_owner_is_someone_else_id.present?
+        team = Team.find_by(id: @search.case_owner_is_someone_else_id)
+        wheres[:owner_id] = if team
+                              team.users.pluck(:id)
+                            else
+                              @search.case_owner_is_someone_else_id
+                            end
+      else
+        wheres[:_not] = { owner_id: user.id }
+      end
+    end
+
+    case @search.teams_with_access
+    when "my_team"
+      wheres[:team_ids_with_access] = user.team.id
+    when "other"
+      if @search.teams_with_access_other_id.present?
+        wheres[:team_ids_with_access] = @search.teams_with_access_other_id
+      else
+        wheres[:_not] = { team_ids_with_access: user.team.id }
+      end
+    end
+
+    Investigation.search(
+      query,
+      where: wheres,
+      order: @search.sorting_params,
+      misspellings: { edit_distance: 2 },
+      page: page_number,
+      per_page: page_size
+    )
   end
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)
@@ -109,8 +198,40 @@ module InvestigationsHelper
     )
   end
 
-  def export_params
-    query_params.except(:page, :sort_by, :page_name)
+  def case_export_params
+    params.permit(
+      :q,
+      :case_status,
+      :case_type,
+      :case_owner,
+      :priority,
+      :teams_with_access,
+      :case_owner_is_someone_else_id,
+      :teams_with_access_other_id,
+      :created_by,
+      :created_by_other_id,
+      :hazard_type
+    )
+  end
+
+  def sorting_params
+    return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
+    return { trading_name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
+    return { trading_name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
+
+    { updated_at: :desc }
+  end
+
+  def sort_column
+    Investigation.column_names.include?(params[:sort_by]) ? params[:sort_by] : :updated_at
+  end
+
+  def sort_direction
+    SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
+  end
+
+  def page_number
+    params[:page].to_i > 500 ? "500" : params[:page]
   end
 
   def safety_and_compliance_rows(investigation)

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeCaseStatusForm, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe ChangeCaseStatusForm, :with_test_queue_adapter do
   subject(:form) { described_class.from(investigation) }
 
   let(:investigation) { build(:allegation) }

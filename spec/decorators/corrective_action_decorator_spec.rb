@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveActionDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe CorrectiveActionDecorator, :with_stubbed_mailer do
   subject(:decorated_corrective_action) { corrective_action.decorate }
 
   let(:corrective_action) { build(:corrective_action, online_recall_information:) }

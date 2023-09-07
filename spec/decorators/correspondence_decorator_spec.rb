@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrespondenceDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe CorrespondenceDecorator, :with_stubbed_mailer do
   subject { build(:email, investigation:).decorate }
 
   let(:user)          { create(:user) }

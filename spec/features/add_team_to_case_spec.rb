@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a team to a case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.feature "Adding a team to a case", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   include_context "with read only team and user"
   let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }

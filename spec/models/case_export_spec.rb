@@ -16,7 +16,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
            risk_level: "serious").decorate
   end
   let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
-  let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }
+  let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all" } }
   let(:case_export) { described_class.create!(user:, params:) }
   let(:team_mappings) do
     [
@@ -40,7 +40,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   end
 
   before do
-    Investigation.__elasticsearch__.import scope: "not_deleted", force: true, refresh: :wait
+    Investigation.reindex
     allow(JSON).to receive(:load_file!).and_return(JSON.parse(team_mappings, object_class: OpenStruct))
   end
 
@@ -58,9 +58,8 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:sheet) { exported_data.sheet("Cases") }
 
-    # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength
-    it "exports the case data" do
+    it "exports the case data", :aggregate_failures do
       expect(exported_data.sheets).to eq %w[Cases]
 
       expect(sheet.cell(1, 1)).to eq "ID"
@@ -196,7 +195,6 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 33)).to eq investigation.non_compliant_reason
       expect(sheet.cell(3, 33)).to eq other_team_investigation.non_compliant_reason
     end
-    # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength
   end
 end

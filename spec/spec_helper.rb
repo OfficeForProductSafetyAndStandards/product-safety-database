@@ -11,6 +11,20 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.before(:suite) do
+    uri = URI(ENV.fetch("OPENSEARCH_URL"))
+    WebMock.disable_net_connect!(allow: "#{uri.host}:#{uri.port}")
+    Investigation.reindex
+
+    Searchkick.disable_callbacks
+  end
+
+  config.around(:each, with_opensearch: true) do |example|
+    Searchkick.callbacks(nil) do
+      example.run
+    end
+  end
+
   config.example_status_persistence_file_path = "examples.txt"
 
   config.shared_context_metadata_behavior = :apply_to_host_groups

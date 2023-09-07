@@ -8,7 +8,7 @@ RSpec.describe "Health Check", :with_opensearch, :with_stubbed_mailer, :with_2fa
 
     before do
       create(:allegation)
-      Investigation.import scope: "not_deleted", refresh: true, force: true
+      Investigation.reindex
       allow(Sidekiq::Queue).to receive(:new).with("psd").and_return(sidekiq_queue)
     end
 

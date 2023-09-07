@@ -24,8 +24,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   # rubocop:enable RSpec/LetSetup
 
   before do
-    Investigation.import scope: "not_deleted", refresh: :wait_for
-    Product.import refresh: :wait_for
+    Investigation.reindex
     sign_in(user)
     visit products_path
   end

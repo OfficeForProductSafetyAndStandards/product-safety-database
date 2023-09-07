@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch, :with_test_queue_adapter do
+RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_test_queue_adapter do
   describe ".call" do
     subject(:result) { described_class.call(params) }
 

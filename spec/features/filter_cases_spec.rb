@@ -38,7 +38,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   before do
     create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
     other_team_investigation.touch # Tests sort order
-    Investigation.import scope: "not_deleted", refresh: :wait_for, force: true
+    Investigation.reindex
     sign_in(user)
     visit all_cases_investigations_path
   end
@@ -73,7 +73,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   context "when there are multiple pages of cases" do
     before do
       20.times { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
-      Investigation.import scope: "not_deleted", refresh: :wait_for, force: true
+      Investigation.reindex
     end
 
     it "maintains the filters when clicking on additional pages" do
@@ -162,7 +162,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering cases where the user’s team is the owner" do
+      scenario "filtering cases where the user's team is the owner" do
         within_fieldset("Case owner") { choose "Me and my team" }
         click_button "Apply"
 
@@ -283,7 +283,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
           click_button "Apply"
 
           expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-          expect(page).to have_text("Team added to the case: #{chosen_team.name}")
         end
       end
 

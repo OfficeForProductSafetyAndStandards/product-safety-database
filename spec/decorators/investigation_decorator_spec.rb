@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
+RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
   subject(:decorated_investigation) { investigation.decorate }

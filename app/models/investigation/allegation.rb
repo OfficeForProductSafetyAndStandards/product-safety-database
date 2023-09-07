@@ -2,8 +2,6 @@ class Investigation < ApplicationRecord
   class Allegation < Investigation
     validates :description, :product_category, :hazard_type, presence: true, on: :allegation_details
 
-    index_name [ENV.fetch("OS_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
-
     has_one :add_audit_activity,
             class_name: "AuditActivity::Investigation::AddAllegation",
             foreign_key: :investigation_id,

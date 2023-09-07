@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Validate risk level", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:investigation) { create(:project, creator: creator_user) }
   let(:user) { create(:user, :activated) }
   let(:creator_user) { create(:user, :activated) }
