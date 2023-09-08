@@ -6,6 +6,7 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
   let(:other_user)    { create(:user, :activated) }
   let(:right_product) { create(:product) }
   let(:wrong_product) { create(:product) }
+  let(:new_product)   { create(:product) }
 
   scenario "Finding and linking an existing product" do
     sign_in user
@@ -105,7 +106,46 @@ RSpec.feature "Adding a product to a case", :with_stubbed_mailer, :with_stubbed_
     expect(page).to have_text("Product added by #{user.name}")
   end
 
-  scenario "Not being able to add a product to another team’s case" do
+  scenario "Adding a product changes the product count for case index page" do
+    sign_in user
+
+    parent_selector = ".govuk-table__body[data-cy-case-id='#{investigation.pretty_id}']"
+
+    visit "/cases/your-cases"
+    within parent_selector do
+      expect(page).to have_text("0 products")
+    end
+
+    visit "/cases/#{investigation.pretty_id}/products"
+
+    click_link "Add a product to the case"
+    fill_in "reference", with: right_product.id
+    click_button "Continue"
+    choose "Yes"
+    click_button "Save and continue"
+
+    visit "/cases/your-cases"
+
+    within parent_selector do
+      expect(page).to have_text("1 product")
+    end
+
+    visit "/cases/#{investigation.pretty_id}/products"
+
+    click_link "Add a product to the case"
+    fill_in "reference", with: new_product.id
+    click_button "Continue"
+    choose "Yes"
+    click_button "Save and continue"
+
+    visit "/cases/your-cases"
+
+    within parent_selector do
+      expect(page).to have_text("2 products")
+    end
+  end
+
+  scenario "Not being able to add a product to another team's case" do
     sign_in other_user
     visit "/cases/#{investigation.pretty_id}/products"
 
