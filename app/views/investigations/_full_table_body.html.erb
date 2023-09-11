@@ -1,9 +1,9 @@
-<tbody class="govuk-table__body">
+<tbody class="govuk-table__body" data-cy-case-id="<%= investigation.pretty_id %>">
   <tr class="govuk-table__row">
     <th class="govuk-visually-hidden">
       Case title
     </th>
-    <th id="<%= dom_id investigation, :item %>" colspan="4" scope="colgroup" class="govuk-table__header">
+    <th id="<%= dom_id investigation, :item %>" colspan="5" scope="colgroup" class="govuk-table__header">
       <%= link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
     </th>
   </tr>
@@ -32,6 +32,9 @@
         <%= investigation.hazard_type %>
       </td>
     <% end %>
+    <td headers="product_count" class="govuk-table__cell">
+      <%= pluralize investigation.products.count, "product" %>
+    </td>
     <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
       <td headers="created <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
