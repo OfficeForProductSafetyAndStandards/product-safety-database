@@ -49,24 +49,9 @@
             label: { text: "Risk type" },
             value: @case&.hazard_type
             ) %>
-      <%= form.govuk_radios :risk_level, legend: "Risk level", classes: "govuk-radios--small govuk-radios--inline", legend_classes: "govuk-fieldset__legend", items: [{ text: "High", value: "High" }, { text: "Serious", value: "Serious" }], value: @case&.risk_level&.capitalize %>
+      <%= form.govuk_radios :risk_level, legend: "Risk level", classes: "govuk-radios--small govuk-radios--inline", legend_classes: "govuk-fieldset__legend", items: [{ text: "High", value: "High" }, { text: "Serious", value: "Serious" }, { text: "Medium", value: "Medium" }, { text: "Low", value: "Low" }], value: @case&.risk_level&.capitalize %>
       <%= form.govuk_text_area :risk_description, label: "Risk description - why is the product unsafe", label_classes: "govuk-label", attributes: { maxlength: 10_000, rows: 10 }, value: @case&.hazard_description %>
-      <div class="govuk-checkboxes govuk-checkboxes--small">
-        <% other_corrective_action = capture do %>
-          <%= form.govuk_text_area :other_corrective_action, label: nil, attributes: { maxlength: 10_000, rows: 5 } %>
-        <% end %>
-        <%
-          corrective_action_values = @case&.corrective_actions.map { |corrective_action| CorrectiveAction.actions[corrective_action.action.to_sym] }
-          corrective_action_items = CorrectiveAction.actions.each_with_object([]) do |item, arr|
-            arr << { text: item[1], value: item[1], disable_ghost: true, values: corrective_action_values, conditional: item[0] == "other" ? { html: other_corrective_action } : nil }
-          end
-        %>
-        <%= form.govuk_checkboxes :corrective_actions,
-                                  legend: "Corrective action(s)",
-                                  legend_classes: "govuk-checkboxes--small",
-                                  items: corrective_action_items
-        %>
-      </div>
+      <%= form.govuk_text_area :corrective_actions, label: "Corrective actions", label_classes: "govuk-label", attributes: { maxlength: 10_000, rows: 10 } %>
       <% online_marketplace_radios = capture do %>
         <% number_of_market_places = @online_marketplaces.length %>
         <% online_marketplace_first_half = @online_marketplaces.slice(0..number_of_market_places/2) %>
@@ -77,7 +62,7 @@
               <div class="govuk-radios govuk-radios--small">
                 <% online_marketplace_first_half.each do |marketplace| %>
                   <div class="govuk-radios__item">
-                    <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input js-radio-handle-other" %>
+                    <%= form.radio_button :online_marketplace_id, marketplace.name, class: "govuk-radios__input js-radio-handle-other" %>
                     <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
                   </div>
                 <% end %>
@@ -87,7 +72,7 @@
               <div class="govuk-radios govuk-radios--small">
                 <% online_marketplace_second_half.each do |marketplace| %>
                   <div class="govuk-radios__item">
-                    <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input js-radio-handle-other" %>
+                    <%= form.radio_button :online_marketplace_id, marketplace.name, class: "govuk-radios__input js-radio-handle-other" %>
                     <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
                   </div>
                 <% end %>
@@ -116,7 +101,8 @@
           }
         ]
       %>
-      <p class="govuk-body">Notified by: <%= @product.owning_team.name %></p>
+      <%= form.govuk_input :notified_by, label: "Notified by", value: @product.owning_team.name %>
+
       <div class="govuk-button-group">
         <%= form.submit "Continue", class: "govuk-button", role: "button" unless @form.last_step? %>
       </div>

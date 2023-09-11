@@ -16,11 +16,12 @@ class ProductRecallForm
   attribute :risk_type, :string
   attribute :risk_level, :string
   attribute :risk_description, :string
-  attribute :corrective_actions, default: []
+  attribute :corrective_actions, :string
   attribute :other_corrective_action, :string
   attribute :online_marketplace, :boolean
   attribute :online_marketplace_id, :string
   attribute :other_marketplace_name, :string
+  attribute :notified_by, :string
 
   def product_images(product)
     product.virus_free_images.map do |img|

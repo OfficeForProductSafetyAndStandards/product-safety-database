@@ -54,8 +54,8 @@ module Products
       params.require(:product_recall_form).permit(
         :step, :type, :pdf_title, :alert_number, :product_type, :product_identifiers, :product_description,
         :country_of_origin, :counterfeit, :risk_type, :risk_level, :risk_description, :online_marketplace,
-        :online_marketplace_id, :other_marketplace_name, :other_corrective_action, corrective_actions: [],
-                                                                                   product_image_ids: []
+        :online_marketplace_id, :other_marketplace_name, :other_corrective_action, :notified_by, :corrective_actions,
+        product_image_ids: []
       )
     end
 

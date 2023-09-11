@@ -23,8 +23,8 @@ class GenerateProductRecallPdf
     )
     # rubocop:enable Rails/SaveBang
     pdf.font("GDS Transport")
-    pdf.image(Rails.root.join("app/assets/images/opss-logo.jpg"), width: 200)
-    pdf.text title, color: "FF0000", style: :bold, align: :right
+    pdf.image(Rails.root.join("app/assets/images/opss-logo.jpg"), width: 180)
+    pdf.text title, color: "FF0000", style: :bold, align: :right, size: 20
     pdf.table([
       [{ content: @params["pdf_title"], colspan: 2, font_style: :bold }],
       [{ content: "Aspect", font_style: :bold }, { content: "Details", font_style: :bold }],
@@ -38,7 +38,7 @@ class GenerateProductRecallPdf
       [{ content: "Risk Type", font_style: :bold }, @params["risk_type"]],
       risk_level_row,
       [{ content: "Risk Description", font_style: :bold }, @params["risk_description"]],
-      [{ content: "Corrective Measures", font_style: :bold }, corrective_actions],
+      [{ content: "Corrective Measures", font_style: :bold }, @params["corrective_actions"]],
       [{ content: "Online Marketplace", font_style: :bold }, online_marketplace],
       [{ content: "Notifier", font_style: :bold }, @product.owning_team.name],
     ].compact, width: 522)
@@ -77,7 +77,7 @@ private
   end
 
   def risk_level_row
-    [{ content: "Risk Level", font_style: :bold }, @params["risk_level"].presence || "Unknown"] if product_safety_report?
+    [{ content: "Risk Level", font_style: :bold }, @params["risk_level"].presence || "Unknown"]
   end
 
   def country_from_code(code)
@@ -91,14 +91,10 @@ private
     @params["counterfeit"] ? "Yes" : "No"
   end
 
-  def corrective_actions
-    @params["corrective_actions"].map { |action| action == "Other" ? "Other: #{@params['other_corrective_action']}" : action }.join("\n")
-  end
-
   def online_marketplace
     return "N/A" if @params["online_marketplace"].nil?
     return "No" unless @params["online_marketplace"]
 
-    @params["other_marketplace_name"].presence || OnlineMarketplace.find(@params["online_marketplace_id"]).name
+    "The listing has been removed by the online market place - #{@params['other_marketplace_name'].presence || @params['online_marketplace_id']}"
   end
 end
