@@ -269,24 +269,24 @@ module InvestigationsHelper
   def investigation_product_rows(investigation_product = nil, user = nil)
     [
       {
-        key: { text: "Batch numbers" },
+        key: { html: "<span id='case_batch_numbers_#{investigation_product&.id}'>Batch numbers</span>".html_safe },
         value: { text: investigation_product&.batch_number || "" },
         actions: batch_number_actions(investigation_product, user)
       },
       {
-        key: { text: "Customs codes" },
+        key: { html: "<span id='case_customs_codes_#{investigation_product&.id}'>Customs codes</span>".html_safe },
         value: { text: investigation_product&.customs_code || "" },
         actions: customs_code_actions(investigation_product, user)
       },
       {
-        key: { html: "UCR numbers" },
+        key: { html: "<span id='case_ucr_numbers_#{investigation_product&.id}'>UCR numbers</span>".html_safe },
         value: {
           html: ucr_number_unordered_list(investigation_product&.ucr_numbers_list) || ""
         },
         actions: ucr_numbers_actions(investigation_product, user)
       },
       {
-        key: { text: "Units affected" },
+        key: { html: "<span id='case_units_affected_#{investigation_product&.id}'>Units affected</span>".html_safe },
         value: units_affected(investigation_product),
         actions: number_of_affected_units_actions(investigation_product, user)
       }

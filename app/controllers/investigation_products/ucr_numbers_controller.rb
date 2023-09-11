@@ -13,7 +13,7 @@ module InvestigationProducts
         ucr_numbers: ucr_numbers_params
       )
       if service.success?
-        redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The UCR numbers were updated" }
+        redirect_to investigation_path(@investigation_product.investigation, anchor: "case_ucr_numbers_#{@investigation_product.id}"), flash: { success: "The UCR numbers were updated" }
       else
         render :edit, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ module InvestigationProducts
     def destroy
       @ucr_number = @investigation_product.ucr_numbers.find(params[:id])
       @ucr_number.destroy!
-      redirect_to investigation_path(@investigation_product.investigation), flash: { success: "The UCR numbers were deleted" }
+      redirect_to investigation_path(@investigation_product.investigation, anchor: "case_ucr_numbers_#{@investigation_product.id}"), flash: { success: "The UCR numbers were deleted" }
     end
 
   private
