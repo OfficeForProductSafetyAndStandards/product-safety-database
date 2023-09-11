@@ -42,6 +42,9 @@
                   <% else %>
                     <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
                   <% end %>
+
+                  <th scope="col" class="govuk-table__header">Product count</th>
+
                   <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% else %>
@@ -68,6 +71,8 @@
                     <% else %>
                       <th scope="col" class="govuk-table__header">Hazard type</th>
                     <% end %>
+
+                    <th scope="col" class="govuk-table__header">Product count</th>
 
                     <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
                       <th scope="col" class="govuk-table__header">Created</th>
