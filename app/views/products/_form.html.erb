@@ -73,6 +73,10 @@
   attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
+<% if !local_assigns[:disable_image_upload] %>
+  <%= render "upload_file_component", form: form, old_file: nil, field_name: :image, legend: "Upload a product image", label: "Upload a product image" %>
+<% end %>
+
 <%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
 
 <%= govukInput(
