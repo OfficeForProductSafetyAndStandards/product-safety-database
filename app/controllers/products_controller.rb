@@ -111,6 +111,22 @@ private
     @search = SearchParams.new(query_params.except(:page_name))
   end
 
+  def product_params
+    params.require(:product).permit(
+      :name, :brand, :category, :subcategory, :product_code,
+      :webpage, :description, :country_of_origin, :barcode,
+      :authenticity, :when_placed_on_market, :has_markings, markings: []
+    )
+  end
+
+  def product_params_for_update
+    params.require(:product).permit(
+      :subcategory, :product_code,
+      :webpage, :description, :country_of_origin, :barcode,
+      :when_placed_on_market, :has_markings, markings: []
+    )
+  end
+
   def query_params
     params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
   end
