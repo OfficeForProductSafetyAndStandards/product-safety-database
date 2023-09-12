@@ -21,7 +21,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, type: :feature d
     visit "/products/#{product.id}"
     expect_to_be_on_product_page(product_id: product.id, product_name: "Washing machine")
 
-    click_link "Edit the product record"
+    click_link "Edit this product record"
 
     expect_to_be_on_edit_product_page(product_id: product.id, product_name: "Washing machine")
 

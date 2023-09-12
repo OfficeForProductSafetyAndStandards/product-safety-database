@@ -5,7 +5,6 @@ module Prism
   class RiskAssessment < ApplicationRecord
     include AASM
 
-    has_one :product, autosave: true, dependent: :destroy
     has_one :product_market_detail, autosave: true, dependent: :destroy
     has_one :product_hazard, autosave: true, dependent: :destroy
     has_many :harm_scenarios, autosave: true, dependent: :destroy
@@ -88,6 +87,10 @@ module Prism
       event :submit do
         transitions from: :evaluate_completed, to: :submitted
       end
+    end
+
+    def product
+      Product.find(product_id) if product_id.present?
     end
 
   private

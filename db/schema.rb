@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_29_123357) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_07_101809) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -375,24 +375,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_123357) do
     t.index ["risk_assessment_id"], name: "index_prism_product_market_details_on_risk_assessment_id"
   end
 
-  create_table "prism_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "barcode"
-    t.string "batch_number"
-    t.string "brand"
-    t.string "category"
-    t.string "country_of_origin"
-    t.datetime "created_at", null: false
-    t.text "description"
-    t.string "markings"
-    t.string "name"
-    t.string "placed_on_market_before_eu_exit"
-    t.uuid "risk_assessment_id"
-    t.jsonb "routing_questions"
-    t.string "subcategory"
-    t.datetime "updated_at", null: false
-    t.index ["risk_assessment_id"], name: "index_prism_products_on_risk_assessment_id"
-  end
-
   create_table "prism_risk_assessments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "assessment_organisation"
     t.string "assessor_name"
@@ -401,6 +383,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_123357) do
     t.string "overall_product_risk_level"
     t.string "overall_product_risk_methodology"
     t.string "overall_product_risk_plus_label"
+    t.bigint "product_id"
     t.string "risk_type"
     t.jsonb "routing_questions"
     t.string "serious_risk_rebuttable_factors"

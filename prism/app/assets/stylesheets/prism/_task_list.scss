@@ -1,5 +1,9 @@
 $govuk-task-list-hover-colour: govuk-colour("light-grey");
 
+.opss-task-list-group {
+  margin-left: govuk-spacing(2);
+}
+
 .govuk-task-list {
   @include govuk-font($size: 19);
   margin-top: 0;

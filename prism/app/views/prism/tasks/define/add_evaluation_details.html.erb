@@ -11,9 +11,7 @@
       </h1>
       <%= f.govuk_text_field :assessor_name, label: { text: "Name of assessor", size: "m" }, hint: { text: "Full name of the individual carrying out the assessment." } %>
       <%= f.govuk_text_field :assessment_organisation, label: { text: "Name of assessment organisation", size: "m" }, hint: { text: "For example, the name of the organisation that employs the assessor." } %>
-      <%= f.govuk_submit "Save and continue" do %>
-        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
-      <% end %>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
     <% end %>
   </div>
 </div>

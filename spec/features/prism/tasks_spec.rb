@@ -26,7 +26,7 @@ RSpec.feature "PRISM tasks", type: :feature do
       expect(page).to have_link("Add assessment details")
       expect(page).to have_selector("#task-list-0-0-status", text: "Not started")
 
-      expect(page).not_to have_link("Search or add a new product")
+      expect(page).not_to have_link("Add details about products in use and safety")
       expect(page).to have_selector("#task-list-0-1-status", text: "Cannot start yet")
     end
 
@@ -50,11 +50,8 @@ RSpec.feature "PRISM tasks", type: :feature do
       expect(page).to have_link("Add assessment details")
       expect(page).to have_selector("#task-list-0-0-status", text: "Completed")
 
-      expect(page).to have_link("Search or add a new product")
+      expect(page).to have_link("Add details about products in use and safety")
       expect(page).to have_selector("#task-list-0-1-status", text: "Not started")
-
-      expect(page).not_to have_link("Add details about products in use and safety")
-      expect(page).to have_selector("#task-list-0-2-status", text: "Cannot start yet")
 
       click_link "Add assessment details"
       click_button "Save as draft"
@@ -65,7 +62,6 @@ RSpec.feature "PRISM tasks", type: :feature do
     context "when completing the final task of a section" do
       before do
         prism_risk_assessment.tasks_status["add_assessment_details"] = "completed"
-        prism_risk_assessment.tasks_status["search_or_add_a_new_product"] = "completed"
         prism_risk_assessment.save!
       end
 
@@ -88,7 +84,6 @@ RSpec.feature "PRISM tasks", type: :feature do
     context "when completing a task that allows dynamic form fields" do
       before do
         prism_risk_assessment.tasks_status["add_assessment_details"] = "completed"
-        prism_risk_assessment.tasks_status["search_or_add_a_new_product"] = "completed"
         prism_risk_assessment.tasks_status["add_details_about_products_in_use_and_safety"] = "completed"
         prism_risk_assessment.tasks_status["add_a_number_of_hazards"] = "completed"
         prism_risk_assessment.state = "identify_completed"
@@ -146,14 +141,14 @@ RSpec.feature "PRISM tasks", type: :feature do
       expect(page).to have_link("Add evaluation details")
       expect(page).to have_selector("#task-list-0-0-status", text: "Not started")
 
-      expect(page).not_to have_link("Search or add a new product")
-      expect(page).to have_selector("#task-list-0-1-status", text: "Cannot start yet")
+      expect(page).not_to have_link("Complete product risk evaluation")
+      expect(page).to have_selector("#task-list-1-0-status", text: "Cannot start yet")
     end
   end
 
   context "when signed in as a user without the PRISM role" do
     let(:non_prism_user) { create(:user, :activated) }
-    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: nil) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: non_prism_user.id) }
 
     before do
       sign_out
@@ -164,6 +159,20 @@ RSpec.feature "PRISM tasks", type: :feature do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_current_path("/403")
+    end
+  end
+
+  context "when not signed in" do
+    let(:prism_risk_assessment) { create(:prism_risk_assessment) }
+
+    before do
+      sign_out
+    end
+
+    scenario "visiting the task list" do
+      visit prism.risk_assessment_tasks_path(prism_risk_assessment)
+
+      expect(page).to have_current_path("/sign-in")
     end
   end
 end

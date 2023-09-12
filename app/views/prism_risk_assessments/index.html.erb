@@ -2,32 +2,32 @@
 
 <%= render "prism_risk_assessments/heading/#{@page_name}" %>
 
+<% if @draft_prism_risk_assessments.any? %>
 <div class="govuk-grid-row">
   <section class="govuk-grid-column-full" id="page-content">
     <h2 class="govuk-heading-m">Draft risk assessments</h2>
-    <% if @draft_prism_risk_assessments.any? %>
-      <%= render "table", prism_risk_assessments: @draft_prism_risk_assessments, type: "draft" %>
-      <%= paginate @draft_prism_risk_assessments, param_name: :draft_page %>
-    <% elsif ["team_prism_risk_assessments", "your_prism_risk_assessments"].include?(@page_name) %>
-      <%= render "prism_risk_assessments/no_prism_risk_assessments", page_name: @page_name, type: "draft" %>
-    <% end %>
+    <%= render "table", prism_risk_assessments: @draft_prism_risk_assessments, type: "draft" %>
+    <%= paginate @draft_prism_risk_assessments, param_name: :draft_page %>
   </section>
 </div>
+<% end %>
 
+<% if @submitted_prism_risk_assessments.any? %>
 <div class="govuk-grid-row">
   <section class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Submitted risk assessments</h2>
-    <% if @submitted_prism_risk_assessments.any? %>
-      <%= render "table", prism_risk_assessments: @submitted_prism_risk_assessments, type: "submitted" %>
-      <%= paginate @submitted_prism_risk_assessments, param_name: :submitted_page %>
-    <% elsif ["team_prism_risk_assessments", "your_prism_risk_assessments"].include?(@page_name) %>
-      <%= render "prism_risk_assessments/no_prism_risk_assessments", page_name: @page_name, type: "submitted" %>
-    <% end %>
+    <%= render "table", prism_risk_assessments: @submitted_prism_risk_assessments, type: "submitted" %>
+    <%= paginate @submitted_prism_risk_assessments, param_name: :submitted_page %>
   </section>
 </div>
+<% end %>
+
+<% if @draft_prism_risk_assessments.blank? && @submitted_prism_risk_assessments.blank? %>
+<p class="govuk-body">You haven't added any risk assessments yet.</p>
+<% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= govukButton(text: "Start a new risk assessment", href: prism.serious_risk_path) %>
+    <%= govukButton(text: "Start a new risk assessment", href: all_products_path) %>
   </div>
 </div>

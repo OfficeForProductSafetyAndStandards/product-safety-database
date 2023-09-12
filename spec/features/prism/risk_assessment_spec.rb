@@ -8,7 +8,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
   end
 
   context "with normal risk" do
-    let(:prism_risk_assessment) { create(:prism_risk_assessment) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: user.id) }
 
     scenario "risk assessment completion" do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
@@ -17,10 +17,6 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       fill_in "Name of assessor", with: "Test name"
       fill_in "Name of assessment organisation", with: "Test organisation"
-
-      click_button "Save and continue"
-
-      expect(page).to have_text("This is a placeholder page.")
 
       click_button "Save and continue"
 

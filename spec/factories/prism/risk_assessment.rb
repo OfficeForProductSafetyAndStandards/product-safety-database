@@ -5,7 +5,6 @@ FactoryBot.define do
     tasks_status do
       {
         "add_assessment_details" => "not_started",
-        "search_or_add_a_new_product" => "not_started",
         "add_details_about_products_in_use_and_safety" => "not_started",
         "add_a_number_of_hazards" => "not_started",
         "confirm_overall_product_risk" => "not_started",
@@ -22,7 +21,6 @@ FactoryBot.define do
       tasks_status do
         {
           "add_evaluation_details" => "not_started",
-          "search_or_add_a_new_product" => "not_started",
           "complete_product_risk_evaluation" => "not_started",
           "review_and_submit_results_of_the_evaluation" => "not_started"
         }
@@ -35,6 +33,14 @@ FactoryBot.define do
 
     trait :with_harm_scenario do
       harm_scenarios { [association(:prism_harm_scenario)] }
+    end
+
+    transient do
+      product { create(:product) }
+    end
+
+    before(:create) do |prism_risk_assessment, evaluator|
+      prism_risk_assessment.product_id = evaluator.product.id
     end
   end
 end
