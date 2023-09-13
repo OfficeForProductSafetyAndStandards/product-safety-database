@@ -27,7 +27,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_link product.name
 
-      click_link "Create a new case for this product"
+      click_link "Create a product case"
 
       expect(page).to have_css("h1", text: "Why are you creating a case?")
 
@@ -126,7 +126,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         click_link product.name
 
-        click_link "Create a new case for this product"
+        click_link "Create a product case"
 
         expect(page).to have_css("h1", text: "Why are you creating a case?")
 
@@ -173,7 +173,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_link product.name
 
-      click_link "Create a new case for this product"
+      click_link "Create a product case"
 
       expect(page).to have_css("h1", text: "Why are you creating a case?")
 
@@ -272,7 +272,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         click_link product.name
 
-        click_link "Create a new case for this product"
+        click_link "Create a product case"
 
         expect(page).to have_css("h1", text: "Why are you creating a case?")
 

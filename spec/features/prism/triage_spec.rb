@@ -1,15 +1,18 @@
 require "rails_helper"
 
 RSpec.feature "PRISM triage", type: :feature do
-  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk) }
+  let(:user) { create(:user, :activated, roles: %w[prism]) }
+  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, created_by_user_id: user.id) }
+
+  before do
+    sign_in user
+  end
 
   scenario "visiting the start page" do
     visit prism.root_path
 
     expect(page).to have_text("Determine and evaluate the level of risk presented by a consumer product")
     expect(page).to have_link("Start now")
-
-    expect(page).not_to have_link("Sign out")
   end
 
   scenario "selecting that a product poses a serious risk" do
@@ -66,7 +69,7 @@ RSpec.feature "PRISM triage", type: :feature do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_text("Sign in")
+    expect(page).to have_text("Evaluate the product deemed serious risk")
   end
 
   scenario "selecting the product requires a full risk assessment" do
@@ -81,7 +84,7 @@ RSpec.feature "PRISM triage", type: :feature do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_text("Sign in")
+    expect(page).to have_text("Evaluate the product deemed serious risk")
   end
 
   scenario "selecting the product may not require a full risk assessment" do
@@ -91,5 +94,32 @@ RSpec.feature "PRISM triage", type: :feature do
     click_button "Continue"
 
     expect(page).to have_text("Perform risk triage")
+  end
+
+  context "when signed in as a user without the PRISM role" do
+    let(:non_prism_user) { create(:user, :activated) }
+
+    before do
+      sign_out
+      sign_in non_prism_user
+    end
+
+    scenario "visiting the start page" do
+      visit prism.root_path
+
+      expect(page).to have_current_path("/403")
+    end
+  end
+
+  context "when not signed in" do
+    before do
+      sign_out
+    end
+
+    scenario "visiting the start page" do
+      visit prism.root_path
+
+      expect(page).to have_current_path("/sign-in")
+    end
   end
 end

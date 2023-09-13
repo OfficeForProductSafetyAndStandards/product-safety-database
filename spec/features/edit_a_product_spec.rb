@@ -35,7 +35,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
     it "does not allow user to edit the product" do
       visit "/products/#{product.id}"
-      expect(page).not_to have_link "Edit the product record"
+      expect(page).not_to have_link "Edit this product record"
 
       visit "/cases/#{investigation.pretty_id}/products"
       expect(page).not_to have_link "Change product details"
@@ -51,7 +51,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       visit "/products/#{product.id}"
 
-      click_link "Edit the product record"
+      click_link "Edit this product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)
       expect(page).to have_field("Product subcategory", with: product.subcategory)
@@ -145,7 +145,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       visit "/products/#{product.id}"
 
-      click_link "Edit the product record"
+      click_link "Edit this product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)
       expect(page).to have_field("Product subcategory", with: product.subcategory)

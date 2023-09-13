@@ -1,6 +1,6 @@
 # Define wizard steps for normal and serious risk pathways split by section
 NORMAL_RISK_DEFINE_STEPS = %i[
-  add_assessment_details search_or_add_a_new_product add_details_about_products_in_use_and_safety
+  add_assessment_details add_details_about_products_in_use_and_safety
 ].freeze
 NORMAL_RISK_IDENTIFY_STEPS = %i[
   add_a_number_of_hazards
@@ -12,7 +12,7 @@ NORMAL_RISK_EVALUATE_STEPS = %i[
   confirm_overall_product_risk add_level_of_uncertainty_and_sensitivity_analysis consider_the_nature_of_the_risk consider_perception_and_tolerability_of_the_risk risk_evaluation_outcome review_and_submit_results_of_the_assessment
 ].freeze
 SERIOUS_RISK_DEFINE_STEPS = %i[
-  add_evaluation_details search_or_add_a_new_product
+  add_evaluation_details
 ].freeze
 SERIOUS_RISK_EVALUATE_STEPS = %i[
   complete_product_risk_evaluation review_and_submit_results_of_the_evaluation

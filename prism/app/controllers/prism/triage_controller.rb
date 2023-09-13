@@ -1,6 +1,5 @@
 module Prism
   class TriageController < ApplicationController
-    skip_before_action :authenticate_user!
     before_action :prism_risk_assessment, except: %i[index serious_risk serious_risk_choose perform_risk_triage]
 
     def index; end
@@ -10,7 +9,9 @@ module Prism
     end
 
     def serious_risk_choose
-      @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params)
+      return redirect_to main_app.all_products_path if serious_risk_params[:product_id].present? && !Product.find_by(id: serious_risk_params[:product_id])
+
+      @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params.merge(created_by_user_id: current_user.id))
 
       if @prism_risk_assessment.save(context: :serious_risk)
         if @prism_risk_assessment.serious_risk?
@@ -31,8 +32,11 @@ module Prism
       if @prism_risk_assessment.save(context: :serious_risk_rebuttable)
         if @prism_risk_assessment.less_than_serious_risk?
           redirect_to full_risk_assessment_required_path(@prism_risk_assessment)
-        else
+        elsif @prism_risk_assessment.product_id.present?
           redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
+        else
+          session[:prism_risk_assessment_id] = @prism_risk_assessment.id
+          redirect_to main_app.your_prism_risk_assessments_path
         end
       else
         render :serious_risk_rebuttable
@@ -50,8 +54,11 @@ module Prism
 
       if full_risk_assessment_required_params[:full_risk_assessment_required] == "false"
         redirect_to perform_risk_triage_path(@prism_risk_assessment)
-      else
+      elsif @prism_risk_assessment.product_id.present?
         redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
+      else
+        session[:prism_risk_assessment_id] = @prism_risk_assessment.id
+        redirect_to main_app.your_prism_risk_assessments_path
       end
     end
 
@@ -60,14 +67,11 @@ module Prism
   private
 
     def prism_risk_assessment
-      # We can't set the user ID until the tasks list page since that's the first point at which
-      # authentication is enforced. We explicitly search for risk assessments without a user ID so
-      # triage cannot be re-entered once completed.
-      @prism_risk_assessment ||= Prism::RiskAssessment.find_by!(id: params[:id], created_by_user_id: nil)
+      @prism_risk_assessment ||= Prism::RiskAssessment.find_by!(id: params[:id], created_by_user_id: current_user.id)
     end
 
     def serious_risk_params
-      params.require(:risk_assessment).permit(:risk_type)
+      params.require(:risk_assessment).permit(:risk_type, :product_id)
     end
 
     def serious_risk_rebuttable_params

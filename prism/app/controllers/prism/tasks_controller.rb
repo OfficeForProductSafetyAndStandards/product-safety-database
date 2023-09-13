@@ -1,9 +1,10 @@
 module Prism
   class TasksController < ApplicationController
     before_action :prism_risk_assessment
-    before_action :set_prism_risk_assessment_created_by_user_id, only: %i[index]
     before_action :set_prism_risk_assessment_tasks_status, only: %i[index]
+    before_action :ensure_product_id, only: %i[index]
     before_action :ensure_one_harm_scenario, only: %i[index]
+    before_action :clear_session_risk_assessment_id, only: %i[index]
     before_action :harm_scenario, only: %i[remove_harm_scenario delete_harm_scenario]
 
     def index
@@ -31,17 +32,7 @@ module Prism
   private
 
     def prism_risk_assessment
-      @prism_risk_assessment ||= if action_name == "index"
-                                   Prism::RiskAssessment.includes(:harm_scenarios).where(id: params[:risk_assessment_id], created_by_user_id: current_user.id).or(Prism::RiskAssessment.where(id: params[:risk_assessment_id], created_by_user_id: nil)).first!
-                                 else
-                                   Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
-                                 end
-    end
-
-    def set_prism_risk_assessment_created_by_user_id
-      return unless @prism_risk_assessment.created_by_user_id.nil?
-
-      @prism_risk_assessment.update!(created_by_user_id: current_user.id)
+      @prism_risk_assessment ||= Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
     end
 
     def set_prism_risk_assessment_tasks_status
@@ -59,6 +50,12 @@ module Prism
       end
 
       @prism_risk_assessment.save!
+    end
+
+    def ensure_product_id
+      @prism_risk_assessment.update!(product_id: params[:product_id]) if params[:product_id].present? && @prism_risk_assessment.product_id.blank? && Product.find_by(id: params[:product_id])
+
+      redirect_to main_app.all_products_path if @prism_risk_assessment.product_id.blank?
     end
 
     def ensure_one_harm_scenario
@@ -79,6 +76,10 @@ module Prism
 
     def harm_scenario
       @harm_scenario = @prism_risk_assessment.harm_scenarios.find_by!(id: params[:harm_scenario_id])
+    end
+
+    def clear_session_risk_assessment_id
+      session.delete(:prism_risk_assessment_id)
     end
   end
 end
