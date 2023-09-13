@@ -1,19 +1,14 @@
-<% page_heading =  "Edit risk assessment" %>
+<% page_heading = "Edit risk assessment" %>
 <%= page_title page_heading, errors: @risk_assessment_form.errors.any? %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
-    <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessment_path(@investigation.pretty_id, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
-
+    <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessment_path(@investigation.pretty_id, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
       <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level assessed_by investigation_product_ids risk_assessment_file])%>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
       <%= render "form_fields", form: form, risk_assessment_form: @risk_assessment_form, investigation: @investigation %>
-
       <%= govukButton(text: "Update risk assessment") %>
     <% end %>
-
   </div>
 </div>

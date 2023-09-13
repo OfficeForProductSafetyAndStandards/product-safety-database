@@ -9,11 +9,16 @@ module Prism
     end
 
     def serious_risk_choose
-      return redirect_to main_app.all_products_path if serious_risk_params[:product_id].present? && !Product.find_by(id: serious_risk_params[:product_id])
-
-      @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params.merge(created_by_user_id: current_user.id))
+      @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params.merge(created_by_user_id: current_user.id).except(:investigation_id, :product_id, :product_ids))
 
       if @prism_risk_assessment.save(context: :serious_risk)
+        if serious_risk_params[:investigation_id].present? && serious_risk_params[:product_ids].present?
+          associated_investigation = @prism_risk_assessment.associated_investigations.create!(investigation_id: serious_risk_params[:investigation_id])
+          serious_risk_params[:product_ids].each { |product_id| associated_investigation.associated_investigation_products.create!(product_id:) }
+        elsif serious_risk_params[:product_id].present?
+          @prism_risk_assessment.associated_products.create!(product_id: serious_risk_params[:product_id])
+        end
+
         if @prism_risk_assessment.serious_risk?
           redirect_to serious_risk_rebuttable_path(@prism_risk_assessment)
         else
@@ -32,7 +37,7 @@ module Prism
       if @prism_risk_assessment.save(context: :serious_risk_rebuttable)
         if @prism_risk_assessment.less_than_serious_risk?
           redirect_to full_risk_assessment_required_path(@prism_risk_assessment)
-        elsif @prism_risk_assessment.product_id.present?
+        elsif @prism_risk_assessment.associated_investigations.present? || @prism_risk_assessment.associated_products.present?
           redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
         else
           session[:prism_risk_assessment_id] = @prism_risk_assessment.id
@@ -54,7 +59,7 @@ module Prism
 
       if full_risk_assessment_required_params[:full_risk_assessment_required] == "false"
         redirect_to perform_risk_triage_path(@prism_risk_assessment)
-      elsif @prism_risk_assessment.product_id.present?
+      elsif @prism_risk_assessment.associated_investigations.present? || @prism_risk_assessment.associated_products.present?
         redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
       else
         session[:prism_risk_assessment_id] = @prism_risk_assessment.id
@@ -71,7 +76,7 @@ module Prism
     end
 
     def serious_risk_params
-      params.require(:risk_assessment).permit(:risk_type, :product_id)
+      params.require(:risk_assessment).permit(:risk_type, :investigation_id, :product_id, product_ids: [])
     end
 
     def serious_risk_rebuttable_params

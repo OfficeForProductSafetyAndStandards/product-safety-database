@@ -9,6 +9,9 @@ module Prism
     has_one :product_hazard, autosave: true, dependent: :destroy
     has_many :harm_scenarios, autosave: true, dependent: :destroy
     has_one :evaluation, autosave: true, dependent: :destroy
+    has_many :associated_products, autosave: true, dependent: :destroy
+    has_many :associated_investigations, autosave: true, dependent: :destroy
+    has_many :associated_investigation_products, through: :associated_investigations, autosave: true, dependent: :destroy
 
     # This is used on the "Review the overall product risk level"
     # page in case there are no other fields to make strong params
@@ -89,8 +92,14 @@ module Prism
       end
     end
 
-    def product
-      Product.find(product_id) if product_id.present?
+    def product_name
+      if associated_investigations.present? && associated_investigation_products.present?
+        associated_investigations.first.associated_investigation_products.first.product.name
+      elsif associated_products.present?
+        associated_products.first.product.name
+      else
+        "Unknown product"
+      end
     end
 
   private

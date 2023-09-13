@@ -11,7 +11,7 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l">Placeholder product</p>
+        <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
       <% end %>
       <%= f.govuk_text_field :selling_organisation, label: { text: "Name of the business that sold the product", size: "m" }, hint: { text: "This information is essential for product traceability." } %>
       <%= f.govuk_radio_buttons_fieldset :total_products_sold_estimatable, legend: { text: "Can the total number of products in use be estimated?", size: "m" } do %>

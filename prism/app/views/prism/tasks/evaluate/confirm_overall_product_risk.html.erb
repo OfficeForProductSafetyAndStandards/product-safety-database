@@ -11,7 +11,7 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l">Placeholder product</p>
+        <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
         <% if @prism_risk_assessment.product_market_detail&.total_products_sold.present? %><p class="govuk-body">Number of products in use: <%= @prism_risk_assessment.product_market_detail&.total_products_sold %></p><% end %>
       <% end %>
       <%= govuk_inset_text(text: "The overall risk level takes into account the total number of products in use, if available.") %>

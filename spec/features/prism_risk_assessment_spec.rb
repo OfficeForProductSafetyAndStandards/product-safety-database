@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.feature "PRISM risk assessment dashboard", type: :feature do
   context "when the user has access to PRISM" do
     let(:user) { create(:user, :activated, roles: %w[prism]) }
-    let(:draft_prism_risk_assessment) { create(:prism_risk_assessment, :with_harm_scenario, created_by_user_id: user.id) }
-    let(:submitted_prism_risk_assessment) { create(:prism_risk_assessment, :submitted, :with_harm_scenario, created_by_user_id: user.id) }
+    let(:draft_prism_risk_assessment) { create(:prism_risk_assessment, :with_product, :with_harm_scenario, created_by_user_id: user.id) }
+    let(:submitted_prism_risk_assessment) { create(:prism_risk_assessment, :submitted, :with_product, :with_harm_scenario, created_by_user_id: user.id) }
 
     before do
       sign_in user
@@ -24,10 +24,10 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
         click_link "Risk assessments"
 
         expect(page).to have_text("Risk assessments")
-        expect(page).to have_text(draft_prism_risk_assessment.product.name)
+        expect(page).to have_text(draft_prism_risk_assessment.product_name)
         expect(page).to have_text(draft_prism_risk_assessment.harm_scenarios.first.description)
         expect(page).to have_link("Make changes")
-        expect(page).to have_text(submitted_prism_risk_assessment.product.name)
+        expect(page).to have_text(submitted_prism_risk_assessment.product_name)
         expect(page).to have_text(submitted_prism_risk_assessment.harm_scenarios.first.description)
         expect(page).to have_link("View assessment")
         expect(page).to have_link("Start a new risk assessment")
@@ -53,14 +53,16 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
 
       context "without an associated product" do
         before do
-          draft_prism_risk_assessment.product_id = nil
-          draft_prism_risk_assessment.save!
+          draft_prism_risk_assessment.associated_products.destroy_all
         end
 
         scenario "making changes to an existing PRISM risk assessment" do
           visit "/"
 
           click_link "Risk assessments"
+
+          expect(page).to have_text("Unknown product")
+
           click_link "Make changes"
 
           expect(page).to have_current_path("/products/all-products")

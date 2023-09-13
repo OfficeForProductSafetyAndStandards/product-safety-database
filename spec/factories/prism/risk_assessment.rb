@@ -31,16 +31,12 @@ FactoryBot.define do
       state { "submitted" }
     end
 
+    trait :with_product do
+      associated_products { [association(:prism_associated_product)] }
+    end
+
     trait :with_harm_scenario do
       harm_scenarios { [association(:prism_harm_scenario)] }
-    end
-
-    transient do
-      product { create(:product) }
-    end
-
-    before(:create) do |prism_risk_assessment, evaluator|
-      prism_risk_assessment.product_id = evaluator.product.id
     end
   end
 end

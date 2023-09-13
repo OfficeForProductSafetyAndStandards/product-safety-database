@@ -11,7 +11,7 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l">Placeholder product</p>
+        <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
       <% end %>
       <%= f.govuk_radio_buttons_fieldset :product_aimed_at, legend: { text: "Who is the product aimed at?", size: "m" } do %>
         <%= f.govuk_radio_button :product_aimed_at, "particular_group_of_users", label: { text: "Particular group of users" }, hint: { text: "For example, children, men or women, the elderly, certain ethnic or cultural groups, etc." }, link_errors: true do %>

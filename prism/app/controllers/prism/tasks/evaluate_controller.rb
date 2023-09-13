@@ -52,7 +52,7 @@ module Prism
   private
 
     def prism_risk_assessment
-      @prism_risk_assessment ||= Prism::RiskAssessment.includes(:product_market_detail, :harm_scenarios, :evaluation).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+      @prism_risk_assessment ||= Prism::RiskAssessment.includes(:associated_investigations, :associated_products, :product_market_detail, :harm_scenarios, :evaluation).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
     end
 
     def harm_scenarios

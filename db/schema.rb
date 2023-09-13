@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_07_101809) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_13_141145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -292,6 +292,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_101809) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
+  create_table "prism_associated_investigation_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "associated_investigation_id"
+    t.datetime "created_at", null: false
+    t.bigint "product_id"
+    t.datetime "updated_at", null: false
+    t.index ["associated_investigation_id"], name: "index_prism_associated_products_on_associated_investigation_id"
+    t.index ["product_id"], name: "index_prism_associated_investigation_products_on_product_id"
+  end
+
+  create_table "prism_associated_investigations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "investigation_id"
+    t.uuid "risk_assessment_id"
+    t.datetime "updated_at", null: false
+    t.index ["investigation_id"], name: "index_prism_associated_investigations_on_investigation_id"
+    t.index ["risk_assessment_id"], name: "index_prism_associated_investigations_on_risk_assessment_id"
+  end
+
+  create_table "prism_associated_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "product_id"
+    t.uuid "risk_assessment_id"
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_prism_associated_products_on_product_id"
+    t.index ["risk_assessment_id"], name: "index_prism_associated_products_on_risk_assessment_id"
+  end
+
   create_table "prism_evaluations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "aimed_at_vulnerable_users"
     t.string "comparable_risk_level"
@@ -383,7 +410,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_101809) do
     t.string "overall_product_risk_level"
     t.string "overall_product_risk_methodology"
     t.string "overall_product_risk_plus_label"
-    t.bigint "product_id"
     t.string "risk_type"
     t.jsonb "routing_questions"
     t.string "serious_risk_rebuttable_factors"

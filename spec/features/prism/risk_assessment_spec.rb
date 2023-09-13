@@ -8,7 +8,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
   end
 
   context "with normal risk" do
-    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: user.id) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, :with_product, created_by_user_id: user.id) }
 
     scenario "risk assessment completion" do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
@@ -50,7 +50,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      expect(page).to have_text("For\nElectrical\nPlaceholder product\nThis is a test description 1\nAffected users: Particular group of users")
+      expect(page).to have_text("For\nElectrical\n#{prism_risk_assessment.product_name}\nThis is a test description 1\nAffected users: Particular group of users")
 
       fill_in "Step description", with: "Test description for step 1"
 
@@ -61,7 +61,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      expect(page).to have_text("For\nElectrical\nPlaceholder product\nThis is a test description 1\nAffected users: Particular group of users\nSeverity of harm: Level 3\nMultiple casualties: yes")
+      expect(page).to have_text("For\nElectrical\n#{prism_risk_assessment.product_name}\nThis is a test description 1\nAffected users: Particular group of users\nSeverity of harm: Level 3\nMultiple casualties: yes")
 
       choose "Decimal number" # In what format would you like to express the probability of harm?
       fill_in "Enter the probability as a decimal number.", with: "0.25"
@@ -92,7 +92,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      expect(page).to have_text("For\nMechanical\nPlaceholder product\nThis is a test description 2\nAffected users: General population")
+      expect(page).to have_text("For\nMechanical\n#{prism_risk_assessment.product_name}\nThis is a test description 2\nAffected users: General population")
 
       fill_in "Step description", with: "Test description for step 1"
 
