@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "PRISM triage", type: :feature do
   let(:user) { create(:user, :activated, roles: %w[prism]) }
-  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, created_by_user_id: user.id) }
+  let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, :with_product, created_by_user_id: user.id) }
 
   before do
     sign_in user

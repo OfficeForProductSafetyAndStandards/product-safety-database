@@ -12,7 +12,7 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <p class="govuk-body-l"><%= hazard_type %></p>
-        <p class="govuk-body">Placeholder product</p>
+        <p class="govuk-body"><%= @prism_risk_assessment.product_name %></p>
         <p class="govuk-body"><%= @harm_scenario.description %></p>
         <p class="govuk-body">Affected users: <%= affected_users %></p>
       <% end %>

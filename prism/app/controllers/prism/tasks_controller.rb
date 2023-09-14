@@ -2,7 +2,7 @@ module Prism
   class TasksController < ApplicationController
     before_action :prism_risk_assessment
     before_action :set_prism_risk_assessment_tasks_status, only: %i[index]
-    before_action :ensure_product_id, only: %i[index]
+    before_action :ensure_associated_investigation_or_product, only: %i[index]
     before_action :ensure_one_harm_scenario, only: %i[index]
     before_action :clear_session_risk_assessment_id, only: %i[index]
     before_action :harm_scenario, only: %i[remove_harm_scenario delete_harm_scenario]
@@ -52,10 +52,15 @@ module Prism
       @prism_risk_assessment.save!
     end
 
-    def ensure_product_id
-      @prism_risk_assessment.update!(product_id: params[:product_id]) if params[:product_id].present? && @prism_risk_assessment.product_id.blank? && Product.find_by(id: params[:product_id])
+    def ensure_associated_investigation_or_product
+      if params[:investigation_id].present? && params[:product_ids].present?
+        associated_investigation = @prism_risk_assessment.associated_investigations.create!(investigation_id: params[:investigation_id])
+        params[:product_ids].each { |product_id| associated_investigation.associated_investigation_products.create!(product_id:) }
+      elsif params[:product_id].present?
+        @prism_risk_assessment.associated_products.create!(product_id: params[:product_id])
+      end
 
-      redirect_to main_app.all_products_path if @prism_risk_assessment.product_id.blank?
+      redirect_to main_app.all_products_path if @prism_risk_assessment.associated_products.blank? && @prism_risk_assessment.associated_investigations.blank?
     end
 
     def ensure_one_harm_scenario
