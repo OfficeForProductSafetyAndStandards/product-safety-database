@@ -25,4 +25,9 @@ class PrismRiskAssessment < ApplicationRecord
       "Unknown product"
     end
   end
+
+  def user_and_organisation
+    user = User.find(created_by_user_id)
+    [user.name, user.organisation.name]
+  end
 end

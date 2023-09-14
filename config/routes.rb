@@ -147,6 +147,12 @@ Rails.application.routes.draw do
       resource :comment, only: %i[create new]
     end
 
+    resources :prism_risk_assessments, controller: "investigations/prism_risk_assessments", path: "prism-risk-assessments", only: %i[new create] do
+      collection do
+        get :choose_product
+      end
+    end
+
     resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: %i[new create show edit update] do
       resource :update_case_risk_level, only: %i[show update], path: "update-case-risk-level", controller: "investigations/update_case_risk_level_from_risk_assessment"
     end
