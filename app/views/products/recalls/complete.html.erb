@@ -78,7 +78,7 @@ The listing has been removed by the online market place - <%= @form.attributes["
 
 PSD case number: <%= @form.attributes["alert_number"] %>
 
-Notified by: <%= @product.owning_team.name %>
+Notified by: <%= @product.owning_team&.name %>
       </textarea>
       <div class="govuk-form-group">
         <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
@@ -127,6 +127,8 @@ Product: <%= @product.name %>
 
 Hazard: <%= @form.attributes["risk_type"] %>
 
+Risk Level: <%= @form.attributes["risk_level"].presence || "Unknown" %>
+
 Corrective action: <%= @form.attributes["corrective_actions"] %>
 
 <% if @form.attributes["online_marketplace"]  %>
@@ -155,7 +157,7 @@ The listing has been removed by the online market place - <%= @form.attributes["
 
 PSD case number: <%= @form.attributes["alert_number"] %>
 
-Notified by: <%= @product.owning_team.name %>
+Notified by: <%= @product.owning_team&.name %>
       </textarea>
       <div class="govuk-form-group">
         <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">

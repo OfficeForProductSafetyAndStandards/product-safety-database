@@ -101,7 +101,7 @@
           }
         ]
       %>
-      <%= form.govuk_input :notified_by, label: "Notified by", value: @product.owning_team.name %>
+      <%= form.govuk_input :notified_by, label: "Notified by", value: @product.owning_team&.name %>
 
       <div class="govuk-button-group">
         <%= form.submit "Continue", class: "govuk-button", role: "button" unless @form.last_step? %>

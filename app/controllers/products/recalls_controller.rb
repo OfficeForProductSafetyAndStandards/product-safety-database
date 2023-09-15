@@ -28,8 +28,12 @@ module Products
     def pdf
       @form = ProductRecallForm.new(recall_form_params)
       filetype = product_safety_report? ? "product-safety-report" : "product-recall"
-      filename = "#{@product.investigations&.first&.pretty_id}-#{filetype}-#{@form.attributes['pdf_title']&.parameterize}"
-      send_data(GenerateProductRecallPdf.new(@form.attributes, @product).render, filename:, type: "application/pdf", disposition: "attachment")
+      file = Tempfile.new(["#{@product.investigations&.first&.pretty_id}-#{filetype}-#{@form.attributes['pdf_title']&.parameterize}-#{Time.zone.now.to_i}", ".pdf"], binmode: true)
+      GenerateProductRecallPdf.generate_pdf(@form.attributes, @product, file)
+      file.rewind
+      send_file file.path
+    ensure
+      file&.close
     end
 
   private
