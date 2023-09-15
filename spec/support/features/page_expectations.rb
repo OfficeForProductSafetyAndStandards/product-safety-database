@@ -674,7 +674,7 @@ module PageExpectations
 
   def expect_to_be_on_add_risk_assessment_for_a_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/new")
-    expect_page_to_have_h1("Add risk assessment")
+    expect_page_to_have_h1("Attach existing risk assessment")
   end
 
   def expect_to_be_on_risk_assessement_for_a_case_page(case_id:, risk_assessment_id: nil)

@@ -1,0 +1,22 @@
+<% page_heading = "Select a product for risk assessment" %>
+<%= page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <%= form_with url: new_investigation_prism_risk_assessment_path, method: :get, builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <%= govukRadios(
+        form: form,
+        key: :product_id,
+        items: @products.map do |product|
+          {
+            id: "product_#{product.id}",
+            text: product.name,
+            value: product.id
+          }
+        end,
+        fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } }
+      ) %>
+      <%= govukButton(text: "Continue") %>
+    <% end %>
+  </div>
+</div>

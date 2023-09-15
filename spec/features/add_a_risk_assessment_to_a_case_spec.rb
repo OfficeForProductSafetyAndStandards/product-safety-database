@@ -44,6 +44,9 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
     click_link "Add a risk assessment"
+    choose product1.name
+    click_button "Continue"
+    click_link "Attach existing risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
     expect_to_have_case_breadcrumbs
@@ -56,7 +59,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
                                 options: ["", "MyBrand Distributors", "MyBrand Inc"],
                                 selected: [""])
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter the date of the assessment"
@@ -67,7 +70,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     attach_file "Upload the risk assessment", risk_assessment_file
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     expect(page).to have_css("#current-attachment-details a", text: risk_assessment_file.basename.to_s)
     expect(page).not_to have_text("You must upload the risk assessment")
@@ -92,7 +95,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     fill_in("Further details (optional)", with: "Products risk-assessed in response to incident.")
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     # Skip the 'Case risk level' page as it is automatically updated to match
 
@@ -154,14 +157,14 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
       check "MyBrand washing machine model X"
     end
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     expect(page).to have_text("Select business related to the case")
     select "MyBrand Inc", from: "Choose business"
 
     attach_file "Upload the risk assessment", risk_assessment_file
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     # Skip the 'Case risk level' page as it is automatically updated to match
 
@@ -200,24 +203,24 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
       check "MyBrand washing machine model X"
     end
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     within_fieldset("What was the risk level?") do
       choose "Serious risk"
     end
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     expect(page).to have_text("Enter organisation name")
     fill_in "Organisation name", with: "RiskAssessmentsRUs"
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     # Check that field retains value when there's a validation error
     expect(page).to have_field("Organisation name", with: "RiskAssessmentsRUs")
 
     attach_file "Upload the risk assessment", risk_assessment_file
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     # Skip the 'Case risk level' page as it is automatically updated to match
 
@@ -273,7 +276,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     attach_file "Upload the risk assessment", risk_assessment_file
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     # Skip the 'Case risk level' page as it is automatically updated to match
 
@@ -307,7 +310,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     attach_file "Upload the risk assessment", risk_assessment_file
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     # Skip the 'Case risk level' page as it already matches
 
@@ -337,7 +340,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     attach_file "Upload the risk assessment", risk_assessment_file
 
-    click_button "Add risk assessment"
+    click_button "Attach risk assessment"
 
     expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation_with_not_conclusive_risk_level.pretty_id)
 
