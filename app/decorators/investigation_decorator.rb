@@ -50,7 +50,7 @@ class InvestigationDecorator < ApplicationDecorator
     if object.is_private? && !viewing_user.has_role?(:super_user)
       "Case restricted"
     else
-      h.link_to("Case restricted - #{title}", h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
+      h.link_to(title, h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
     end
   end
 
