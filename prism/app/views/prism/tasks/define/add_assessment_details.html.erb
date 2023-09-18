@@ -9,6 +9,7 @@
         <span class="govuk-caption-l">Define the product</span>
         Add assessment details
       </h1>
+      <%= f.govuk_text_field :name, label: { text: "Assessment title", size: "m" }, hint: { text: "Give the risk assessment a short descriptive title." } %>
       <%= f.govuk_text_field :assessor_name, label: { text: "Name of assessor", size: "m" }, hint: { text: "Full name of the individual carrying out the assessment." } %>
       <%= f.govuk_text_field :assessment_organisation, label: { text: "Name of assessment organisation", size: "m" }, hint: { text: "For example, the name of the organisation that employs the assessor." } %>
       <%= f.govuk_submit "Save and continue" do %>

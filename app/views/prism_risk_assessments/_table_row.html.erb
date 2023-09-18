@@ -3,7 +3,7 @@
     <%= prism_risk_assessment.product_name %>
   </th>
   <td class="govuk-table__cell">
-    <%= prism_risk_assessment.prism_harm_scenarios&.first&.description || "None" %>
+    <%= prism_risk_assessment.name || "Unknown" %>
   </td>
   <td class="govuk-table__cell">
     <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
@@ -13,6 +13,6 @@
   </td>
   <td class="govuk-table__cell">
     <%# TODO(ruben): Add link to view submitted assessment %>
-    <% if type == "submitted" %><a href="#" class="govuk-link">View assessment</a><% else %><a href="<%= prism.risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">Make changes</a><% end %>
+    <% if type == "submitted" %><a href="#" class="govuk-link">View assessment</a><hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"><a href="<%= add_to_case_prism_risk_assessments_path(prism_risk_assessment_id: prism_risk_assessment.id) %>" class="govuk-link">Add to a case</a><% else %><a href="<%= prism.risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">Make changes</a><% end %>
   </td>
 </tr>

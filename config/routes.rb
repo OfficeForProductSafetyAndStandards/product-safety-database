@@ -272,6 +272,8 @@ Rails.application.routes.draw do
 
   resource :prism_risk_assessments, only: [], path: "prism-risk-assessments" do
     get "your-prism-risk-assessments", to: "prism_risk_assessments#your_prism_risk_assessments", as: "your"
+    get "add-to-case", to: "prism_risk_assessments#add_to_case", as: "add_to_case"
+    post "add-to-case", to: "prism_risk_assessments#add_to_case"
   end
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do

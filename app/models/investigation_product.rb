@@ -17,6 +17,11 @@ class InvestigationProduct < ApplicationRecord
   has_many :unexpected_events
   has_many :risk_assessed_products
   has_many :risk_assessments, through: :risk_assessed_products
+  has_many :prism_associated_products, foreign_key: :product_id
+  has_many :prism_associated_investigation_products, foreign_key: :product_id
+  has_many :prism_risk_assessments_via_product, through: :prism_associated_products, class_name: "PrismRiskAssessment", source: :prism_risk_assessment
+  has_many :prism_associated_investigations, through: :prism_associated_investigation_products
+  has_many :prism_risk_assessments_via_investigations, through: :prism_associated_investigations, class_name: "PrismRiskAssessment", source: :prism_risk_assessment
   has_many :ucr_numbers
 
   belongs_to :added_by_user, class_name: :User, optional: true
@@ -34,8 +39,12 @@ class InvestigationProduct < ApplicationRecord
     investigation_closed_at ? super.paper_trail.version_at(investigation_closed_at) || super : super
   end
 
+  def prism_risk_assessments
+    prism_risk_assessments_via_product + prism_risk_assessments_via_investigations
+  end
+
   def supporting_information
-    tests + corrective_actions + unexpected_events + risk_assessments
+    tests + corrective_actions + unexpected_events + risk_assessments + prism_risk_assessments
   end
 
   def psd_ref

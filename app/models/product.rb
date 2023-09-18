@@ -40,6 +40,11 @@ class Product < ApplicationRecord
   has_many :unexpected_events, through: :investigation_products
   has_many :risk_assessed_products, through: :investigation_products
   has_many :risk_assessments, through: :risk_assessed_products
+  has_many :prism_associated_products
+  has_many :prism_associated_investigation_products
+  has_many :prism_risk_assessments_via_product, through: :prism_associated_products, class_name: "PrismRiskAssessment", source: :prism_risk_assessment
+  has_many :prism_associated_investigations, through: :prism_associated_investigation_products
+  has_many :prism_risk_assessments_via_investigations, through: :prism_associated_investigations, class_name: "PrismRiskAssessment", source: :prism_risk_assessment
 
   belongs_to :added_by_user, class_name: :User, optional: true
   belongs_to :owning_team, class_name: "Team", inverse_of: :owned_products, optional: true
@@ -68,8 +73,12 @@ class Product < ApplicationRecord
     false
   end
 
+  def prism_risk_assessments
+    prism_risk_assessments_via_product + prism_risk_assessments_via_investigations
+  end
+
   def supporting_information
-    tests + corrective_actions + unexpected_events + risk_assessments
+    tests + corrective_actions + unexpected_events + risk_assessments + prism_risk_assessments
   end
 
   def images

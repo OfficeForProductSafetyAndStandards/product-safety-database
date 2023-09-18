@@ -25,10 +25,10 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
 
         expect(page).to have_text("Risk assessments")
         expect(page).to have_text(draft_prism_risk_assessment.product_name)
-        expect(page).to have_text(draft_prism_risk_assessment.harm_scenarios.first.description)
+        expect(page).to have_text(draft_prism_risk_assessment.name)
         expect(page).to have_link("Make changes")
         expect(page).to have_text(submitted_prism_risk_assessment.product_name)
-        expect(page).to have_text(submitted_prism_risk_assessment.harm_scenarios.first.description)
+        expect(page).to have_text(submitted_prism_risk_assessment.name)
         expect(page).to have_link("View assessment")
         expect(page).to have_link("Start a new risk assessment")
       end

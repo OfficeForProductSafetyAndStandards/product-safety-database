@@ -18,6 +18,10 @@ module Investigations
           items: @investigation.risk_assessments.order(created_at: :desc).map(&:decorate),
           new_path: new_investigation_risk_assessment_path(@investigation)
         },
+        "PRISM risk assessments" => {
+          items: @investigation.prism_risk_assessments.order(created_at: :desc).map(&:decorate),
+          new_path: new_investigation_prism_risk_assessment_path(@investigation)
+        },
         "Correspondence" => {
           items: @investigation.correspondences.order(created_at: :desc).map(&:decorate),
           new_path: new_investigation_correspondence_path(@investigation)

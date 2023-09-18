@@ -1,7 +1,7 @@
 <% page_heading = "Add risk assessment" %>
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-full">
     <%= form_with url: investigation_prism_risk_assessments_path, method: :post, builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
@@ -16,7 +16,7 @@
           <caption class="govuk-table__caption govuk-visually-hidden">PRISM risk assessments: a simple data table.</caption>
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th scope="col" class="govuk-table__header">Hazard description</th>
+              <th scope="col" class="govuk-table__header">Assessment title</th>
               <th scope="col" class="govuk-table__header">Created by</th>
               <th scope="col" class="govuk-table__header">Last updated</th>
               <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">View assessment</span></th>
@@ -27,7 +27,7 @@
             <% @related_prism_risk_assessments.each do |prism_risk_assessment| %>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                  <%= prism_risk_assessment.prism_harm_scenarios&.first&.description || "None" %>
+                  <%= prism_risk_assessment.name || "Unknown" %>
                 </th>
                 <td class="govuk-table__cell">
                   <%= prism_risk_assessment.user_and_organisation.join("<br>").html_safe %>
@@ -40,7 +40,7 @@
                   <a href="#" class="govuk-link">View<span class="govuk-visually-hidden"> assessment</span></a>
                 </td>
                 <td class="govuk-table__cell">
-                  <%= govukButton(text: "Add", name: "prism_risk_assessment_id", value: prism_risk_assessment.id) %>
+                  <%= govukButton(text: "Add", name: "prism_risk_assessment_id", value: prism_risk_assessment.id, classes: "govuk-!-margin-bottom-0") %>
                 </td>
               </tr>
             <% end %>
@@ -48,7 +48,7 @@
           <% if @related_prism_risk_assessments.size > 11 %>
             <tfoot class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Hazard description</th>
+                <th scope="col" class="govuk-table__header">Assessment title</th>
                 <th scope="col" class="govuk-table__header">Created by</th>
                 <th scope="col" class="govuk-table__header">Last updated</th>
                 <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">View assessment</span></th>

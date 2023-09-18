@@ -34,7 +34,8 @@ class Investigations::TsInvestigationsController < ApplicationController
       @investigation = session[:investigation]
       @product = authorize_product
       @investigation.build_owner_collaborations_from(current_user)
-      CreateCase.call(investigation: session[:investigation], user: current_user, product: Product.find(session[:product_id]))
+      prism_risk_assessment = PrismRiskAssessment.find(session[:prism_risk_assessment_id]) if session[:prism_risk_assessment_id].present?
+      CreateCase.call(investigation: session[:investigation], user: current_user, product: Product.find(session[:product_id]), prism_risk_assessment:)
       clear_session
     end
 
@@ -44,6 +45,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   def new
     clear_session
     session[:product_id] = params[:product_id]
+    session[:prism_risk_assessment_id] = params[:prism_risk_assessment_id]
     authorize_product
     redirect_to wizard_path(steps.first)
   end
@@ -105,6 +107,7 @@ private
   def clear_session
     session.delete :form_answers
     session.delete :investigation
+    session.delete :prism_risk_assessment_id
     session.delete :product_id
   end
 
