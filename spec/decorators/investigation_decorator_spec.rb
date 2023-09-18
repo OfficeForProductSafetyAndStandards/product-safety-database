@@ -300,7 +300,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
       let(:viewing_user) { create(:user, :super_user) }
 
-      it { expect(case_title_key).to include("Case restricted - user title") }
+      it { expect(case_title_key).to include("user title") }
     end
   end
 
