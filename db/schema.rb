@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_13_141145) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_15_145123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -407,6 +407,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_13_141145) do
     t.string "assessor_name"
     t.datetime "created_at", null: false
     t.uuid "created_by_user_id"
+    t.string "name"
     t.string "overall_product_risk_level"
     t.string "overall_product_risk_methodology"
     t.string "overall_product_risk_plus_label"
