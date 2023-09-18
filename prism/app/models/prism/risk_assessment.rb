@@ -41,6 +41,7 @@ module Prism
     validates :less_than_serious_risk, inclusion: [true, false], on: :serious_risk_rebuttable
     validates :serious_risk_rebuttable_factors, presence: true, if: -> { less_than_serious_risk }, on: :serious_risk_rebuttable
     validates :assessor_name, :assessment_organisation, presence: true, on: %i[add_assessment_details add_evaluation_details]
+    validates :name, presence: true, uniqueness: true, on: %i[add_assessment_details add_evaluation_details]
     validate :check_all_harm_scenarios, on: :confirm_overall_product_risk
     validates :overall_product_risk_methodology, inclusion: %w[highest combined], if: -> { multiple_harm_scenarios_with_identical_severity_levels? }, on: :confirm_overall_product_risk
 

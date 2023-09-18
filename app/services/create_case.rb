@@ -1,7 +1,7 @@
 class CreateCase
   include Interactor
 
-  delegate :investigation, :user, :product, to: :context
+  delegate :investigation, :user, :product, :prism_risk_assessment, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -14,7 +14,7 @@ class CreateCase
     investigation.notifying_country = team.country
 
     ActiveRecord::Base.transaction do
-      # This ensures no other pretty_id generation is happenning concurrently.
+      # This ensures no other pretty_id generation is happening concurrently.
       # The ID 1 needs to uniquely identify the type of action (in this case
       # case saving) but this is currently not implemented elsewhere
       ActiveRecord::Base.connection.execute("SELECT pg_advisory_xact_lock(1)")
@@ -26,6 +26,8 @@ class CreateCase
       investigation.save!
 
       AddProductToCase.call!(investigation:, product:, user:, skip_email: true) if product
+
+      AddPrismRiskAssessmentToCase.call!(investigation:, product:, prism_risk_assessment:, user:) if prism_risk_assessment
 
       create_audit_activity_for_case_added
     end

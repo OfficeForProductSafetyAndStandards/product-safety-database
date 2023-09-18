@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :prism_risk_assessment, class: "Prism::RiskAssessment" do
     risk_type { "normal_risk" }
     state { "draft" }
+    name { Faker::Lorem.sentence(word_count: 4) }
     tasks_status do
       {
         "add_assessment_details" => "not_started",

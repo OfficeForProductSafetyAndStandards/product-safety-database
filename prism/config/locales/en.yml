@@ -48,6 +48,9 @@ en:
               inclusion: Select whether there are any factors
             serious_risk_rebuttable_factors:
               blank: Enter a description
+            name:
+              blank: Enter a title for the risk assessment
+              taken: The title of the risk assessment must be unique
             assessor_name:
               blank: Enter the full name of the assessor
             assessment_organisation:

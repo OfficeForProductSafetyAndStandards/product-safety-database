@@ -62,7 +62,7 @@ module Prism
     end
 
     def add_assessment_details_params
-      params.require(:risk_assessment).permit(:assessor_name, :assessment_organisation, :draft)
+      params.require(:risk_assessment).permit(:name, :assessor_name, :assessment_organisation, :draft)
     end
 
     def add_details_about_products_in_use_and_safety_params

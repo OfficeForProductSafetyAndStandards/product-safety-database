@@ -59,6 +59,11 @@ module Investigations::DisplayTextHelper
             href: investigation_supporting_information_index_path(investigation, anchor: "risk-assessments")
           },
           {
+            text: "PRISM risk assessments",
+            count: " (#{investigation.prism_risk_assessments.size})",
+            href: investigation_supporting_information_index_path(investigation, anchor: "prism-risk-assessments")
+          },
+          {
             text: "Correspondence",
             count: " (#{investigation.correspondences.size})",
             href: investigation_supporting_information_index_path(investigation, anchor: "correspondence")

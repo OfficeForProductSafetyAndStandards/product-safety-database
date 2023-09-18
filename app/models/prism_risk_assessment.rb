@@ -26,6 +26,14 @@ class PrismRiskAssessment < ApplicationRecord
     end
   end
 
+  def product_id
+    if prism_associated_investigations.present? && prism_associated_investigation_products.present?
+      prism_associated_investigations.first.prism_associated_investigation_products.first.product.id
+    elsif prism_associated_products.present?
+      prism_associated_products.first.product.id
+    end
+  end
+
   def user_and_organisation
     user = User.find(created_by_user_id)
     [user.name, user.organisation.name]
