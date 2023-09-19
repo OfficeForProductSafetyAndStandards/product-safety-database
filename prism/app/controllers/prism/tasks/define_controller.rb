@@ -68,7 +68,7 @@ module Prism
     def add_details_about_products_in_use_and_safety_params
       allowed_params = params
         .require(:product_market_detail)
-        .permit(:selling_organisation, :total_products_sold_estimatable, :total_products_sold, :other_safety_legislation_standard, :final, safety_legislation_standards: [])
+        .permit(:selling_organisation, :total_products_sold_estimatable, :total_products_sold, :final, safety_legislation_standards: [])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
       allowed_params[:safety_legislation_standards].reject!(&:blank?)
       allowed_params

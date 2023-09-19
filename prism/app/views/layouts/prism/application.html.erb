@@ -124,5 +124,6 @@
   <%= javascript_tag nonce: true do -%>
     window.GOVUKFrontend.initAll()
   <% end -%>
+  <%= yield :extra_javascript %>
 </body>
 </html>

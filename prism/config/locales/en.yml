@@ -76,8 +76,6 @@ en:
             safety_legislation_standards:
               blank: Select the product safety legislation and standards that are relevant to your product
               inclusion: Select the product safety legislation and standards that are relevant to your product
-            other_safety_legislation_standard:
-              blank: Enter the name of the safety legislation or standard
         prism/product_hazard:
           attributes:
             number_of_hazards:

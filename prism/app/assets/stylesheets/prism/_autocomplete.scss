@@ -1,0 +1,155 @@
+// Apply GOVUK typography
+// See https://github.com/alphagov/accessible-autocomplete/issues/285
+.autocomplete__wrapper * {
+  @include govuk-typography-common;
+}
+
+// Fix invisible arrow when used as dropdown
+// See https://github.com/alphagov/accessible-autocomplete/issues/351
+.autocomplete__wrapper {
+  z-index: 0;
+}
+
+// Add a clear button.
+.autocomplete-select-with-clear {
+  width: calc(100% - 48px);
+  display: inline-block;
+
+  // Hide IE browser input clear button (that doesn't work anyway)
+  .autocomplete__input::-ms-clear,
+  .autocomplete__hint::-ms-clear {
+    display: none;
+  }
+}
+
+.autocomplete__clear-button {
+  background: transparent;
+  border-color: transparent;
+  cursor: pointer;
+  width: 44px;
+  margin: 2px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  float: right;
+}
+
+.autocomplete__clear-button:focus {
+  @include govuk-focused-text;
+}
+
+.autocomplete__clear-viewbox {
+  cursor: pointer;
+  width: 30px;
+  height: 30px; // Set explicitly as IE needs it
+}
+
+.autocomplete__clear-icon {
+  stroke: govuk-colour("black");
+  fill: transparent;
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+@include govuk-media-query($from: tablet) {
+  .autocomplete__hint,
+  .autocomplete__input,
+  .autocomplete__option {
+    font-size: 19px;
+  }
+
+  .autocomplete__hint,
+  .autocomplete__input {
+    line-height: 25px;
+  }
+
+  .autocomplete__wrapper input,
+  .autocomplete__wrapper li {
+    font-size: 19px;
+  }
+}
+
+// Apply error styling
+.govuk-form-group--error {
+  .autocomplete__input {
+    border: $govuk-border-width-form-element solid $govuk-error-colour;
+  }
+
+  // Remove error colour when focused
+  .autocomplete__input:focus,
+  .autocomplete__input--focused {
+    border-color: $govuk-input-border-colour;
+    // Remove `box-shadow` inherited from `:focus` as `input--error`
+    // already has the thicker border.
+    box-shadow: none;
+  }
+
+  // Make sure hint has same border width as input
+  .autocomplete__hint {
+    border-width: $govuk-border-width-form-element;
+  }
+
+  // Reposition dropdown arrow to account for thicker border
+  .autocomplete__dropdown-arrow-down {
+    top: 12px;
+  }
+
+  // Reposition clear button
+  .autocomplete__clear-button {
+    margin-top: 4px;
+  }
+}
+
+// Set autocomplete widths
+
+// TODO: It would be better to add a wrapper to autocompletes instead.
+// Autocompletes need a wrapper width to be set rather than on
+// input directly because of our 'clear' button
+@mixin autocomplete-set-width($max-width) {
+
+  // Explicitly set font size on container so ex units work
+  // Assumes all autocompletes are default size.
+  // This matches govuk fixed width inputs which scale with
+  // font size.
+  @include govuk-font(19);
+
+  // Set on govuk-selects and autocompletes (clear and non-clear)
+  // There is no one selector currently we can target, so we target
+  // both, then unset where we don't need.
+  .govuk-select,
+  .autocomplete__wrapper,
+  .autocomplete-select-with-clear {
+    max-width: $max-width !important;
+  }
+
+  // Unset on autocompletes clear button is used
+  // Easier to unset than to have more complex selector above
+  .autocomplete-select-with-clear .autocomplete__wrapper {
+    max-width: inherit !important;
+  }
+}
+
+// Custom width overrides so inputs can be fixed width regardless of resolution.
+@include govuk-media-query($from: tablet) {
+
+  // These widths should match those set in helpers/field-widths.scss
+  .app-\!-autocomplete--max-width-three-quarters {
+    @include autocomplete-set-width(50ex);
+  }
+
+  .app-\!-autocomplete--max-width-two-thirds {
+    @include autocomplete-set-width(44ex);
+  }
+
+  .app-\!-autocomplete--max-width-one-half {
+    @include autocomplete-set-width(33ex);
+  }
+
+  .app-\!-autocomplete--max-width-one-third {
+    @include autocomplete-set-width(22ex);
+  }
+
+  .app-\!-autocomplete--max-width-one-quarter {
+    @include autocomplete-set-width(17ex);
+  }
+}

@@ -23,7 +23,8 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       fill_in "Name of the business that sold the product", with: "Test company"
       choose "Yes" # Can the total number of products in use be estimated?
       fill_in "Estimated number of products in use", with: 1_000_000
-      check "BS EN 17072:2018" # Product safety legislation and standards
+      select "ATEX 2016" # Product safety legislation and standards
+      select "Fireworks Act 2003 / Fireworks Regulations 2004" # Product safety legislation and standards
 
       click_button "Save and complete tasks in this section"
 

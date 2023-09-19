@@ -72,7 +72,8 @@ RSpec.feature "PRISM tasks", type: :feature do
 
         fill_in "Name of the business that sold the product", with: "Test organisation"
         choose "No" # Can the total number of products in use be estimated?
-        check "BS EN 17022:2018"
+        select "ATEX 2016"
+        select "Fireworks Act 2003 / Fireworks Regulations 2004"
 
         click_button "Save and complete tasks in this section"
 
