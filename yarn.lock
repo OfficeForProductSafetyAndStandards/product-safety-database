@@ -245,10 +245,9 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-accessible-autocomplete@2.0.4:
+"accessible-autocomplete@https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main":
   version "2.0.4"
-  resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-2.0.4.tgz#e295256c8d268b97c5ab456a1cb084b553ed3eb0"
-  integrity sha512-2p0txrSpvs5wXFUeQJHMheDPTZVSEmiUHWlEPb7vJnv2Dd1xPfoLnBQQMfNbTSit2pL/9sSQYESuD2Yyohd4Yw==
+  resolved "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main#f043b72a5530664a47a1a8e451258920135b9303"
   dependencies:
     preact "^8.3.1"
 

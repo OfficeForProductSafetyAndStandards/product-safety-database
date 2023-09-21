@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_15_145123) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_18_155916) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -392,7 +392,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_15_145123) do
 
   create_table "prism_product_market_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "other_safety_legislation_standard"
     t.uuid "risk_assessment_id"
     t.jsonb "routing_questions"
     t.string "safety_legislation_standards", default: [], array: true
