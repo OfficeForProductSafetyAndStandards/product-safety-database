@@ -3,6 +3,7 @@ module Prism
     include Wicked::Wizard
 
     before_action :prism_risk_assessment
+    before_action :disallow_editing_submitted_prism_risk_assessment
     before_action :harm_scenario
     before_action :set_wizard_steps
     before_action :setup_wizard
@@ -77,6 +78,10 @@ module Prism
 
     def prism_risk_assessment
       @prism_risk_assessment ||= Prism::RiskAssessment.includes(:associated_investigations, :associated_products, :harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+    end
+
+    def disallow_editing_submitted_prism_risk_assessment
+      redirect_to view_submitted_assessment_risk_assessment_tasks_path(@prism_risk_assessment) if @prism_risk_assessment.submitted?
     end
 
     def harm_scenario

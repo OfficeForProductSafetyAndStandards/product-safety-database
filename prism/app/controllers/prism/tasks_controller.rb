@@ -1,6 +1,7 @@
 module Prism
   class TasksController < ApplicationController
-    before_action :prism_risk_assessment
+    before_action :prism_risk_assessment, except: %i[view_submitted_assessment]
+    before_action :disallow_editing_submitted_prism_risk_assessment, except: %i[confirmation view_submitted_assessment]
     before_action :set_prism_risk_assessment_tasks_status, only: %i[index]
     before_action :ensure_associated_investigation_or_product, only: %i[index]
     before_action :ensure_one_harm_scenario, only: %i[index]
@@ -29,10 +30,25 @@ module Prism
       redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
     end
 
+    def confirmation
+      return redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
+    end
+
+    def view_submitted_assessment
+      @prism_risk_assessment = Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id])
+      @harm_scenarios = @prism_risk_assessment.harm_scenarios
+
+      return redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
+    end
+
   private
 
     def prism_risk_assessment
       @prism_risk_assessment ||= Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+    end
+
+    def disallow_editing_submitted_prism_risk_assessment
+      redirect_to view_submitted_assessment_risk_assessment_tasks_path(@prism_risk_assessment) if @prism_risk_assessment.submitted?
     end
 
     def set_prism_risk_assessment_tasks_status

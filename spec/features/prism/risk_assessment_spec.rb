@@ -8,13 +8,14 @@ RSpec.feature "PRISM risk assessment", type: :feature do
   end
 
   context "with normal risk" do
-    let(:prism_risk_assessment) { create(:prism_risk_assessment, :with_product, created_by_user_id: user.id) }
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, :with_product, name: nil, created_by_user_id: user.id) }
 
     scenario "risk assessment completion" do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       click_link "Add assessment details"
 
+      fill_in "Assessment title", with: "Unique name"
       fill_in "Name of assessor", with: "Test name"
       fill_in "Name of assessment organisation", with: "Test organisation"
 
@@ -175,9 +176,17 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "Risk is intolerable"
 
-      expect { click_button "Save and continue" }.to raise_error(ActionView::MissingTemplate)
+      click_button "Save and continue"
 
-      # TODO(ruben): Add more tests once workflow is complete
+      expect(page).to have_text("Check your risk assessment details")
+
+      click_button "Submit"
+
+      expect(page).to have_text("Your product risk assessment is complete")
+
+      click_link "View"
+
+      expect(page).to have_text("Unique name risk assessment")
     end
   end
   # TODO(ruben): Add tests for serious risk products when the workflow is ready

@@ -36,6 +36,7 @@ module Prism
     }
 
     store_attribute :routing_questions, :less_than_serious_risk, :boolean
+    store_attribute :routing_questions, :triage_complete, :boolean
 
     validates :risk_type, inclusion: %w[normal_risk serious_risk], on: :serious_risk
     validates :less_than_serious_risk, inclusion: [true, false], on: :serious_risk_rebuttable
@@ -54,7 +55,6 @@ module Prism
       state :define_completed
       state :identify_completed
       state :create_completed
-      state :evaluate_completed
       state :submitted
 
       event :complete_define_section do
@@ -84,13 +84,17 @@ module Prism
         end
       end
 
-      event :complete_evaluate_section do
-        transitions from: :create_completed, to: :evaluate_completed
-      end
-
       event :submit do
-        transitions from: :evaluate_completed, to: :submitted
+        transitions from: :create_completed, to: :submitted
       end
+    end
+
+    def product
+      @product ||= if associated_investigations.present? && associated_investigation_products.present?
+                     associated_investigations.first.associated_investigation_products.first.product
+                   elsif associated_products.present?
+                     associated_products.first.product
+                   end
     end
 
     def product_name

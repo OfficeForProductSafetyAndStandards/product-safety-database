@@ -2,6 +2,17 @@
   "en": {
     "prism": {
       "evaluation": {
+        "comparable_risk_level": {
+          "higher": "Higher",
+          "lower": "Lower",
+          "similar": "Similar",
+          "unknown": "Unknown"
+        },
+        "counterfeit": {
+          "counterfeit": "Yes",
+          "genuine": "No",
+          "unsure": "Unsure"
+        },
         "estimated_products_in_use": {
           "one": "Estimated 1 product in use",
           "other": "Estimated %{items_in_use} products in use",
@@ -16,12 +27,62 @@
           "false": "No multiple casualties",
           "true": "Yes"
         },
+        "multiple_casualties_verbose": {
+          "false": "No multiple casualties",
+          "true": "Multiple casualties"
+        },
+        "number_of_hazards": {
+          "five": "5",
+          "four": "4",
+          "more_than_five": "More than 5",
+          "one": "1",
+          "three": "3",
+          "two": "2"
+        },
+        "number_of_products_expected_to_change": {
+          "fall": "Fall",
+          "increase": "Increase",
+          "no_changes": "No changes",
+          "unknown": "Unknown"
+        },
+        "other_risk_perception_matters": {
+          "no_other_matters": "No other matters"
+        },
+        "other_types_of_harm": {
+          "damage_to_property": "Damage to property",
+          "harm_to_animals": "Harm to animals",
+          "harm_to_the_environment": "Harm to the environment",
+          "not_applicable": "Not applicable",
+          "psychological_harm": "Psychological harm"
+        },
         "people_at_increased_risk": {
           "false": "No"
+        },
+        "probability_evidence": {
+          "sole_judgement_or_estimation": "Sole judgement or estimation",
+          "some_limited_empirical_evidence": "Some limited empirical evidence",
+          "strong_empirical_evidence": "Strong empirical evidence"
         },
         "risk_to_non_users": {
           "false": "Non-users might not be at risk",
           "true": "Non-users might be at risk"
+        },
+        "risk_tolerability": {
+          "intolerable": "Risk is intolerable",
+          "tolerable": "Risk is tolerable"
+        },
+        "unintended_risks_for": {
+          "non_users": "Non-users",
+          "not_applicable": "Not applicable",
+          "unintended_users": "Unintended users"
+        },
+        "yes_no": {
+          "false": "No",
+          "no": "No",
+          "not_applicable": "Not applicable",
+          "true": "Yes",
+          "unknown": "Unknown",
+          "yes": "Yes"
         }
       },
       "harm_scenario_steps": {

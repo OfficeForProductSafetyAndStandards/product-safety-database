@@ -48,5 +48,58 @@ module Prism
 
       I18n.t("prism.evaluation.risk_to_non_users.#{@harm_scenarios.map(&:unintended_risks_for).flatten.length.positive?}")
     end
+
+    def country_from_code(code)
+      country = ::Country.all.find { |c| c[1] == code }
+      (country && country[0]) || code
+    end
+
+    def counterfeit(authenticity)
+      I18n.t("prism.evaluation.counterfeit.#{authenticity}") if authenticity.present?
+    end
+
+    def product_safety_legislation_standards_list(safety_legislation_standards)
+      "<ul class=\"govuk-list govuk-list--bullet\"><li>#{safety_legislation_standards.join('</li><li>')}</li></ul>".html_safe
+    end
+
+    def harm_scenario_hazard_type(hazard_type)
+      I18n.t("prism.harm_scenarios.hazard_types.#{hazard_type}")
+    end
+
+    def harm_scenario_product_aimed_at(product_aimed_at, product_aimed_at_description)
+      product_aimed_at == "general_population" ? I18n.t("prism.harm_scenarios.product_aimed_at.general_population") : product_aimed_at_description
+    end
+
+    def harm_scenario_unintended_risks_for(unintended_risks_for)
+      unintended_risks_for.present? ? unintended_risks_for.map { |urf| I18n.t("prism.evaluation.unintended_risks_for.#{urf}") }.join(", ") : I18n.t("prism.harm_scenarios.unintended_risks_for.not_applicable")
+    end
+
+    def harm_scenario_probability_evidence(probability_evidence)
+      I18n.t("prism.evaluation.probability_evidence.#{probability_evidence}")
+    end
+
+    def harm_scenario_evidence_file(harm_scenario_step_evidence)
+      harm_scenario_step_evidence.present? ? (render partial: "attachment", locals: { file: harm_scenario_step_evidence.evidence_file }) : ""
+    end
+
+    def harm_scenario_severity_level(severity_level, multiple_casualties)
+      "<ul class=\"govuk-list govuk-list--bullet\"><li>#{I18n.t("prism.harm_scenarios.severity.#{severity_level}")}</li><li>#{I18n.t("prism.evaluation.multiple_casualties_verbose.#{multiple_casualties}")}</li></ul>".html_safe
+    end
+
+    def harm_scenario_overall_probability_of_harm(harm_scenario)
+      Prism::RiskMatrixService.risk_level(probability_frequency: Prism::ProbabilityService.overall_probability_of_harm(harm_scenario:).probability, severity_level: harm_scenario.severity.to_sym)
+    end
+
+    def other_types_of_harm(other_types_of_harm)
+      other_types_of_harm.present? ? other_types_of_harm.map { |oth| I18n.t("prism.evaluation.other_types_of_harm.#{oth}") }.join(", ") : I18n.t("prism.harm_scenarios.other_types_of_harm.not_applicable")
+    end
+
+    def other_risk_perception_matters(other_risk_perception_matters)
+      other_risk_perception_matters.presence || I18n.t("prism.evaluation.other_risk_perception_matters.no_other_matters")
+    end
+
+    def evaluation_translate_simple(key, value)
+      I18n.t("prism.evaluation.#{key}.#{value}")
+    end
   end
 end

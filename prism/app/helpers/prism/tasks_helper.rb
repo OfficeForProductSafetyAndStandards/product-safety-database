@@ -23,7 +23,7 @@ module Prism
         2
       elsif @prism_risk_assessment.create_completed?
         3
-      elsif @prism_risk_assessment.evaluate_completed? || @prism_risk_assessment.submitted?
+      elsif @prism_risk_assessment.submitted?
         4
       else
         0
@@ -33,7 +33,7 @@ module Prism
     def serious_risk_sections_complete
       if @prism_risk_assessment.define_completed?
         1
-      elsif @prism_risk_assessment.evaluate_completed? || @prism_risk_assessment.submitted?
+      elsif @prism_risk_assessment.submitted?
         2
       else
         0
