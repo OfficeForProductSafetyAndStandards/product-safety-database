@@ -1,0 +1,187 @@
+<% content_for :page_title, "Check your risk evaluation details" %>
+<% @errors = @prism_risk_assessment.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @prism_risk_assessment, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Evaluate product risk and submit assessment</span>
+        Check your risk evaluation details
+      </h1>
+      <h2 class="govuk-heading-m">About assessment</h2>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "Assessment name")
+            row.with_value(text: @prism_risk_assessment.name)
+            row.with_action(text: "Change", href: task_path("define", @prism_risk_assessment.serious_risk? ? "add_evaluation_details" : "add_assessment_details"), visually_hidden_text: "assessment name")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Name of assessor")
+            row.with_value(text: @prism_risk_assessment.assessor_name)
+            row.with_action(text: "Change", href: task_path("define", @prism_risk_assessment.serious_risk? ? "add_evaluation_details" : "add_assessment_details"), visually_hidden_text: "assessor name")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Name of assessment organisation")
+            row.with_value(text: @prism_risk_assessment.assessment_organisation)
+            row.with_action(text: "Change", href: task_path("define", @prism_risk_assessment.serious_risk? ? "add_evaluation_details" : "add_assessment_details"), visually_hidden_text: "assessment organisation")
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Product details</h2>
+      <p class="govuk-body">as recorded on the <abbr>PSD</abbr></p>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "<abbr>PSD</abbr> reference".html_safe)
+            row.with_value(text: "<a href=\"#{main_app.product_path(@prism_risk_assessment.product)}\" class=\"govuk-link\">#{@prism_risk_assessment.product.psd_ref}</a>".html_safe)
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Product")
+            row.with_value(text: @prism_risk_assessment.product.name)
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Brand name")
+            row.with_value(text: @prism_risk_assessment.product.brand)
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Description")
+            row.with_value(text: @prism_risk_assessment.product.description)
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Country of origin")
+            row.with_value(text: country_from_code(@prism_risk_assessment.product.country_of_origin))
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Counterfeit")
+            row.with_value(text: counterfeit(@prism_risk_assessment.product.authenticity))
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m">Level of uncertainty and sensitivity analysis</h2>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "Level of uncertainty associated with the risk assessment")
+            row.with_value(text: evaluation_translate_simple("level_of_uncertainty", @prism_risk_assessment.evaluation.level_of_uncertainty))
+            row.with_action(text: "Change", href: task_path("evaluate", "add_level_of_uncertainty_and_sensitivity_analysis"), visually_hidden_text: "level of uncertainty associated with the risk assessment")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Has sensitivity analysis been undertaken?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.sensitivity_analysis))
+            row.with_action(text: "Change", href: task_path("evaluate", "add_level_of_uncertainty_and_sensitivity_analysis"), visually_hidden_text: "whether sensitivity analysis has been undertaken")
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m">Risk evaluation</h2>
+      <h3 class="govuk-heading-s">Nature of risk</h3>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "What other types of harm could the hazard cause?")
+            row.with_value(text: other_types_of_harm(@prism_risk_assessment.evaluation.other_types_of_harm))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "what other types of harm the hazard could cause")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is the number of products estimated to be in use expected to change?")
+            row.with_value(text: evaluation_translate_simple("number_of_products_expected_to_change", @prism_risk_assessment.evaluation.number_of_products_expected_to_change))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether the number of products estimated to be in use is expected to change")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Does the uncertainty level have implications for risk management decisions?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.uncertainty_level_implications_for_risk_management))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether the uncertainty level has implications for risk management decisions")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "How does the risk level compare to that of comparable products?")
+            row.with_value(text: evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "how the risk level compares to that of comparable products")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is there potential for multiple casualties in a single incident?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.multiple_casualties))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there is potential for multiple casualties in a single incident")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is there a significant risk differential?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.significant_risk_differential))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there is a significant risk differential")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Are there people at increased risk?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are people at increased risk")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is relevant action planned or underway by another MSA or other organisation?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether relevant action is planned or underway by another MSA or other organisation")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.factors_to_take_into_account))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are there factors to take account of in relation to risk management decisions")
+          end
+        end
+      %>
+      <h3 class="govuk-heading-s">Perception and tolerability of risk</h3>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether the product has any other hazards that can and do cause harm")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is this a low likelihood but high severity risk?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.low_likelihood_high_severity))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether this is a low likelihood but high severity risk")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is there a risk to non-users?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.risk_to_non_users))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether there is a risk to non-users")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is this a type of product aimed at vulnerable users?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.aimed_at_vulnerable_users))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether this is a type of product aimed at vulnerable users")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Is the product designed to provide a protective function?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.designed_to_provide_protective_function))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether the product is designed to provide a protective function")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Can users exert any control over the risk?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.user_control_over_risk))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether users can exert any control over the risk")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Are there other matters that will influence the way the risk is perceived?")
+            row.with_value(text: other_risk_perception_matters(@prism_risk_assessment.evaluation.other_risk_perception_matters))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether there are other matters that will influence the way the risk is perceived")
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m">Risk evaluation outcome</h2>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "How would you describe the risk presented by the product?")
+            row.with_value(text: evaluation_translate_simple("risk_tolerability", @prism_risk_assessment.evaluation.risk_tolerability))
+            row.with_action(text: "Change", href: task_path("evaluate", "risk_evaluation_outcome"), visually_hidden_text: "how you would describe the risk presented by the product")
+          end
+        end
+      %>
+      <%= f.govuk_submit "Submit" %>
+      <p class="govuk-body"><a href="#" class="govuk-link" download>Download a <abbr>PDF</abbr> of the assessment</a></p>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <% if @prism_risk_assessment.product.virus_free_images.present? %>
+      <img src="<%= main_app.rails_storage_proxy_path(@prism_risk_assessment.product.virus_free_images&.first&.file_upload&.variant(resize_to_limit: [300, 500]), only_path: true) %>">
+    <% end %>
+  </div>
+</div>
