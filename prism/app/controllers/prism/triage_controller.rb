@@ -1,6 +1,7 @@
 module Prism
   class TriageController < ApplicationController
     before_action :prism_risk_assessment, except: %i[index serious_risk serious_risk_choose perform_risk_triage]
+    before_action :disallow_triage_reentry, except: %i[index serious_risk serious_risk_choose perform_risk_triage]
 
     def index; end
 
@@ -38,8 +39,10 @@ module Prism
         if @prism_risk_assessment.less_than_serious_risk?
           redirect_to full_risk_assessment_required_path(@prism_risk_assessment)
         elsif @prism_risk_assessment.associated_investigations.present? || @prism_risk_assessment.associated_products.present?
+          @prism_risk_assessment.update!(triage_complete: true)
           redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
         else
+          @prism_risk_assessment.update!(triage_complete: true)
           session[:prism_risk_assessment_id] = @prism_risk_assessment.id
           redirect_to main_app.your_prism_risk_assessments_path
         end
@@ -60,8 +63,10 @@ module Prism
       if full_risk_assessment_required_params[:full_risk_assessment_required] == "false"
         redirect_to perform_risk_triage_path(@prism_risk_assessment)
       elsif @prism_risk_assessment.associated_investigations.present? || @prism_risk_assessment.associated_products.present?
+        @prism_risk_assessment.update!(triage_complete: true)
         redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
       else
+        @prism_risk_assessment.update!(triage_complete: true)
         session[:prism_risk_assessment_id] = @prism_risk_assessment.id
         redirect_to main_app.your_prism_risk_assessments_path
       end
@@ -73,6 +78,10 @@ module Prism
 
     def prism_risk_assessment
       @prism_risk_assessment ||= Prism::RiskAssessment.find_by!(id: params[:id], created_by_user_id: current_user.id)
+    end
+
+    def disallow_triage_reentry
+      redirect_to risk_assessment_tasks_path(@prism_risk_assessment) if @prism_risk_assessment.triage_complete
     end
 
     def serious_risk_params

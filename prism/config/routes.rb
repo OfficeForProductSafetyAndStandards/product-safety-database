@@ -35,6 +35,8 @@ Prism::Engine.routes.draw do
           get "remove/:harm_scenario_id", to: "tasks#remove_harm_scenario", as: "remove_harm_scenario"
           delete "delete/:harm_scenario_id", to: "tasks#delete_harm_scenario", as: "delete_harm_scenario"
         end
+        get "confirmation", to: "tasks#confirmation"
+        get "view-submitted-assessment", to: "tasks#view_submitted_assessment"
       end
     end
   end

@@ -3,6 +3,7 @@ module Prism
     include Wicked::Wizard
 
     before_action :prism_risk_assessment
+    before_action :disallow_editing_submitted_prism_risk_assessment
     before_action :harm_scenarios
     before_action :items_in_use
     before_action :evaluation, except: %i[confirm_overall_product_risk add_level_of_uncertainty_and_sensitivity_analysis]
@@ -34,7 +35,7 @@ module Prism
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
-      @prism_risk_assessment.complete_evaluate_section if step == wizard_steps.last
+      @prism_risk_assessment.submit! if step == wizard_steps.last
 
       if params[:draft] == "true" || params[:final] == "true"
         # "Save as draft" or final save button of the section clicked.
@@ -44,6 +45,8 @@ module Prism
         else
           render_wizard
         end
+      elsif @prism_risk_assessment.submitted?
+        redirect_to confirmation_risk_assessment_tasks_path(@prism_risk_assessment)
       else
         render_wizard(@prism_risk_assessment, { context: step })
       end
@@ -53,6 +56,10 @@ module Prism
 
     def prism_risk_assessment
       @prism_risk_assessment ||= Prism::RiskAssessment.includes(:associated_investigations, :associated_products, :product_market_detail, :harm_scenarios, :evaluation).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
+    end
+
+    def disallow_editing_submitted_prism_risk_assessment
+      redirect_to view_submitted_assessment_risk_assessment_tasks_path(@prism_risk_assessment) if @prism_risk_assessment.submitted?
     end
 
     def harm_scenarios

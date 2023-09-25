@@ -36,8 +36,7 @@
                   <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
                 </td>
                 <td class="govuk-table__cell">
-                  <%# TODO(ruben): Add link to view submitted assessment %>
-                  <a href="#" class="govuk-link">View<span class="govuk-visually-hidden"> assessment</span></a>
+                  <a href="<%= prism.view_submitted_assessment_risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">View<span class="govuk-visually-hidden"> assessment</span></a>
                 </td>
                 <td class="govuk-table__cell">
                   <%= govukButton(text: "Add", name: "prism_risk_assessment_id", value: prism_risk_assessment.id, classes: "govuk-!-margin-bottom-0") %>

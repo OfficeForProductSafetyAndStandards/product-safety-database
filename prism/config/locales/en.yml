@@ -260,9 +260,59 @@ en:
         high: High level of uncertainty
       multiple_casualties:
         "true": "Yes"
-        "false": "No multiple casualties"
+        "false": No multiple casualties
       people_at_increased_risk:
         "false": "No"
       risk_to_non_users:
         "true": Non-users might be at risk
         "false": Non-users might not be at risk
+      counterfeit:
+        counterfeit: "Yes"
+        genuine: "No"
+        unsure: Unsure
+      number_of_hazards:
+        one: "1"
+        two: "2"
+        three: "3"
+        four: "4"
+        five: "5"
+        more_than_five: More than 5
+      unintended_risks_for:
+        unintended_users: Unintended users
+        non_users: Non-users
+        not_applicable: Not applicable
+      probability_evidence:
+        sole_judgement_or_estimation: Sole judgement or estimation
+        some_limited_empirical_evidence: Some limited empirical evidence
+        strong_empirical_evidence: Strong empirical evidence
+      multiple_casualties_verbose:
+        "true": Multiple casualties
+        "false": No multiple casualties
+      other_types_of_harm:
+        psychological_harm: Psychological harm
+        damage_to_property: Damage to property
+        harm_to_animals: Harm to animals
+        harm_to_the_environment: Harm to the environment
+        not_applicable: Not applicable
+      number_of_products_expected_to_change:
+        no_changes: No changes
+        increase: Increase
+        fall: Fall
+        unknown: Unknown
+      comparable_risk_level:
+        lower: Lower
+        similar: Similar
+        higher: Higher
+        unknown: Unknown
+      other_risk_perception_matters:
+        no_other_matters: No other matters
+      risk_tolerability:
+        tolerable: Risk is tolerable
+        intolerable: Risk is intolerable
+      yes_no:
+        "true": "Yes"
+        "false": "No"
+        "yes": "Yes"
+        "no": "No"
+        unknown: Unknown
+        not_applicable: Not applicable

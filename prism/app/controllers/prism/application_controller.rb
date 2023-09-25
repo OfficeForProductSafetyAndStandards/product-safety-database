@@ -9,6 +9,8 @@ module Prism
 
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
+    rescue_from ActiveRecord::RecordNotFound, with: -> { redirect_to "/404" }
+
     def after_sign_in_path_for(*)
       serious_risk_path
     end

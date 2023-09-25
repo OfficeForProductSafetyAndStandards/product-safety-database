@@ -14,8 +14,7 @@ class PrismRiskAssessmentDecorator < ApplicationDecorator
   end
 
   def show_path
-    # TODO(ruben): Add link to view submitted assessment
-    "#"
+    Prism::Engine.routes.url_helpers.view_submitted_assessment_risk_assessment_tasks_path(object)
   end
 
   def supporting_information_type
