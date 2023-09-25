@@ -122,8 +122,6 @@ en:
               blank: Enter a description of the evidence
             probability_evidence_description_strong:
               blank: Enter a description of the evidence
-            harm_scenario_step_evidence:
-              blank: Attach a document in support of your decision
         prism/harm_scenario_step_evidence:
           attributes:
             evidence_file:

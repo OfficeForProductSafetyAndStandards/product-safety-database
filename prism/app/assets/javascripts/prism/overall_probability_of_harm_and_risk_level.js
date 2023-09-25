@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
       getOverallProbabilityOfHarmAndRiskLevel()
     })
   })
+
+  getOverallProbabilityOfHarmAndRiskLevel()
 })
 
 const getOverallProbabilityOfHarmAndRiskLevel = async () => {
