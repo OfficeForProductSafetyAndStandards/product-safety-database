@@ -1,0 +1,9 @@
+<p class="govuk-body">
+  <% if keywords.blank? %>
+    There <%= count == 1 ? "is" : "are" %> currently <%= pluralize count, "risk assessment", plural: "risk assessments" %>.
+  <% else %>
+    <% if keywords.present? %>
+      <%= pluralize count, "risk assessment", plural: "risk assessments" %> matching keyword(s) <span class="govuk-!-font-weight-bold"><%= sanitize keywords %></span>, <%= count == 1 ? "was" : "were" %> found.
+    <% end %>
+  <% end %>
+</p>

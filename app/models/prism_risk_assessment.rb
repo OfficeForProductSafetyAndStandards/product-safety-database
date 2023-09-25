@@ -13,6 +13,7 @@ class PrismRiskAssessment < ApplicationRecord
   has_many :prism_associated_investigation_products, through: :prism_associated_investigations, foreign_key: "risk_assessment_id"
 
   scope :for_user, ->(user) { where(created_by_user_id: user.id) }
+  scope :for_team, ->(team) { where(created_by_user_id: team.users.pluck(:id)) }
   scope :draft, -> { where.not(state: "submitted") }
   scope :submitted, -> { where(state: "submitted") }
 

@@ -1,10 +1,44 @@
 class PrismRiskAssessmentsController < ApplicationController
+  include BreadcrumbHelper
+
+  breadcrumb "prism_risk_assessments.label", :all_prism_risk_assessments
+
+  before_action :set_search_params, only: %i[index]
+  before_action :set_sort_by_items, only: %i[index your_prism_risk_assessments team_prism_risk_assessments]
+  before_action :set_last_prism_risk_assessment_view_cookie, only: %i[index your_prism_risk_assessments team_prism_risk_assessments]
+
+  def index
+    authorize PrismRiskAssessment, :index?
+
+    @submitted_prism_risk_assessments = PrismRiskAssessment.submitted
+
+    if @search.q
+      @search.q.strip!
+      @submitted_prism_risk_assessments = @submitted_prism_risk_assessments.where("name ilike ?", "%#{@search.q}%")
+    end
+
+    @submitted_prism_risk_assessments = @submitted_prism_risk_assessments.order(sorting_params).page(params[:submitted_page]).per(20)
+    @count = @submitted_prism_risk_assessments.total_count
+    @page_name = "all_prism_risk_assessments"
+  end
+
   def your_prism_risk_assessments
     authorize PrismRiskAssessment, :index?
 
-    @draft_prism_risk_assessments = PrismRiskAssessment.for_user(current_user).draft.order(updated_at: :desc).page(params[:draft_page]).per(20)
-    @submitted_prism_risk_assessments = PrismRiskAssessment.submitted.order(updated_at: :desc).page(params[:submitted_page]).per(20)
+    @draft_prism_risk_assessments = PrismRiskAssessment.for_user(current_user).draft.order(sorting_params).page(params[:draft_page]).per(20)
+    @submitted_prism_risk_assessments = PrismRiskAssessment.for_user(current_user).submitted.order(sorting_params).page(params[:submitted_page]).per(20)
+    @count = @draft_prism_risk_assessments.total_count + @submitted_prism_risk_assessments.total_count
     @page_name = "your_prism_risk_assessments"
+
+    render "prism_risk_assessments/index"
+  end
+
+  def team_prism_risk_assessments
+    authorize PrismRiskAssessment, :index?
+
+    @submitted_prism_risk_assessments = PrismRiskAssessment.for_team(current_user.team).submitted.order(sorting_params).page(params[:submitted_page]).per(20)
+    @count = @submitted_prism_risk_assessments.total_count
+    @page_name = "team_prism_risk_assessments"
 
     render "prism_risk_assessments/index"
   end
@@ -34,5 +68,40 @@ class PrismRiskAssessmentsController < ApplicationController
         render :add_to_case
       end
     end
+  end
+
+private
+
+  def set_search_params
+    @search = SearchParams.new(query_params.except(:page_name))
+  end
+
+  def query_params
+    params.permit(:q, :sort_by, :sort_dir, :page_name)
+  end
+
+  def set_last_prism_risk_assessment_view_cookie
+    cookies[:last_prism_risk_assessment_view] = params[:action]
+  end
+
+  def set_sort_by_items
+    @sort_by_items = sort_by_items
+    @selected_sort_by = params[:sort_by].presence || SortByHelper::SORT_BY_UPDATED_AT
+    @selected_sort_direction = params[:sort_dir]
+  end
+
+  def sort_by_items
+    [
+      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Assessment title A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
+      SortByHelper::SortByItem.new("Assessment title Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
+    ]
+  end
+
+  def sorting_params
+    return { name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
+    return { name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
+
+    { updated_at: :desc }
   end
 end
