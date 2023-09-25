@@ -67,7 +67,7 @@ module Prism
     end
 
     def items_in_use
-      @items_in_use ||= @prism_risk_assessment.product_market_detail.total_products_sold
+      @items_in_use ||= @prism_risk_assessment.product_market_detail.total_products_sold unless @prism_risk_assessment.serious_risk?
     end
 
     def evaluation
