@@ -1,0 +1,29 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "206dcf7f67c5d44d33645621ef9b8a49700c8e48cc5c45ca0284cc61367bc9a8",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "prism/app/controllers/prism/tasks_controller.rb",
+      "line": 52,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(Tempfile.new([\"prism-risk-assessment-#{Prism::RiskAssessment.includes(:product_market_detail, :product_hazard, :evaluation, :harm_scenarios => :harm_scenario_steps).find_by!(:id => params[:risk_assessment_id]).name.parameterize}-#{Time.zone.now.to_i}\", \".pdf\"], :binmode => true).path)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Prism::TasksController",
+        "method": "download_assessment_pdf"
+      },
+      "user_input": "Prism::RiskAssessment.includes(:product_market_detail, :product_hazard, :evaluation, :harm_scenarios => :harm_scenario_steps).find_by!(:id => params[:risk_assessment_id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2023-09-26 15:17:59 +0100",
+  "brakeman_version": "6.0.1"
+}

@@ -74,7 +74,7 @@ module Prism
     end
 
     def harm_scenario_unintended_risks_for(unintended_risks_for)
-      unintended_risks_for.present? ? unintended_risks_for.map { |urf| I18n.t("prism.evaluation.unintended_risks_for.#{urf}") }.join(", ") : I18n.t("prism.harm_scenarios.unintended_risks_for.not_applicable")
+      unintended_risks_for.present? ? unintended_risks_for.map { |urf| I18n.t("prism.evaluation.unintended_risks_for.#{urf}") }.join(", ") : I18n.t("prism.evaluation.unintended_risks_for.not_applicable")
     end
 
     def harm_scenario_probability_evidence(probability_evidence)
@@ -85,8 +85,16 @@ module Prism
       harm_scenario_step_evidence.present? ? (render partial: "attachment", locals: { file: harm_scenario_step_evidence.evidence_file }) : ""
     end
 
-    def harm_scenario_severity_level(severity_level, multiple_casualties)
+    def harm_scenario_severity_level_and_multiple_casualties(severity_level, multiple_casualties)
       "<ul class=\"govuk-list govuk-list--bullet\"><li>#{I18n.t("prism.harm_scenarios.severity.#{severity_level}")}</li><li>#{I18n.t("prism.evaluation.multiple_casualties_verbose.#{multiple_casualties}")}</li></ul>".html_safe
+    end
+
+    def harm_scenario_severity_level(severity_level)
+      I18n.t("prism.harm_scenarios.severity.#{severity_level}")
+    end
+
+    def harm_scenario_multiple_casualties(multiple_casualties)
+      I18n.t("prism.evaluation.multiple_casualties_verbose.#{multiple_casualties}")
     end
 
     def harm_scenario_overall_probability_of_harm(harm_scenario)
@@ -94,7 +102,7 @@ module Prism
     end
 
     def other_types_of_harm(other_types_of_harm)
-      other_types_of_harm.present? ? other_types_of_harm.map { |oth| I18n.t("prism.evaluation.other_types_of_harm.#{oth}") }.join(", ") : I18n.t("prism.harm_scenarios.other_types_of_harm.not_applicable")
+      other_types_of_harm.present? ? other_types_of_harm.map { |oth| I18n.t("prism.evaluation.other_types_of_harm.#{oth}") }.join(", ") : I18n.t("prism.evaluation.other_types_of_harm.not_applicable")
     end
 
     def other_risk_perception_matters(other_risk_perception_matters)

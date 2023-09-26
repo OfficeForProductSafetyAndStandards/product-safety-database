@@ -37,6 +37,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "listen", "~> 3.8"
   spec.add_runtime_dependency "pagy", "~> 6.0"
   spec.add_runtime_dependency "pg", "~> 1.5"
+  spec.add_runtime_dependency "prawn", "~> 2.4"
+  spec.add_runtime_dependency "prawn-table", "~> 0.2"
   spec.add_runtime_dependency "rails", ">= 7.0.4.3"
   spec.add_runtime_dependency "store_attribute", "~> 1.1"
   spec.add_runtime_dependency "wicked", "~> 2.0"

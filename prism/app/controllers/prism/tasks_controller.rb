@@ -1,7 +1,7 @@
 module Prism
   class TasksController < ApplicationController
-    before_action :prism_risk_assessment, except: %i[view_submitted_assessment]
-    before_action :disallow_editing_submitted_prism_risk_assessment, except: %i[confirmation view_submitted_assessment]
+    before_action :prism_risk_assessment, except: %i[view_submitted_assessment download_assessment_pdf]
+    before_action :disallow_editing_submitted_prism_risk_assessment, except: %i[confirmation view_submitted_assessment download_assessment_pdf]
     before_action :set_prism_risk_assessment_tasks_status, only: %i[index]
     before_action :ensure_associated_investigation_or_product, only: %i[index]
     before_action :ensure_one_harm_scenario, only: %i[index]
@@ -39,6 +39,19 @@ module Prism
       @harm_scenarios = @prism_risk_assessment.harm_scenarios
 
       return redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
+    end
+
+    def download_assessment_pdf
+      @prism_risk_assessment = Prism::RiskAssessment.includes(:product_market_detail, :product_hazard, :evaluation, harm_scenarios: :harm_scenario_steps).find_by!(id: params[:risk_assessment_id])
+
+      return redirect_to "/404" unless @prism_risk_assessment.submitted? || (@prism_risk_assessment.created_by_user_id == current_user.id && @prism_risk_assessment.tasks_status["risk_evaluation_outcome"] == "completed")
+
+      file = Tempfile.new(["prism-risk-assessment-#{@prism_risk_assessment.name.parameterize}-#{Time.zone.now.to_i}", ".pdf"], binmode: true)
+      Prism::RiskAssessmentPdfService.generate_pdf(@prism_risk_assessment, file)
+      file.rewind
+      send_file file.path
+    ensure
+      file&.close
     end
 
   private
