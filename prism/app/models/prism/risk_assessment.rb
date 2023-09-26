@@ -58,6 +58,12 @@ module Prism
       state :submitted
 
       event :complete_define_section do
+        # Serious risk workflow skips from define to evaluate
+        transitions from: :draft, to: :create_completed do
+          guard do
+            serious_risk?
+          end
+        end
         transitions from: :draft, to: :define_completed
       end
 

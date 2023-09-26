@@ -52,6 +52,7 @@
         end
       end
     %>
+    <% if @prism_risk_assessment.normal_risk? %>
     <h2 class="govuk-heading-m">Product sales and safety</h2>
     <%=
       govuk_summary_list do |summary_list|
@@ -125,6 +126,7 @@
         end
       end
     %>
+    <% end %>
     <h2 class="govuk-heading-m">Level of uncertainty and sensitivity analysis</h2>
     <%=
       govuk_summary_list do |summary_list|

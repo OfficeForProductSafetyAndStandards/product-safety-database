@@ -15,5 +15,5 @@ SERIOUS_RISK_DEFINE_STEPS = %i[
   add_evaluation_details
 ].freeze
 SERIOUS_RISK_EVALUATE_STEPS = %i[
-  complete_product_risk_evaluation review_and_submit_results_of_the_evaluation
+  add_level_of_uncertainty_and_sensitivity_analysis consider_the_nature_of_the_risk consider_perception_and_tolerability_of_the_risk risk_evaluation_outcome review_and_submit_results_of_the_evaluation
 ].freeze

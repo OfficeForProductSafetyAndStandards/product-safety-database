@@ -31,7 +31,7 @@ module Prism
     end
 
     def serious_risk_sections_complete
-      if @prism_risk_assessment.define_completed?
+      if @prism_risk_assessment.create_completed?
         1
       elsif @prism_risk_assessment.submitted?
         2
@@ -52,7 +52,7 @@ module Prism
                                      elsif NORMAL_RISK_EVALUATE_STEPS.include?(task.to_sym) && @prism_risk_assessment.normal_risk?
                                        @prism_risk_assessment.create_completed?
                                      elsif SERIOUS_RISK_EVALUATE_STEPS.include?(task.to_sym) && @prism_risk_assessment.serious_risk?
-                                       @prism_risk_assessment.define_completed?
+                                       @prism_risk_assessment.create_completed?
                                      end
         statuses[task] = if status == "not_started" && index.positive? && (original_tasks_status[original_tasks_status.keys[index - 1]] != "completed" || !previous_section_completed)
                            "cannot_start_yet"
