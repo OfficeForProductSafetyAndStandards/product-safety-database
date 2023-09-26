@@ -22,7 +22,10 @@ FactoryBot.define do
       tasks_status do
         {
           "add_evaluation_details" => "not_started",
-          "complete_product_risk_evaluation" => "not_started",
+          "add_level_of_uncertainty_and_sensitivity_analysis" => "not_started",
+          "consider_the_nature_of_the_risk" => "not_started",
+          "consider_perception_and_tolerability_of_the_risk" => "not_started",
+          "risk_evaluation_outcome" => "not_started",
           "review_and_submit_results_of_the_evaluation" => "not_started"
         }
       end
