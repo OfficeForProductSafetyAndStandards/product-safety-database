@@ -6,6 +6,10 @@
     <h1 class="govuk-heading-l">Perform risk triage</h1>
     <p class="govuk-body">The purpose of risk triage is to sense check whether a detailed risk assessment is required and to give an early indication of what the risk level is likely to be.</p>
     <p class="govuk-body">The <abbr title="Product Safety Risk Assessment Methodology">PRISM</abbr> triage guide will take you through necessary steps needed to determine whether your product requires an assessment.</p>
-    <p class="govuk-body"><a href="/files/prism-toolkit-risk-triage.xlsm" class="govuk-link" download>Undertake risk triage using the PRISM triage guide (EXCEL, 120KB)</a></p>
+    <div class="govuk-inset-text">
+      <p class="govuk-body">You'll need to download the Excel file (120KB) to start the risk triage.</p>
+    </div>
+    <%= govuk_button_link_to("Download PRISM triage Excel tool", "/files/prism-toolkit-risk-triage.xlsm", download: "") %>
+    <p class="govuk-body"><a href="<%= main_app.your_prism_risk_assessments_path %>" class="govuk-link">Return to risk assessments dashboard</a></p>
   </div>
 </div>
