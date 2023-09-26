@@ -23,3 +23,8 @@ en:
         your_products: Your products
         team_products: Team products
         all_products: All products - Search
+      prism_risk_assessments:
+        label: Risk assessments
+        your_prism_risk_assessments: Your risk assessments
+        team_prism_risk_assessments: Team risk assessments
+        all_prism_risk_assessments: All risk assessments - Search

@@ -41,4 +41,16 @@ module BreadcrumbHelper
     setting = "all_products" if setting == "index"
     setting.to_s.to_sym
   end
+
+  def breadcrumb_prism_risk_assessment_label
+    setting = cookies.fetch(:last_prism_risk_assessment_view, "your_prism_risk_assessments")
+    setting = "all_prism_risk_assessments" if setting == "index"
+    "prism_risk_assessments.#{setting}".to_sym
+  end
+
+  def breadcrumb_prism_risk_assessment_path
+    setting = cookies.fetch(:last_prism_risk_assessment_view, "your_prism_risk_assessments")
+    setting = "all_prism_risk_assessments" if setting == "index"
+    setting.to_s.to_sym
+  end
 end
