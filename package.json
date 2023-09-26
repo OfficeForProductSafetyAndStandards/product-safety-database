@@ -13,7 +13,7 @@
     "esbuild": "^0.19.3",
     "govuk-frontend": "4.6.0",
     "i18n-js": "^4.3.2",
-    "postcss": "^8.4.29",
+    "postcss": "^8.4.30",
     "sass": "^1.66.1",
     "standard": "^17.1.0",
     "stimulus-rails-nested-form": "^4.1.0",
