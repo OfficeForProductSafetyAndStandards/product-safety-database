@@ -122,8 +122,6 @@ en:
               blank: Enter a description of the evidence
             probability_evidence_description_strong:
               blank: Enter a description of the evidence
-            harm_scenario_step_evidence:
-              blank: Attach a document in support of your decision
         prism/harm_scenario_step_evidence:
           attributes:
             evidence_file:
@@ -214,8 +212,6 @@ en:
                 title: Consider perception and tolerability of the risk
               risk_evaluation_outcome:
                 title: Risk evalation outcome
-              complete_product_risk_evaluation:
-                title: Complete product risk evaluation
               review_and_submit_results_of_the_assessment:
                 title: Review and submit results of the assessment
               review_and_submit_results_of_the_evaluation:

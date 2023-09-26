@@ -189,5 +189,78 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       expect(page).to have_text("Unique name risk assessment")
     end
   end
-  # TODO(ruben): Add tests for serious risk products when the workflow is ready
+
+  context "with serious risk" do
+    let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, :with_product, name: nil, created_by_user_id: user.id) }
+
+    scenario "risk assessment completion" do
+      visit prism.risk_assessment_tasks_path(prism_risk_assessment)
+
+      click_link "Add evaluation details"
+
+      fill_in "Assessment title", with: "Unique name"
+      fill_in "Name of assessor", with: "Test name"
+      fill_in "Name of assessment organisation", with: "Test organisation"
+
+      click_button "Save and complete tasks in this section"
+
+      click_link "Add level of uncertainty and sensitivity analysis"
+
+      choose "Medium" # What is the level of uncertainty associated with the risk assessment?
+      choose "No" # Has sensitivity analysis been undertaken?
+
+      click_button "Save and continue"
+
+      expect(page).to have_text("Is the number of products estimated to be in use expected to change?\nAs recorded in the assessment\nUnknown")
+      choose "No changes" # Is the number of products estimated to be in use expected to change?
+
+      expect(page).to have_text("Does the uncertainty level have implications for risk management decisions?\nAs recorded in the assessment\nMedium level of uncertainty")
+      choose "evaluation-uncertainty-level-implications-for-risk-management-field" # Does the uncertainty level have implications for risk management decisions? (No)
+
+      choose "Similar" # How does the risk level compare to that of comparable products?
+
+      expect(page).to have_text("Is there potential for multiple casualties in a single incident?\nAs recorded in the assessment\nNo multiple casualties")
+      choose "evaluation-multiple-casualties-true-field" # Is there potential for multiple casualties in a single incident? (Yes)
+
+      choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
+
+      expect(page).to have_text("Are there people at increased risk?\nAs recorded in the assessment\nNo")
+      choose "evaluation-people-at-increased-risk-true-field" # Are there people at increased risk? (Yes)
+
+      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant action planned or underway by another MSA or other organisation? (Unknown)
+
+      choose "evaluation-factors-to-take-into-account-field" # As regards the nature of the risk, are there factors to take account of in relation to risk management decisions? (No)
+
+      click_button "Save and continue"
+
+      choose "evaluation-other-hazards-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
+
+      choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
+
+      expect(page).to have_text("Is there a risk to non-users?\nAs recorded in the assessment\nNon-users might not be at risk")
+      choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users? (No)
+
+      choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)
+
+      choose "evaluation-designed-to-provide-protective-function-no-field" # Is the product designed to provide a protective function? (No)
+
+      choose "evaluation-user-control-over-risk-field" # Can users exert any control over the risk? (No)
+
+      click_button "Save and continue"
+
+      choose "Risk is intolerable"
+
+      click_button "Save and continue"
+
+      expect(page).to have_text("Check your risk evaluation details")
+
+      click_button "Submit"
+
+      expect(page).to have_text("Your product risk assessment is complete")
+
+      click_link "View"
+
+      expect(page).to have_text("Unique name risk assessment")
+    end
+  end
 end

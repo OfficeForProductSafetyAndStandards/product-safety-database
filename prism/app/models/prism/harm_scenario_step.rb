@@ -28,7 +28,6 @@ module Prism
     validates :probability_evidence, inclusion: %w[sole_judgement_or_estimation some_limited_empirical_evidence strong_empirical_evidence], on: :estimate_probability_of_harm
     validates :probability_evidence_description_limited, presence: true, if: -> { probability_evidence == "some_limited_empirical_evidence" }, on: :estimate_probability_of_harm
     validates :probability_evidence_description_strong, presence: true, if: -> { probability_evidence == "strong_empirical_evidence" }, on: :estimate_probability_of_harm
-    validates :harm_scenario_step_evidence, presence: true, if: -> { %w[some_limited_empirical_evidence strong_empirical_evidence].include?(probability_evidence) }, on: :estimate_probability_of_harm
 
     after_find :set_probability_evidence_description_virtual_attributes
     before_validation :set_probability_evidence_description

@@ -1,9 +1,12 @@
 module Prism
   module Tasks::EvaluateHelper
     def overall_product_risk_level
-      return unless @prism_risk_assessment && @harm_scenarios
+      return unless @prism_risk_assessment && (@prism_risk_assessment.serious_risk? || @harm_scenarios)
 
-      if @harm_scenarios.length == 1
+      if @prism_risk_assessment.serious_risk?
+        # The overall product risk level is always serious by definition
+        Prism::RiskMatrixService.highest_risk_level(risk_levels: %w[serious])
+      elsif @harm_scenarios.length == 1
         overall_risk_level(@harm_scenarios.first)
       elsif @prism_risk_assessment.overall_product_risk_methodology == "combined"
         combined_risk_level(@harm_scenarios, @items_in_use)
