@@ -19,9 +19,9 @@ We're using [Sidekiq](https://github.com/mperham/sidekiq) as our background proc
 
 We're processing attachments using our [antivirus API](https://github.com/UKGovernmentBEIS/beis-opss-antivirus) for antivirus checking and [Imagemagick](http://imagemagick.org) for thumbnailing.
 
-## Getting set up
+## Getting started
 
-See [getting set up](doc/getting-set-up.md).
+See [getting started](doc/getting_started.md).
 
 ## Contributing
 

@@ -8,8 +8,10 @@ applications:
   stack: cflinuxfs3
   routes:
     - route: ((psd-host))
+    - route: ((psd-host-support))
   env:
     PSD_HOST: ((psd-host))
+    PSD_HOST_SUPPORT: ((psd-host-support))
     STATEMENT_TIMEOUT: 60s
     RAILS_MAX_THREADS: ((web-max-threads))
   timeout: 180

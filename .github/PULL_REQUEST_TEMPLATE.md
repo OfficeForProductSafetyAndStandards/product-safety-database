@@ -21,6 +21,12 @@
   - Windows guide: https://support.microsoft.com/en-us/windows/5328cd25-9046-4472-8a14-c485f138802c
 -->
 
+## Review apps
+
+<!-- Edit the following links after the PR is created to replace "xxxx" with the PR number -->
+https://psd-pr-xxxx.london.cloudapps.digital/
+https://psd-pr-xxxx-support.london.cloudapps.digital/
+
 <!--- Put an `x` in all the boxes that apply. Delete items which are not relevant. -->
 ## Checklist:
 - [ ] Have you documented your changes in the pull request description?

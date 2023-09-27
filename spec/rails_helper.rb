@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "domain_helpers"
 require "simplecov"
 
 # Output coverage in LCOV format for CodeCov in CI environment

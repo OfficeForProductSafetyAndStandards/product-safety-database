@@ -26,6 +26,7 @@ jobs:
           SPACE: research
           APP_NAME: psd-web
           DOMAIN: psd-research.london.cloudapps.digital
+          DOMAIN_SUPPORT: psd-research-support.london.cloudapps.digital
           WEB_DISK_QUOTA: 2G
           WORKER_DISK_QUOTA: 2G
           WEB_MEMORY: 2G

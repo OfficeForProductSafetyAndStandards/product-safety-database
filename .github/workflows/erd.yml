@@ -3,7 +3,7 @@ name: Generate ERD
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
@@ -14,6 +14,7 @@ env:
   ANTIVIRUS_USERNAME: av
   ANTIVIRUS_PASSWORD: password
   PSD_HOST: example.com
+  PSD_HOST_SUPPORT: example.com
   EMAIL_WHITELIST_ENABLED: false
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
   CI: true
