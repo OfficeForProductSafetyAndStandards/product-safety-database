@@ -123,7 +123,7 @@
             end
             summary_list.with_row do |row|
               row.with_key(text: "Severity level")
-              row.with_value(text: harm_scenario_severity_level(harm_scenario.severity, harm_scenario.multiple_casualties))
+              row.with_value(text: harm_scenario_severity_level_and_multiple_casualties(harm_scenario.severity, harm_scenario.multiple_casualties))
               row.with_action(text: "Change", href: task_path("create", "determine_severity_of_harm", harm_scenario.id), visually_hidden_text: "severity level")
             end
             summary_list.with_row do |row|
@@ -260,7 +260,7 @@
         end
       %>
       <%= f.govuk_submit "Submit" %>
-      <p class="govuk-body"><a href="#" class="govuk-link" download>Download a <abbr>PDF</abbr> of the assessment</a></p>
+      <p class="govuk-body"><a href="<%= download_assessment_pdf_risk_assessment_tasks_path(@prism_risk_assessment) %>" class="govuk-link" download>Download a <abbr>PDF</abbr> of the assessment</a></p>
     <% end %>
   </div>
   <div class="govuk-grid-column-one-third">

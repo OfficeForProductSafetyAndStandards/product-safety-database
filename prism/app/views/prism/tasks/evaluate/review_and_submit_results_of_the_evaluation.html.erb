@@ -176,7 +176,7 @@
         end
       %>
       <%= f.govuk_submit "Submit" %>
-      <p class="govuk-body"><a href="#" class="govuk-link" download>Download a <abbr>PDF</abbr> of the assessment</a></p>
+      <p class="govuk-body"><a href="<%= download_assessment_pdf_risk_assessment_tasks_path(@prism_risk_assessment) %>" class="govuk-link" download>Download a <abbr>PDF</abbr> of the assessment</a></p>
     <% end %>
   </div>
   <div class="govuk-grid-column-one-third">

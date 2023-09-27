@@ -113,6 +113,10 @@ module Prism
       end
     end
 
+    def user
+      User.find(created_by_user_id) if created_by_user_id.present?
+    end
+
   private
 
     def check_all_harm_scenarios
