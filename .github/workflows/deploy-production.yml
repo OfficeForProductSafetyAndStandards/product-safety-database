@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Production
+    name: Deploy to Pre-Prod and Production
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,68 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/bin
         curl -A "" -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
         echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+    - name: Create GitHub deployment for Pre-Prod
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: main
+      run: |
+        source deploy-github-functions.sh
+        gh_deploy_create pre-prod
+
+    - name: Initiate Pre-Prod deployment status
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source deploy-github-functions.sh
+
+        # URL where the deployment progress can be tracked. Exported for future steps.
+        log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/actions?query=branch%3Amain+workflow%3ADeploy+Pre-Prod")
+        echo "LOG_URL=$log_url" >> $GITHUB_ENV
+
+        gh_deploy_initiate pre-prod $log_url
+
+    - name: Deploy to Pre-Prod
+      if: success()
+      env:
+        SPACE: pre-prod
+        APP_NAME: psd-web
+        DOMAIN: pre-prod.product-safety-database.service.gov.uk
+        DOMAIN_SUPPORT: pre-prod-support.product-safety-database.service.gov.uk
+        WEB_DISK_QUOTA: 2.5G
+        WORKER_DISK_QUOTA: 2.5G
+        WEB_MEMORY: 4G
+        WORKER_MEMORY: 2G
+        WEB_INSTANCES: 4
+        WORKER_INSTANCES: 2
+        WEB_MAX_THREADS: 5
+        WORKER_MAX_THREADS: 10
+        CF_USERNAME: ${{ secrets.PaaSUsernameProduction }}
+        CF_PASSWORD: ${{ secrets.PaaSPasswordProduction }}
+        SENTRY_SERVICE_NAME: psd-sentry-env
+      run: |
+        cf api api.london.cloud.service.gov.uk
+        cf auth
+        cf target -o 'beis-opss' -s $SPACE
+        ./deploy.sh
+        cf logout
+
+    - name: Update Pre-Prod deployment status (success)
+      if: success()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source deploy-github-functions.sh
+        environment_url=https://pre-prod.product-safety-database.service.gov.uk/
+        gh_deploy_success pre-prod $LOG_URL $environment_url
+
+    - name: Update Pre-Prod deployment status (failure)
+      if: failure()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        source deploy-github-functions.sh
+        gh_deploy_failure pre-prod $LOG_URL
 
     - name: Create GitHub deployment for Production
       env:
@@ -41,12 +103,13 @@ jobs:
 
         gh_deploy_initiate production $log_url
 
-    - name: Deploy to production
+    - name: Deploy to Production
       if: success()
       env:
         SPACE: prod
         APP_NAME: psd-web
         DOMAIN: www.product-safety-database.service.gov.uk
+        DOMAIN_SUPPORT: support.product-safety-database.service.gov.uk
         WEB_DISK_QUOTA: 2.5G
         WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 4G

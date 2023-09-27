@@ -1,3 +1,5 @@
+require "constraints/domain_inclusion_constraint"
+require "constraints/domain_exclusion_constraint"
 require "sidekiq/web"
 require "sidekiq-scheduler/web"
 
@@ -10,8 +12,6 @@ end
 
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
-
-  mount Prism::Engine => "/prism"
 
   unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
     mount Sidekiq::Web => "/sidekiq"
@@ -47,254 +47,264 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :document_attachable do
-    resources :documents, controller: "documents" do
+  # Main PSD app
+  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
+    mount Prism::Engine => "/prism"
+
+    concern :document_attachable do
+      resources :documents, controller: "documents" do
+        member do
+          get :remove
+        end
+      end
+    end
+
+    concern :document_uploadable do
+      resources :document_uploads, controller: "document_uploads" do
+        member do
+          get :remove
+        end
+      end
+    end
+
+    namespace :declaration do
+      get :index, path: ""
+      post :accept
+    end
+
+    namespace :introduction do
+      get :overview
+      get :report_products
+      get :track_investigations
+      get :share_data
+      get :skip
+    end
+
+    resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
+
+    resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
+
+    scope :investigation, path: "", as: :investigation do
+      resources :ts_investigation, only: [], concerns: %i[document_attachable]
+    end
+
+    scope :investigation, path: "", module: "investigations", as: :investigation do
+      resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
+    end
+
+    resource :investigations, only: [], path: "cases" do
+      resource :search, only: :show
+
+      get "your-cases", to: "investigations#your_cases", as: "your_cases"
+      get "team-cases", to: "investigations#team_cases", as: "team_cases"
+      get "assigned-cases", to: "investigations#assigned_cases", as: "assigned_cases"
+      get "all-cases", to: "investigations#index"
+    end
+
+    get "cases/new", to: "ts_investigations#new"
+
+    resources :investigations,
+              path: "cases",
+              only: %i[show index destroy],
+              param: :pretty_id,
+              concerns: %i[document_attachable] do
       member do
-        get :remove
+        get :created
+        get :cannot_close
+        get :confirm_deletion
       end
-    end
-  end
 
-  concern :document_uploadable do
-    resources :document_uploads, controller: "document_uploads" do
-      member do
-        get :remove
+      resource :status, only: %i[], controller: "investigations/status" do
+        get :close
+        get :reopen
+        patch :close
+        patch :reopen
       end
+
+      resource :visibility, only: %i[], controller: "investigations/visibility" do
+        get :show
+        get :restrict
+        get :unrestrict
+        patch :restrict
+        patch :unrestrict
+      end
+
+      resource :summary, only: %i[edit update], controller: "investigations/summary"
+
+      resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
+
+      resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
+      resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
+      resource :overseas_regulator, only: %i[update edit], path: "edit-overseas-regulator", controller: "investigations/overseas_regulator"
+      resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
+      resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
+      resource :reference_numbers, only: %i[edit update], controller: "investigations/reference_numbers"
+      resource :case_names, only: %i[edit update], controller: "investigations/case_names"
+      resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
+      resource :reported_reason, only: %i[edit update], path: "edit-reported-reason", controller: "investigations/reported_reason"
+      resources :images, controller: "investigations/images", only: %i[index], path: "images"
+      resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index]
+
+      resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
+
+      resource :activity, controller: "investigations/activities", only: %i[show create] do
+        resource :comment, only: %i[create new]
+      end
+
+      resources :prism_risk_assessments, controller: "investigations/prism_risk_assessments", path: "prism-risk-assessments", only: %i[new create] do
+        collection do
+          get :choose_product
+        end
+      end
+
+      resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: %i[new create show edit update] do
+        resource :update_case_risk_level, only: %i[show update], path: "update-case-risk-level", controller: "investigations/update_case_risk_level_from_risk_assessment"
+      end
+
+      resources :products, only: %i[new create index], controller: "investigations/products" do
+        collection do
+          post :find
+        end
+      end
+
+      resources :investigation_products, only: %i[remove unlink], controller: "investigations/investigation_products" do
+        member do
+          get :owner
+          get :remove
+          delete :unlink, path: ""
+        end
+      end
+
+      resource :business_types, controller: "investigations/business_types", path: "businesses/with-type", only: %i[new create]
+      resources :businesses, controller: "investigations/businesses" do
+        member do
+          get :remove
+        end
+      end
+
+      resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
+      resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }
+      resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
+
+      resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
+
+      resources :accident_or_incidents_type, controller: "investigations/accident_or_incidents_type", only: %i[new create]
+      resources :accident_or_incidents, controller: "investigations/accident_or_incidents", only: %i[show new create edit update]
+
+      resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
+      resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
+      resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create edit update], path: "phone-calls"
+      resources :alerts, controller: "investigations/alerts", only: %i[show new create update] do
+        collection do
+          get :about
+          post :preview
+        end
+      end
+
+      resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
+        collection do
+          resource :funding_source, controller: "investigations/test_results/funding_source", only: %i[new create], path: "funding-source"
+          resource :funding_certificate, controller: "investigations/test_results/funding_certificate", only: %i[new create], path: "funding-certificate"
+
+          put :create_draft, path: "confirm"
+          get :confirm
+        end
+      end
+
+      resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[new show create edit update], path: "corrective-actions"
     end
-  end
 
-  namespace :declaration do
-    get :index, path: ""
-    post :accept
-  end
-
-  namespace :introduction do
-    get :overview
-    get :report_products
-    get :track_investigations
-    get :share_data
-    get :skip
-  end
-
-  resources :create_a_case_page, controller: "create_a_case_page", only: %i[index]
-
-  resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
-
-  scope :investigation, path: "", as: :investigation do
-    resources :ts_investigation, only: [], concerns: %i[document_attachable]
-  end
-
-  scope :investigation, path: "", module: "investigations", as: :investigation do
-    resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
-  end
-
-  resource :investigations, only: [], path: "cases" do
-    resource :search, only: :show
-
-    get "your-cases", to: "investigations#your_cases", as: "your_cases"
-    get "team-cases", to: "investigations#team_cases", as: "team_cases"
-    get "assigned-cases", to: "investigations#assigned_cases", as: "assigned_cases"
-    get "all-cases", to: "investigations#index"
-  end
-
-  get "cases/new", to: "ts_investigations#new"
-
-  resources :investigations,
-            path: "cases",
-            only: %i[show index destroy],
-            param: :pretty_id,
-            concerns: %i[document_attachable] do
-    member do
-      get :created
-      get :cannot_close
-      get :confirm_deletion
-    end
-
-    resource :status, only: %i[], controller: "investigations/status" do
-      get :close
-      get :reopen
-      patch :close
-      patch :reopen
-    end
-
-    resource :visibility, only: %i[], controller: "investigations/visibility" do
-      get :show
-      get :restrict
-      get :unrestrict
-      patch :restrict
-      patch :unrestrict
-    end
-
-    resource :summary, only: %i[edit update], controller: "investigations/summary"
-
-    resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
-
-    resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
-    resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
-    resource :overseas_regulator, only: %i[update edit], path: "edit-overseas-regulator", controller: "investigations/overseas_regulator"
-    resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
-    resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
-    resource :reference_numbers, only: %i[edit update], controller: "investigations/reference_numbers"
-    resource :case_names, only: %i[edit update], controller: "investigations/case_names"
-    resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
-    resource :reported_reason, only: %i[edit update], path: "edit-reported-reason", controller: "investigations/reported_reason"
-    resources :images, controller: "investigations/images", only: %i[index], path: "images"
-    resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index]
-
-    resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
-
-    resource :activity, controller: "investigations/activities", only: %i[show create] do
-      resource :comment, only: %i[create new]
-    end
-
-    resources :prism_risk_assessments, controller: "investigations/prism_risk_assessments", path: "prism-risk-assessments", only: %i[new create] do
+    resources :case_exports, only: :show do
       collection do
-        get :choose_product
+        get :generate
       end
     end
 
-    resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: %i[new create show edit update] do
-      resource :update_case_risk_level, only: %i[show update], path: "update-case-risk-level", controller: "investigations/update_case_risk_level_from_risk_assessment"
-    end
-
-    resources :products, only: %i[new create index], controller: "investigations/products" do
+    resources :business_exports, only: :show do
       collection do
-        post :find
+        get :generate
       end
     end
 
-    resources :investigation_products, only: %i[remove unlink], controller: "investigations/investigation_products" do
+    resource :products, only: [], path: "products" do
+      get "your-products", to: "products#your_products", as: "your"
+      get "team-products", to: "products#team_products", as: "team"
+      get "all-products", to: "products#index", as: "all"
+    end
+
+    resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
       member do
         get :owner
-        get :remove
-        delete :unlink, path: ""
       end
-    end
 
-    resource :business_types, controller: "investigations/business_types", path: "businesses/with-type", only: %i[new create]
-    resources :businesses, controller: "investigations/businesses" do
-      member do
-        get :remove
-      end
-    end
-
-    resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
-    resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }
-    resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
-
-    resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
-
-    resources :accident_or_incidents_type, controller: "investigations/accident_or_incidents_type", only: %i[new create]
-    resources :accident_or_incidents, controller: "investigations/accident_or_incidents", only: %i[show new create edit update]
-
-    resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
-    resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
-    resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create edit update], path: "phone-calls"
-    resources :alerts, controller: "investigations/alerts", only: %i[show new create update] do
       collection do
-        get :about
-        post :preview
+        get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
+        post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
+      end
+
+      resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
+        member do
+          post :confirm
+        end
+      end
+
+      resources :recalls, only: %i[show update], controller: "products/recalls" do
+        collection do
+          post :pdf
+        end
       end
     end
 
-    resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
+    resource :businesses, only: [], path: "businesses" do
+      get "your-businesses", to: "businesses#your_businesses", as: "your"
+      get "team-businesses", to: "businesses#team_businesses", as: "team"
+      get "all-businesses", to: "businesses#index", as: "all"
+    end
+
+    resources :investigation_products, only: %i[], param: :id do
+      resource :batch_numbers, only: %i[edit update], path: "edit-batch-numbers", controller: "investigation_products/batch_numbers"
+      resource :customs_code, only: %i[edit update], path: "edit-customs-code", controller: "investigation_products/customs_codes"
+      resource :ucr_numbers, only: %i[edit update destroy], path: "edit-ucr-numbers", controller: "investigation_products/ucr_numbers" do
+        collection do
+          post :add_ucr_number
+        end
+        get "/delete/:id" => "investigation_products/ucr_numbers#destroy", as: "delete"
+      end
+
+      resource :number_of_affected_units, only: %i[edit update], param: :id, path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
+    end
+
+    resource :prism_risk_assessments, only: [], path: "prism-risk-assessments" do
+      get "your-prism-risk-assessments", to: "prism_risk_assessments#your_prism_risk_assessments", as: "your"
+      get "team-prism-risk-assessments", to: "prism_risk_assessments#team_prism_risk_assessments", as: "team"
+      get "all-prism-risk-assessments", to: "prism_risk_assessments#index", as: "all"
+      get "add-to-case", to: "prism_risk_assessments#add_to_case", as: "add_to_case"
+      post "add-to-case", to: "prism_risk_assessments#add_to_case"
+    end
+
+    resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
+      resources :locations do
+        member do
+          get :remove
+        end
+      end
+      resources :contacts do
+        member do
+          get :remove
+        end
+      end
+    end
+
+    resources :product_exports do
       collection do
-        resource :funding_source, controller: "investigations/test_results/funding_source", only: %i[new create], path: "funding-source"
-        resource :funding_certificate, controller: "investigations/test_results/funding_certificate", only: %i[new create], path: "funding-certificate"
-
-        put :create_draft, path: "confirm"
-        get :confirm
-      end
-    end
-
-    resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[new show create edit update], path: "corrective-actions"
-  end
-
-  resources :case_exports, only: :show do
-    collection do
-      get :generate
-    end
-  end
-
-  resources :business_exports, only: :show do
-    collection do
-      get :generate
-    end
-  end
-
-  resource :products, only: [], path: "products" do
-    get "your-products", to: "products#your_products", as: "your"
-    get "team-products", to: "products#team_products", as: "team"
-    get "all-products", to: "products#index", as: "all"
-  end
-
-  resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
-    member do
-      get :owner
-    end
-
-    collection do
-      get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
-      post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
-    end
-
-    resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
-      member do
-        post :confirm
-      end
-    end
-
-    resources :recalls, only: %i[show update], controller: "products/recalls" do
-      collection do
-        post :pdf
+        get :generate
       end
     end
   end
 
-  resource :businesses, only: [], path: "businesses" do
-    get "your-businesses", to: "businesses#your_businesses", as: "your"
-    get "team-businesses", to: "businesses#team_businesses", as: "team"
-    get "all-businesses", to: "businesses#index", as: "all"
-  end
-
-  resources :investigation_products, only: %i[], param: :id do
-    resource :batch_numbers, only: %i[edit update], path: "edit-batch-numbers", controller: "investigation_products/batch_numbers"
-    resource :customs_code, only: %i[edit update], path: "edit-customs-code", controller: "investigation_products/customs_codes"
-    resource :ucr_numbers, only: %i[edit update destroy], path: "edit-ucr-numbers", controller: "investigation_products/ucr_numbers" do
-      collection do
-        post :add_ucr_number
-      end
-      get "/delete/:id" => "investigation_products/ucr_numbers#destroy", as: "delete"
-    end
-
-    resource :number_of_affected_units, only: %i[edit update], param: :id, path: "edit-number-of-affected-units", controller: "investigation_products/number_of_affected_units"
-  end
-
-  resource :prism_risk_assessments, only: [], path: "prism-risk-assessments" do
-    get "your-prism-risk-assessments", to: "prism_risk_assessments#your_prism_risk_assessments", as: "your"
-    get "team-prism-risk-assessments", to: "prism_risk_assessments#team_prism_risk_assessments", as: "team"
-    get "all-prism-risk-assessments", to: "prism_risk_assessments#index", as: "all"
-    get "add-to-case", to: "prism_risk_assessments#add_to_case", as: "add_to_case"
-    post "add-to-case", to: "prism_risk_assessments#add_to_case"
-  end
-
-  resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
-    resources :locations do
-      member do
-        get :remove
-      end
-    end
-    resources :contacts do
-      member do
-        get :remove
-      end
-    end
-  end
-
-  resources :product_exports do
-    collection do
-      get :generate
-    end
+  # Support portal
+  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
+    get "/", to: ->(_) { [200, {}, %w[OK]] }
   end
 
   resources :teams, only: %i[index show] do
