@@ -136,6 +136,10 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(product_sheet.cell(2, 23)).to eq investigation_product.customs_code
       expect(product_sheet.cell(3, 23)).to eq investigation_product_2.customs_code
 
+      expect(product_sheet.cell(1, 24)).to eq "case_type"
+      expect(product_sheet.cell(2, 24)).to eq investigation.case_type
+      expect(product_sheet.cell(3, 24)).to eq other_investigation.case_type
+
       expect(test_result_sheet.cell(1, 1)).to eq "psd_ref"
       expect(test_result_sheet.cell(2, 1)).to eq product.psd_ref
       expect(test_result_sheet.cell(3, 1)).to eq product.psd_ref
@@ -192,6 +196,10 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(test_result_sheet.cell(2, 14)).to eq test.investigation.risk_level_description
       expect(test_result_sheet.cell(3, 14)).to eq test_2.investigation.risk_level_description
 
+      expect(test_result_sheet.cell(1, 15)).to eq "case_type"
+      expect(test_result_sheet.cell(2, 15)).to eq test.investigation.case_type
+      expect(test_result_sheet.cell(3, 15)).to eq test_2.investigation.case_type
+
       expect(risk_assessments_sheet.cell(1, 1)).to eq "psd_ref"
       expect(risk_assessments_sheet.cell(2, 1)).to eq product.psd_ref
       expect(risk_assessments_sheet.cell(3, 1)).to eq product.psd_ref
@@ -239,6 +247,10 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(risk_assessments_sheet.cell(1, 12)).to eq "risk_level"
       expect(risk_assessments_sheet.cell(2, 12)).to eq risk_assessment.investigation.risk_level_description
       expect(risk_assessments_sheet.cell(3, 12)).to eq risk_assessment_2.investigation.risk_level_description
+
+      expect(risk_assessments_sheet.cell(1, 13)).to eq "case_type"
+      expect(risk_assessments_sheet.cell(2, 13)).to eq risk_assessment.investigation.case_type
+      expect(risk_assessments_sheet.cell(3, 13)).to eq risk_assessment_2.investigation.case_type
 
       expect(corrective_actions_sheet.cell(1, 1)).to eq "psd_ref"
       expect(corrective_actions_sheet.cell(2, 1)).to eq product.psd_ref
@@ -307,6 +319,10 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(corrective_actions_sheet.cell(1, 17)).to eq "risk_level"
       expect(corrective_actions_sheet.cell(2, 17)).to eq corrective_action.investigation.risk_level_description
       expect(corrective_actions_sheet.cell(3, 17)).to eq corrective_action_2.investigation.risk_level_description
+
+      expect(corrective_actions_sheet.cell(1, 18)).to eq "case_type"
+      expect(corrective_actions_sheet.cell(2, 18)).to eq corrective_action.investigation.case_type
+      expect(corrective_actions_sheet.cell(3, 18)).to eq corrective_action_2.investigation.case_type
     end
   end
 
