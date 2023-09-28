@@ -1,5 +1,7 @@
 module Prism
   class TriageController < ApplicationController
+    skip_before_action :authenticate_user!, only: %i[index]
+
     before_action :prism_risk_assessment, except: %i[index serious_risk serious_risk_choose perform_risk_triage]
     before_action :disallow_triage_reentry, except: %i[index serious_risk serious_risk_choose perform_risk_triage]
 

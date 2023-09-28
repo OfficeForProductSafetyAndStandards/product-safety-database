@@ -119,7 +119,8 @@ RSpec.feature "PRISM triage", type: :feature do
     scenario "visiting the start page" do
       visit prism.root_path
 
-      expect(page).to have_current_path("/sign-in")
+      expect(page).to have_text("Determine and evaluate the level of risk presented by a consumer product")
+      expect(page).to have_link("Start now")
     end
   end
 end
