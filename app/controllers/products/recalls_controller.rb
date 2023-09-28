@@ -28,8 +28,12 @@ module Products
     def pdf
       @form = ProductRecallForm.new(recall_form_params)
       filetype = product_safety_report? ? "product-safety-report" : "product-recall"
-      filename = "#{@product.investigations&.first&.pretty_id}-#{filetype}-#{@form.attributes['pdf_title']&.parameterize}"
-      send_data(GenerateProductRecallPdf.new(@form.attributes, @product).render, filename:, type: "application/pdf", disposition: "attachment")
+      file = Tempfile.new(["#{@product.investigations&.first&.pretty_id}-#{filetype}-#{@form.attributes['pdf_title']&.parameterize}-#{Time.zone.now.to_i}", ".pdf"], binmode: true)
+      GenerateProductRecallPdf.generate_pdf(@form.attributes, @product, file)
+      file.rewind
+      send_file file.path
+    ensure
+      file&.close
     end
 
   private
@@ -54,8 +58,8 @@ module Products
       params.require(:product_recall_form).permit(
         :step, :type, :pdf_title, :alert_number, :product_type, :product_identifiers, :product_description,
         :country_of_origin, :counterfeit, :risk_type, :risk_level, :risk_description, :online_marketplace,
-        :online_marketplace_id, :other_marketplace_name, :other_corrective_action, corrective_actions: [],
-                                                                                   product_image_ids: []
+        :online_marketplace_id, :other_marketplace_name, :other_corrective_action, :notified_by, :corrective_actions,
+        product_image_ids: []
       )
     end
 

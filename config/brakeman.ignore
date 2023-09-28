@@ -22,8 +22,31 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "8780e2b8cceb4bc8eef29138b3caa86890257517b4195b1b2faade6c7b3e9a0a",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/products/recalls_controller.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(Tempfile.new([\"#{Product.find(params[:product_id]).decorate.investigations.first.pretty_id}-#{(\"product-safety-report\" or \"product-recall\")}-#{ProductRecallForm.new(recall_form_params).attributes[\"pdf_title\"].parameterize}-#{Time.zone.now.to_i}\", \".pdf\"], :binmode => true).path)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Products::RecallsController",
+        "method": "pdf"
+      },
+      "user_input": "Product.find(params[:product_id]).decorate",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
     }
   ],
-  "updated": "2023-09-26 15:17:59 +0100",
+  "updated": "2023-09-28 11:41:03 +0100",
   "brakeman_version": "6.0.1"
 }
