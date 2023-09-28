@@ -95,7 +95,8 @@ private
                      affected_units_status
                      number_of_affected_units
                      batch_number
-                     customs_code]
+                     customs_code
+                     case_type]
 
     @product_info_sheet = sheet
   end
@@ -117,7 +118,8 @@ private
                      reported_reason
                      hazard_type
                      non_compliant_reason
-                     risk_level]
+                     risk_level
+                     case_type]
 
     @test_results_sheet = sheet
   end
@@ -137,7 +139,8 @@ private
                      reported_reason
                      hazard_type
                      non_compliant_reason
-                     risk_level]
+                     risk_level
+                     case_type]
 
     @risk_assessments_sheet = sheet
   end
@@ -162,21 +165,21 @@ private
                      reported_reason
                      hazard_type
                      non_compliant_reason
-                     risk_level]
+                     risk_level
+                     case_type]
 
     @corrective_actions_sheet = sheet
   end
 
   def attributes_for_info_sheet(product, investigation_product:)
-    pretty_id = investigation_product.investigation.pretty_id
-
+    investigation = investigation_product.investigation.decorate
     [
       product.psd_ref,
       product.id,
       product.authenticity,
       product.barcode,
       product.brand,
-      pretty_id,
+      investigation.pretty_id,
       product.category,
       format_country_code(code: product.country_of_origin),
       product.created_at.to_formatted_s(:xmlschema),
@@ -193,13 +196,13 @@ private
       investigation_product.affected_units_status,
       investigation_product.number_of_affected_units,
       investigation_product.batch_number,
-      investigation_product.customs_code
+      investigation_product.customs_code,
+      investigation.case_type || "case"
     ]
   end
 
   def attributes_for_test_results_sheet(product, test_result)
     investigation = test_result.investigation.decorate
-
     [
       product.psd_ref,
       product.id,
@@ -214,7 +217,8 @@ private
       investigation.reported_reason,
       investigation.hazard_type,
       investigation.non_compliant_reason,
-      investigation.risk_level_description
+      investigation.risk_level_description,
+      investigation.case_type || "case"
     ]
   end
 
@@ -232,7 +236,8 @@ private
       investigation.reported_reason,
       investigation.hazard_type,
       investigation.non_compliant_reason,
-      investigation.risk_level_description
+      investigation.risk_level_description,
+      investigation.case_type || "case"
     ]
   end
 
@@ -255,7 +260,8 @@ private
       investigation.reported_reason,
       investigation.hazard_type,
       investigation.non_compliant_reason,
-      investigation.risk_level_description
+      investigation.risk_level_description,
+      investigation.case_type || "case"
     ]
   end
 
