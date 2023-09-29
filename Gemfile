@@ -60,8 +60,11 @@ gem "turbo-rails"
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
-# PRISM Rails engine
+# PRISM engine
 gem "prism", path: "prism"
+
+# OSU Support Portal engine
+gem "support_portal", path: "support_portal"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"

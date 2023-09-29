@@ -38,6 +38,7 @@ applications:
     - antivirus-auth-env
     - psd-seeds-v2
     - psd-redacted-export-env
+    - psd-support-portal-env
   processes:
     - type: web
       command: bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
