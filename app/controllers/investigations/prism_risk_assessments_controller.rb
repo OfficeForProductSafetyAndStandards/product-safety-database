@@ -7,6 +7,8 @@ module Investigations
     before_action :product, except: %i[choose_product]
 
     def new
+      authorize PrismRiskAssessment, :index?
+
       # Find all submitted PRISM risk assessments that are associated with the chosen product
       # either directly or via a case that is not the current case.
       @related_prism_risk_assessments = PrismRiskAssessment
@@ -24,6 +26,8 @@ module Investigations
     end
 
     def create
+      authorize PrismRiskAssessment, :index?
+
       return render :new if params[:prism_risk_assessment_id].blank?
 
       prism_risk_assessment = PrismRiskAssessment.find(params[:prism_risk_assessment_id])
@@ -37,6 +41,8 @@ module Investigations
     end
 
     def choose_product
+      authorize PrismRiskAssessment, :index?
+
       @products = @investigation.products
     end
 
