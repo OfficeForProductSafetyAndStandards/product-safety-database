@@ -14,7 +14,14 @@ class PrismRiskAssessmentsController < ApplicationController
 
     if @search.q
       @search.q.strip!
-      @submitted_prism_risk_assessments = @submitted_prism_risk_assessments.where("name ilike ?", "%#{@search.q}%")
+      @submitted_prism_risk_assessments = @submitted_prism_risk_assessments
+        .joins(:prism_product_market_detail)
+        .left_joins(prism_associated_products: :product)
+        .left_joins(prism_associated_investigation_products: :product)
+        .where("prism_risk_assessments.name ILIKE ?", "%#{@search.q}%")
+        .or(PrismRiskAssessment.where("prism_product_market_details.selling_organisation ILIKE ?", "%#{@search.q}%"))
+        .or(PrismRiskAssessment.where("products.name ILIKE ?", "%#{@search.q}%"))
+        .or(PrismRiskAssessment.where("products_prism_associated_investigation_products.name ILIKE ?", "%#{@search.q}%"))
     end
 
     @submitted_prism_risk_assessments = @submitted_prism_risk_assessments.order(sorting_params).page(params[:submitted_page]).per(20)
@@ -92,7 +99,8 @@ private
 
   def sort_by_items
     [
-      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DESC),
+      SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_ASC),
       SortByHelper::SortByItem.new("Assessment title A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
       SortByHelper::SortByItem.new("Assessment title Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
     ]
@@ -101,6 +109,7 @@ private
   def sorting_params
     return { name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
     return { name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
+    return { updated_at: :asc } if params[:sort_by] == SortByHelper::SORT_BY_UPDATED_AT && params[:sort_dir] == SortByHelper::SORT_DIRECTION_ASC
 
     { updated_at: :desc }
   end
