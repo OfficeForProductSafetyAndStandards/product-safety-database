@@ -64,17 +64,17 @@
           "strong_empirical_evidence": "Strong empirical evidence"
         },
         "risk_to_non_users": {
-          "false": "Non-users might not be at risk",
-          "true": "Non-users might be at risk"
+          "false": "Non-users of the product might not be at risk",
+          "true": "Non-users of the product might be at risk"
         },
         "risk_tolerability": {
           "intolerable": "Risk is intolerable",
           "tolerable": "Risk is tolerable"
         },
         "unintended_risks_for": {
-          "non_users": "Non-users",
+          "non_users": "Non-users of the product",
           "not_applicable": "Not applicable",
-          "unintended_users": "Unintended users"
+          "unintended_users": "Unintended users of the product"
         },
         "yes_no": {
           "false": "No",
@@ -189,7 +189,7 @@
             "identify": {
               "tasks": {
                 "add_a_number_of_hazards": {
-                  "title": "Add a number of hazards"
+                  "title": "Add the hazards and who/what could be harmed"
                 }
               },
               "title": "Identify product hazards"
