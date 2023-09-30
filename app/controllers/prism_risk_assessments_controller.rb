@@ -54,12 +54,18 @@ class PrismRiskAssessmentsController < ApplicationController
     return redirect_to your_prism_risk_assessments_path if params[:prism_risk_assessment_id].blank? || (params[:investigation_pretty_id].blank? && request.post?)
 
     @prism_risk_assessment = PrismRiskAssessment.find(params[:prism_risk_assessment_id])
-    # Find all submitted PRISM risk assessments that are associated with the chosen product
-    # either directly or via a case that is not the current case.
+
+    # Find all cases which have already been associated with this risk assessment.
+    @associated_investigations = Investigation
+      .joins(:prism_associated_investigations)
+      .where(prism_associated_investigations: { risk_assessment_id: @prism_risk_assessment.id })
+      .order(updated_at: :desc)
+      .decorate
+
+    # Find all cases which are associated to the product but not to this risk assessment.
     @related_investigations = Investigation
-      .left_joins(:investigation_products, prism_associated_investigations: :prism_associated_investigation_products)
-      .where.missing(:prism_associated_investigations)
-      .or(Investigation.where.not(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @prism_risk_assessment.product_id } }))
+      .left_joins(:investigation_products)
+      .where.not(id: @associated_investigations.pluck(:id))
       .where(investigation_products: { product_id: @prism_risk_assessment.product_id })
       .where(is_closed: false)
       .order(updated_at: :desc)
