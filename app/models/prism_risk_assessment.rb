@@ -7,6 +7,7 @@ class PrismRiskAssessment < ApplicationRecord
     true
   end
 
+  has_one :prism_product_market_detail, foreign_key: "risk_assessment_id"
   has_many :prism_harm_scenarios, foreign_key: "risk_assessment_id"
   has_many :prism_associated_investigations, foreign_key: "risk_assessment_id"
   has_many :prism_associated_products, foreign_key: "risk_assessment_id"

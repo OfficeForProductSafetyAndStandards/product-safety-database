@@ -44,9 +44,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
     click_link "Add a risk assessment"
-    choose product1.name
-    click_button "Continue"
-    click_link "Attach existing risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
     expect_to_have_case_breadcrumbs

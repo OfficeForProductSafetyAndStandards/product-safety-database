@@ -157,7 +157,7 @@ en:
             low_likelihood_high_severity:
               inclusion: Select whether this is a low likelihood but high severity risk
             risk_to_non_users:
-              inclusion: Select whether there is a risk to non-users
+              inclusion: Select whether there is a risk to non-users of the product
             aimed_at_vulnerable_users:
               inclusion: Select whether this is a type of product aimed at vulnerable users
             designed_to_provide_protective_function:
@@ -183,7 +183,7 @@ en:
             title: Identify product hazards
             tasks:
               add_a_number_of_hazards:
-                title: Add a number of hazards
+                title: Add the hazards and who/what could be harmed
           create:
             title: Create product harm scenarios
             tasks:
@@ -260,8 +260,8 @@ en:
       people_at_increased_risk:
         "false": "No"
       risk_to_non_users:
-        "true": Non-users might be at risk
-        "false": Non-users might not be at risk
+        "true": Non-users of the product might be at risk
+        "false": Non-users of the product might not be at risk
       counterfeit:
         counterfeit: "Yes"
         genuine: "No"
@@ -274,8 +274,8 @@ en:
         five: "5"
         more_than_five: More than 5
       unintended_risks_for:
-        unintended_users: Unintended users
-        non_users: Non-users
+        unintended_users: Unintended users of the product
+        non_users: Non-users of the product
         not_applicable: Not applicable
       probability_evidence:
         sole_judgement_or_estimation: Sole judgement or estimation

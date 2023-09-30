@@ -18,10 +18,12 @@ module Investigations
           items: @investigation.risk_assessments.order(created_at: :desc).map(&:decorate),
           new_path: new_investigation_risk_assessment_path(@investigation)
         },
-        "PRISM risk assessments" => {
-          items: @investigation.prism_risk_assessments.order(created_at: :desc).map(&:decorate),
-          new_path: new_investigation_prism_risk_assessment_path(@investigation)
-        },
+        "PRISM risk assessments" => if current_user.is_prism_user?
+                                      {
+                                        items: @investigation.prism_risk_assessments.submitted.order(created_at: :desc).map(&:decorate),
+                                        new_path: new_investigation_prism_risk_assessment_path(@investigation)
+                                      }
+                                    end,
         "Correspondence" => {
           items: @investigation.correspondences.order(created_at: :desc).map(&:decorate),
           new_path: new_investigation_correspondence_path(@investigation)
@@ -34,7 +36,7 @@ module Investigations
           items: @investigation.generic_supporting_information_attachments.order(created_at: :desc).map(&:decorate),
           new_path: new_investigation_document_path(@investigation)
         }
-      }
+      }.compact
     end
   end
 end

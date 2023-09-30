@@ -129,7 +129,7 @@ module Prism
       pdf.table([
         [{ content: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards)],
         [{ content: "Is this a low likelihood but high severity risk?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.low_likelihood_high_severity)],
-        [{ content: "Is there a risk to non-users?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.risk_to_non_users)],
+        [{ content: "Is there a risk to non-users of the product?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.risk_to_non_users)],
         [{ content: "Is this a type of product aimed at vulnerable users?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.aimed_at_vulnerable_users)],
         [{ content: "Is the product designed to provide a protective function?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.designed_to_provide_protective_function)],
         [{ content: "Can users exert any control over the risk?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.user_control_over_risk)],
