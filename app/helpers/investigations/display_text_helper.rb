@@ -58,11 +58,13 @@ module Investigations::DisplayTextHelper
             count: " (#{investigation.risk_assessments.size})",
             href: investigation_supporting_information_index_path(investigation, anchor: "risk-assessments")
           },
-          {
-            text: "PRISM risk assessments",
-            count: " (#{investigation.prism_risk_assessments.size})",
-            href: investigation_supporting_information_index_path(investigation, anchor: "prism-risk-assessments")
-          },
+          if current_user.is_prism_user?
+            {
+              text: "PRISM risk assessments",
+              count: " (#{investigation.prism_risk_assessments.submitted.size})",
+              href: investigation_supporting_information_index_path(investigation, anchor: "prism-risk-assessments")
+            }
+          end,
           {
             text: "Correspondence",
             count: " (#{investigation.correspondences.size})",
@@ -78,7 +80,7 @@ module Investigations::DisplayTextHelper
             count: " (#{investigation.generic_supporting_information_attachments.size})",
             href: investigation_supporting_information_index_path(investigation, anchor: "other")
           }
-        ]
+        ].compact
       },
 
       {

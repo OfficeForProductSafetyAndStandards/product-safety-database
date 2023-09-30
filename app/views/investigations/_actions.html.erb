@@ -35,12 +35,21 @@
         <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_corrective_action_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a corrective action</span></a></dd>
       <% end %>
     </div>
+    <% if current_user.is_prism_user? %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Risk assessment&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.risk_assessments.size + @investigation.prism_risk_assessments.submitted.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+        <% if policy(@investigation).update? %>
+          <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_prism_risk_assessment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a risk assessment</span></a></dd>
+        <% end %>
+      </div>
+    <% else %>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Risk assessment&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.risk_assessments.size + @investigation.prism_risk_assessments.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <dt class="govuk-summary-list__key">Risk assessment&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.risk_assessments.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
       <% if policy(@investigation).update? %>
-        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_prism_risk_assessment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a risk assessment</span></a></dd>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_risk_assessment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a risk assessment</span></a></dd>
       <% end %>
     </div>
+    <% end %>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Correspondence&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.correspondences.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
       <% if policy(@investigation).update? %>
