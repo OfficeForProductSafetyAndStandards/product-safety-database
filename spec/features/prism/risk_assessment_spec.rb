@@ -31,7 +31,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       expect(page).to have_text("You have completed 1 of 4 sections.")
 
-      click_link "Add a number of hazards"
+      click_link "Add the hazards and who/what could be harmed"
 
       choose "3" # Number of hazards identified
 
@@ -48,7 +48,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "Particular group of users" # Who is the product aimed at?
       fill_in "Description of user type including age group if applicable. For example, children 2-3 years.", with: "Children"
-      check "Unintended users" # Who else might be at risk?
+      check "Unintended users of the product" # Who else might be at risk?
 
       click_button "Save and continue"
 
@@ -163,8 +163,8 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
 
-      expect(page).to have_text("Is there a risk to non-users?\nAs recorded in the assessment\nNon-users might be at risk")
-      choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users? (No)
+      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product might be at risk")
+      choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users of the product? (No)
 
       choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)
 
@@ -237,8 +237,8 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
 
-      expect(page).to have_text("Is there a risk to non-users?\nAs recorded in the assessment\nNon-users might not be at risk")
-      choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users? (No)
+      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product might not be at risk")
+      choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users of the product? (No)
 
       choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)
 

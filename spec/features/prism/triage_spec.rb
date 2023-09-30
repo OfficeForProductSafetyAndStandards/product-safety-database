@@ -18,7 +18,7 @@ RSpec.feature "PRISM triage", type: :feature do
   scenario "selecting that a product poses a serious risk" do
     visit prism.serious_risk_path
 
-    expect(page).to have_text("Is the product likely to pose a serious risk that would justify exemption from a full risk assessment?")
+    expect(page).to have_text("Is the product or hazard of a type where a serious risk can generally be deemed to exist?")
 
     click_button "Continue"
 
@@ -33,7 +33,7 @@ RSpec.feature "PRISM triage", type: :feature do
   scenario "selecting that a product does not pose a serious risk" do
     visit prism.serious_risk_path
 
-    expect(page).to have_text("Is the product likely to pose a serious risk that would justify exemption from a full risk assessment?")
+    expect(page).to have_text("Is the product or hazard of a type where a serious risk can generally be deemed to exist?")
 
     choose "No"
     click_button "Continue"
@@ -119,7 +119,8 @@ RSpec.feature "PRISM triage", type: :feature do
     scenario "visiting the start page" do
       visit prism.root_path
 
-      expect(page).to have_current_path("/sign-in")
+      expect(page).to have_text("Determine and evaluate the level of risk presented by a consumer product")
+      expect(page).to have_link("Start now")
     end
   end
 end

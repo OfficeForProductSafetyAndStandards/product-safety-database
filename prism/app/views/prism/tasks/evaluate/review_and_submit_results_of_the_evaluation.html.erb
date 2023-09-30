@@ -139,9 +139,9 @@
             row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether this is a low likelihood but high severity risk")
           end
           summary_list.with_row do |row|
-            row.with_key(text: "Is there a risk to non-users?")
+            row.with_key(text: "Is there a risk to non-users of the product?")
             row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.risk_to_non_users))
-            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether there is a risk to non-users")
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether there is a risk to non-users of the product")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Is this a type of product aimed at vulnerable users?")
