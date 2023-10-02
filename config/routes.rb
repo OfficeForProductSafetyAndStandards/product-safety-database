@@ -304,7 +304,7 @@ Rails.application.routes.draw do
 
   # Support portal
   constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
-    get "/", to: ->(_) { [200, {}, %w[OK]] }
+    mount SupportPortal::Engine => "/"
   end
 
   resources :teams, only: %i[index show] do
