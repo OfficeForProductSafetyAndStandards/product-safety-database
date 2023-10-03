@@ -10,11 +10,6 @@
             <h1 class="govuk-fieldset__heading"><%= t(".heading") %></h1>
           </legend>
           <div id="type-hint" class="govuk-hint govuk-!-margin-bottom-5"><%= t(".hint") %></div>
-          <% if @business_type_form&.errors[:type].present? %>
-            <p id="type-error" class="govuk-error-message">
-              <span class="govuk-visually-hidden">Error:</span> Select a business type
-            </p>
-          <% end %>
           <%= form.hidden_field :type, value: "" %>
 
           <% online_marketplace_radios = capture do %>
@@ -79,6 +74,7 @@
             { value: "fulfillment_house", text: t(".types.fulfillment_house.label") },
             { value: "distributor", text: t(".types.distributor.label") },
             { value: "authorised_representative", text: t(".types.authorised_representative.label"), conditional: { html: authorised_representative_radios }},
+            { value: "responsible_person", text: t(".types.responsible_person.label") },
           ] %>
 
           <%= form.govuk_radios :type,
