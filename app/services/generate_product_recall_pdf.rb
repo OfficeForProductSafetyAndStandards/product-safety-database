@@ -47,7 +47,7 @@ class GenerateProductRecallPdf
       [{ content: "Risk Description", font_style: :bold }, params["risk_description"]],
       [{ content: "Corrective Measures", font_style: :bold }, params["corrective_actions"]],
       [{ content: "Online Marketplace", font_style: :bold }, online_marketplace],
-      [{ content: "Notifier", font_style: :bold }, product.owning_team&.name],
+      [{ content: "Notifier", font_style: :bold }, params["notified_by"]],
     ].compact, width: 522)
     pdf.text_box 'The OPSS Product Safety Alerts, Reports and Recalls Site can be accessed at the following link: <u><link href="https://www.gov.uk/guidance/product-recalls-and-alerts">https://www.gov.uk/guidance/product-recalls-and-alerts</link></u>', inline_format: true, at: [0, 50]
     pdf.render(file)

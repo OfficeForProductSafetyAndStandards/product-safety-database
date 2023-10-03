@@ -51,7 +51,7 @@
             ) %>
       <%= form.govuk_radios :risk_level, legend: "Risk level", classes: "govuk-radios--small govuk-radios--inline", legend_classes: "govuk-fieldset__legend", items: [{ text: "High", value: "High" }, { text: "Serious", value: "Serious" }, { text: "Medium", value: "Medium" }, { text: "Low", value: "Low" }], value: @case&.risk_level&.capitalize %>
       <%= form.govuk_text_area :risk_description, label: "Risk description - why is the product unsafe", label_classes: "govuk-label", attributes: { maxlength: 10_000, rows: 10 }, value: @case&.hazard_description %>
-      <%= form.govuk_text_area :corrective_actions, label: "Corrective actions", label_classes: "govuk-label", attributes: { maxlength: 10_000, rows: 10 } %>
+      <%= form.govuk_text_area :corrective_actions, label: "Corrective actions", label_classes: "govuk-label", attributes: { maxlength: 10_000, rows: 10 }, value: @case&.corrective_actions&.decorate&.map(&:page_title)&.join("\n") %>
       <% online_marketplace_radios = capture do %>
         <% number_of_market_places = @online_marketplaces.length %>
         <% online_marketplace_first_half = @online_marketplaces.slice(0..number_of_market_places/2) %>
@@ -80,7 +80,6 @@
             </div>
           </div>
         </div>
-
         <%= form.govuk_input :other_marketplace_name, label: "Other online platform", classes: "js-input-handle-other" %>
       <% end %>
       <%= form.govuk_radios :online_marketplace,
@@ -101,8 +100,7 @@
           }
         ]
       %>
-      <%= form.govuk_input :notified_by, label: "Notified by", value: @product.owning_team&.name %>
-
+      <%= form.govuk_input :notified_by, label: "Notified by" %>
       <div class="govuk-button-group">
         <%= form.submit "Continue", class: "govuk-button", role: "button" unless @form.last_step? %>
       </div>
