@@ -470,19 +470,13 @@ module PageExpectations
 
   def expect_to_be_on_add_attachment_to_a_product_page(product_id:)
     expect(page).to have_content "Image files will be saved to the product images"
-    expect(page).to have_current_path("/products/#{product_id}/document_uploads/new")
+    expect(page).to have_current_path("/products/#{product_id}/image_uploads/new")
     expect(page).to have_h1("Add attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end
 
-  def expect_to_be_on_edit_attachment_for_a_product_page(product_id:, document_upload_id:)
-    expect(page).to have_current_path("/products/#{product_id}/document_uploads/#{document_upload_id}/edit")
-    expect(page).to have_h2("Edit attachment")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
-  end
-
-  def expect_to_be_on_delete_attachment_for_a_product_page(product_id:, document_upload_id:)
-    expect(page).to have_current_path("/products/#{product_id}/document_uploads/#{document_upload_id}/remove")
+  def expect_to_be_on_delete_attachment_for_a_product_page(product_id:, image_upload_id:)
+    expect(page).to have_current_path("/products/#{product_id}/image_uploads/#{image_upload_id}/remove")
     expect(page).to have_h2("Remove attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end

@@ -79,11 +79,11 @@ private
   end
 
   def image_cell(id)
-    document_upload = DocumentUpload.find_by(id:, upload_model: product)
+    image_upload = ImageUpload.find_by(id:, upload_model: product)
 
-    return if document_upload.blank?
+    return if image_upload.blank?
 
-    document_upload.file_upload.blob.open do |file|
+    image_upload.file_upload.blob.open do |file|
       { image: File.open(file.path), fit: [200, 200] }
     end
   end

@@ -1,0 +1,20 @@
+<% title = "Add attachment" %>
+<%= page_title title, errors: @image_upload.errors.any? %>
+<%= form_with model: @image_upload, local: true, builder: ApplicationFormBuilder, html: { novalidate: true }, url: associated_image_uploads_path(@parent) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary(@image_upload.errors, %i[file_upload])%>
+      <span class="govuk-caption-l"><%= @parent.pretty_description %></span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-1"><%= title %></h1>
+
+      <% if (@parent.is_a?(Investigation) || @parent.is_a?(Product)) %>
+        <% hint_text = @parent.is_a?(Investigation) ? "Image files will be saved to the case images page." : "Image files will be saved to the product images." %>
+        <div class="govuk-hint govuk-!-margin-bottom-8"><%= hint_text %></div>
+      <% end %>
+
+      <%= render "upload_file_component", form: form, old_file: nil, field_name: :file_upload, legend: "Upload a file", label: "Upload a file" %>
+
+      <%= govukButton text: "Save attachment" %>
+    </div>
+  </div>
+<% end %>
