@@ -278,7 +278,7 @@ GEM
     interactor (3.1.2)
     jaro_winkler (1.5.4)
     jmespath (1.6.2)
-    jsbundling-rails (1.1.1)
+    jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
     json (2.6.3)
     jsonapi-renderer (0.2.2)
