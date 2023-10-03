@@ -6,7 +6,7 @@ gem "active_model_serializers", "~> 0.10.0"
 gem "activerecord-pg_enum", "~> 2.0"
 gem "active_storage_validations", "~> 1.0.4"
 gem "aws-sdk-s3", "~> 1.136"
-gem "aws-sdk-s3control", "~> 1.63"
+gem "aws-sdk-s3control", "~> 1.70"
 gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
