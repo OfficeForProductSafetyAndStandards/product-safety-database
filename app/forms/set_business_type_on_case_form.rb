@@ -9,7 +9,7 @@ class SetBusinessTypeOnCaseForm
   attribute :authorised_representative_choice
 
   BUSINESS_TYPES = %w[
-    retailer online_seller online_marketplace manufacturer exporter importer fulfillment_house distributor authorised_representative
+    retailer online_seller online_marketplace manufacturer exporter importer fulfillment_house distributor authorised_representative responsible_person
   ].freeze
 
   validates_inclusion_of :type, in: BUSINESS_TYPES

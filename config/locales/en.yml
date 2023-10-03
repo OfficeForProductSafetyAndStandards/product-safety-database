@@ -148,6 +148,8 @@ en:
             label: Fulfillment house
           distributor:
             label: Distributor
+          responsible_person:
+            label: Responsible person
           other:
             label: Other online platform
     overseas_regulator:
@@ -909,6 +911,7 @@ en:
       importer: "Importer"
       fulfillment_house: "Fulfillment house"
       distributor: "Distributor"
+      responsible_person: "Responsible person"
       other: "Other"
       authorised_reprsentative:
         uk_authorised_representative: "UK Authorised representative"
