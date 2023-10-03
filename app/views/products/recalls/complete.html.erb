@@ -78,7 +78,7 @@ The listing has been removed by the online market place - <%= @form.attributes["
 
 PSD case number: <%= @form.attributes["alert_number"] %>
 
-Notified by: <%= @product.owning_team&.name %>
+Notified by: <%= @form.attributes["notified_by"] %>
       </textarea>
       <div class="govuk-form-group">
         <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
@@ -157,7 +157,7 @@ The listing has been removed by the online market place - <%= @form.attributes["
 
 PSD case number: <%= @form.attributes["alert_number"] %>
 
-Notified by: <%= @product.owning_team&.name %>
+Notified by: <%= @form.attributes["notified_by"] %>
       </textarea>
       <div class="govuk-form-group">
         <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
