@@ -67,6 +67,14 @@ Rails.application.routes.draw do
       end
     end
 
+    concern :image_uploadable do
+      resources :image_uploads, controller: "image_uploads", except: %i[edit update] do
+        member do
+          get :remove
+        end
+      end
+    end
+
     namespace :declaration do
       get :index, path: ""
       post :accept
@@ -232,7 +240,7 @@ Rails.application.routes.draw do
       get "all-products", to: "products#index", as: "all"
     end
 
-    resources :products, except: %i[destroy], concerns: %i[document_uploadable] do
+    resources :products, except: %i[destroy], concerns: %i[document_uploadable image_uploadable] do
       member do
         get :owner
       end

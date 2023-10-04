@@ -81,15 +81,8 @@ class Product < ApplicationRecord
     tests + corrective_actions + unexpected_events + risk_assessments + prism_risk_assessments
   end
 
-  def images
-    document_uploads.select { |document_upload| document_upload.file_upload.content_type.starts_with?("image") }
-  end
-
   def virus_free_images
-    document_uploads.select do |document_upload|
-      file_upload = document_upload.file_upload
-      file_upload.content_type.starts_with?("image") && file_upload.metadata["safe"]
-    end
+    image_uploads.select { |image_upload| image_upload.file_upload.metadata["safe"] }
   end
 
   # Expose document uploads similarly to other model attributes while managing them as an
@@ -97,6 +90,13 @@ class Product < ApplicationRecord
   # uploads as they were at the time of the versioned product.
   def document_uploads
     DocumentUpload.where(id: document_upload_ids)
+  end
+
+  # Expose image uploads similarly to other model attributes while managing them as an
+  # array of IDs. This allows products to be versioned along with their associated image
+  # uploads as they were at the time of the versioned product.
+  def image_uploads
+    ImageUpload.where(id: image_upload_ids)
   end
 
   def psd_ref(timestamp: nil, investigation_was_closed: false)

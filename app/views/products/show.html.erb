@@ -54,7 +54,6 @@
         <div class="govuk-grid-column-one-third">
           <figure class="opss-margin-bottom-1-desktop">
             <%= image_tag @product.virus_free_images.first.file_upload.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
-            <figcaption class="govuk-visually-hidden"><%= @product.virus_free_images.first.title %></figcaption>
           </figure>
         </div>
       <% end %>

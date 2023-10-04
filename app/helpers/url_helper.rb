@@ -59,4 +59,17 @@ module UrlHelper
   def remove_associated_document_upload_path(parent, document_upload)
     "#{associated_document_upload_path(parent, document_upload)}/remove"
   end
+
+  # IMAGE UPLOADS
+  def associated_image_uploads_path(parent)
+    path_for_model(parent, :image_uploads)
+  end
+
+  def associated_image_upload_path(parent, image_upload)
+    "#{path_for_model(parent, :image_uploads)}/#{image_upload.id}"
+  end
+
+  def remove_associated_image_upload_path(parent, image_upload)
+    "#{associated_image_upload_path(parent, image_upload)}/remove"
+  end
 end

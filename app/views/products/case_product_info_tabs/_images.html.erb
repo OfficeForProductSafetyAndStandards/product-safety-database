@@ -13,7 +13,7 @@
       <dl class="govuk-summary-list govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            Image and title
+            Image
           </dt>
           <dd class="govuk-summary-list__value">
             <figure class="opss-margin-bottom-1-desktop">
@@ -22,16 +22,7 @@
                 <span class="govuk-visually-hidden">(opens in new tab)</span>
               <% end %>
               <%= link_to link_content, image.file_upload, target: "_blank", rel: "noreferrer noopener", title: "Opens in a new tab" %>
-              <figcaption><%= image.title %></figcaption>
             </figure>
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Image description
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <%= image.description %>
           </dd>
         </div>
         <div class="govuk-summary-list__row">

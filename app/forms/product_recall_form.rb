@@ -26,11 +26,11 @@ class ProductRecallForm
   def product_images(product)
     product.virus_free_images.map do |img|
       {
-        text: img.title,
+        text: img.file_upload.filename,
         value: img.id,
         disable_ghost: true,
         checked: product_image_ids.to_a.include?(img.id),
-        html: "#{img.title}<div class='govuk-hint govuk-checkboxes__hint govuk-!-font-size-16'>#{img.description}</div><code>#{img.file_upload.filename}</code><div class='opss-checkboxes-thumbnails_img' style='background-image: url(#{rails_storage_proxy_path(img.file_upload, only_path: true)})'></div>".html_safe
+        html: "<div class='opss-checkboxes-thumbnails_img' style='background-image: url(#{rails_storage_proxy_path(img.file_upload, only_path: true)})'></div>".html_safe
       }
     end
   end
