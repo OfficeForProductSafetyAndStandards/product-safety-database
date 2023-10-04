@@ -120,8 +120,7 @@ class User < ApplicationRecord
   end
 
   def can_use_product_recall_tool?
-    true
-    # team.name == "OPSS Incident Management"
+    team.name == "OPSS Incident Management"
   end
 
   def has_role?(role)

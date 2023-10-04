@@ -46,7 +46,7 @@ Body:
 
 Product: <%= @product.name %>
 
-Hazard: <%= @form.attributes["risk_type"] %>
+Hazard: <%= @form.attributes["risk_description"] %>
 
 Risk Level: <%= @form.attributes["risk_level"].presence || "Unknown" %>
 
@@ -54,14 +54,14 @@ Corrective action: <%= @form.attributes["corrective_actions"] %>
 
 <% if @form.attributes["online_marketplace"]  %>
 Online marketplace:
-The listing has been removed by the online market place - <%= @form.attributes["online_marketplace_id"].presence || @form.attributes["other_marketplace_name"] %>
+The listing has been removed by the online marketplace - <%= @form.attributes["online_marketplace_id"].presence || @form.attributes["other_marketplace_name"] %>
 <% end %>
 
 ## Product information
 
 | Type |  |
 | - | - |
-| Product Identifiers | <%= @form.attributes["product_identifiers"] %> |
+| Product Identifiers | <%= @form.attributes["product_identifiers"].gsub(/\R+/, ", ") %> |
 | Country of Origin | <%= country_from_code(@form.attributes["country_of_origin"]) %> |
 | Product Description | <%= @form.attributes["product_description"] %> |
 | Product Report and Image | **Insert link to uploaded PDF** |
@@ -125,7 +125,7 @@ Body:
 
 Product: <%= @product.name %>
 
-Hazard: <%= @form.attributes["risk_type"] %>
+Hazard: <%= @form.attributes["risk_description"] %>
 
 Risk Level: <%= @form.attributes["risk_level"].presence || "Unknown" %>
 
@@ -133,14 +133,14 @@ Corrective action: <%= @form.attributes["corrective_actions"] %>
 
 <% if @form.attributes["online_marketplace"]  %>
 Online marketplace:
-The listing has been removed by the online market place - <%= @form.attributes["online_marketplace_id"].presence || @form.attributes["other_marketplace_name"] %>
+The listing has been removed by the online marketplace - <%= @form.attributes["online_marketplace_id"].presence || @form.attributes["other_marketplace_name"] %>
 <% end %>
 
 ## Product information
 
 | Type |  |
 | - | - |
-| Product Identifiers | <%= @form.attributes["product_identifiers"] %> |
+| Product Identifiers | <%= @form.attributes["product_identifiers"].gsub(/\R+/, ", ") %> |
 | Country of Origin | <%= country_from_code(@form.attributes["country_of_origin"]) %> |
 | Product Description | <%= @form.attributes["product_description"] %> |
 | Product Report and Image | **Insert link to uploaded PDF** |
