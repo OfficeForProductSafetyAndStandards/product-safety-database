@@ -31,7 +31,7 @@ private
     return @business_ids if @business_ids
 
     @search = SearchParams.new(params)
-    search_for_businesses(FIND_IN_BATCH_SIZE, nil).pluck(:id).sort
+    search_for_businesses(nil, nil).pluck(:id).sort
   end
 
   def add_businesses_worksheet(business_ids, book)

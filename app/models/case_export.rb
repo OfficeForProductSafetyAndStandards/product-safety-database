@@ -46,7 +46,7 @@ private
     return @case_ids if @case_ids
 
     @search = SearchParams.new(params)
-    opensearch_for_investigations(FIND_IN_BATCH_SIZE, user).pluck(:id).sort
+    opensearch_for_investigations(nil, user).pluck(:id).sort
   end
 
   def activity_counts
