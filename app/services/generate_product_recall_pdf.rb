@@ -20,20 +20,21 @@ class GenerateProductRecallPdf
       Producer: "Prawn",
       CreationDate: Time.zone.now
     }
-    pdf = Prawn::Document.new(page_size: "A4", info: metadata)
+    pdf = Prawn::Document.new(page_size: "A4", font_size: 11, info: metadata)
     # rubocop:disable Rails/SaveBang
     pdf.font_families.update(
-      "GDS Transport" => {
-        normal: { file: Rails.root.join("app/assets/fonts/gds-transport-light.ttf"), font: "GDSTransport" },
-        bold: { file: Rails.root.join("app/assets/fonts/gds-transport-bold.ttf"), font: "GDSTransport-Bold" },
+      "Arial" => {
+        normal: { file: Rails.root.join("app/assets/fonts/arial.ttf"), font: "Arial" },
+        bold: { file: Rails.root.join("app/assets/fonts/arial-bold.ttf"), font: "Arial-Bold" },
       }
     )
     # rubocop:enable Rails/SaveBang
-    pdf.font("GDS Transport")
-    pdf.image(Rails.root.join("app/assets/images/opss-logo.jpg"), width: 120)
-    pdf.text title, color: "FF0000", style: :bold, align: :right, size: 26
+    pdf.font("Arial")
     pdf.table([
-      [{ content: params["pdf_title"], colspan: 2, font_style: :bold }],
+      [{ image: File.open(Rails.root.join("app/assets/images/opss-logo.jpg")), fit: [140, 140] }, { content: title, text_color: "FF0000", font_style: :bold, size: 20, align: :right, valign: :bottom }],
+    ], width: pdf.bounds.width, cell_style: { borders: [] })
+    pdf.table([
+      [{ content: params["pdf_title"], colspan: 2, font_style: :bold, size: 14 }],
       [{ content: "Aspect", font_style: :bold }, { content: "Details", font_style: :bold }],
       *image_rows,
       [{ content: "Alert Number", font_style: :bold }, params["alert_number"]],
@@ -48,8 +49,12 @@ class GenerateProductRecallPdf
       [{ content: "Corrective Measures", font_style: :bold }, params["corrective_actions"]],
       [{ content: "Online Marketplace", font_style: :bold }, online_marketplace],
       [{ content: "Notifier", font_style: :bold }, params["notified_by"]],
-    ].compact, width: 522)
-    pdf.text_box 'The OPSS Product Safety Alerts, Reports and Recalls Site can be accessed at the following link: <u><link href="https://www.gov.uk/guidance/product-recalls-and-alerts">https://www.gov.uk/guidance/product-recalls-and-alerts</link></u>', inline_format: true, at: [0, 50]
+    ].compact, width: pdf.bounds.width, column_widths: { 0 => 80 })
+    pdf.repeat :all do
+      pdf.bounding_box [pdf.bounds.left, pdf.bounds.bottom + 25], width: pdf.bounds.width do
+        pdf.text_box 'The OPSS Product Safety Alerts, Reports and Recalls Site can be accessed at the following link: <color rgb="#0000FF"><u><link href="https://www.gov.uk/guidance/product-recalls-and-alerts">https://www.gov.uk/guidance/product-recalls-and-alerts</link></u></color>', inline_format: true
+      end
+    end
     pdf.render(file)
   end
 
@@ -102,6 +107,6 @@ private
     return "N/A" if params["online_marketplace"].nil?
     return "No" unless params["online_marketplace"]
 
-    "The listing has been removed by the online market place - #{params['other_marketplace_name'].presence || params['online_marketplace_id']}"
+    "The listing has been removed by the online marketplace - #{params['other_marketplace_name'].presence || params['online_marketplace_id']}"
   end
 end
