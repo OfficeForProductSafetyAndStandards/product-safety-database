@@ -5,7 +5,7 @@ module BusinessesHelper
     business
   end
 
-  def search_for_businesses(page_size = Business.count, user = current_user)
+  def search_for_businesses(page_size = Business.count, user = current_user, ids_only: false)
     query = Business.includes(investigations: %i[owner_user owner_team])
 
     if @search.q
@@ -27,10 +27,14 @@ module BusinessesHelper
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
 
-    query
-      .order(sorting_params)
-      .page(page_number)
-      .per(page_size)
+    if ids_only
+      query.pluck(:id)
+    else
+      query
+        .order(sorting_params)
+        .page(page_number)
+        .per(page_size)
+    end
   end
 
   def business_export_params

@@ -46,7 +46,7 @@ private
     return @case_ids if @case_ids
 
     @search = SearchParams.new(params)
-    opensearch_for_investigations(nil, user).pluck(:id).sort
+    search_for_investigations(nil, user, ids_only: true).sort
   end
 
   def activity_counts

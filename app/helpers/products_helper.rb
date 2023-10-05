@@ -23,7 +23,7 @@ module ProductsHelper
     params.require(:product).permit(PARAMS_FOR_UPDATE).with_defaults(markings: [])
   end
 
-  def search_for_products(page_size = Product.count, user = current_user)
+  def search_for_products(page_size = Product.count, user = current_user, ids_only: false)
     query = Product.includes(investigations: %i[owner_user owner_team])
 
     if @search.q
@@ -56,10 +56,14 @@ module ProductsHelper
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
 
-    query
-      .order(sorting_params)
-      .page(page_number)
-      .per(page_size)
+    if ids_only
+      query.pluck(:id)
+    else
+      query
+        .order(sorting_params)
+        .page(page_number)
+        .per(page_size)
+    end
   end
 
   def product_export_params

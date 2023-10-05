@@ -95,10 +95,7 @@ module InvestigationsHelper
     )
   end
 
-  def search_for_investigations(page_size = Investigation.count, user = current_user)
-    # This method is not used for searching across all investigations
-    # (see `opensearch_for_investigations` above), but it implements all filters
-    # for potential future use.
+  def search_for_investigations(page_size = Investigation.count, user = current_user, ids_only: false)
     query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses)
 
     if @search.q
@@ -172,10 +169,14 @@ module InvestigationsHelper
               end
     end
 
-    query
-      .order(@search.sorting_params)
-      .page(page_number)
-      .per(page_size)
+    if ids_only
+      query.pluck(:id)
+    else
+      query
+        .order(@search.sorting_params)
+        .page(page_number)
+        .per(page_size)
+    end
   end
 
   def query_params
