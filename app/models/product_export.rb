@@ -38,7 +38,7 @@ private
     return @product_ids if @product_ids
 
     @search = SearchParams.new(params)
-    search_for_products(nil, user).pluck(:id).sort
+    search_for_products(nil, user, ids_only: true).sort
   end
 
   def find_products(ids)
