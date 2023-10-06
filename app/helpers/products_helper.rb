@@ -26,7 +26,7 @@ module ProductsHelper
   def search_for_products(page_size = Product.count, user = current_user, ids_only: false)
     query = Product.includes(investigations: %i[owner_user owner_team])
 
-    if @search.q
+    if @search.q.present?
       @search.q.strip!
       query = query.where("products.name ILIKE ?", "%#{@search.q}%")
         .or(Product.where("products.description ILIKE ?", "%#{@search.q}%"))
