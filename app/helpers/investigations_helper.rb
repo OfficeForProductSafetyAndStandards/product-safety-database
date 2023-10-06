@@ -98,7 +98,7 @@ module InvestigationsHelper
   def search_for_investigations(page_size = Investigation.count, user = current_user, ids_only: false)
     query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses)
 
-    if @search.q
+    if @search.q.present?
       @search.q.strip!
       query = query.where("description ILIKE ?", "%#{@search.q}%")
         .or(Investigation.where(pretty_id: @search.q))

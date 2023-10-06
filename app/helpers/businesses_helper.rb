@@ -8,7 +8,7 @@ module BusinessesHelper
   def search_for_businesses(page_size = Business.count, user = current_user, ids_only: false)
     query = Business.includes(investigations: %i[owner_user owner_team])
 
-    if @search.q
+    if @search.q.present?
       @search.q.strip!
       query = query.where("trading_name ILIKE ?", "%#{@search.q}%")
         .or(Business.where("legal_name ILIKE ?", "%#{@search.q}%"))
