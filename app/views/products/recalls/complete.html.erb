@@ -48,14 +48,7 @@ Product: <%= @product.name %>
 
 Hazard: <%= @form.attributes["risk_description"] %>
 
-Risk Level: <%= @form.attributes["risk_level"].presence || "Unknown" %>
-
 Corrective action: <%= @form.attributes["corrective_actions"] %>
-
-<% if @form.attributes["online_marketplace"]  %>
-Online marketplace:
-The listing has been removed by the online marketplace - <%= @form.attributes["online_marketplace_id"].presence || @form.attributes["other_marketplace_name"] %>
-<% end %>
 
 ## Product information
 
@@ -127,14 +120,7 @@ Product: <%= @product.name %>
 
 Hazard: <%= @form.attributes["risk_description"] %>
 
-Risk Level: <%= @form.attributes["risk_level"].presence || "Unknown" %>
-
 Corrective action: <%= @form.attributes["corrective_actions"] %>
-
-<% if @form.attributes["online_marketplace"]  %>
-Online marketplace:
-The listing has been removed by the online marketplace - <%= @form.attributes["online_marketplace_id"].presence || @form.attributes["other_marketplace_name"] %>
-<% end %>
 
 ## Product information
 
