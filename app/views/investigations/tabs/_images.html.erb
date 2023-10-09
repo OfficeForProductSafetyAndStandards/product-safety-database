@@ -1,6 +1,6 @@
 <%= page_title "Images - #{@investigation.pretty_id}" %>
 
-<% if @investigation.images.none? %>
+<% if @investigation.images.none? && @investigation.image_uploads.none? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <p class="govuk-body opss-text-align-center">This case does not have any case evidence images.</p>
@@ -74,6 +74,64 @@
       <% if policy(@investigation).update? %>
         <%= link_to(remove_associated_document_path(@investigation, image), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset") do %>
           Remove this image<span class="govuk-visually-hidden">: <%= image_title %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<%
+  @investigation.image_uploads.each.with_index(@investigation.images.size + 1) do |image_upload, image_number|
+    image = image_upload.file_upload
+    analyzed = image.metadata["analyzed"]
+    safe = image.metadata["safe"]
+    metadata_ok_for_display = safe || !analyzed
+%>
+  <section class="govuk-!-margin-bottom-9">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <h3 class="govuk-heading-m">Case image <%= image_number %></h3>
+      </div>
+    </div>
+    <dl class="govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Image</dt>
+        <dd class="govuk-summary-list__value">
+          <% if analyzed && safe %>
+            <figure>
+              <%= link_to image, class: "govuk-link govuk-link--no-visited-state", rel: "noreferrer noopener", target: "_blank", title: "Opens in a new tab" do %>
+                <%= render("image_uploads/image_tag", image: image_upload, dimensions: [300, 200], class_name: "") %>
+              <% end %>
+            </figure>
+          <% else %>
+            <figure>
+              <a target="_blank" rel="noreferrer noopener" href="#">
+                <%= image_tag "img-icon.png", alt: "Blank image", class: "opss-blank-img" %>
+              </a>
+              <% if !analyzed %>
+                <figcaption class="govuk-warning-text govuk-!-margin-top-2 govuk-!-margin-bottom-0 opss-warning-text--s">
+                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                  <strong class="govuk-warning-text__text">
+                      <span class="govuk-warning-text__assistive">Warning</span>
+                      The image file has not finished uploading – this may take several minutes or more. Refresh the page to confirm it has finished.
+                  </strong>
+                </figcaption>
+              <% end %>
+            </figure>
+          <% end %>
+        </dd>
+      </div>
+      <% if metadata_ok_for_display %>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Updated</dt>
+            <dd class="govuk-summary-list__value"><%= file_updated_date_in_govuk_format image %></dd>
+        </div>
+      <% end %>
+    </dl>
+    <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+      <% if policy(@investigation).update? %>
+        <%= link_to(remove_associated_image_upload_path(@investigation, image_upload), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset") do %>
+          Remove this image
         <% end %>
       <% end %>
     </div>

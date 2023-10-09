@@ -249,6 +249,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_141513) do
     t.text "description"
     t.text "hazard_description"
     t.string "hazard_type"
+    t.bigint "image_upload_ids", default: [], array: true
     t.boolean "is_closed", default: false
     t.boolean "is_from_overseas_regulator"
     t.boolean "is_private", default: false, null: false

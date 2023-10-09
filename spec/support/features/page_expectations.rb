@@ -40,9 +40,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Images")
   end
 
-  def expect_to_be_on_add_image_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
-    expect(page).to have_selector("h1", text: "Add attachment")
+  def expect_to_be_on_add_image_page(image_upload_id: nil)
+    # rubocop:disable Style/StringConcatenation
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new#{image_upload_id.present? ? '?image_upload_id[]=' + image_upload_id.to_s : ''}")
+    # rubocop:enable Style/StringConcatenation
+    expect(page).to have_selector("h1", text: "Add an image")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
@@ -204,6 +206,13 @@ module PageExpectations
     expect(page).to have_content "Image files will be saved to the case images page."
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
     expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
+  end
+
+  def expect_to_be_on_add_image_to_a_case_page
+    expect(page).to have_content "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the case."
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new")
+    expect(page).to have_h1("Add an image")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
@@ -471,13 +480,13 @@ module PageExpectations
   def expect_to_be_on_add_attachment_to_a_product_page(product_id:)
     expect(page).to have_content "Image files will be saved to the product images"
     expect(page).to have_current_path("/products/#{product_id}/image_uploads/new")
-    expect(page).to have_h1("Add attachment")
+    expect(page).to have_h1("Add an image")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end
 
   def expect_to_be_on_delete_attachment_for_a_product_page(product_id:, image_upload_id:)
     expect(page).to have_current_path("/products/#{product_id}/image_uploads/#{image_upload_id}/remove")
-    expect(page).to have_h2("Remove attachment")
+    expect(page).to have_h2("Remove image")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end
 

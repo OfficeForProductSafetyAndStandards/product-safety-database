@@ -1,0 +1,12 @@
+<% if activity.file_upload.image? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <%= render "document_uploads/document_preview",
+               document: activity.file_upload,
+               dimensions: [100, 100],
+               class_name: "product-image" %>
+    </div>
+  </div>
+<% else %>
+  <%= link_to "View document upload (opens in new tab)", activity.file_upload, class: "psd-block-link govuk-link--no-visited-state", target: "_blank", rel: "noreferrer noopener" %>
+<% end %>

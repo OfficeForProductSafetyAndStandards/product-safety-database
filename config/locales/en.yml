@@ -453,14 +453,12 @@ en:
             authorised_representative_choice:
               blank: Select an authorised representative region
               inclusion: Select an authorised representative region
-
         remove_business_form:
           attributes:
             remove:
               inclusion: "Select yes if you want to remove the business from the case"
             reason:
               blank: "Enter the reason for removing the business from the case"
-
         accident_or_incident_form:
           attributes:
             is_date_known:
@@ -545,7 +543,6 @@ en:
               blank: "Select the product marking(s)"
             when_placed_on_market:
               blank: "Select yes if the product was placed on the market before 1 January 2021"
-
         risk_assessment_form:
           attributes:
             assessed_on:
@@ -790,6 +787,10 @@ en:
           attributes:
             correspondence_date:
               invalid: "Enter a real correspondence date"
+        image_upload:
+          attributes:
+            file_upload:
+              blank: "Select a file"
         investigation:
           attributes:
             product_category:
@@ -881,7 +882,7 @@ en:
   file_added: "The file was added"
   file_updated: "File has been updated"
   file_removed: "File was successfully removed"
-  image_added: "The image was added"
+  image_added: "The image was uploaded"
   image_updated: "The image was updated"
   image_removed: "The image was successfully removed"
   otp_code:

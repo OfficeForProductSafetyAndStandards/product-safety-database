@@ -20,7 +20,7 @@ module UrlHelper
 
   def attachments_tab_path(parent, file = nil)
     if parent.is_a?(Investigation)
-      path_for_model(parent) + (file&.image? ? "/images" : "/supporting-information")
+      path_for_model(parent) + (file.is_a?(ImageUpload) || file&.image? ? "/images" : "/supporting-information")
     else
       "#{path_for_model(parent)}#attachments"
     end
