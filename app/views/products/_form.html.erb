@@ -19,7 +19,7 @@
   form: form,
   id: "subcategory",
   label: { text: "Product subcategory", classes: label_class },
-  hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" }
+  hint: { text: "For example, 'Face mask' or 'Washing machine'" }
 ) %>
 
 <% if product_form.authenticity_unsure?  %>
@@ -73,6 +73,10 @@
   attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
 
+<% if !local_assigns[:disable_image_upload] %>
+  <%= render "upload_file_component", form: form, old_file: nil, field_name: :image, legend: "Upload a product image", label: "Upload a product image" %>
+<% end %>
+
 <%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
 
 <%= govukInput(
@@ -100,7 +104,7 @@
   key: :webpage,
   form: form,
   label: { text: "Webpage", classes: label_class },
-  hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" }
+  hint: { text: "The manufacturer's page for the product, or a link to where it can be bought" }
 ) %>
 
 <%= govukSelect(
@@ -124,7 +128,7 @@
   form: form,
   attributes: { maxlength: 10_000 },
   label: { text: "Description of product", classes: label_class },
-  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. Do not include details of damage or incidents" }
+  hint: { text: "Details about the product you haven't included above. For example, colour, size, packaging description. Do not include details of damage or incidents" }
 ) %>
 
 <%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>

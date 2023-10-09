@@ -38,13 +38,13 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_css("#item-3", text: chemical_product.name)
   end
 
-  scenario "selecting Name A–Z sorts ascending by name" do
+  scenario "selecting Name A-Z sorts ascending by name" do
     within "form dl.govuk-list.opss-dl-select" do
-      click_on "Name A–Z"
+      click_on "Name A-Z"
     end
     expect(page).to have_current_path(/sort_by=name/, ignore_query: false)
     expect(page).to have_current_path(/sort_dir=asc/, ignore_query: false)
-    expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name A–Z")
+    expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name A-Z")
 
     expect(page).to have_css("#item-0", text: another_drowning_product.name)
     expect(page).to have_css("#item-1", text: fire_product_8.name)
@@ -52,13 +52,13 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_css("#item-3", text: fire_product_5.name)
   end
 
-  scenario "selecting Name Z–A sorts descending by name" do
+  scenario "selecting Name Z-A sorts descending by name" do
     within "form dl.govuk-list.opss-dl-select" do
-      click_on "Name Z–A"
+      click_on "Name Z-A"
     end
     expect(page).to have_current_path(/sort_by=name/, ignore_query: false)
     expect(page).to have_current_path(/sort_dir=desc/, ignore_query: false)
-    expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name Z–A")
+    expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name Z-A")
 
     expect(page).to have_css("#item-0", text: zebra_product.name)
     expect(page).to have_css("#item-1", text: fire_product_2.name)
@@ -68,14 +68,14 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
 
   scenario "selected sort order is persisted when filtering by category" do
     within "form dl.govuk-list.opss-dl-select" do
-      click_on "Name A–Z"
+      click_on "Name A-Z"
     end
 
     select "Lifts", from: "Category"
     click_button "Apply"
 
     expect(page).to have_current_path(/sort_by=name/, ignore_query: false)
-    expect(page).to have_css("form dl.govuk-list.opss-dl-select dd", text: "Active: Name A–Z")
+    expect(page).to have_css("form dl.govuk-list.opss-dl-select dd", text: "Active: Name A-Z")
   end
 
   scenario "filtering by keyword sorts by Relevance by default" do
@@ -93,7 +93,7 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
 
   scenario "filtering by keyword persists a selected sort order" do
     within "form dl.govuk-list.opss-dl-select" do
-      click_on "Name A–Z"
+      click_on "Name A-Z"
     end
 
     fill_in "Search", with: "hot product"

@@ -1,28 +1,4 @@
 module ProductsHelper
-  PARAMS_FOR_CREATE = [:brand,
-                       :name,
-                       :subcategory,
-                       :category,
-                       :product_code,
-                       :webpage,
-                       :description,
-                       :country_of_origin,
-                       :barcode,
-                       :authenticity,
-                       :when_placed_on_market,
-                       :has_markings,
-                       { markings: [] }].freeze
-  PARAMS_FOR_UPDATE = PARAMS_FOR_CREATE.without(:category, :authenticity,
-                                                :brand, :name)
-
-  def product_params
-    params.require(:product).permit(PARAMS_FOR_CREATE).with_defaults(markings: [])
-  end
-
-  def product_params_for_update
-    params.require(:product).permit(PARAMS_FOR_UPDATE).with_defaults(markings: [])
-  end
-
   def search_for_products(page_size = Product.count, user = current_user, ids_only: false)
     query = Product.includes(investigations: %i[owner_user owner_team])
 

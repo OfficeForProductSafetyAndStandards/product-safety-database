@@ -36,16 +36,19 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product_form = ProductForm.new product_params
+    @product_form = ProductForm.new(product_params)
 
     if @product_form.valid?
       context = CreateProduct.call!(
         @product_form.serializable_hash.merge(user: current_user)
       )
       @product = context.product
+      @product_form.cache_file!(current_user, @product)
+
       render :confirmation
     else
       set_countries
+      @product_form.cache_file!(current_user, nil)
       render :new
     end
   end
@@ -53,7 +56,7 @@ class ProductsController < ApplicationController
   def edit
     authorize @product, :update?
 
-    @product_form = ProductForm.from @product.object
+    @product_form = ProductForm.from(@product.object)
     breadcrumb breadcrumb_product_label, breadcrumb_product_path
     breadcrumb @product.name, product_path(@product)
   end
@@ -61,13 +64,13 @@ class ProductsController < ApplicationController
   def update
     authorize @product, :update?
 
-    @product_form = ProductForm.from @product.object
+    @product_form = ProductForm.from(@product.object)
     @product_form.attributes = product_params_for_update
 
     if @product_form.valid?
       UpdateProduct.call!(
         product: @product.object,
-        product_params: @product_form.serializable_hash,
+        product_params: @product_form.serializable_hash.except("image", "existing_image_file_id"),
         updating_team: current_user.team
       )
 
@@ -111,6 +114,23 @@ private
     @search = SearchParams.new(query_params.except(:page_name))
   end
 
+  def product_params
+    params.require(:product).permit(
+      :name, :brand, :category, :subcategory, :product_code,
+      :image, :existing_image_file_id,
+      :webpage, :description, :country_of_origin, :barcode,
+      :authenticity, :when_placed_on_market, :has_markings, markings: []
+    )
+  end
+
+  def product_params_for_update
+    params.require(:product).permit(
+      :subcategory, :product_code,
+      :webpage, :description, :country_of_origin, :barcode,
+      :when_placed_on_market, :has_markings, markings: []
+    )
+  end
+
   def query_params
     params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
   end
@@ -131,8 +151,8 @@ private
   def sort_by_items
     items = [
       SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DEFAULT),
-      SortByHelper::SortByItem.new("Name A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
-      SortByHelper::SortByItem.new("Name Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
+      SortByHelper::SortByItem.new("Name A-Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
+      SortByHelper::SortByItem.new("Name Z-A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
     ]
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if params[:q].present?
     items
