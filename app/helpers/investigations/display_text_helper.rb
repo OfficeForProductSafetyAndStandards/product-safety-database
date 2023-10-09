@@ -34,7 +34,7 @@ module Investigations::DisplayTextHelper
       {
         href: investigation_images_path(investigation),
         text: "Images",
-        count: " (#{investigation.images.size})",
+        count: " (#{investigation.images.size + investigation.image_uploads.size})",
         active: is_current_tab.images?
       },
       {

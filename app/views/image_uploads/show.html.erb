@@ -39,7 +39,7 @@
     <%= govukSummaryList(rows: rows) %>
 
     <% if imageable_policy(@parent).remove? %>
-      <p class="govuk-body"><%= link_to "Remove attachment", remove_associated_image_upload_path(@parent, @image_upload), class: "govuk-link" %></p>
+      <p class="govuk-body"><%= link_to "Remove image", remove_associated_image_upload_path(@parent, @image_upload), class: "govuk-link" %></p>
     <% end %>
   </div>
   <div class="govuk-grid-column-one-third">

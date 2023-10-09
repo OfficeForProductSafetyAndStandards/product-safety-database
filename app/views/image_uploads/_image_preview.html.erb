@@ -22,7 +22,7 @@
           <%= render("image_uploads/image_tag", image:, dimensions: dimensions) %>
           <span class="govuk-visually-hidden">(opens in new tab)</span>
         <% end %>
-        <%= link_to link_content, image, target: "_blank", rel: "noreferrer noopener" %>
+        <%= link_to link_content, rails_storage_proxy_path(image.file_upload), target: "_blank", rel: "noreferrer noopener" %>
       <% end %>
     </div>
   <% else %>

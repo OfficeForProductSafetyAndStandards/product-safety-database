@@ -115,7 +115,7 @@ Rails.application.routes.draw do
               path: "cases",
               only: %i[show index destroy],
               param: :pretty_id,
-              concerns: %i[document_attachable] do
+              concerns: %i[document_attachable image_uploadable] do
       member do
         get :created
         get :cannot_close
