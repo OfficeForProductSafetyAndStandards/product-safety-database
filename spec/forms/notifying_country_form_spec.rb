@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe NotifyingCountryForm do
   subject(:form) { described_class.from(investigation) }
 
-  let(:investigation) { build(:case, notifying_country:) }
+  let(:investigation) { build(:notification, notifying_country:) }
   let(:notifying_country) { "country:GB" }
 
   describe ".from" do
