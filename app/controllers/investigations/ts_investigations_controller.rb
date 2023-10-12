@@ -58,10 +58,10 @@ class Investigations::TsInvestigationsController < ApplicationController
       return render_wizard unless @reason_for_creating_form.valid?
 
       if @reason_for_creating_form.case_is_safe == "yes"
-        session[:investigation] = Investigation::Case.new(reported_reason: "safe_and_compliant")
+        session[:investigation] = Investigation::Notification.new(reported_reason: "safe_and_compliant")
         skip_step
       else
-        session[:investigation] = Investigation::Case.new
+        session[:investigation] = Investigation::Notification.new
       end
       session[:form_answers] = reason_for_creating_params
     when :reason_for_concern
@@ -69,7 +69,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       @edit_why_reporting_form = EditWhyReportingForm.new(reason_for_concern_params.merge(reported_reason:))
       return render_wizard unless @edit_why_reporting_form.valid?
 
-      session[:investigation] = Investigation::Case.new(reported_reason:, hazard_description: @edit_why_reporting_form.hazard_description,
+      session[:investigation] = Investigation::Notification.new(reported_reason:, hazard_description: @edit_why_reporting_form.hazard_description,
                                                         hazard_type: @edit_why_reporting_form.hazard_type, non_compliant_reason: @edit_why_reporting_form.non_compliant_reason)
       session[:form_answers].merge!(reason_for_creating_params)
     when :reference_number
