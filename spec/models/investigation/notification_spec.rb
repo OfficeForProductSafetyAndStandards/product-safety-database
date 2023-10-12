@@ -1,16 +1,16 @@
 require "rails_helper"
 
-RSpec.describe Investigation::Case do
-  subject(:case_object) { build(:case) }
+RSpec.describe Investigation::Notification do
+  subject(:notification) { build(:notification) }
 
   describe "#case_type" do
     it "returns 'notification'" do
-      expect(case_object.case_type).to eq("notification")
+      expect(notification.case_type).to eq("notification")
     end
   end
 
   describe "#valid?" do
-    subject(:case) { build(:case, date_received:).build_owner_collaborations_from(create(:user)) }
+    subject(:notification) { build(:notification, date_received:).build_owner_collaborations_from(create(:user)) }
 
     context "with valid date_received" do
       let(:date_received) { 1.day.ago }
