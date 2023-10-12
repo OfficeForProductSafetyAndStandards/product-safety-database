@@ -36,9 +36,9 @@ FactoryBot.define do
       user_title { "test project title" }
     end
 
-    factory :case, class: "Investigation::Case" do
-      description { "test case" }
-      user_title { "test case title" }
+    factory :notification, class: "Investigation::Notification" do
+      description { "test notification" }
+      user_title { "test notification title" }
     end
 
     trait :with_complainant do
