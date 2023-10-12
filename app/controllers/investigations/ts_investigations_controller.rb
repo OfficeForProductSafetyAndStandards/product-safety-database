@@ -70,7 +70,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       return render_wizard unless @edit_why_reporting_form.valid?
 
       session[:investigation] = Investigation::Notification.new(reported_reason:, hazard_description: @edit_why_reporting_form.hazard_description,
-                                                        hazard_type: @edit_why_reporting_form.hazard_type, non_compliant_reason: @edit_why_reporting_form.non_compliant_reason)
+                                                                hazard_type: @edit_why_reporting_form.hazard_type, non_compliant_reason: @edit_why_reporting_form.non_compliant_reason)
       session[:form_answers].merge!(reason_for_creating_params)
     when :reference_number
       @reference_number_form = ReferenceNumberForm.new(reference_number_params)
