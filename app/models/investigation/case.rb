@@ -6,6 +6,10 @@ class Investigation < ApplicationRecord
             inverse_of: :investigation,
             dependent: :destroy
 
+    def case_type
+      "notification"
+    end
+
     def case_created_audit_activity_class
       AuditActivity::Investigation::AddCase
     end
