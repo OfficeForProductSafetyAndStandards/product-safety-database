@@ -75,6 +75,7 @@ class SearchParams
 
   def uses_expanded_filter_options?
     teams_with_access != "all" || created_by != "all" ||
-      case_type != "all" || case_owner != "all"
+      case_type != "all" || case_owner != "all" ||
+      last_change.present?
   end
 end
