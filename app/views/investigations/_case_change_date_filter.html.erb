@@ -1,0 +1,28 @@
+<%= govukDateInput(
+  id: "change_date_filter-fieldset",
+  fieldset: {
+    legend: {
+      text: "Last updated date"
+    }
+  },
+  items: [
+    {
+      classes: "govuk-input--width-2",
+      label: "Day",
+      name: "last_change[day]",
+      value: form.object.last_change&.day
+    },
+    {
+      classes: "govuk-input--width-2",
+      label: "Month",
+      name: "last_change[month]",
+      value: form.object.last_change&.month
+    },
+    {
+      classes: "govuk-input--width-2",
+      label: "Year",
+      name: "last_change[year]",
+      value: form.object.last_change&.year
+    }
+  ]
+) %>

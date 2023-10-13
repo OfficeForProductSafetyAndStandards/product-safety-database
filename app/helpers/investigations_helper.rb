@@ -195,7 +195,8 @@ module InvestigationsHelper
       :created_by,
       :created_by_other_id,
       :page_name,
-      :hazard_type
+      :hazard_type,
+      last_change: %i[day month year]
     )
   end
 
@@ -211,7 +212,8 @@ module InvestigationsHelper
       :teams_with_access_other_id,
       :created_by,
       :created_by_other_id,
-      :hazard_type
+      :hazard_type,
+      last_change: %i[day month year]
     )
   end
 

@@ -24,6 +24,7 @@ class SearchParams
   attribute :category
   attribute :page_name
   attribute :retired_status
+  attribute :last_change, :govuk_date
 
   def selected_sort_by
     if sort_by.blank?
