@@ -60,7 +60,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_antivirus, :with_stub
     click_button "Save attachment"
 
     expect_to_be_on_images_page
-    expect_confirmation_banner("The image was added")
+    expect_confirmation_banner("The image was uploaded")
 
     expect(page).to have_selector("figure figcaption", text: title)
     expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
@@ -73,89 +73,54 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_antivirus, :with_stub
     expect(page).not_to have_selector("dd.govuk-summary-list__value", text: description)
   end
 
-  # rubocop:disable RSpec/AnyInstance
-  context "when image is too large" do
-    it "shows error" do
-      allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.bytes }
-
-      visit "/cases/#{investigation.pretty_id}"
-      click_link "Add an image"
-
-      expect_to_be_on_add_attachment_to_a_case_page
-
-      attach_file "document[document]", image_file
-      fill_in "Document title", with: title
-      fill_in "Description",    with: description
-
-      click_button "Save attachment"
-
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
-
-      errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Image file must be smaller than 0 MB in size"
-    end
-  end
-  # rubocop:enable RSpec/AnyInstance
-
   context "when image is too small" do
     it "shows error" do
       visit "/cases/#{investigation.pretty_id}"
       click_link "Add an image"
 
-      expect_to_be_on_add_attachment_to_a_case_page
+      expect_to_be_on_add_image_to_a_case_page
 
-      attach_file "document[document]", empty_image
-      fill_in "Document title", with: title
-      fill_in "Description",    with: description
+      attach_file "image_upload[file_upload]", empty_image
 
-      click_button "Save attachment"
+      click_button "Upload"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
+      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "The selected file could not be uploaded – try again"
+      expect(errors_list[0].text).to eq "Image must be larger than 0MB"
     end
   end
 
-  context "when non image file is too large" do
-    # rubocop:disable RSpec/AnyInstance
-    it "shows error" do
-      allow_any_instance_of(DocumentForm).to receive(:max_file_byte_size) { 1.bytes }
-
-      visit "/cases/#{investigation.pretty_id}"
-      click_link "Add an image"
-
-      expect_to_be_on_add_attachment_to_a_case_page
-
-      attach_file "document[document]", other_file
-      fill_in "Document title", with: title
-      fill_in "Description",    with: description
-
-      click_button "Save attachment"
-
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents")
-
-      errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "File must be smaller than 0 MB in size"
-    end
-    # rubocop:enable RSpec/AnyInstance
-  end
-
-  context "when an imagine fails the antivirus check", :with_stubbed_failing_antivirus do
+  context "when image is not an image file" do
     it "shows error" do
       visit "/cases/#{investigation.pretty_id}"
       click_link "Add an image"
 
-      expect_to_be_on_add_attachment_to_a_case_page
+      expect_to_be_on_add_image_to_a_case_page
 
-      attach_file "document[document]", image_file
-      fill_in "Document title", with: title
-      fill_in "Description",    with: description
+      attach_file "image_upload[file_upload]", other_file
 
-      click_button "Save attachment"
+      click_button "Upload"
+
+      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads")
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Files must be virus free"
+      expect(errors_list[0].text).to eq "Image must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF file"
+    end
+  end
+
+  context "when an image fails the antivirus check", :with_stubbed_failing_antivirus do
+    it "shows error" do
+      visit "/cases/#{investigation.pretty_id}"
+      click_link "Add an image"
+
+      expect_to_be_on_add_image_to_a_case_page
+
+      attach_file "image_upload[file_upload]", image_file
+
+      click_button "Upload"
+
+      expect_warning_banner("File upload must be virus free")
     end
   end
 

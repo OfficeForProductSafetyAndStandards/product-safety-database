@@ -1,9 +1,9 @@
-<%= page_title "Remove attachment" %>
+<%= page_title "Remove image" %>
 <% content_for :after_header do %>
   <%= link_to "Back", attachments_tab_path(@parent, @image_upload), class: "govuk-back-link" %>
 <% end %>
 
-<%= render "page_heading", title: "Remove attachment" %>
+<%= render "page_heading", title: "Remove image" %>
 
 <%= render "image_uploads/image_preview", image: @image_upload, dimensions: [480, 320] %>
 
@@ -31,5 +31,11 @@
 </div>
 
 <%= form_with url: associated_image_upload_path(@parent, @image_upload), method: :delete, local: true do |form| %>
-  <%= form.submit "Delete attachment", class: "govuk-button govuk-button--warning" %>
+  <% if params[:multiple] %>
+    <input type="hidden" name="multiple" value="true">
+    <% (params[:image_upload_id] || []).each do |image_upload_id| %>
+      <input type="hidden" name="image_upload_id[]" value="<%= image_upload_id %>">
+    <% end %>
+  <% end %>
+  <%= form.submit "Delete image", class: "govuk-button govuk-button--warning" %>
 <% end %>
