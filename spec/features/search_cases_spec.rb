@@ -357,27 +357,63 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
   end
 
   describe "when filtering based on the date of last change" do
-    let!(:old_case) { create(:allegation, products: [product], user_title: title, updated_at: 3.months.ago) }
-    let!(:new_case) { create(:allegation, products: [mobile_phone], user_title: title, updated_at: 1.day.ago) }
+    let!(:old_case) { create(:allegation, products: [product], user_title: title) }
+    let!(:new_case) { create(:allegation, products: [mobile_phone], user_title: title) }
+
+    let(:time) { Time.zone.parse("16 Oct 2023 00:00") }
+    let(:three_months_ago) { time.advance(months: -3) }
+    let(:one_day_ago) { time.advance(days: -1) }
 
     let(:title) { "interesting case" }
 
     before do
+      Timecop.freeze(time)
+      old_case.update_column(:updated_at, three_months_ago)
+      new_case.update_column(:updated_at, one_day_ago)
+
       Investigation.reindex
       sign_in(user)
       visit "/cases"
-
-      fill_in "Search", with: title
-      click_button "Submit search"
     end
 
+    after { Timecop.return }
+
     context "with no date filters applied" do
+      before do
+        fill_in "Search", with: title
+        click_button "Submit search"
+      end
+
       it "shows both cases" do
         expect_to_be_on_cases_search_results_page
         expect(page).to have_content "2 cases matching keyword(s) #{title}, using the current filters, were found."
 
         expect(page).to have_text(old_case.pretty_id)
         expect(page).to have_text(new_case.pretty_id)
+      end
+    end
+
+    context "with a date filter applied" do
+      before do
+        fill_in "Search", with: title
+        find("details#filter-details").click
+
+        within_fieldset "Updated after" do
+          fill_in "change_date_filter-fieldset-last_change[day]", with: "14"
+          fill_in "change_date_filter-fieldset-last_change[month]", with: "10"
+          fill_in "change_date_filter-fieldset-last_change[year]", with: "2023"
+        end
+
+        click_button "Apply"
+        click_button "Submit search"
+      end
+
+      it "only shows the case that was last changed within the date range" do
+        expect_to_be_on_cases_search_results_page
+        expect(page).to have_content "1 case matching keyword(s) #{title}, using the current filters, was found."
+
+        expect(page).to have_text(old_case.pretty_id)
+        expect(page).not_to have_text(new_case.pretty_id)
       end
     end
   end
