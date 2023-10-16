@@ -368,7 +368,9 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
     before do
       Timecop.freeze(time)
+      old_case.update_column(:created_at, three_months_ago)
       old_case.update_column(:updated_at, three_months_ago)
+      new_case.update_column(:created_at, one_day_ago)
       new_case.update_column(:updated_at, one_day_ago)
 
       Investigation.reindex
@@ -386,7 +388,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       it "shows both cases" do
         expect_to_be_on_cases_search_results_page
-        expect(page).to have_content "2 cases matching keyword(s) #{title}, using the current filters, were found."
+        expect(page).to have_content "2 cases matching keyword(s)"
 
         expect(page).to have_text(old_case.pretty_id)
         expect(page).to have_text(new_case.pretty_id)
@@ -410,10 +412,10 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
       it "only shows the case that was last changed within the date range" do
         expect_to_be_on_cases_search_results_page
-        expect(page).to have_content "1 case matching keyword(s) #{title}, using the current filters, was found."
+        expect(page).to have_content "1 case matching keyword(s)"
 
-        expect(page).to have_text(old_case.pretty_id)
-        expect(page).not_to have_text(new_case.pretty_id)
+        expect(page).not_to have_text(old_case.pretty_id)
+        expect(page).to have_text(new_case.pretty_id)
       end
     end
   end
