@@ -1,20 +1,19 @@
 require "rails_helper"
 
-RSpec.feature "Manage Images", :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
+RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
+  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user_different_org) { create(:user, :activated) }
 
   let(:investigation) { create(:allegation, creator: user) }
-  let(:file)          { Rails.root.join "test/fixtures/files/testImage.png" }
-  let(:title)         { Faker::Lorem.sentence }
-  let(:description)   { Faker::Lorem.paragraph }
+  let(:file) { Rails.root.join "test/fixtures/files/testImage.png" }
+  let(:file_name) { "testImage.png" }
 
   before do
     ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
     sign_in user
   end
 
-  scenario "completing the add attachment flow saves the attachment" do
+  scenario "completing the add image flow saves the image" do
     visit "/cases/#{investigation.pretty_id}"
 
     click_link "Images"
@@ -23,16 +22,18 @@ RSpec.feature "Manage Images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
     expect_to_be_on_add_image_page
 
-    click_button "Save attachment"
+    click_button "Upload"
 
-    expect(page).to have_error_summary("Select a file", "Enter a document title")
+    expect(page).to have_error_summary("Select a file")
 
     attach_and_submit_file
 
-    expect_to_be_on_images_page
-    expect_confirmation_banner("The image was added")
+    expect_to_be_on_add_image_page(image_upload_id: investigation.reload.image_uploads.first.id)
+    expect_confirmation_banner("The image was uploaded")
 
-    expect_case_images_page_to_show_entered_information
+    visit "/cases/#{investigation.pretty_id}/images"
+
+    expect_to_be_on_images_page
 
     click_link "Activity"
 
@@ -44,9 +45,8 @@ RSpec.feature "Manage Images", :with_stubbed_antivirus, :with_stubbed_mailer do
     sign_in(other_user_different_org)
 
     visit "/cases/#{investigation.pretty_id}/images"
-    expect_to_be_on_images_page
 
-    expect_case_images_page_to_show_entered_information
+    expect_to_be_on_images_page
 
     click_link "Activity"
 
@@ -73,15 +73,18 @@ RSpec.feature "Manage Images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
       expect_to_be_on_add_image_page
 
-      click_button "Save attachment"
+      click_button "Upload"
 
-      expect(page).to have_error_summary("Select a file", "Enter a document title")
+      expect(page).to have_error_summary("Select a file")
 
       attach_and_submit_file
 
-      expect_to_be_on_images_page
-      expect_confirmation_banner("The image was added")
+      expect_to_be_on_add_image_page(image_upload_id: investigation.reload.image_uploads.first.id)
+      expect_confirmation_banner("The image was uploaded")
 
+      click_link "Finish uploading images"
+
+      expect_to_be_on_images_page
       expect(page).to have_content "Images (1)"
       expect(page).to have_content "Case image 1"
     end
@@ -89,20 +92,12 @@ RSpec.feature "Manage Images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
   def expect_case_activity_page_to_show_entered_information
     expect(page).to have_selector("h1", text: "Activity")
-    item = page.find("h3", text: title).find(:xpath, "..")
+    item = page.find("h3", text: file_name).find(:xpath, "..")
     expect(item).to have_selector("p", text: "Image added")
-    expect(item).to have_selector("p", text: description)
-  end
-
-  def expect_case_images_page_to_show_entered_information
-    expect(page).to have_selector("figure figcaption", text: title)
-    expect(page).to have_selector("dd.govuk-summary-list__value", text: description)
   end
 
   def attach_and_submit_file
-    attach_file "document[document]", file
-    fill_in "Document title", with: title
-    fill_in "Description", with: description
-    click_button "Save attachment"
+    attach_file "image_upload[file_upload]", file
+    click_button "Upload"
   end
 end
