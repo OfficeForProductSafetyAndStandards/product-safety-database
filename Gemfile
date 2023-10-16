@@ -107,5 +107,6 @@ group :test do
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
   gem "super_diff"
+  gem "timecop", "~> 0.9"
   gem "webmock", "~> 3.19"
 end

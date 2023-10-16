@@ -24,6 +24,7 @@ class SearchParams
   attribute :category
   attribute :page_name
   attribute :retired_status
+  attribute :last_change, :govuk_date
 
   def selected_sort_by
     if sort_by.blank?
@@ -74,6 +75,7 @@ class SearchParams
 
   def uses_expanded_filter_options?
     teams_with_access != "all" || created_by != "all" ||
-      case_type != "all" || case_owner != "all"
+      case_type != "all" || case_owner != "all" ||
+      last_change.present?
   end
 end
