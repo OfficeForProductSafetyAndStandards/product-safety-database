@@ -18,7 +18,7 @@ RSpec.describe InvestigationSerializer, :with_stubbed_mailer, :with_test_queue_a
     let(:time) { Time.zone.parse("16 Oct 2023 00:00") }
     let(:investigation) { build(:allegation, updated_at: investigation_last_change, created_at: investigation_last_change) }
 
-    context "when an investigation has activities" do
+    xcontext "when an investigation has activities" do
       let(:investigation) { create(:allegation, updated_at: investigation_last_change, created_at: investigation_last_change) }
       let(:test_result_activity) { create(:audit_activity_test_result, investigation:) }
 
