@@ -632,6 +632,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.2.2)
     tilt (2.3.0)
+    timecop (0.9.6)
     timeout (0.4.0)
     ttfunk (1.7.0)
     tty-color (0.6.0)
@@ -682,6 +683,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
@@ -772,6 +774,7 @@ DEPENDENCIES
   strong_migrations (~> 1.4)
   super_diff
   support_portal!
+  timecop (~> 0.9)
   tty-table
   turbo-rails
   validate_email (~> 0.1)
