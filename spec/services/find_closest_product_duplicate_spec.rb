@@ -56,7 +56,7 @@ RSpec.describe FindClosestProductDuplicate, :with_stubbed_mailer do
 
     before do
       create_list(:product, 2, barcode:)
-      create(:case, products: [product_a])
+      create(:notification, products: [product_a])
     end
 
     it "returns the product with cases only" do
@@ -70,7 +70,7 @@ RSpec.describe FindClosestProductDuplicate, :with_stubbed_mailer do
 
     before do
       create_list(:product, 2, barcode:, authenticity: "genuine")
-      create(:case, products: [product_a])
+      create(:notification, products: [product_a])
     end
 
     it "returns the product with cases only" do

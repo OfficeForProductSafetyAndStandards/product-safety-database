@@ -1,9 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Investigation::Enquiry do
-  subject(:enquiry) { build(:enquiry, date_received:).build_owner_collaborations_from(create(:user)) }
+  subject(:enquiry) { build(:enquiry) }
+
+  describe "#case_type" do
+    it "returns 'notification'" do
+      expect(enquiry.case_type).to eq("enquiry")
+    end
+  end
 
   describe "#valid?" do
+    subject(:enquiry) { build(:enquiry, date_received:).build_owner_collaborations_from(create(:user)) }
+
     context "with valid date_received" do
       let(:date_received) { 1.day.ago }
 
