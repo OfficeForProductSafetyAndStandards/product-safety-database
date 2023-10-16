@@ -100,7 +100,7 @@ module InvestigationsHelper
   end
 
   def search_for_investigations(page_size = Investigation.count, user = current_user, ids_only: false)
-    query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses)
+    query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses, :activities)
 
     if @search.q.present?
       @search.q.strip!
@@ -171,6 +171,12 @@ module InvestigationsHelper
               else
                 query.where.not(collaboration_accesses_investigations: { collaborator_type: "Team", collaborator_id: user.team.id })
               end
+    end
+
+    if @search.last_change.present?
+      query = query.joins(:activities)
+                   .where("investigations.updated_at >= ?", @search.last_change.at_midnight)
+                   .where("activities.created_at >= ?", @search.last_change.at_midnight)
     end
 
     if ids_only

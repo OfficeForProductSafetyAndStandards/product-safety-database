@@ -17,7 +17,6 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   end
   let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
   let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all" } }
-  let(:case_export) { described_class.create!(user:, params:) }
   let(:team_mappings) do
     [
       {
@@ -37,6 +36,10 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
         "ts_area": nil
       }
     ].to_json
+  end
+
+  subject(:case_export) do
+    described_class.create!(user:, params:)
   end
 
   before do
@@ -195,6 +198,29 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 33)).to eq investigation.non_compliant_reason
       expect(sheet.cell(3, 33)).to eq other_team_investigation.non_compliant_reason
     end
+
+    context "when a last_change search parameter is provided" do
+      let(:last_change) { 1.day.ago }
+      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", last_change: } }
+
+      let!(:old_case) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
+
+      before do
+        old_case.update!(updated_at: 2.days.ago, created_at: 2.days.ago)
+      end
+
+      it "exports the case data", :aggregate_failures do
+        expect(exported_data.sheets).to eq %w[Cases]
+      end
+
+      it "only exports cases that have been updated since the last_change date", :aggregate_failures do
+        expect(sheet.cell(1, 1)).to eq "ID"
+        expect(sheet.cell(2, 1)).to eq investigation.pretty_id
+        expect(sheet.cell(3, 1)).to eq other_team_investigation.pretty_id
+        expect(sheet.cell(4, 1)).not_to eq old_case.pretty_id
+      end
+    end
+
     # rubocop:enable RSpec/ExampleLength
   end
 end
