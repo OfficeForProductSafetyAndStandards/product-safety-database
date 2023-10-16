@@ -14,16 +14,16 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
     click_link "Add an image"
     expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
 
-    click_button "Save attachment"
+    click_button "Upload"
 
-    expect(page).to have_error_summary("File upload cannot be blank")
+    expect(page).to have_error_summary("Select a file")
 
     attach_file "image_upload[file_upload]", image
 
-    click_button "Save attachment"
+    click_button "Upload"
 
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect_confirmation_banner("The image was added")
+    expect_confirmation_banner("The image was uploaded")
 
     change_attachment_to_have_simulated_virus(product.reload)
 
@@ -43,15 +43,15 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
 
     attach_file "image_upload[file_upload]", image
 
-    click_button "Save attachment"
+    click_button "Upload"
 
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect_confirmation_banner("The image was added")
+    expect_confirmation_banner("The image was uploaded")
 
     click_link "Remove this image"
     expect_to_be_on_delete_attachment_for_a_product_page(product_id: product.id, image_upload_id: product.reload.virus_free_images.first.id)
 
-    click_button "Delete attachment"
+    click_button "Delete image"
 
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
     expect_confirmation_banner("The image was successfully removed")
@@ -67,15 +67,15 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
       click_link "Add an image"
       expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
 
-      click_button "Save attachment"
+      click_button "Upload"
 
-      expect(page).to have_error_summary("File upload cannot be blank")
+      expect(page).to have_error_summary("Select a file")
 
       attach_file "image_upload[file_upload]", image
 
-      click_button "Save attachment"
+      click_button "Upload"
 
-      expect_warning_banner("The image did not finish uploading - you must refresh the image")
+      expect_warning_banner("File upload must be virus free")
     end
   end
 
@@ -93,7 +93,7 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
       expect { visit("/products/#{product.id}/document_uploads/new") }.to raise_error(Pundit::NotAuthorizedError)
     end
 
-    it "does not allow the user to edit or delete attachments" do
+    it "does not allow the user to edit or delete images" do
       sign_in owning_user
       visit "/products/#{product.id}"
 
@@ -103,10 +103,10 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
 
       attach_file "image_upload[file_upload]", image
 
-      click_button "Save attachment"
+      click_button "Upload"
 
       expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-      expect_confirmation_banner("The image was added")
+      expect_confirmation_banner("The image was uploaded")
 
       expect(page).to have_link("Remove this image")
 

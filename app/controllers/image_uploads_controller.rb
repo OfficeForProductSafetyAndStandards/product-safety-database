@@ -49,13 +49,24 @@ class ImageUploadsController < ApplicationController
     # Reload the uploaded file to get the latest metadata
     @image_upload.file_upload.try(:reload)
 
-    if @image_upload.file_upload.metadata["safe"] && @image_upload.file_upload.metadata["analyzed"]
-      flash[:success] = t(:image_added)
+    if @image_upload.file_upload.metadata["analyzed"]
+      if @image_upload.file_upload.metadata["safe"]
+        flash[:success] = t(:image_added)
+      else
+        flash[:warning] = "File upload must be virus free"
+      end
     else
       flash[:information] = "The image did not finish uploading - you must refresh the image"
     end
 
-    redirect_to(product_path(@parent, anchor: "images"))
+    if @parent.is_a?(Investigation)
+      create_audit_activity
+      create_send_notification_email
+
+      redirect_to new_investigation_image_upload_path(@parent, image_upload_id: (params[:image_upload_id] || []).push(@image_upload.id))
+    else
+      redirect_to product_path(@parent, anchor: "images")
+    end
   end
 
   def remove
@@ -71,7 +82,18 @@ class ImageUploadsController < ApplicationController
 
     flash[:success] = t(:image_removed)
 
-    redirect_to(@parent)
+    if @parent.is_a?(Investigation)
+      destroy_audit_activity
+      destroy_send_notification_email
+
+      if params[:multiple]
+        redirect_to new_investigation_image_upload_path(@parent, image_upload_id: params[:image_upload_id])
+      else
+        redirect_to investigation_images_path(@parent)
+      end
+    else
+      redirect_to product_path(@parent, anchor: "images")
+    end
   end
 
   def show
@@ -87,7 +109,12 @@ private
   end
 
   def get_parent
-    Product.find(params[:product_id])
+    if (pretty_id = params[:investigation_pretty_id] || params[:allegation_id] || params[:project_id] || params[:enquiry_id])
+      return Investigation.find_by!(pretty_id:)
+    end
+
+    return Product.find(params[:product_id]) if params[:product_id]
+    return Business.find(params[:business_id]) if params[:business_id]
   end
 
   def image_upload_params
@@ -96,5 +123,69 @@ private
 
   def existing_file_from_id(existing_file_id)
     ActiveStorage::Blob.find_signed!(existing_file_id)
+  end
+
+  def create_audit_activity
+    activity = AuditActivity::ImageUpload::Add.create!(
+      metadata: AuditActivity::ImageUpload::Add.build_metadata(@image_upload.file_upload),
+      added_by_user: current_user,
+      investigation: @parent
+    )
+
+    activity.file_upload.attach(@image_upload.file_upload.blob)
+  end
+
+  def destroy_audit_activity
+    activity = AuditActivity::ImageUpload::Destroy.create!(
+      metadata: AuditActivity::ImageUpload::Destroy.build_metadata(@image_upload.file_upload),
+      added_by_user: current_user,
+      investigation: @parent
+    )
+
+    activity.file_upload.attach(@image_upload.file_upload.blob)
+  end
+
+  def create_send_notification_email
+    return unless @parent.sends_notifications?
+
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        @parent.pretty_id,
+        recipient.name,
+        recipient.email,
+        "Image was attached to the Case by #{current_user&.decorate&.display_name(viewer: recipient)}.",
+        "Case updated"
+      ).deliver_later
+    end
+  end
+
+  def destroy_send_notification_email
+    return unless @parent.sends_notifications?
+
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        @parent.pretty_id,
+        recipient.name,
+        recipient.email,
+        "Image attached to the Case was removed by #{current_user&.decorate&.display_name(viewer: recipient)}.",
+        "Case updated"
+      ).deliver_later
+    end
+  end
+
+  def email_recipients_for_case_owner
+    investigation = @parent
+
+    if investigation.owner_user && investigation.owner_user == current_user
+      []
+    elsif investigation.owner_user
+      [investigation.owner_user]
+    elsif investigation.owner_team && investigation.owner_team == current_user.team
+      []
+    elsif investigation.owner_team.email.present?
+      [investigation.owner_team]
+    else
+      investigation.owner_team.users.active
+    end
   end
 end
