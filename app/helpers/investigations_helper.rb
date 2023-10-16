@@ -85,6 +85,10 @@ module InvestigationsHelper
       end
     end
 
+    if @search.last_change.present?
+      wheres[:updated_at] = { gt: @search.last_change.at_midnight }
+    end
+
     Investigation.search(
       query,
       where: wheres,
