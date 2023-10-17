@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
-  getOverallProbabilityOfHarmAndRiskLevel()
+  if (document.querySelector('.opss-step-probability-choice')) {
+    getOverallProbabilityOfHarmAndRiskLevel()
+  }
 })
 
 const getOverallProbabilityOfHarmAndRiskLevel = async () => {
