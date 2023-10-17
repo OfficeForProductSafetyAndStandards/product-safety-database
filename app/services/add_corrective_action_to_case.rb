@@ -24,12 +24,35 @@ class AddCorrectiveActionToCase
         has_online_recall_information:
       )
       corrective_action.document.attach(document)
+      add_incident_management_team
       create_audit_activity
       send_notification_email
     end
   end
 
 private
+
+  def add_incident_management_team
+    # OPSS IMT is automatically added to an investigation with edit permissions
+    # on adding a corrective action if either the risk level is serious/high or
+    # the corrective action indicates a recall. If OPSS IMT has already been added,
+    # `AddTeamToCase` returns silently.
+
+    return unless %w[serious high].include?(investigation.risk_level) || action == "recall_of_the_product_from_end_users"
+
+    team = Team.find_by(name: "OPSS Incident Management")
+
+    return if team.blank?
+
+    AddTeamToCase.call!(
+      investigation:,
+      team:,
+      collaboration_class: Collaboration::Access::Edit,
+      user:,
+      message: "System added OPSS IMT with edit permissions due to either risk level or corrective action.",
+      silent: true
+    )
+  end
 
   def create_audit_activity
     metadata = AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action)
