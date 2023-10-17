@@ -18,10 +18,10 @@ Rails.application.configure do
     policy.base_uri :none
 
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src
-    # Note: we purposely don't include `data:` here because it produces a security risk.
     policy.img_src :self,
                    *govuk_domains,
-                   *google_analytics_domains # Tracking pixels
+                   *google_analytics_domains, # Tracking pixels
+                   :data # Inline images via CSS
 
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
     # Note: we purposely don't include `data:`, `unsafe-inline` or `unsafe-eval` because
@@ -35,7 +35,8 @@ Rails.application.configure do
     # Note: we purposely don't include `data:`, `unsafe-inline` or `unsafe-eval` because
     # they are security risks, if you need them for a legacy app please only apply them at
     # an app level.
-    policy.style_src :self, *google_static_domains
+    policy.style_src :self,
+                     *google_static_domains
 
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src
     # Note: we purposely don't include data here because it produces a security risk.
