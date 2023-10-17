@@ -51,5 +51,38 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
     expect(audit.business).to eq(business)
   end
 
+  it "does not add OPSS IMT with edit permissions as a collaborator" do
+    expect(result.investigation.teams_with_edit_access).to eq([user.team])
+  end
+
   it_behaves_like "a service which notifies teams with access"
+
+  context "when the investigation risk level is serious" do
+    let(:opss_imt) { create(:team, name: "OPSS Incident Management") }
+
+    before do
+      opss_imt
+      investigation.risk_level = "serious"
+      investigation.save!
+    end
+
+    it "adds OPSS IMT with edit permissions as a collaborator" do
+      expect(result.investigation.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
+    end
+  end
+
+  context "when the corrective action indicates a recall" do
+    let(:action_key) { "recall_of_the_product_from_end_users" }
+    let(:opss_imt) { create(:team, name: "OPSS Incident Management") }
+
+    before do
+      opss_imt
+      investigation.risk_level = "low"
+      investigation.save!
+    end
+
+    it "adds OPSS IMT with edit permissions as a collaborator" do
+      expect(result.investigation.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
+    end
+  end
 end
