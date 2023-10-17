@@ -41,7 +41,7 @@ applications:
     - psd-support-portal-env
   processes:
     - type: web
-      command: bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+      command: bin/rake cf:on_first_instance db:prepare && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
       instances: 1
       memory: 2G
       disk_quota: 1.5G
