@@ -93,7 +93,7 @@ module InvestigationsHelper
       query,
       where: wheres,
       order: @search.sorting_params,
-      misspellings: { edit_distance: 2 },
+      misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
       per_page: page_size
     )
@@ -245,6 +245,10 @@ module InvestigationsHelper
 
   def page_number
     params[:page].to_i > 500 ? "500" : params[:page]
+  end
+
+  def searching_for_investigation_pretty_id?(query)
+    query.match(/\d{4}-\d{4}/)
   end
 
   def safety_and_compliance_rows(investigation)
