@@ -119,6 +119,10 @@ class User < ApplicationRecord
     has_role? :restricted_case_viewer
   end
 
+  def can_bulk_upload_products?
+    has_role? :product_bulk_uploader
+  end
+
   def can_use_product_recall_tool?
     team.name == "OPSS Incident Management"
   end

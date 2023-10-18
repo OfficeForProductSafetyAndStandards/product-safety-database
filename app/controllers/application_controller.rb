@@ -129,7 +129,7 @@ private
   end
 
   def highlight_products?
-    return true if params[:controller].start_with?("product")
+    return true if params[:controller].start_with?("product", "bulk_product")
     return true if %w[documents document_uploads image_uploads].include?(params[:controller]) && params[:product_id]
   end
 

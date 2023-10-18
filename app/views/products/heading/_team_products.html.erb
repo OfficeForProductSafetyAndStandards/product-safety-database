@@ -6,8 +6,13 @@
     </p>
   </div>
   <div class="govuk-grid-column-one-third">
-    <div class="opss-text-align-right govuk-!-margin-bottom-8">
-      <%= link_to "Create a product record", duplicate_check_products_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset", data: { cy: "new-product" }  %>
+    <div class="govuk-button-group opss-text-align-right">
+      <% if current_user.can_bulk_upload_products? %>
+        <%= link_to triage_bulk_upload_products_path, class: "govuk-link govuk-link--no-visited-state", data: { cy: "upload-multiple-products" } do %>
+          Upload multiple products
+        <% end %>
+      <% end %>
+      <%= govukButton(text: "Create a product record", href: duplicate_check_products_path, classes: "govuk-button--secondary", attributes: { data: { cy: "new-product" } }) %>
     </div>
   </div>
 </div>

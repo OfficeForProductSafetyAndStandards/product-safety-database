@@ -248,6 +248,10 @@ Rails.application.routes.draw do
       collection do
         get :duplicate_check, to: "products/duplicate_checks#new", path: "duplicate-check"
         post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
+
+        scope "/bulk-upload" do
+          get :triage, to: "bulk_products#triage", as: "triage_bulk_upload"
+        end
       end
 
       resource :duplicate_checks, controller: "products/duplicate_checks", only: %i[show], path: "duplicate-check" do
