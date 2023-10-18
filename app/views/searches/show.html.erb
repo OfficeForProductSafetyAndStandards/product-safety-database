@@ -18,13 +18,15 @@
           <div class="govuk-grid-column-full" role="region" aria-label="Cases">
             <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
               <caption class="govuk-visually-hidden">
-                Cases data: 4 columns with each case described across rows within each table body.
+                Cases data: 5 columns with each case described across rows within each table body.
               </caption>
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th class="govuk-visually-hidden">&nbsp;</th>
                   <th id="case" scope="col" class="govuk-table__header">Case number</th>
                   <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
+                  <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
+                  <th scope="col" class="govuk-table__header">Product count</th>
                   <% if @search.sort_by == SortByHelper::SORT_BY_CREATED_AT %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% else %>
@@ -50,6 +52,8 @@
                     <th class="govuk-visually-hidden">&nbsp;</th>
                     <th scope="col" class="govuk-table__header">Case number</th>
                     <th scope="col" class="govuk-table__header">Case owner</th>
+                    <th scope="col" class="govuk-table__header">Hazard type</th>
+                    <th scope="col" class="govuk-table__header">Product count</th>
                     <% if @search.sort_by == SortByHelper::SORT_BY_CREATED_AT %>
                       <th scope="col" class="govuk-table__header">Created</th>
                     <% else %>
