@@ -372,7 +372,7 @@ GEM
       optimist (~> 3.0)
     pdf-core (0.9.0)
     pg (1.5.4)
-    pghero (3.3.3)
+    pghero (3.3.4)
       activerecord (>= 6)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
