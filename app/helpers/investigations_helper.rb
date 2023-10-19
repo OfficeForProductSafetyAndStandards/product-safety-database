@@ -204,7 +204,7 @@ module InvestigationsHelper
       :created_by_other_id,
       :page_name,
       :hazard_type,
-      last_change: %i[day month year]
+      created_from_date: %i[day month year]
     )
   end
 
@@ -221,7 +221,7 @@ module InvestigationsHelper
       :created_by,
       :created_by_other_id,
       :hazard_type,
-      last_change: %i[day month year]
+      created_from_date: %i[day month year]
     )
   end
 
