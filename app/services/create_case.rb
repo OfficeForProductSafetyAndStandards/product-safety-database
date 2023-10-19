@@ -1,12 +1,12 @@
 class CreateCase
   include Interactor
 
-  delegate :investigation, :user, :product, :prism_risk_assessment, to: :context
+  delegate :investigation, :user, :product, :prism_risk_assessment, :bulk, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-    context.fail!(error: "Product must be supplied for non opss users") if !user.is_opss? && !product.is_a?(Product)
+    context.fail!(error: "Product must be supplied for non opss users") if !bulk && !user.is_opss? && !product.is_a?(Product)
     team = user.team
 
     investigation.creator_user = user

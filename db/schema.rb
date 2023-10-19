@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_12_141513) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_19_104345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -84,6 +84,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_141513) do
     t.string "summary"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
+  end
+
+  create_table "bulk_products_uploads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "investigation_id"
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["investigation_id"], name: "index_bulk_products_uploads_on_investigation_id"
+    t.index ["user_id"], name: "index_bulk_products_uploads_on_user_id"
   end
 
   create_table "business_exports", force: :cascade do |t|
