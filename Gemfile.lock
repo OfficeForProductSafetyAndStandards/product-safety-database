@@ -187,6 +187,8 @@ GEM
     cf-app-utils (0.6)
     choice (0.2.0)
     coderay (1.1.3)
+    companies-house-rest (1.0.0)
+      dry-struct (~> 1)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crack (0.4.5)
@@ -224,6 +226,25 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
+    dry-core (1.0.1)
+      concurrent-ruby (~> 1.0)
+      zeitwerk (~> 2.6)
+    dry-inflector (1.0.0)
+    dry-logic (1.5.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-struct (1.6.0)
+      dry-core (~> 1.0, < 2)
+      dry-types (>= 1.7, < 2)
+      ice_nine (~> 0.11)
+      zeitwerk (~> 2.6)
+    dry-types (1.7.1)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
     e2mmap (0.1.0)
     erubi (1.12.0)
     et-orbi (1.2.7)
@@ -272,6 +293,7 @@ GEM
     i18n-js (4.2.3)
       glob (>= 0.4.0)
       i18n
+    ice_nine (0.11.2)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
@@ -702,6 +724,7 @@ DEPENDENCIES
   caxlsx
   caxlsx_rails
   cf-app-utils (~> 0.6)
+  companies-house-rest
   cssbundling-rails
   database_cleaner (~> 2.0)
   devise (~> 4.9)
