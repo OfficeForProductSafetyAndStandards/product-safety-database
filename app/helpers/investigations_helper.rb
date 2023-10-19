@@ -173,10 +173,8 @@ module InvestigationsHelper
               end
     end
 
-    if @search.last_change.present?
-      query = query.joins(:activities)
-                   .where("investigations.updated_at >= ?", @search.last_change.at_midnight)
-                   .where("activities.created_at >= ?", @search.last_change.at_midnight)
+    if @search.created_from_date.present?
+      query = query.where("investigations.created_at >= ?", @search.created_from_date.at_midnight)
     end
 
     if ids_only
