@@ -26,3 +26,31 @@
     }
   ]
 ) %>
+<%= govukDateInput(
+  id: "change_date_filter-fieldset",
+  fieldset: {
+    legend: {
+      text: "Created up to"
+    }
+  },
+  items: [
+    {
+      classes: "govuk-input--width-2",
+      label: "Day",
+      name: "created_to_date[day]",
+      value: form.object.created_to_date&.day
+    },
+    {
+      classes: "govuk-input--width-2",
+      label: "Month",
+      name: "created_to_date[month]",
+      value: form.object.created_to_date&.month
+    },
+    {
+      classes: "govuk-input--width-2",
+      label: "Year",
+      name: "created_to_date[year]",
+      value: form.object.created_to_date&.year
+    }
+  ]
+) %>
