@@ -741,6 +741,16 @@ en:
               inclusion: Select how you would describe the products in terms of their compliance and safety
             hazard_description:
               blank: Enter why the product is non-compliant
+              too_long: The reason why the product is non-compliant must be %{count} characters or less
+        bulk_products_create_case_form:
+          attributes:
+            name:
+              blank: Enter a name for the case
+              too_long: The case name must be %{count} characters or less
+            reference_number:
+              blank: Enter a reference number
+            reference_number_provided:
+              inclusion: Select yes if you want to add a reference number
 
   activerecord:
     models:

@@ -38,5 +38,20 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
     click_button "Continue"
 
     expect(page).to have_error_summary("Enter why the product is non-compliant")
+
+    fill_in "Why is the product non-compliant?", with: "Testing"
+    click_button "Continue"
+
+    expect(page).to have_content("Create a case for multiple products")
+
+    fill_in "Case name", with: "Test case"
+
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select yes if you want to add a reference number")
+
+    choose "Yes"
+    fill_in "Reference number", with: "1234"
+    click_button "Continue"
   end
 end
