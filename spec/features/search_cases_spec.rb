@@ -369,9 +369,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     before do
       Timecop.freeze(time)
       old_case.update_column(:created_at, three_months_ago)
-      old_case.update_column(:updated_at, three_months_ago)
       new_case.update_column(:created_at, one_day_ago)
-      new_case.update_column(:updated_at, one_day_ago)
 
       Investigation.reindex
       sign_in(user)
@@ -400,10 +398,10 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         fill_in "Search", with: title
         find("details#filter-details").click
 
-        within_fieldset "Updated after" do
-          fill_in "change_date_filter-fieldset-last_change[day]", with: "14"
-          fill_in "change_date_filter-fieldset-last_change[month]", with: "10"
-          fill_in "change_date_filter-fieldset-last_change[year]", with: "2023"
+        within_fieldset "Created from" do
+          fill_in "change_date_filter-fieldset-created_from_date[day]", with: "14"
+          fill_in "change_date_filter-fieldset-created_from_date[month]", with: "10"
+          fill_in "change_date_filter-fieldset-created_from_date[year]", with: "2023"
         end
 
         click_button "Apply"
