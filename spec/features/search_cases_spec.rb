@@ -356,7 +356,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     end
   end
 
-  describe "when filtering based on the date of last change" do
+  describe "when filtering based on the created_at datre" do
     let!(:old_case) { create(:allegation, products: [product], user_title: title) }
     let!(:new_case) { create(:allegation, products: [mobile_phone], user_title: title) }
 
@@ -393,7 +393,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       end
     end
 
-    context "with a date filter applied" do
+    context "with a from date filter applied" do
       before do
         fill_in "Search", with: title
         find("details#filter-details").click
@@ -414,6 +414,30 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
 
         expect(page).not_to have_text(old_case.pretty_id)
         expect(page).to have_text(new_case.pretty_id)
+      end
+    end
+
+    context "with a to date filter applied" do
+      before do
+        fill_in "Search", with: title
+        find("details#filter-details").click
+
+        within_fieldset "Created up to" do
+          fill_in "change_date_filter-fieldset-created_to_date[day]", with: "14"
+          fill_in "change_date_filter-fieldset-created_to_date[month]", with: "10"
+          fill_in "change_date_filter-fieldset-created_to_date[year]", with: "2023"
+        end
+
+        click_button "Apply"
+        click_button "Submit search"
+      end
+
+      it "only shows the case that was last changed within the date range" do
+        expect_to_be_on_cases_search_results_page
+        expect(page).to have_content "1 case matching keyword(s)"
+
+        expect(page).to have_text(old_case.pretty_id)
+        expect(page).not_to have_text(new_case.pretty_id)
       end
     end
   end
