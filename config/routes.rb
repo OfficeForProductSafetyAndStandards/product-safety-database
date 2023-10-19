@@ -251,6 +251,10 @@ Rails.application.routes.draw do
 
         scope "/bulk-upload" do
           get :triage, to: "bulk_products#triage", as: "triage_bulk_upload"
+          put :triage, to: "bulk_products#triage"
+          get :no_upload_unsafe, to: "bulk_products#no_upload_unsafe", as: "no_upload_unsafe_bulk_upload", path: "no-upload-unsafe"
+          get :no_upload_mixed, to: "bulk_products#no_upload_mixed", as: "no_upload_mixed_bulk_upload", path: "no-upload-mixed"
+          get :create_case, to: "bulk_products#create_case", as: "create_case_bulk_upload", path: "create-case"
         end
       end
 

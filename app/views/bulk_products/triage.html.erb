@@ -1,0 +1,50 @@
+<% page_heading = "How would you describe the products in terms of their compliance and safety? - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_triage_form.errors.any? %>
+<%= form_with model: @bulk_products_triage_form, url: triage_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= error_summary @bulk_products_triage_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        How would you describe the products in terms of their compliance and safety?
+      </h1>
+      <%= govukRadios(
+        form: form,
+        key: :compliance_and_safety,
+        items: [
+          {
+            text: "Products are unsafe",
+            value: "unsafe",
+            id: "compliance_and_safety_unsafe",
+            checked: @bulk_products_triage_form.compliance_and_safety == "unsafe",
+            hint: { text: "Products pose significant risk and might require risk assessment." }
+          },
+          {
+            text: "Products are non-compliant",
+            value: "non_compliant",
+            id: "compliance_and_safety_non_compliant",
+            checked: @bulk_products_triage_form.compliance_and_safety == "non_compliant",
+            hint: { text: "For example, incomplete markings, product labelling or documentation non-compliance." },
+            conditional: {
+              html: govukTextarea(
+                form: form,
+                key: :hazard_description,
+                attributes: { maxlength: 10_000 },
+                label: { text: "Why is the product non-compliant?" }
+              )
+            }
+          },
+          {
+            text: "Mix of non-compliant and unsafe products",
+            value: "mixed",
+            id: "compliance_and_safety_mixed",
+            checked: @bulk_products_triage_form.compliance_and_safety == "mixed"
+          }
+        ]
+      ) %>
+      <div class="govuk-button-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>
