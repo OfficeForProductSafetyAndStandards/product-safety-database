@@ -85,8 +85,8 @@ module InvestigationsHelper
       end
     end
 
-    if @search.last_change.present?
-      wheres[:updated_at] = { gt: @search.last_change.at_midnight }
+    if @search.created_from_date.present?
+      wheres[:created_at] = { gt: @search.created_from_date.at_midnight }
     end
 
     Investigation.search(

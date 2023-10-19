@@ -199,21 +199,21 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(3, 33)).to eq other_team_investigation.non_compliant_reason
     end
 
-    context "when a last_change search parameter is provided" do
-      let(:last_change) { 1.day.ago }
-      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", last_change: } }
+    context "when a created_from_date search parameter is provided" do
+      let(:created_from_date) { 1.day.ago }
+      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", created_from_date: } }
 
       let!(:old_case) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
 
       before do
-        old_case.update!(updated_at: 2.days.ago, created_at: 2.days.ago)
+        old_case.update!(created_at: 2.days.ago)
       end
 
       it "exports the case data", :aggregate_failures do
         expect(exported_data.sheets).to eq %w[Cases]
       end
 
-      it "only exports cases that have been updated since the last_change date", :aggregate_failures do
+      it "only exports cases that have been updated since the created_from_date date", :aggregate_failures do
         expect(sheet.cell(1, 1)).to eq "ID"
         expect(sheet.cell(2, 1)).to eq investigation.pretty_id
         expect(sheet.cell(3, 1)).to eq other_team_investigation.pretty_id
