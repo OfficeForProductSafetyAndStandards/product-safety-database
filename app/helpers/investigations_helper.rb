@@ -85,8 +85,12 @@ module InvestigationsHelper
       end
     end
 
-    if @search.created_from_date.present?
-      wheres[:created_at] = { gt: @search.created_from_date.at_midnight }
+    if @search.created_from_date.present? && @search.created_to_date.present?
+      wheres[:created_at] = { gte: @search.created_from_date.at_midnight, lte: @search.created_to_date.at_end_of_day }
+    elsif @search.created_from_date.present?
+      wheres[:created_at] = { gte: @search.created_from_date.at_midnight }
+    elsif @search.created_to_date.present?
+      wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
     end
 
     Investigation.search(
@@ -204,7 +208,8 @@ module InvestigationsHelper
       :created_by_other_id,
       :page_name,
       :hazard_type,
-      created_from_date: %i[day month year]
+      created_from_date: %i[day month year],
+      created_to_date: %i[day month year]
     )
   end
 
@@ -221,7 +226,8 @@ module InvestigationsHelper
       :created_by,
       :created_by_other_id,
       :hazard_type,
-      created_from_date: %i[day month year]
+      created_from_date: %i[day month year],
+      created_to_date: %i[day month year]
     )
   end
 
