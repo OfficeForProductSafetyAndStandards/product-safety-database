@@ -15,6 +15,7 @@ class Business < ApplicationRecord
   has_many :corrective_actions, dependent: :destroy
   has_many :risk_assessments, dependent: :destroy, foreign_key: :assessed_by_business_id
 
+  has_one :online_marketplace
   belongs_to :added_by_user, class_name: :User, optional: true
 
   accepts_nested_attributes_for :locations, reject_if: :all_blank
