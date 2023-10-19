@@ -178,7 +178,10 @@ module InvestigationsHelper
     end
 
     if @search.created_from_date.present?
-      query = query.where("investigations.created_at >= ?", @search.created_from_date.at_midnight)
+      query = query.where("investigations.created_at >= ?", @search.created_from_date.at_beginning_of_day)
+    end
+    if @search.created_to_date.present?
+      query = query.where("investigations.created_at <= ?", @search.created_to_date.at_end_of_day)
     end
 
     if ids_only
