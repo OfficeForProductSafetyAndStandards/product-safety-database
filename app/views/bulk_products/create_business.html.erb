@@ -1,0 +1,97 @@
+<% page_heading = "Add the business to the case - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_add_business_type_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govukBackLink(text: "Back", href: create_case_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_add_business_type_form, url: create_business_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= error_summary @bulk_products_add_business_type_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Add the business to the case
+      </h1>
+      <% online_marketplace_radios = capture do %>
+        <% number_of_market_places = @online_marketplaces.length %>
+        <% online_marketplace_first_half = @online_marketplaces.slice(0..number_of_market_places/2) %>
+        <% online_marketplace_second_half = @online_marketplaces.slice(number_of_market_places/2+1, number_of_market_places) %>
+        <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @bulk_products_add_business_type_form&.errors[:online_marketplace_id].present? %>">
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
+              <div class="govuk-radios govuk-radios--small">
+                <% online_marketplace_first_half.each do |marketplace| %>
+                  <div class="govuk-radios__item">
+                    <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input js-radio-handle-other" %>
+                    <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
+              <div class="govuk-radios govuk-radios--small">
+                <% online_marketplace_second_half.each do |marketplace| %>
+                  <div class="govuk-radios__item">
+                    <%= form.radio_button :online_marketplace_id, marketplace.id, class: "govuk-radios__input js-radio-handle-other" %>
+                    <%= form.label :online_marketplace_id, marketplace.name, value: marketplace.id, class: "govuk-label govuk-radios__label" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%= govukInput(
+          form: form,
+          key: :other_marketplace_name,
+          label: { text: t("investigations.business_types.new.types.other.label"), classes: "govuk-label--m" },
+          id: "other_marketplace_name",
+          classes: "js-input-handle-other"
+        ) %>
+      <% end %>
+      <% authorised_representative_radios = capture do %>
+        <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @bulk_products_add_business_type_form&.errors[:authorised_representative_choice].present? %>">
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <div class="govuk-radios govuk-radios--small">
+                <div class="govuk-radios__item">
+                  <%= form.radio_button :authorised_representative_choice, t("investigations.business_types.new.types.authorised_representative.uk.value"), class: "govuk-radios__input" %>
+                  <%= form.label :authorised_representative_choice, t("investigations.business_types.new.types.authorised_representative.uk.label"), value: t("investigations.business_types.new.types.authorised_representative.uk.value"), class: "govuk-label govuk-radios__label" %>
+                </div>
+                <div class="govuk-radios__item">
+                  <%= form.radio_button :authorised_representative_choice, t("investigations.business_types.new.types.authorised_representative.eu.value"), class: "govuk-radios__input" %>
+                  <%= form.label :authorised_representative_choice, t("investigations.business_types.new.types.authorised_representative.eu.label"), value: t("investigations.business_types.new.types.authorised_representative.eu.value"), class: "govuk-label govuk-radios__label" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% radio_items = [
+        { value: "retailer", text: t("investigations.business_types.new.types.retailer.label"), hint: { text: t("investigations.business_types.new.types.retailer.hint") } },
+        { value: "online_seller", text: t("investigations.business_types.new.types.online_seller.label"), hint: { text: t("investigations.business_types.new.types.online_seller.hint") } },
+        { value: "online_marketplace", text: t("investigations.business_types.new.types.online_marketplace.label"), hint: { text: t("investigations.business_types.new.types.online_marketplace.hint") }, conditional: { html: online_marketplace_radios }},
+        { value: "manufacturer", text: t("investigations.business_types.new.types.manufacturer.label") },
+        { value: "exporter", text: t("investigations.business_types.new.types.exporter.label") },
+        { value: "importer", text: t("investigations.business_types.new.types.importer.label") },
+        { value: "fulfillment_house", text: t("investigations.business_types.new.types.fulfillment_house.label") },
+        { value: "distributor", text: t("investigations.business_types.new.types.distributor.label") },
+        { value: "authorised_representative", text: t("investigations.business_types.new.types.authorised_representative.label"), conditional: { html: authorised_representative_radios }},
+        { value: "responsible_person", text: t("investigations.business_types.new.types.responsible_person.label") },
+      ] %>
+      <%= govukRadios(
+        form: form,
+        key: :type,
+        fieldset: {
+          legend: {
+            text: "What is the business type?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        hint: { text: "What is the business role as an economic operator in the supply chain?" },
+        items: radio_items
+      ) %>
+      <div class="govuk-button-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -17,7 +17,6 @@
         key: :name,
         label: { text: "Case name", classes: "govuk-label--m" },
         hint: { text: "Give the case a short descriptive title." },
-        value: @bulk_products_create_case_form.name,
         id: "name"
       ) %>
       <%= govukRadios(
@@ -35,7 +34,6 @@
             text: "Yes",
             value: "true",
             id: "reference_number_provided_true",
-            checked: @bulk_products_create_case_form.reference_number_provided,
             conditional: {
               html: govukInput(
                 form: form,
@@ -47,8 +45,7 @@
           {
             text: "No",
             value: "false",
-            id: "reference_number_provided_false",
-            checked: @bulk_products_create_case_form.reference_number_provided == false # Can be `nil` if the user has not made a choice
+            id: "reference_number_provided_false"
           }
         ]
       ) %>
