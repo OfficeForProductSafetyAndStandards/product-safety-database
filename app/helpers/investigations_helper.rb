@@ -185,7 +185,7 @@ module InvestigationsHelper
     end
 
     if ids_only
-      query.pluck(:id)
+      query.distinct.pluck(:id)
     else
       query
         .order(@search.sorting_params)
