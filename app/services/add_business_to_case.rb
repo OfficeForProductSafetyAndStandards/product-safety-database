@@ -25,7 +25,7 @@ class AddBusinessToCase
 private
 
   def create_online_marketplace
-    context.online_marketplace = OnlineMarketplace.create!(name: other_marketplace_name, approved_by_opss: false)
+    context.online_marketplace = OnlineMarketplace.find_or_create_by!(name: other_marketplace_name, approved_by_opss: false)
   end
 
   def create_audit_activity_for_business_added(business, investigation_business)

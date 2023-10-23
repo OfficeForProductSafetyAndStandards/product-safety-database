@@ -260,6 +260,10 @@ Rails.application.routes.draw do
             put "create-case", to: "bulk_products#create_case"
             get "create-business", to: "bulk_products#create_business", as: "create_business_bulk_upload"
             put "create-business", to: "bulk_products#create_business"
+            get "add-business-details", to: "bulk_products#add_business_details", as: "add_business_details_bulk_upload"
+            put "add-business-details", to: "bulk_products#add_business_details"
+            get "upload-products-file", to: "bulk_products#upload_products_file", as: "upload_products_file_bulk_upload"
+            put "upload-products-file", to: "bulk_products#upload_products_file"
           end
         end
       end

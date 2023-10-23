@@ -2,8 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Bulk upload products", :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[product_bulk_uploader]) }
+  let(:online_marketplace) { create(:online_marketplace, name: "My marketplace", approved_by_opss: true) }
 
   before do
+    online_marketplace
+
     sign_in(user)
   end
 
@@ -52,6 +55,21 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
 
     choose "Yes"
     fill_in "Reference number", with: "1234"
+    click_button "Continue"
+
+    expect(page).to have_content("Add the business to the case")
+
+    choose "Authorised representative"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select whether the authorised representative is a UK or EU Authorised representative")
+
+    choose "EU Authorised representative"
+    click_button "Continue"
+
+    expect(page).to have_content("Provide the business details")
+
+    select "United Kingdom", from: "bulk_products_add_business_details_form_locations_attributes_0_country", match: :first
     click_button "Continue"
   end
 end
