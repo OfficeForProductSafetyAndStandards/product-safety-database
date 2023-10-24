@@ -11,6 +11,8 @@ module InvestigationsHelper
       wheres[:type] = "Investigation::Allegation"
     when "project"
       wheres[:type] = "Investigation::Project"
+    when "notification"
+      wheres[:type] = "Investigation::Notification"
     when "enquiry"
       wheres[:type] = "Investigation::Enquiry"
     end

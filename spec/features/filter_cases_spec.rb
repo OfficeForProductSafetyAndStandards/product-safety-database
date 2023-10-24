@@ -12,6 +12,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
   let!(:investigation)                       { create(:allegation, creator: user, hazard_type: "Fire") }
+  let!(:notification)                        { create(:notification, creator: user) }
   let!(:deleted_investigation)               { create(:allegation, creator: user, hazard_type: "Fire", deleted_at: Time.zone.now) }
   let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team, hazard_type: "Fire") }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
@@ -394,7 +395,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         click_button "Apply"
 
         expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).to     have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
@@ -407,8 +409,23 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         click_button "Apply"
 
         expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
-        expect(page).to have_listed_case(enquiry.pretty_id)
+        expect(page).to     have_listed_case(enquiry.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering for notifications" do
+        within_fieldset "Case type" do
+          choose "Notification"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to     have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
@@ -419,7 +436,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         end
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to     have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
 
