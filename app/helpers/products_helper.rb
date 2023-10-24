@@ -33,7 +33,7 @@ module ProductsHelper
     end
 
     if ids_only
-      query.pluck(:id)
+      query.distinct.pluck(:id)
     else
       query
         .order(sorting_params)
