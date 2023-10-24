@@ -147,7 +147,7 @@ private
   end
 
   def default_params
-    [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access], params[:hazard_type]].each do |param_value|
+    [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access], params[:hazard_type], params[:created_from_date], params[:created_to_date]].each do |param_value|
       return false unless param_value == "all" || param_value.blank?
     end
 
