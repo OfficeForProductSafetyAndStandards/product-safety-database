@@ -119,6 +119,8 @@ module InvestigationsHelper
       query = query.where(type: "Investigation::Allegation")
     when "project"
       query = query.where(type: "Investigation::Project")
+    when "notification"
+      query = query.where(type: "Investigation::Notification")
     when "enquiry"
       query = query.where(type: "Investigation::Enquiry")
     end
