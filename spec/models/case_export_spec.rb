@@ -200,6 +200,80 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
     end
     # rubocop:enable RSpec/ExampleLength
 
+    context "when filtering on case type" do
+      let!(:notification) { create(:notification) }
+      let!(:allegation) { create(:allegation) }
+      let!(:project) { create(:project) }
+      let!(:enquiry) { create(:enquiry) }
+
+      let(:params) { { case_type:, created_by: "all", case_status: "open", teams_with_access: "all" } }
+
+      context "with all cases" do
+        let(:case_type) { "all" }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "only exports all case types", :aggregate_failures do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, notification.pretty_id, allegation.pretty_id, project.pretty_id, enquiry.pretty_id]
+        end
+      end
+
+      context "with allegations" do
+        let(:case_type) { "allegation" }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "only exports allegations", :aggregate_failures do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, allegation.pretty_id]
+        end
+      end
+
+      context "with enquiries" do
+        let(:case_type) { "enquiry" }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "only exports enquiries", :aggregate_failures do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [enquiry.pretty_id]
+        end
+      end
+
+      context "with projects" do
+        let(:case_type) { "project" }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "only exports projects", :aggregate_failures do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [project.pretty_id]
+        end
+      end
+
+      context "with notifications" do
+        let(:case_type) { "notification" }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "only exports notifications", :aggregate_failures do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [notification.pretty_id]
+        end
+      end
+    end
+
     context "when a created_from_date search parameter is provided" do
       let(:created_from_date) { 1.day.ago }
       let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", created_from_date: } }
