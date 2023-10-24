@@ -24,10 +24,11 @@ class AddCorrectiveActionToCase
         has_online_recall_information:
       )
       corrective_action.document.attach(document)
-      add_incident_management_team
       create_audit_activity
       send_notification_email
     end
+
+    add_incident_management_team
   end
 
 private
