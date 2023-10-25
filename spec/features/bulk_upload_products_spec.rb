@@ -71,5 +71,20 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
 
     select "United Kingdom", from: "bulk_products_add_business_details_form_locations_attributes_0_country", match: :first
     click_button "Continue"
+
+    expect(page).to have_content("Upload products by Excel")
+
+    attach_file "bulk_products_upload_products_file_form[products_file]", "spec/fixtures/files/bulk_products_upload_template.xlsx"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("The selected file does not contain any products")
+
+    attach_file "bulk_products_upload_products_file_form[products_file]", "spec/fixtures/files/bulk_products_upload_incomplete_product.xlsx"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("The selected file contains one or more products with errors")
+
+    attach_file "bulk_products_upload_products_file_form[products_file]", "spec/fixtures/files/bulk_products_upload_complete_product.xlsx"
+    click_button "Continue"
   end
 end

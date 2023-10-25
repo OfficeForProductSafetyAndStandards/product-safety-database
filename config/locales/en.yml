@@ -763,6 +763,17 @@ en:
           attributes:
             trading_name:
               blank: Enter a trading name
+        bulk_products_upload_products_file_form:
+          attributes:
+            products_file:
+              blank: Select a file
+              too_large: The selected file must be smaller than 30MB
+              too_small: The selected file must not be empty
+              wrong_type: The selected file must be an Excel file (XLSX)
+              missing_worksheet: The selected file must have a sheet named "Non compliance Form"
+              wrong_headers: The selected file does not have the correct headers
+              no_products: The selected file does not contain any products
+              malformed_products: The selected file contains one or more products with errors
 
   activerecord:
     models:

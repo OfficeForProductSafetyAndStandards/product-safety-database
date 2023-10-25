@@ -1,6 +1,5 @@
 class BulkProductsController < ApplicationController
   include CountriesHelper
-  include UrlHelper
   include BreadcrumbHelper
 
   before_action :authorize_user
@@ -117,7 +116,27 @@ class BulkProductsController < ApplicationController
     end
   end
 
-  def upload_products_file; end
+  def upload_products_file
+    if request.put?
+      @bulk_products_upload_products_file_form = BulkProductsUploadProductsFileForm.new(bulk_products_upload_products_file_params)
+      @bulk_products_upload_products_file_form.cache_file!
+      @bulk_products_upload_products_file_form.load_products_file
+
+      if @bulk_products_upload_products_file_form.valid?
+        @bulk_products_upload.update!(products_cache: @bulk_products_upload_products_file_form.products)
+
+        redirect_to resolve_duplicate_products_bulk_upload_products_path(@bulk_products_upload)
+      else
+        @bulk_products_upload.update!(products_cache: [])
+      end
+    else
+      @bulk_products_upload_products_file_form = BulkProductsUploadProductsFileForm.from(@bulk_products_upload)
+      @bulk_products_upload_products_file_form.cache_file!
+      @bulk_products_upload_products_file_form.load_products_file
+    end
+  end
+
+  def resolve_duplicate_products; end
 
 private
 
@@ -147,5 +166,10 @@ private
       locations_attributes: %i[id address_line_1 address_line_2 city county postal_code country],
       contacts_attributes: %i[id name email phone_number job_title]
     )
+  end
+
+  def bulk_products_upload_products_file_params
+    # `random_uuid` allows us to detect a missing file upload
+    params.require(:bulk_products_upload_products_file_form).permit(:random_uuid, :products_file)
   end
 end
