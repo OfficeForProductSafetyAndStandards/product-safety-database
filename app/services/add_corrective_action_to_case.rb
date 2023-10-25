@@ -50,8 +50,7 @@ private
       team:,
       collaboration_class: Collaboration::Access::Edit,
       user:,
-      message: "System added OPSS IMT with edit permissions due to either risk level or corrective action.",
-      silent: true
+      message: "System added OPSS IMT with edit permissions due to either risk level or corrective action."
     )
   end
 
