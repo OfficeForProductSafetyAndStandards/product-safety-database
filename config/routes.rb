@@ -250,11 +250,21 @@ Rails.application.routes.draw do
         post :duplicate_check, to: "products/duplicate_checks#create", path: "duplicate-check"
 
         scope "/bulk-upload" do
-          get :triage, to: "bulk_products#triage", as: "triage_bulk_upload"
-          put :triage, to: "bulk_products#triage"
-          get :no_upload_unsafe, to: "bulk_products#no_upload_unsafe", as: "no_upload_unsafe_bulk_upload", path: "no-upload-unsafe"
-          get :no_upload_mixed, to: "bulk_products#no_upload_mixed", as: "no_upload_mixed_bulk_upload", path: "no-upload-mixed"
-          get :create_case, to: "bulk_products#create_case", as: "create_case_bulk_upload", path: "create-case"
+          get "triage", to: "bulk_products#triage", as: "triage_bulk_upload"
+          put "triage", to: "bulk_products#triage"
+          get "no-upload-unsafe", to: "bulk_products#no_upload_unsafe", as: "no_upload_unsafe_bulk_upload"
+          get "no-upload-mixed", to: "bulk_products#no_upload_mixed", as: "no_upload_mixed_bulk_upload"
+
+          scope ":bulk_products_upload_id" do
+            get "create-case", to: "bulk_products#create_case", as: "create_case_bulk_upload"
+            put "create-case", to: "bulk_products#create_case"
+            get "create-business", to: "bulk_products#create_business", as: "create_business_bulk_upload"
+            put "create-business", to: "bulk_products#create_business"
+            get "add-business-details", to: "bulk_products#add_business_details", as: "add_business_details_bulk_upload"
+            put "add-business-details", to: "bulk_products#add_business_details"
+            get "upload-products-file", to: "bulk_products#upload_products_file", as: "upload_products_file_bulk_upload"
+            put "upload-products-file", to: "bulk_products#upload_products_file"
+          end
         end
       end
 

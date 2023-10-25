@@ -1,0 +1,57 @@
+<% page_heading = "Create a case for multiple products - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_create_case_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govukBackLink(text: "Back", href: triage_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_create_case_form, url: create_case_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= error_summary @bulk_products_create_case_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Create a case for multiple products
+      </h1>
+      <p class="govuk-body">All the products you upload will be grouped together in a single case.</p>
+      <%= govukInput(
+        form: form,
+        key: :name,
+        label: { text: "Case name", classes: "govuk-label--m" },
+        hint: { text: "Give the case a short descriptive title." },
+        id: "name"
+      ) %>
+      <%= govukRadios(
+        form: form,
+        key: :reference_number_provided,
+        fieldset: {
+          legend: {
+            text: "Do you want to add your own reference number to the case?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        hint: { text: "This might be a number already created in a different internal system for your case, or a number you intend to use globally across different systems to reference your case." },
+        items: [
+          {
+            text: "Yes",
+            value: "true",
+            id: "reference_number_provided_true",
+            conditional: {
+              html: govukInput(
+                form: form,
+                key: :reference_number,
+                label: { text: "Reference number" }
+              )
+            }
+          },
+          {
+            text: "No",
+            value: "false",
+            id: "reference_number_provided_false"
+          }
+        ]
+      ) %>
+      <div class="govuk-button-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>
