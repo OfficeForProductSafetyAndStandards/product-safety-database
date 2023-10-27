@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a product", :with_stubbed_mailer, :with_product_form_helper do
+RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer, :with_product_form_helper do
   let(:user)       { create(:user, :activated) }
   let(:attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
@@ -142,6 +142,46 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_product_form_helpe
     fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:barcode]
     fill_in "Other product identifiers", with: attributes[:product_code]
     fill_in "Webpage", with: attributes[:webpage]
+
+    within_fieldset("Was the product placed on the market before 1 January 2021?") do
+      choose when_placed_on_market_answer(attributes[:when_placed_on_market])
+    end
+
+    within_fieldset("Is the product counterfeit?") do
+      choose counterfeit_answer(attributes[:authenticity])
+    end
+
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      page.find("input[value='#{attributes[:has_markings]}']").choose
+    end
+
+    within_fieldset("Select product marking") do
+      attributes[:markings].each { |marking| check(marking) } if attributes[:has_markings] == "markings_yes"
+    end
+
+    select "Unknown", from: "Country of origin"
+
+    fill_in "Description of product", with: attributes[:description]
+    click_on "Save"
+
+    expect(page).to have_current_path("/products")
+    expect(page).not_to have_error_messages
+    expect(page).to have_selector("h1", text: "Product record created")
+
+    click_on "View the product record"
+    expect(page).to have_summary_item(key: "Country of origin", value: "Unknown")
+  end
+
+  scenario "Adding a product with an image" do
+    select attributes[:category], from: "Product category"
+    fill_in "Product subcategory", with: attributes[:subcategory]
+    fill_in "Manufacturer's brand name", with: attributes[:brand]
+    fill_in "Product name", with: attributes[:name]
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:barcode]
+    fill_in "Other product identifiers", with: attributes[:product_code]
+    fill_in "Webpage", with: attributes[:webpage]
+
+    attach_file "product[image]", "spec/fixtures/files/testImage.png"
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
       choose when_placed_on_market_answer(attributes[:when_placed_on_market])
