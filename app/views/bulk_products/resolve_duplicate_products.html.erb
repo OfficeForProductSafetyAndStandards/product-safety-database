@@ -1,0 +1,95 @@
+<% page_heading = "We found duplicate product records - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_resolve_duplicate_products_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govukBackLink(text: "Back", href: upload_products_file_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_resolve_duplicate_products_form, url: resolve_duplicate_products_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= error_summary @bulk_products_resolve_duplicate_products_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        We found duplicate product records
+      </h1>
+      <p class="govuk-body">Product records with the same barcode already exist in the database.</p>
+      <% @duplicate_products_length = @duplicate_products.length - 1 %>
+      <% @duplicate_products.decorate.each_with_index do |product, index| %>
+        <div class="opss-panels">
+          <div class="opss-panels__single">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= product.name_with_brand %></h2>
+            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
+                <dd class="govuk-summary-list__value"><%= product.psd_ref %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Brand name</dt>
+                <dd class="govuk-summary-list__value"><%= product.brand %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Product name</dt>
+                <dd class="govuk-summary-list__value"><%= product.name %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Barcode</dt>
+                <dd class="govuk-summary-list__value"><%= product.barcode %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Counterfeit</dt>
+                <dd class="govuk-summary-list__value">
+                  <%= product.counterfeit_value %>
+                  <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= product.counterfeit_explanation %></span>
+                </dd>
+              </div>
+            </dl>
+            <% if product.virus_free_images.present? %>
+              <details class="govuk-details govuk-!-margin-bottom-3" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                    Product image
+                  </span>
+                </summary>
+                  <div class="govuk-details__text">
+                    <%= image_tag(product.virus_free_images.first.file_upload, alt: product.virus_free_images.first.file_upload.filename, class: 'opss-details-img') %>
+                  </div>
+              </details>
+            <% end %>
+          </div>
+        </div>
+        <%= form.fields_for :resolution do |resolution_form| %>
+          <%= govukRadios(
+            form: resolution_form,
+            key: product.barcode,
+            fieldset: {
+              legend: {
+                text: "What would you like to do?",
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            items: [
+              {
+                text: "Use this product record instead",
+                value: "existing_record;#{product.id}",
+                checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "existing_record;#{product.id}",
+                id: product.barcode
+              },
+              {
+                text: "Use the product record from my Excel file",
+                value: "new_record",
+                checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "new_record"
+              }
+            ],
+            errorMessage: @bulk_products_resolve_duplicate_products_form.errors.include?(product.barcode) ? { text: @bulk_products_resolve_duplicate_products_form.errors.full_messages_for(product.barcode).first } : nil
+          ) %>
+        <% end %>
+        <% if index < @duplicate_products_length %>
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <% end %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>

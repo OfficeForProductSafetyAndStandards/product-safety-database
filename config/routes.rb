@@ -266,6 +266,8 @@ Rails.application.routes.draw do
             put "upload-products-file", to: "bulk_products#upload_products_file"
             get "resolve-duplicate-products", to: "bulk_products#resolve_duplicate_products", as: "resolve_duplicate_products_bulk_upload"
             put "resolve-duplicate-products", to: "bulk_products#resolve_duplicate_products"
+            get "review-products", to: "bulk_products#review_products", as: "review_products_bulk_upload"
+            put "review-products", to: "bulk_products#review_products"
           end
         end
       end
