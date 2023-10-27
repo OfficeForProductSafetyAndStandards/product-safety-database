@@ -5,7 +5,7 @@
 <% end %>
 <%= form_with model: @bulk_products_create_case_form, url: create_case_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-three-quarters">
       <%= error_summary @bulk_products_create_case_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>

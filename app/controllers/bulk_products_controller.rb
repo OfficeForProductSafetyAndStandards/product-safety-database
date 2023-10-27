@@ -21,7 +21,7 @@ class BulkProductsController < ApplicationController
         when "non_compliant"
           ActiveRecord::Base.transaction do
             investigation = Investigation::Notification.new(reported_reason: "non_compliant", hazard_description: bulk_products_triage_params[:hazard_description])
-            CreateCase.call!(investigation:, user: current_user, bulk: true)
+            CreateCase.call!(investigation:, user: current_user, bulk: true, silent: true)
             @bulk_products_upload = BulkProductsUpload.create!(investigation:, user: current_user)
           end
 
@@ -136,7 +136,44 @@ class BulkProductsController < ApplicationController
     end
   end
 
-  def resolve_duplicate_products; end
+  def resolve_duplicate_products
+    # If there is nothing in the cache then we don't have a valid file, so redirect to the file upload page
+    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.empty?
+
+    # Barcodes from all uploaded products
+    barcodes = @bulk_products_upload.products_cache.pluck("barcode").compact
+
+    # Gets the newest product per barcode to present to the user as an alternative to what they've submitted
+    @duplicate_products = Product.where(barcode: barcodes).select("DISTINCT ON (products.barcode) barcode, products.*").order(barcode: :asc, updated_at: :desc)
+
+    # If there are no duplicates then we can progress to the next page
+    return redirect_to review_products_bulk_upload_products_path(@bulk_products_upload, barcodes:) if @duplicate_products.empty?
+
+    # Used by the form to validate that all duplicate products have a resolution
+    duplicate_barcodes = @duplicate_products.map(&:barcode)
+
+    if request.put?
+      @bulk_products_resolve_duplicate_products_form = BulkProductsResolveDuplicateProductsForm.new(bulk_products_resolve_duplicate_products_params.merge(duplicate_barcodes:))
+
+      if @bulk_products_resolve_duplicate_products_form.valid?
+        # Get IDs for all products where the user has chosen to use an existing product
+        product_ids_to_use = @bulk_products_resolve_duplicate_products_form.resolution.filter_map { |_barcode, resolution| resolution.split(";").last if resolution.start_with?("existing_record") }
+
+        # Get all barcodes where the user has either chosen to use their uploaded product or the product was not a duplicate
+        barcodes_to_create = barcodes - duplicate_barcodes + @bulk_products_resolve_duplicate_products_form.resolution.filter_map { |barcode, resolution| barcode if resolution == "new_record" }
+
+        redirect_to review_products_bulk_upload_products_path(
+          @bulk_products_upload,
+          product_ids: product_ids_to_use,
+          barcodes: barcodes_to_create
+        )
+      end
+    else
+      @bulk_products_resolve_duplicate_products_form = BulkProductsResolveDuplicateProductsForm.new(duplicate_barcodes:)
+    end
+  end
+
+  def review_products; end
 
 private
 
@@ -171,5 +208,10 @@ private
   def bulk_products_upload_products_file_params
     # `random_uuid` allows us to detect a missing file upload
     params.require(:bulk_products_upload_products_file_form).permit(:random_uuid, :products_file)
+  end
+
+  def bulk_products_resolve_duplicate_products_params
+    # `random_uuid` allows us to detect a missing file upload
+    params.require(:bulk_products_resolve_duplicate_products_form).permit(:random_uuid, resolution: {})
   end
 end

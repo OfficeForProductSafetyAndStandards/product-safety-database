@@ -32,7 +32,7 @@ class CreateCase
       create_audit_activity_for_case_added
     end
 
-    send_confirmation_email
+    send_confirmation_email unless context.silent
   end
 
 private
