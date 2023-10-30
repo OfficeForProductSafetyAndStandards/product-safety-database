@@ -21,6 +21,6 @@
 
 <%= form.govuk_radios :severity, legend: "Indicate the severity", items: [{ text: "Serious", value: "serious" },  { text: "High", value: "high" }, { text: "Medium", value: "medium" }, { text: "Low", value: "low" }, { text: "Unknown", value: "unknown_severity" }, { text: "Other", value: "other", conditional: { html: other } }] %>
 
-<%= form.govuk_text_area :additional_info, label: "Additional information (optional)", attributes: { maxlength: 50_000 } %>
+<%= form.govuk_text_area :additional_info, label: "Additional information (optional)", attributes: { maxlength: 32_767 } %>
 
 <%= form.hidden_field :type, value: form.object.type %>

@@ -130,8 +130,8 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_mailer, :with_stubbed_antivir
       end
     end
 
-    context "with details longer than 50,000 characters" do
-      let(:details) { Faker::Lorem.characters(number: 50_001) }
+    context "with details longer than 32,767 characters" do
+      let(:details) { Faker::Lorem.characters(number: 32_768) }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid

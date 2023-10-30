@@ -47,7 +47,7 @@
 
 <%= form.govuk_radios :result, legend: "What was the result?", items: result_items(form) %>
 
-<%= form.govuk_text_area :details, label: "Further details", attributes: { maxlength: 50_000 } %>
+<%= form.govuk_text_area :details, label: "Further details", attributes: { maxlength: 32_767 } %>
 
 <%= form.hidden_field :existing_document_file_id %>
 <%= render "related_attachment_fields",
