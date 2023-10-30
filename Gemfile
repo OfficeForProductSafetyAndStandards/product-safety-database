@@ -70,6 +70,9 @@ gem "prism", path: "prism"
 # OSU Support Portal engine
 gem "support_portal", path: "support_portal"
 
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
@@ -79,6 +82,8 @@ group :development, :test do
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.4"
+  gem 'rspec-rails'
+  gem 'rswag-specs'
 end
 
 group :development do
