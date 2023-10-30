@@ -10,10 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_25_103257) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_27_094200) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
@@ -84,6 +86,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_25_103257) do
     t.string "summary"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
+  end
+
+  create_table "api_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.datetime "last_used_at"
+    t.jsonb "metadata", default: {}
+    t.string "name"
+    t.string "token"
+    t.boolean "transient", default: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["token"], name: "index_api_tokens_on_token", unique: true
+    t.index ["user_id"], name: "index_api_tokens_on_user_id"
   end
 
   create_table "bulk_products_uploads", force: :cascade do |t|
@@ -634,7 +650,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_25_103257) do
   add_foreign_key "activities", "correspondences"
   add_foreign_key "activities", "investigations"
   add_foreign_key "alerts", "investigations"
+  add_foreign_key "api_tokens", "users"
   add_foreign_key "collaborations", "investigations"
+  add_foreign_key "collaborations", "investigations"
+  add_foreign_key "complainants", "investigations"
   add_foreign_key "complainants", "investigations"
   add_foreign_key "corrective_actions", "businesses"
   add_foreign_key "corrective_actions", "investigations"
