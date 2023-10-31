@@ -116,7 +116,9 @@ private
   def worksheet
     return if products_file.blank?
 
-    @workbook ||= RubyXL::Parser.parse(ActiveStorage::Blob.service.path_for(products_file.key))
+    @workbook ||= products_file.open do |file|
+      RubyXL::Parser.parse(file.path)
+    end
 
     @workbook["Non compliance Form"]
   end
