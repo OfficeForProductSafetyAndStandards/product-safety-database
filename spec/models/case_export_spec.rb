@@ -43,7 +43,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   end
 
   before do
-    Investigation.reindex
+    Investigation.search_index.refresh
     allow(JSON).to receive(:load_file!).and_return(JSON.parse(team_mappings, object_class: OpenStruct))
   end
 
@@ -208,6 +208,8 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
       let(:params) { { case_type:, created_by: "all", case_status: "open", teams_with_access: "all" } }
 
+      before { Investigation.search_index.refresh }
+
       context "with all cases" do
         let(:case_type) { "all" }
 
@@ -304,6 +306,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
       before do
         old_case.update!(created_at: 2.days.ago)
+        Investigation.search_index.refresh
       end
 
       it "exports the case data", :aggregate_failures do

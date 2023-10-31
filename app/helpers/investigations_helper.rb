@@ -101,7 +101,8 @@ module InvestigationsHelper
       order: @search.sorting_params,
       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
-      per_page: page_size
+      per_page: page_size,
+      body_options: {track_total_hits: true}
     )
   end
 
