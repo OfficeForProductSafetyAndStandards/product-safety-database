@@ -173,7 +173,41 @@ class BulkProductsController < ApplicationController
     end
   end
 
-  def review_products; end
+  def review_products
+    # If there is nothing in the cache then we don't have a valid file, so redirect to the file upload page
+    # Also redirect if there are no barcodes or product IDs to review
+    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.empty? || (params[:barcodes].blank? && params[:product_ids].blank?)
+
+    if request.put?
+      @bulk_products_review_products_form = BulkProductsReviewProductsForm.new(bulk_products_review_products_params)
+
+      if @bulk_products_review_products_form.valid?
+        # TODO(ruben): Upload images here
+        redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
+      end
+    else
+      @bulk_products_review_products_form = BulkProductsReviewProductsForm.new
+    end
+
+    new_products = if params[:barcodes].present?
+                     @bulk_products_upload.products_cache.filter_map do |product|
+                       { product: Product.new(product["product_data"].except("image", "existing_image_file_id")).decorate, investigation_product: InvestigationProduct.new(product["investigation_data"]) } if params[:barcodes].include?(product["barcode"])
+                     end
+                   else
+                     []
+                   end
+    existing_products = Product.where(id: params[:product_ids]).decorate.map do |product|
+      { product:, investigation_product: product.investigation_products&.first }
+    end
+    @products_to_review = new_products + existing_products
+  end
+
+  def cancel_and_reupload
+    @bulk_products_upload.update!(products_cache: [])
+    redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload)
+  end
+
+  def choose_products_for_corrective_actions; end
 
 private
 
@@ -213,5 +247,10 @@ private
   def bulk_products_resolve_duplicate_products_params
     # `random_uuid` allows us to detect a missing file upload
     params.require(:bulk_products_resolve_duplicate_products_form).permit(:random_uuid, resolution: {})
+  end
+
+  def bulk_products_review_products_params
+    # `random_uuid` allows us to detect a missing file upload
+    params.require(:bulk_products_review_products_form).permit(:random_uuid, images: {})
   end
 end

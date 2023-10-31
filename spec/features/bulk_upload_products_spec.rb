@@ -99,5 +99,9 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
     click_button "Continue"
 
     expect(page).to have_current_path("/products/bulk-upload/1/review-products?product_ids[]=#{duplicate_product.id}")
+    expect(page).to have_content("Review details of the products you are uploading")
+    expect(page).to have_content(duplicate_product.name)
+
+    click_button "Continue"
   end
 end

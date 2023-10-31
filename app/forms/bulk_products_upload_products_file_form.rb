@@ -116,7 +116,9 @@ private
   def worksheet
     return if products_file.blank?
 
-    @workbook ||= RubyXL::Parser.parse(ActiveStorage::Blob.service.path_for(products_file.key))
+    @workbook ||= products_file.open do |file|
+      RubyXL::Parser.parse(file.path)
+    end
 
     @workbook["Non compliance Form"]
   end
@@ -136,16 +138,21 @@ private
       # Ignore completely empty rows or rows with just an entry number
       next if ary.drop(1).compact.empty?
 
-      entry_number, category, subcategory, customs_code, country_of_origin, barcode, name, description, units_affected, brand, batch_number, counterfeit, markings, marketed_before_brexit, *_extra_cells = ary
+      entry_number, category, subcategory, customs_code, country_of_origin, barcode, name, description, number_of_affected_units, brand, batch_number, counterfeit, markings, marketed_before_brexit, *_extra_cells = ary
       authenticity = counterfeit == "Yes" ? "counterfeit" : "genuine"
       has_markings = markings.blank? ? "markings_no" : ({ "No" => "markings_no", "Unknown" => "markings_unknown" }[markings] || "markings_yes")
       markings = has_markings == "markings_yes" ? markings.split(", ") : nil
       when_placed_on_market = marketed_before_brexit == "Yes" ? "before_2021" : "on_or_after_2021"
-      product = ProductForm.new(category:, subcategory:, country_of_origin:, barcode:, name:, description:, brand:, authenticity:, has_markings:, markings:, when_placed_on_market:)
-      products << { product_data: product.serializable_hash, investigation_data: { customs_code:, units_affected:, batch_number: }, barcode: }
+      product = ProductForm.new(category:, subcategory:, country_of_origin: country_to_code(country_of_origin), barcode:, name:, description:, brand:, authenticity:, has_markings:, markings:, when_placed_on_market:)
+      products << { product_data: product.serializable_hash, investigation_data: { customs_code:, number_of_affected_units:, batch_number: }, barcode: }
       error_messages[entry_number] = product.errors if product.invalid?
     end
 
     [products, error_messages]
+  end
+
+  def country_to_code(country)
+    code = Country.all.find { |c| c[0] == country }
+    (code && code[1]) || country
   end
 end
