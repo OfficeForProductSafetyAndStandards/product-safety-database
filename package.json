@@ -16,8 +16,9 @@
     "postcss": "^8.4.31",
     "sass": "^1.69.5",
     "standard": "^17.1.0",
-    "stimulus-rails-nested-form": "^4.1.0",
     "stimulus-clipboard": "^4.0.1",
+    "stimulus-rails-nested-form": "^4.1.0",
+    "stimulus-reveal-controller": "^4.1.0",
     "stylelint": "^14.16.1",
     "stylelint-config-gds": "^0.3.0"
   },

@@ -1,12 +1,10 @@
 class BulkProductsController < ApplicationController
   include CountriesHelper
-  include BreadcrumbHelper
 
   before_action :authorize_user
   before_action :bulk_products_upload, except: %i[triage no_upload_unsafe no_upload_mixed]
   before_action :set_countries, only: %i[add_business_details]
-
-  breadcrumb "products.label", :products_path
+  skip_before_action :set_home_breadcrumb
 
   def triage
     if request.put?
@@ -178,28 +176,57 @@ class BulkProductsController < ApplicationController
     # Also redirect if there are no barcodes or product IDs to review
     return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.empty? || (params[:barcodes].blank? && params[:product_ids].blank?)
 
+    new_products = if params[:barcodes].present?
+                     @bulk_products_upload.products_cache.filter_map do |product|
+                       { product: Product.new(product["product_data"].except("image", "existing_image_file_id")), investigation_product: InvestigationProduct.new(product["investigation_data"]) } if params[:barcodes].include?(product["barcode"])
+                     end
+                   else
+                     []
+                   end
+    existing_products = Product.where(id: params[:product_ids]).map do |product|
+      { product:, investigation_product: product.investigation_products&.first }
+    end
+    @products_to_review = new_products + existing_products
+
     if request.put?
       @bulk_products_review_products_form = BulkProductsReviewProductsForm.new(bulk_products_review_products_params)
 
       if @bulk_products_review_products_form.valid?
-        # TODO(ruben): Upload images here
+        new_products.each do |new_product|
+          context = CreateProduct.call!(new_product[:product].serializable_hash.merge(user: current_user))
+          product = context.product
+
+          if @bulk_products_review_products_form.images[product.barcode].present?
+            uploaded_image = @bulk_products_review_products_form.images[product.barcode]
+
+            image = ActiveStorage::Blob.create_and_upload!(
+              io: uploaded_image,
+              filename: uploaded_image.original_filename,
+              content_type: uploaded_image.content_type
+            )
+
+            image.analyze_later
+
+            image_upload = ImageUpload.create!(upload_model: product, created_by: current_user.id, file_upload: image.signed_id)
+
+            product.image_upload_ids.push(image_upload.id)
+            product.save!
+          end
+
+          AddProductToCase.call!(investigation: @bulk_products_upload.investigation, product:, user: current_user, skip_email: true)
+
+          product.investigation_products.first.update!(new_product[:investigation_product].serializable_hash.slice("batch_number", "customs_code", "number_of_affected_units"))
+        end
+
+        existing_products.each do |existing_product|
+          AddProductToCase.call!(investigation: @bulk_products_upload.investigation, product: existing_product[:product], user: current_user, skip_email: true)
+        end
+
         redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
       end
     else
       @bulk_products_review_products_form = BulkProductsReviewProductsForm.new
     end
-
-    new_products = if params[:barcodes].present?
-                     @bulk_products_upload.products_cache.filter_map do |product|
-                       { product: Product.new(product["product_data"].except("image", "existing_image_file_id")).decorate, investigation_product: InvestigationProduct.new(product["investigation_data"]) } if params[:barcodes].include?(product["barcode"])
-                     end
-                   else
-                     []
-                   end
-    existing_products = Product.where(id: params[:product_ids]).decorate.map do |product|
-      { product:, investigation_product: product.investigation_products&.first }
-    end
-    @products_to_review = new_products + existing_products
   end
 
   def cancel_and_reupload
@@ -250,7 +277,7 @@ private
   end
 
   def bulk_products_review_products_params
-    # `random_uuid` allows us to detect a missing file upload
+    # `random_uuid` allows us to continue even if no images are uploaded
     params.require(:bulk_products_review_products_form).permit(:random_uuid, images: {})
   end
 end
