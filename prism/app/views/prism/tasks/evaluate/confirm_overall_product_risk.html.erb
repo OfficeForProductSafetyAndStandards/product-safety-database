@@ -45,9 +45,9 @@
       %>
       <%= f.hidden_field :_dummy, value: "dummy" %>
       <% risk_level_plus_label = capture do %>
-        <div>
-          <button type="button" class="govuk-button govuk-button--secondary" data-action="visibility#toggleTargets">Add a risk level plus label</button>
-          <div data-visibility-target="hideable"<% unless f.object.overall_product_risk_plus_label.present? %> hidden<% end %>>
+        <div data-controller="reveal" data-reveal-hidden-class="govuk-visually-hidden">
+          <button type="button" class="govuk-button govuk-button--secondary" data-action="click->reveal#toggle">Add a risk level plus label</button>
+          <div data-reveal-target="item"<% unless f.object.overall_product_risk_plus_label.present? %> class="govuk-visually-hidden"<% end %>>
             <%= f.govuk_text_area :overall_product_risk_plus_label, label: { text: "Describe the reason for choosing the risk level plus label" }, rows: 3, class: %w[govuk-!-width-one-half] %>
           </div>
         </div>

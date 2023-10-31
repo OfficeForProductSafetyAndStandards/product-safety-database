@@ -3,7 +3,7 @@
 <% content_for :after_header do %>
   <%= govukBackLink(text: "Back", href: resolve_duplicate_products_bulk_upload_products_path) %>
 <% end %>
-<%= form_with model: @bulk_products_review_products_form, url: review_products_bulk_upload_products_path(barcodes: params[:barcodes], product_ids: params[:product_ids]), html: { novalidate: true }, method: :put, local: true do |form| %>
+<%= form_with model: @bulk_products_review_products_form, url: review_products_bulk_upload_products_path(barcodes: params[:barcodes], product_ids: params[:product_ids]), html: { novalidate: true }, method: :put, local: true, multipart: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <%= error_summary @bulk_products_review_products_form.errors %>
@@ -13,7 +13,7 @@
       </h1>
       <% @products_to_review_length = @products_to_review.length - 1 %>
       <% @products_to_review.each_with_index do |data, index| %>
-        <% product = data[:product] %>
+        <% product = data[:product].decorate %>
         <% investigation_product = data[:investigation_product] %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-quarter">
@@ -22,7 +22,25 @@
             <% else %>
               <%= image_tag("no-product-image.jpg", width: 200, height: 200, alt: "No product image available", class: "opss-details-img") %>
               <% if product.id.nil? %>
-                <%# TODO(ruben): Add a product image button will go here %>
+                <div data-controller="add-remove" data-add-remove-template-id="product-image-upload-field-<%= product.barcode %>">
+                  <p class="govuk-body">
+                    <a href="#" class="govuk-link govuk-link--no-visited-state" data-action="click->add-remove#add" data-add-remove-target="addLink">Add product image</a>
+                  </p>
+                  <div data-add-remove-target="item"></div>
+                </div>
+                <template id="product-image-upload-field-<%= product.barcode %>">
+                  <%= govukFileUpload(
+                    id: "product-image-upload-#{product.barcode}",
+                    name: "bulk_products_review_products_form[images][#{product.barcode}]",
+                    label: {
+                      text: "Upload a file",
+                      classes: "govuk-label--s"
+                    }
+                  ) %>
+                  <p class="govuk-body">
+                    <a href="#" class="govuk-link govuk-link--no-visited-state" data-action="click->add-remove#remove">Remove product image</a>
+                  </p>
+                </template>
               <% end %>
             <% end %>
           </div>
