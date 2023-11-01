@@ -17,11 +17,8 @@ class BulkProductsController < ApplicationController
         when "mixed"
           redirect_to no_upload_mixed_bulk_upload_products_path
         when "non_compliant"
-          ActiveRecord::Base.transaction do
-            investigation = Investigation::Notification.new(reported_reason: "non_compliant", hazard_description: bulk_products_triage_params[:hazard_description])
-            CreateCase.call!(investigation:, user: current_user, bulk: true, silent: true)
-            @bulk_products_upload = BulkProductsUpload.create!(investigation:, user: current_user)
-          end
+          context = CreateBulkProductsUpload.call!(hazard_description: bulk_products_triage_params[:hazard_description], user: current_user)
+          @bulk_products_upload = context.bulk_products_upload
 
           redirect_to create_case_bulk_upload_products_path(@bulk_products_upload)
         end
@@ -40,7 +37,8 @@ class BulkProductsController < ApplicationController
       @bulk_products_create_case_form = BulkProductsCreateCaseForm.new(bulk_products_create_case_params)
 
       if @bulk_products_create_case_form.valid?
-        @bulk_products_upload.investigation.update!(
+        UpdateBulkProductsUploadCase.call!(
+          bulk_products_upload: @bulk_products_upload,
           user_title: bulk_products_create_case_params[:name],
           complainant_reference: bulk_products_create_case_params[:reference_number_provided] == "true" ? bulk_products_create_case_params[:reference_number] : nil
         )
@@ -59,38 +57,24 @@ class BulkProductsController < ApplicationController
       @bulk_products_add_business_type_form = BulkProductsAddBusinessTypeForm.new(bulk_products_add_business_type_params)
 
       if @bulk_products_add_business_type_form.valid?
-        ActiveRecord::Base.transaction do
-          if @bulk_products_upload.investigation_business.present?
-            online_marketplace = if bulk_products_add_business_type_params[:other_marketplace_name].present?
-                                   OnlineMarketplace.find_or_create_by!(name: bulk_products_add_business_type_params[:other_marketplace_name], approved_by_opss: false)
-                                 else
-                                   OnlineMarketplace.find(bulk_products_add_business_type_params[:online_marketplace_id])
-                                 end
-            @bulk_products_upload.investigation_business.update!(
-              relationship: bulk_products_add_business_type_params[:type],
-              online_marketplace:,
-              authorised_representative_choice: bulk_products_add_business_type_params[:authorised_representative_choice]
-            )
-          else
-            # Use a fake name for now
-            business = Business.create!(
-              trading_name: "Auto-generated business for case #{@bulk_products_upload.investigation.pretty_id}",
-              added_by_user: current_user
-            )
-            # Location will not be valid until a country is added at the next step
-            business.locations.build(name: "Registered office address", added_by_user: current_user).save!(validate: false)
-            business.contacts.create!
-            AddBusinessToCase.call!(
-              business:,
-              relationship: bulk_products_add_business_type_params[:type],
-              online_marketplace: bulk_products_add_business_type_params[:online_marketplace_id].present? ? OnlineMarketplace.find(bulk_products_add_business_type_params[:online_marketplace_id]) : nil,
-              other_marketplace_name: bulk_products_add_business_type_params[:other_marketplace_name],
-              authorised_representative_choice: bulk_products_add_business_type_params[:authorised_representative_choice],
-              investigation: @bulk_products_upload.investigation,
-              user: current_user
-            )
-            @bulk_products_upload.update!(investigation_business_id: business.reload.investigation_businesses.first.id)
-          end
+        if @bulk_products_upload.investigation_business.present?
+          UpdateBulkProductsUploadBusiness.call!(
+            bulk_products_upload: @bulk_products_upload,
+            type: bulk_products_add_business_type_params[:type],
+            online_marketplace_id: bulk_products_add_business_type_params[:online_marketplace_id],
+            other_marketplace_name: bulk_products_add_business_type_params[:other_marketplace_name],
+            authorised_representative_choice: bulk_products_add_business_type_params[:authorised_representative_choice],
+            user: current_user
+          )
+        else
+          CreateBulkProductsUploadBusiness.call!(
+            bulk_products_upload: @bulk_products_upload,
+            type: bulk_products_add_business_type_params[:type],
+            online_marketplace_id: bulk_products_add_business_type_params[:online_marketplace_id],
+            other_marketplace_name: bulk_products_add_business_type_params[:other_marketplace_name],
+            authorised_representative_choice: bulk_products_add_business_type_params[:authorised_representative_choice],
+            user: current_user
+          )
         end
 
         redirect_to add_business_details_bulk_upload_products_path(@bulk_products_upload)
@@ -192,35 +176,13 @@ class BulkProductsController < ApplicationController
       @bulk_products_review_products_form = BulkProductsReviewProductsForm.new(bulk_products_review_products_params)
 
       if @bulk_products_review_products_form.valid?
-        new_products.each do |new_product|
-          context = CreateProduct.call!(new_product[:product].serializable_hash.merge(user: current_user))
-          product = context.product
-
-          if @bulk_products_review_products_form.images[product.barcode].present?
-            uploaded_image = @bulk_products_review_products_form.images[product.barcode]
-
-            image = ActiveStorage::Blob.create_and_upload!(
-              io: uploaded_image,
-              filename: uploaded_image.original_filename,
-              content_type: uploaded_image.content_type
-            )
-
-            image.analyze_later
-
-            image_upload = ImageUpload.create!(upload_model: product, created_by: current_user.id, file_upload: image.signed_id)
-
-            product.image_upload_ids.push(image_upload.id)
-            product.save!
-          end
-
-          AddProductToCase.call!(investigation: @bulk_products_upload.investigation, product:, user: current_user, skip_email: true)
-
-          product.investigation_products.first.update!(new_product[:investigation_product].serializable_hash.slice("batch_number", "customs_code", "number_of_affected_units"))
-        end
-
-        existing_products.each do |existing_product|
-          AddProductToCase.call!(investigation: @bulk_products_upload.investigation, product: existing_product[:product], user: current_user, skip_email: true)
-        end
+        CreateBulkProductsUploadProducts.call!(
+          bulk_products_upload: @bulk_products_upload,
+          new_products:,
+          existing_products:,
+          images: @bulk_products_review_products_form.images,
+          user: current_user
+        )
 
         redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
       end
