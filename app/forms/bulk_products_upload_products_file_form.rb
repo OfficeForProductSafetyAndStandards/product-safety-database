@@ -86,7 +86,7 @@ private
   end
 
   def file_products_validation
-    return if headers_mismatched?
+    return if worksheet.blank? || headers_mismatched?
 
     @products, @product_error_messages = validate_products
 
