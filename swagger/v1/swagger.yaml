@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: PSD API V1
+  title: API V1
   version: v1
 paths: {}
 servers:
