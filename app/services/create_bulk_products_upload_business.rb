@@ -27,7 +27,8 @@ class CreateBulkProductsUploadBusiness
         other_marketplace_name:,
         authorised_representative_choice:,
         investigation: bulk_products_upload.investigation,
-        user:
+        user:,
+        skip_email: true
       )
 
       # Keep track of the investigation business so we can refer to it unambiguously later

@@ -176,13 +176,15 @@ class BulkProductsController < ApplicationController
       @bulk_products_review_products_form = BulkProductsReviewProductsForm.new(bulk_products_review_products_params)
 
       if @bulk_products_review_products_form.valid?
-        CreateBulkProductsUploadProducts.call!(
-          bulk_products_upload: @bulk_products_upload,
-          new_products:,
-          existing_products:,
-          images: @bulk_products_review_products_form.images,
-          user: current_user
-        )
+        if @bulk_products_upload.investigation.products.blank?
+          CreateBulkProductsUploadProducts.call!(
+            bulk_products_upload: @bulk_products_upload,
+            new_products:,
+            existing_products:,
+            images: @bulk_products_review_products_form.images,
+            user: current_user
+          )
+        end
 
         redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
       end
@@ -196,7 +198,62 @@ class BulkProductsController < ApplicationController
     redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload)
   end
 
-  def choose_products_for_corrective_actions; end
+  def choose_products_for_corrective_actions
+    @products = Product.where(id: @bulk_products_upload.investigation.investigation_products.where.missing(:corrective_actions).map(&:product_id))
+
+    # If there are no products, redirect to the file upload page
+    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @products.empty?
+
+    if request.put?
+      @bulk_products_choose_products_for_corrective_actions_form = BulkProductsChooseProductsForCorrectiveActionsForm.new(bulk_products_choose_products_for_corrective_actions_params)
+
+      if @bulk_products_choose_products_for_corrective_actions_form.valid?
+        redirect_to create_corrective_action_bulk_upload_products_path(@bulk_products_upload, product_ids: bulk_products_choose_products_for_corrective_actions_params[:product_ids])
+      end
+    else
+      @bulk_products_choose_products_for_corrective_actions_form = BulkProductsChooseProductsForCorrectiveActionsForm.new
+    end
+  end
+
+  def create_corrective_action
+    # Redirect if there are no product IDs to create an corrective action for
+    return redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload) if params[:product_ids].blank?
+
+    @products = @bulk_products_upload.investigation.products.where(id: params[:product_ids])
+
+    if request.put?
+      @bulk_products_create_corrective_action_form = CorrectiveActionForm.new(bulk_products_create_corrective_action_params)
+      @file_blob = @bulk_products_create_corrective_action_form.document
+
+      if @bulk_products_create_corrective_action_form.valid?
+        @products.each do |product|
+          AddCorrectiveActionToCase.call!(
+            @bulk_products_create_corrective_action_form
+              .serializable_hash(except: :further_corrective_action)
+              .merge(
+                user: current_user,
+                investigation: @bulk_products_upload.investigation,
+                business_id: @bulk_products_upload.business.id,
+                investigation_product_id: @bulk_products_upload.investigation.investigation_products.where(product_id: product.id).first.id,
+                silent: true
+              )
+          )
+        end
+
+        remaining_product_ids = @bulk_products_upload.investigation.investigation_products.where.missing(:corrective_actions).map(&:product_id) - @products.ids
+
+        if remaining_product_ids.present?
+          redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
+        else
+          redirect_to confirm_bulk_upload_products_path(@bulk_products_upload)
+        end
+      end
+    else
+      @bulk_products_create_corrective_action_form = CorrectiveActionForm.new
+    end
+  end
+
+  def confirm; end
 
 private
 
@@ -241,5 +298,29 @@ private
   def bulk_products_review_products_params
     # `random_uuid` allows us to continue even if no images are uploaded
     params.require(:bulk_products_review_products_form).permit(:random_uuid, images: {})
+  end
+
+  def bulk_products_choose_products_for_corrective_actions_params
+    # `random_uuid` allows us to continue even if no products are chosen
+    params.require(:bulk_products_choose_products_for_corrective_actions_form).permit(:random_uuid, product_ids: [])
+  end
+
+  def bulk_products_create_corrective_action_params
+    params.require(:corrective_action_form).permit(
+      :legislation,
+      :action,
+      :has_online_recall_information,
+      :online_recall_information,
+      :details,
+      :related_file,
+      :measure_type,
+      :duration,
+      :other_action,
+      :further_corrective_action,
+      :existing_document_file_id,
+      geographic_scopes: [],
+      file: %i[file description],
+      date_decided: %i[day month year]
+    ).with_defaults(geographic_scopes: [])
   end
 end

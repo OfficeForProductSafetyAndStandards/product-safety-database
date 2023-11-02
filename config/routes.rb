@@ -268,9 +268,13 @@ Rails.application.routes.draw do
             put "resolve-duplicate-products", to: "bulk_products#resolve_duplicate_products"
             get "review-products", to: "bulk_products#review_products", as: "review_products_bulk_upload"
             put "review-products", to: "bulk_products#review_products"
+            get "cancel-and-reupload", to: "bulk_products#cancel_and_reupload", as: "cancel_and_reupload_bulk_upload"
             get "choose-products-for-corrective-actions", to: "bulk_products#choose_products_for_corrective_actions", as: "choose_products_for_corrective_actions_bulk_upload"
             put "choose-products-for-corrective-actions", to: "bulk_products#choose_products_for_corrective_actions"
-            get "cancel-and-reupload", to: "bulk_products#cancel_and_reupload", as: "cancel_and_reupload_bulk_upload"
+            get "create-corrective-action", to: "bulk_products#create_corrective_action", as: "create_corrective_action_bulk_upload"
+            put "create-corrective-action", to: "bulk_products#create_corrective_action"
+            get "confirm", to: "bulk_products#confirm", as: "confirm_bulk_upload"
+            put "confirm", to: "bulk_products#confirm"
           end
         end
       end

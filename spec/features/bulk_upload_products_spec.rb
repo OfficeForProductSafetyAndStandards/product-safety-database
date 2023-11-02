@@ -103,5 +103,12 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
     expect(page).to have_content(duplicate_product.name)
 
     click_button "Continue"
+
+    expect(page).to have_content("Choose products that require a corrective action")
+
+    check duplicate_product.name
+    click_button "Continue"
+
+    expect(page).to have_content("Record corrective action")
   end
 end

@@ -25,7 +25,7 @@ class AddCorrectiveActionToCase
       )
       corrective_action.document.attach(document)
       create_audit_activity
-      send_notification_email
+      send_notification_email unless context.silent
     end
 
     add_incident_management_team
