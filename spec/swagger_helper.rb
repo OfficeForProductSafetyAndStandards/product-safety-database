@@ -18,18 +18,16 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
-        title: 'API V1',
+        title: 'PSD API',
         version: 'v1'
       },
       paths: {},
       servers: [
         {
-          url: 'https://{defaultHost}',
-          variables: {
-            defaultHost: {
-              default: 'www.example.com'
-            }
-          }
+          url: 'https://staging.product-safety-database.service.gov.uk',
+        },
+        {
+          url: 'http://localhost:3000',
         }
       ]
     }
