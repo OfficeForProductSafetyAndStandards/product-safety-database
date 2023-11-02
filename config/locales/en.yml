@@ -774,6 +774,10 @@ en:
               wrong_headers: The selected file does not have the correct headers
               no_products: The selected file does not contain any products
               malformed_products: The selected file contains one or more products with errors
+        bulk_products_choose_products_for_corrective_actions_form:
+          attributes:
+            product_ids:
+              blank: Select at least one product to add a corrective action for
 
   activerecord:
     models:

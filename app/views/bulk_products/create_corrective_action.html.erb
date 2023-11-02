@@ -1,0 +1,43 @@
+<% page_heading = "Record corrective action - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_create_corrective_action_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govukBackLink(text: "Back", href: choose_products_for_corrective_actions_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_create_corrective_action_form, url: create_corrective_action_bulk_upload_products_path(product_ids: params[:product_ids]), builder: ApplicationFormBuilder, html: { novalidate: true }, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= error_summary @bulk_products_create_corrective_action_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Record corrective action
+      </h1>
+      <div class="govuk-inset-text">
+        <h2 class="govuk-heading-m">Products selected for corrective action</h2>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @products.decorate.each do |product| %>
+            <li><%= product.name_with_brand %></li>
+          <% end %>
+        </ul>
+      </div>
+      <%= render "investigations/corrective_actions/form",
+                 form: form,
+                 corrective_action: @bulk_products_create_corrective_action_form,
+                 investigation: @bulk_products_upload.investigation,
+                 allow_product_linking: false,
+                 allow_business_linking: false %>
+      <% file_field = capture do %>
+        <%= render "related_attachment_fields", form: form, file_blob: @file_blob, attachment_name: :file %>
+      <% end %>
+      <%= form.govuk_radios :related_file,
+         legend: "Are there any files related to the action?",
+         items: [
+           { text: "Yes", value: "true", conditional: { html: file_field }},
+           { text: "No", value: "off"}
+         ]
+      %>
+      <div class="govuk-button-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>
