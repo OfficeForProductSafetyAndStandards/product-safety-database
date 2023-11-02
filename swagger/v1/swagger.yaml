@@ -1,11 +1,28 @@
 ---
 openapi: 3.0.1
 info:
-  title: API V1
+  title: PSD API
   version: v1
-paths: {}
+paths:
+  "/api/v1/auth":
+    post:
+      summary: Request an API token
+      tags:
+      - Request an API token
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: password
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User authenticated and API token returned
+        '401':
+          description: Unauthorized
 servers:
-- url: https://{defaultHost}
-  variables:
-    defaultHost:
-      default: www.example.com
+- url: https://staging.product-safety-database.service.gov.uk
+- url: http://localhost:3000
