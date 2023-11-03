@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_01_140826) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_02_164229) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_01_140826) do
     t.bigint "investigation_business_id"
     t.bigint "investigation_id"
     t.jsonb "products_cache", default: []
+    t.datetime "submitted_at", precision: nil
     t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["business_id"], name: "index_bulk_products_uploads_on_business_id"

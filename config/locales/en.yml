@@ -765,7 +765,7 @@ en:
               blank: Enter a trading name
         bulk_products_upload_products_file_form:
           attributes:
-            products_file:
+            products_file_upload:
               blank: Select a file
               too_large: The selected file must be smaller than 30MB
               too_small: The selected file must not be empty

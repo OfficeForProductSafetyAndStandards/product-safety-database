@@ -694,4 +694,16 @@ if run_seeds
   end
 
   Investigation.reindex
+
+  # rubocop:disable Layout/MultilineArrayLineBreaks
+  marketplaces = ["Amazon", "eBay", "AliExpress", "Wish", "Etsy", "AliBaba", "Asos Marketplace", "Banggood",
+                  "Bonanza", "Depop", "DesertCart", "Ecrater", "Facebook Marketplace", "Farfetch", "Fishpond",
+                  "Folksy", "ForDeal", "Fruugo", "Grandado", "Groupon", "Gumtree", "Houzz", "Instagram",
+                  "Joom", "Light In The Box", "OnBuy", "NotOnTheHighStreet", "Manomano", "PatPat", "Pinterest",
+                  "Rakuten", "Shein", "Shpock", "Stockx", "Temu", "Vinted", "Wayfair", "Wowcher", "Zalando"]
+  # rubocop:enable Layout/MultilineArrayLineBreaks
+
+  marketplaces.each do |marketplace|
+    OnlineMarketplace.create(name: marketplace, approved_by_opss: true)
+  end
 end

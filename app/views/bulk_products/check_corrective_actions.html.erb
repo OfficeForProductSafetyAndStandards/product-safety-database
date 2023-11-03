@@ -1,0 +1,53 @@
+<% page_heading = "Check products selected for corrective actions - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_upload.errors.any? %>
+<% content_for :after_header do %>
+  <%= govukBackLink(text: "Back", href: choose_products_for_corrective_actions_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_upload, url: check_corrective_actions_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= error_summary @bulk_products_upload.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Check products selected for corrective actions
+      </h1>
+      <table class="govuk-table opss-table--borders">
+        <caption class="govuk-table__caption govuk-visually-hidden">Products with their respective corrective actions: a simple data table.</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Product</th>
+            <th scope="col" class="govuk-table__header">Corrective action</th>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Change corrective action</span></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @investigation_products.decorate.each do |investigation_product| %>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">
+                <%= investigation_product.product.name_with_brand %>
+              </th>
+              <td class="govuk-table__cell">
+                <%= investigation_product.corrective_actions.first.other_action || investigation_product.corrective_actions.first.action_label %>
+              </td>
+              <td class="govuk-table__cell">
+                <a href="<%= edit_investigation_corrective_action_path(investigation_pretty_id: @bulk_products_upload.investigation.pretty_id, id: investigation_product.corrective_actions.first.id, bulk_products_upload_id: @bulk_products_upload.id) %>" class="govuk-link">Change</a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <% if @investigation_products.size > 11 %>
+          <tfoot class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Product</th>
+              <th scope="col" class="govuk-table__header">Corrective action</th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Change corrective action</span></th>
+            </tr>
+          </tfoot>
+        <% end %>
+      </table>
+      <div class="govuk-button-group">
+        <%= form.submit "Upload product records", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>
