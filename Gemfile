@@ -21,7 +21,7 @@ gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jsbundling-rails"
 gem "kaminari", "~> 1.2"
-gem "lograge", "~> 0.12"
+gem "lograge", "~> 0.14"
 gem "mini_magick", "~> 4.12"
 gem "opensearch-ruby"
 
