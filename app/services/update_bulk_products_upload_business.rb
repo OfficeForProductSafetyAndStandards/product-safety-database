@@ -10,7 +10,7 @@ class UpdateBulkProductsUploadBusiness
 
     online_marketplace = if other_marketplace_name.present?
                            OnlineMarketplace.find_or_create_by!(name: other_marketplace_name, approved_by_opss: false)
-                         else
+                         elsif online_marketplace_id.present?
                            OnlineMarketplace.find(online_marketplace_id)
                          end
 

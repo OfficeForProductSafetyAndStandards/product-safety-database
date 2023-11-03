@@ -21,9 +21,10 @@ class BulkProductsUploadProductsFileForm
 
   attribute :random_uuid
   attribute :products_file
+  attribute :products_file_upload
   attribute :existing_products_file_id
 
-  validates :products_file, presence: true
+  validates :products_file_upload, presence: true, unless: -> { products_file.present? }
   validate :file_type_validation
   validate :file_size_validation
   validate :file_worksheet_validation
@@ -32,21 +33,21 @@ class BulkProductsUploadProductsFileForm
 
   attr_reader :products, :product_error_messages
 
-  def self.from(bulk_products_upload)
+  def self.from(bulk_products_upload, params = {})
     if bulk_products_upload.products_file.attached?
-      new(existing_products_file_id: bulk_products_upload.products_file.signed_id)
+      new(existing_products_file_id: bulk_products_upload.products_file.signed_id, **params)
     else
-      new
+      new(params)
     end
   end
 
   def cache_file!
-    return if products_file.blank?
+    return if products_file_upload.blank?
 
     self.products_file = ActiveStorage::Blob.create_and_upload!(
-      io: products_file,
-      filename: products_file.original_filename,
-      content_type: products_file.content_type
+      io: products_file_upload,
+      filename: products_file_upload.original_filename,
+      content_type: products_file_upload.content_type
     )
 
     self.existing_products_file_id = products_file.signed_id
@@ -63,26 +64,26 @@ private
   def file_type_validation
     return if products_file.blank?
 
-    errors.add(:products_file, :wrong_type) if file_not_an_excel_workbook?
+    errors.add(:products_file_upload, :wrong_type) if file_not_an_excel_workbook?
   end
 
   def file_size_validation
     return if file_not_an_excel_workbook?
 
-    errors.add(:products_file, :too_large) if file_too_large?
-    errors.add(:products_file, :too_small) if file_too_small?
+    errors.add(:products_file_upload, :too_large) if file_too_large?
+    errors.add(:products_file_upload, :too_small) if file_too_small?
   end
 
   def file_worksheet_validation
     return if file_too_large? || file_too_small?
 
-    errors.add(:products_file, :missing_worksheet) if worksheet.blank?
+    errors.add(:products_file_upload, :missing_worksheet) if worksheet.blank?
   end
 
   def file_header_validation
     return if worksheet.blank?
 
-    errors.add(:products_file, :wrong_headers) if headers_mismatched?
+    errors.add(:products_file_upload, :wrong_headers) if headers_mismatched?
   end
 
   def file_products_validation
@@ -91,9 +92,9 @@ private
     @products, @product_error_messages = validate_products
 
     if products.empty?
-      errors.add(:products_file, :no_products)
+      errors.add(:products_file_upload, :no_products)
     elsif @product_error_messages.present?
-      errors.add(:products_file, :malformed_products)
+      errors.add(:products_file_upload, :malformed_products)
     end
   end
 

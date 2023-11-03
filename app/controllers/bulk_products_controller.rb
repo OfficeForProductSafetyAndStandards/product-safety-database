@@ -101,9 +101,10 @@ class BulkProductsController < ApplicationController
 
   def upload_products_file
     if request.put?
-      @bulk_products_upload_products_file_form = BulkProductsUploadProductsFileForm.new(bulk_products_upload_products_file_params)
+      @bulk_products_upload_products_file_form = BulkProductsUploadProductsFileForm.from(@bulk_products_upload, bulk_products_upload_products_file_params)
       @bulk_products_upload_products_file_form.cache_file!
       @bulk_products_upload_products_file_form.load_products_file
+      @bulk_products_upload.products_file.attach(@bulk_products_upload_products_file_form.products_file)
 
       if @bulk_products_upload_products_file_form.valid?
         @bulk_products_upload.update!(products_cache: @bulk_products_upload_products_file_form.products)
@@ -121,7 +122,7 @@ class BulkProductsController < ApplicationController
 
   def resolve_duplicate_products
     # If there is nothing in the cache then we don't have a valid file, so redirect to the file upload page
-    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.empty?
+    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.blank?
 
     # Barcodes from all uploaded products
     barcodes = @bulk_products_upload.products_cache.pluck("barcode").compact
@@ -159,7 +160,7 @@ class BulkProductsController < ApplicationController
   def review_products
     # If there is nothing in the cache then we don't have a valid file, so redirect to the file upload page
     # Also redirect if there are no barcodes or product IDs to review
-    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.empty? || (params[:barcodes].blank? && params[:product_ids].blank?)
+    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.blank? || (params[:barcodes].blank? && params[:product_ids].blank?)
 
     new_products = if params[:barcodes].present?
                      @bulk_products_upload.products_cache.filter_map do |product|
@@ -302,7 +303,7 @@ private
 
   def bulk_products_upload_products_file_params
     # `random_uuid` allows us to detect a missing file upload
-    params.require(:bulk_products_upload_products_file_form).permit(:random_uuid, :products_file)
+    params.require(:bulk_products_upload_products_file_form).permit(:random_uuid, :products_file_upload)
   end
 
   def bulk_products_resolve_duplicate_products_params
