@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_action_path(@investigation, @corrective_action_form.id), method: :put, builder: ApplicationFormBuilder, html: { novalidate: true }, local: true do |form| %>
+    <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_action_path(@investigation, @corrective_action_form.id, bulk_products_upload_id: params[:bulk_products_upload_id]), method: :put, builder: ApplicationFormBuilder, html: { novalidate: true }, local: true do |form| %>
       <%= error_summary(@corrective_action_form.errors, %i[action date_decided legislation has_online_recall_information online_recall_information measure_type duration geographic_scope related_file]) %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>

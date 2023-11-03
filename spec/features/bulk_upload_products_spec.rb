@@ -1,9 +1,10 @@
 require "rails_helper"
 
-RSpec.feature "Bulk upload products", :with_stubbed_mailer do
+RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[product_bulk_uploader]) }
   let(:online_marketplace) { create(:online_marketplace, name: "My marketplace", approved_by_opss: true) }
   let(:duplicate_product) { create(:product, barcode: "12345678") }
+  let(:corrective_action) { CorrectiveAction.actions[(CorrectiveAction.actions.keys - %w[other]).sample] }
 
   before do
     online_marketplace
@@ -76,17 +77,17 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
 
     expect(page).to have_content("Upload products by Excel")
 
-    attach_file "bulk_products_upload_products_file_form[products_file]", "spec/fixtures/files/bulk_products_upload_template.xlsx"
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_template.xlsx"
     click_button "Continue"
 
     expect(page).to have_error_summary("The selected file does not contain any products")
 
-    attach_file "bulk_products_upload_products_file_form[products_file]", "spec/fixtures/files/bulk_products_upload_incomplete_product.xlsx"
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_incomplete_product.xlsx"
     click_button "Continue"
 
     expect(page).to have_error_summary("The selected file contains one or more products with errors")
 
-    attach_file "bulk_products_upload_products_file_form[products_file]", "spec/fixtures/files/bulk_products_upload_complete_product.xlsx"
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_complete_product.xlsx"
     click_button "Continue"
 
     expect(page).to have_content("We found duplicate product records")
@@ -104,11 +105,52 @@ RSpec.feature "Bulk upload products", :with_stubbed_mailer do
 
     click_button "Continue"
 
-    expect(page).to have_content("Choose products that require a corrective action")
+    expect(page).to have_content("Choose products that require the same corrective action")
 
     check duplicate_product.name
     click_button "Continue"
 
     expect(page).to have_content("Record corrective action")
+
+    choose corrective_action
+    fill_in "Day", with: 1
+    fill_in "Month", with: 5
+    fill_in "Year", with: 2020
+    select "General Product Safety Regulations 2005", from: "Under which legislation?"
+
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+      fill_in "Online recall information", with: Faker::Internet.url(host: "example.com"), visible: false
+    end
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose "Yes"
+    end
+
+    within_fieldset "How long will the corrective action be in place?" do
+      choose "Permanent"
+    end
+
+    within_fieldset "What is the geographic scope of the action?" do
+      CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)].each do |geographic_scope|
+        check I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
+      end
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "No"
+    end
+
+    fill_in "Further details (optional)", with: "Urgent action following consumer reports"
+    click_button "Continue"
+
+    expect(page).to have_content("Check products selected for corrective actions")
+    expect(page).to have_content(duplicate_product.decorate.name_with_brand)
+    expect(page).to have_content(corrective_action)
+
+    click_button "Upload product records"
+
+    expect(page).to have_current_path("/products/all-products?sort_by=created_at")
+    expect_confirmation_banner("The products were uploaded with the case number #{BulkProductsUpload.first.investigation.pretty_id}")
   end
 end

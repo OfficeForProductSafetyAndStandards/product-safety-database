@@ -1,4 +1,4 @@
-<% page_heading = "Choose products that require a corrective action - Upload multiple products" %>
+<% page_heading = "Choose products that require the same corrective action - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_choose_products_for_corrective_actions_form.errors.any? %>
 <% content_for :after_header do %>
   <%= govukBackLink(text: "Back", href: review_products_bulk_upload_products_path(product_ids: @products.ids)) %>
@@ -9,7 +9,7 @@
       <%= error_summary @bulk_products_choose_products_for_corrective_actions_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
-        Choose products that require a corrective action
+        Choose products that require the same corrective action
       </h1>
       <p class="govuk-body">Select all that are applicable.</p>
       <%

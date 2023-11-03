@@ -3,6 +3,7 @@ class BulkProductsController < ApplicationController
 
   before_action :authorize_user
   before_action :bulk_products_upload, except: %i[triage no_upload_unsafe no_upload_mixed]
+  before_action :prevent_editing_submitted_bulk_products_upload, except: %i[triage no_upload_unsafe no_upload_mixed]
   before_action :set_countries, only: %i[add_business_details]
   skip_before_action :set_home_breadcrumb
 
@@ -201,8 +202,8 @@ class BulkProductsController < ApplicationController
   def choose_products_for_corrective_actions
     @products = Product.where(id: @bulk_products_upload.investigation.investigation_products.where.missing(:corrective_actions).map(&:product_id))
 
-    # If there are no products, redirect to the file upload page
-    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @products.empty?
+    # Redirect if there are no products to create corrective actions for
+    return redirect_to check_corrective_actions_bulk_upload_products_path(@bulk_products_upload) if @products.empty?
 
     if request.put?
       @bulk_products_choose_products_for_corrective_actions_form = BulkProductsChooseProductsForCorrectiveActionsForm.new(bulk_products_choose_products_for_corrective_actions_params)
@@ -245,7 +246,7 @@ class BulkProductsController < ApplicationController
         if remaining_product_ids.present?
           redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
         else
-          redirect_to confirm_bulk_upload_products_path(@bulk_products_upload)
+          redirect_to check_corrective_actions_bulk_upload_products_path(@bulk_products_upload)
         end
       end
     else
@@ -253,7 +254,17 @@ class BulkProductsController < ApplicationController
     end
   end
 
-  def confirm; end
+  def check_corrective_actions
+    # Redirect if there are products with no corrective actions
+    return redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.investigation.investigation_products.where.missing(:corrective_actions).present?
+
+    if request.put?
+      @bulk_products_upload.update!(submitted_at: Time.zone.now)
+      redirect_to all_products_path(sort_by: "created_at"), flash: { success: "The products were uploaded with the case number <a href=\"#{investigation_path(pretty_id: @bulk_products_upload.investigation.pretty_id)}\" class=\"govuk-link\">#{@bulk_products_upload.investigation.pretty_id}</a>".html_safe }
+    else
+      @investigation_products = @bulk_products_upload.investigation.investigation_products.includes(:product)
+    end
+  end
 
 private
 
@@ -263,6 +274,10 @@ private
 
   def bulk_products_upload
     @bulk_products_upload ||= BulkProductsUpload.where(id: params[:bulk_products_upload_id], user: current_user).first!
+  end
+
+  def prevent_editing_submitted_bulk_products_upload
+    redirect_to all_products_path if @bulk_products_upload.submitted_at.present?
   end
 
   def bulk_products_triage_params
