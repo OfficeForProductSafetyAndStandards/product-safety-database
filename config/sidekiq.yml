@@ -21,3 +21,6 @@
     delete_old_exports_job:
       cron: "0 3 * * *"
       class: "DeleteOldExportsJob"
+    delete_abandoned_bulk_products_uploads_job:
+      cron: "0 4 * * *"
+      class: "DeleteAbandonedBulkProductsUploadsJob"
