@@ -21,6 +21,7 @@ class AddProductToCase
 
     change_product_owner_if_unowned
 
+    context.investigation_product = investigation_product
     context.activity = create_audit_activity_for_product_added
 
     send_notification_email unless skip_email

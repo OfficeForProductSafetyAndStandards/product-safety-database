@@ -170,8 +170,10 @@ class BulkProductsController < ApplicationController
                      []
                    end
     existing_products = Product.where(id: params[:product_ids]).map do |product|
-      { product:, investigation_product: product.investigation_products&.first }
+      cached_product = @bulk_products_upload.products_cache.detect { |p| p["barcode"] == product[:barcode] }
+      { product:, investigation_product: cached_product.present? ? InvestigationProduct.new(cached_product["investigation_data"]) : InvestigationProduct.new }
     end
+
     @products_to_review = new_products + existing_products
 
     if request.put?
