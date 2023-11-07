@@ -17,4 +17,10 @@ class BulkProductsUpload < ApplicationRecord
     source_products&.destroy_all
     destroy!
   end
+
+  # Called by a Sidekiq job on a cron schedule to destroy records that have been
+  # abandoned before submission.
+  def self.destroy_abandoned_records!
+    BulkProductsUpload.where(submitted_at: nil).where("updated_at < ?", 3.days.ago).find_each(&:deep_destroy!)
+  end
 end
