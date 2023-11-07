@@ -134,6 +134,8 @@ private
     error_messages = {}
 
     worksheet[2..].each do |row|
+      next if row.nil?
+
       ary = row.cells.map { |cell| cell&.value&.to_s }
 
       # Ignore completely empty rows or rows with just an entry number
