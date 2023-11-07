@@ -33,7 +33,7 @@ class CreateBulkProductsUploadProducts
 
         AddProductToCase.call!(investigation: bulk_products_upload.investigation, product:, user:, skip_email: true)
 
-        product.investigation_products.first.update!(new_product[:investigation_product].serializable_hash.slice("batch_number", "customs_code", "number_of_affected_units"))
+        product.investigation_products.first.update!(new_product[:investigation_product].serializable_hash.slice("batch_number", "customs_code", "number_of_affected_units").merge(affected_units_status: "exact"))
 
         product
       end
@@ -44,7 +44,8 @@ class CreateBulkProductsUploadProducts
 
       # Products that already exist
       existing_products.each do |existing_product|
-        AddProductToCase.call!(investigation: bulk_products_upload.investigation, product: existing_product[:product], user:, skip_email: true)
+        context = AddProductToCase.call!(investigation: bulk_products_upload.investigation, product: existing_product[:product], user:, skip_email: true)
+        context.investigation_product.update!(existing_product[:investigation_product].serializable_hash.slice("batch_number", "customs_code", "number_of_affected_units").merge(affected_units_status: "exact"))
       end
     end
   end
