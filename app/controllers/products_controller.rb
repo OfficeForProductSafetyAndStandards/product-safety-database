@@ -13,6 +13,8 @@ class ProductsController < ApplicationController
   breadcrumb "products.label", :products_path
 
   def index
+    # Find the most recent incomplete bulk products upload for the current user, if any
+    @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
     @results = search_for_products(20)
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)

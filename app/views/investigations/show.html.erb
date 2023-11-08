@@ -3,6 +3,8 @@
 <% link_text = @investigation.is_closed? ? "Re-open case" : "Close case" %>
 <% secondary_text = @investigation.is_closed? ? "This case is closed." : "From here you can find all the information about this case. If you have editing rights for this case, you can add products, businesses and supporting information." %>
 
+<%= render "incomplete_bulk_products_upload_notification" %>
+
 <%= render "investigations/navigable_case_nav", investigation: @investigation,
                                                 current_tab: "overview",
                                                 case_page_heading: "Case",
