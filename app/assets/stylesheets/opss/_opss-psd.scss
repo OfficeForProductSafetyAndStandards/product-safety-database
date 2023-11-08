@@ -218,6 +218,10 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
         margin-right: govuk-spacing(3);
         margin-left: govuk-spacing(2);
       }
+
+      &.opss-panels__pair--merged--right {
+        border-left: none;
+      }
     }
   }
 }
