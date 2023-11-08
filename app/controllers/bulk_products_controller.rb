@@ -124,8 +124,10 @@ class BulkProductsController < ApplicationController
     # If there is nothing in the cache then we don't have a valid file, so redirect to the file upload page
     return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.blank?
 
+    @products_cache = @bulk_products_upload.products_cache
+
     # Barcodes from all uploaded products
-    barcodes = @bulk_products_upload.products_cache.pluck("barcode").compact
+    barcodes = @products_cache.pluck("barcode").compact
 
     # Gets the newest product per barcode to present to the user as an alternative to what they've submitted
     @duplicate_products = Product.where(barcode: barcodes).select("DISTINCT ON (products.barcode) barcode, products.*").order(barcode: :asc, updated_at: :desc)

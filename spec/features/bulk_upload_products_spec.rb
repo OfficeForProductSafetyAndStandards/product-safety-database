@@ -96,7 +96,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
 
     expect(page).to have_error_summary("Select whether to use the existing product record or the one from your Excel file")
 
-    choose "Use this product record instead"
+    choose "Use existing PSD record"
     click_button "Continue"
 
     expect(page).to have_current_path("/products/bulk-upload/#{BulkProductsUpload.last.id}/review-products?product_ids[]=#{duplicate_product.id}")
