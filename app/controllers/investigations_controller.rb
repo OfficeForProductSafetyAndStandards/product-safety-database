@@ -12,6 +12,9 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
+        # Find the most recent incomplete bulk products upload for the current user, if any
+        @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
+
         @answer         = opensearch_for_investigations(20)
         @count          = count_to_display
         @investigations = InvestigationDecorator
@@ -26,6 +29,9 @@ class InvestigationsController < ApplicationController
     authorize @investigation, :view_non_protected_details?
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
     @complainant = @investigation.complainant&.decorate
+
+    # Find the most recent incomplete bulk products upload for the current user and case, if any
+    @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil, investigation: @investigation.object).order(updated_at: :desc).first
   end
 
   def created

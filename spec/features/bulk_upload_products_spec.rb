@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mailer, :with_opensearch do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[product_bulk_uploader]) }
   let(:online_marketplace) { create(:online_marketplace, name: "My marketplace", approved_by_opss: true) }
   let(:duplicate_product) { create(:product, barcode: "12345678") }
@@ -51,7 +51,6 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     expect(page).to have_content("Create a case for multiple products")
 
     fill_in "Case name", with: "Test case"
-
     click_button "Continue"
 
     expect(page).to have_error_summary("Select yes if you want to add a reference number")
@@ -99,7 +98,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     choose "Use this product record instead"
     click_button "Continue"
 
-    expect(page).to have_current_path("/products/bulk-upload/1/review-products?product_ids[]=#{duplicate_product.id}")
+    expect(page).to have_current_path("/products/bulk-upload/#{BulkProductsUpload.last.id}/review-products?product_ids[]=#{duplicate_product.id}")
     expect(page).to have_content("Review details of the products you are uploading")
     expect(page).to have_content(duplicate_product.name)
 
@@ -151,6 +150,32 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     click_button "Upload product records"
 
     expect(page).to have_current_path("/products/all-products?sort_by=created_at")
-    expect_confirmation_banner("The products were uploaded with the case number #{BulkProductsUpload.first.investigation.pretty_id}")
+    expect_confirmation_banner("The products were uploaded with the case number #{BulkProductsUpload.last.investigation.pretty_id}")
+  end
+
+  scenario "Resuming an incomplete journey" do
+    visit "/products/bulk-upload/triage"
+
+    expect(page).to have_content("How would you describe the products in terms of their compliance and safety?")
+
+    choose "Products are non-compliant"
+    fill_in "Why is the product non-compliant?", with: "Testing"
+    click_button "Continue"
+
+    expect(page).to have_content("Create a case for multiple products")
+
+    fill_in "Case name", with: "Test incomplete case"
+    choose "Yes"
+    fill_in "Reference number", with: "1234"
+    click_button "Continue"
+
+    visit "/cases/all-cases"
+
+    expect_warning_banner("We have noticed that your recent product upload is not complete, and the products have yet to be allocated to their respective case. Resume the upload process.")
+
+    click_link "Resume the upload process"
+
+    expect(page).to have_content("Create a case for multiple products")
+    expect(page).to have_field("Case name", with: "Test incomplete case")
   end
 end

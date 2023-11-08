@@ -6,6 +6,12 @@ class BulkProductsUpload < ApplicationRecord
   has_and_belongs_to_many :products
   has_one_attached :products_file
 
+  scope :incomplete, -> { where(submitted_at: nil) }
+
+  def incomplete?
+    submitted_at.nil?
+  end
+
   # Destroys all records created as part of the bulk products upload process
   def deep_destroy!
     # Products created (as opposed to existing ones added to the investigation)
