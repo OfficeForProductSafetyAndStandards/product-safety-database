@@ -161,16 +161,11 @@ class BulkProductsController < ApplicationController
 
   def review_products
     # If there is nothing in the cache then we don't have a valid file, so redirect to the file upload page
-    # Also redirect if there are no barcodes or product IDs to review
-    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.blank? || (params[:barcodes].blank? && params[:product_ids].blank?)
+    return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.blank?
 
-    new_products = if params[:barcodes].present?
-                     @bulk_products_upload.products_cache.filter_map do |product|
-                       { product: Product.new(product["product_data"].except("image", "existing_image_file_id")), investigation_product: InvestigationProduct.new(product["investigation_data"]) } if params[:barcodes].include?(product["barcode"])
-                     end
-                   else
-                     []
-                   end
+    new_products = @bulk_products_upload.products_cache.filter_map do |product|
+      { product: Product.new(product["product_data"].except("image", "existing_image_file_id")), investigation_product: InvestigationProduct.new(product["investigation_data"]) } if (params[:barcodes] || []).include?(product["barcode"]) || product["barcode"].blank?
+    end
     existing_products = Product.where(id: params[:product_ids]).map do |product|
       cached_product = @bulk_products_upload.products_cache.detect { |p| p["barcode"] == product[:barcode] }
       { product:, investigation_product: cached_product.present? ? InvestigationProduct.new(cached_product["investigation_data"]) : InvestigationProduct.new }
