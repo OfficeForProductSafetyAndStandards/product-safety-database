@@ -763,6 +763,7 @@ en:
           attributes:
             trading_name:
               blank: Enter a trading name
+              invalid: Enter a valid trading name
         bulk_products_upload_products_file_form:
           attributes:
             products_file_upload:

@@ -71,6 +71,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
 
     expect(page).to have_content("Provide the business details")
 
+    fill_in "Trading name", with: "Fake name"
     select "United Kingdom", from: "bulk_products_add_business_details_form_locations_attributes_0_country", match: :first
     click_button "Continue"
 
