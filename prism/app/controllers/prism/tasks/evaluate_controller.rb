@@ -93,7 +93,7 @@ module Prism
     end
 
     def add_level_of_uncertainty_and_sensitivity_analysis_params
-      params.require(:evaluation).permit(:level_of_uncertainty, :sensitivity_analysis, :draft)
+      params.require(:evaluation).permit(:level_of_uncertainty, :sensitivity_analysis, :sensitivity_analysis_details, :draft)
     end
 
     def consider_the_nature_of_the_risk_params

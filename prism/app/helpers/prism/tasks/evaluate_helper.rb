@@ -101,6 +101,10 @@ module Prism
       Prism::RiskMatrixService.risk_level(probability_frequency: Prism::ProbabilityService.overall_probability_of_harm(harm_scenario:).probability, severity_level: harm_scenario.severity.to_sym)
     end
 
+    def sensitivity_analysis_with_details(sensitivity_analysis, sensitivity_analysis_details)
+      sensitivity_analysis_details.present? ? "#{I18n.t('prism.evaluation.yes_no.true')}: #{sensitivity_analysis_details}" : I18n.t("prism.evaluation.yes_no.#{sensitivity_analysis}")
+    end
+
     def other_types_of_harm(other_types_of_harm)
       other_types_of_harm.present? ? other_types_of_harm.map { |oth| I18n.t("prism.evaluation.other_types_of_harm.#{oth}") }.join(", ") : I18n.t("prism.evaluation.other_types_of_harm.not_applicable")
     end

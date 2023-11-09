@@ -75,5 +75,13 @@ module Prism
     validates :designed_to_provide_protective_function, inclusion: %w[yes no unknown], on: :consider_perception_and_tolerability_of_the_risk
     validates :user_control_over_risk, inclusion: [true, false], on: :consider_perception_and_tolerability_of_the_risk
     validates :risk_tolerability, inclusion: %w[tolerable intolerable], on: :risk_evaluation_outcome
+
+    before_save :clear_sensitivity_analysis_details
+
+  private
+
+    def clear_sensitivity_analysis_details
+      self.sensitivity_analysis_details = nil unless sensitivity_analysis
+    end
   end
 end

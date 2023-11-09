@@ -26,19 +26,12 @@
         hint: { text: "Every risk assessment that involves some degree of estimation will come with an associated degree of uncertainty; this is normal and does not in itself mean that the risk assessment is flawed." },
         bold_labels: false
       %>
-      <%=
-        f.govuk_collection_radio_buttons :sensitivity_analysis,
-        [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
-        ],
-        :id,
-        :name,
-        legend: { text: "Has sensitivity analysis been undertaken?" },
-        hint: { text: "The implications of the uncertainty can be considered by undertaking a sensitivity analysis. For example, where there is uncertainty surrounding one or more of the probabilities within a harm scenario, then different probabilities can be applied (which can be higher, lower, or both than the orignal figures used) to fairly reflect the extent of the uncertainty." },
-        bold_labels: false,
-        inline: true
-      %>
+      <%= f.govuk_radio_buttons_fieldset :sensitivity_analysis, legend: { text: "Has sensitivity analysis been undertaken?", size: "m" }, hint: { text: "The implications of the uncertainty can be considered by undertaking a sensitivity analysis. For example, where there is uncertainty surrounding one or more of the probabilities within a harm scenario, then different probabilities can be applied (which can be higher, lower, or both than the orignal figures used) to fairly reflect the extent of the uncertainty." } do %>
+        <%= f.govuk_radio_button :sensitivity_analysis, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_area :sensitivity_analysis_details, label: { text: "Add additional sensitivity analysis information if required." } %>
+        <% end %>
+        <%= f.govuk_radio_button :sensitivity_analysis, false, label: { text: "No" } %>
+      <% end %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>
