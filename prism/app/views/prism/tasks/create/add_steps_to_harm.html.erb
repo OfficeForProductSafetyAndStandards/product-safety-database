@@ -16,7 +16,7 @@
         <p class="govuk-body"><%= @harm_scenario.description %></p>
         <p class="govuk-body">Affected users: <%= affected_users %></p>
       <% end %>
-      <p class="govuk-text">Creating a harm scenario requires consideration of how the identified hazard could cause harm to people. The scenario will normally contain between three to five steps to harm. The nature of probability is such that the more steps there are, in general the lower the probability will be. It is rare that more than five steps are necessary.</p>
+      <p class="govuk-text">Creating a harm scenario requires consideration of how the identified hazard could cause harm to people. The scenario will normally contain between three and five steps to harm. The nature of probability is such that the more steps there are, in general the lower the probability will be. It is rare that more than five steps are necessary. Further information can be found in the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=16" class="govuk-link" target="_blank" rel="noreferrer noopener"><abbr>PRISM</abbr> guidance (opens in a new tab)</a>.</p>
       <div id="opss-steps">
         <template data-nested-form-target="template">
           <%= f.fields_for :harm_scenario_steps, Prism::HarmScenarioStep.new, child_index: "NEW_RECORD" do |step_fields| %>

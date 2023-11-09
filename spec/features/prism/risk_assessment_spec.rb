@@ -31,7 +31,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       expect(page).to have_text("You have completed 1 of 4 sections.")
 
-      click_link "Add the hazards and who/what could be harmed"
+      click_link "Add the hazards"
 
       choose "3" # Number of hazards identified
 

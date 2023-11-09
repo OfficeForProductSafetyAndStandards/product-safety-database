@@ -90,10 +90,7 @@
           "sole_judgement_or_estimation": "Sole judgement or estimation",
           "some_limited_empirical_evidence": "Some limited empirical evidence",
           "strong_empirical_evidence": "Strong empirical evidence"
-        },
-        "step_0_hint": "Step 1 should cover the existence of a hazard which can foreseeably cause harm during the lifetime of the product. For example, the car seat is occupied by an infant while the vehicle is in use.",
-        "step_1_hint": "Step 2 should describe how the user (and/or other subjects) becomes exposed to risk. For example, the vehicle containing the seat/child is involved in a frontal collision of sufficient magnitude that the protection offered by the seat is necessary.",
-        "step_2_hint": "Step 3 should describe how exposure to the risk results in harm. For example, the occupant of the seat suffers injury as a result of the collision."
+        }
       },
       "harm_scenarios": {
         "hazard_types": {
@@ -101,6 +98,7 @@
           "electrical": "Electrical",
           "ergonomic": "Ergonomic",
           "fire_and_explosion": "Fire and explosion",
+          "functional": "Functional",
           "lack_of_protection": "Lack of protection",
           "mechanical": "Mechanical",
           "microbiological": "Microbiological",
@@ -181,7 +179,7 @@
                   "title": "Review and submit results of the evaluation"
                 },
                 "risk_evaluation_outcome": {
-                  "title": "Risk evalation outcome"
+                  "title": "Risk evaluation outcome"
                 }
               },
               "title": "Evaluate product risk and submit assessment"
@@ -189,7 +187,7 @@
             "identify": {
               "tasks": {
                 "add_a_number_of_hazards": {
-                  "title": "Add the hazards and who/what could be harmed"
+                  "title": "Add the hazards"
                 }
               },
               "title": "Identify product hazards"

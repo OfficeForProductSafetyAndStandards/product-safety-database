@@ -22,7 +22,7 @@
       <%= govuk_details(summary_text: "Help with identifying probability of harm") do %>
         <p>Identifying a reliable probability can be challenging, and the starting point should be to obtain and consider any relevant empirical evidence that can inform probability decisions.</p>
         <p>However, some degree of probability estimation by the assessor will nearly always be required, and will often be the sole or main means of determining probabilities.</p>
-        <p>To help with defining steps to harm and probability of harm please refer to the examples of PRISM risk assessments on the PRISM <a href="https://www.gov.uk/guidance/product-safety-risk-assessment-methodology-prism" class="govuk-link" rel="noreferrer noopener" target="_blank">guidance page</a>.</p>
+        <p>To help with defining steps to harm and probability of harm please refer to the examples of <abbr>PRISM</abbr> risk assessments on the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=20" class="govuk-link" target="_blank" rel="noreferrer noopener"><abbr>PRISM</abbr> guidance (opens in a new tab)</a>.</p>
       <% end %>
       <%= f.fields_for :harm_scenario_steps do |step_fields| %>
         <%= render partial: "harm_scenario_step_probability_fields", locals: { f: step_fields } %>

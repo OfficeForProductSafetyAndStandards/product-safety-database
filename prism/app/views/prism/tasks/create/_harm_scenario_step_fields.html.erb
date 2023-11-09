@@ -2,8 +2,6 @@
   <h2 class="govuk-heading-m opss-step-heading">Step<% if show_index %> <%= f.index + 1 %><% end %></h2>
   <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" data-action="nested-form#remove">Remove</a></p>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  <% step_hint = t("prism.harm_scenario_steps.step_#{f.index}_hint", default: "&nbsp;").html_safe %>
-  <% step_hint_display = step_hint == "&nbsp;" ? "display: none;" : "" %>
-  <%= f.govuk_text_area :description, label: { text: "Step description", size: "s" }, hint: { text: step_hint, class: "opss-step-hint", style: step_hint_display } %>
+  <%= f.govuk_text_area :description, label: { text: "Step description", size: "s" } %>
   <%= f.hidden_field :_destroy %>
 </div>
