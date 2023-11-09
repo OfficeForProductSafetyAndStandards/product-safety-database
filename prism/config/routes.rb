@@ -39,6 +39,8 @@ Prism::Engine.routes.draw do
         get "confirmation", to: "tasks#confirmation"
         get "view-submitted-assessment", to: "tasks#view_submitted_assessment"
         get "download-assessment-pdf", to: "tasks#download_assessment_pdf"
+        get "remove", to: "tasks#remove"
+        delete "delete", to: "tasks#delete"
       end
     end
   end
