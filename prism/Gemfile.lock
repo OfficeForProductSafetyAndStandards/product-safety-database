@@ -6,8 +6,8 @@ PATH
       active_storage_validations (~> 1.0)
       aws-sdk-s3 (~> 1.122)
       devise (~> 4.9)
-      govuk-components (~> 4.0)
-      govuk_design_system_formbuilder (~> 4.0)
+      govuk-components (~> 4.1)
+      govuk_design_system_formbuilder (~> 4.1)
       i18n-js (~> 4.2)
       listen (~> 3.8)
       pagy (~> 6.0)
@@ -125,10 +125,10 @@ GEM
     glob (0.4.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    govuk-components (4.0.0)
+    govuk-components (4.1.1)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
-      view_component (~> 3.0.0)
+      view_component (>= 3.3, < 3.6)
     govuk_design_system_formbuilder (4.1.1)
       actionview (>= 6.1)
       activemodel (>= 6.1)
@@ -231,7 +231,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    view_component (3.0.0)
+    view_component (3.5.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -246,6 +246,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES

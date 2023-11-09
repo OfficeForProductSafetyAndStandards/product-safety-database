@@ -2,23 +2,11 @@
 
 'use strict'
 
-import { i18n } from './i18n'
-
 document.addEventListener('DOMContentLoaded', () => {
   const dynamicNestedStepFieldsCallback = () => {
     document.querySelectorAll('.nested-form-wrapper:not([style*="display: none;"])').forEach((el, i) => {
-      // Update the step heading and hint depending on the current step
-      const stepHint = el.querySelector('.opss-step-hint')
-      const stepHintText = i18n.t(el.dataset.i18nScope + '.step_' + i + '_hint', { defaultValue: '' })
+      // Update the step heading depending on the current step
       el.querySelector('.opss-step-heading').innerText = 'Step ' + (i + 1)
-      stepHint.innerText = stepHintText
-
-      // Hide or show the hint depending on if it has any content
-      if (stepHintText === '') {
-        stepHint.style.display = 'none'
-      } else {
-        stepHint.style.display = 'block'
-      }
 
       // Update added fields to use the correct child index
       if (el.innerHTML.indexOf('-new-record-') !== -1) {

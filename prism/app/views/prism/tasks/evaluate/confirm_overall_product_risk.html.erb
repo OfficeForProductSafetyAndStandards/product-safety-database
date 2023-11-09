@@ -14,7 +14,7 @@
         <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
         <% if @prism_risk_assessment.product_market_detail&.total_products_sold.present? %><p class="govuk-body">Number of products in use: <%= ActiveSupport::NumberHelper.number_to_delimited(@prism_risk_assessment.product_market_detail&.total_products_sold) %></p><% end %>
       <% end %>
-      <%= govuk_inset_text(text: "The overall risk level takes into account the total number of products in use, if available.") %>
+      <%= govuk_inset_text(text: "The scenario risk level(s) given below take into account the total number of products in use, where this has been provided.") %>
       <%=
         govuk_table do |table|
           table.with_caption(text: "Harm scenarios", size: "m")
@@ -58,12 +58,12 @@
       <% elsif @identical_severity_levels %>
         <h2 class="govuk-heading-m">Choose the overall product risk level</h2>
         <%= f.govuk_radio_buttons_fieldset :overall_product_risk_methodology, legend: nil do %>
-          <%= f.govuk_radio_button :overall_product_risk_methodology, "highest", label: { text: highest_risk_level(@harm_scenarios).risk_level_tag_html }, hint: { text: "<br>#{risk_level_plus_label}This risk level approach is most suited to scenarios where a product has multiple independent hazards that involve risks with different injury severity levels. The risk associated with the product would, as normal, be derived from the hazard creating the greatest level of risk.".html_safe }, link_errors: true %>
+          <%= f.govuk_radio_button :overall_product_risk_methodology, "highest", label: { text: highest_risk_level(@harm_scenarios).risk_level_tag_html }, hint: { text: "<br>#{risk_level_plus_label}Where more than one harm scenario has been generated in relation to the same hazard, the overall level of risk for the product will be determined by the scenario that involves the greatest risk.".html_safe }, link_errors: true %>
           <%= f.govuk_radio_button :overall_product_risk_methodology, "combined", label: { text: combined_risk_level(@harm_scenarios, @items_in_use).risk_level_tag_html }, hint: { text: "<br>This method of combining risk probabilities is useful when a product has at least two independent hazards that involve the same level of injury severity. Adding the probabilities of harm presented by the two hazards would generate a greater overall probability of harm.".html_safe } %>
         <% end %>
       <% else %>
         <h2 class="govuk-heading-m">Overall product risk level</h2>
-        <p class="govuk-body">This risk level approach is most suited to scenarios where a product has multiple independent hazards that involve risks with different injury severity levels. The risk associated with the product would, as normal, be derived from the hazard creating the greatest level of risk.</p>
+        <p class="govuk-body">Where more than one harm scenario has been generated in relation to the same hazard, the overall level of risk for the product will be determined by the scenario that involves the greatest risk.</p>
         <p class="govuk-body" data-test="overall-product-risk-level"><%= highest_risk_level(@harm_scenarios).risk_level_tag_html %></p>
         <%= risk_level_plus_label %>
       <% end %>
