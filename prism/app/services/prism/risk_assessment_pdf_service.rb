@@ -106,7 +106,7 @@ module Prism
       pdf.move_down 10
       pdf.table([
         [{ content: "Level of uncertainty associated with the risk assessment", font_style: :bold }, evaluation_translate_simple("level_of_uncertainty", prism_risk_assessment.evaluation.level_of_uncertainty)],
-        [{ content: "Has sensitivity analysis been undertaken?", font_style: :bold }, evaluation_translate_simple("yes_no", prism_risk_assessment.evaluation.sensitivity_analysis)],
+        [{ content: "Has sensitivity analysis been undertaken?", font_style: :bold }, sensitivity_analysis_with_details(prism_risk_assessment.evaluation.sensitivity_analysis, prism_risk_assessment.evaluation.sensitivity_analysis_details)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.move_down 20
       pdf.text "Risk evaluation", color: "000000", style: :bold, size: 20

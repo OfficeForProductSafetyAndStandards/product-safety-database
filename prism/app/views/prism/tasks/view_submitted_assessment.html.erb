@@ -136,7 +136,7 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Has sensitivity analysis been undertaken?")
-          row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.sensitivity_analysis))
+          row.with_value(text: sensitivity_analysis_with_details(@prism_risk_assessment.evaluation.sensitivity_analysis, @prism_risk_assessment.evaluation.sensitivity_analysis_details))
         end
       end
     %>

@@ -69,7 +69,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Has sensitivity analysis been undertaken?")
-            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.sensitivity_analysis))
+            row.with_value(text: sensitivity_analysis_with_details(@prism_risk_assessment.evaluation.sensitivity_analysis, @prism_risk_assessment.evaluation.sensitivity_analysis_details))
             row.with_action(text: "Change", href: task_path("evaluate", "add_level_of_uncertainty_and_sensitivity_analysis"), visually_hidden_text: "whether sensitivity analysis has been undertaken")
           end
         end
