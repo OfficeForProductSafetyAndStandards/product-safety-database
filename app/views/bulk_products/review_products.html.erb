@@ -93,7 +93,7 @@
       <div class="govuk-button-group">
         <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
         <%= form.submit "Continue", class: "govuk-button" %>
-        <%= govukButton(text: "Cancel and re-upload again", href: cancel_and_reupload_bulk_upload_products_path, classes: "govuk-button--secondary") %>
+        <%= govukButton(text: "Cancel and re-upload", href: cancel_and_reupload_bulk_upload_products_path, classes: "govuk-button--secondary") %>
       </div>
     </div>
   </div>

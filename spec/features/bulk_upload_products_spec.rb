@@ -94,7 +94,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
 
     click_button "Continue"
 
-    expect(page).to have_error_summary("Select whether to use the existing product record or the one from your Excel file")
+    expect(page).to have_error_summary("Select whether to use the existing PSD record or the imported Excel record")
 
     choose "Use existing PSD record"
     click_button "Continue"

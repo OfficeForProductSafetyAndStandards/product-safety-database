@@ -12,7 +12,7 @@ private
 
   def all_duplicate_barcodes_have_resolution
     duplicate_barcodes.each do |barcode|
-      errors.add(barcode, "Select whether to use the existing product record or the one from your Excel file") unless %w[new_record existing_record].include?(resolution[barcode]&.split(";")&.first)
+      errors.add(barcode, "Select whether to use the existing PSD record or the imported Excel record") unless %w[new_record existing_record].include?(resolution[barcode]&.split(";")&.first)
     end
   end
 end
