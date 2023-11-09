@@ -1,7 +1,7 @@
 module Prism
   class TasksController < ApplicationController
     before_action :prism_risk_assessment, except: %i[view_submitted_assessment download_assessment_pdf]
-    before_action :disallow_editing_submitted_prism_risk_assessment, except: %i[confirmation view_submitted_assessment download_assessment_pdf]
+    before_action :disallow_changing_submitted_prism_risk_assessment, except: %i[confirmation view_submitted_assessment download_assessment_pdf]
     before_action :set_prism_risk_assessment_tasks_status, only: %i[index]
     before_action :ensure_associated_investigation_or_product, only: %i[index]
     before_action :ensure_one_harm_scenario, only: %i[index]
@@ -54,13 +54,25 @@ module Prism
       file&.close
     end
 
+    def remove; end
+
+    def delete
+      @prism_risk_assessment.destroy!
+
+      if params[:back_to] == "dashboard"
+        redirect_to main_app.your_prism_risk_assessments_path
+      else
+        redirect_to root_path
+      end
+    end
+
   private
 
     def prism_risk_assessment
       @prism_risk_assessment ||= Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id], created_by_user_id: current_user.id)
     end
 
-    def disallow_editing_submitted_prism_risk_assessment
+    def disallow_changing_submitted_prism_risk_assessment
       redirect_to view_submitted_assessment_risk_assessment_tasks_path(@prism_risk_assessment) if @prism_risk_assessment.submitted?
     end
 
