@@ -9,9 +9,15 @@
       <span class="govuk-caption-l">Upload multiple products</span>
       You can’t upload a mix of multiple non-compliant and unsafe products
     </h1>
-    <p class="govuk-body">
-      Each unsafe product requires a <a href="<%= prism.perform_risk_triage_path %>" class="govuk-link">risk triage</a> or <a href="<%= your_prism_risk_assessments_path %>" class="govuk-link">risk assessment</a>.
-    </p>
+    <% if @prism_user %>
+      <p class="govuk-body">
+        Each unsafe product requires a <a href="<%= prism.perform_risk_triage_path %>" class="govuk-link">risk triage</a> or <a href="<%= your_prism_risk_assessments_path %>" class="govuk-link">risk assessment</a>.
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        Each unsafe product requires a risk triage or risk assessment.
+      </p>
+    <% end %>
     <p class="govuk-body">
       You can only upload multiple non-compliant products.
     </p>
