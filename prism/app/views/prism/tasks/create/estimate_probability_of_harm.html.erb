@@ -2,6 +2,9 @@
 <% @errors = @harm_scenario.errors.any? %>
 
 <div class="govuk-grid-row">
+  <div class="govuk-grid-column-full opss-js-enabled-hidden">
+    <%= govuk_notification_banner(title_text: "Important", text: "The overall probability of harm and risk level below will not be updated if you change the probabilities of any steps because JavaScript is disabled in your browser. You can see the latest overall probability of harm and risk level on the next page.") %>
+  </div>
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
       <%= f.govuk_error_summary(presenter: Prism::HarmScenarioStepErrorSummaryPresenter) %>

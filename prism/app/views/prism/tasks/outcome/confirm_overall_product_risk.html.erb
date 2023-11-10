@@ -6,7 +6,7 @@
     <%= form_with model: @prism_risk_assessment, url: wizard_path, method: :patch, data: { controller: "visibility" } do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l">Evaluate product risk and submit assessment</span>
+        <span class="govuk-caption-l">Risk assessment outcome</span>
         Review the overall product risk level
       </h1>
       <%= govuk_inset_text do %>

@@ -55,10 +55,11 @@ module Prism
       state :define_completed
       state :identify_completed
       state :create_completed
+      state :outcome_completed
       state :submitted
 
       event :complete_define_section do
-        # Serious risk workflow skips from define to evaluate
+        # Serious risk workflow skips from define to outcome
         transitions from: :draft, to: :create_completed do
           guard do
             serious_risk?
@@ -90,8 +91,12 @@ module Prism
         end
       end
 
+      event :complete_outcome_section do
+        transitions from: :create_completed, to: :outcome_completed
+      end
+
       event :submit do
-        transitions from: :create_completed, to: :submitted
+        transitions from: :outcome_completed, to: :submitted
       end
     end
 

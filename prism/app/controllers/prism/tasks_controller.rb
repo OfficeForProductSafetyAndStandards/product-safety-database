@@ -81,9 +81,9 @@ module Prism
 
       # Exclude harm scenario steps since they are tracked per harm scenario
       all_steps = if @prism_risk_assessment.serious_risk?
-                    SERIOUS_RISK_DEFINE_STEPS + SERIOUS_RISK_EVALUATE_STEPS
+                    SERIOUS_RISK_DEFINE_STEPS + SERIOUS_RISK_OUTCOME_STEPS + SERIOUS_RISK_EVALUATE_STEPS
                   else
-                    NORMAL_RISK_DEFINE_STEPS + NORMAL_RISK_IDENTIFY_STEPS + NORMAL_RISK_EVALUATE_STEPS
+                    NORMAL_RISK_DEFINE_STEPS + NORMAL_RISK_IDENTIFY_STEPS + NORMAL_RISK_OUTCOME_STEPS + NORMAL_RISK_EVALUATE_STEPS
                   end
 
       @prism_risk_assessment.tasks_status = all_steps.each_with_object({}) do |step, tasks|
