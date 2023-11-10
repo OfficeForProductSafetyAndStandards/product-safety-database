@@ -29,7 +29,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and complete tasks in this section"
 
-      expect(page).to have_text("You have completed 1 of 4 sections.")
+      expect(page).to have_text("You have completed 1 of 5 sections.")
 
       click_link "Add the hazards"
 
@@ -37,7 +37,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and complete tasks in this section"
 
-      expect(page).to have_text("You have completed 2 of 4 sections.")
+      expect(page).to have_text("You have completed 2 of 5 sections.")
 
       click_link "task-list-2-0-0-status" # Choose hazard type (scenario 1)
 
@@ -121,7 +121,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Confirm and create scenario"
 
-      expect(page).to have_text("You have completed 3 of 4 sections.")
+      expect(page).to have_text("You have completed 3 of 5 sections.")
 
       click_link "Review the overall product risk level"
 
@@ -135,7 +135,11 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       choose "Medium" # What is the level of uncertainty associated with the risk assessment?
       choose "No" # Has sensitivity analysis been undertaken?
 
-      click_button "Save and continue"
+      click_button "Save and complete tasks in this section"
+
+      expect(page).to have_text("You have completed 4 of 5 sections.")
+
+      click_link "Consider the nature of the risk"
 
       expect(page).to have_text("Is the number of products estimated to be in use expected to change?\nAs recorded in the assessment\nEstimated 1,000,000 products in use")
       choose "No changes" # Is the number of products estimated to be in use expected to change?
@@ -209,7 +213,9 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       choose "Medium" # What is the level of uncertainty associated with the risk assessment?
       choose "No" # Has sensitivity analysis been undertaken?
 
-      click_button "Save and continue"
+      click_button "Save and complete tasks in this section"
+
+      click_link "Consider the nature of the risk"
 
       expect(page).to have_text("Is the number of products estimated to be in use expected to change?\nAs recorded in the assessment\nUnknown")
       choose "No changes" # Is the number of products estimated to be in use expected to change?

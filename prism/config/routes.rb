@@ -29,6 +29,7 @@ Prism::Engine.routes.draw do
               put ":harm_scenario_id", to: "create#update"
             end
           end
+          resources :outcome, only: %i[show update]
           resources :evaluate, only: %i[show update]
         end
         scope "/harm-scenarios" do

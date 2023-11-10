@@ -199,13 +199,16 @@ en:
                 title: Estimate probability of harm
               check_your_harm_scenario:
                 title: Check your harm scenario
-          evaluate:
-            title: Evaluate product risk and submit assessment
+          outcome:
+            title: Risk assessment outcome
             tasks:
               confirm_overall_product_risk:
                 title: Review the overall product risk level
               add_level_of_uncertainty_and_sensitivity_analysis:
                 title: Add level of uncertainty and sensitivity analysis
+          evaluate:
+            title: Evaluate product risk and submit assessment
+            tasks:
               consider_the_nature_of_the_risk:
                 title: Consider the nature of the risk
               consider_perception_and_tolerability_of_the_risk:

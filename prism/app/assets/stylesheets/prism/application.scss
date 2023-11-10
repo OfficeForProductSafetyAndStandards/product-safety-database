@@ -32,6 +32,12 @@ body.js-enabled .opss-nojs-hide {
   display: inline;
 }
 
+.js-enabled {
+  .opss-js-enabled-hidden {
+    display: none;
+  }
+}
+
 .govuk-header nav {
   float: right;
 }

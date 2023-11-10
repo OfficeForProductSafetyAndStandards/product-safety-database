@@ -160,12 +160,6 @@
             },
             "evaluate": {
               "tasks": {
-                "add_level_of_uncertainty_and_sensitivity_analysis": {
-                  "title": "Add level of uncertainty and sensitivity analysis"
-                },
-                "confirm_overall_product_risk": {
-                  "title": "Review the overall product risk level"
-                },
                 "consider_perception_and_tolerability_of_the_risk": {
                   "title": "Consider perception and tolerability of the risk"
                 },
@@ -191,6 +185,17 @@
                 }
               },
               "title": "Identify product hazards"
+            },
+            "outcome": {
+              "tasks": {
+                "add_level_of_uncertainty_and_sensitivity_analysis": {
+                  "title": "Add level of uncertainty and sensitivity analysis"
+                },
+                "confirm_overall_product_risk": {
+                  "title": "Review the overall product risk level"
+                }
+              },
+              "title": "Risk assessment outcome"
             }
           }
         }
