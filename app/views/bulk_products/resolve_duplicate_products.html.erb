@@ -5,7 +5,7 @@
 <% end %>
 <%= form_with model: @bulk_products_resolve_duplicate_products_form, url: resolve_duplicate_products_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-column-full">
       <%= error_summary @bulk_products_resolve_duplicate_products_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
@@ -16,7 +16,7 @@
       <% @duplicate_products.decorate.each_with_index do |product, index| %>
         <div class="opss-panels">
           <!-- Existing record -->
-          <div class="opss-panels__pair opss-panels__pair--merged--left">
+          <div class="opss-panels__pair opss-panels__pair--merged--left" id="variant-select-<%= product.barcode %>-existing-panel">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><%= product.name_with_brand %></h2>
             <div class="govuk-tag govuk-tag--yellow govuk-!-margin-bottom-3">Existing PSD record</div>
             <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
@@ -56,10 +56,11 @@
                   </div>
               </details>
             <% end %>
+            <%= govukButton(text: "Select", href: "#", classes: "govuk-button--secondary opss-nojs-hide opss-variant-select-button", attributes: { data: { identifier: product.barcode, variant: "existing" } }) %>
           </div>
           <!-- New record -->
           <% new_record = new_record_for_product(product).decorate %>
-          <div class="opss-panels__pair opss-panels__pair--merged--right">
+          <div class="opss-panels__pair opss-panels__pair--merged--right" id="variant-select-<%= product.barcode %>-new-panel">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><%= new_record.name_with_brand %></h2>
             <div class="govuk-tag govuk-tag--green govuk-!-margin-bottom-3">Imported Excel record</div>
             <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
@@ -87,6 +88,7 @@
                 </dd>
               </div>
             </dl>
+            <%= govukButton(text: "Select", href: "#", classes: "govuk-button--secondary opss-nojs-hide opss-variant-select-button", attributes: { data: { identifier: product.barcode, variant: "new" } }) %>
           </div>
         </div>
         <%= form.fields_for :resolution do |resolution_form| %>
@@ -97,19 +99,22 @@
               legend: {
                 text: "What would you like to do?",
                 classes: "govuk-fieldset__legend--m"
-              }
+              },
+              classes: "opss-js-enabled-hidden"
             },
+            classes: "opss-variant-select-form",
             items: [
               {
                 text: "Use existing PSD record",
                 value: "existing_record;#{product.id}",
                 checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "existing_record;#{product.id}",
-                id: product.barcode
+                id: "variant-select-#{product.barcode}-existing-form"
               },
               {
                 text: "Use imported Excel record",
                 value: "new_record",
-                checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "new_record"
+                checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "new_record",
+                id: "variant-select-#{product.barcode}-new-form"
               }
             ],
             errorMessage: @bulk_products_resolve_duplicate_products_form.errors.include?(product.barcode) ? { text: @bulk_products_resolve_duplicate_products_form.errors.full_messages_for(product.barcode).first } : nil

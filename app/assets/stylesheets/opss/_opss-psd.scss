@@ -176,6 +176,16 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
     details div {
       @include govuk-font($size: 16);
     }
+
+    &.opss-panels__pair--merged--right {
+      margin-left: -2px;
+    }
+
+    &.opss-variant-select-panel--selected {
+      outline: 3px solid $govuk-brand-colour;
+      outline-offset: 0;
+      box-shadow: inset 0 0 0 2px;
+    }
   }
 
   .opss-panels__single {
@@ -217,10 +227,6 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
       &.opss-panels__pair--right {
         margin-right: govuk-spacing(3);
         margin-left: govuk-spacing(2);
-      }
-
-      &.opss-panels__pair--merged--right {
-        border-left: none;
       }
     }
   }
