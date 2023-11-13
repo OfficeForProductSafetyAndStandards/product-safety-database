@@ -1,4 +1,4 @@
-name: Deploy Staging
+name: Deploy to Staging
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install cf client
       env:
@@ -41,7 +41,7 @@ jobs:
 
         gh_deploy_initiate staging $log_url
 
-    - name: Deploy to staging
+    - name: Deploy to Staging
       env:
         SPACE: staging
         APP_NAME: psd-web
@@ -101,7 +101,7 @@ jobs:
         bundle config path vendor/bundle
         bundle check || bundle install --without development --jobs=4 --retry=3
 
-    - name: Run Smoke Tests
+    - name: Run smoke tests
       if: success()
       env:
         SMOKE_USER: ${{secrets.SMOKE_USER}}
