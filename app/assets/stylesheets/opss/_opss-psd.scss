@@ -42,11 +42,11 @@ body > .govuk-width-container > .govuk-main-wrapper > .govuk-back-link {
 }
 
 @function govuk-tint($colour, $percentage) {
-  /// Make a colour lighter by mixing it with white
+  // Make a colour lighter by mixing it with white
   @return mix(govuk-colour("white"), $colour, $percentage);
 }
 
-$opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50);
+$opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50%);
 
 .opss-radios__divider--title .govuk-radios__divider {
   width: 100%;
