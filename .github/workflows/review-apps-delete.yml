@@ -11,10 +11,16 @@ jobs:
   cleanup_reviewapp:
     name: Delete review app
     runs-on: ubuntu-latest
+    # Skip if it is a Dependabot created PR.
+    # For security reasons they do not have write permissions to deploy or access to secrets.
+    # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+    if: ${{ github.actor != 'dependabot[bot]' }}
+
     env:
       SPACE: int
       CF_USERNAME: ${{ secrets.PaaSUsernameInt }}
       CF_PASSWORD: ${{ secrets.PaaSPasswordInt }}
+
     steps:
     - name: Install cf client
       env:
@@ -40,7 +46,7 @@ jobs:
         cf logout
 
     - name: Checkout code to get deploy functions
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Deactivate GitHub deployment
       env:
