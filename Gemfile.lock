@@ -520,7 +520,7 @@ GEM
       rubocop-rails (= 2.17.4)
       rubocop-rake (= 0.6.0)
       rubocop-rspec (= 2.18.1)
-    rubocop-performance (1.17.1)
+    rubocop-performance (1.19.1)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.17.4)
@@ -654,7 +654,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
-    unicode-display_width (2.4.2)
+    unicode-display_width (2.5.0)
     unicode_utils (1.4.0)
     validate_email (0.1.6)
       activemodel (>= 3.0)
@@ -755,7 +755,7 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 1.39)
   rubocop-govuk (~> 4.7)
-  rubocop-performance (~> 1.17)
+  rubocop-performance (~> 1.19)
   rubocop-rspec (~> 2.15)
   rubyXL (~> 3.4.25)
   sassc-rails
