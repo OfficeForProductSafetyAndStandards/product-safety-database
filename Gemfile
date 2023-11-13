@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "3.2.1"
 
-gem "active_model_serializers", "~> 0.10.0"
+gem "active_model_serializers", "~> 0.10.14"
 gem "activerecord-pg_enum", "~> 2.0"
 gem "active_storage_validations", "~> 1.1.1"
 gem "aws-sdk-s3", "~> 1.136"
