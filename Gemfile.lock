@@ -610,7 +610,7 @@ GEM
     spring (4.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    sprockets (4.2.0)
+    sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
     sprockets-rails (3.4.2)
@@ -773,7 +773,7 @@ DEPENDENCIES
   solargraph (~> 0.49)
   spring (~> 4.1)
   spring-commands-rspec (~> 1.0)
-  sprockets (~> 4.2.0)
+  sprockets (~> 4.2.1)
   sprockets-rails
   stimulus-rails
   strong_migrations (~> 1.6)
