@@ -55,7 +55,7 @@ gem "sidekiq-scheduler", "~> 5.0.3"
 gem "sprockets", "~> 4.2.0"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "stimulus-rails"
-gem "strong_migrations", "~> 1.4"
+gem "strong_migrations", "~> 1.6"
 gem "tty-table", require: false
 gem "turbo-rails"
 gem "validate_email", "~> 0.1"
