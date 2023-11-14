@@ -1,0 +1,5 @@
+<%= govukCheckboxes(
+    key: "",
+    form: form,
+    items: hazard_types.map { |type| { key: type.parameterize.underscore, text: type, value: true } }
+  ) %>
