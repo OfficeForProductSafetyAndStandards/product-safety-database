@@ -1,6 +1,7 @@
-# 0. Searchkick and Opensearch
+# 2. Searchkick and Opensearch
 
-Date: `30 August 2023`
+Date: 30 August 2023
+
 Status: Accepted
 
 ## Context

@@ -6,7 +6,7 @@ Pull requests trigger a deployment to the `int` space on GOV.UK PaaS of a tempor
 
 Merging requires passing tests, code style checks and at least one approving review.
 
-The `develop` branch represents the staging environment and `main` the pre-prod and production environments. Anything merged into `develop` will trigger a deployment to staging, and anything merged into `main` will trigger a deployment to pre-prod and production.
+Anything merged into `main` will trigger a deployment to staging. To deploy to pre-prod and production, create a GitHub Release and associated tag using a version number agreed with the team. Creating the release will trigger a deployment to pre-prod and production.
 
 ### Review applications
 
@@ -71,7 +71,7 @@ Give this user the AmazonS3FullAccess policy.
 
 Create an S3 bucket named `psd-<<SPACE>>`.
 
-#### PSD Website
+#### PSD app
 
 Start by setting up the following credentials:
 
@@ -139,7 +139,7 @@ Start by setting up the following credentials:
     }'
 ```
 
-* To enable and add basic auth to the sidekiq monitoring UI at `/sidekiq`:
+* To enable and add basic auth to the Sidekiq monitoring UI at `/sidekiq`:
 
 ```
     cf cups psd-sidekiq-env -p '{

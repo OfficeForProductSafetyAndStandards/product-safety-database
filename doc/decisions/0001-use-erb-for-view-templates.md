@@ -1,6 +1,7 @@
 # 1. Use ERB (Embedded Ruby) for view templates
 
-Date: `9 March 2020`
+Date: 9 March 2020
+
 Status: Accepted
 
 ## Context
