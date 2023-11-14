@@ -615,7 +615,7 @@ if run_seeds
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
     Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
-    Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation, country: "country:GB")
+    Team.create!(name: "OPSS Incident Management", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
     Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
 
     unless User.find_by(email: "user@example.com")
