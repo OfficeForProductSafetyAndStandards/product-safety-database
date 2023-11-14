@@ -78,7 +78,7 @@ private
   end
 
   def same_email_file?
-    email_file_action == "replace" && @previous_email_file_checksum ==  email.email_file.checksum
+    email_file_action == "replace" && @previous_email_file_checksum == email.email_file.checksum
   end
 
   def email_file_changed?

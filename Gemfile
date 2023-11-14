@@ -98,10 +98,10 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.12"
   gem "rspec-rails"
-  gem "rubocop", "~> 1.39"
-  gem "rubocop-govuk", "~> 4.7"
+  gem "rubocop", "~> 1.55"
+  gem "rubocop-govuk", "~> 4.12"
   gem "rubocop-performance", "~> 1.19"
-  gem "rubocop-rspec", "~> 2.15", require: false
+  gem "rubocop-rspec", "~> 2.22", require: false
   gem "selenium-webdriver", "~> 4.15"
   gem "shoulda-matchers"
   gem "simplecov"
