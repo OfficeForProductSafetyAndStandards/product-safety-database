@@ -357,7 +357,7 @@ GEM
       multi_json (>= 1.0)
     optimist (3.0.1)
     orm_adapter (0.5.0)
-    pagy (6.1.0)
+    pagy (6.2.0)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
