@@ -2,7 +2,7 @@
 
 #### Useful examples
 
-Please take a look into github actions in `.github/workflows` to see how deployments are done.
+Please take a look into GitHub actions in `.github/workflows` to see how deployments are done.
 
 #### Login to CF Api
 
