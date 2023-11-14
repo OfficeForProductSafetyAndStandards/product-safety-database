@@ -10,7 +10,7 @@ class InvestigationBusinessDecorator < ApplicationDecorator
 private
 
   def business_type_relationship
-    I18n.t("business.type.#{relationship}", default: relationship.capitalize)
+    I18n.t("business.type.#{relationship}", default: relationship&.capitalize)
   end
 
   def authorised_representative_relationship
