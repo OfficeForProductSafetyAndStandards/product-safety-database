@@ -95,7 +95,7 @@ GEM
     active_record_extended (3.2.1)
       activerecord (>= 5.2, < 7.2.0)
       pg (< 3.0)
-    active_storage_validations (1.1.1)
+    active_storage_validations (1.1.2)
       activejob (>= 5.2.0)
       activemodel (>= 5.2.0)
       activestorage (>= 5.2.0)
@@ -699,7 +699,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.14)
-  active_storage_validations (~> 1.1.1)
+  active_storage_validations (~> 1.1.2)
   activerecord-pg_enum (~> 2.0)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.136)
