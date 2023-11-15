@@ -9,7 +9,7 @@ class NotificationsController < ApplicationController
 
   # GET /cases
   def index
-    redirect_to all_cases_investigation_path unless current_user.can_access_new_search?
+    redirect_to all_cases_investigations_path unless current_user.can_access_new_search?
 
     respond_to do |format|
       format.html do
