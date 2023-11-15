@@ -3,13 +3,14 @@ class NotificationsController < ApplicationController
   include BreadcrumbHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
-  before_action :set_last_case_view_cookie, only: %i[index your_cases assigned_cases team_cases]
+  before_action :set_last_case_view_cookie, only: %i[index]
 
   breadcrumb "cases.label", :your_cases_investigations
 
   # GET /cases
   def index
+    redirect_to all_cases_investigation_path unless current_user.can_access_new_search?
+
     respond_to do |format|
       format.html do
         @answer         = new_opensearch_for_investigations(20)
@@ -19,17 +20,6 @@ class NotificationsController < ApplicationController
         @page_name = "all_cases"
       end
     end
-  end
-
-  # GET /cases/1
-  def show
-    authorize @investigation, :view_non_protected_details?
-    breadcrumb breadcrumb_case_label, breadcrumb_case_path
-    @complainant = @investigation.complainant&.decorate
-  end
-
-  def created
-    authorize @investigation, :view_non_protected_details?
   end
 
 private
@@ -46,16 +36,7 @@ private
     @search = SearchParams.new(query_params.except(:page_name))
   end
 
-  def set_investigation
-    investigation = Investigation.includes(:owner_team, :owner_user, :products, :teams_with_access).find_by!(pretty_id: params[:pretty_id])
-    @investigation = investigation.decorate
-  end
-
   def default_params
-    [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access], params[:hazard_type], params[:created_from_date], params[:created_to_date]].each do |param_value|
-      return false unless param_value == "all" || param_value.blank?
-    end
-
-    params["case_statuses"] == ["open", "closed"] && params[:q].blank?
+    params["case_statuses"] == %w[open closed] && params[:q].blank?
   end
 end

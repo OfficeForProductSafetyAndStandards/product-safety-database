@@ -1,7 +1,7 @@
 module InvestigationsHelper
   HAZARD_TYPES = Rails.application.config.hazard_constants["hazard_type"]
   HAZARD_PARAMS = HAZARD_TYPES.map { |type| type.parameterize.underscore.to_sym }
-  CASE_TYPES = %i[allegation enquiry project notification]
+  CASE_TYPES = %i[allegation enquiry project notification].freeze
 
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
     # Opensearch is only used for searching across all investigations
@@ -106,7 +106,7 @@ module InvestigationsHelper
       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
       per_page: page_size,
-      body_options: {track_total_hits: true}
+      body_options: { track_total_hits: true }
     )
   end
 
@@ -128,7 +128,7 @@ module InvestigationsHelper
 
     risk_levels << nil if @search.not_set
 
-    wheres[:risk_level] =  risk_levels unless risk_levels.empty?
+    wheres[:risk_level] = risk_levels unless risk_levels.empty?
 
     hazard_types = HAZARD_TYPES.map { |type| type if @search.send(type.parameterize.underscore.to_sym) }.compact
 
@@ -152,7 +152,7 @@ module InvestigationsHelper
     end
 
     if @search.created_by_others && @search.created_by_other_id.present?
-      if team = Team.find_by(id: @search.created_by_other_id)
+      if (team = Team.find_by(id: @search.created_by_other_id))
         creator_ids += team.users.pluck(:id)
         creator_team_ids << team.id
       else
@@ -185,16 +185,16 @@ module InvestigationsHelper
     end
 
     if @search.case_owner_other && @search.case_owner_is_someone_else_id.present?
-      if team = Team.find_by(id: @search.case_owner_is_someone_else_id)
+      if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
         case_owner_ids += team.users.pluck(:id)
       else
         case_owner_ids << @search.case_owner_is_someone_else_id
       end
     end
 
-    if case_owner_ids.empty? &&  teams_with_access_ids.empty?
+    if case_owner_ids.empty? && teams_with_access_ids.empty?
       wheres[:_not] ||= {}
-      wheres[:_not].merge!({ owner_id: user.team.user_ids }) if @search.case_owner_other
+      wheres[:_not][:owner_id] = user.team.user_ids if @search.case_owner_other
     else
       unless @search.case_owner_other && @search.case_owner_is_someone_else_id.blank?
         wheres[:_or] ||= []
@@ -226,7 +226,7 @@ module InvestigationsHelper
       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
       per_page: page_size,
-      body_options: {track_total_hits: true}
+      body_options: { track_total_hits: true }
     )
   end
 
