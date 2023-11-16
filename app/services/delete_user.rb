@@ -8,7 +8,7 @@ class DeleteUser
     context.fail!(error: "User already deleted") if user.deleted?
 
     ActiveRecord::Base.transaction do
-      user.mark_as_deleted!
+      user.mark_as_deleted!(deleted_by)
 
       change_user_investigations_ownership_to_their_team
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_09_111428) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_112059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -628,6 +628,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_09_111428) do
 
   create_table "versions", force: :cascade do |t|
     t.datetime "created_at", precision: nil
+    t.string "entity_id"
+    t.string "entity_type"
     t.string "event", null: false
     t.bigint "item_id", null: false
     t.string "item_type", null: false
