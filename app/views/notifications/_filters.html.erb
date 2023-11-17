@@ -11,28 +11,29 @@
 
     <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
 
-    <%= govukDetails(summaryText: "Case status", classes: "opss-details--plain", id: "case-status", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Case status", classes: "opss-details--plain", id: "case-status") do %>
       <%= render "notifications/case_status_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Case priority", classes: "opss-details--plain", id: "case-status", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Case priority", classes: "opss-details--plain", id: "case-status") do %>
       <%= render "notifications/case_risk_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Case owner", classes: "opss-details--plain", id: "case-owner", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Case owner", classes: "opss-details--plain", id: "case-owner") do %>
       <%= render "notifications/case_owner_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Teams added to the case", classes: "opss-details--plain", id: "cases-added-to-team", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Teams added to the case", classes: "opss-details--plain", id: "cases-added-to-team") do %>
       <%= render "notifications/teams_with_access_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Created by", classes: "opss-details--plain", id: "cases-created-by", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Created by", classes: "opss-details--plain", id: "cases-created-by") do %>
       <%= render "notifications/case_creator_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Case type", classes: "opss-details--plain", id: "case-type", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Case type", classes: "opss-details--plain", id: "case-type") do %>
       <%= render "notifications/case_type_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Case hazard type", classes: "opss-details--plain", id: "case-hazard-type", open: search.uses_expanded_filter_options?) do %>
+    <%= govukDetails(summaryText: "Case hazard type", classes: "opss-details--plain", id: "case-hazard-type") do %>
       <%= render "notifications/case_hazard_type_checkboxes", form: form %>
     <% end %>
-      <%= render "investigations/case_change_date_filter", form: form %>
+
+    <%= render "investigations/case_change_date_filter", form: form %>
 
     <div class="govuk-button-group">
       <%= form.submit "Apply", name: nil, class: "govuk-button" %>

@@ -99,6 +99,12 @@ FactoryBot.define do
       end
     end
 
+    trait :can_access_new_search do
+      transient do
+        roles { %i[use_new_search] }
+      end
+    end
+
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
         create(:role, name: role, entity: user)

@@ -7,6 +7,14 @@ module PageExpectations
     expect(page).to have_current_path("/cases/search", ignore_query: true)
   end
 
+  def expect_to_be_on_notifications_index_page
+    expect(page).to have_current_path("/notifications", ignore_query: true)
+  end
+
+  def expect_to_be_on_notifications_search_results_page
+    expect(page).to have_current_path("/notifications/search", ignore_query: true)
+  end
+
   # Cases pages
   def expect_to_be_on_case_page(case_id: nil)
     if case_id
