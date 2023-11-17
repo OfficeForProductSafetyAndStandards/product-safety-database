@@ -20,7 +20,7 @@ module SupportPortal
         session[:secondary_authentication_user_id] = user_id_for_secondary_authentication
         auth = SecondaryAuthentication.new(user)
         auth.generate_and_send_code(current_operation)
-        redirect_to new_secondary_authentication_path
+        redirect_to main_app.new_secondary_authentication_path
       end
     end
 
@@ -52,7 +52,7 @@ module SupportPortal
         session[:secondary_authentication_user_id] = user_id_for_secondary_authentication
         auth = SecondaryAuthentication.new(user)
         auth.generate_and_send_code(current_operation)
-        redirect_to new_secondary_authentication_path
+        redirect_to main_app.new_secondary_authentication_path
       end
     end
 
