@@ -10,14 +10,14 @@ class SearchesController < ApplicationController
         redirect_to investigations_path(query_params.except(:page_name))
       end
     else
-      @answer = notfications_search
+      @answer = notifications_search
       @investigations = @answer.includes([{ owner_team: :organisation, owner_user: :organisation }, :products])
     end
   end
 
 private
 
-  def notfications_search
+  def notifications_search
     current_user.can_access_new_search? ? new_opensearch_for_investigations(20) : opensearch_for_investigations(20)
   end
 end
