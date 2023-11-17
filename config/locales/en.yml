@@ -740,8 +740,8 @@ en:
             compliance_and_safety:
               inclusion: Select how you would describe the products in terms of their compliance and safety
             hazard_description:
-              blank: Enter why the product is non-compliant
-              too_long: The reason why the product is non-compliant must be %{count} characters or less
+              blank: Enter why the products are non-compliant
+              too_long: The reason why the products are non-compliant must be %{count} characters or less
         bulk_products_create_case_form:
           attributes:
             name:
