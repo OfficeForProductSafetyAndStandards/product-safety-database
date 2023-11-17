@@ -29,7 +29,7 @@ module SupportPortal
     end
 
     def last_action_was_resending_2fa_code?
-      request.fullpath == resend_secondary_authentication_code_path
+      request.fullpath == main_app.resend_secondary_authentication_code_path
     end
 
     # Use as `before_filter` in application_controller controller
