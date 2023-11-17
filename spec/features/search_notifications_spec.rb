@@ -10,7 +10,6 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
            product_code: "W2020-10/1")
   end
   let!(:investigation) { create(:allegation, products: [product], user_title: nil) }
-  let!(:deleted_investigation) { create(:allegation, products: [product], user_title: "DeletedCase", deleted_at: Time.zone.now) }
 
   let(:mobile_phone) do
     create(:product,
