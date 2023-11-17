@@ -111,6 +111,12 @@ Rails.application.routes.draw do
 
     get "cases/new", to: "ts_investigations#new"
 
+    resource :notifications, only: %i[] do
+      resource :search, only: :show
+    end
+
+    resources :notifications, only: %i[index]
+
     resources :investigations,
               path: "cases",
               only: %i[show index destroy],

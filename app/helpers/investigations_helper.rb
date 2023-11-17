@@ -1,4 +1,8 @@
 module InvestigationsHelper
+  HAZARD_TYPES = Rails.application.config.hazard_constants["hazard_type"]
+  HAZARD_PARAMS = HAZARD_TYPES.map { |type| type.parameterize.underscore.to_sym }
+  CASE_TYPES = %i[allegation enquiry project notification].freeze
+
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
@@ -101,7 +105,128 @@ module InvestigationsHelper
       order: @search.sorting_params,
       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
-      per_page: page_size
+      per_page: page_size,
+      body_options: { track_total_hits: true }
+    )
+  end
+
+  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user)
+    # Opensearch is only used for searching across all investigations
+    @search.q.strip! if @search.q
+    query = (@search.q.presence || "*")
+
+    wheres = {}
+
+    case_types = CASE_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
+    wheres[:type] = case_types unless case_types.empty?
+
+    risk_levels = []
+
+    %i[serious high medium low].each do |risk_level|
+      risk_levels << risk_level if @search.send(risk_level)
+    end
+
+    risk_levels << nil if @search.not_set
+
+    wheres[:risk_level] = risk_levels unless risk_levels.empty?
+
+    hazard_types = HAZARD_TYPES.map { |type| type if @search.send(type.parameterize.underscore.to_sym) }.compact
+
+    wheres[:hazard_type] = hazard_types unless hazard_types.empty?
+
+    unless @search.case_status_open && @search.case_status_closed
+      wheres[:is_closed] = false if @search.case_status_open
+      wheres[:is_closed] = true if @search.case_status_closed
+    end
+
+    creator_ids = []
+    creator_team_ids = []
+
+    creator_ids << user.id if @search.created_by_me
+
+    if @search.created_by_my_team
+      team = user.team
+
+      creator_ids += team.users.pluck(:id)
+      creator_team_ids << team.id
+    end
+
+    if @search.created_by_others && @search.created_by_other_id.present?
+      if (team = Team.find_by(id: @search.created_by_other_id))
+        creator_ids += team.users.pluck(:id)
+        creator_team_ids << team.id
+      else
+        creator_ids << @search.created_by_other_id
+      end
+    end
+
+    if creator_ids.empty? && creator_team_ids.empty?
+      if @search.created_by_others
+        wheres[:_not] = { creator_user: user.team.user_ids }
+      end
+    else
+      unless @search.created_by_others && @search.created_by_other_id.blank?
+        wheres[:_or] = [
+          { creator_user: creator_ids },
+          { creator_team: creator_team_ids }
+        ]
+      end
+    end
+
+    case_owner_ids = []
+    teams_with_access_ids = []
+
+    case_owner_ids << user.id if @search.case_owner_me
+
+    if @search.case_owner_my_team
+      team = user.team
+      case_owner_ids += team.users.pluck(:id)
+      teams_with_access_ids << team.id
+    end
+
+    if @search.case_owner_other && @search.case_owner_is_someone_else_id.present?
+      if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+        case_owner_ids += team.users.pluck(:id)
+      else
+        case_owner_ids << @search.case_owner_is_someone_else_id
+      end
+    end
+
+    if case_owner_ids.empty? && teams_with_access_ids.empty?
+      wheres[:_not] ||= {}
+      wheres[:_not][:owner_id] = user.team.user_ids if @search.case_owner_other
+    else
+      unless @search.case_owner_other && @search.case_owner_is_someone_else_id.blank?
+        wheres[:_or] ||= []
+        wheres[:_or] += [
+          { owner_id: case_owner_ids },
+          { team_ids_with_access: teams_with_access_ids }
+        ]
+      end
+    end
+
+    team_ids_with_access = []
+    team_ids_with_access << user.team.id if @search.teams_with_access_my_team
+    team_ids_with_access << @search.teams_with_access_other_id if @search.teams_with_access_others && @search.teams_with_access_other_id.present?
+
+    wheres[:team_ids_with_access] = team_ids_with_access if @search.teams_with_access_my_team || @search.teams_with_access_others
+
+    if @search.created_from_date.present? && @search.created_to_date.present?
+      wheres[:created_at] = { gte: @search.created_from_date.at_midnight, lte: @search.created_to_date.at_end_of_day }
+    elsif @search.created_from_date.present?
+      wheres[:created_at] = { gte: @search.created_from_date.at_midnight }
+    elsif @search.created_to_date.present?
+      wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
+    end
+
+    Investigation.search(
+      query,
+      where: wheres,
+      order: @search.sorting_params,
+      misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+      page: page_number,
+      per_page: page_size,
+      body_options: { track_total_hits: true }
     )
   end
 
@@ -202,21 +327,38 @@ module InvestigationsHelper
     params.permit(
       :q,
       :case_status,
+      :case_status_open,
+      :case_status_closed,
       :case_type,
+      *CASE_TYPES,
       :page,
       :case_owner,
+      :case_owner_me,
+      :case_owner_my_team,
+      :case_owner_other,
       :sort_by,
       :sort_dir,
       :priority,
+      :serious,
+      :high,
+      :medium,
+      :low,
+      :not_set,
       :teams_with_access,
       :case_owner_is_someone_else_id,
       :teams_with_access_other_id,
       :created_by,
       :created_by_other_id,
+      :created_by_me,
+      :created_by_my_team,
+      :created_by_others,
       :page_name,
       :hazard_type,
+      *HAZARD_PARAMS,
+      :teams_with_access_my_team,
+      :teams_with_access_others,
       created_from_date: %i[day month year],
-      created_to_date: %i[day month year]
+      created_to_date: %i[day month year],
     )
   end
 

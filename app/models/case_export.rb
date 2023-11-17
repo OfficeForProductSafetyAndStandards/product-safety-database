@@ -46,7 +46,22 @@ private
     return @case_ids if @case_ids
 
     @search = SearchParams.new(params)
-    search_for_investigations(nil, user, ids_only: true).sort
+
+    current_page = if user.can_access_new_search?
+                     new_opensearch_for_investigations(10_000, user)
+                   else
+                     opensearch_for_investigations(10_000, user)
+                   end
+
+    ids = current_page.results.pluck(:id)
+
+    until current_page.last_page?
+      current_page = current_page.next_page
+
+      ids += current_page.results.pluck(:id)
+    end
+
+    ids.sort
   end
 
   def activity_counts

@@ -7,18 +7,37 @@ class SearchParams
 
   attribute :created_by, default: "all"
   attribute :created_by_other_id
+  attribute :created_by_me, :boolean
+  attribute :created_by_my_team, :boolean
+  attribute :created_by_others, :boolean
   attribute :override_sort_by
   attribute :direction
   attribute :case_type, default: "all"
+  attribute :allegation, :boolean
+  attribute :project, :boolean
+  attribute :notification, :boolean
+  attribute :enquiry, :boolean
   attribute :q
   attribute :case_status, default: "open"
+  attribute :case_status_open, :boolean
+  attribute :case_status_closed, :boolean
   attribute :priority, default: "all"
+  attribute :serious, :boolean
+  attribute :high, :boolean
+  attribute :medium, :boolean
+  attribute :low, :boolean
+  attribute :not_set, :boolean
   attribute :case_owner, default: "all"
+  attribute :case_owner_me, :boolean
+  attribute :case_owner_my_team, :boolean
+  attribute :case_owner_other, :boolean
   attribute :case_owner_is_someone_else_id
   attribute :sort_by
   attribute :sort_dir
   attribute :page, :integer
   attribute :teams_with_access, default: "all"
+  attribute :teams_with_access_my_team, :boolean
+  attribute :teams_with_access_others, :boolean
   attribute :teams_with_access_other_id
   attribute :hazard_type
   attribute :category
@@ -26,6 +45,9 @@ class SearchParams
   attribute :retired_status
   attribute :created_from_date, :govuk_date
   attribute :created_to_date, :govuk_date
+  Rails.application.config.hazard_constants["hazard_type"].each do |type|
+    attribute type.parameterize.underscore.to_sym, :boolean
+  end
 
   def selected_sort_by
     if sort_by.blank?
