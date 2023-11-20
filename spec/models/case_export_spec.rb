@@ -286,7 +286,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
           let(:params) { { notification: true } }
 
-          it "thing" do
+          it "exports all notifications" do
             stub_const("CaseExport::OPENSEARCH_PAGE_SIZE", 2)
             expect(sheet.last_row).to eq 5
           end
