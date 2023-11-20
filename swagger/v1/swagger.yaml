@@ -1,28 +1,114 @@
 ---
-openapi: 3.0.1
+swagger: '2.0'
 info:
   title: PSD API
   version: v1
 paths:
   "/api/v1/auth":
     post:
-      summary: Request an API token
+      summary: Request a new API token
+      description: Request a new API token using a valid PSD account email and password
       tags:
-      - Request an API token
+      - Authentication
+      consumes:
+      - application/json
       parameters:
       - name: email
         in: query
-        schema:
-          type: string
+        type: string
       - name: password
         in: query
-        schema:
-          type: string
+        type: string
       responses:
         '200':
           description: User authenticated and API token returned
         '401':
-          description: Unauthorized
+          description: Unauthorised user
+    delete:
+      summary: Delete a users API tokens
+      description: Delete a users API tokens using a valid PSD account email and password
+      tags:
+      - Authentication
+      consumes:
+      - application/json
+      parameters:
+      - name: email
+        in: query
+        type: string
+      - name: password
+        in: query
+        type: string
+      responses:
+        '200':
+          description: User API tokens destroyed
+        '401':
+          description: Unauthorised user
+  "/api/v1/products/{id}":
+    get:
+      summary: Retrieves a Product
+      description: Retrieves a Product's detail by ID
+      tags:
+      - Products
+      produces:
+      - application/json
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        type: string
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Product found
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              brand:
+                type: string
+              product_code:
+                type: string
+              barcode:
+                type: string
+                nullable: true
+              category:
+                type: string
+              subcategory:
+                type: string
+                nullable: true
+              description:
+                type: string
+              country_of_origin:
+                type: string
+              webpage:
+                type: string
+              owning_team:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  email:
+                    type: string
+              product_images:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+            required:
+            - name
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorised user
 servers:
 - url: https://staging.product-safety-database.service.gov.uk
 - url: http://localhost:3000
