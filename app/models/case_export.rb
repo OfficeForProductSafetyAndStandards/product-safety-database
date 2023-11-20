@@ -4,6 +4,7 @@ class CaseExport < ApplicationRecord
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
+  OPENSEARCH_PAGE_SIZE = 10_000
 
   belongs_to :user
   has_one_attached :export_file
@@ -47,21 +48,21 @@ private
 
     @search = SearchParams.new(params)
 
-    current_page = if user.can_access_new_search?
-                     new_opensearch_for_investigations(10_000, user)
-                   else
-                     opensearch_for_investigations(10_000, user)
-                   end
+    ids = search_results.results.pluck(:id)
 
-    ids = current_page.results.pluck(:id)
+    until search_results.last_page?
+      self[:params][:page] = search_results.next_page
 
-    until current_page.last_page?
-      current_page = current_page.next_page
-
-      ids += current_page.results.pluck(:id)
+      ids += search_results.results.pluck(:id)
     end
 
     ids.sort
+  end
+
+  def search_results
+    return new_opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user) if user.can_access_new_search?
+
+    opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user)
   end
 
   def activity_counts

@@ -277,6 +277,20 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
             expect(sheet_ids).to match_array [notification.pretty_id]
           end
         end
+
+        context "with more results than the upper search limit on notifications" do
+          before do
+            create_list(:notification, 3)
+            Investigation.search_index.refresh
+          end
+
+          let(:params) { { notification: true } }
+
+          it "exports all notifications" do
+            stub_const("CaseExport::OPENSEARCH_PAGE_SIZE", 2)
+            expect(sheet.last_row).to eq 5
+          end
+        end
       end
 
       context "with the old search" do
