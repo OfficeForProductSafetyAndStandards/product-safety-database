@@ -1,24 +1,44 @@
 require "csv"
 
 class RedactedCsvExporter
-  attr_accessor :clean_tables_and_attributes, :running_time
-
   def initialize
     @running_time = Time.zone.now.to_i
     @clean_tables_and_attributes = load_clean_attributes
   end
 
   def export_tables
-    FileUtils.mkdir_p Rails.root.join("tmp/redacted/#{running_time}")
+    directory = "tmp/redacted/#{running_time}"
+    FileUtils.mkdir_p(Rails.root.join(directory))
     clean_tables_and_attributes.each do |table, attributes|
-      export_table(table:, attributes:)
+      export_table(table:, attributes:, directory:)
+    end
+    self
+  end
+
+  def upload_export
+    directory = Rails.root.join("tmp/redacted/#{running_time}")
+    files = Dir.glob("#{directory}/*.csv")
+    s3_client = Aws::S3::Client.new(
+      region: Rails.configuration.redacted_export["region"],
+      access_key_id: Rails.configuration.redacted_export["access_key_id"],
+      secret_access_key: Rails.configuration.redacted_export["secret_access_key"]
+    )
+    files.each do |file|
+      s3_client.put_object(
+        bucket: Rails.configuration.redacted_export["destination_bucket"],
+        key: "csv/#{running_time}/#{File.basename(file)}",
+        content_type: "text/csv",
+        body: File.read(file)
+      )
     end
   end
 
 private
 
-  def export_table(table:, attributes:)
-    filename = Rails.root.join("tmp/redacted/#{running_time}/#{table}.csv")
+  attr_accessor :clean_tables_and_attributes, :running_time
+
+  def export_table(table:, attributes:, directory:)
+    filename = Rails.root.join("#{directory}/#{table}.csv")
 
     table_name = table.to_s.classify.constantize
     batch_size = 10_000
