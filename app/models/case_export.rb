@@ -64,9 +64,9 @@ private
   end
 
   def search_results
-    return new_opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, true) if user.can_access_new_search?
+    return new_opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, scroll: true) if user.can_access_new_search?
 
-    opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, true)
+    opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, scroll: true)
   end
 
   def activity_counts

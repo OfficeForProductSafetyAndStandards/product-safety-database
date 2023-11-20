@@ -3,7 +3,7 @@ module InvestigationsHelper
   HAZARD_PARAMS = HAZARD_TYPES.map { |type| type.parameterize.underscore.to_sym }
   CASE_TYPES = %i[allegation enquiry project notification].freeze
 
-  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll = false)
+  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
@@ -111,7 +111,7 @@ module InvestigationsHelper
     )
   end
 
-  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll = false)
+  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
