@@ -7,7 +7,7 @@ class Test < ApplicationRecord
 
   redacted_export_with :id, :created_at, :date, :details, :failure_details, :investigation_id,
                        :legislation, :investigation_product_id, :result, :standards_product_was_tested_against,
-                       :type, :updated_at
+                       :type, :updated_at, :tso_certificate_issue_date, :tso_certificate_reference_number
 
   def initialize(*args)
     raise "Cannot directly instantiate a Test record" if instance_of?(Test)
