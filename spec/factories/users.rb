@@ -99,6 +99,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_api_token do
+      after(:create) do |user|
+        user.api_tokens.find_or_create_by(name: ApiToken::DEFAULT_NAME)
+      end
+    end
+
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
         create(:role, name: role, entity: user)

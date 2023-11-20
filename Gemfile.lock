@@ -708,6 +708,7 @@ DEPENDENCIES
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)
+  jbuilder
   jsbundling-rails
   launchy (~> 2.5)
   loaf (~> 0.10)

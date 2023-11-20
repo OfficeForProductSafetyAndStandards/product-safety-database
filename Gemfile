@@ -22,6 +22,7 @@ gem "govuk-design-system-rails", "~> 0.10.5", github: "OfficeForProductSafetyAnd
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
+gem "jbuilder"
 gem "jsbundling-rails"
 gem "lograge", "~> 0.14"
 gem "mini_magick", "~> 4.12"

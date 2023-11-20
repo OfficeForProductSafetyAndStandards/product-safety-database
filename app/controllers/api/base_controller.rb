@@ -2,6 +2,8 @@ class Api::BaseController < ActionController::Base
   skip_before_action :verify_authenticity_token
   skip_before_action
   prepend_before_action :authenticate_api_token!
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
+
 
   private
 
@@ -10,7 +12,7 @@ class Api::BaseController < ActionController::Base
       sign_in user, store: false
       user.update_last_activity_time!
     else
-      head :unauthorized
+      render_unauthorized
     end
   end
 
@@ -29,5 +31,13 @@ class Api::BaseController < ActionController::Base
       api_token.touch(:last_used_at)
       api_token.user
     end
+  end
+
+  def render_unauthorized
+    render json: { error: "Invalid Login" }, status: :unauthorized
+  end
+
+  def render_404
+    render json: { error: "Not Found" }, status: :not_found
   end
 end
