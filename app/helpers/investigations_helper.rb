@@ -3,7 +3,7 @@ module InvestigationsHelper
   HAZARD_PARAMS = HAZARD_TYPES.map { |type| type.parameterize.underscore.to_sym }
   CASE_TYPES = %i[allegation enquiry project notification].freeze
 
-  def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
+  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
@@ -106,11 +106,12 @@ module InvestigationsHelper
       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
       per_page: page_size,
-      body_options: { track_total_hits: true }
+      body_options: { track_total_hits: true },
+      scroll: scroll_time(scroll)
     )
   end
 
-  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user)
+  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
@@ -226,7 +227,8 @@ module InvestigationsHelper
       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
       page: page_number,
       per_page: page_size,
-      body_options: { track_total_hits: true }
+      body_options: { track_total_hits: true },
+      scroll: scroll_time(scroll)
     )
   end
 
@@ -906,5 +908,11 @@ private
     else
       date.to_formatted_s(:govuk)
     end
+  end
+
+  def scroll_time(scroll)
+    return nil unless scroll
+
+    "1m"
   end
 end
