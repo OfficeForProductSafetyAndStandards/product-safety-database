@@ -1,6 +1,8 @@
 module SupportPortal
   class AccountAdministrationController < ApplicationController
     before_action :set_user, except: %i[index search search_results invite_user create_user]
+    before_action :set_all_role_names, only: %i[add_role create_role]
+    before_action :set_role, only: %i[remove_role delete_role]
 
     # GET /
     def index; end
@@ -101,6 +103,34 @@ module SupportPortal
       redirect_to account_administration_path, notice: "The team admin role has been #{new_team_admin_role ? 'added' : 'removed'}."
     end
 
+    # GET /:id/add-role
+    def add_role
+      @add_role_form = AddRoleForm.new
+    end
+
+    # PATCH/PUT /:id/create-role
+    def create_role
+      @add_role_form = AddRoleForm.new(add_role_params)
+
+      role_name = add_role_params[:role_name] == "other" ? add_role_params[:custom_role_name] : add_role_params[:role_name]
+
+      if @add_role_form.valid? && (@user.roles.pluck(:name) + %w[team_admin]).exclude?(role_name)
+        @user.roles.create!(name: role_name)
+        redirect_to account_administration_path(anchor: "roles"), notice: "The role has been added."
+      else
+        render :add_role
+      end
+    end
+
+    # GET /:id/remove-role/:role_id
+    def remove_role; end
+
+    # DELETE /:id/delete-role/:role_id
+    def delete_role
+      @role.destroy!
+      redirect_to account_administration_path(anchor: "roles"), notice: "The role has been removed."
+    end
+
     # GET /:id/remove-user
     def remove_user; end
 
@@ -133,6 +163,16 @@ module SupportPortal
       @user = ::User.not_deleted.joins(:team).left_joins(:roles).find(params[:id])
     end
 
+    def set_all_role_names
+      # Get all currently used roles except those already possessed by the user
+      # and `team_admin` (which is granted separately).
+      @all_role_names = ::Role.select(:name).distinct.order(:name).pluck(:name) - @user.roles.pluck(:name) - %w[team_admin]
+    end
+
+    def set_role
+      @role = ::Role.where(id: params[:role_id], entity: @user).first!
+    end
+
     def update_name_params
       params.require(:user).permit(:name)
     end
@@ -147,6 +187,10 @@ module SupportPortal
 
     def update_team_admin_role_params
       params.require(:user).permit(:team_admin)
+    end
+
+    def add_role_params
+      params.require(:add_role_form).permit(:role_name, :custom_role_name)
     end
 
     def invite_user_params

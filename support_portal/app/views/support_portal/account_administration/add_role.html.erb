@@ -1,0 +1,22 @@
+<% content_for :page_title, "Add a role for #{@user.name}" %>
+<% @errors = @add_role_form.errors.any? %>
+<% @back_link_href = account_administration_path(@user, q: params[:q], anchor: "roles") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @add_role_form, url: create_role_account_administration_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <% if @errors %><h1 class="govuk-heading-l"><%= yield :page_title %></h1><% end %>
+      <%= f.govuk_radio_buttons_fieldset(:role_name, legend: nil) do %>
+        <% @all_role_names.each_with_index do |role_name, i| %>
+          <%= f.govuk_radio_button :role_name, role_name, label: { text: role_name }, link_errors: i.zero? %>
+        <% end %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :role_name, "other", label: { text: "Other" } do %>
+          <%= f.govuk_text_field :custom_role_name, label: { text: "Role name" } %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_submit "Add role" %>
+    <% end %>
+  </div>
+</div>
