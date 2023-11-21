@@ -1,0 +1,49 @@
+<%=
+  govuk_summary_list do |summary_list|
+    summary_list.with_row do |row|
+      row.with_key(text: "Name")
+      row.with_value(text: @user.name)
+      row.with_action(text: "Change", href: edit_name_account_administration_path(@user, q: params[:q]), visually_hidden_text: "name")
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Email")
+      row.with_value(text: @user.email)
+      row.with_action(text: "Change", href: edit_email_account_administration_path(@user, q: params[:q]), visually_hidden_text: "email")
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Mobile number")
+      row.with_value(text: @user.mobile_number)
+      row.with_action(text: "Change", href: edit_mobile_number_account_administration_path(@user, q: params[:q]), visually_hidden_text: "mobile number")
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Team")
+      row.with_value(text: @user.team.name)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Team admin")
+      row.with_value(text: @user.roles.pluck("name").include?("team_admin") ? "User is a team admin" : "User is not a team admin")
+      row.with_action(text: "Change", href: edit_team_admin_role_account_administration_path(@user, q: params[:q]), visually_hidden_text: "team admin role")
+    end
+  end
+%>
+<h2 class="govuk-heading-m">Last login details</h2>
+<% if @user.last_sign_in_at %>
+  <%=
+    govuk_table do |table|
+      table.with_head do |head|
+        head.with_row do |row|
+          row.with_cell(text: "Date")
+          row.with_cell(text: "Time")
+        end
+      end
+      table.with_body do |body|
+        body.with_row do |row|
+          row.with_cell(text: display_date(@user.last_sign_in_at))
+          row.with_cell(text: display_time(@user.last_sign_in_at))
+        end
+      end
+    end
+  %>
+<% else %>
+  <p class="govuk-body">This user has not logged in yet.</p>
+<% end %>

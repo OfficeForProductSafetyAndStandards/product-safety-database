@@ -23,6 +23,11 @@ SupportPortal::Engine.routes.draw do
       get "edit-team-admin-role"
       patch "update-team-admin-role"
       put "update-team-admin-role"
+      get "add-role"
+      patch "create-role"
+      put "create-role"
+      get "remove-role/:role_id", to: "account_administration#remove_role", as: "remove_role"
+      delete "delete-role/:role_id", to: "account_administration#delete_role", as: "delete_role"
       get "remove-user"
       delete "delete-user"
     end
