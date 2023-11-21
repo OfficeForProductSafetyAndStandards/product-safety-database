@@ -10,7 +10,7 @@
     "@hmcts/frontend": "^0.0.41-alpha",
     "@hotwired/stimulus": "^3.2.2",
     "accessible-autocomplete": "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main",
-    "esbuild": "^0.19.5",
+    "esbuild": "^0.19.7",
     "govuk-frontend": "4.7.0",
     "i18n-js": "^4.3.2",
     "postcss": "^8.4.31",
