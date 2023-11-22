@@ -232,9 +232,9 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     expect(page).to have_h1("Dashboard")
 
     click_link "Account administration"
-    click_link "Add a new user account"
+    click_link "Add a new account"
 
-    expect(page).to have_h1("Invite a new PSD user")
+    expect(page).to have_h1("Add a new account")
 
     click_on "Send invitation"
 

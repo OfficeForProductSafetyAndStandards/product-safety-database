@@ -48,21 +48,25 @@ private
 
     @search = SearchParams.new(params)
 
-    ids = search_results.results.pluck(:id)
+    ids = []
 
-    until search_results.last_page?
-      self[:params][:page] = search_results.next_page
+    results = search_results
 
-      ids += search_results.results.pluck(:id)
+    while results.any?
+      ids += results.pluck(:id)
+
+      results = results.scroll
     end
+
+    results.clear_scroll
 
     ids.sort
   end
 
   def search_results
-    return new_opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user) if user.can_access_new_search?
+    return new_opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, scroll: true) if user.can_access_new_search?
 
-    opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user)
+    opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, scroll: true)
   end
 
   def activity_counts
