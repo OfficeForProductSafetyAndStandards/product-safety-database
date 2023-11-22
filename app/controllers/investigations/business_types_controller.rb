@@ -12,8 +12,22 @@ class Investigations::BusinessTypesController < Investigations::BaseController
   def create
     @business_type_form = SetBusinessTypeOnCaseForm.new(business_request_params)
     if @business_type_form.valid?
-      @business_type_form.set_params_on_session(session)
-      redirect_to new_investigation_business_path(@investigation)
+      if @business_type_form.is_approved_online_marketplace?
+        online_marketplace = @business_type_form.approved_online_marketplace
+
+        AddBusinessToCase.call!(
+          business: online_marketplace.business,
+          relationship: "online_marketplace",
+          online_marketplace: online_marketplace,
+          investigation: @investigation,
+          user: current_user
+        )
+
+        redirect_to investigation_businesses_path(@investigation), success: "The business was created"
+      else
+        @business_type_form.set_params_on_session(session)
+        redirect_to new_investigation_business_path(@investigation)
+      end
     else
       render :new
     end
