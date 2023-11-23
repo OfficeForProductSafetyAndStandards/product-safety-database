@@ -18,7 +18,7 @@ class Investigations::BusinessTypesController < Investigations::BaseController
         AddBusinessToCase.call!(
           business: online_marketplace.business,
           relationship: "online_marketplace",
-          online_marketplace: online_marketplace,
+          online_marketplace:,
           investigation: @investigation,
           user: current_user
         )

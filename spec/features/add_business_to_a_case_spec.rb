@@ -17,6 +17,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:investigation)    { create(:enquiry, creator: user) }
   let(:other_user)       { create(:user, :activated) }
 
+  # rubocop:disable RSpec/LetSetup
   let!(:marketplace_1_business_location) { create(:location) }
   let!(:marketplace_2_business_location) { create(:location) }
 
@@ -25,8 +26,8 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
   let!(:marketplace_1_business) { create(:business, online_marketplace: marketplace_1, locations: [marketplace_1_business_location]) }
   let!(:marketplace_2_business) { create(:business, online_marketplace: marketplace_2, locations: [marketplace_2_business_location]) }
-
   let!(:unapproved_marketplace) { create(:online_marketplace) }
+  # rubocop:enable RSpec/LetSetup
 
   before do
     ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
