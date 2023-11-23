@@ -698,6 +698,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aasm (~> 5.5)
   active_model_serializers (~> 0.10.14)
   active_storage_validations (~> 1.1.2)
   activerecord-pg_enum (~> 2.0)
@@ -719,7 +720,9 @@ DEPENDENCIES
   draper (~> 4.0)
   factory_bot_rails (~> 6.4)
   faker (~> 3.2)
+  govuk-components (~> 4.1)
   govuk-design-system-rails (~> 0.10.5)!
+  govuk_design_system_formbuilder (~> 4.1)
   govuk_notify_rails (~> 2.2)
   image_processing
   interactor (~> 3.1)
