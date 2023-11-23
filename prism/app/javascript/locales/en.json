@@ -55,17 +55,14 @@
           "not_applicable": "Not applicable",
           "psychological_harm": "Psychological harm"
         },
-        "people_at_increased_risk": {
-          "false": "No"
-        },
         "probability_evidence": {
           "sole_judgement_or_estimation": "Sole judgement or estimation",
           "some_limited_empirical_evidence": "Some limited empirical evidence",
           "strong_empirical_evidence": "Strong empirical evidence"
         },
         "risk_to_non_users": {
-          "false": "Non-users of the product might not be at risk",
-          "true": "Non-users of the product might be at risk"
+          "false": "Non-users of the product are not at risk",
+          "true": "Non-users of the product are at risk"
         },
         "risk_tolerability": {
           "intolerable": "Risk is intolerable",

@@ -154,10 +154,10 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
 
-      expect(page).to have_text("Are there people at increased risk?\nAs recorded in the assessment\nChildren")
+      expect(page).to have_text("Are there people at increased risk?")
       choose "evaluation-people-at-increased-risk-true-field" # Are there people at increased risk? (Yes)
 
-      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant action planned or underway by another MSA or other organisation? (Unknown)
+      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant risk management action planned or underway by another MSA or other organisation? (Unknown)
 
       choose "evaluation-factors-to-take-into-account-field" # As regards the nature of the risk, are there factors to take account of in relation to risk management decisions? (No)
 
@@ -167,7 +167,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
 
-      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product might be at risk")
+      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product are at risk")
       choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users of the product? (No)
 
       choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)
@@ -182,7 +182,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      expect(page).to have_text("Check your risk assessment details")
+      expect(page).to have_text("Check your risk assessment and risk evaluation details")
 
       click_button "Submit"
 
@@ -230,10 +230,10 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
 
-      expect(page).to have_text("Are there people at increased risk?\nAs recorded in the assessment\nNo")
+      expect(page).to have_text("Are there people at increased risk?")
       choose "evaluation-people-at-increased-risk-true-field" # Are there people at increased risk? (Yes)
 
-      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant action planned or underway by another MSA or other organisation? (Unknown)
+      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant risk management action planned or underway by another MSA or other organisation? (Unknown)
 
       choose "evaluation-factors-to-take-into-account-field" # As regards the nature of the risk, are there factors to take account of in relation to risk management decisions? (No)
 
@@ -243,7 +243,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
 
-      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product might not be at risk")
+      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product are not at risk")
       choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users of the product? (No)
 
       choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)

@@ -110,11 +110,11 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Are there people at increased risk?")
-            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk))
+            row.with_value(text: people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are people at increased risk")
           end
           summary_list.with_row do |row|
-            row.with_key(text: "Is relevant action planned or underway by another MSA or other organisation?")
+            row.with_key(text: "Is relevant risk management action planned or underway by another MSA or other organisation?")
             row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether relevant action is planned or underway by another MSA or other organisation")
           end

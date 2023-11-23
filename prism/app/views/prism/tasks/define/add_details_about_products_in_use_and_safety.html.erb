@@ -22,7 +22,7 @@
       <% end %>
       <%= f.govuk_select(
         :safety_legislation_standards,
-        options_for_select([""] + Rails.application.config.legislation_constants["legislation"], @product_market_detail.safety_legislation_standards),
+        options_for_select([""] + Rails.application.config.legislation_constants["legislation"] + ["Not yet determined"], @product_market_detail.safety_legislation_standards),
         label: { text: "Product safety legislation", size: "m" },
         hint: { text: "Search applicable safety legislation and choose the ones you feel are relevant to your product." },
         multiple: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_09_111428) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -283,6 +283,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_09_111428) do
     t.enum "risk_level", enum_type: "risk_levels"
     t.datetime "risk_validated_at", precision: nil
     t.string "risk_validated_by"
+    t.string "state"
+    t.jsonb "tasks_status", default: {}
     t.string "type", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "user_title"
@@ -359,10 +361,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_09_111428) do
     t.string "low_likelihood_high_severity"
     t.boolean "multiple_casualties"
     t.string "number_of_products_expected_to_change"
-    t.boolean "other_hazards"
+    t.string "other_hazards"
     t.text "other_risk_perception_matters"
     t.string "other_types_of_harm", default: [], array: true
     t.boolean "people_at_increased_risk"
+    t.text "people_at_increased_risk_details"
     t.string "relevant_action_by_others"
     t.uuid "risk_assessment_id"
     t.boolean "risk_to_non_users"

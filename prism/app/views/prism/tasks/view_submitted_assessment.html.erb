@@ -112,7 +112,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Overall probability of harm")
-            row.with_value(text: harm_scenario_overall_probability_of_harm(harm_scenario).risk_level_tag_html)
+            row.with_value(text: "1 in #{ActiveSupport::NumberHelper.number_to_delimited(harm_scenario_overall_probability_of_harm(harm_scenario))}")
           end
         end
       %>
@@ -170,10 +170,10 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Are there people at increased risk?")
-          row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk))
+          row.with_value(text: people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details))
         end
         summary_list.with_row do |row|
-          row.with_key(text: "Is relevant action planned or underway by another MSA or other organisation?")
+          row.with_key(text: "Is relevant risk management action planned or underway by another MSA or other organisation?")
           row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others))
         end
         summary_list.with_row do |row|

@@ -2,6 +2,12 @@ module Prism
   class Evaluation < ApplicationRecord
     belongs_to :risk_assessment
 
+    enum :other_hazards, {
+      "yes" => "yes",
+      "no" => "no",
+      "unknown" => "unknown",
+    }, prefix: true
+
     enum :level_of_uncertainty, {
       "low" => "low",
       "medium" => "medium",
@@ -37,7 +43,6 @@ module Prism
     enum :low_likelihood_high_severity, {
       "yes" => "yes",
       "no" => "no",
-      "unknown" => "unknown",
     }, prefix: true
 
     enum :aimed_at_vulnerable_users, {
@@ -49,7 +54,6 @@ module Prism
     enum :designed_to_provide_protective_function, {
       "yes" => "yes",
       "no" => "no",
-      "unknown" => "unknown",
     }, prefix: true
 
     enum risk_tolerability: {
@@ -68,20 +72,25 @@ module Prism
     validates :people_at_increased_risk, inclusion: [true, false], on: :consider_the_nature_of_the_risk
     validates :relevant_action_by_others, inclusion: %w[yes no unknown], on: :consider_the_nature_of_the_risk
     validates :factors_to_take_into_account, inclusion: [true, false], on: :consider_the_nature_of_the_risk
-    validates :other_hazards, inclusion: [true, false], on: :consider_perception_and_tolerability_of_the_risk
-    validates :low_likelihood_high_severity, inclusion: %w[yes no unknown], on: :consider_perception_and_tolerability_of_the_risk
+    validates :other_hazards, inclusion: %w[yes no unknown], on: :consider_perception_and_tolerability_of_the_risk
+    validates :low_likelihood_high_severity, inclusion: %w[yes no], on: :consider_perception_and_tolerability_of_the_risk
     validates :risk_to_non_users, inclusion: [true, false], on: :consider_perception_and_tolerability_of_the_risk
     validates :aimed_at_vulnerable_users, inclusion: %w[yes no unknown], on: :consider_perception_and_tolerability_of_the_risk
-    validates :designed_to_provide_protective_function, inclusion: %w[yes no unknown], on: :consider_perception_and_tolerability_of_the_risk
+    validates :designed_to_provide_protective_function, inclusion: %w[yes no], on: :consider_perception_and_tolerability_of_the_risk
     validates :user_control_over_risk, inclusion: [true, false], on: :consider_perception_and_tolerability_of_the_risk
     validates :risk_tolerability, inclusion: %w[tolerable intolerable], on: :risk_evaluation_outcome
 
     before_save :clear_sensitivity_analysis_details
+    before_save :clear_people_at_increased_risk_details
 
   private
 
     def clear_sensitivity_analysis_details
       self.sensitivity_analysis_details = nil unless sensitivity_analysis
+    end
+
+    def clear_people_at_increased_risk_details
+      self.people_at_increased_risk_details = nil unless people_at_increased_risk
     end
   end
 end
