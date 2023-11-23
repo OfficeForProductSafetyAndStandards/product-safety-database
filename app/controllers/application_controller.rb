@@ -134,7 +134,7 @@ private
   end
 
   def highlight_cases?
-    return true if params[:controller].match?(/investigations|searches|collaborators|comments/)
+    return true if params[:controller].match?(/investigations|notifications|searches|collaborators|comments/)
     return true if %w[documents image_uploads].include?(params[:controller]) && params[:investigation_pretty_id]
   end
 end
