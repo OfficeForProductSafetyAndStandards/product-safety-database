@@ -1,5 +1,5 @@
-class AssociateOnlineMarketplacesWithBusinesses < ActiveRecord::Migration[7.0]
-  def change
+class AssociateBusinessesWithApprovedOnlineMarketplaces < ActiveRecord::Migration[7.0]
+  def self.up
     country_uk = "country:GB"
     country_usa = "country:US"
     country_china = "country:CN"
@@ -44,6 +44,10 @@ class AssociateOnlineMarketplacesWithBusinesses < ActiveRecord::Migration[7.0]
     Business.create(trading_name: "Wish", locations: [Location.new(name: "Registered office address", address_line_1: "One Sansome Street", address_line_2: "33rd Floor", city: "San Francisco", postal_code: "CA 94104.", country: country_usa)], online_marketplace: marketplace("Light In The Box"))
     Business.create(trading_name: "Wowcher", locations: [Location.new(name: "Registered office address", address_line_1: "69 Dalston Lane", city: "London", postal_code: "E8 2NG", country: country_uk)], online_marketplace: marketplace("Wowcher"))
     Business.create(trading_name: "Zalando", locations: [Location.new(name: "Registered office address", address_line_1: "C/O Tradebyte Software Limited Studio 8", address_line_2: "Montpellier Street", city: "Cheltenham", postal_code: "GL50 1SS", country: country_uk)], online_marketplace: marketplace("Zalando"))
+  end
+
+  def self.down
+    Business.where('online_marketplace_id is not null').destroy_all
   end
 
   private
