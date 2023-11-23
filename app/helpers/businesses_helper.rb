@@ -6,7 +6,7 @@ module BusinessesHelper
   end
 
   def search_for_businesses(page_size = Business.count, user = current_user, for_export: false)
-    query = Business.includes(child_records(for_export))
+    query = Business.without_online_marketplaces.includes(child_records(for_export))
 
     if @search.q.present?
       @search.q.strip!
@@ -34,7 +34,7 @@ module BusinessesHelper
   def child_records(for_export)
     return %i[investigations locations contacts] if for_export
 
-    [investigations: %i[owner_user owner_team]]
+    [:online_marketplace, { investigations: %i[owner_user owner_team] }]
   end
 
   def business_export_params
