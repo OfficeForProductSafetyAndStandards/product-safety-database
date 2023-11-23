@@ -631,6 +631,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
 
   create_table "versions", force: :cascade do |t|
     t.datetime "created_at", precision: nil
+    t.string "entity_id"
+    t.string "entity_type"
     t.string "event", null: false
     t.bigint "item_id", null: false
     t.string "item_type", null: false

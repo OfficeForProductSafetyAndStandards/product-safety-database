@@ -1,0 +1,18 @@
+<% content_for :page_title, "Add a new account" %>
+<% @errors = @invite_user_form.errors.any? %>
+<% @back_link_href = account_administration_index_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @invite_user_form, url: create_user_account_administration_index_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <% if @errors %><h1 class="govuk-heading-l"><%= yield :page_title %></h1><% end %>
+      <%= f.govuk_text_field :name, label: { text: "Name" } %>
+      <%= f.govuk_email_field :email, label: { text: "Email address" } %>
+      <%= f.govuk_collection_select :team_id, team_select, :id, :name, label: { text: "Team" } %>
+      <%= f.govuk_submit "Send invitation" do %>
+        <%= govuk_button_link_to "Cancel", account_administration_index_path, secondary: true %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

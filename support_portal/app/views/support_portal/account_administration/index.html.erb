@@ -1,0 +1,17 @@
+<% content_for :page_title, "Account administration" %>
+<% @back_link_href = support_root_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <a href="<%= search_account_administration_index_path %>" class="app-card">
+      <h3 class="govuk-heading-s app-card__heading">Search for an account</h3>
+      <p class="govuk-body">Search for a PSD user.</p>
+    </a>
+  </div>
+  <div class="govuk-grid-column-one-half">
+    <a href="<%= invite_user_account_administration_index_path %>" class="app-card">
+      <h3 class="govuk-heading-s app-card__heading">Add a new account</h3>
+      <p class="govuk-body">Invite a new PSD user.</p>
+    </a>
+  </div>
+</div>

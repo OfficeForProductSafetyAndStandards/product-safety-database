@@ -1,0 +1,16 @@
+<%= govukCheckboxes(
+      key: :case_status,
+      form: form,
+      items: [
+        {
+          key: "case_status_open",
+          text: "Open",
+          value: true,
+        },
+        {
+          key: "case_status_closed",
+          text: "Closed",
+          value: true,
+        },
+      ]
+    ) %>

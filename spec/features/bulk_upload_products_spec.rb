@@ -43,9 +43,9 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     choose "Products are non-compliant"
     click_button "Continue"
 
-    expect(page).to have_error_summary("Enter why the product is non-compliant")
+    expect(page).to have_error_summary("Enter why the products are non-compliant")
 
-    fill_in "Why is the product non-compliant?", with: "Testing"
+    fill_in "Why are the products non-compliant?", with: "Testing"
     click_button "Continue"
 
     expect(page).to have_content("Create a case for multiple products")
@@ -160,7 +160,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     expect(page).to have_content("How would you describe the products in terms of their compliance and safety?")
 
     choose "Products are non-compliant"
-    fill_in "Why is the product non-compliant?", with: "Testing"
+    fill_in "Why are the products non-compliant?", with: "Testing"
     click_button "Continue"
 
     expect(page).to have_content("Create a case for multiple products")

@@ -20,7 +20,7 @@ module SupportPortal
         session[:secondary_authentication_user_id] = user_id_for_secondary_authentication
         auth = SecondaryAuthentication.new(user)
         auth.generate_and_send_code(current_operation)
-        redirect_to new_secondary_authentication_path
+        redirect_to main_app.new_secondary_authentication_path
       end
     end
 
@@ -29,7 +29,7 @@ module SupportPortal
     end
 
     def last_action_was_resending_2fa_code?
-      request.fullpath == resend_secondary_authentication_code_path
+      request.fullpath == main_app.resend_secondary_authentication_code_path
     end
 
     # Use as `before_filter` in application_controller controller
@@ -52,7 +52,7 @@ module SupportPortal
         session[:secondary_authentication_user_id] = user_id_for_secondary_authentication
         auth = SecondaryAuthentication.new(user)
         auth.generate_and_send_code(current_operation)
-        redirect_to new_secondary_authentication_path
+        redirect_to main_app.new_secondary_authentication_path
       end
     end
 

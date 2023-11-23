@@ -4,18 +4,18 @@ class BulkProductsUploadProductsFileForm
 
   WORKSHEET_HEADERS = [
     "Entry number",
-    "Product category",
-    "Product Subcategory",
+    "Product category*",
+    "Product Subcategory*",
     "Customs code",
-    "Country of origin",
+    "Country of origin*",
     "Barcode number",
-    "Product name (including Model and Model Number)",
+    "Product name (including Model and Model Number)*",
     "Product description",
     "How many units affected",
     "Manufacturers brand name",
     "Batch number",
-    "Is the product Counterfeit",
-    "Does the Product have any markings",
+    "Is the product Counterfeit*",
+    "Does the Product have any markings*",
     "Was the product placed on the market before 1 january 2021"
   ].freeze
 
@@ -125,15 +125,15 @@ private
   end
 
   def worksheet_headers
-    # First row is a title, second row contains the column headers
-    worksheet[1].cells.map { |cell| cell&.value&.strip }.compact
+    # First row is a note, second row is a title, third row contains the column headers
+    worksheet[2].cells.map { |cell| cell&.value&.to_s&.strip }.compact
   end
 
   def validate_products
     products = []
     error_messages = {}
 
-    worksheet[2..].each do |row|
+    worksheet[3..].each do |row|
       next if row.nil?
 
       ary = row.cells.map { |cell| cell&.value&.to_s }
@@ -142,8 +142,8 @@ private
       next if ary.drop(1).compact.empty?
 
       entry_number, category, subcategory, customs_code, country_of_origin, barcode, name, description, number_of_affected_units, brand, batch_number, counterfeit, markings, marketed_before_brexit, *_extra_cells = ary
-      authenticity = counterfeit == "Yes" ? "counterfeit" : "genuine"
-      has_markings = markings.blank? ? "markings_no" : ({ "No" => "markings_no", "Unknown" => "markings_unknown" }[markings] || "markings_yes")
+      authenticity = counterfeit.blank? ? nil : { "Yes" => "counterfeit", "No" => "genuine" }[counterfeit]
+      has_markings = markings.blank? ? nil : ({ "No" => "markings_no", "Unknown" => "markings_unknown" }[markings] || "markings_yes")
       markings = has_markings == "markings_yes" ? markings.split(", ") : nil
       when_placed_on_market = marketed_before_brexit == "Yes" ? "before_2021" : "on_or_after_2021"
       product = ProductForm.new(category:, subcategory:, country_of_origin: country_to_code(country_of_origin), barcode:, name:, description:, brand:, authenticity:, has_markings:, markings:, when_placed_on_market:)

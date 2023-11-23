@@ -380,6 +380,43 @@ en:
     opss_funded:
       yes_html: "Yes <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>Funded under the <abbr>OPSS</abbr> Sampling Protocol</span>"
       no: "No"
+  notifications:
+    create:
+      index:
+        sections:
+          notification_details:
+            title: Add notification and product safety details
+            tasks:
+              add_product_notification_details:
+                title: Add product notification details
+              add_product_safety_and_compliance_details:
+                title: Add product safety and compliance details
+          business_details:
+            title: Add business details
+            tasks:
+              search_or_add_a_new_business:
+                title: Search or add a new business
+          evidence:
+            title: Add evidence
+            tasks:
+              select_evidence:
+                title: Select evidence
+              add_test_reports:
+                title: Add test reports
+              add_supporting_images:
+                title: Add supporting images
+              create_or_add_risk_assessment:
+                title: Create or add risk assessment
+          corrective_actions:
+            title: Add corrective actions
+            tasks:
+              record_product_corrective_actions:
+                title: Record product corrective actions
+          submit:
+            title: Submit notification
+            tasks:
+              check_notification_details_and_submit:
+                title: Check notification details and submit
 
   errors:
     format: "%{message}"
@@ -740,8 +777,8 @@ en:
             compliance_and_safety:
               inclusion: Select how you would describe the products in terms of their compliance and safety
             hazard_description:
-              blank: Enter why the product is non-compliant
-              too_long: The reason why the product is non-compliant must be %{count} characters or less
+              blank: Enter why the products are non-compliant
+              too_long: The reason why the products are non-compliant must be %{count} characters or less
         bulk_products_create_case_form:
           attributes:
             name:

@@ -1,0 +1,17 @@
+<% content_for :page_title, "Change team admin role" %>
+<% @errors = @user.errors.any? %>
+<% @back_link_href = account_administration_path(@user, q: params[:q]) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @user, url: update_team_admin_role_account_administration_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <% if @errors %><h1 class="govuk-heading-l"><%= yield :page_title %></h1><% end %>
+      <%= f.govuk_check_boxes_fieldset :team_admin, multiple: false, legend: nil do %>
+        <%= f.hidden_field :team_admin, value: false, autocomplete: false %>
+        <%= f.govuk_check_box :team_admin, true, false, multiple: false, link_errors: true, label: { text: "Team admin?" }, checked: @current_team_admin %>
+      <% end %>
+      <%= f.govuk_submit "Save changes" %>
+    <% end %>
+  </div>
+</div>

@@ -43,7 +43,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   end
 
   before do
-    Investigation.reindex
+    Investigation.search_index.refresh
     allow(JSON).to receive(:load_file!).and_return(JSON.parse(team_mappings, object_class: OpenStruct))
   end
 
@@ -208,68 +208,155 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
       let(:params) { { case_type:, created_by: "all", case_status: "open", teams_with_access: "all" } }
 
-      context "with all cases" do
-        let(:case_type) { "all" }
+      before { Investigation.search_index.refresh }
 
-        it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+      context "with the new search" do
+        before { user.roles.create(name: "use_new_search") }
+
+        context "with all cases" do
+          let(:params) { { allegation: true, project: true, enquiry: true, notification: true } }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports all case types", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, notification.pretty_id, allegation.pretty_id, project.pretty_id, enquiry.pretty_id]
+          end
         end
 
-        it "only exports all case types", :aggregate_failures do
-          sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, notification.pretty_id, allegation.pretty_id, project.pretty_id, enquiry.pretty_id]
+        context "with allegations" do
+          let(:params) { { allegation: true } }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports allegations", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, allegation.pretty_id]
+          end
+        end
+
+        context "with enquiries" do
+          let(:params) { { enquiry: true } }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports enquiries", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [enquiry.pretty_id]
+          end
+        end
+
+        context "with projects" do
+          let(:params) { { project: true } }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports projects", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [project.pretty_id]
+          end
+        end
+
+        context "with notifications" do
+          let(:params) { { notification: true } }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports notifications", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [notification.pretty_id]
+          end
+        end
+
+        context "with more results than the upper search limit on notifications" do
+          before do
+            create_list(:notification, 3)
+            Investigation.search_index.refresh
+          end
+
+          let(:params) { { notification: true } }
+
+          it "exports all notifications" do
+            stub_const("CaseExport::OPENSEARCH_PAGE_SIZE", 2)
+            expect(sheet.last_row).to eq 5
+          end
         end
       end
 
-      context "with allegations" do
-        let(:case_type) { "allegation" }
+      context "with the old search" do
+        context "with all cases" do
+          let(:case_type) { "all" }
 
-        it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports all case types", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, notification.pretty_id, allegation.pretty_id, project.pretty_id, enquiry.pretty_id]
+          end
         end
 
-        it "only exports allegations", :aggregate_failures do
-          sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, allegation.pretty_id]
-        end
-      end
+        context "with allegations" do
+          let(:case_type) { "allegation" }
 
-      context "with enquiries" do
-        let(:case_type) { "enquiry" }
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
 
-        it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
-        end
-
-        it "only exports enquiries", :aggregate_failures do
-          sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [enquiry.pretty_id]
-        end
-      end
-
-      context "with projects" do
-        let(:case_type) { "project" }
-
-        it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+          it "only exports allegations", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, allegation.pretty_id]
+          end
         end
 
-        it "only exports projects", :aggregate_failures do
-          sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [project.pretty_id]
+        context "with enquiries" do
+          let(:case_type) { "enquiry" }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports enquiries", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [enquiry.pretty_id]
+          end
         end
-      end
 
-      context "with notifications" do
-        let(:case_type) { "notification" }
+        context "with projects" do
+          let(:case_type) { "project" }
 
-        it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports projects", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [project.pretty_id]
+          end
         end
 
-        it "only exports notifications", :aggregate_failures do
-          sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [notification.pretty_id]
+        context "with notifications" do
+          let(:case_type) { "notification" }
+
+          it "exports the case data", :aggregate_failures do
+            expect(exported_data.sheets).to eq %w[Cases]
+          end
+
+          it "only exports notifications", :aggregate_failures do
+            sheet_ids = sheet.column(1).drop(1)
+            expect(sheet_ids).to match_array [notification.pretty_id]
+          end
         end
       end
     end
@@ -304,6 +391,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
 
       before do
         old_case.update!(created_at: 2.days.ago)
+        Investigation.search_index.refresh
       end
 
       it "exports the case data", :aggregate_failures do
