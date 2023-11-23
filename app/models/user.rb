@@ -126,6 +126,10 @@ class User < ApplicationRecord
     has_role? :product_bulk_uploader
   end
 
+  def can_use_notification_task_list?
+    has_role? :notification_task_list_user
+  end
+
   def can_use_product_recall_tool?
     team.name == "OPSS Incident Management"
   end

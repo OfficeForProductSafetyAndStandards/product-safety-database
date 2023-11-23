@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_112059) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_22_154711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -283,6 +283,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_112059) do
     t.enum "risk_level", enum_type: "risk_levels"
     t.datetime "risk_validated_at", precision: nil
     t.string "risk_validated_by"
+    t.string "state"
+    t.jsonb "tasks_status", default: {}
     t.string "type", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "user_title"

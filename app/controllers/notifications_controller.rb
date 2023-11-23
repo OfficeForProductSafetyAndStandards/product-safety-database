@@ -7,7 +7,7 @@ class NotificationsController < ApplicationController
 
   breadcrumb "cases.label", :your_cases_investigations
 
-  # GET /cases
+  # GET /notifications
   def index
     redirect_to all_cases_investigations_path unless current_user.can_access_new_search?
 
