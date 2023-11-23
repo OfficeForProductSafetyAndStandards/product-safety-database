@@ -35,7 +35,7 @@ RSpec.feature "Your businesses listing", :with_stubbed_mailer, type: :feature do
       AddBusinessToCase.call!(
         business: business_four,
         relationship: "online_marketplace",
-        online_marketplace: online_marketplace,
+        online_marketplace:,
         investigation: explosion_investigation,
         user:
       )
@@ -43,7 +43,7 @@ RSpec.feature "Your businesses listing", :with_stubbed_mailer, type: :feature do
     end
 
     scenario "it doesn't show the online marketplace business in 'My businesses'" do
-      expect(page).to_not have_text(business_four.trading_name)
+      expect(page).not_to have_text(business_four.trading_name)
     end
   end
 end

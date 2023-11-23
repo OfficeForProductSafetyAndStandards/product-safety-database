@@ -110,7 +110,7 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
 
         it "returns false" do
           expect(form).to be_valid
-          expect(form.is_approved_online_marketplace?).to be_falsey
+          expect(form).not_to be_is_approved_online_marketplace
         end
       end
 
@@ -125,7 +125,7 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
 
         it "returns true" do
           expect(form).to be_valid
-          expect(form.is_approved_online_marketplace?).to be_truthy
+          expect(form).to be_is_approved_online_marketplace
         end
       end
     end
@@ -135,7 +135,7 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
 
       it "returns false" do
         expect(form).to be_valid
-        expect(form.is_approved_online_marketplace?).to be_falsey
+        expect(form).not_to be_is_approved_online_marketplace
       end
     end
   end
@@ -162,7 +162,7 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
       let(:online_marketplace_id) { online_marketplace.id }
 
       it "returns the object" do
-      expect(form.approved_online_marketplace).to eq(online_marketplace)
+        expect(form.approved_online_marketplace).to eq(online_marketplace)
       end
     end
 
