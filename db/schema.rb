@@ -109,6 +109,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_134039) do
     t.string "company_number"
     t.datetime "created_at", precision: nil, null: false
     t.string "legal_name"
+    t.bigint "online_marketplace_id"
     t.string "trading_name", null: false
     t.datetime "updated_at", precision: nil, null: false
   end
@@ -302,7 +303,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_134039) do
 
   create_table "online_marketplaces", force: :cascade do |t|
     t.boolean "approved_by_opss"
-    t.bigint "business_id"
     t.datetime "created_at", null: false
     t.string "name"
     t.datetime "updated_at", null: false
