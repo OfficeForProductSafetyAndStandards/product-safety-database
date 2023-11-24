@@ -16,7 +16,7 @@ class BusinessExport < ApplicationRecord
     Axlsx::Package.new do |p|
       book = p.workbook
 
-      add_businesses_worksheet(business_ids, book)
+      add_businesses_worksheet(businesses, book)
 
       Tempfile.create("business_export", Rails.root.join("tmp")) do |file|
         p.serialize(file)
@@ -27,24 +27,16 @@ class BusinessExport < ApplicationRecord
 
 private
 
-  def business_ids
-    return @business_ids if @business_ids
-
+  def businesses
     @search = SearchParams.new(params)
-    search_for_businesses(nil, nil, ids_only: true).sort
+    search_for_businesses(nil, nil, for_export: true).sort
   end
 
   def add_businesses_worksheet(business_ids, book)
     book.add_worksheet name: "Businesses" do |sheet|
       sheet.add_row(headings_for_business_info_sheet)
 
-      business_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_business_ids|
-        Business
-          .includes(:investigations, :locations, :contacts)
-          .find(batch_business_ids).each do |business|
-          sheet.add_row attributes_business_info_sheet(business), types: :text
-        end
-      end
+      businesses.each { |business| sheet.add_row attributes_business_info_sheet(business), types: :text }
     end
   end
 
