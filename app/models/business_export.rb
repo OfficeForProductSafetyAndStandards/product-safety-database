@@ -32,7 +32,7 @@ private
     search_for_businesses(nil, nil, for_export: true).sort
   end
 
-  def add_businesses_worksheet(business_ids, book)
+  def add_businesses_worksheet(businesses, book)
     book.add_worksheet name: "Businesses" do |sheet|
       sheet.add_row(headings_for_business_info_sheet)
 

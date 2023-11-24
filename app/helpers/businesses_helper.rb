@@ -15,7 +15,6 @@ module BusinessesHelper
         .or(Business.where(company_number: @search.q))
     end
 
-
     query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
 
     case @search.case_owner
@@ -33,9 +32,9 @@ module BusinessesHelper
   end
 
   def child_records(for_export)
-    return [ :investigations, :locations, :contacts ] if for_export
+    return %i[investigations locations contacts] if for_export
 
-    [ investigations: %i[owner_user owner_team] ]
+    [investigations: %i[owner_user owner_team]]
   end
 
   def business_export_params
