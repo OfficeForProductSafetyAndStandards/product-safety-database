@@ -70,9 +70,8 @@ class SearchParams
 
   def sorting_params
     return {} if selected_sort_by == SortByHelper::SORT_BY_RELEVANT
-    { selected_sort_by => selected_sort_dir }# if sort_by.present?
 
-   #{ updated_at: :desc }
+    { selected_sort_by => selected_sort_dir }
   end
 
   def sort_by_items(with_relevant_option: false)
