@@ -69,10 +69,9 @@ class SearchParams
   end
 
   def sorting_params
-    sort_by_field = sort_by.presence || "updated_at"
-    sort_dir_value = sort_dir.presence || "desc"
+    return {} if selected_sort_by == SortByHelper::SORT_BY_RELEVANT
 
-    { sort_by_field => sort_dir_value }
+    { selected_sort_by => selected_sort_dir }
   end
 
   def sort_by_items(with_relevant_option: false)
