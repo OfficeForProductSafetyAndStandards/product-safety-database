@@ -16,8 +16,9 @@
       <%=
         f.govuk_collection_radio_buttons :other_hazards,
         [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
+          OpenStruct.new(id: "yes", name: "Yes"),
+          OpenStruct.new(id: "no", name: "No"),
+          OpenStruct.new(id: "unknown", name: "Unknown")
         ],
         :id,
         :name,
@@ -28,8 +29,7 @@
         f.govuk_collection_radio_buttons :low_likelihood_high_severity,
         [
           OpenStruct.new(id: "yes", name: "Yes"),
-          OpenStruct.new(id: "no", name: "No"),
-          OpenStruct.new(id: "unknown", name: "Unknown")
+          OpenStruct.new(id: "no", name: "No")
         ],
         :id,
         :name,
@@ -64,8 +64,7 @@
         f.govuk_collection_radio_buttons :designed_to_provide_protective_function,
         [
           OpenStruct.new(id: "yes", name: "Yes"),
-          OpenStruct.new(id: "no", name: "No"),
-          OpenStruct.new(id: "unknown", name: "Unknown")
+          OpenStruct.new(id: "no", name: "No")
         ],
         :id,
         :name,

@@ -1,4 +1,4 @@
-<% content_for :page_title, "Check your risk assessment details" %>
+<% content_for :page_title, "Check your risk assessment and risk evaluation details" %>
 <% @errors = @prism_risk_assessment.errors.any? %>
 
 <div class="govuk-grid-row">
@@ -7,7 +7,7 @@
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Evaluate product risk and submit assessment</span>
-        Check your risk assessment details
+        Check your risk assessment and risk evaluation details
       </h1>
       <h2 class="govuk-heading-m">About assessment</h2>
       <%=
@@ -128,7 +128,7 @@
             end
             summary_list.with_row do |row|
               row.with_key(text: "Overall probability of harm")
-              row.with_value(text: harm_scenario_overall_probability_of_harm(harm_scenario).risk_level_tag_html)
+              row.with_value(text: "1 in #{ActiveSupport::NumberHelper.number_to_delimited(harm_scenario_overall_probability_of_harm(harm_scenario))}")
               row.with_action(text: "Change", href: task_path("create", "estimate_probability_of_harm", harm_scenario.id), visually_hidden_text: "overall probability of harm")
             end
           end
@@ -194,11 +194,11 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Are there people at increased risk?")
-            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk))
+            row.with_value(text: people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are people at increased risk")
           end
           summary_list.with_row do |row|
-            row.with_key(text: "Is relevant action planned or underway by another MSA or other organisation?")
+            row.with_key(text: "Is relevant risk management action planned or underway by another MSA or other organisation?")
             row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether relevant action is planned or underway by another MSA or other organisation")
           end

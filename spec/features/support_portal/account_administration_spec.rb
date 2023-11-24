@@ -243,7 +243,7 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
 
     fill_in "Name", with: "Fake faker"
     fill_in "Email address", with: "fake@example.com"
-    select Team.all.sample.name, from: "Team"
+    select Team.all.sample.name, from: "Team", match: :first
 
     click_on "Send invitation"
 
