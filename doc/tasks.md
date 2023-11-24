@@ -16,17 +16,7 @@ Where `ORG_NAME` is the name of the organisation and team to be created, `ADMIN_
 
 ## Deleting a User
 
-```bash
-cf run-task psd-web --command "EMAIL=<email address> bin/rake user:delete" --name <task name> -k 2G
-```
-
-or
-
-```bash
-cf run-task psd-web --command "ID=<user ID> bin/rake user:delete" --name <task name> -k 2G
-```
-
-Where `EMAIL` or `ID` is the e-mail address or ID of the user to be deleted. Task name can be set to anything you like.
+Use the OSU support portal
 
 ## Deleting a Team
 
