@@ -157,9 +157,9 @@ module Prism
         filename = if file.metadata["safe"] == true
                      file.blob.filename
                    elsif file.metadata["safe"] == false
-                     file.blob.filename (failed virus scan)
+                     "#{file.blob.filename} (failed virus scan)"
                    else
-                     file.blob.filename (pending virus scan)
+                     "#{file.blob.filename} (pending virus scan)"
                    end
         "\n\nAttachment: #{filename}"
       end
