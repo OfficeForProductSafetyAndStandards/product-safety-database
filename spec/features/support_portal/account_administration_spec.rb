@@ -208,7 +208,7 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     expect(page).to have_css("div.govuk-notification-banner", text: "The team admin role has been removed.")
   end
 
-  xscenario "Deleting an account" do
+  xit "Deleting an account" do
     visit "/account-admin/#{user2.id}"
 
     expect(page).to have_h1(user2.name)
