@@ -14,21 +14,10 @@
         :id,
         :name,
         legend: { text: "Is the product or hazard of a type where a serious risk can generally be deemed to exist?", size: "l" },
-        hint: { text: 'Products containing prohibited chemicals, non-compliant category III personal protective equipment and other products covered within the <abbr title="Office for Product Safety and Standards">OPSS</abbr> "<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1121889/prism-products-and-hazards-deemed-serious-risk-v01.pdf" class="govuk-link" target="_blank" rel="noreferrer noopener">Products and hazards deemed serious risk</a>" guide.'.html_safe },
+        hint: { text: 'In some, limited circumstances it is appropriate to start from the point that a non-compliant product is likely to present a serious risk. This is on the basis of the outcome of risk assessment activity already undertaken for that product type or hazard type. The relevant types of products or hazards for which a serious risk can be deemed to exist are those described within the <abbr title="Office for Product Safety and Standards">OPSS</abbr> “<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1121889/prism-products-and-hazards-deemed-serious-risk-v01.pdf" class="govuk-link" target="_blank" rel="noreferrer noopener">Products and hazards deemed serious risk</a>” guide. Therefore before answering ‘yes’ below, you <strong>must</strong> check this guide to ensure that the product or hazard subject to your risk assessment is within the guide’s scope. If it is not, you must answer ‘no’ below.'.html_safe },
         bold_labels: false,
         inline: true
       %>
-      <%= govuk_details(summary_text: "Help with understanding the presumption of serious risk") do %>
-        <p>
-          In some, limited circumstances it is appropriate to treat a non-compliant product as presenting a serious risk, without the assessor needing to complete all the stages of the risk assessment process.
-        </p>
-        <p>
-          For further information please refer to the OPSS guide on products and hazards deemed serious risk:
-        </p>
-        <p>
-          <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1121889/prism-products-and-hazards-deemed-serious-risk-v01.pdf" class="govuk-link" target="_blank" rel="noreferrer noopener">Products and hazards deemed serious risk<span class="govuk-visually-hidden"> (opens in new tab)</span></a> (PDF, 105 KB, 2 pages)
-        </p>
-      <% end %>
       <% if params[:investigation_id].present? %>
         <%= f.hidden_field :investigation_id, value: params[:investigation_id] %>
       <% end %>

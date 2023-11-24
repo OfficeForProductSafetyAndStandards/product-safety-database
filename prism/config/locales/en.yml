@@ -258,11 +258,9 @@ en:
       multiple_casualties:
         "true": "Yes"
         "false": No multiple casualties
-      people_at_increased_risk:
-        "false": "No"
       risk_to_non_users:
-        "true": Non-users of the product might be at risk
-        "false": Non-users of the product might not be at risk
+        "true": Non-users of the product are at risk
+        "false": Non-users of the product are not at risk
       counterfeit:
         counterfeit: "Yes"
         genuine: "No"

@@ -91,7 +91,7 @@ module Prism
               # rubocop:enable Style/StringConcatenation
             end,
             [{ content: "Severity level", font_style: :bold }, "#{harm_scenario_severity_level(harm_scenario.severity)}\n#{harm_scenario_multiple_casualties(harm_scenario.multiple_casualties)}"],
-            [{ content: "Overall probability of harm", font_style: :bold }, harm_scenario_overall_probability_of_harm(harm_scenario).risk_level.capitalize],
+            [{ content: "Overall probability of harm", font_style: :bold }, "1 in #{ActiveSupport::NumberHelper.number_to_delimited(harm_scenario_overall_probability_of_harm(harm_scenario))}"],
           ], width: 522, column_widths: { 0 => 200 })
         end
         pdf.move_down 20
@@ -119,8 +119,8 @@ module Prism
         [{ content: "How does the risk level compare to that of comparable products?", font_style: :bold }, evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level)],
         [{ content: "Is there potential for multiple casualties in a single incident?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.multiple_casualties)],
         [{ content: "Is there a significant risk differential?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.significant_risk_differential)],
-        [{ content: "Are there people at increased risk?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk)],
-        [{ content: "Is relevant action planned or underway by another MSA or other organisation?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others)],
+        [{ content: "Are there people at increased risk?", font_style: :bold }, people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details)],
+        [{ content: "Is relevant risk management action planned or underway by another MSA or other organisation?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others)],
         [{ content: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.factors_to_take_into_account)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.move_down 10
