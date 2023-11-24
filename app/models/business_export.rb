@@ -16,7 +16,7 @@ class BusinessExport < ApplicationRecord
     Axlsx::Package.new do |p|
       book = p.workbook
 
-      add_businesses_worksheet(businesses, book)
+      add_businesses_worksheet(book)
 
       Tempfile.create("business_export", Rails.root.join("tmp")) do |file|
         p.serialize(file)
@@ -32,7 +32,7 @@ private
     search_for_businesses(nil, nil, for_export: true).sort
   end
 
-  def add_businesses_worksheet(businesses, book)
+  def add_businesses_worksheet(book)
     book.add_worksheet name: "Businesses" do |sheet|
       sheet.add_row(headings_for_business_info_sheet)
 
