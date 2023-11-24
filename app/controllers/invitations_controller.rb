@@ -30,7 +30,7 @@ private
 
   def find_team_and_authorize_invite
     team = Team.find(params[:team_id])
-    authorize team, :invite_or_remove_user?
+    authorize team, :invite_user?
     team
   end
 
