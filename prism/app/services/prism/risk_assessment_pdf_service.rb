@@ -15,7 +15,7 @@ module Prism
       new(prism_risk_assessment, file).generate_pdf
     end
 
-    def generate_pdf
+    def generate_pdf(skip_images: false)
       metadata = {
         Title: "OPSS - PRISM risk assessment - #{prism_risk_assessment.name}",
         Author: prism_risk_assessment.user.name,
@@ -37,7 +37,7 @@ module Prism
       pdf.table([
         [
           { image: File.open(Prism::Engine.root.join("app/assets/images/prism/opss-logo.jpg")), fit: [200, 200] },
-          prism_risk_assessment.product.virus_free_images.present? ? prism_risk_assessment.product.virus_free_images.first.file_upload.blob.open { |file| { image: File.open(file.path), fit: [200, 200], position: :right } } : ""
+          !skip_images && prism_risk_assessment.product.virus_free_images.present? ? prism_risk_assessment.product.virus_free_images.first.file_upload.blob.open { |file| { image: File.open(file.path), fit: [200, 200], position: :right } } : ""
         ],
       ], width: 522, cell_style: { borders: [] })
       pdf.text "About assessment", color: "000000", style: :bold, size: 20
@@ -87,7 +87,7 @@ module Prism
             [{ content: "Other users that may be at risk", font_style: :bold }, harm_scenario_unintended_risks_for(harm_scenario.unintended_risks_for)],
             *harm_scenario.harm_scenario_steps.each_with_index.map do |hss, hss_index|
               # rubocop:disable Style/StringConcatenation
-              [{ content: "Step #{hss_index + 1}", font_style: :bold }, "#{hss.description}\n\nProbability of harm: #{hss.probability_decimal || '1 in ' + ActiveSupport::NumberHelper.number_to_delimited(hss.probability_frequency.to_s)}\n\nSupporting information: #{harm_scenario_probability_evidence(hss.probability_evidence)}"]
+              [{ content: "Step #{hss_index + 1}", font_style: :bold }, "#{hss.description}\n\nProbability of harm: #{hss.probability_decimal || '1 in ' + ActiveSupport::NumberHelper.number_to_delimited(hss.probability_frequency.to_s)}\n\nSupporting information: #{harm_scenario_probability_evidence(hss.probability_evidence)}#{attachment(hss.harm_scenario_step_evidence.evidence_file)}"]
               # rubocop:enable Style/StringConcatenation
             end,
             [{ content: "Severity level", font_style: :bold }, "#{harm_scenario_severity_level(harm_scenario.severity)}\n#{harm_scenario_multiple_casualties(harm_scenario.multiple_casualties)}"],
@@ -142,6 +142,27 @@ module Prism
         [{ content: "How would you describe the risk presented by the product?", font_style: :bold }, evaluation_translate_simple("risk_tolerability", @prism_risk_assessment.evaluation.risk_tolerability)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.render(file)
+    rescue Prawn::Errors::UnsupportedImageType
+      # Prawn doesn't know what to do with the product image.
+      # Re-run the PDF generation while skipping the image so
+      # the user can at least get something.
+      skip_images = true
+      retry
+    end
+
+  private
+
+    def attachment(file)
+      if file.attached?
+        filename = if file.metadata["safe"] == true
+                     file.blob.filename
+                   elsif file.metadata["safe"] == false
+                     file.blob.filename (failed virus scan)
+                   else
+                     file.blob.filename (pending virus scan)
+                   end
+        "\n\nAttachment: #{filename}"
+      end
     end
   end
 end
