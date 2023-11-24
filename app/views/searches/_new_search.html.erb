@@ -8,7 +8,7 @@
     <section class="govuk-grid-column-three-quarters" id="page-content">
       <div class="govuk-grid-row">
         <%= render 'investigations/search_bar', form: form %>
-        <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.sort_dir %>
+        <%= render_sort_by form, @search.sort_by_items(with_relevant_option: true), @search.selected_sort_by, @search.sort_dir %>
       </div>
       <div class="govuk-grid-row">
         <%= search_result_statement(@search.q, @answer.total_count) %>
