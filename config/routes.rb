@@ -25,8 +25,6 @@ Rails.application.routes.draw do
     resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
     get "missing-mobile-number", to: "users#missing_mobile_number"
     post "sign-out-before-resetting-password", to: "users/passwords#sign_out_before_resetting_password", as: :sign_out_before_resetting_password
-    get "remove_user", to: "users#remove", as: :remove_user
-    delete "delete", to: "users#delete", as: :delete_user
   end
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
