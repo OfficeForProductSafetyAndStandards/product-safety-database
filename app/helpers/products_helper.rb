@@ -1,6 +1,6 @@
 module ProductsHelper
-  def search_for_products(page_size = Product.count, user = current_user, ids_only: false)
-    query = Product.includes(investigations: %i[owner_user owner_team])
+  def search_for_products(page_size = Product.count, user = current_user, for_export: false)
+    query = Product.includes(child_records(for_export))
 
     if @search.q.present?
       @search.q.strip!
@@ -10,19 +10,13 @@ module ProductsHelper
         .or(Product.where(id: @search.q))
     end
 
-    if @search.category.present?
-      query = query.where(category: @search.category)
-    end
+    query = query.where(category: @search.category) if @search.category.present?
 
-    if @search.case_status == "open_only"
-      query = query.where(investigations: { is_closed: false })
-    end
+    query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
 
-    if @search.retired_status == "active" || @search.retired_status.blank?
-      query = query.where(retired_at: nil)
-    elsif @search.retired_status == "retired"
-      query = query.where.not(retired_at: nil)
-    end
+    query = query.where(retired_at: nil) if @search.retired_status == "active" || @search.retired_status.blank?
+
+    query = query.where.not(retired_at: nil) if @search.retired_status == "retired"
 
     case @search.case_owner
     when "me"
@@ -32,18 +26,20 @@ module ProductsHelper
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
 
-    if ids_only
-      query.distinct.pluck(:id)
-    else
-      query
-        .order(sorting_params)
-        .page(page_number)
-        .per(page_size)
-    end
+    query
+      .order(sorting_params)
+      .page(page_number)
+      .per(page_size)
   end
 
   def product_export_params
     params.permit(:q, :category)
+  end
+
+  def child_records(for_export)
+    return [:investigations, :owning_team, { investigation_products: [:test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }] }] if for_export
+
+    { investigations: %i[owner_user owner_team] }
   end
 
   def sorting_params
