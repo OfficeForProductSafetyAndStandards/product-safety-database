@@ -5,7 +5,7 @@ ruby "3.2.1"
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.14"
 gem "activerecord-pg_enum", "~> 2.0"
-gem "active_storage_validations", "~> 1.1.2"
+gem "active_storage_validations", "~> 1.1.3"
 gem "aws-sdk-s3", "~> 1.136"
 gem "aws-sdk-s3control", "~> 1.70"
 gem "bootsnap", require: false
