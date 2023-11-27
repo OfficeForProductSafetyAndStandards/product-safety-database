@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Viewing a restricted case", :with_stubbed_mailer, :with_stubbed_notify, :with_errors_rendered, type: :request do
+RSpec.describe "Viewing a restricted case", :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:users_organisation) { create(:organisation, name: "Org A") }
   let(:users_team) { create(:team, organisation: users_organisation, name: "Team A") }
   let(:user) { create(:user, :activated, organisation: users_organisation, team: users_team) }
