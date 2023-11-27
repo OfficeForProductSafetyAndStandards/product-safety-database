@@ -5,8 +5,8 @@ module BusinessesHelper
     business
   end
 
-  def search_for_businesses(page_size = Business.count, user = current_user, ids_only: false)
-    query = Business.includes(investigations: %i[owner_user owner_team])
+  def search_for_businesses(page_size = Business.count, user = current_user, for_export: false)
+    query = Business.includes(child_records(for_export))
 
     if @search.q.present?
       @search.q.strip!
@@ -15,9 +15,7 @@ module BusinessesHelper
         .or(Business.where(company_number: @search.q))
     end
 
-    if @search.case_status == "open_only"
-      query = query.where(investigations: { is_closed: false })
-    end
+    query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
 
     case @search.case_owner
     when "me"
@@ -27,14 +25,16 @@ module BusinessesHelper
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
 
-    if ids_only
-      query.distinct.pluck(:id)
-    else
-      query
-        .order(sorting_params)
-        .page(page_number)
-        .per(page_size)
-    end
+    query
+      .order(sorting_params)
+      .page(page_number)
+      .per(page_size)
+  end
+
+  def child_records(for_export)
+    return %i[investigations locations contacts] if for_export
+
+    [investigations: %i[owner_user owner_team]]
   end
 
   def business_export_params
