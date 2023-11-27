@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbed_notify, :with_errors_rendered, type: :request do
+RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:team) { create(:team) }
   let(:user) { create(:user, :team_admin, :activated, has_viewed_introduction: true, team: user_team) }
   let(:user_team) { team }

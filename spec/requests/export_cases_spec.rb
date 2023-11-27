@@ -11,7 +11,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
     let(:user) { create(:user, :activated, :viewed_introduction) }
 
     context "when generating a case export" do
-      it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
+      it "shows a forbidden error", :aggregate_failures do
         get generate_case_exports_path
 
         expect(response).to render_template("errors/forbidden")
@@ -20,7 +20,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
     end
 
     context "when viewing a case export" do
-      it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
+      it "shows a forbidden error", :aggregate_failures do
         case_export = CaseExport.create!(user:, params:)
         get case_export_path(case_export)
 

@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :nav_items, :secondary_nav_items, :current_user, :root_path_for
 
+  rescue_from Pundit::NotAuthorizedError, with: :render_403_page
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
 
   def check_current_user_status
@@ -121,6 +122,10 @@ private
 
   def render_404_page
     render "errors/not_found", status: :not_found
+  end
+
+  def render_403_page
+    render "errors/forbidden", status: :forbidden
   end
 
   def highlight_businesses?
