@@ -4,7 +4,6 @@ class Api::BaseController < ActionController::Base
   prepend_before_action :authenticate_api_token!
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
-
   private
 
   def authenticate_api_token!
