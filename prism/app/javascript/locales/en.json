@@ -75,8 +75,10 @@
         },
         "yes_no": {
           "false": "No",
+          "minor": "Yes - minor coverage",
           "no": "No",
           "not_applicable": "Not applicable",
+          "significant": "Yes - significant coverage",
           "true": "Yes",
           "unknown": "Unknown",
           "yes": "Yes"

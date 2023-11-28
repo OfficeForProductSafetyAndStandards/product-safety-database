@@ -2,6 +2,13 @@ module Prism
   class Evaluation < ApplicationRecord
     belongs_to :risk_assessment
 
+    enum :featured_in_media, {
+      "significant" => "significant",
+      "minor" => "minor",
+      "no" => "no",
+      "unknown" => "unknown",
+    }, prefix: true
+
     enum :other_hazards, {
       "yes" => "yes",
       "no" => "no",
@@ -72,6 +79,7 @@ module Prism
     validates :people_at_increased_risk, inclusion: [true, false], on: :consider_the_nature_of_the_risk
     validates :relevant_action_by_others, inclusion: %w[yes no unknown], on: :consider_the_nature_of_the_risk
     validates :factors_to_take_into_account, inclusion: [true, false], on: :consider_the_nature_of_the_risk
+    validates :featured_in_media, inclusion: %w[significant minor no unknown], on: :consider_perception_and_tolerability_of_the_risk
     validates :other_hazards, inclusion: %w[yes no unknown], on: :consider_perception_and_tolerability_of_the_risk
     validates :low_likelihood_high_severity, inclusion: %w[yes no], on: :consider_perception_and_tolerability_of_the_risk
     validates :risk_to_non_users, inclusion: [true, false], on: :consider_perception_and_tolerability_of_the_risk
@@ -82,6 +90,7 @@ module Prism
 
     before_save :clear_sensitivity_analysis_details
     before_save :clear_people_at_increased_risk_details
+    before_save :clear_factors_to_take_into_account_details
 
   private
 
@@ -91,6 +100,10 @@ module Prism
 
     def clear_people_at_increased_risk_details
       self.people_at_increased_risk_details = nil unless people_at_increased_risk
+    end
+
+    def clear_factors_to_take_into_account_details
+      self.factors_to_take_into_account_details = nil unless factors_to_take_into_account
     end
   end
 end
