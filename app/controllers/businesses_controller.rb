@@ -46,7 +46,7 @@ class BusinessesController < ApplicationController
     respond_to do |format|
       if @business.save
         @business.investigations.reindex
-        format.html { redirect_to @business, flash: { success: "The business was updated" }, allow_other_host: true }
+        format.html { redirect_to @business, flash: { success: "The business was updated" } }
         format.json { render :show, status: :ok, location: @business }
       else
         format.html { render :edit }
