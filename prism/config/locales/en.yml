@@ -152,6 +152,8 @@ en:
               inclusion: Select whether relevant action is planned or underway by another MSA or other organisation
             factors_to_take_into_account:
               inclusion: Select whether there are factors to take account of in relation to risk management decisions
+            featured_in_media:
+              inclusion: Select whether the risk has been featured in the media
             other_hazards:
               inclusion: Select whether the product has any other hazards that can and do cause harm
             low_likelihood_high_severity:
@@ -311,3 +313,5 @@ en:
         "no": "No"
         unknown: Unknown
         not_applicable: Not applicable
+        significant: Yes - significant coverage
+        minor: Yes - minor coverage
