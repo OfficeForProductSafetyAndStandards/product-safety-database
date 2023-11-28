@@ -75,6 +75,7 @@ paths:
                 type: string
               product_code:
                 type: string
+                nullable: true
               barcode:
                 type: string
                 nullable: true
@@ -89,13 +90,16 @@ paths:
                 type: string
               webpage:
                 type: string
+                nullable: true
               owning_team:
                 type: object
                 properties:
                   name:
                     type: string
+                    nullable: true
                   email:
                     type: string
+                    nullable: true
               product_images:
                 type: array
                 items:
@@ -109,6 +113,26 @@ paths:
           description: Product not found
         '401':
           description: Unauthorised user
+  "/api/v1/products":
+    get:
+      summary: Search for a Product
+      description: Search for a Product
+      tags:
+      - Products
+      produces:
+      - application/json
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        type: string
+      - name: q
+        in: query
+        type: string
+      responses:
+        '200':
+          description: Search results returned
 servers:
 - url: https://staging.product-safety-database.service.gov.uk
 - url: http://localhost:3000
