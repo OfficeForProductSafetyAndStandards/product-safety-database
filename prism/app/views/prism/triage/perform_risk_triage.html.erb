@@ -9,11 +9,14 @@
     <div class="govuk-inset-text">
       <p class="govuk-body">You'll need to download the Excel file (120KB) to start the risk triage.</p>
     </div>
-    <%= govuk_button_link_to("Download PRISM triage Excel tool", "/files/prism-toolkit-risk-triage.xlsx", download: "") %>
+    <%= govuk_button_link_to("Download PRISM triage Excel tool", "/files/prism-toolkit-risk-triage.xlsx", download: "", secondary: true) %>
     <% if params[:id].present? %>
-      <p class="govuk-body"><a href="<%= continue_with_risk_assessment_path(params[:id]) %>" class="govuk-link">Continue with risk assessment</a></p>
+      <div class="govuk-button-group">
+        <%= govuk_button_link_to("Continue with risk assessment", continue_with_risk_assessment_path(params[:id])) %>
+        <a href="<%= main_app.your_prism_risk_assessments_path %>" class="govuk-link">No risk assessment required</a>
+      </div>
     <% else %>
-      <p class="govuk-body"><a href="<%= main_app.your_prism_risk_assessments_path %>" class="govuk-link">Return to risk assessments dashboard</a></p>
+      <%= govuk_button_link_to("Return to risk assessments dashboard", main_app.your_prism_risk_assessments_path) %>
     <% end %>
   </div>
 </div>

@@ -87,7 +87,7 @@ module Prism
             [{ content: "Other users that may be at risk", font_style: :bold }, harm_scenario_unintended_risks_for(harm_scenario.unintended_risks_for)],
             *harm_scenario.harm_scenario_steps.each_with_index.map do |hss, hss_index|
               # rubocop:disable Style/StringConcatenation
-              [{ content: "Step #{hss_index + 1}", font_style: :bold }, "#{hss.description}\n\nProbability of harm: #{hss.probability_decimal || '1 in ' + ActiveSupport::NumberHelper.number_to_delimited(hss.probability_frequency.to_s)}\n\nSupporting information: #{harm_scenario_probability_evidence(hss.probability_evidence)}#{attachment(hss.harm_scenario_step_evidence.evidence_file)}"]
+              [{ content: "Step #{hss_index + 1}", font_style: :bold }, "#{hss.description}\n\nProbability of harm: #{hss.probability_decimal || '1 in ' + ActiveSupport::NumberHelper.number_to_delimited(hss.probability_frequency.to_s)}\n\nSupporting information: #{harm_scenario_probability_evidence(hss.probability_evidence)}#{attachment(hss.harm_scenario_step_evidence&.evidence_file)}"]
               # rubocop:enable Style/StringConcatenation
             end,
             [{ content: "Severity level", font_style: :bold }, "#{harm_scenario_severity_level(harm_scenario.severity)}\n#{harm_scenario_multiple_casualties(harm_scenario.multiple_casualties)}"],
@@ -121,12 +121,13 @@ module Prism
         [{ content: "Is there a significant risk differential?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.significant_risk_differential)],
         [{ content: "Are there people at increased risk?", font_style: :bold }, people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details)],
         [{ content: "Is relevant risk management action planned or underway by another MSA or other organisation?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others)],
-        [{ content: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.factors_to_take_into_account)],
+        [{ content: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?", font_style: :bold }, factors_to_take_into_account(@prism_risk_assessment.evaluation.factors_to_take_into_account, @prism_risk_assessment.evaluation.factors_to_take_into_account_details)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.move_down 10
       pdf.text "Perception and tolerability of risk", color: "000000", style: :bold, size: 15
       pdf.move_down 10
       pdf.table([
+        [{ content: "Has the risk featured in the media?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.featured_in_media)],
         [{ content: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards)],
         [{ content: "Is this a low likelihood but high severity risk?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.low_likelihood_high_severity)],
         [{ content: "Is there a risk to non-users of the product?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.risk_to_non_users)],
@@ -153,6 +154,8 @@ module Prism
   private
 
     def attachment(file)
+      return if file.nil?
+
       if file.attached?
         filename = if file.metadata["safe"] == true
                      file.blob.filename

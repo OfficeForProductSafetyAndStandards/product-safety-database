@@ -134,7 +134,7 @@ module Prism
     end
 
     def multiple_harm_scenarios_with_identical_severity_levels?
-      multiple_harm_scenarios? && harm_scenarios.map(&:severity).uniq.length <= 1
+      multiple_harm_scenarios? && harm_scenarios.map(&:severity).uniq.length < harm_scenarios.map(&:severity).length
     end
 
     def clear_serious_risk_rebuttable_factors

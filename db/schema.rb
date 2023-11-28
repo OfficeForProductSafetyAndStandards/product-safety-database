@@ -347,6 +347,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_134039) do
     t.datetime "created_at", null: false
     t.string "designed_to_provide_protective_function"
     t.boolean "factors_to_take_into_account"
+    t.text "factors_to_take_into_account_details"
+    t.string "featured_in_media"
     t.string "level_of_uncertainty"
     t.string "low_likelihood_high_severity"
     t.boolean "multiple_casualties"
