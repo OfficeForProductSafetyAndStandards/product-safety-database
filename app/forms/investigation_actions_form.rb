@@ -10,7 +10,7 @@ class InvestigationActionsForm
   validates_presence_of :investigation_action
 
   def actions
-    status_and_owner_actions.merge(email_alert_action)
+    status_and_owner_actions
   end
 
 private
@@ -23,14 +23,6 @@ private
       change_case_visibility: action_label("change_case_visibility.#{visibility_status}"),
       change_case_risk_level: action_label("change_case_risk_level.#{risk_level_status}")
     })
-  end
-
-  def email_alert_action
-    return {} unless policy(investigation).send_email_alert?
-
-    {
-      send_email_alert: action_label(:send_email_alert),
-    }
   end
 
   def case_status_action

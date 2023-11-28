@@ -21,12 +21,6 @@
       rows: case_rows(@investigation, current_user, team_list_html)
 ) %>
 
-<% if policy(@investigation).send_email_alert? %>
-  <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-    <%= link_to "Create an email alert", about_investigation_alerts_path(@investigation), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" %>
-  </div>
-<% end %>
-
 <h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">
   Safety and compliance
 </h3>

@@ -81,12 +81,6 @@ FactoryBot.define do
       end
     end
 
-    trait :email_alert_sender do
-      transient do
-        roles { %i[email_alert_sender] }
-      end
-    end
-
     trait :restricted_case_viewer do
       transient do
         roles { %i[restricted_case_viewer] }
