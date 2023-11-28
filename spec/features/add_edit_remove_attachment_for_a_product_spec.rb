@@ -90,7 +90,8 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
 
       expect(page).not_to have_link("Add an image")
 
-      expect { visit("/products/#{product.id}/document_uploads/new") }.to raise_error(Pundit::NotAuthorizedError)
+      visit("/products/#{product.id}/document_uploads/new")
+      expect(page).to have_http_status(:forbidden)
     end
 
     it "does not allow the user to edit or delete images" do
@@ -122,7 +123,8 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
       expect(page).not_to have_link("Add an image")
       expect(page).not_to have_link("Delete image")
 
-      expect { visit("/products/#{product.id}/image_uploads/#{product.virus_free_images.last.id}/remove") }.to raise_error(Pundit::NotAuthorizedError)
+      visit("/products/#{product.id}/image_uploads/#{product.virus_free_images.last.id}/remove")
+      expect(page).to have_http_status(:forbidden)
     end
   end
 
