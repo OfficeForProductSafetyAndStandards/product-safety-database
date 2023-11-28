@@ -163,7 +163,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      choose "featured-in-media-significant-field" # Has the risk featured in the media? (Yes - significant coverage)
+      choose "evaluation-featured-in-media-significant-field" # Has the risk featured in the media? (Yes - significant coverage)
 
       choose "evaluation-other-hazards-no-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
 
@@ -241,7 +241,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      choose "featured-in-media-significant-field" # Has the risk featured in the media? (Yes - significant coverage)
+      choose "evaluation-featured-in-media-significant-field" # Has the risk featured in the media? (Yes - significant coverage)
 
       choose "evaluation-other-hazards-no-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
 
