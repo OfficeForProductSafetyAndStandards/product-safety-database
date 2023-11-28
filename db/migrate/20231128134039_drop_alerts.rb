@@ -10,7 +10,7 @@ class DropAlerts < ActiveRecord::Migration[7.0]
       t.integer "investigation_id"
       t.string "summary"
       t.datetime "updated_at", null: false
-      t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
+      t.index %w[investigation_id], name: "index_alerts_on_investigation_id"
     end
   end
 end
