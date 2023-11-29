@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbed_notify, :with_errors_rendered, type: :request do
+RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:team) { create(:team) }
   let(:user) { create(:user, :team_admin, :activated, has_viewed_introduction: true, team: user_team) }
   let(:user_team) { team }
@@ -84,7 +84,9 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
       end
 
       it "calls the InviteUserToTeam service" do
-        expect(InviteUserToTeam).to have_received(:call).with({ email:, team:, inviting_user: user }.with_indifferent_access)
+        expect(InviteUserToTeam).to have_received(:call).with(
+          hash_including({ email:, team:, inviting_user: user })
+        )
       end
 
       it "redirects to the team page" do
@@ -111,7 +113,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
 
       it "shows an error message" do
         put resend_team_invitation_path(team, existing_user)
-        expect(response).to render_template("errors/forbidden")
+        expect(response).to be_forbidden
       end
     end
 
@@ -121,7 +123,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
 
       it "shows an error message" do
         put resend_team_invitation_path(team, existing_user)
-        expect(response).to render_template("errors/forbidden")
+        expect(response).to be_forbidden
       end
     end
 
@@ -130,7 +132,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
 
       it "shows an error message" do
         put resend_team_invitation_path(team, existing_user)
-        expect(response).to render_template("errors/not_found")
+        expect(response).to be_not_found
       end
     end
 

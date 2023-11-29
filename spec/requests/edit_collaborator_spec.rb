@@ -16,7 +16,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
   end
 
   context "when editing" do
-    context "with owner collaboration", :with_errors_rendered do
+    context "with owner collaboration" do
       before do
         get edit_investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id)
       end
@@ -68,7 +68,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
       end
     end
 
-    context "with owner collaboration", :with_errors_rendered do
+    context "with owner collaboration" do
       before do
         put investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id), params:
       end
@@ -78,7 +78,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
       end
     end
 
-    context "when the collaboration has already been deleted", :with_errors_rendered do
+    context "when the collaboration has already been deleted" do
       before do
         edit_access_collaboration.destroy!
       end
@@ -89,7 +89,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
     end
   end
 
-  context "when the user isn't part of the team assigned", :with_errors_rendered do
+  context "when the user isn't part of the team assigned" do
     let(:creator) { create(:user) }
     let(:investigation) { create(:allegation, creator:) }
 

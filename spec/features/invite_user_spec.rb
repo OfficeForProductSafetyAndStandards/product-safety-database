@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_errors_rendered, type: :feature do
+RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
   let(:email) { Faker::Internet.email }

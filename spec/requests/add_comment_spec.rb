@@ -52,9 +52,8 @@ RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer
     let(:investigation) { create(:allegation, :closed) }
 
     it "does not allow a comment to be added" do
-      expect {
-        post investigation_activity_comment_path(investigation), params: { comment_form: { body: "Test" } }
-      }.to raise_error(Pundit::NotAuthorizedError)
+      post investigation_activity_comment_path(investigation), params: { comment_form: { body: "Test" } }
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

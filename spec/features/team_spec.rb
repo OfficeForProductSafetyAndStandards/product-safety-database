@@ -10,7 +10,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, type: :feature do
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
 
   context "when signed in as a member of another team" do
-    scenario "it displays a forbidden error", :with_errors_rendered do
+    scenario "it displays a forbidden error" do
       sign_in(another_user_another_team)
       visit "/teams/#{team.id}"
       expect_to_be_on_access_denied_page
