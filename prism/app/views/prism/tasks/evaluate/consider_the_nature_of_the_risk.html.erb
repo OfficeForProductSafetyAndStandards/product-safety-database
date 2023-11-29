@@ -104,17 +104,12 @@
         legend: { text: "Is relevant risk management action planned or underway by another MSA or other organisation?" },
         bold_labels: false
       %>
-      <%=
-        f.govuk_collection_radio_buttons :factors_to_take_into_account,
-        [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
-        ],
-        :id,
-        :name,
-        legend: { text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?" },
-        bold_labels: false
-      %>
+      <%= f.govuk_radio_buttons_fieldset(:factors_to_take_into_account, legend: { text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?" }) do %>
+        <%= f.govuk_radio_button :factors_to_take_into_account, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_area :factors_to_take_into_account_details, label: nil %>
+        <% end %>
+        <%= f.govuk_radio_button :factors_to_take_into_account, false, label: { text: "No" } %>
+      <% end %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>
