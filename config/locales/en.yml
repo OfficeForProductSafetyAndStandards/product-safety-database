@@ -470,7 +470,6 @@ en:
         change_case_risk_level:
           not_set: Set risk level
           set: Change risk level
-        send_email_alert: "Send email alert"
 
   activemodel:
     errors:

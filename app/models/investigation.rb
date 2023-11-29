@@ -47,7 +47,6 @@ class Investigation < ApplicationRecord
 
   has_many :tests, dependent: :destroy
   has_many :test_results, class_name: "Test::Result", dependent: :destroy
-  has_many :alerts, dependent: :destroy
 
   has_many_attached :documents
 

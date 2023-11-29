@@ -46,10 +46,6 @@ class InvestigationPolicy < ApplicationPolicy
     user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team) || user.has_role?(:super_user)
   end
 
-  def send_email_alert?(user: @user)
-    user.can_send_email_alert?
-  end
-
   def investigation_restricted?
     !@record.is_private
   end

@@ -114,10 +114,6 @@ class User < ApplicationRecord
     has_role? :risk_level_validator
   end
 
-  def can_send_email_alert?
-    has_role? :email_alert_sender
-  end
-
   def can_view_restricted_cases?
     has_role? :restricted_case_viewer
   end

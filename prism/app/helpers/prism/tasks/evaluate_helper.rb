@@ -107,6 +107,10 @@ module Prism
       people_at_increased_risk_details.present? ? "#{I18n.t('prism.evaluation.yes_no.true')}: #{people_at_increased_risk_details}" : I18n.t("prism.evaluation.yes_no.#{people_at_increased_risk}")
     end
 
+    def factors_to_take_into_account(factors_to_take_into_account, factors_to_take_into_account_details)
+      factors_to_take_into_account_details.present? ? "#{I18n.t('prism.evaluation.yes_no.true')}: #{factors_to_take_into_account_details}" : I18n.t("prism.evaluation.yes_no.#{factors_to_take_into_account}")
+    end
+
     def other_risk_perception_matters(other_risk_perception_matters)
       other_risk_perception_matters.presence || I18n.t("prism.evaluation.other_risk_perception_matters.no_other_matters")
     end
