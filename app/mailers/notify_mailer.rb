@@ -5,7 +5,6 @@ class NotifyMailer < GovukNotifyRails::Mailer
     {
       account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d",
       account_locked_inactive: "4e5294f8-04ac-4791-a265-3504a1df964e",
-      alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
       case_risk_level_updated: "66c2f2dd-f3a1-4ef1-a9cc-a99a1b7dff22",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
       investigation_created: "b5457546-9633-4a9c-a844-b61f2e818c24",
@@ -69,18 +68,6 @@ class NotifyMailer < GovukNotifyRails::Mailer
       investigation_url: investigation_url(pretty_id: investigation_pretty_id),
       update_text:,
       subject_text:
-    )
-
-    mail(to: email)
-  end
-
-  def alert(email, subject_text:, body_text:)
-    set_template(TEMPLATES[:alert])
-    set_reference("Alert")
-
-    set_personalisation(
-      subject_text:,
-      email_text: body_text
     )
 
     mail(to: email)

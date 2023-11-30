@@ -4,9 +4,9 @@ class UsersController < ApplicationController
   skip_before_action :has_viewed_introduction
   skip_before_action :require_secondary_authentication
 
-  def complete_registration
-    @user = User.find(params[:id])
+  before_action :find_user, only: %i[complete_registration update]
 
+  def complete_registration
     return render :signed_in_as_another_user if user_signed_in? && !signed_in_as?(@user)
 
     # Some users will bookmark the invitation URL received on the email and may re-use
@@ -29,7 +29,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
     return render("errors/forbidden", status: :forbidden) if params[:invitation] != @user.invitation_token
 
     @user.assign_attributes(new_user_attributes)
@@ -45,6 +44,8 @@ class UsersController < ApplicationController
   def remove
     @user = User.find_by(id: params[:user_id])
     @remove_user_form = RemoveUserForm.new
+  rescue ActiveRecord::RecordNotFound
+    render "errors/not_found", status: :not_found
   end
 
   def delete
@@ -69,6 +70,12 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def find_user
+    @user = User.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render "errors/not_found", status: :not_found
+  end
 
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)

@@ -22,6 +22,8 @@ class InvitationsController < ApplicationController
     invitation = InviteUserToTeam.call({ user:, team:, inviting_user: current_user })
 
     redirect_to(team, flash: { success: t("invite_user_to_team.invite_sent", email: invitation.user.email) })
+  rescue ActiveRecord::RecordNotFound
+    render "errors/not_found", status: :not_found
   end
 
 private

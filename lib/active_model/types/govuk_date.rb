@@ -1,6 +1,6 @@
 module ActiveModel
   module Types
-    class GovUKDate < ActiveRecord::Type::Value
+    class GovukDate < ActiveRecord::Type::Value
       def cast(value)
         DateParser.new(value).date
       end

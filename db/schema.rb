@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_28_134039) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -76,16 +76,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
     t.index ["type"], name: "index_activities_on_type"
   end
 
-  create_table "alerts", id: :serial, force: :cascade do |t|
-    t.uuid "added_by_user_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.text "description"
-    t.integer "investigation_id"
-    t.string "summary"
-    t.datetime "updated_at", precision: nil, null: false
-    t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
-  end
-
   create_table "bulk_products_uploads", force: :cascade do |t|
     t.bigint "business_id"
     t.datetime "created_at", null: false
@@ -119,6 +109,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
     t.string "company_number"
     t.datetime "created_at", precision: nil, null: false
     t.string "legal_name"
+    t.bigint "online_marketplace_id"
     t.string "trading_name", null: false
     t.datetime "updated_at", precision: nil, null: false
   end
@@ -357,6 +348,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
     t.datetime "created_at", null: false
     t.string "designed_to_provide_protective_function"
     t.boolean "factors_to_take_into_account"
+    t.text "factors_to_take_into_account_details"
+    t.string "featured_in_media"
     t.string "level_of_uncertainty"
     t.string "low_likelihood_high_severity"
     t.boolean "multiple_casualties"
@@ -647,7 +640,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_151152) do
   add_foreign_key "activities", "businesses"
   add_foreign_key "activities", "correspondences"
   add_foreign_key "activities", "investigations"
-  add_foreign_key "alerts", "investigations"
   add_foreign_key "collaborations", "investigations"
   add_foreign_key "complainants", "investigations"
   add_foreign_key "corrective_actions", "businesses"

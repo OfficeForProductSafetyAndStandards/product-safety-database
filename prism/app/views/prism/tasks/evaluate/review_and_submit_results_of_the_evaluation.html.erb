@@ -120,7 +120,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?")
-            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.factors_to_take_into_account))
+            row.with_value(text: factors_to_take_into_account(@prism_risk_assessment.evaluation.factors_to_take_into_account, @prism_risk_assessment.evaluation.factors_to_take_into_account_details))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are there factors to take account of in relation to risk management decisions")
           end
         end
@@ -128,6 +128,11 @@
       <h3 class="govuk-heading-s">Perception and tolerability of risk</h3>
       <%=
         govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "Has the risk featured in the media?")
+            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.featured_in_media))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether the risk has featured in the media")
+          end
           summary_list.with_row do |row|
             row.with_key(text: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?")
             row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards))
