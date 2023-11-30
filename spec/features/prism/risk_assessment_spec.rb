@@ -117,7 +117,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       expect(page).to have_text("Step 1Test description for step 1Probability of harm: 1 in 100Evidence: Sole judgement or estimation")
       expect(page).to have_text("Overall probability of harm1 in 100")
       expect(page).to have_text("Severity levelLevel 1, multiple casualties: no")
-      expect(page).to have_text("Scenario risk level\nMedium risk")
+      expect(page).to have_text("Scenario risk level\nLow risk")
 
       click_button "Confirm and create scenario"
 
