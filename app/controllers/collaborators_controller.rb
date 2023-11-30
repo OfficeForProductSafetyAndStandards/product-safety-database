@@ -37,6 +37,8 @@ class CollaboratorsController < Investigations::BaseController
     @collaborator = @collaboration.collaborator
 
     @edit_form = EditCaseCollaboratorForm.new(collaboration: @collaboration)
+  rescue ActiveRecord::RecordNotFound
+    render_404_page
   end
 
   def update

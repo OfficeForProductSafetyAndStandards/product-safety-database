@@ -43,12 +43,11 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
     before { sign_in(other_user) }
 
     it "raises an unauthorised error" do
-      expect {
-        put product_path(product),
-            params: {
-              product: { name: "something else" }
-            }
-      }.to raise_error(Pundit::NotAuthorizedError)
+      put product_path(product),
+          params: {
+            product: { name: "something else" }
+          }
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

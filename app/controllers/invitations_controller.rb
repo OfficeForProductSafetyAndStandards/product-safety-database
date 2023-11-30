@@ -22,13 +22,15 @@ class InvitationsController < ApplicationController
     invitation = InviteUserToTeam.call({ user:, team:, inviting_user: current_user })
 
     redirect_to(team, flash: { success: t("invite_user_to_team.invite_sent", email: invitation.user.email) })
+  rescue ActiveRecord::RecordNotFound
+    render "errors/not_found", status: :not_found
   end
 
 private
 
   def find_team_and_authorize_invite
     team = Team.find(params[:team_id])
-    authorize team, :invite_or_remove_user?
+    authorize team, :invite_user?
     team
   end
 

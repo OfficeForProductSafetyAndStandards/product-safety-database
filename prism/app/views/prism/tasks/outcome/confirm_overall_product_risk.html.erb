@@ -55,7 +55,7 @@
       <% if @harm_scenarios.length == 1 %>
         <h2 class="govuk-heading-m">Overall product risk level</h2>
         <p class="govuk-body" data-test="overall-product-risk-level"><%= overall_risk_level(@harm_scenarios.first).risk_level_tag_html %></p>
-      <% elsif @shared_severity_levels %>
+      <% elsif @identical_severity_levels %>
         <h2 class="govuk-heading-m">Choose the overall product risk level</h2>
         <%= f.govuk_radio_buttons_fieldset :overall_product_risk_methodology, legend: nil do %>
           <%= f.govuk_radio_button :overall_product_risk_methodology, "highest", label: { text: highest_risk_level(@harm_scenarios).risk_level_tag_html }, hint: { text: "<br>#{risk_level_plus_label}Where more than one harm scenario has been generated in relation to the same hazard, the overall level of risk for the product will be determined by the scenario that involves the greatest risk.".html_safe }, link_errors: true %>

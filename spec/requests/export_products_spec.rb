@@ -12,7 +12,7 @@ RSpec.describe "Export products as XLSX file", :with_opensearch, :with_stubbed_n
       let(:user) { create(:user, :activated, :viewed_introduction) }
 
       context "when generating a product export" do
-        it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
+        it "shows a forbidden error", :aggregate_failures do
           get generate_product_exports_path
 
           expect(response).to render_template("errors/forbidden")
@@ -21,7 +21,7 @@ RSpec.describe "Export products as XLSX file", :with_opensearch, :with_stubbed_n
       end
 
       context "when viewing a product export" do
-        it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
+        it "shows a forbidden error", :aggregate_failures do
           product_export = ProductExport.create!(user:, params:)
           get product_export_path(product_export)
 

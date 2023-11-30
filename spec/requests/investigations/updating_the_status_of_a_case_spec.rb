@@ -52,7 +52,7 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
     end
   end
 
-  context "when the user belongs to the a collaborating team", :with_errors_rendered do
+  context "when the user belongs to the a collaborating team" do
     before do
       sign_in user_from_collaborator_team
       patch close_investigation_status_path(investigation),
@@ -69,7 +69,7 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
     end
   end
 
-  context "when the user belongs a team not involved with the case", :with_errors_rendered do
+  context "when the user belongs a team not involved with the case" do
     before do
       sign_in other_user
       patch close_investigation_status_path(investigation),

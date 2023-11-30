@@ -25,8 +25,6 @@ Rails.application.routes.draw do
     resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
     get "missing-mobile-number", to: "users#missing_mobile_number"
     post "sign-out-before-resetting-password", to: "users/passwords#sign_out_before_resetting_password", as: :sign_out_before_resetting_password
-    get "remove_user", to: "users#remove", as: :remove_user
-    delete "delete", to: "users#delete", as: :delete_user
   end
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
@@ -216,12 +214,6 @@ Rails.application.routes.draw do
       resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
       resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
       resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create edit update], path: "phone-calls"
-      resources :alerts, controller: "investigations/alerts", only: %i[show new create update] do
-        collection do
-          get :about
-          post :preview
-        end
-      end
 
       resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
         collection do

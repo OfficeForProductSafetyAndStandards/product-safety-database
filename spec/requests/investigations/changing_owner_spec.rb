@@ -36,7 +36,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_mailer, :with_stubb
     end
   end
 
-  context "when the user is from a collaborating team", :with_errors_rendered do
+  context "when the user is from a collaborating team" do
     before do
       sign_in user_from_collaborator_team
       put investigation_ownership_path(investigation, "select-owner"),
@@ -53,7 +53,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_mailer, :with_stubb
     end
   end
 
-  context "when the user is not involved with the case", :with_errors_rendered do
+  context "when the user is not involved with the case" do
     before do
       sign_in other_user
       put investigation_ownership_path(investigation, "select-owner"),

@@ -321,22 +321,6 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
     end
   end
 
-  describe "#send_email_alert?" do
-    context "when the user has the email_alert_sender role" do
-      before { user.team.roles.create!(name: "email_alert_sender") }
-
-      it "returns true" do
-        expect(policy).to be_send_email_alert
-      end
-    end
-
-    context "when the user does not have the email_alert_sender role" do
-      it "returns false" do
-        expect(policy).not_to be_send_email_alert
-      end
-    end
-  end
-
   describe "#can_be_deleted?" do
     context "when investigation has products" do
       let(:investigation) { create(:allegation, :with_products, is_private: false) }
