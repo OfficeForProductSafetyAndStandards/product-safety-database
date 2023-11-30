@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Changing case summary", :with_stubbed_mailer, :with_errors_rendered, type: :request do
+RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
   let(:investigation) do
     create(
       :allegation,

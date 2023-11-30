@@ -13,7 +13,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
 
     scenario "cannot view the new corrective action form" do
       sign_in(read_only_user)
-      expect { visit "/cases/#{investigation.pretty_id}/corrective-actions/new" }.to raise_error(Pundit::NotAuthorizedError)
+      visit "/cases/#{investigation.pretty_id}/corrective-actions/new"
+      expect(page).to have_http_status(:forbidden)
     end
   end
 

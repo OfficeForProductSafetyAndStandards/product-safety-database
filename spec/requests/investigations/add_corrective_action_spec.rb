@@ -26,7 +26,7 @@ RSpec.describe "Adding a corrective action to a case", type: :request, with_stub
     )
   end
 
-  context "when the user is from a team with read-only access", :with_errors_rendered do
+  context "when the user is from a team with read-only access" do
     before do
       sign_in user_from_team_with_read_only_access
       post investigation_corrective_actions_path(investigation.pretty_id)
@@ -37,7 +37,7 @@ RSpec.describe "Adding a corrective action to a case", type: :request, with_stub
     end
   end
 
-  context "when the user is from a team not associated with the case", :with_errors_rendered do
+  context "when the user is from a team not associated with the case" do
     before do
       sign_in other_user
       post investigation_corrective_actions_path(investigation.pretty_id)

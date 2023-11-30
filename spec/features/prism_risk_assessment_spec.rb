@@ -109,7 +109,8 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
     end
 
     scenario "visiting the PRISM risk assessment dashboard directly" do
-      expect { visit "/prism-risk-assessments/your-prism-risk-assessments" }.to raise_error(Pundit::NotAuthorizedError)
+      visit "/prism-risk-assessments/your-prism-risk-assessments"
+      expect(page).to have_http_status(:forbidden)
     end
   end
 end
