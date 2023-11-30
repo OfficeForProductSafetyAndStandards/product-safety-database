@@ -12,7 +12,7 @@ module Prism
     def show
       case step
       when :confirm_overall_product_risk
-        @shared_severity_levels = @harm_scenarios.map(&:severity).uniq.length < @harm_scenarios.map(&:severity).length
+        @identical_severity_levels = @harm_scenarios.map(&:severity).uniq.length <= 1
       when :add_level_of_uncertainty_and_sensitivity_analysis
         @evaluation = @prism_risk_assessment.evaluation || @prism_risk_assessment.build_evaluation
       end
@@ -23,7 +23,7 @@ module Prism
     def update
       case step
       when :confirm_overall_product_risk
-        @shared_severity_levels = @harm_scenarios.map(&:severity).uniq.length < @harm_scenarios.map(&:severity).length
+        @identical_severity_levels = @harm_scenarios.map(&:severity).uniq.length <= 1
         @prism_risk_assessment.assign_attributes(confirm_overall_product_risk_params)
       when :add_level_of_uncertainty_and_sensitivity_analysis
         @evaluation = @prism_risk_assessment.evaluation || @prism_risk_assessment.build_evaluation
