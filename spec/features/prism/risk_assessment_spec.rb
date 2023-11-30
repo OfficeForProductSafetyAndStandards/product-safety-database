@@ -126,7 +126,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       click_link "Review the overall product risk level"
 
       expect(page).to have_text("Electrical1 in 4Level 3Serious risk")
-      expect(page).to have_text("Mechanical1 in 100Level 1Medium risk")
+      expect(page).to have_text("Mechanical1 in 100Level 1Low risk")
       expect(page).to have_css("p[data-test='overall-product-risk-level']", text: "Serious risk")
       expect(page).to have_button("Add a risk level plus label")
 
