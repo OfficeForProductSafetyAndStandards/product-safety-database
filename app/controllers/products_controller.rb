@@ -74,7 +74,7 @@ class ProductsController < ApplicationController
     if @product_form.valid?
       UpdateProduct.call!(
         product: @product.object,
-        product_params: @product_form.serializable_hash.except("image", "existing_image_file_id"),
+        product_params: @product_form.serializable_hash.except("image", "existing_image_file_id", "notification_pretty_id"),
         updating_team: current_user.team
       )
 
