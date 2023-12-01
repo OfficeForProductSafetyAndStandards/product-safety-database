@@ -11,15 +11,15 @@ RSpec.describe "Collaborations", :with_stubbed_mailer do
 
   it "lists all the teams" do
     visit "/cases/#{investigation.pretty_id}/teams"
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
-    expect(page).to have_css("table tbody tr:nth-child(1) th:nth-child(1)", text: "#{owner_team.name} Case creator")
-    expect(page).to have_css("table tbody tr:nth-child(1) td:nth-child(2)", text: "Case owner")
+    expect(page).to have_css("table tbody tr:nth-child(1) th:nth-child(1)", text: "#{owner_team.name} Notification creator")
+    expect(page).to have_css("table tbody tr:nth-child(1) td:nth-child(2)", text: "Notification owner")
 
     expect(page).to have_css("table tbody tr:nth-child(2) th:nth-child(1)", text: editor_team.name)
-    expect(page).to have_css("table tbody tr:nth-child(2) td:nth-child(2)", text: "Edit full case")
+    expect(page).to have_css("table tbody tr:nth-child(2) td:nth-child(2)", text: "Edit full notification")
 
     expect(page).to have_css("table tbody tr:nth-child(3) th:nth-child(1)", text: read_only_team.name)
-    expect(page).to have_css("table tbody tr:nth-child(3) td:nth-child(2)", text: "View full case")
+    expect(page).to have_css("table tbody tr:nth-child(3) td:nth-child(2)", text: "View full notification")
   end
 end

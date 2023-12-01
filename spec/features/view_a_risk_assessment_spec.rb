@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "View a risk assessment on a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "View a risk assessment on a notification", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:risk_assessment_file_path) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new(risk_assessment_file_path) }
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }
@@ -38,7 +38,7 @@ RSpec.feature "View a risk assessment on a case", :with_stubbed_antivirus, :with
       click_link "Serious risk: Teddy Bear"
 
       expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
-      expect_to_have_case_breadcrumbs
+      expect_to_have_notification_breadcrumbs
     end
   end
 
@@ -58,7 +58,7 @@ RSpec.feature "View a risk assessment on a case", :with_stubbed_antivirus, :with
       click_link "Serious risk: Teddy Bear"
 
       expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
-      expect_to_have_case_breadcrumbs
+      expect_to_have_notification_breadcrumbs
     end
   end
 end

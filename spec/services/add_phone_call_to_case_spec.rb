@@ -51,8 +51,8 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_mailer, :with_stubbed_antivirus
         investigation.pretty_id,
         investigation.owner_team.name,
         investigation.owner_team.email,
-        "Phone call details added to the Case by #{user.decorate.display_name(viewer: user)}.",
-        "Case updated"
+        "Phone call details added to the notification by #{user.decorate.display_name(viewer: user)}.",
+        "Notification updated"
       )
     end
   end

@@ -54,8 +54,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Product was removed from the case by #{user.decorate.display_name(viewer: recipient)}.",
-        "Case updated"
+        "Product was removed from the notification by #{user.decorate.display_name(viewer: recipient)}.",
+        "Notification updated"
       ).deliver_later
     end
   end

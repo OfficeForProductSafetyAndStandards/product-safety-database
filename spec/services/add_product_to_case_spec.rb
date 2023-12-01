@@ -43,11 +43,11 @@ RSpec.describe AddProductToCase, :with_test_queue_adapter do
 
     context "with required parameters" do
       def expected_email_subject
-        "Case updated"
+        "Notification updated"
       end
 
       def expected_email_body(name)
-        "Product was added to the case by #{name}."
+        "Product was added to the notification by #{name}."
       end
 
       let(:result) { described_class.call(user:, investigation:, product:) }
@@ -74,7 +74,7 @@ RSpec.describe AddProductToCase, :with_test_queue_adapter do
         expect(activity.title(nil)).to eq(product.name)
       end
 
-      it_behaves_like "a service which notifies the case owner"
+      it_behaves_like "a service which notifies the notification owner"
 
       context "with a product owned by someone else" do
         let(:product) { create(:product, owning_team: create(:team)) }
@@ -109,7 +109,7 @@ RSpec.describe AddProductToCase, :with_test_queue_adapter do
 
           it "returns a failure", :aggregate_failures do
             expect(result).to be_failure
-            expect(result.error).to eq("The product is already linked to the case")
+            expect(result.error).to eq("The product is already linked to the notification")
           end
 
           it "does not add the product twice" do

@@ -1,4 +1,4 @@
-<% title = "Add a team to the case" %>
+<% title = "Add a team to the notification" %>
 <% page_title title, errors: @form.errors.any? %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -23,7 +23,7 @@
         show_all_values: true
       ) %>
 
-      <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.</p>
+      <p class="govuk-body">We’ll email the team to let them know they’ve been added to the notification.</p>
 
       <%= govukRadios(
         form: form,
@@ -39,18 +39,18 @@
         items: [
           {
             id: "permission_level",
-            text: "View full case",
+            text: "View full notification",
             value: Collaboration::Access::ReadOnly.model_name.human,
             hint: {
-              text: "View full case details including correspondence",
+              text: "View full notification details including correspondence",
             }
           },
           {
             id: "permission_level_edit",
-            text: "Edit full case",
+            text: "Edit full notification",
             value: Collaboration::Access::Edit.model_name.human,
             hint: {
-              text: "View and edit all case details. Cannot add or remove teams or close the case.",
+              text: "View and edit all notification details. Cannot add or remove teams or close the notification.",
             }
           }
         ]
@@ -65,7 +65,7 @@
             text: "Message to the team"
           },
           hint: {
-            text: "Message will also be included on the case timeline"
+            text: "Message will also be included on the notification timeline"
           }
         ) %>
       <% end %>
@@ -96,7 +96,7 @@
       ) %>
 
 
-      <%= govukButton(text: "Add team to this case") %>
+      <%= govukButton(text: "Add team to this notification") %>
     <% end %>
   </div>
 </div>

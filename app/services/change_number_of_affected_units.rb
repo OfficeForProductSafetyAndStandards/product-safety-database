@@ -47,7 +47,7 @@ private
         recipient.name,
         recipient.email,
         email_body(recipient),
-        "Case units affected updated"
+        "Notification units affected updated"
       ).deliver_later
     end
   end
@@ -58,6 +58,6 @@ private
 
   def email_body(viewer = nil)
     user_name = user.decorate.display_name(viewer:)
-    "Case units affected was updated by #{user_name}."
+    "Notification units affected was updated by #{user_name}."
   end
 end

@@ -56,11 +56,11 @@ RSpec.describe ChangeCaseStatus, :with_test_queue_adapter do
 
     context "when the previous status and the new status are different" do
       def expected_email_subject
-        "Case was closed"
+        "Notification was closed"
       end
 
       def expected_email_body(name)
-        "Case was closed by #{name}. Email notifications about edits made to cases are not sent when edits are made to closed cases."
+        "Notification was closed by #{name}. Emails about edits made to notifications are not sent when edits are made to closed notifications."
       end
 
       it "succeeds" do
@@ -136,8 +136,8 @@ RSpec.describe ChangeCaseStatus, :with_test_queue_adapter do
         end
       end
 
-      it_behaves_like "a service which notifies the case owner", even_when_the_case_is_closed: true
-      it_behaves_like "a service which notifies the case creator", even_when_the_case_is_closed: true
+      it_behaves_like "a service which notifies the notification owner", even_when_the_notification_is_closed: true
+      it_behaves_like "a service which notifies the notification creator", even_when_the_notification_is_closed: true
     end
   end
 end

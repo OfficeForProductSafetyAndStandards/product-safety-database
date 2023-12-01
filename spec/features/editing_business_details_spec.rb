@@ -59,9 +59,9 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
 
     expect(page).to have_summary_item(key: "Contact", value: "Mr New, CEO, 01632 960000, contact@newco.example")
 
-    within("header") { click_on "Cases" }
+    within("header") { click_on "Notifications" }
 
-    click_on "All cases – Search"
+    click_on "All notifications – Search"
 
     fill_in "Search", with: "NewCo"
     sleep 1

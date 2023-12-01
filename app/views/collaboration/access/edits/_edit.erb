@@ -3,7 +3,7 @@
     <%= edit.collaborator.name %>
     <%= render "collaboration/case_creator_label" if edit.creator_team? %>
   </th>
-  <td class="govuk-table__cell">Edit full case</td>
+  <td class="govuk-table__cell">Edit full notification</td>
   <td class="govuk-table__cell app-table__cell--align-right">
     <% if policy(edit.investigation).manage_collaborators? %>
       <%= link_with_hidden_text_to "Change", "#{edit.collaborator.name}’s permission level",  edit_investigation_collaborator_path(edit.investigation, edit) %>

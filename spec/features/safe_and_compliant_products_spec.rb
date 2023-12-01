@@ -14,10 +14,10 @@ RSpec.feature "Viewing safe and compliant products", :with_stubbed_mailer, :with
       click_link "Products"
     end
 
-    expect(page).not_to have_text("This case has reported any included products as safe and compliant.")
+    expect(page).not_to have_text("This notification has reported any included products as safe and compliant.")
   end
 
-  scenario "Recording the case products as safe and compliant" do
+  scenario "Recording the notification products as safe and compliant" do
     click_link "Edit the safety and compliance"
 
     choose "As safe and compliant"
@@ -30,6 +30,6 @@ RSpec.feature "Viewing safe and compliant products", :with_stubbed_mailer, :with
       click_link "Products"
     end
 
-    expect(page).to have_text("This case has reported any included products as safe and compliant.")
+    expect(page).to have_text("This notification has reported any included products as safe and compliant.")
   end
 end

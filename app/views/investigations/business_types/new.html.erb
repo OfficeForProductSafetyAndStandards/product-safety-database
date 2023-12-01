@@ -1,4 +1,4 @@
-<%= page_title "Add business to case", errors: @business_type_form.errors.any? %>
+<%= page_title "Add business to notification", errors: @business_type_form.errors.any? %>
 <%= form_with(model: @business_type_form, url: investigation_business_types_path(investigation_pretty_id: @investigation.pretty_id), builder: ApplicationFormBuilder) do |form| %>
   <%= govukErrorSummary form: form %>
 

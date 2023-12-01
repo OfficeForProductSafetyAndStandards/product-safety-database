@@ -21,7 +21,7 @@ RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_mailer d
 
   describe "#title" do
     it "returns a generated String" do
-      expect(activity.title(user)).to eq("Case owner changed to #{owner.name}")
+      expect(activity.title(user)).to eq("Notification owner changed to #{owner.name}")
     end
   end
 

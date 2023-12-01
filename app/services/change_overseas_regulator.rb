@@ -49,8 +49,8 @@ private
         investigation.pretty_id,
         entity.name,
         email,
-        "#{user.name} (#{user.team.name}) edited overseas regulator on the case.",
-        "Overseas regulator edited for Case"
+        "#{user.name} (#{user.team.name}) edited overseas regulator on the notification.",
+        "Overseas regulator edited for notification"
       ).deliver_later
     end
   end

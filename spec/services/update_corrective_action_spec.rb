@@ -140,14 +140,14 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_antiv
         end
 
         def expected_email_subject
-          "Corrective action edited for Case"
+          "Corrective action edited for notification"
         end
 
         def expected_email_body(name)
-          "#{name} edited a corrective action on the case."
+          "#{name} edited a corrective action on the notification."
         end
 
-        it_behaves_like "a service which notifies the case owner"
+        it_behaves_like "a service which notifies the notification owner"
 
         context "when removing the previously attached file" do
           let(:related_file) { false }

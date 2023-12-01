@@ -43,14 +43,14 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
     click_link "Supporting information (2)"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_link "Doll #{doll.psd_ref}: Normal use"
 
     click_link "Edit incident"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{incident.id}/edit")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     within_fieldset("Do you know when the incident happened?") do
       expect(page).to have_checked_field("No")
@@ -83,7 +83,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
     click_button "Update incident"
 
     expect(page).not_to have_error_messages
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_link "Teddy Bear #{teddy_bear.psd_ref}: Misuse"
 
@@ -110,7 +110,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
     click_link "Supporting information (2)"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_link "Teddy Bear #{teddy_bear.psd_ref}: Normal use"
 
@@ -149,7 +149,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
 
     expect(page).not_to have_error_messages
     expect(page).to have_content "Accident involving Doll"
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_link investigation.pretty_id
 

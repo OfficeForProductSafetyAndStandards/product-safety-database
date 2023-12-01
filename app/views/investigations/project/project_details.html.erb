@@ -1,6 +1,6 @@
 <%= page_title "New project", errors: @investigation.errors.any? %>
 <% content_for :after_header do %>
-  <%= link_to "Back to cases", investigations_path, class: "govuk-back-link" %>
+  <%= link_to "Back to notifications", investigations_path, class: "govuk-back-link" %>
 <% end %>
 
 <%= form_with(model: @investigation, scope: :investigation, url: wizard_path, method: :put, local: true) do |form| %>
