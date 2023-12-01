@@ -1,5 +1,5 @@
-RSpec.shared_examples "a service which notifies the case owner", :with_test_queue_adapter do |even_when_the_case_is_closed: false|
-  context "when the user is the case owner" do
+RSpec.shared_examples "a service which notifies the notification owner", :with_test_queue_adapter do |even_when_the_notification_is_closed: false|
+  context "when the user is the notification owner" do
     before { ChangeCaseOwner.call!(investigation:, owner: user, user:) }
 
     it "does not send an email" do
@@ -7,7 +7,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
     end
   end
 
-  context "when the user's team is the case owner" do
+  context "when the user's team is the notification owner" do
     before { ChangeCaseOwner.call!(investigation:, owner: user.team, user:) }
 
     it "does not send an email" do
@@ -15,7 +15,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
     end
   end
 
-  context "when the case owner is a user on the same team" do
+  context "when the notification owner is a user on the same team" do
     let(:user_same_team) { create(:user, :activated, team: user.team, organisation: user.organisation) }
 
     before { ChangeCaseOwner.call!(investigation:, owner: user_same_team, user:) }
@@ -30,8 +30,8 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
       )
     end
 
-    unless even_when_the_case_is_closed
-      context "when the case is closed" do
+    unless even_when_the_notification_is_closed
+      context "when the notification is closed" do
         before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
 
         it "does not send an email" do
@@ -58,8 +58,8 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
         )
       end
 
-      unless even_when_the_case_is_closed
-        context "when the case is closed" do
+      unless even_when_the_notification_is_closed
+        context "when the notification is closed" do
           before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
 
           it "does not send an email" do
@@ -82,8 +82,8 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
         )
       end
 
-      unless even_when_the_case_is_closed
-        context "when the case is closed" do
+      unless even_when_the_notification_is_closed
+        context "when the notification is closed" do
           before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
 
           it "does not send an email" do
@@ -111,8 +111,8 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
           )
         end
 
-        unless even_when_the_case_is_closed
-          context "when the case is closed" do
+        unless even_when_the_notification_is_closed
+          context "when the notification is closed" do
             before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
 
             it "does not send an email" do

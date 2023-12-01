@@ -12,8 +12,8 @@ module Investigations::DisplayTextHelper
     items = [
       {
         href: investigation_path(investigation),
-        html: safe_join(["Case ", tag.span(" #{investigation.pretty_id}", class: "govuk-!-font-weight-regular")]),
-        text: "Case",
+        html: safe_join(["Notification ", tag.span(" #{investigation.pretty_id}", class: "govuk-!-font-weight-regular")]),
+        text: "Notification",
         active: is_current_tab.overview?,
         sub_items: investigation_sub_items(investigation)
       },
@@ -99,14 +99,14 @@ module Investigations::DisplayTextHelper
         href: investigation_path(investigation, anchor: "safety")
       },
       {
-        text: "Case specific product information",
+        text: "Notification specific product information",
         href: investigation_path(investigation, anchor: "product-info-1")
       }
     ]
 
     if investigation.complainant
       rows << {
-        text: "Case source",
+        text: "Notification source",
         href: investigation_path(investigation, anchor: "source")
       }
     end
@@ -152,9 +152,9 @@ module Investigations::DisplayTextHelper
 
   def replace_unsightly_field_names(field_name)
     pretty_field_names = {
-      pretty_id: "Case number",
+      pretty_id: "Notification number",
       "activities.search_index": "Activities, comment",
-      "teams_with_access.id": "Team added to the case"
+      "teams_with_access.id": "Team added to the notification"
     }
     pretty_field_names[field_name.to_sym] || field_name.humanize
   end
@@ -178,12 +178,12 @@ module Investigations::DisplayTextHelper
   end
 
   def protected_details_text(source, _investigation)
-    data_type = source.include?("correspondences") ? "correspondence" : "case contact details"
+    data_type = source.include?("correspondences") ? "correspondence" : "notification contact details"
     t("case.protected_details", data_type:)
   end
 
   def investigation_owner(investigation)
-    return "No case owner".html_safe unless investigation.owner
+    return "No notification owner".html_safe unless investigation.owner
 
     owner_names = [h(investigation.owner.name.to_s)]
     owner_names << h(investigation.owner_team&.name)

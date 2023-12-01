@@ -68,8 +68,8 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           expect(page).to have_current_path(authenticated_root_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_link("Your cases")
-          expect(page).to have_link("All cases")
+          expect(page).to have_link("Your notifications")
+          expect(page).to have_link("All notifications")
           expect(page).to have_link("Guidance")
           expect(page).to have_link("How to use the PSD")
         end
@@ -80,8 +80,8 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           expect(page).to have_current_path(authenticated_root_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_link("Your cases")
-          expect(page).to have_link("All cases")
+          expect(page).to have_link("Your notifications")
+          expect(page).to have_link("All notifications")
           expect(page).to have_link("Guidance")
           expect(page).to have_link("How to use the PSD")
         end
@@ -129,8 +129,8 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
             expect(page).to have_current_path(authenticated_root_path)
             expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
-            expect(page).to have_link("Your cases")
-            expect(page).to have_link("All cases")
+            expect(page).to have_link("Your notifications")
+            expect(page).to have_link("All notifications")
             expect(page).to have_link("Guidance")
             expect(page).to have_link("How to use the PSD")
           end

@@ -58,7 +58,7 @@ RSpec.describe AuditActivity::Investigation::UpdateCoronavirusStatus, :with_stub
   describe "#body" do
     context "when new status is true" do
       it "returns a string" do
-        expect(activity.body).to eq("The case is related to the coronavirus outbreak.")
+        expect(activity.body).to eq("The notification is related to the coronavirus outbreak.")
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe AuditActivity::Investigation::UpdateCoronavirusStatus, :with_stub
       let(:new_status) { false }
 
       it "returns a string" do
-        expect(activity.body).to eq("The case is not related to the coronavirus outbreak.")
+        expect(activity.body).to eq("The notification is not related to the coronavirus outbreak.")
       end
     end
   end

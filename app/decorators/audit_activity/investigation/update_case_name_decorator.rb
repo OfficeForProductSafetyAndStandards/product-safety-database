@@ -6,6 +6,6 @@ class AuditActivity::Investigation::UpdateCaseNameDecorator < ApplicationDecorat
   end
 
   def title(_viewer)
-    "Case name updated"
+    "Notification name updated"
   end
 end

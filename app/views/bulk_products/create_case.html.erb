@@ -1,4 +1,4 @@
-<% page_heading = "Create a case for multiple products - Upload multiple products" %>
+<% page_heading = "Create a notification for multiple products - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_create_case_form.errors.any? %>
 <% content_for :after_header do %>
   <%= govukBackLink(text: "Back", href: triage_bulk_upload_products_path) %>
@@ -9,14 +9,14 @@
       <%= error_summary @bulk_products_create_case_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
-        Create a case for multiple products
+        Create a notification for multiple products
       </h1>
-      <p class="govuk-body">All the products you upload will be grouped together in a single case.</p>
+      <p class="govuk-body">All the products you upload will be grouped together in a single notification.</p>
       <%= govukInput(
         form: form,
         key: :name,
-        label: { text: "Case name", classes: "govuk-label--m" },
-        hint: { text: "Give the case a short descriptive title." },
+        label: { text: "Notification name", classes: "govuk-label--m" },
+        hint: { text: "Give the notification a short descriptive title." },
         id: "name"
       ) %>
       <%= govukRadios(
@@ -24,11 +24,11 @@
         key: :reference_number_provided,
         fieldset: {
           legend: {
-            text: "Do you want to add your own reference number to the case?",
+            text: "Do you want to add your own reference number to the notification?",
             classes: "govuk-fieldset__legend--m"
           }
         },
-        hint: { text: "This might be a number already created in a different internal system for your case, or a number you intend to use globally across different systems to reference your case." },
+        hint: { text: "This might be a number already created in a different internal system for your notification, or a number you intend to use globally across different systems to reference your notification." },
         items: [
           {
             text: "Yes",

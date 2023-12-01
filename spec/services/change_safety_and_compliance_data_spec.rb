@@ -92,8 +92,8 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
-            "#{user.name} (#{user.team.name}) edited safety and compliance data on the case.",
-            "Safety and compliance data edited for Case"
+            "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
+            "Safety and compliance data edited for notification"
           )
         end
       end
@@ -141,8 +141,8 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
-            "#{user.name} (#{user.team.name}) edited safety and compliance data on the case.",
-            "Safety and compliance data edited for Case"
+            "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
+            "Safety and compliance data edited for notification"
           )
         end
       end
@@ -188,8 +188,8 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
-            "#{user.name} (#{user.team.name}) edited safety and compliance data on the case.",
-            "Safety and compliance data edited for Case"
+            "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
+            "Safety and compliance data edited for notification"
           )
         end
       end
@@ -234,8 +234,8 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
-            "#{user.name} (#{user.team.name}) edited safety and compliance data on the case.",
-            "Safety and compliance data edited for Case"
+            "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
+            "Safety and compliance data edited for notification"
           )
         end
       end

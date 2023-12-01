@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Changing the overseas regulator of a case", :with_stubbed_mailer, :with_stubbed_opensearch do
+RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, creator: user) }
 
@@ -69,6 +69,6 @@ RSpec.feature "Changing the overseas regulator of a case", :with_stubbed_mailer,
     click_link "Change overseas regulator"
     expect(page).to have_css("h1", text: "Was the allegation made by an overseas regulator?")
     expect(page).to have_select("Select which country", selected: country)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 end

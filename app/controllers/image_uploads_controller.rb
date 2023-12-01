@@ -153,8 +153,8 @@ private
         @parent.pretty_id,
         recipient.name,
         recipient.email,
-        "Image was attached to the Case by #{current_user&.decorate&.display_name(viewer: recipient)}.",
-        "Case updated"
+        "Image was attached to the notification by #{current_user&.decorate&.display_name(viewer: recipient)}.",
+        "Notification updated"
       ).deliver_later
     end
   end
@@ -167,8 +167,8 @@ private
         @parent.pretty_id,
         recipient.name,
         recipient.email,
-        "Image attached to the Case was removed by #{current_user&.decorate&.display_name(viewer: recipient)}.",
-        "Case updated"
+        "Image attached to the notification was removed by #{current_user&.decorate&.display_name(viewer: recipient)}.",
+        "Notification updated"
       ).deliver_later
     end
   end

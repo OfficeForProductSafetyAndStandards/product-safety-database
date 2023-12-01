@@ -1,13 +1,13 @@
-<% page_heading = "Change case owner" %>
+<% page_heading = "Change notification owner" %>
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= render "investigations/ownership/owner_form", investigation: @investigation, change_case_owner_form: @form do %>
       <%= render "minimal_investigation_heading", investigation: @investigation, title: page_heading %>
       <% if @investigation.owner.present? %>
-        <p>Current case owner: <strong><%= @investigation.owner.decorate.display_name(viewer: current_user) %></strong></p>
+        <p>Current notification owner: <strong><%= @investigation.owner.decorate.display_name(viewer: current_user) %></strong></p>
       <% else %>
-        <p>This case has no owner</p>
+        <p>This notification has no owner</p>
       <% end %>
     <% end %>
   </div>

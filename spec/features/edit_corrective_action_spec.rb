@@ -14,7 +14,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
       visit "/cases/#{investigation.pretty_id}/corrective-actions/#{corrective_action.id}"
 
       click_link "Edit corrective action"
-      expect_to_have_case_breadcrumbs
+      expect_to_have_notification_breadcrumbs
 
       within_fieldset("What action is being taken?") { expect(page).to have_checked_field(CorrectiveAction.actions[corrective_action.action]) }
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
@@ -56,7 +56,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
       click_link "Supporting information (1)"
       click_link corrective_action.decorate.supporting_information_title
       click_link "Edit corrective action"
-      expect_to_have_case_breadcrumbs
+      expect_to_have_notification_breadcrumbs
 
       # check error rendering and attachment details are retained
       fill_in "Year", with: "abcdefdef"
@@ -112,7 +112,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
       click_on "Update corrective action"
       click_on CorrectiveAction.first.decorate.supporting_information_title
       expect_to_be_on_corrective_action_summary_page(is_other_action: true)
-      expect_to_have_case_breadcrumbs
+      expect_to_have_notification_breadcrumbs
 
       expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
 

@@ -7,11 +7,12 @@
     </h1>
     <% if @product.retired? %>
       <p class="govuk-body opss-secondary-text">
-        <span class="govuk-!-font-weight-bold opss-primary-text">This product record has been retired and can no
-            longer be added to cases</span>.
+        <span class="govuk-!-font-weight-bold opss-primary-text">
+          This product record has been retired and can no longer be added to notifications.
+        </span>
         <br class="opss-br-desktop">
         <span class="govuk-!-font-size-16">
-            It was not used in an open case for 18 months. You can create a new product record for this product.
+          It was not used in an open notification for 18 months. You can create a new product record for this product.
         </span>
       </p>
     <% else %>
@@ -25,7 +26,7 @@
           <a href="<%= from_product_notifications_create_index_path(product_id: @product.id) %>" class="govuk-link govuk-link--no-visited-state" data-cy="create-new-notification">Create a product safety notification</a>
         <% else %>
           <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state", data: { cy: "create-new-case" } do %>
-            Create a product case
+            Create a product notification
           <% end %>
         <% end %>
       <% end %>
@@ -78,7 +79,7 @@
       },
       {
         heading: {
-          html: "<span class=\"govuk-visually-hidden\">Related</span> Cases <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.unique_investigation_products.size })</span>".html_safe
+          html: "<span class=\"govuk-visually-hidden\">Related</span> Notifications <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.unique_investigation_products.size })</span>".html_safe
         },
         content: {
           html: render("cases", product: @product)
@@ -101,7 +102,7 @@
         <% end %>
       <% else %>
         <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-          This product record is currently owned by <%= @product.owning_team.name %><span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries<span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can still add this product record to your case<span class="opss-hidden-desktop">.</span>
+          This product record is currently owned by <%= @product.owning_team.name %><span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries<span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can still add this product record to your notification<span class="opss-hidden-desktop">.</span>
         </p>
       <% end %>
     <% end %>

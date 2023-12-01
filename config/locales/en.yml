@@ -13,8 +13,8 @@ en:
     case_permission_changed_for_team:
       message_from: "Message from %{user_name}:"
       permission:
-        edit: "edit full case"
-        readonly: "view full case"
+        edit: "edit full notification"
+        readonly: "view full notification"
 
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
@@ -27,11 +27,11 @@ en:
   invite_user_to_team:
     invite_sent: "Invite sent to %{email}"
   delete_team:
-    change_case_owner_rationale: "%{team} was merged into %{new_team} by %{user}. %{team} previously owned this case."
-    add_remove_team_message: "%{team} was merged into %{new_team} by %{user}. %{team} previously had access to this case."
+    change_case_owner_rationale: "%{team} was merged into %{new_team} by %{user}. %{team} previously owned this notification."
+    add_remove_team_message: "%{team} was merged into %{new_team} by %{user}. %{team} previously had access to this notification."
   change_case_status:
     email_subject_text: "%{case_type} was %{status}"
-    email_update_text_closed: "%{case_type} was closed by %{name}. Email notifications about edits made to cases are not sent when edits are made to closed cases."
+    email_update_text_closed: "%{case_type} was closed by %{name}. Emails about edits made to notifications are not sent when edits are made to closed notifications."
     email_update_text_reopened: "%{case_type} was re-opened by %{name}."
   change_case_visibility:
     email_subject_text: "%{case_type} was %{visibility}"
@@ -43,7 +43,7 @@ en:
     email_subject_text: "%{case_type} updated"
   update_phone_call:
     email_subject_text: "%{case_type} updated"
-  create_case: "Create a case"
+  create_case: "Create a notification"
   contacts:
     form:
       legend:
@@ -56,14 +56,14 @@ en:
         hint: You can add additional addresses after you have added the business.
   case:
     badges:
-      coronavirus_related: "COVID-19 related case"
-      closed: "Case closed"
-      restricted: "Restricted case"
-      risk_level_high: "High risk case"
-      risk_level_serious: "Serious risk case"
+      coronavirus_related: "COVID-19 related notification"
+      closed: "Notification closed"
+      restricted: "Restricted notification"
+      risk_level_high: "High risk notification"
+      risk_level_serious: "Serious risk notification"
     coronavirus_related:
-      true: "Coronavirus related case"
-    protected_details: "Only teams added to the case can view %{data_type}"
+      true: "Coronavirus related notification"
+    protected_details: "Only teams added to the notification can view %{data_type}"
     is_private:
       false: Visible to all
       true: Restricted for legal privilege
@@ -106,16 +106,16 @@ en:
       destroy:
         business_successfully_deleted: "Business was successfully removed."
       supporting_information_warning:
-        cannot_remove_business_warning: "Cannot remove the business from the case because it's associated with following supporting information"
+        cannot_remove_business_warning: "Cannot remove the business from the notification because it's associated with following supporting information"
       form:
-        remove_business_legend: "Do you want to remove the business from the case?"
+        remove_business_legend: "Do you want to remove the business from the notification?"
         yes_label: "Yes"
         no_label: "No"
-        reason_for_removing_the_business_from_the_case: "Reason for removing the business from the case"
+        reason_for_removing_the_business_from_the_case: "Reason for removing the business from the notification"
         cancel: "Cancel"
       remove:
-        remove_business_warning_html: Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
-      empty: This case has not added any businesses.
+        remove_business_warning_html: Remove a business from a notification if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
+      empty: This notification has not added any businesses.
     business_types:
       new:
         heading: What is the business type?
@@ -157,26 +157,26 @@ en:
       option_no: "No"
     tabs:
       businesses:
-        remove_business_hint: "Removing a business from a case cannot be undone"
+        remove_business_hint: "Removing a business from a notification cannot be undone"
         remove:
-          remove_business_warning: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab."
+          remove_business_warning: "Remove a business from a notification if it's not relevant to the investigation. Business details can be changed from the Businesses tab."
     titles:
-      team_cases: Team cases
-      your_cases: Your cases
-      assigned_cases: Assigned cases
-      all_cases: All Cases – Search
+      team_cases: Team notifications
+      your_cases: Your notifications
+      assigned_cases: Assigned notifications
+      all_cases: All notifications – Search
     filters:
-      teams_added_to_case: "Teams added to case"
+      teams_added_to_case: "Teams added to notification"
       my_team: "My team"
       other_team: "Other team"
     no_cases:
       title:
-        team_cases: The team has no open cases.
-        your_cases: You have no open cases.
-        assigned_cases: There are no open cases your team has been added to.
+        team_cases: The team has no open notifications.
+        your_cases: You have no open notifications.
+        assigned_cases: There are no open notifications your team has been added to.
       subtitle_html: |
-        You can find all other cases in the
-        <a href="%{cases_path}" class="govuk-link govuk-link--no-visited-state">all cases</a> search page.
+        You can find all other notifications in the
+        <a href="%{cases_path}" class="govuk-link govuk-link--no-visited-state">all notifications</a> search page.
     corrective_actions:
       form:
         geographic_scopes:
@@ -207,7 +207,7 @@ en:
         online_recall_information_label: "Online recall information"
     overview:
       case_risk_level:
-        key: Case risk level
+        key: Notification risk level
         action:
           change: Change
           set: Set
@@ -257,32 +257,32 @@ en:
         key: Compliance
     coronavirus_related:
       show:
-        title: "Is the case related to the coronavirus outbreak?"
+        title: "Is the notification related to the coronavirus outbreak?"
         submit_button: "Update coronavirus status"
         yes_label: "Yes, it is (or could be)"
         no_label: "No, this is business as usual"
-        hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
+        hint: "For example, notifications relating to hand sanitiser or personal protective equipment (PPE)"
       success: "Coronavirus status updated on %{case_type}"
     risk_validation:
       validate: "Validate"
       not_validated: "No"
       validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
       page_title: "Risk level validated"
-      validated_success_message: "The case risk level has updated"
-      validation_removed_success_message: "Case risk level validation removed"
+      validated_success_message: "The notification risk level has updated"
+      validation_removed_success_message: "Notification risk level validation removed"
       activity:
-        added: "The case risk level has updated"
-        removed: "Case risk level validation removed"
+        added: "The notification risk level has updated"
+        removed: Notification risk level validation removed
     risk_level:
       show:
         title:
-          set: "Set case risk level"
-          change: "Change case risk level"
+          set: "Set notification risk level"
+          change: "Change notification risk level"
         risk_assessment_details_for_case_html:
-          zero: This case does not have a risk assessment. You may want to <a class="govuk-link" href="%{add_risk_assessment_href}">add a risk assessment</a> before setting the case risk level.
-          one: This case has <a class="govuk-link" href="%{risk_assessment_href}">1 risk assessment</a> added, assessing the risk as %{risk_assessment_risk_levels}.
-          other:  This case has <a class="govuk-link" href="%{supporting_information_href}">%{count} risk assessments</a> added, assessing the risk as %{risk_assessment_risk_levels}.
-        legend: "Case risk level"
+          zero: This notification does not have a risk assessment. You may want to <a class="govuk-link" href="%{add_risk_assessment_href}">add a risk assessment</a> before setting the notification risk level.
+          one: This notification has <a class="govuk-link" href="%{risk_assessment_href}">1 risk assessment</a> added, assessing the risk as %{risk_assessment_risk_levels}.
+          other:  This notification has <a class="govuk-link" href="%{supporting_information_href}">%{count} risk assessments</a> added, assessing the risk as %{risk_assessment_risk_levels}.
+        legend: Notification risk level
         levels:
           serious: "Serious risk"
           high: "High risk"
@@ -290,32 +290,32 @@ en:
           low: "Low risk"
           not_conclusive: "Not conclusive"
       success:
-        set: "The case risk level was updated"
-        changed: "The case risk level was updated"
-        removed: "Case risk level removed"
+        set: "The notification risk level was updated"
+        changed: "The notification risk level was updated"
+        removed: "Notification risk level removed"
     status:
       close:
-        title: "Close case"
-        label: "Why are you closing the case?"
+        title: "Close notification"
+        label: "Why are you closing the notification?"
         hint: "For example, the product is low risk, so no further activity is expected."
-        action: "Close case"
+        action: "Close notification"
       reopen:
-        title: "Re-open case"
-        label: "Why are you re-opening the case?"
+        title: "Re-open notification"
+        label: "Why are you re-opening the notification?"
         hint: "For example, the business responsible needs to take further action."
-        action: "Re-open case"
+        action: "Re-open notification"
     visibility:
       updated: "%{case_type} has been %{status}"
-      show: "%{future_status} case"
-      why: "Why is this case being %{future_status}ed?"
+      show: "%{future_status} notification"
+      why: "Why is this notification being %{future_status}ed?"
       restrict:
-        title: "Restrict this case"
-        label: "Why is the case being restricted?"
-        action: "Restrict this case"
+        title: "Restrict this notification"
+        label: "Why is the notification being restricted?"
+        action: "Restrict this notification"
       unrestrict:
-        title: "Unrestrict this case"
-        label: "Why is the case being unrestricted?"
-        action: "Unrestrict this case"
+        title: "Unrestrict this notification"
+        label: "Why is the notification being unrestricted?"
+        action: "Unrestrict this notification"
     test_results:
       edit:
         result_date: This test was funded under the <abbr>OPSS</abbr> Sampling Protocol and was issued on %{date}.
@@ -331,14 +331,14 @@ en:
       all_prism_risk_assessments: All risk assessments
   audit_activity:
     investigation:
-      coronavirus_related: Case is related to the coronavirus outbreak.
+      coronavirus_related: Notification is related to the coronavirus outbreak.
       update_coronavirus_status:
         title:
           true: "Status updated: coronavirus related"
           false: "Status updated: not coronavirus related"
         body:
-          true: "The case is related to the coronavirus outbreak."
-          false: "The case is not related to the coronavirus outbreak."
+          true: "The notification is related to the coronavirus outbreak."
+          false: "The notification is not related to the coronavirus outbreak."
       update_status:
         title: "%{case_type} %{status}"
         subtitle: "by %{user_name}, %{date}"
@@ -347,13 +347,13 @@ en:
         subtitle: "by %{user_name}, %{date}"
       risk_level_updated:
         title:
-          set: "Case risk level set to %{level}"
-          changed: "Case risk level changed to %{level}"
-          removed: "Case risk level removed"
+          set: "Notification risk level set to %{level}"
+          changed: "Notification risk level changed to %{level}"
+          removed: "Notification risk level removed"
       team_added:
         permission:
-          edit: "edit full case"
-          readonly: "view full case"
+          edit: "edit full notification"
+          readonly: "view full notification"
         title: "%{team_name} added to %{case_type}"
         subtitle: "Team added by %{user_name}, %{date}"
         body: "Permission level given: %{permission}."
@@ -362,10 +362,10 @@ en:
         subtitle: "Team removed by %{user_name}, %{date}"
       team_permission_changed:
         permission:
-          edit: "edit full case"
-          readonly: "view full case"
-        title: "%{team_name}'s case permission level changed"
-        subtitle: "Case permissions updated by %{user_name}, %{date}"
+          edit: "edit full notification"
+          readonly: "view full notification"
+        title: "%{team_name}'s notification permission level changed"
+        subtitle: "Notification permissions updated by %{user_name}, %{date}"
         body: "Permission level changed to '%{new_permission}' from '%{old_permission}'."
       update_notifying_country:
         body: "Notifying country changed from %{previous_country} to %{new_country}."
@@ -374,8 +374,8 @@ en:
         body_changed: "Overseas regulator changed from %{previous_country} to %{new_country}"
   cases:
     filters:
-      coronavirus_cases_only: "Coronavirus cases only"
-      serious_and_high_risk_level_only: "Serious and high risk cases only"
+      coronavirus_cases_only: "Coronavirus notifications only"
+      serious_and_high_risk_level_only: "Serious and high risk notifications only"
   test_results:
     opss_funded:
       yes_html: "Yes <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>Funded under the <abbr>OPSS</abbr> Sampling Protocol</span>"
@@ -470,12 +470,12 @@ en:
   forms:
     investigation_actions:
       actions:
-        change_case_owner: "Change case owner"
-        close_case: "Close case"
-        reopen_case: "Re-open case"
+        change_case_owner: "Change notification owner"
+        close_case: "Close notification"
+        reopen_case: "Re-open notification"
         change_case_visibility:
-          restricted: "Unrestrict this case"
-          unrestricted: "Restrict this case"
+          restricted: "Unrestrict this notification"
+          unrestricted: "Restrict this notification"
         change_case_risk_level:
           not_set: Set risk level
           set: Change risk level
@@ -501,9 +501,9 @@ en:
         remove_business_form:
           attributes:
             remove:
-              inclusion: "Select yes if you want to remove the business from the case"
+              inclusion: "Select yes if you want to remove the business from the notification"
             reason:
-              blank: "Enter the reason for removing the business from the case"
+              blank: "Enter the reason for removing the business from the notification"
         accident_or_incident_form:
           attributes:
             is_date_known:
@@ -527,7 +527,7 @@ en:
         remove_product_form:
           attributes:
             remove_product:
-              inclusion: Select yes if you want to remove the product from the case
+              inclusion: Select yes if you want to remove the product from the notification
             reason:
               blank: Enter the reason for removing the product
         notifying_country_form:
@@ -603,7 +603,7 @@ en:
             assessed_by_team_id:
               blank: Select trading standards or another market surveilance authority
             assessed_by_business_id:
-              blank: Select business related to the case
+              blank: Select business related to the notification
             assessed_by_other:
               blank: Enter organisation name
             investigation_product_ids:
@@ -613,11 +613,11 @@ en:
         update_risk_level_from_risk_assessment_form:
           attributes:
             update_case_risk_level_to_match_investigation:
-              inclusion: Select yes if you want to match the case risk level to the risk assessment level
+              inclusion: Select yes if you want to match the notification risk level to the risk assessment level
         add_team_to_case_form:
           attributes:
             team_id:
-              blank: "Select a team to add to the case"
+              blank: "Select a team to add to the notification"
             message:
               blank: Enter a message to the team
             include_message:
@@ -627,12 +627,12 @@ en:
         change_case_owner_form:
           attributes:
             owner_id:
-              blank: Select case owner
+              blank: Select notification owner
               not_found: User or team not found
         change_case_summary_form:
           attributes:
             summary:
-              blank: Enter the case summary
+              blank: Enter the notification summary
               too_long: Summary must be 10,000 characters or fewer
         change_case_status_form:
           attributes:
@@ -660,7 +660,7 @@ en:
               blank: "Enter a message to the team"
             permission_level:
               blank: "Select the permission level the team should have"
-          select_different_permission_level: "This team already has this permission level. Select a different option or return to the case."
+          select_different_permission_level: "This team already has this permission level. Select a different option or return to the notification."
         invite_user_to_team_form:
           attributes:
             email:
@@ -697,11 +697,11 @@ en:
         case_name_form:
           attributes:
             user_title:
-              blank: "Enter a case name"
+              blank: "Enter a notification name"
         reference_number_form:
           attributes:
             has_complainant_reference:
-              inclusion: "Select yes to add a reference number to the case"
+              inclusion: "Select yes to add a reference number to the notification"
             complainant_reference:
               blank: "Enter a reference number"
         email_correspondence_form:
@@ -761,7 +761,7 @@ en:
             risk_validation_change_rationale:
               blank: Enter details
             is_risk_validated:
-              inclusion:  "Select yes if you have validated the case risk level"
+              inclusion:  "Select yes if you have validated the notification risk level"
         product_duplicate_confirmation_form:
           attributes:
             correct:
@@ -790,8 +790,8 @@ en:
         bulk_products_create_case_form:
           attributes:
             name:
-              blank: Enter a name for the case
-              too_long: The case name must be %{count} characters or less
+              blank: Enter a name for the notification
+              too_long: The notification name must be %{count} characters or less
             reference_number:
               blank: Enter a reference number
             reference_number_provided:

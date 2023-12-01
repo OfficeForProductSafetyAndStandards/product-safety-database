@@ -63,11 +63,11 @@ private
   end
 
   def email_case_type
-    "Case"
+    "Notification"
   end
 
   def email_update_text(recipient)
-    "Phone call details updated on the #{email_case_type} by #{user.decorate.display_name(viewer: recipient)}."
+    "Phone call details updated on the notification by #{user.decorate.display_name(viewer: recipient)}."
   end
 
   def any_changes?

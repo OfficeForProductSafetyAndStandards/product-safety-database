@@ -36,7 +36,7 @@ RSpec.describe ChangeCaseOwnerForm do
     context "when no owner_id is supplied" do
       let(:owner_id) { nil }
 
-      include_examples "invalid form", [:owner_id, "Select case owner"]
+      include_examples "invalid form", [:owner_id, "Select notification owner"]
     end
 
     context "when owner_id does not match a user or team" do

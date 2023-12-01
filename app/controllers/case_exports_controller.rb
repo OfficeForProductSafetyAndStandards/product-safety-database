@@ -8,9 +8,9 @@ class CaseExportsController < ApplicationController
     CaseExportJob.perform_later(case_export)
 
     if current_user.can_access_new_search?
-      redirect_to notifications_path(q: params[:q]), flash: { success: "Your case export is being prepared. You will receive an email when your export is ready to download." }
+      redirect_to notifications_path(q: params[:q]), flash: { success: "Your notification export is being prepared. You will receive an email when your export is ready to download." }
     else
-      redirect_to investigations_path(q: params[:q]), flash: { success: "Your case export is being prepared. You will receive an email when your export is ready to download." }
+      redirect_to investigations_path(q: params[:q]), flash: { success: "Your notification export is being prepared. You will receive an email when your export is ready to download." }
     end
   end
 

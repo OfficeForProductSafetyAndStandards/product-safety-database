@@ -1,4 +1,4 @@
-<% page_heading = "Why are you creating a case?" %>
+<% page_heading = "Why are you creating a notification?" %>
 <%= page_title page_heading, errors: @reason_for_creating_form.errors.any? %>
 
 <%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, builder: ApplicationFormBuilder, html: {novalidate: true}, method: :put, local: true do |form| %>
@@ -10,7 +10,7 @@
           errorMessage: error_message,
           fieldset: {
             legend: {
-              text: "Why are you creating a case?",
+              text: "Why are you creating a notification?",
               isPageHeading: true,
               classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-7"
             }

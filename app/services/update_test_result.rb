@@ -53,8 +53,8 @@ private
         test_result.investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited a test result on the case.",
-        "Test result edited for Case"
+        "#{user.decorate.display_name(viewer: recipient)} edited a test result on the notification.",
+        "Test result edited for notification"
       ).deliver_later
     end
   end
