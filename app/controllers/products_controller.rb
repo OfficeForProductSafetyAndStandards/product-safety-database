@@ -47,6 +47,8 @@ class ProductsController < ApplicationController
       @product = context.product
       @product_form.cache_file!(current_user, @product)
 
+      return redirect_to add_product_notification_create_index_path(notification_pretty_id: product_params[:notification_pretty_id], product_id: @product.id) if product_params[:notification_pretty_id].present?
+
       render :confirmation
     else
       set_countries
@@ -119,7 +121,7 @@ private
   def product_params
     params.require(:product).permit(
       :name, :brand, :category, :subcategory, :product_code,
-      :image, :existing_image_file_id,
+      :image, :existing_image_file_id, :notification_pretty_id,
       :webpage, :description, :country_of_origin, :barcode,
       :authenticity, :when_placed_on_market, :has_markings, markings: []
     )
