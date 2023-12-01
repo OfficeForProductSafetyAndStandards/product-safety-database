@@ -3,7 +3,7 @@ class TeamPolicy < ApplicationPolicy
     user.team == team
   end
 
-  def invite_or_remove_user?(user: @user, team: @record)
+  def invite_user?(user: @user, team: @record)
     user.is_team_admin? && user.team == team
   end
 end

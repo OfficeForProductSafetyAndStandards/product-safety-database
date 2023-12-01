@@ -10,66 +10,25 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     set_whitelisting_enabled(false)
     allow(Rails.application.config)
       .to receive(:secondary_authentication_enabled).and_return(true)
-  end
 
-  context "when a user is invited, but deleted before they can accept" do
-    it "does not allow user to register" do
-      sign_in(admin)
-
-      visit "/teams/#{team.id}/invitations/new"
-
-      # enter_secondary_authentication_code(admin.reload.direct_otp)
-
-      invite_user_to_team
-
-      expect_user_invited_successfully
-
-      invitation_token = User.find_by!(email: invitee_email).invitation_token
-
-      click_link "Remove"
-
-      choose("Yes")
-
-      click_button("Save and continue")
-
-      expect(page).to have_content "The team member was removed"
-
-      sign_out
-
-      invitee = User.find_by!(email: invitee_email)
-
-      visit "/users/#{invitee.id}/complete-registration?invitation=#{invitation_token}"
-
-      expect(page).to have_content "Page not found"
-    end
+    sign_in(admin)
+    visit "/teams/#{team.id}/invitations/new"
   end
 
   context "when a previously deleted user is invited back" do
     let!(:deleted_user) { create(:user, :deleted, team:) }
 
     it "allows deleted user to sign up again" do
-      sign_in(admin)
-
-      visit "/teams/#{team.id}/invitations/new"
-
-      # enter_secondary_authentication_code(admin.reload.direct_otp)
-
       invite_user_to_team(deleted_user.email)
-
       expect_user_invited_successfully(deleted_user.email)
-
       sign_out
 
       invitee = User.find_by!(email: deleted_user.email)
-
       visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
-
       fill_in_registration_form
-
       expect_to_be_on_secondary_authentication_page
 
       click_link "Not received a text message?"
-
       expect_to_be_on_resend_secondary_authentication_page
       find("details summary", text: "Change where the text message is sent").click
       fill_in "Mobile number", with: "07012345678"
@@ -90,36 +49,23 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
   end
 
   it "sending an invitation and registering after changing the phone number" do
-    sign_in(admin)
-
-    visit "/teams/#{team.id}/invitations/new"
-
     expect(page).to have_title("Invite a team member")
 
     wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
     travel_to(Time.zone.now.utc + wait_time.seconds) do
       visit "/teams/#{team.id}/invitations/new"
-
       enter_secondary_authentication_code(admin.reload.direct_otp)
-
       invite_user_to_team
-
       expect_user_invited_successfully
-
       sign_out
 
       invitee = User.find_by!(email: invitee_email)
-
       visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
-
       expect(page).to have_field("Full name", with: name)
-
       fill_in_registration_form
-
       expect_to_be_on_secondary_authentication_page
 
       click_link "Not received a text message?"
-
       expect_to_be_on_resend_secondary_authentication_page
       find("details summary", text: "Change where the text message is sent").click
       fill_in "Mobile number", with: "07012345678"
