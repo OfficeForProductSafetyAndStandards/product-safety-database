@@ -26,6 +26,8 @@ module ProductsHelper
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
 
+    return query if for_export
+
     query
       .order(sorting_params)
       .page(page_number)
