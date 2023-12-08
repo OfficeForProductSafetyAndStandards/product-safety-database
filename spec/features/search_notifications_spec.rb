@@ -9,7 +9,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
            category: "kitchen appliances",
            product_code: "W2020-10/1")
   end
-  let!(:investigation) { create(:allegation, products: [product], user_title: nil) }
+  let!(:investigation) { create(:allegation, products: [product], user_title: nil, reported_reason: "unsafe") }
 
   let(:mobile_phone) do
     create(:product,
@@ -39,10 +39,10 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
            category: "consumer electronics")
   end
 
-  let!(:mobile_phone_investigation) { create(:allegation, products: [mobile_phone], user_title: "mobile phone investigation") }
-  let!(:mobilz_phont_investigation) { create(:notification, products: [mobilz_phont], user_title: "mobilz phone investigation") }
-  let!(:thirteenproduct_investigation) { create(:enquiry, products: [thirteenproduct], user_title: "thirteenproduct investigation") }
-  let!(:eeirteenproduct_investigation) { create(:project, products: [eeirteenproduct], user_title: "eeirteenproduct investigation") }
+  let!(:mobile_phone_investigation) { create(:allegation, products: [mobile_phone], user_title: "mobile phone investigation", reported_reason: "unsafe") }
+  let!(:mobilz_phont_investigation) { create(:notification, products: [mobilz_phont], user_title: "mobilz phone investigation", reported_reason: "unsafe_and_non_compliant") }
+  let!(:thirteenproduct_investigation) { create(:enquiry, products: [thirteenproduct], user_title: "thirteenproduct investigation", reported_reason: "non_compliant") }
+  let!(:eeirteenproduct_investigation) { create(:project, products: [eeirteenproduct], user_title: "eeirteenproduct investigation", reported_reason: "safe_and_compliant") }
 
   before do
     Investigation.reindex
@@ -254,6 +254,70 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         expect(page).to have_text(old_case.pretty_id)
         expect(page).not_to have_text(new_case.pretty_id)
       end
+    end
+  end
+
+  describe "when filtering by reported reason" do
+    before do
+      sign_in(user)
+      visit "/notifications"
+    end
+
+    it "shows the correct notifications for that reason" do
+      find("details#reported-reason").click
+      check "Unsafe and non-compliant"
+      check "Non-compliant"
+      check "Unsafe"
+      check "Safe and compliant"
+      click_button "Apply"
+
+      expect_to_be_on_notifications_index_page
+      expect(page).to have_content "5 cases using the current filters, were found."
+      expect(page).to have_text(investigation.pretty_id)
+      expect(page).to have_text(mobilz_phont_investigation.pretty_id)
+      expect(page).to have_text(mobile_phone_investigation.pretty_id)
+      expect(page).to have_text(thirteenproduct_investigation.pretty_id)
+      expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
+
+      find("details#reported-reason").click
+      uncheck "Unsafe and non-compliant"
+      click_button "Apply"
+
+      expect_to_be_on_notifications_index_page
+      expect(page).to have_content "4 cases using the current filters, were found."
+      expect(page).to have_text(investigation.pretty_id)
+      expect(page).to have_text(mobile_phone_investigation.pretty_id)
+      expect(page).to have_text(thirteenproduct_investigation.pretty_id)
+      expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
+
+      find("details#reported-reason").click
+      uncheck "Unsafe"
+      click_button "Apply"
+
+      expect_to_be_on_notifications_index_page
+      expect(page).to have_content "2 cases using the current filters, were found."
+      expect(page).to have_text(thirteenproduct_investigation.pretty_id)
+      expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
+
+      find("details#reported-reason").click
+      uncheck "Non-compliant"
+      click_button "Apply"
+
+      expect_to_be_on_notifications_index_page
+      expect(page).to have_content "1 case using the current filters, was found."
+      expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
+
+      find("details#reported-reason").click
+      uncheck "Safe and compliant"
+      click_button "Apply"
+
+      expect_to_be_on_notifications_index_page
+      expect(page).to have_content "5 cases using the current filters, were found."
+      expect(page).to have_text(investigation.pretty_id)
+      expect(page).to have_text(mobilz_phont_investigation.pretty_id)
+      expect(page).to have_text(mobile_phone_investigation.pretty_id)
+      expect(page).to have_text(thirteenproduct_investigation.pretty_id)
+      expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
     end
   end
 end
