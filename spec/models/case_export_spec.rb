@@ -405,5 +405,58 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
         expect(sheet.cell(4, 1)).not_to eq other_team_investigation.pretty_id
       end
     end
+
+    context "when filtering on reported reason" do
+      let(:unsafe_and_non_compliant_notification) { create(:notification, reported_reason: "unsafe_and_non_compliant") }
+      let(:safe_and_compliant_notification) { create(:notification, reported_reason: "safe_and_compliant") }
+      let(:non_compliant_notification) { create(:notification, reported_reason: "non_compliant") }
+
+      before do
+        user.roles.create!(name: "use_new_search")
+        unsafe_and_non_compliant_notification
+        safe_and_compliant_notification
+        non_compliant_notification
+        Investigation.search_index.refresh
+      end
+
+      context "with some reported reasons" do
+        let(:params) { { unsafe: true, safe_and_compliant: true } }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "only exports the cases with the selected reasons" do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [investigation.pretty_id, safe_and_compliant_notification.pretty_id]
+        end
+      end
+
+      context "with no reported reasons" do
+        let(:params) { {} }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "exports all cases" do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id, other_team_investigation.pretty_id]
+        end
+      end
+
+      context "with all reported reasons" do
+        let(:params) { { unsafe: true, safe_and_compliant: true, non_compliant: true, unsafe_and_non_compliant: true } }
+
+        it "exports the case data", :aggregate_failures do
+          expect(exported_data.sheets).to eq %w[Cases]
+        end
+
+        it "exports all cases with a reported reason" do
+          sheet_ids = sheet.column(1).drop(1)
+          expect(sheet_ids).to match_array [investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id]
+        end
+      end
+    end
   end
 end

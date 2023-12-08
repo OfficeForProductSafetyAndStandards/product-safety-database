@@ -39,6 +39,10 @@ class SearchParams
   attribute :teams_with_access_my_team, :boolean
   attribute :teams_with_access_others, :boolean
   attribute :teams_with_access_other_id
+  attribute :unsafe, :boolean
+  attribute :unsafe_and_non_compliant, :boolean
+  attribute :non_compliant, :boolean
+  attribute :safe_and_compliant, :boolean
   attribute :hazard_type
   attribute :category
   attribute :page_name
