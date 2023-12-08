@@ -2,6 +2,7 @@ module InvestigationsHelper
   HAZARD_TYPES = Rails.application.config.hazard_constants["hazard_type"]
   HAZARD_PARAMS = HAZARD_TYPES.map { |type| type.parameterize.underscore.to_sym }
   CASE_TYPES = %i[allegation enquiry project notification].freeze
+  REPORTED_REASONS = %i[safe_and_compliant unsafe_and_non_compliant unsafe non_compliant].freeze
 
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
     # Opensearch is only used for searching across all investigations
@@ -220,6 +221,9 @@ module InvestigationsHelper
       wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
     end
 
+    reported_reasons = REPORTED_REASONS.map { |reason| reason.to_s if @search.send(reason) }.compact
+    wheres[:reported_reason] = reported_reasons unless reported_reasons.empty?
+
     Investigation.search(
       query,
       where: wheres,
@@ -357,6 +361,7 @@ module InvestigationsHelper
       :page_name,
       :hazard_type,
       *HAZARD_PARAMS,
+      *REPORTED_REASONS,
       :teams_with_access_my_team,
       :teams_with_access_others,
       created_from_date: %i[day month year],
@@ -392,6 +397,7 @@ module InvestigationsHelper
       :created_by_others,
       :hazard_type,
       *HAZARD_PARAMS,
+      *REPORTED_REASONS,
       :teams_with_access_my_team,
       :teams_with_access_others,
       created_from_date: %i[day month year],
