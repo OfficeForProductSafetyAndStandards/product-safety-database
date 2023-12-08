@@ -32,6 +32,9 @@
     <%= govukDetails(summaryText: "Case hazard type", classes: "opss-details--plain", id: "case-hazard-type") do %>
       <%= render "notifications/case_hazard_type_checkboxes", form: form %>
     <% end %>
+    <%= govukDetails(summaryText: "Reported reason", classes: "opss-details--plain", id: "reported-reason") do %>
+      <%= render "notifications/reported_reason_checkboxes", form: form %>
+    <% end %>
 
     <%= render "investigations/case_change_date_filter", form: form %>
 
