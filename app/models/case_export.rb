@@ -115,15 +115,10 @@ private
                      Description
                      Product_Category
                      Hazard_Type
-                     Coronavirus_Related
                      Risk_Level
                      Case_Owner_Team
-                     Case_Owner_User
-                     Source_Type
                      Products
                      Businesses
-                     Activities
-                     Correspondences
                      Corrective_Actions
                      Tests
                      Risk_Assessments
@@ -135,9 +130,7 @@ private
                      Notifying_Country
                      Reported_Reason
                      Complainant_Reference
-                     Case_Type
                      Trading_Standards_Region
-                     Trading_Standards_Region_Code
                      Regulator_Name
                      OPSS_Internal_Team
                      Non_Compliant_Reason]
@@ -164,15 +157,10 @@ private
       investigation.object.description,
       investigation.categories.join(", "),
       investigation.hazard_type,
-      investigation.coronavirus_related?,
       investigation.risk_level_description,
       investigation.owner_team&.name,
-      investigation.owner_user&.name,
-      investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,
-      activity_counts[investigation.id] || 0,
-      correspondence_counts[investigation.id] || 0,
       corrective_action_counts[investigation.id] || 0,
       test_counts[investigation.id] || 0,
       risk_assessment_counts[investigation.id] || 0,
@@ -184,9 +172,7 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       investigation.complainant_reference,
-      investigation.case_type,
       team_data.ts_region,
-      team_data.ts_acronym,
       team_data.regulator_name,
       (team_data.type == "internal"),
       investigation.non_compliant_reason
@@ -204,15 +190,10 @@ private
       "Restricted",
       investigation.categories.join(", "),
       investigation.hazard_type,
-      investigation.coronavirus_related?,
       investigation.risk_level_description,
       investigation.owner_team&.name,
-      "Restricted",
-      investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,
-      activity_counts[investigation.id] || 0,
-      correspondence_counts[investigation.id] || 0,
       corrective_action_counts[investigation.id] || 0,
       test_counts[investigation.id] || 0,
       risk_assessment_counts[investigation.id] || 0,
@@ -224,9 +205,7 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       "Restricted",
-      investigation.case_type,
       team_data.ts_region,
-      team_data.ts_acronym,
       team_data.regulator_name,
       (team_data.type == "internal")
     ]
