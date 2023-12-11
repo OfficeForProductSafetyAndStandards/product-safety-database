@@ -384,39 +384,48 @@ en:
     create:
       index:
         sections:
+          product:
+            title: Choose the product for the notification
+            tasks:
+              search_for_or_add_a_product:
+                title: Search for or add a product
           notification_details:
-            title: Add notification and product safety details
+            title: Add notification and additional product details
             tasks:
               add_product_notification_details:
                 title: Add product notification details
               add_product_safety_and_compliance_details:
                 title: Add product safety and compliance details
+              add_product_identification_details:
+                title: Add product identification details
           business_details:
-            title: Add business details
+            title: Add business that supplied the product
             tasks:
-              search_or_add_a_new_business:
-                title: Search or add a new business
+              select_business_type:
+                title: Select business type
+              add_business_details:
+                title: Add business details
           evidence:
             title: Add evidence
             tasks:
-              select_evidence:
-                title: Select evidence
               add_test_reports:
                 title: Add test reports
               add_supporting_images:
                 title: Add supporting images
               create_or_add_risk_assessment:
                 title: Create or add risk assessment
+              determine_overall_product_risk_level:
+                title: Determine overall product risk level
           corrective_actions:
             title: Add corrective actions
             tasks:
-              record_product_corrective_actions:
-                title: Record product corrective actions
+              record_a_corrective_action_for_the_product:
+                title: Record a corrective action for the product
           submit:
             title: Submit notification
             tasks:
               check_notification_details_and_submit:
-                title: Check notification details and submit
+                title: Check the notification details and submit
 
   errors:
     format: "%{message}"

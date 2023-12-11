@@ -1,8 +1,15 @@
 module Notifications
   module CreateHelper
+    include Pagy::Frontend
+
     def sections_complete
-      # TODO(ruben): add logic
-      0
+      tasks_status = @notification.tasks_status
+      Notifications::CreateController::TASK_LIST_SECTIONS.map { |_section, tasks|
+        complete = tasks.map { |task|
+          tasks_status[task.to_s] == "completed" ? 1 : 0
+        }.exclude?(0)
+        complete ? 1 : 0
+      }.inject(&:+)
     end
 
     def task_status(task)
@@ -26,6 +33,14 @@ module Notifications
       when "completed"
         govuk_tag(text: "Completed")
       end
+    end
+
+    def sort_by_options
+      [
+        OpenStruct.new(id: "newly_added", name: "Newly added"),
+        OpenStruct.new(id: "name_a_z", name: "Name A-Z"),
+        OpenStruct.new(id: "name_z_a", name: "Name Z-A")
+      ]
     end
 
   private

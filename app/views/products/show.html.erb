@@ -21,8 +21,12 @@
   <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
     <div class="govuk-button-group opss-text-align-right">
       <% if policy(@product).can_spawn_case? %>
-        <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state", data: { cy: "create-new-case" } do %>
-          Create a product case
+        <% if current_user.can_use_notification_task_list? %>
+          <a href="<%= from_product_notifications_create_index_path(product_id: @product.id) %>" class="govuk-link govuk-link--no-visited-state" data-cy="create-new-notification">Create a product safety notification</a>
+        <% else %>
+          <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state", data: { cy: "create-new-case" } do %>
+            Create a product case
+          <% end %>
         <% end %>
       <% end %>
       <% if policy(@product).can_create_prism_risk_assessment? %>

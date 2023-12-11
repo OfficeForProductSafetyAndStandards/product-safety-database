@@ -168,7 +168,7 @@ class BulkProductsController < ApplicationController
     return redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload) if @bulk_products_upload.products_cache.blank?
 
     new_products = @bulk_products_upload.products_cache.filter_map do |product|
-      { product: Product.new(product["product_data"].except("image", "existing_image_file_id")), investigation_product: InvestigationProduct.new(product["investigation_data"]) } if (params[:barcodes] || []).include?(product["barcode"]) || product["barcode"].blank?
+      { product: Product.new(product["product_data"].except("image", "existing_image_file_id", "notification_pretty_id")), investigation_product: InvestigationProduct.new(product["investigation_data"]) } if (params[:barcodes] || []).include?(product["barcode"]) || product["barcode"].blank?
     end
     existing_products = Product.where(id: params[:product_ids]).map do |product|
       cached_product = @bulk_products_upload.products_cache.detect { |p| p["barcode"] == product[:barcode] }
