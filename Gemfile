@@ -83,7 +83,7 @@ end
 group :development do
   gem "m", "~> 1.6"
   gem "rails-erd"
-  gem "solargraph", "~> 0.49"
+  gem "solargraph", "~> 0.50"
   gem "spring", "~> 4.1"
   gem "spring-commands-rspec", "~> 1.0"
   gem "web-console"
@@ -105,7 +105,7 @@ group :test do
   gem "rubocop-govuk", "~> 4.12"
   gem "rubocop-performance", "~> 1.19"
   gem "rubocop-rspec", "~> 2.22", require: false
-  gem "selenium-webdriver", "~> 4.15"
+  gem "selenium-webdriver", "~> 4.16"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
