@@ -114,7 +114,7 @@ module SupportPortal
 
       role_name = add_role_params[:role_name] == "other" ? add_role_params[:custom_role_name] : add_role_params[:role_name]
 
-      if @add_role_form.valid? && (@user.roles.pluck(:name) + %w[team_admin]).exclude?(role_name)
+      if @add_role_form.valid? && (@user.roles.pluck(:name) + %w[team_admin super_user]).exclude?(role_name)
         @user.roles.create!(name: role_name)
         redirect_to account_administration_path(anchor: "roles"), notice: "The role has been added."
       else
@@ -165,8 +165,8 @@ module SupportPortal
 
     def set_all_role_names
       # Get all currently used roles except those already possessed by the user
-      # and `team_admin` (which is granted separately).
-      @all_role_names = ::Role.select(:name).distinct.order(:name).pluck(:name) - @user.roles.pluck(:name) - %w[team_admin]
+      # and `team_admin` and `super_user` (which are granted separately).
+      @all_role_names = ::Role.select(:name).distinct.order(:name).pluck(:name) - @user.roles.pluck(:name) - %w[team_admin super_user]
     end
 
     def set_role
