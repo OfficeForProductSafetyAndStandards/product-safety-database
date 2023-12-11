@@ -113,13 +113,21 @@ Rails.application.routes.draw do
       resource :search, only: :show
 
       scope module: :notifications do
-        resources :create, only: %i[index]
+        resources :create, only: %i[index] do
+          collection do
+            get "from-product/:product_id", to: "create#from_product", as: "from_product"
+          end
+        end
       end
     end
 
     resources :notifications, param: :pretty_id, only: %i[index] do
       scope module: :notifications do
-        resources :create, only: %i[index show update]
+        resources :create, only: %i[index show update] do
+          collection do
+            get "add-product/:product_id", to: "create#add_product", as: "add_product"
+          end
+        end
       end
     end
 

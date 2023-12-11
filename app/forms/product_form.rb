@@ -28,6 +28,9 @@ class ProductForm
   attribute :image
   attribute :existing_image_file_id
 
+  # Used when creating a new product as part of the notification task list workflow
+  attribute :notification_pretty_id
+
   before_validation { trim_line_endings(:description) }
   before_validation { trim_whitespace(:brand) }
   before_validation { nilify_blanks(:barcode, :brand) }
