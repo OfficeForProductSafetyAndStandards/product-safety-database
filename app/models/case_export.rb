@@ -129,7 +129,7 @@ private
                      Case_Creator_Team
                      Notifying_Country
                      Reported_Reason
-                     Complainant_Reference
+                     Notifiers_Reference
                      Trading_Standards_Region
                      Regulator_Name
                      OPSS_Internal_Team
