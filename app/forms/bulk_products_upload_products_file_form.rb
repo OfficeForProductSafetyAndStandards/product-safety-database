@@ -142,7 +142,7 @@ private
       next if ary.drop(1).compact.empty?
 
       entry_number, category, subcategory, customs_code, country_of_origin, barcode, name, description, number_of_affected_units, brand, batch_number, counterfeit, markings, marketed_before_brexit, *_extra_cells = ary
-      authenticity = counterfeit.blank? ? nil : { "Yes" => "counterfeit", "No" => "genuine" }[counterfeit]
+      authenticity = counterfeit.blank? ? nil : { "Yes" => "counterfeit", "No" => "genuine", "Unsure" => "unsure" }[counterfeit]
       has_markings = markings.blank? ? nil : ({ "No" => "markings_no", "Unknown" => "markings_unknown" }[markings] || "markings_yes")
       markings = has_markings == "markings_yes" ? markings.split(", ") : nil
       when_placed_on_market = marketed_before_brexit == "Yes" ? "before_2021" : "on_or_after_2021"

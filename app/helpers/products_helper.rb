@@ -75,7 +75,8 @@ module ProductsHelper
   def items_for_authenticity(product_form)
     items = [
       { text: "Yes", value: "counterfeit" },
-      { text: "No", value: "genuine" }
+      { text: "No", value: "genuine" },
+      { text: "Unsure", value: "unsure" }
     ]
 
     return items if product_form.authenticity.blank?
