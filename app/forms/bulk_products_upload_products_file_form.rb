@@ -142,10 +142,10 @@ private
       next if ary.drop(1).compact.empty?
 
       entry_number, category, subcategory, customs_code, country_of_origin, barcode, name, description, number_of_affected_units, brand, batch_number, counterfeit, markings, marketed_before_brexit, *_extra_cells = ary
-      authenticity = counterfeit.blank? ? nil : { "Yes" => "counterfeit", "No" => "genuine", "Unknown" => "unsure" }[counterfeit]
-      has_markings = markings.blank? ? nil : ({ "No" => "markings_no", "Unknown" => "markings_unknown" }[markings] || "markings_yes")
+      authenticity = counterfeit.blank? ? nil : { "Yes" => "counterfeit", "No" => "genuine", "Unknown" => "unsure" }[counterfeit&.strip]
+      has_markings = markings.blank? ? nil : ({ "No" => "markings_no", "Unknown" => "markings_unknown" }[markings&.strip] || "markings_yes")
       markings = has_markings == "markings_yes" ? markings.split(", ") : nil
-      when_placed_on_market = marketed_before_brexit.blank? ? nil : { "Yes" => "before_2021", "No" => "on_or_after_2021", "Unable to ascertain" => "unknown_date" }[marketed_before_brexit]
+      when_placed_on_market = marketed_before_brexit.blank? ? nil : { "Yes" => "before_2021", "No" => "on_or_after_2021", "Unable to ascertain" => "unknown_date" }[marketed_before_brexit&.strip]
       product = ProductForm.new(category:, subcategory:, country_of_origin: country_to_code(country_of_origin), barcode:, name:, description:, brand:, authenticity:, has_markings:, markings:, when_placed_on_market:)
       products << { product_data: product.serializable_hash, investigation_data: { customs_code:, number_of_affected_units:, batch_number: }, barcode: }
       error_messages[entry_number] = product.errors if product.invalid?
