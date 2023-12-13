@@ -23,7 +23,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (1 added)")
         expect(page).to have_text("Business (1 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")
@@ -48,7 +48,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (0 added)")
         expect(page).to have_text("Business (0 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")
@@ -66,7 +66,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (1 added)")
         expect(page).to have_text("Business (0 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")
@@ -113,7 +113,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (1 added)")
         expect(page).to have_text("Business (1 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")

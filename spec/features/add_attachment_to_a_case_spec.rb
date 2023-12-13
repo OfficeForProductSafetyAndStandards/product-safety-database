@@ -76,7 +76,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_antivirus, :with_stub
   context "when image is too small" do
     it "shows error" do
       visit "/cases/#{investigation.pretty_id}"
-      click_link "Add an image"
+      click_link "Add a notification image"
 
       expect_to_be_on_add_image_to_a_case_page
 
@@ -94,7 +94,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_antivirus, :with_stub
   context "when image is not an image file" do
     it "shows error" do
       visit "/cases/#{investigation.pretty_id}"
-      click_link "Add an image"
+      click_link "Add a notification image"
 
       expect_to_be_on_add_image_to_a_case_page
 
@@ -112,7 +112,7 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_antivirus, :with_stub
   context "when an image fails the antivirus check", :with_stubbed_failing_antivirus do
     it "shows error" do
       visit "/cases/#{investigation.pretty_id}"
-      click_link "Add an image"
+      click_link "Add a notification image"
 
       expect_to_be_on_add_image_to_a_case_page
 
