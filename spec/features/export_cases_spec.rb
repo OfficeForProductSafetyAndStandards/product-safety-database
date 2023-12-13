@@ -1,7 +1,7 @@
 require "rails_helper"
 require "sidekiq/testing"
 
-RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
+RSpec.feature "notification export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user_team) { create :team, name: "User Team" }
   let(:user) { create :user, :all_data_exporter, :activated, team: user_team, organisation: user_team.organisation }
   let(:other_user_same_team) { create :user, :activated, team: user_team, organisation: user_team.organisation }
@@ -11,7 +11,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
   let(:export) { CaseExport.find_by(user:) }
   let(:spreadsheet) do
     export.export_file.blob.open do |file|
-      Roo::Excelx.new(file).sheet("Cases")
+      Roo::Excelx.new(file).sheet("Notifications")
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(page).not_to have_text allegation_closed.pretty_id
 
     click_link "XLSX (spreadsheet)"
-    expect(page).to have_content "Your case export is being prepared. You will receive an email when your export is ready to download."
+    expect(page).to have_content "Your notification export is being prepared. You will receive an email when your export is ready to download."
 
     expect(email.action_name).to eq "case_export"
     expect(email.personalization[:name]).to eq user.name
@@ -76,7 +76,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(allegation_serious.pretty_id)
   end
 
-  scenario "with filtering on case type" do
+  scenario "with filtering on notification type" do
     choose "Enquiry"
     click_button "Apply"
 
@@ -91,7 +91,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
   end
 
-  scenario "with filtering on case status" do
+  scenario "with filtering on notification status" do
     choose "Closed"
     click_button "Apply"
 
@@ -106,7 +106,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(allegation_closed.pretty_id)
   end
 
-  scenario "with filtering on cases created by current user" do
+  scenario "with filtering on notifications created by current user" do
     within_fieldset "Created by" do
       choose "Me"
     end
@@ -124,7 +124,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
   end
 
-  scenario "with filtering on cases created by another user on the same team" do
+  scenario "with filtering on notifications created by another user on the same team" do
     within_fieldset "Created by" do
       choose "Me and my team"
     end
@@ -143,7 +143,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
   end
 
-  scenario "with filtering on cases created by another user or team" do
+  scenario "with filtering on notifications created by another user or team" do
     within_fieldset "Created by" do
       choose "Others"
       select other_user.name
@@ -162,8 +162,8 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)
   end
 
-  scenario "with filtering on cases with the user's team added to the case" do
-    within_fieldset "Teams added to case" do
+  scenario "with filtering on notifications with the user's team added to the notifications" do
+    within_fieldset "Teams added to notifications" do
       choose "My team"
     end
 
@@ -182,8 +182,8 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(4, 1)).to eq(allegation_other_team.pretty_id)
   end
 
-  scenario "with filtering on cases with another user or team added to the case" do
-    within_fieldset "Teams added to cases" do
+  scenario "with filtering on notifications with another user or team added to the notifications" do
+    within_fieldset "Teams added to notifications" do
       choose "Other"
       select other_user.team.name
     end
@@ -201,8 +201,8 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)
   end
 
-  scenario "with filtering on cases owned by the user" do
-    within_fieldset "Case owner" do
+  scenario "with filtering on notifications owned by the user" do
+    within_fieldset "Notification owner" do
       choose "Me"
     end
 
@@ -219,8 +219,8 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
   end
 
-  scenario "with filtering on cases owned by another team" do
-    within_fieldset "Case owner" do
+  scenario "with filtering on notifications owned by another team" do
+    within_fieldset "Notification owner" do
       choose "Others"
       select other_user.team.name
     end

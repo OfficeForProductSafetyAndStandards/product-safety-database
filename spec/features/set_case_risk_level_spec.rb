@@ -29,7 +29,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_antivirus
   context "when the user does not belong to a team with edit access in the investigation" do
     let(:user) { create(:user, :activated, has_viewed_introduction: true, team: create(:team, name: "Team without access")) }
 
-    scenario "they cannot set the risk level for the case" do
+    scenario "they cannot set the risk level for the notification" do
       visit "/cases/#{investigation.pretty_id}"
       expect(page).not_to have_link("Set risk level")
     end
@@ -39,26 +39,26 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_antivirus
     visit "/cases/#{investigation.pretty_id}"
 
     # Set risk level for first time
-    expect(page).to have_summary_item(key: "Case risk level", value: "Not set")
+    expect(page).to have_summary_item(key: "Notification risk level", value: "Not set")
     click_set_risk_level_link
 
     expect_to_be_on_set_risk_level_page(case_id: investigation.pretty_id)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
     choose "Serious risk"
 
-    expect(page).to have_text("This case does not have a risk assessment. You may want to add a risk assessment before setting the case risk level.")
+    expect(page).to have_text("This notification does not have a risk assessment. You may want to add a risk assessment before setting the notification risk level.")
 
     click_button "Save"
 
-    expect_confirmation_banner("The case risk level was updated")
+    expect_confirmation_banner("The notification risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Serious risk")
+    expect(page).to have_summary_item(key: "Notification risk level", value: "Serious risk")
     expect(page).to have_css("span.opss-tag--risk1", text: "Serious risk")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk level set to serious risk")
+    expect(page).to have_css("h3", text: "Notification risk level set to serious risk")
 
     # Teams/users with access receive an email with the update
     email = delivered_emails.last
@@ -69,16 +69,16 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_antivirus
     )
   end
 
-  scenario "Setting risk level on a case with an existing 'serious' risk assessment" do
+  scenario "Setting risk level on a notification with an existing 'serious' risk assessment" do
     visit "/cases/#{investigation_with_serious_risk_assessment.pretty_id}/edit-risk-level"
 
-    expect(page).to have_content("This case has 1 risk assessment added, assessing the risk as serious risk.")
+    expect(page).to have_content("This notification has 1 risk assessment added, assessing the risk as serious risk.")
   end
 
-  scenario "Setting risk level on a case with multiple risk assessments" do
+  scenario "Setting risk level on a notification with multiple risk assessments" do
     visit "/cases/#{investigation_with_multiple_risk_assessments.pretty_id}/edit-risk-level"
 
-    expect(page).to have_content("This case has 3 risk assessments added, assessing the risk as serious risk, high risk and not conclusive.")
+    expect(page).to have_content("This notification has 3 risk assessments added, assessing the risk as serious risk, high risk and not conclusive.")
   end
 
   scenario "Changing risk level for an investigation" do
@@ -89,18 +89,18 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_antivirus
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Medium risk")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
     choose("Not conclusive")
     click_button "Save"
 
-    expect_confirmation_banner("The case risk level was updated")
+    expect_confirmation_banner("The notification risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Not conclusive")
+    expect(page).to have_summary_item(key: "Notification risk level", value: "Not conclusive")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk level changed to not conclusive")
+    expect(page).to have_css("h3", text: "Notification risk level changed to not conclusive")
 
     # Teams/users with access receive an email with the update
     email = delivered_emails.last
@@ -111,23 +111,23 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_antivirus
     )
 
     # Changing the risk level back to a default one
-    within('nav[aria-label="Secondary"]') { click_link "Case" }
+    within('nav[aria-label="Secondary"]') { click_link "Notification" }
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Not conclusive")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
     choose("High risk")
     click_button "Save"
 
-    expect_confirmation_banner("The case risk level was updated")
+    expect_confirmation_banner("The notification risk level was updated")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "High risk")
+    expect(page).to have_summary_item(key: "Notification risk level", value: "High risk")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk level changed to high risk")
+    expect(page).to have_css("h3", text: "Notification risk level changed to high risk")
 
     # Teams/users with access receive an email with the update
     email = delivered_emails.last

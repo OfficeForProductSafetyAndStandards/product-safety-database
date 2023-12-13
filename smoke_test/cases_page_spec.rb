@@ -18,7 +18,7 @@ def take_screenshot_after_failed_example(example)
 end
 
 RSpec.feature "Search smoke test" do
-  scenario "sign-in and visit case page" do
+  scenario "sign-in and visit notifications page" do
 
     WebMock.allow_net_connect!
     @session.visit(smoke_uri)
@@ -44,8 +44,8 @@ RSpec.feature "Search smoke test" do
       sleep attempts * 10
     end
 
-    @session.click_link "Cases", wait: 60
-    @session.click_link "All cases", wait: 60
+    @session.click_link "Notification", wait: 60
+    @session.click_link "All notifications", wait: 60
 
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(3)")
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(13)")

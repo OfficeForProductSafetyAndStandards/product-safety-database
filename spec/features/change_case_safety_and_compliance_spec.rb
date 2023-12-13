@@ -161,7 +161,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
     expect(page).to have_unchecked_field("As non-compliant")
     expect(page).to have_checked_field("As unsafe and non-compliant")
     expect(page).to have_unchecked_field("As safe and compliant")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 
   def visit_change_reported_reason_page_with_no_values_selected
@@ -172,7 +172,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
     expect(page).to have_unchecked_field("As non-compliant")
     expect(page).to have_unchecked_field("As unsafe and non-compliant")
     expect(page).to have_unchecked_field("As safe and compliant")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 
   def expect_prefilled_values_for_non_compliant_product
@@ -180,7 +180,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
     expect(page).not_to have_field("Why is the product unsafe?", with: "FIRE FIRE FIRE")
     expect(page).not_to have_select("What is the primary hazard?", selected: investigation.hazard_type)
     expect(page).to have_field("Why is the product non-compliant?", with: "Covered in petrol")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 
   def expect_prefilled_values_for_unsafe_product
@@ -188,6 +188,6 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
     expect(page).to have_field("Why is the product unsafe?", with: "FIRE FIRE FIRE")
     expect(page).to have_select("What is the primary hazard?", selected: investigation.hazard_type)
     expect(page).not_to have_field("Why is the product non-compliant?", with: "Covered in petrol")
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 end

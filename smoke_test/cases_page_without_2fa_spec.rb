@@ -21,7 +21,7 @@ end
 # SMOKE_TEST_URL=http://localhost:3000 SMOKE_USER=user@example.com SMOKE_PASSWORD=testpassword bundle exec rspec smoke_test/cases_page_without_2fa_spec.rb
 
 RSpec.feature "Search smoke test" do
-  scenario "sign-in and visit case page" do
+  scenario "sign-in and visit notifications page" do
 
     WebMock.allow_net_connect!
     @session.visit(smoke_uri)

@@ -61,7 +61,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def investigation_updated(investigation_pretty_id, name, email, update_text, subject_text)
     set_template(TEMPLATES[:investigation_updated])
-    set_reference("Case updated")
+    set_reference("Notification updated")
 
     set_personalisation(
       name:,
@@ -75,7 +75,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def investigation_created(investigation_pretty_id, name, email, investigation_title, investigation_type)
     set_template(TEMPLATES[:investigation_created])
-    set_reference("Case created")
+    set_reference("Notification created")
 
     set_personalisation(
       name:,
@@ -158,7 +158,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
@@ -171,7 +171,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
   def risk_validation_updated(email:, updater:, investigation:, action:, name:)
     set_template(TEMPLATES[:risk_validation_updated])
     set_personalisation(
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: updater.name,
@@ -203,7 +203,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
@@ -224,7 +224,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_personalisation(
       verb_with_level:,
       name:,
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       investigation_url: investigation_url(pretty_id: investigation.pretty_id)
@@ -247,7 +247,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def case_export(email:, name:, case_export:)
     set_template(TEMPLATES[:case_export])
-    set_reference("Case Export")
+    set_reference("Notification Export")
 
     set_personalisation(
       name:,

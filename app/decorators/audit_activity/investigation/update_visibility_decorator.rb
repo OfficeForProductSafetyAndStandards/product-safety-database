@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateVisibilityDecorator < ApplicationDecor
   delegate_all
 
   def title(_viewer)
-    I18n.t(".title", scope: object.class.i18n_scope, case_type: "Case", visibility: new_visibility)
+    I18n.t(".title", scope: object.class.i18n_scope, case_type: "notification", visibility: new_visibility)
   end
 
   def subtitle(viewer)

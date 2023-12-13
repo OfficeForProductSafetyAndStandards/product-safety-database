@@ -1,11 +1,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full" role="region" aria-label="Products">
     <p class="govuk-body opss-text-align-center">
-       <%= "There are no product records linked to your open cases." if page_name == "your_products" %>
-       <%= "There are no product records linked to the team's open cases." if page_name == "team_products" %>
-       <br>
-       You can search all product records in the <%= link_to "all products", all_products_path, class: "govuk-link govuk-link--no-visited-state" %> search page.
-
+      <%= "There are no product records linked to your open notifications." if page_name == "your_products" %>
+      <%= "There are no product records linked to the team's open notifications." if page_name == "team_products" %>
+      <br>
+      You can search all product records in the <%= link_to "all products", all_products_path, class: "govuk-link govuk-link--no-visited-state" %> search page.
     </p>
   </div>
 </div>

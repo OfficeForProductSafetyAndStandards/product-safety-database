@@ -155,7 +155,7 @@ RSpec.feature "Editing a test result", :with_stubbed_antivirus, :with_stubbed_ma
 
     click_link "Edit test result"
     expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 
   def expect_failed_test_without_failure_details_to_show_not_provided

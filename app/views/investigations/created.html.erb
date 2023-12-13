@@ -1,10 +1,10 @@
-<% page_heading = "Case created" %>
+<% page_heading = "Notification created" %>
 
 <%= page_title page_heading %>
 
 <% banner_content = capture do %>
   <h1 class="govuk-heading-l"><%= page_heading %></h1>
-  <p class="govuk-body"><%= "Case ID: #{@investigation&.pretty_id}" %></p>
+  <p class="govuk-body"><%= "Notification ID: #{@investigation&.pretty_id}" %></p>
   <p class="govuk-body">
     A confirmation email has been sent to <strong><%= current_user.email %></strong>.
   </p>
@@ -16,14 +16,14 @@
     <p class="govuk-body">
       <% # TODO: this should be the case owner, shown as 'you' if the case owner
          # is the case creator. %>
-      You are now the case owner for
+      You are now the notification owner for
       <strong><%= @investigation.title %></strong>.
     </p>
 
     <p class="govuk-body">If you need to, you can add more information later.</p>
 
     <%= govukButton(
-      text: "View case",
+      text: "View notification",
       href: investigation_path(@investigation)
     ) %>
 

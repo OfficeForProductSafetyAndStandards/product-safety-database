@@ -1,9 +1,9 @@
-<h4 class="govuk-heading-m">Related cases</h4>
+<h4 class="govuk-heading-m">Related notifications</h4>
 <% unique_investigations = @product.unique_cases_except(@investigation) %>
 <% if unique_investigations.count.zero? %>
-  <p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">The original product record has not been included in any other cases.</p>
+  <p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">The original product record has not been included in any other notifications.</p>
 <% else %>
-  <p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">The original product record was or is also included in these <%= unique_investigations.count %> cases.</p>
+  <p class="govuk-body-s govuk-!-margin-bottom-7 opss-secondary-text">The original product record was or is also included in these <%= unique_investigations.count %> notifications.</p>
 <% end %>
 <% unique_investigations.each do |investigation| %>
   <%= govukSummaryList(

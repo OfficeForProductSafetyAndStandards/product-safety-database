@@ -5,7 +5,7 @@
     <%= error_summary @edit_form.errors %>
     <h1 class="govuk-heading-l"><%= title %></h1>
     <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, local: true do |form| %>
-      <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view case details as it is restricted" :  "Will have default view rights"%>
+      <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view notification details as it is restricted" :  "Will have default view rights"%>
       <%= govukRadios(
         form: form,
         key: :permission_level,
@@ -20,24 +20,24 @@
         items: [
           {
             id: "permission_level",
-            text: "View full case",
+            text: "View full notification",
             value: Collaboration::Access::ReadOnly.model_name.human,
             hint: {
-              text: "View full case details including correspondence",
+              text: "View full notification details including correspondence",
             }
           },
           {
             id: "permission_level_edit",
-            text: "Edit full case",
+            text: "Edit full notification",
             value: Collaboration::Access::Edit.model_name.human,
             hint: {
-              text: "View and edit all case details. Cannot add or remove teams or close the case.",
+              text: "View and edit all notification details. Cannot add or remove teams or close the notification.",
             }
           },
           { key: "or", divider: "or" },
           {
             id: "permission_level_delete",
-            text: "Remove #{@collaborator.name} from the case",
+            text: "Remove #{@collaborator.name} from the notification",
             hint: {
               text: remove_hint
             },
@@ -58,7 +58,7 @@
             text: "Message to the #{@collaborator.name}"
           },
           hint: {
-            text: "Message will also be included on the case timeline"
+            text: "Message will also be included on the notification timeline"
           }
         ) %>
       <% end %>
