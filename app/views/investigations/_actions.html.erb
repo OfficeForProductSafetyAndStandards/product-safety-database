@@ -18,9 +18,9 @@
       <% end %>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Image&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.number_of_related_images %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <dt class="govuk-summary-list__key">Notification image&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.number_of_related_images %><span class="govuk-visually-hidden"> added</span>)</span></dt>
       <% if policy(@investigation).update? %>
-        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_image_upload_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> an image</span></a></dd>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_image_upload_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a notification image</span></a></dd>
       <% end %>
     </div>
     <div class="govuk-summary-list__row">

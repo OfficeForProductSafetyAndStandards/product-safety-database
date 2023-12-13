@@ -128,7 +128,7 @@ class Investigation < ApplicationRecord
   end
 
   def number_of_related_images
-    images.size + image_uploads.size + products.flat_map(&:virus_free_images).count
+    images.size + image_uploads.size
   end
 
   def generic_supporting_information_attachments
