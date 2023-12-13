@@ -12,7 +12,7 @@ class ProductRecallForm
   attribute :product_identifiers, :string
   attribute :product_description, :string
   attribute :country_of_origin, :string
-  attribute :counterfeit, :boolean
+  attribute :counterfeit, :string
   attribute :risk_type, :string
   attribute :risk_level, :string
   attribute :risk_description, :string
