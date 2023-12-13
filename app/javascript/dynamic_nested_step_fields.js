@@ -15,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Re-init GOV.UK Frontend to pick up new form fields
-    window.GOVUKFrontend.initAll({ scope: document.querySelector('opss-steps') })
+    import { initAll } from 'javascript/govuk-frontend.js'
+
+    initAll({ scope: document.querySelector('opss-steps') })
   }
 
   // Detect added or removed steps

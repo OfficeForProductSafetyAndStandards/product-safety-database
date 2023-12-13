@@ -19,7 +19,7 @@ $govuk-fonts-path: "";
 
 $govuk-global-styles: true;
 
-@import "govuk-frontend/govuk/all";
+@import "govuk-frontend/dist/govuk/all";
 @import "accessible-autocomplete/src/autocomplete";
 @import "autocomplete";
 @import "task_list";
