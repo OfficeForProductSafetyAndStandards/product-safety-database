@@ -150,7 +150,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       expect(sheet.cell(2, 21)).to eq investigation.reported_reason
       expect(sheet.cell(3, 21)).to eq other_team_investigation.reported_reason
 
-      expect(sheet.cell(1, 22)).to eq "Complainant_Reference"
+      expect(sheet.cell(1, 22)).to eq "Notifiers_Reference"
       expect(sheet.cell(2, 22)).to eq investigation.complainant_reference
       expect(sheet.cell(3, 22)).to eq "Restricted"
 
