@@ -28,11 +28,11 @@ class AuditActivity::Investigation::ChangeOverseasRegulator < AuditActivity::Inv
   end
 
   def previous_country
-    metadata["updates"]["overseas_regulator_country"].first || "None"
+    metadata["updates"]["overseas_regulator_country"]&.first || "None"
   end
 
   def new_country
-    metadata["updates"]["overseas_regulator_country"].second || "None"
+    metadata["updates"]["overseas_regulator_country"]&.second || "None"
   end
 
 private
