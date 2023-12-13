@@ -81,7 +81,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_link("Add a product", href: new_investigation_product_path(investigation_1))
         expect(page).to have_link("Add a business", href: new_investigation_business_types_path(investigation_1))
-        expect(page).to have_link("Add an image", href: new_investigation_image_upload_path(investigation_1))
+        expect(page).to have_link("Add a notification image", href: new_investigation_image_upload_path(investigation_1))
         expect(page).to have_link("Add an accident or incident", href: new_investigation_accident_or_incidents_type_path(investigation_1))
         expect(page).to have_link("Add a corrective action", href: new_investigation_corrective_action_path(investigation_1))
         expect(page).to have_link("Add a risk assessment", href: new_investigation_prism_risk_assessment_path(investigation_1))
