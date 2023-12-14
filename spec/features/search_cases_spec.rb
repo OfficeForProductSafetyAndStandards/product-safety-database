@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create :user, :activated, has_viewed_introduction: true }
 
   let(:product) do
@@ -49,7 +49,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
     Investigation.reindex
   end
 
-  scenario "searching for a notification using a keyword from a product name" do
+  scenario "searching for a case using a keyword from a product name" do
     sign_in(user)
     visit "/cases"
 
@@ -58,7 +58,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     expect_to_be_on_cases_search_results_page
 
-    expect(page).to have_content "1 notification matching keyword(s) MyBrand, using the current filters, was found."
+    expect(page).to have_content "1 case matching keyword(s) MyBrand, using the current filters, was found."
 
     expect(page).to have_text(investigation.pretty_id)
 
@@ -66,7 +66,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
     expect(page).to have_text("MyBrand washing machine")
   end
 
-  scenario "searching for a notification using a close-matching product name keyword" do
+  scenario "searching for a case using a close-matching product name keyword" do
     sign_in(user)
     visit "/cases"
 
@@ -75,13 +75,13 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     expect_to_be_on_cases_search_results_page
 
-    expect(page).to have_content "1 notification matching keyword(s) MyBran, using the current filters, was found."
+    expect(page).to have_content "1 case matching keyword(s) MyBran, using the current filters, was found."
 
     expect(page).to have_text(investigation.pretty_id)
     expect(page).to have_text("MyBrand washing machine")
   end
 
-  scenario "searching for a notification using an exact matching product code" do
+  scenario "searching for a case using an exact matching product code" do
     sign_in(user)
     visit "/cases"
 
@@ -90,13 +90,13 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     expect_to_be_on_cases_search_results_page
 
-    expect(page).to have_content "1 notification matching keyword(s) W2020-10/1, using the current filters, was found."
+    expect(page).to have_content "1 case matching keyword(s) W2020-10/1, using the current filters, was found."
 
     expect(page).to have_text(investigation.pretty_id)
     expect(page).to have_text("MyBrand washing machine")
   end
 
-  scenario "searching for a notification using a query string that includes trailing or leading whitespaces" do
+  scenario "searching for a case using a query string that includes trailing or leading whitespaces" do
     sign_in(user)
     visit "/cases"
 
@@ -105,7 +105,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     expect_to_be_on_cases_search_results_page
 
-    expect(page).to have_content "1 notification matching keyword(s) W2020-10/1, using the current filters, was found."
+    expect(page).to have_content "1 case matching keyword(s) W2020-10/1, using the current filters, was found."
 
     expect(page).to have_text(investigation.pretty_id)
     expect(page).to have_text("MyBrand washing machine")
@@ -121,7 +121,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     expect_to_be_on_cases_search_results_page
 
-    expect(page).to have_content "2 notifications matching keyword(s) mybrand mobile phone, using the current filters, was found."
+    expect(page).to have_content "2 cases matching keyword(s) mybrand mobile phone, using the current filters, was found."
 
     # Both cases returned even though neither matches ALL the keywords
     expect(page).to have_text(investigation.pretty_id)
@@ -143,7 +143,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       expect_to_be_on_cases_search_results_page
 
-      expect(page).to have_content "1 notification matching keyword(s) phone, using the current filters, was found."
+      expect(page).to have_content "1 case matching keyword(s) phone, using the current filters, was found."
 
       expect(page).to have_text(mobile_phone_investigation.pretty_id)
       expect(page).to have_text("T12 mobile phone")
@@ -161,7 +161,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       expect_to_be_on_cases_search_results_page
 
-      expect(page).to have_content "2 notifications matching keyword(s) mobile, using the current filters, were found."
+      expect(page).to have_content "2 cases matching keyword(s) mobile, using the current filters, were found."
 
       expect(page).to have_text(mobile_phone_investigation.pretty_id)
       expect(page).to have_text("T12 mobile phone")
@@ -179,7 +179,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       expect_to_be_on_cases_search_results_page
 
-      expect(page).to have_content "1 notification matching keyword(s) mobiee, using the current filters, was found."
+      expect(page).to have_content "1 case matching keyword(s) mobiee, using the current filters, was found."
 
       expect(page).to have_text(mobile_phone_investigation.pretty_id)
       expect(page).to have_text("T12 mobile phone")
@@ -197,7 +197,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       expect_to_be_on_cases_search_results_page
 
-      expect(page).to have_content "2 notifications matching keyword(s) thirteenproduct, using the current filters, were found."
+      expect(page).to have_content "2 cases matching keyword(s) thirteenproduct, using the current filters, were found."
 
       expect(page).to have_text(thirteenproduct_investigation.pretty_id)
       expect(page).to have_text("thirteenproduct")
@@ -215,7 +215,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       expect_to_be_on_cases_search_results_page
 
-      expect(page).to have_content "1 notification matching keyword(s) thirteenproduce, using the current filters, was found."
+      expect(page).to have_content "1 case matching keyword(s) thirteenproduce, using the current filters, was found."
 
       expect(page).to have_text(thirteenproduct_investigation.pretty_id)
       expect(page).to have_text("thirteenproduct")
@@ -225,14 +225,14 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
     end
 
     context "when no search term is used" do
-      it " does not show any deleted notifications, but does show all none deleted notifications if no word is searched for" do
+      it " does not show any deleted cases, but does show all none deleted cases if no word is searched for" do
         sign_in(user)
         visit "/cases"
 
         fill_in "Search", with: ""
         click_button "Submit search"
 
-        expect(page).to have_content "5 notifications using the current filters, were found."
+        expect(page).to have_content "5 cases using the current filters, were found."
 
         expect(page).to have_text(thirteenproduct_investigation.pretty_id)
         expect(page).to have_text(thirteenproduct_investigation.user_title)
@@ -253,7 +253,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         expect(page).to have_text("MyBrand washing machine")
       end
 
-      context "when over 10k notifications exist" do
+      context "when over 10k cases exist" do
         # rubocop:disable RSpec/VerifiedDoubles
         before do
           spy = spy("not_deleted")
@@ -263,25 +263,25 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         end
         # rubocop:enable RSpec/VerifiedDoubles
 
-        it "shows total number of notifications" do
+        it "shows total number of cases" do
           visit "/cases"
-          within_fieldset "Notification status" do
+          within_fieldset "Case status" do
             choose "All"
           end
           click_button "Apply"
 
-          expect(page).to have_content "10001 notifications using the current filters, were found."
+          expect(page).to have_content "10001 cases using the current filters, were found."
         end
       end
     end
 
-    context "when searching for a notification that has been deleted" do
-      it "does not show the deleted notification in the results" do
+    context "when searching for a case that has been deleted" do
+      it "does not show the deleted case in the results" do
       end
     end
 
     context "when searching by product subcategory" do
-      context "when notification is closed" do
+      context "when case is closed" do
         before do
           ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
           mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
@@ -289,66 +289,66 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
           sign_in(user)
           visit "/cases"
-          within_fieldset "Notification status" do
+          within_fieldset "Case status" do
             choose "All"
           end
         end
 
-        it "only shows the notification when searching by product details from the time the notification was closed" do
-          pending "This is completely mental and should probably not have gone live. This is matching notifications to the old & updated attributes of the products?"
+        it "only shows the case when searching by product details from the time the case was closed" do
+          pending "This is completely mental and should probably not have gone live. This is matching cases to the old & updated attributes of the products?"
           fill_in "Search", with: "telephone"
           click_button "Submit search"
 
-          expect(page).to have_content "1 notification matching keyword(s) telephone, using the current filters, was found."
+          expect(page).to have_content "1 case matching keyword(s) telephone, using the current filters, was found."
 
           expect(page).to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "11111"
           click_button "Submit search"
 
-          expect(page).to have_content "1 notification matching keyword(s) 11111, using the current filters, was found."
+          expect(page).to have_content "1 case matching keyword(s) 11111, using the current filters, was found."
 
           expect(page).to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "original"
           click_button "Submit search"
 
-          expect(page).to have_content "1 notification matching keyword(s) original, using the current filters, was found."
+          expect(page).to have_content "1 case matching keyword(s) original, using the current filters, was found."
 
           expect(page).to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "AAAAA"
           click_button "Submit search"
 
-          expect(page).to have_content "1 notification matching keyword(s) AAAAA, using the current filters, was found."
+          expect(page).to have_content "1 case matching keyword(s) AAAAA, using the current filters, was found."
 
           expect(page).to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "handset"
           click_button "Submit search"
 
-          expect(page).to have_content "0 notification matching keyword(s) handset, using the current filters, were found."
+          expect(page).to have_content "0 cases matching keyword(s) handset, using the current filters, were found."
 
           expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "22222"
           click_button "Submit search"
 
-          expect(page).to have_content "0 notification matching keyword(s) 22222, using the current filters, were found."
+          expect(page).to have_content "0 cases matching keyword(s) 22222, using the current filters, were found."
 
           expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "anewone"
           click_button "Submit search"
 
-          expect(page).to have_content "0 notification matching keyword(s) anewone, using the current filters, were found."
+          expect(page).to have_content "0 cases matching keyword(s) anewone, using the current filters, were found."
 
           expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
 
           fill_in "Search", with: "BBBBB"
           click_button "Submit search"
 
-          expect(page).to have_content "0 notification matching keyword(s) BBBBB, using the current filters, were found."
+          expect(page).to have_content "0 cases matching keyword(s) BBBBB, using the current filters, were found."
 
           expect(page).not_to have_text(mobile_phone_investigation.pretty_id)
         end
@@ -364,7 +364,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
     let(:three_months_ago) { time.advance(months: -3) }
     let(:one_day_ago) { time.advance(days: -1) }
 
-    let(:title) { "interesting notification" }
+    let(:title) { "interesting case" }
 
     before do
       Timecop.freeze(time)
@@ -384,9 +384,9 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         click_button "Submit search"
       end
 
-      it "shows both notifications" do
+      it "shows both cases" do
         expect_to_be_on_cases_search_results_page
-        expect(page).to have_content "2 notifications matching keyword(s)"
+        expect(page).to have_content "2 cases matching keyword(s)"
 
         expect(page).to have_text(old_case.pretty_id)
         expect(page).to have_text(new_case.pretty_id)
@@ -408,9 +408,9 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         click_button "Submit search"
       end
 
-      it "only shows the notification that was last changed within the date range" do
+      it "only shows the case that was last changed within the date range" do
         expect_to_be_on_cases_search_results_page
-        expect(page).to have_content "1 notification matching keyword(s)"
+        expect(page).to have_content "1 case matching keyword(s)"
 
         expect(page).not_to have_text(old_case.pretty_id)
         expect(page).to have_text(new_case.pretty_id)
@@ -432,9 +432,9 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         click_button "Submit search"
       end
 
-      it "only shows the notification that was last changed within the date range" do
+      it "only shows the case that was last changed within the date range" do
         expect_to_be_on_cases_search_results_page
-        expect(page).to have_content "1 notification matching keyword(s)"
+        expect(page).to have_content "1 case matching keyword(s)"
 
         expect(page).to have_text(old_case.pretty_id)
         expect(page).not_to have_text(new_case.pretty_id)

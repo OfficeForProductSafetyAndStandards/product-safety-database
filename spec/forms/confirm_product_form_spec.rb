@@ -26,7 +26,7 @@ RSpec.describe ConfirmProductForm, :with_stubbed_mailer do
 
       it "provides an error message" do
         form.valid?
-        expect(form.errors.full_messages_for(:correct)).to eq ["Select yes if this is the correct product record to add to your notification"]
+        expect(form.errors.full_messages_for(:correct)).to eq ["Select yes if this is the correct product record to add to your case"]
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe ConfirmProductForm, :with_stubbed_mailer do
 
       it "provides an error message" do
         form.valid?
-        expect(form.errors.full_messages_for(:correct)).to eq ["Select yes if this is the correct product record to add to your notification"]
+        expect(form.errors.full_messages_for(:correct)).to eq ["Select yes if this is the correct product record to add to your case"]
       end
     end
 

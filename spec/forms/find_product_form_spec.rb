@@ -134,7 +134,7 @@ RSpec.describe FindProductForm, :with_stubbed_mailer do
 
           it "provides an error message" do
             form.valid?
-            expect(form.errors.full_messages_for(:reference)).to eq ["Enter a product record which has not already been added to the notification"]
+            expect(form.errors.full_messages_for(:reference)).to eq ["Enter a product record which has not already been added to the case"]
           end
         end
       end

@@ -58,7 +58,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
         Tempfile.create("export_cases_spec", Rails.root.join("tmp"), encoding: "ascii-8bit") do |file|
           file.write response.body
-          Roo::Excelx.new(file).sheet("Notifications")
+          Roo::Excelx.new(file).sheet("Cases")
         end
       end
 

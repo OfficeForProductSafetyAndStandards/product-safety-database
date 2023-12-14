@@ -60,7 +60,7 @@ RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the notification owner"
+    it_behaves_like "a service which notifies the case owner"
   end
 
   context "with a relationship" do
@@ -87,7 +87,7 @@ RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the notification owner"
+    it_behaves_like "a service which notifies the case owner"
   end
 
   context "with an approved online marketplace" do
@@ -114,7 +114,7 @@ RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the notification owner"
+    it_behaves_like "a service which notifies the case owner"
   end
 
   context "with a choice for authorised_representative" do
@@ -141,7 +141,7 @@ RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the notification owner"
+    it_behaves_like "a service which notifies the case owner"
   end
 
   context "when given just the name of a new 'other' online marketplace" do
@@ -174,7 +174,7 @@ RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the notification owner"
+    it_behaves_like "a service which notifies the case owner"
 
     context "when the name is not unique" do
       let(:online_marketplace) { create(:online_marketplace) }
@@ -191,6 +191,6 @@ RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
   end
 
   def expected_email_body(name)
-    "Business was added to the notification by #{name}."
+    "Business was added to the case by #{name}."
   end
 end

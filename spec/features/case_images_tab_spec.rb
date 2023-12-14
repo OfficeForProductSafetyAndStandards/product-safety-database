@@ -18,7 +18,7 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
     click_link "Images"
 
-    click_link "Add a notification image"
+    click_link "Add a case image"
 
     expect_to_be_on_add_image_page
 
@@ -67,9 +67,9 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
       click_link "Images"
 
-      expect(page).to have_content "This notification does not have any notification evidence images."
+      expect(page).to have_content "This case does not have any case evidence images."
 
-      click_link "Add a notification image"
+      click_link "Add a case image"
 
       expect_to_be_on_add_image_page
 
@@ -86,7 +86,7 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
       expect_to_be_on_images_page
       expect(page).to have_content "Images (1)"
-      expect(page).to have_content "Notification image 1"
+      expect(page).to have_content "Case image 1"
     end
   end
 

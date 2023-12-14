@@ -3,18 +3,18 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-      All notifications &ndash; Search
+      All cases &ndash; Search
     </h1>
     <p class="govuk-body opss-secondary-text">
-      Search all notifications in the Product Safety Database (<%= psd_abbr title: false %>).
+      Search all cases in the Product Safety Database (<%= psd_abbr title: false %>).
     </p>
-    <%= govukDetails(summaryText: "Help with the notifications search", classes: "opss-details--sm") do %>
+    <%= govukDetails(summaryText: "Help with the cases search", classes: "opss-details--sm") do %>
       <p class="govuk-body-s govuk-!-margin-bottom-4">
-        <span id="search-hint">You can search for a notification using a notification number or the keywords that describe it and by filtering the results.</span> You can also filter all notification records without a notification number or a keyword search.
+          <span id="search-hint">You can search for a case using a case number or the keywords that describe it and by filtering the results.</span> You can also filter all case records without a case number or a keyword search.
       </p>
       <% if policy(Investigation).export? && @investigations.any? %>
         <p class="govuk-body-s govuk-!-margin-bottom-1">
-          When viewing a list of search results you can <%= link_to  "request the list", generate_case_exports_path(params: case_export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
+            When viewing a list of search results you can <%= link_to  "request the list", generate_case_exports_path(params: case_export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
         </p>
       <% end %>
 

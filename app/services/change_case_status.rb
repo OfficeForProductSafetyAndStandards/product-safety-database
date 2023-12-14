@@ -75,7 +75,7 @@ private
   end
 
   def email_case_type
-    "Notification"
+    "Case"
   end
 
   def closed?

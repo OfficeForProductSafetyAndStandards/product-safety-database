@@ -20,13 +20,13 @@ RSpec.feature "Your businesses listing", :with_stubbed_mailer, type: :feature do
     visit your_businesses_path
   end
 
-  scenario "it shows all recently added businesses that have a notification opened by me" do
+  scenario "it shows all recently added businesses that have a case opened by me" do
     expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_one.trading_name)
     expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_two.trading_name)
     expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_three.trading_name)
   end
 
-  context "when I open a notification linked to an approved online marketplace" do
+  context "when I open a case linked to an approved online marketplace" do
     let(:online_marketplace) { create(:online_marketplace, :approved) }
     let!(:business_four) { create(:business, trading_name: "Exploding Things Ltd", online_marketplace:) }
     let!(:explosion_investigation) { create(:allegation, hazard_type: "Explosion", creator: user) }

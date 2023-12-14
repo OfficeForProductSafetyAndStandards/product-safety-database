@@ -16,7 +16,7 @@ class CaseExport < ApplicationRecord
   end
 
   def export!
-    raise "No notifications to export" unless case_ids.length.positive?
+    raise "No cases to export" unless case_ids.length.positive?
 
     spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "cases_export.xlsx" }
@@ -28,7 +28,7 @@ class CaseExport < ApplicationRecord
 
   def to_spreadsheet
     package = Axlsx::Package.new
-    sheet = package.workbook.add_worksheet name: "Notifications"
+    sheet = package.workbook.add_worksheet name: "Cases"
 
     add_header_row(sheet)
 

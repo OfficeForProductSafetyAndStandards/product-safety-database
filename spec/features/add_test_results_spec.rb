@@ -17,7 +17,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
       click_link "Add a test result"
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
         page.choose "No"
       end
@@ -25,7 +25,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_page
       expect_test_result_form_to_be_blank
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
 
       click_button "Add test result"
 
@@ -45,7 +45,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
       click_link "View test result"
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       expect_summary_to_reflect_values(result: "Pass")
 
       expect(page).to have_text("test_result.txt")
@@ -62,14 +62,14 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
       click_link "Add a test result"
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
         page.choose "Yes"
       end
       click_button "Continue"
 
       expect_to_be_on_record_test_result_opss_funding_form_page(case_id: investigation.pretty_id)
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       fill_in "What is the TSO Sample Reference Number?", with: "TSO123"
       click_button "Continue"
       expect_certificate_date_error
@@ -81,12 +81,12 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_page
       expect_test_result_form_to_be_blank
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
 
       click_button "Add test result"
 
       expect_full_error_list
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Pass", file:, standards: "EN71, EN73")
@@ -119,7 +119,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
       click_link "Add a test result"
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
         page.choose "No"
       end
@@ -127,7 +127,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_page
       expect_test_result_form_to_be_blank
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
 
       click_button "Add test result"
 

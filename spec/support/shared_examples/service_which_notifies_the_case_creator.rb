@@ -1,7 +1,7 @@
-RSpec.shared_examples "a service which notifies the notification creator", :with_test_queue_adapter do |even_when_the_notification_is_closed: false|
+RSpec.shared_examples "a service which notifies the case creator", :with_test_queue_adapter do |even_when_the_case_is_closed: false|
   let!(:investigation) { create(:enquiry, is_closed: false, creator: creator_user) }
 
-  context "when the user is the notification creator" do
+  context "when the user is the case creator" do
     let(:creator_user) { user }
 
     it "does not send an email" do
@@ -9,7 +9,7 @@ RSpec.shared_examples "a service which notifies the notification creator", :with
     end
   end
 
-  context "when the user is not the notification creator" do
+  context "when the user is not the case creator" do
     let(:creator_user) { create(:user, :activated, team: user.team, organisation: user.organisation) }
 
     it "sends an email to the user" do
@@ -22,8 +22,8 @@ RSpec.shared_examples "a service which notifies the notification creator", :with
       )
     end
 
-    unless even_when_the_notification_is_closed
-      context "when the notification is closed" do
+    unless even_when_the_case_is_closed
+      context "when the case is closed" do
         before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
 
         it "does not send an email" do

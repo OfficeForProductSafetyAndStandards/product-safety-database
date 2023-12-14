@@ -9,6 +9,6 @@ class DeleteInvestigationForm
   validate :investigation_has_no_products
 
   def investigation_has_no_products
-    errors.add(:has_products, "Cannot delete a notification with products") unless investigation && investigation.products.none?
+    errors.add(:has_products, "Cannot delete a case with products") unless investigation && investigation.products.none?
   end
 end

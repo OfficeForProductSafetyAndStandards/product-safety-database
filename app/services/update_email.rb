@@ -128,8 +128,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited an email on the notification.",
-        "Email edited for notification"
+        "#{user.decorate.display_name(viewer: recipient)} edited an email on the case.",
+        "Email edited for Case"
       ).deliver_later
     end
   end

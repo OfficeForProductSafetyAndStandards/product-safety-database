@@ -6,7 +6,7 @@ class InvestigationPolicy < ApplicationPolicy
 
   # Used for all updating of the case, including adding and removing related
   # records, such as products, businesses and documents, with the exception of
-  # changing the notification owner, its status (eg 'open' or 'closed'), and whether
+  # changing the case owner, its status (eg 'open' or 'closed'), and whether
   # or not it is 'restricted'.
   def update?(user: @user)
     return false if record.is_closed? && !user.has_role?(:super_user)

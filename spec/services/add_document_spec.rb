@@ -81,11 +81,11 @@ RSpec.describe AddDocument, :with_test_queue_adapter do
         let(:parent) { investigation }
 
         def expected_email_subject
-          "Notification updated"
+          "Case updated"
         end
 
         def expected_email_body(name)
-          "Document was attached to the notification by #{name}."
+          "Document was attached to the Case by #{name}."
         end
 
         it "adds an audit activity record", :aggregate_failures do
@@ -96,7 +96,7 @@ RSpec.describe AddDocument, :with_test_queue_adapter do
           expect(last_added_activity.metadata).to match(hash_including(document_metadata))
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the case owner"
       end
     end
   end

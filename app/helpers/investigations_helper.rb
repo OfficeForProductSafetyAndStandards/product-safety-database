@@ -513,7 +513,7 @@ module InvestigationsHelper
     title_link = link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state"
 
     [
-      { key: { text: "Notification" }, value: { text: investigation.pretty_id } },
+      { key: { text: "Case" }, value: { text: investigation.pretty_id } },
       { key: { text: "Name" }, value: { html: title_link } },
       { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
       { key: { text: "Created" }, value: { text: investigation.created_at.to_formatted_s(:govuk) } },
@@ -527,12 +527,12 @@ module InvestigationsHelper
 
     rows = [
       {
-        key: { text: "Notification name" },
+        key: { text: "Case name" },
         value: { text: investigation.title },
         actions: case_name_actions(investigation, user)
       },
       {
-        key: { text: "Notification number" },
+        key: { text: "Case number" },
         value: {
           text: investigation.pretty_id,
         },
@@ -575,7 +575,7 @@ module InvestigationsHelper
         }
       },
       {
-        key: { text: "Notification owner" },
+        key: { text: "Case owner" },
         value: {
           text: investigation_owner(investigation)
         },
@@ -592,7 +592,7 @@ module InvestigationsHelper
 
     if investigation.is_private?
       rows << {
-        key: { text: "Notification restriction" },
+        key: { text: "Case restriction" },
         value: {
           html: case_restriction_value(investigation)
         },
@@ -602,7 +602,7 @@ module InvestigationsHelper
 
     rows << [
       {
-        key: { text: "Notification risk level" },
+        key: { text: "Case risk level" },
         value: {
           html: case_risk_level_value(investigation)
         },
@@ -696,7 +696,7 @@ private
   def search_result_values(_search_terms, number_of_results)
     word = number_of_results == 1 ? "was" : "were"
 
-    number_of_cases_in_english = "#{number_of_results} #{'notification'.pluralize(number_of_results)}"
+    number_of_cases_in_english = "#{number_of_results} #{'case'.pluralize(number_of_results)}"
 
     {
       number_of_cases_in_english:,
@@ -711,7 +711,7 @@ private
       items: [
         href: edit_investigation_case_names_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the notification name"
+        visuallyHiddenText: " the case name"
       ]
     }
   end
@@ -750,7 +750,7 @@ private
       items: [
         href: status_path,
         text: status_link_text,
-        visuallyHiddenText: " this notification"
+        visuallyHiddenText: " this case"
       ]
     }
   end
@@ -786,7 +786,7 @@ private
       items: [
         href: new_investigation_ownership_path(investigation),
         text: "Change",
-        visuallyHiddenText: " the notification owner"
+        visuallyHiddenText: " the case owner"
       ]
     }
   end
@@ -810,7 +810,7 @@ private
       items: [
         href: investigation_visibility_path(investigation),
         text: "Change",
-        visuallyHiddenText: " the notification restriction"
+        visuallyHiddenText: " the case restriction"
       ]
     }
   end
@@ -889,7 +889,7 @@ private
   def status_value(investigation)
     if investigation.is_closed?
       {
-        html: '<span class="opss-tag opss-tag--risk3">Notification closed</span>'.html_safe,
+        html: '<span class="opss-tag opss-tag--risk3">Case closed</span>'.html_safe,
         secondary_text: { text: investigation.date_closed.to_formatted_s(:govuk) }
       }
     else
@@ -900,7 +900,7 @@ private
   end
 
   def case_restriction_value(investigation)
-    investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This notification is </span>Restricted'.html_safe : "Unrestricted"
+    investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : "Unrestricted"
   end
 
   def case_risk_level_value(investigation)

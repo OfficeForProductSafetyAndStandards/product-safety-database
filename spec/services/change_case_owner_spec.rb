@@ -134,7 +134,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
               investigation.pretty_id,
               old_owner.name,
               old_owner.email,
-              "Owner changed on notification to #{new_owner.name} by #{user.name}.",
+              "Case owner changed on case to #{new_owner.name} by #{user.name}.",
               expected_email_subject
             )
           end
@@ -306,10 +306,10 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
   end
 
   def expected_email_subject
-    "Owner changed for notification"
+    "Case owner changed for case"
   end
 
   def expected_email_body
-    "Owner changed on notification to #{new_owner.name} by #{user.name}.\n\nMessage from #{user.name}: ^ Test rationale"
+    "Case owner changed on case to #{new_owner.name} by #{user.name}.\n\nMessage from #{user.name}: ^ Test rationale"
   end
 end

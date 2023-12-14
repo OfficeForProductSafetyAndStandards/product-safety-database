@@ -19,7 +19,7 @@ class BulkProductsAddBusinessDetailsForm
   def initialize(*args)
     super
     # Detect a default trading name and don't show it to force the user to enter their own
-    self.trading_name = nil if trading_name.start_with?("Auto-generated business for notification")
+    self.trading_name = nil if trading_name.start_with?("Auto-generated business for case")
     self.locations = [Location.new] if locations.empty?
     self.contacts = [Contact.new] if contacts.empty?
   end
@@ -49,7 +49,7 @@ class BulkProductsAddBusinessDetailsForm
 private
 
   def validate_trading_name_not_default
-    errors.add(:trading_name, :invalid) if trading_name.start_with?("Auto-generated business for notification")
+    errors.add(:trading_name, :invalid) if trading_name.start_with?("Auto-generated business for case")
   end
 
   def validate_country_set_for_location

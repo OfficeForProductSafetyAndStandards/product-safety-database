@@ -19,18 +19,23 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
     scenario "Opening a new case (with validation error)" do
       sign_in(user)
 
-      click_link "Notifications"
-      click_link "Create a notification"
+      click_link "Cases"
+
+      click_link "Create a case"
+
       click_link "Go to the products search page"
 
       click_link product.name
-      click_link "Create a product notification"
-      expect(page).to have_css("h1", text: "Why are you creating a notification?")
+
+      click_link "Create a product case"
+
+      expect(page).to have_css("h1", text: "Why are you creating a case?")
+
       click_button "Continue"
 
       expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
 
-      within_fieldset("Why are you creating a notification?") do
+      within_fieldset("Why are you creating a case?") do
         choose("A product is of concern")
       end
 
@@ -68,7 +73,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(errors_list[0].text).to eq "Select yes to add a reference number to the notification"
+      expect(errors_list[0].text).to eq "Select yes to add a reference number to the case"
 
       within_fieldset("Do you want to add a reference number?") do
         choose("Yes")
@@ -82,25 +87,25 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "What is the notification name?")
+      expect(page).to have_css("h1", text: "What is the case name?")
 
       click_button "Save"
 
-      expect(errors_list[0].text).to eq "Enter a notification name"
+      expect(errors_list[0].text).to eq "Enter a case name"
 
       find("#user_title").set(investigation_with_same_user_title.user_title)
       click_button "Save"
 
-      expect(errors_list[0].text).to eq "The notification name has already been used in an open notification by your team"
+      expect(errors_list[0].text).to eq "The case name has already been used in an open case by your team"
 
       find("#user_title").set(case_name)
 
       click_button "Save"
 
-      expect(page).to have_css("h1", text: "Notification created")
-      expect(page).to have_content("Notification number#{Investigation.last.pretty_id}")
+      expect(page).to have_css("h1", text: "Case created")
+      expect(page).to have_content("Case number#{Investigation.last.pretty_id}")
 
-      click_link "View the notification"
+      click_link "View the case"
 
       expect(page).to have_current_path("/cases/#{Investigation.last.pretty_id}")
       expect_summary_page_to_contain_correct_data
@@ -113,18 +118,23 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
       it "does not take user to the safety and compliance details page" do
         sign_in(user)
 
-        click_link "Notifications"
-        click_link "Create a notification"
-        click_link "Go to the products search page"
-        click_link product.name
-        click_link "Create a product notification"
+        click_link "Cases"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        click_link "Create a case"
+
+        click_link "Go to the products search page"
+
+        click_link product.name
+
+        click_link "Create a product case"
+
+        expect(page).to have_css("h1", text: "Why are you creating a case?")
 
         click_button "Continue"
+
         expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
 
-        within_fieldset("Why are you creating a notification?") do
+        within_fieldset("Why are you creating a case?") do
           choose("A product is safe and compliant")
         end
 
@@ -140,10 +150,10 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         visit "/ts_investigation/case_name"
 
-        expect(page).not_to have_css("h1", text: "What is the notification name?")
+        expect(page).not_to have_css("h1", text: "What is the case name?")
         expect(page).to have_no_current_path "ts_investigation/case_name"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("h1", text: "Why are you creating a case?")
         expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
       end
     end
@@ -155,19 +165,23 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
     scenario "Opening a new case (with validation error)" do
       sign_in(user)
 
-      click_link "Notifications"
-      click_link "Create a notification"
+      click_link "Cases"
+
+      click_link "Create a case"
+
       click_link "Go to the products search page"
 
       click_link product.name
-      click_link "Create a product notification"
 
-      expect(page).to have_css("h1", text: "Why are you creating a notification?")
+      click_link "Create a product case"
+
+      expect(page).to have_css("h1", text: "Why are you creating a case?")
+
       click_button "Continue"
 
       expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
 
-      within_fieldset("Why are you creating a notification?") do
+      within_fieldset("Why are you creating a case?") do
         choose("A product is of concern")
       end
 
@@ -205,7 +219,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(errors_list[0].text).to eq "Select yes to add a reference number to the notification"
+      expect(errors_list[0].text).to eq "Select yes to add a reference number to the case"
 
       within_fieldset("Do you want to add a reference number?") do
         choose("Yes")
@@ -219,25 +233,25 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "What is the notification name?")
+      expect(page).to have_css("h1", text: "What is the case name?")
 
       click_button "Save"
 
-      expect(errors_list[0].text).to eq "Enter a notification name"
+      expect(errors_list[0].text).to eq "Enter a case name"
 
       find("#user_title").set(investigation_with_same_user_title.user_title)
       click_button "Save"
 
-      expect(errors_list[0].text).to eq "The notification name has already been used in an open notification by your team"
+      expect(errors_list[0].text).to eq "The case name has already been used in an open case by your team"
 
       find("#user_title").set(case_name)
 
       click_button "Save"
 
-      expect(page).to have_css("h1", text: "Notification created")
-      expect(page).to have_content("Notification number#{Investigation.last.pretty_id}")
+      expect(page).to have_css("h1", text: "Case created")
+      expect(page).to have_content("Case number#{Investigation.last.pretty_id}")
 
-      click_link "View the notification"
+      click_link "View the case"
 
       expect(page).to have_current_path("/cases/#{Investigation.last.pretty_id}")
       expect_summary_page_to_contain_correct_data
@@ -250,23 +264,23 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
       it "does not take user to the safety and compliance details page" do
         sign_in(user)
 
-        click_link "Notifications"
+        click_link "Cases"
 
-        click_link "Create a notification"
+        click_link "Create a case"
 
         click_link "Go to the products search page"
 
         click_link product.name
 
-        click_link "Create a product notification"
+        click_link "Create a product case"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("h1", text: "Why are you creating a case?")
 
         click_button "Continue"
 
         expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
 
-        within_fieldset("Why are you creating a notification?") do
+        within_fieldset("Why are you creating a case?") do
           choose("A product is safe and compliant")
         end
 
@@ -282,10 +296,10 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         visit "/ts_investigation/case_name"
 
-        expect(page).not_to have_css("h1", text: "What is the notification name?")
+        expect(page).not_to have_css("h1", text: "What is the case name?")
         expect(page).to have_no_current_path "ts_investigation/case_name"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("h1", text: "Why are you creating a case?")
         expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
       end
     end
@@ -296,7 +310,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
   end
 
   def expect_summary_page_to_contain_correct_data
-    expect(page.find("dt", text: "Notification name")).to have_sibling("dd", text: case_name)
+    expect(page.find("dt", text: "Case name")).to have_sibling("dd", text: case_name)
     expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Product reported as unsafe and non-compliant")
     expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
     expect(page.find("dt", text: "Hazard description")).to have_sibling("dd", text: hazard_description)

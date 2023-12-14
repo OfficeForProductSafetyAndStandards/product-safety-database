@@ -30,7 +30,7 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
   def title(_user = nil)
     return self[:title] if self[:title] # older activities stored this in the database
 
-    "Notification logged: #{metadata['investigation']['title']}"
+    "Case logged: #{metadata['investigation']['title']}"
   end
 
   # We can now display only the complainant part conditionally when metadata is

@@ -31,7 +31,7 @@ class Investigations::ProductsController < ApplicationController
 
     if @confirm_product_form.confirmed?
       AddProductToCase.call! user: current_user, investigation: @investigation, product: @confirm_product_form.product
-      redirect_to investigation_products_path(@investigation), flash: { success: "The product record was added to the notification" }
+      redirect_to investigation_products_path(@investigation), flash: { success: "The product record was added to the case" }
     else
       redirect_to new_investigation_product_path
     end

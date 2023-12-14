@@ -2,6 +2,6 @@ class ActivityDecorator < ApplicationDecorator
   delegate_all
 
   def protected_details_type
-    "notification contact details"
+    "case contact details"
   end
 end

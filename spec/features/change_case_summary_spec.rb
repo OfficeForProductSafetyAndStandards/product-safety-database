@@ -12,7 +12,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
     click_link "Edit the summary"
 
     expect_to_be_on_case_summary_edit_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     fill_in "Edit the summary", with: ""
     click_on "Save"
 
@@ -21,7 +21,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
     click_link "Edit the summary"
 
     expect_to_be_on_case_summary_edit_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     fill_in "Edit the summary", with: "new summary"
     click_on "Save"
 
@@ -30,7 +30,7 @@ RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_maile
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_text("Notification summary updated")
+    expect(page).to have_text("Case summary updated")
   end
 
   scenario "user from other team cannot edit summary" do

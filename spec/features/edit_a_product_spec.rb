@@ -119,9 +119,9 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       expect(page).to have_summary_item(key: "Country of origin", value: new_country_of_origin)
       expect(page).to have_summary_item(key: "Description", value: new_description)
 
-      within("header") { click_on "Notifications" }
+      within("header") { click_on "Cases" }
 
-      click_on "All notifications – Search"
+      click_on "All cases – Search"
 
       fill_in "Search", with: product.name
       # sleep in order to wait for the changes to be indexed
@@ -215,9 +215,9 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       expect(page).to have_summary_item(key: "Country of origin", value: new_country_of_origin)
       expect(page).to have_summary_item(key: "Description", value: new_description)
 
-      within("header") { click_on "Notifications" }
+      within("header") { click_on "Cases" }
 
-      click_on "All notifications – Search"
+      click_on "All cases – Search"
 
       fill_in "Search", with: product.name
       # sleep in order to wait for the changes to be indexed
