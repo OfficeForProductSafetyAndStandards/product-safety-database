@@ -7,7 +7,7 @@ RSpec.describe ChangeCaseVisibilityForm, :with_test_queue_adapter do
 
   describe ".from" do
     it "sets the case type" do
-      expect(form.case_type).to eq("notification")
+      expect(form.case_type).to eq("case")
     end
 
     it "sets the old visibility" do

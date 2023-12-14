@@ -38,10 +38,10 @@ class AddCommentToCase
   end
 
   def email_update_text(recipient)
-    "#{user.decorate.display_name(viewer: recipient)} commented on the notification."
+    "#{user.decorate.display_name(viewer: recipient)} commented on the case."
   end
 
   def email_subject
-    "Notification updated"
+    "Case updated"
   end
 end

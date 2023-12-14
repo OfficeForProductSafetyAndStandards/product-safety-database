@@ -25,7 +25,7 @@ class ProductDecorator < ApplicationDecorator
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = if date_case_closed.present?
-                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the notification was closed: #{date_case_closed.to_formatted_s(:govuk)}."
+                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the case was closed: #{date_case_closed.to_formatted_s(:govuk)}."
                               else
                                 "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this product record"
                               end.html_safe
@@ -168,7 +168,7 @@ class ProductDecorator < ApplicationDecorator
     if object.investigations.any?
       object.investigations.each_with_index do |investigation, i|
         rows << {
-          key: { text: i.zero? ? "Notification(s)" : "" },
+          key: { text: i.zero? ? "Case(s)" : "" },
           value: { text: "#{investigation.user_title} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(#{investigation.pretty_id})</span>".html_safe }
         }
       end

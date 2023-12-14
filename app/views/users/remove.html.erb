@@ -15,7 +15,7 @@
 
           <% name = @user.name.blank? ? "the team member" : @user.name %>
 
-          <%= form.govuk_radios :remove, legend: "Do you want to remove #{name} from your team?", is_page_heading: true, hint: { text: "#{name.capitalize} will no longer be able to access the Product Safety Database. Any notifications assigned to or owned by this member will be re-assigned to the team. This cannot be undone." }, classes: "govuk-radios govuk-!-padding-top-3", legend_classes: "govuk-fieldset__legend--l", items: [{ text: "Yes", value: "yes", id: "yes" }, { text: "No", value: "no", id: "no" }] %>
+          <%= form.govuk_radios :remove, legend: "Do you want to remove #{name} from your team?", is_page_heading: true, hint: { text: "#{name.capitalize} will no longer be able to access the Product Safety Database. Any cases assigned to or owned by this member will be re-assigned to the team. This cannot be undone." }, classes: "govuk-radios govuk-!-padding-top-3", legend_classes: "govuk-fieldset__legend--l", items: [{ text: "Yes", value: "yes", id: "yes" }, { text: "No", value: "no", id: "no" }] %>
           <%= form.hidden_field :user_id, value: @user.id %>
 
           <%= govukButton text: "Save and continue", preventDoubleClick: true %>

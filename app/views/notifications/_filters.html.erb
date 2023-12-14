@@ -11,25 +11,25 @@
 
     <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
 
-    <%= govukDetails(summaryText: "Notification status", classes: "opss-details--plain", id: "case-status") do %>
+    <%= govukDetails(summaryText: "Case status", classes: "opss-details--plain", id: "case-status") do %>
       <%= render "notifications/case_status_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Notification priority", classes: "opss-details--plain", id: "case-status") do %>
+    <%= govukDetails(summaryText: "Case priority", classes: "opss-details--plain", id: "case-status") do %>
       <%= render "notifications/case_risk_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Notification owner", classes: "opss-details--plain", id: "case-owner") do %>
+    <%= govukDetails(summaryText: "Case owner", classes: "opss-details--plain", id: "case-owner") do %>
       <%= render "notifications/case_owner_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Teams added to the notification", classes: "opss-details--plain", id: "cases-added-to-team") do %>
+    <%= govukDetails(summaryText: "Teams added to the case", classes: "opss-details--plain", id: "cases-added-to-team") do %>
       <%= render "notifications/teams_with_access_checkboxes", form: form %>
     <% end %>
     <%= govukDetails(summaryText: "Created by", classes: "opss-details--plain", id: "cases-created-by") do %>
       <%= render "notifications/case_creator_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Notification type", classes: "opss-details--plain", id: "case-type") do %>
+    <%= govukDetails(summaryText: "Case type", classes: "opss-details--plain", id: "case-type") do %>
       <%= render "notifications/case_type_checkboxes", form: form %>
     <% end %>
-    <%= govukDetails(summaryText: "Notification hazard type", classes: "opss-details--plain", id: "case-hazard-type") do %>
+    <%= govukDetails(summaryText: "Case hazard type", classes: "opss-details--plain", id: "case-hazard-type") do %>
       <%= render "notifications/case_hazard_type_checkboxes", form: form %>
     <% end %>
     <%= govukDetails(summaryText: "Reported reason", classes: "opss-details--plain", id: "reported-reason") do %>

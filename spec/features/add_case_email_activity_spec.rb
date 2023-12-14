@@ -26,16 +26,16 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     choose "Record email"
     click_button "Continue"
 
     expect_to_be_on_record_email_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     click_button "Add email"
     expect(page).to have_error_summary "Please provide either an email file or a subject and body"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Email content" do
       attach_file "Upload a file", file
@@ -107,7 +107,7 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     choose "Record email"
 
     click_button "Continue"
@@ -121,7 +121,7 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
 
     click_button "Add email"
 
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date sent"
 
@@ -212,6 +212,6 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
   def expect_case_activity_page_to_show_restricted_information
     item = page.find("h3", text: "Email added").find(:xpath, "..")
     expect(item).to have_text("Email recorded by #{user.name} (#{user.team.name}), #{Time.zone.today.strftime('%e %B %Y').lstrip}")
-    expect(item).to have_text("Only teams added to the notification can view correspondence")
+    expect(item).to have_text("Only teams added to the case can view correspondence")
   end
 end

@@ -16,7 +16,7 @@ RSpec.describe AuditActivity::Investigation::TeamDeletedDecorator, :with_stubbed
 
   describe "#title" do
     it "returns a generated String" do
-      expect(activity.title(user)).to eq("#{team.display_name} removed from notification")
+      expect(activity.title(user)).to eq("#{team.display_name} removed from case")
     end
   end
 

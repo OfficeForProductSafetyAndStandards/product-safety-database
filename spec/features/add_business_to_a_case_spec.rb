@@ -40,13 +40,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     visit "/cases/#{investigation.pretty_id}/businesses"
 
     click_link "Add business"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Don't select a business type
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     expect(page).to have_error_summary("Select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
@@ -62,11 +62,11 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_details_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     click_on "Save"
     expect(page).to have_error_summary("Trading name cannot be blank")
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Name and company number" do
       fill_in "Registered or legal name", with: business_details
@@ -107,7 +107,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within("section##{trading_name.parameterize}") do
       expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
@@ -119,7 +119,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     # activity log for the investigation.
     click_link "Activity"
     expect(page).to have_text("Business added")
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page.find("h3", text: "Business added"))
       .to have_sibling(".govuk-body", text: "Role: retailer")
@@ -130,13 +130,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     visit "/cases/#{investigation.pretty_id}/businesses"
 
     click_link "Add business"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Don't select a business type
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     expect(page).to have_error_summary("Select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
@@ -160,7 +160,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     # Uses stored marketplace business & location, does not ask for details
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within("section##{marketplace_1_business.trading_name.parameterize}") do
       expect(page.find("dt", text: "Online marketplace")).to have_sibling("dd", text: marketplace_1.name)
@@ -174,7 +174,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     # activity log for the investigation.
     click_link "Activity"
     expect(page).to have_text("Business added")
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page.find("h3", text: "Business added"))
       .to have_sibling(".govuk-body", text: "Role: online_marketplace")
@@ -185,13 +185,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     visit "/cases/#{investigation.pretty_id}/businesses"
 
     click_link "Add business"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Don't select a business type
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     expect(page).to have_error_summary("Select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
@@ -212,7 +212,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_details_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Name and company number" do
       fill_in "Trading name", with: trading_name
@@ -226,7 +226,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within("section##{trading_name.parameterize}") do
       expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
@@ -239,13 +239,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     visit "/cases/#{investigation.pretty_id}/businesses"
 
     click_link "Add business"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Don't select a business type
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     expect(page).to have_error_summary("Select a business type")
 
     choose "Online marketplace"
@@ -257,7 +257,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_details_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within_fieldset "Name and company number" do
       fill_in "Trading name", with: trading_name
@@ -271,7 +271,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within("section##{trading_name.parameterize}") do
       expect(page.find("dt", text: "Trading name")).to have_sibling("dd", text: trading_name)
@@ -282,7 +282,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     # activity log for the investigation.
     click_link "Activity"
     expect(page).to have_text("Business added")
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page.find("h3", text: "Business added"))
       .to have_sibling(".govuk-body", text: "Role: online_marketplace")

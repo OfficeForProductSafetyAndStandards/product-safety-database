@@ -15,11 +15,11 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
 
   describe ".call" do
     def expected_email_subject
-      "Notification updated"
+      "Case updated"
     end
 
     def expected_email_body(name)
-      "Product was removed from the notification by #{name}."
+      "Product was removed from the case by #{name}."
     end
 
     context "with stubbed opensearch", :with_stubbed_opensearch do
@@ -73,7 +73,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
             expect(activity.added_by_user).to eq(user)
           end
 
-          it_behaves_like "a service which notifies the notification owner"
+          it_behaves_like "a service which notifies the case owner"
         end
 
         context "when case has been closed while product was linked to it" do
@@ -112,7 +112,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           expect(product.reload.owning_team).to eq(nil)
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the case owner"
 
         context "when the product is owned by another team" do
           let(:product) { create(:product_washing_machine, owning_team: create(:team)) }

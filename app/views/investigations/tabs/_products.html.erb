@@ -2,13 +2,13 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <p class="govuk-body opss-text-align-center">
-        This notification has not added any products.
+        This case has not added any products.
       </p>
     </div>
   </div>
 <% else %>
-  <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this notification</h2>
-  <%= govukInsetText(text: "This notification has reported any included products as safe and compliant.") if @investigation.safe_and_compliant? %>
+  <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The products included in this case</h2>
+  <%= govukInsetText(text: "This case has reported any included products as safe and compliant.") if @investigation.safe_and_compliant? %>
 
   <% @investigation.investigation_products.decorate.reverse.each.with_index(1) do |investigation_product, index| %>
     <% product = investigation_product.investigation_closed_at ? investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).decorate : investigation_product.product %>
@@ -58,7 +58,7 @@
           },
           {
             id: "cases-#{index}",
-            label: "Notifications (#{@product.unique_cases_except(@investigation).count})",
+            label: "Cases (#{@product.unique_cases_except(@investigation).count})",
             panel: { html: render("products/case_product_info_tabs/cases")}
           }
         ]
@@ -66,7 +66,7 @@
 
       <% if policy(@investigation_product).remove? %>
         <div class="opss-text-align-right opss-margin-bottom-1-desktop">
-          <%= link_to(remove_investigation_investigation_product_path(@investigation, @investigation_product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset") do %>Remove this <span class="govuk-visually-hidden"><%= @product.name %></span> product <span class="govuk-visually-hidden">from the notification</span><% end %>
+          <%= link_to(remove_investigation_investigation_product_path(@investigation, @investigation_product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset") do %>Remove this <span class="govuk-visually-hidden"><%= @product.name %></span> product <span class="govuk-visually-hidden">from the case</span><% end %>
         </div>
       <% end %>
     </section>

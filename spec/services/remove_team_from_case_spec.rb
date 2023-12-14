@@ -104,7 +104,7 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearc
         expect(last_added_activity.added_by_user_id).to eql(user.id)
         expect(last_added_activity.metadata).to be_present
 
-        expect(last_added_activity.decorate.title(nil)).to eql("Testing team removed from notification")
+        expect(last_added_activity.decorate.title(nil)).to eql("Testing team removed from case")
       end
     end
   end

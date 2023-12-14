@@ -16,11 +16,11 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
   describe "#call" do
     context "with stubbed opensearch" do
       def expected_email_subject
-        "Notification updated"
+        "Case updated"
       end
 
       def expected_email_body(name)
-        "Business was removed from the notification by #{name}."
+        "Business was removed from the case by #{name}."
       end
 
       context "when no supporting informations are attached to the business" do
@@ -41,7 +41,7 @@ RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapte
           expect(activity.added_by_user).to eq(user)
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when a corrective action is attached to the business" do

@@ -12,7 +12,7 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
     <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:investigation_product].any? %>">
       <% if investigation.investigation_products.empty? %>
         <span class="govuk-hint">
-          There are no products on this notification.
+          There are no products on this case.
           <br />
           <%= link_to "Add a product", new_investigation_product_path(investigation) %>
           to record a corrective action.
@@ -25,7 +25,7 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
           label: "Product",
           label_classes: "govuk-visually-hidden",
           items: [{text: "", value: ""}] + investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id }},
-          hint: "Only products already added to the notification are listed."
+          hint: "Only products already added to the case are listed."
         %>
       <% end %>
     </div>
@@ -45,12 +45,12 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
   <%= govukFieldset(legend: { text: "Which business is responsible?", classes: "govuk-fieldset__legend--m" }) do %>
     <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:business].any? %>">
       <% if investigation.businesses.empty? %>
-        <span class="govuk-hint">There are no businesses associated with this notification.</span>
+        <span class="govuk-hint">There are no businesses associated with this case.</span>
       <% else %>
         <%= form.govuk_select :business_id,
             label: "Business",
             label_classes: "govuk-visually-hidden",
-            hint: "Only businesses already added to the notification are listed.",
+            hint: "Only businesses already added to the case are listed.",
             items: [{text: "", value: ""}] + investigation.businesses.map { |business| { text: business.trading_name, value: business.id } }
         %>
       <% end %>

@@ -65,8 +65,8 @@ class UpdateAccidentOrIncident
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited an #{type} on the notification.",
-        "#{type} edited for notification"
+        "#{user.decorate.display_name(viewer: recipient)} edited an #{type} on the case.",
+        "#{type} edited for Case"
       ).deliver_later
     end
   end

@@ -46,7 +46,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     click_link "Add a risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page).to have_select("Choose team",
                                 options: ["", "OtherCouncil Trading Standards"],
@@ -114,7 +114,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_text("Notification risk level set to serious risk")
+    expect(page).to have_text("Case risk level set to serious risk")
     expect(page).to have_text("Risk level changed by Jo Bloggs")
 
     expect(page).to have_text("Risk assessment")
@@ -134,7 +134,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     visit "/cases/#{investigation.pretty_id}/risk-assessments/new"
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     within_fieldset("Date of assessment") do
       fill_in("Day", with: "3")
@@ -147,7 +147,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     end
 
     within_fieldset("Who completed the assessment?") do
-      choose "A business related to the notification"
+      choose "A business related to the case"
     end
 
     within_fieldset("Which products were assessed?") do
@@ -156,7 +156,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     click_button "Attach risk assessment"
 
-    expect(page).to have_text("Select business related to the notification")
+    expect(page).to have_text("Select business related to the case")
     select "MyBrand Inc", from: "Choose business"
 
     attach_file "Upload the risk assessment", risk_assessment_file
@@ -242,7 +242,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     visit "/cases/#{investigation_with_no_businesses.pretty_id}/risk-assessments/new"
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_no_businesses.pretty_id)
 
-    expect(page).not_to have_field("A business related to the notification")
+    expect(page).not_to have_field("A business related to the case")
     expect(page).not_to have_select("Choose business")
   end
 
@@ -341,8 +341,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation_with_not_conclusive_risk_level.pretty_id)
 
-    within_fieldset("Do you want to match this notification risk level to the risk assessment level?") do
-      choose("No, keep the current notification risk level unchanged")
+    within_fieldset("Do you want to match this case risk level to the risk assessment level?") do
+      choose("No, keep the current case risk level unchanged")
     end
 
     click_button "Save"
@@ -356,6 +356,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     visit "/cases/#{investigation_with_no_products.pretty_id}/risk-assessments/new"
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_no_products.pretty_id)
 
-    expect(page).to have_text("You need to add a product to the notification before you can add a risk assessment.")
+    expect(page).to have_text("You need to add a product to the case before you can add a risk assessment.")
   end
 end

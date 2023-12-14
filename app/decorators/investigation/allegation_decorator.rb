@@ -8,7 +8,7 @@ class Investigation < ApplicationRecord
       title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?
       title << compliance_line                            if reported_reason&.safe_and_compliant?
       title << " (no product specified)"                  if display_no_product_specified?
-      title.presence || "Untitled notification"
+      title.presence || "Untitled case"
     end
 
     def display_product_summary_list?

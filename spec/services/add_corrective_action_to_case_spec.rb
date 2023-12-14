@@ -23,11 +23,11 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
   end
 
   def expected_email_body(user, user_with_edit_access)
-    "Corrective action was added to the notification by #{user&.decorate&.display_name(viewer: user_with_edit_access)}."
+    "Corrective action was added to the Case by #{user&.decorate&.display_name(viewer: user_with_edit_access)}."
   end
 
   def expected_email_subject
-    "Notification updated"
+    "Case updated"
   end
 
   it "creates the corrective action", :aggregate_failures do

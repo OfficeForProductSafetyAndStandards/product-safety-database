@@ -7,7 +7,7 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
   end
 
   def title(user)
-    "Notification owner changed to #{owner.decorate.display_name(viewer: user)}"
+    "Case owner changed to #{owner.decorate.display_name(viewer: user)}"
   end
 
   def body

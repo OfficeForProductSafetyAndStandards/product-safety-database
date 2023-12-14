@@ -19,7 +19,7 @@ module Investigations
           })
         )
 
-        flash[:success] = "The notification information was updated" if result.changes_made
+        flash[:success] = "The case information was updated" if result.changes_made
         redirect_to investigation_path(@investigation)
       else
         @reported_reason = @edit_why_reporting_form.reported_reason

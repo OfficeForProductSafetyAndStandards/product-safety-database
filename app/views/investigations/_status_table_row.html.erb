@@ -29,7 +29,7 @@
     <%= tag.span investigation.case_type.upcase_first, class: class_names("opss-tag", "opss-tag--std", investigation.is_closed? && "opss-cross-through") unless investigation.case_type.blank? %>
     <% if investigation.products.count.zero? && ["team_cases", "your_cases"].include?(@page_name) %>
       <span class="govuk-visually-hidden"> | </span>
-      <span class="opss-tag opss-tag--risk4">This notification has no product</span>
+      <span class="opss-tag opss-tag--risk4">This case has no product</span>
     <% end %>
     <% badges.each do |badge| %>
       <span class="govuk-visually-hidden"> | </span>

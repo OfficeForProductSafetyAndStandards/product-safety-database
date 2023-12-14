@@ -1,31 +1,31 @@
 <div class="govuk-grid-column-two-thirds">
   <div class="govuk-panel govuk-panel--confirmation">
     <h1 class="govuk-panel__title">
-      Notification created
+      Case created
     </h1>
     <div class="govuk-panel__body">
-      Notification number<br><strong><%= @investigation.pretty_id %></strong>
+      Case number<br><strong><%= @investigation.pretty_id %></strong>
     </div>
   </div>
 
-  <p class="govuk-body">The notification will now appear in <%= link_to "your notifications list.", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %></p>
+  <p class="govuk-body">The case will now appear in <%= link_to "your cases list.", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %></p>
 
   <h2 class="govuk-heading-m">What happens next</h2>
 
   <p class="govuk-body">
-    The notification has been created and includes the product record <%= @product.psd_ref %>. You can now add more information to the notification whenever you want to. For example, you can:
+    The case has been created and includes the product record <%= @product.psd_ref %>. You can now add more information to the case whenever you want to. For example, you can:
   </p>
 
   <ul class="govuk-list govuk-list--bullet">
     <li>add a business</li>
-    <li>add notification images</li>
+    <li>add case images</li>
     <li>add documents</li>
-    <li>add further details about the notification</li>
+    <li>add further details about the case</li>
   </ul>
 
   <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
   <p class="govuk-body-l">
-    <%= link_to "View the notification", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+    <%= link_to "View the case", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
   </p>
 </div>

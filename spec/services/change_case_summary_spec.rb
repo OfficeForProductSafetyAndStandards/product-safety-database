@@ -42,11 +42,11 @@ RSpec.describe ChangeCaseSummary, :with_test_queue_adapter do
 
     context "with required parameters" do
       def expected_email_subject
-        "Notification summary updated"
+        "Case summary updated"
       end
 
       def expected_email_body(name)
-        "Notification summary was updated by #{name}."
+        "Case summary was updated by #{name}."
       end
 
       let(:result) { described_class.call(investigation:, user:, summary: new_summary) }
@@ -83,7 +83,7 @@ RSpec.describe ChangeCaseSummary, :with_test_queue_adapter do
         expect(activity.metadata).to eq({ "updates" => { "description" => ["Old summary", "New summary"] } })
       end
 
-      it_behaves_like "a service which notifies the notification owner"
+      it_behaves_like "a service which notifies the case owner"
     end
   end
 end

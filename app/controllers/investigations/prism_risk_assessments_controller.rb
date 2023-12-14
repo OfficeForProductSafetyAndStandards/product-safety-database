@@ -34,7 +34,7 @@ module Investigations
       product = Product.find(prism_risk_assessment.product_id)
 
       if AddPrismRiskAssessmentToCase.call(investigation: @investigation, product:, prism_risk_assessment:)
-        redirect_to investigation_path(@investigation), flash: { success: "The #{prism_risk_assessment.name} risk assessment has been added to the notification." }
+        redirect_to investigation_path(@investigation), flash: { success: "The #{prism_risk_assessment.name} risk assessment has been added to the case." }
       else
         render :new
       end

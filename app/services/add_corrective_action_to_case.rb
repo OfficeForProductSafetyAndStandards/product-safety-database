@@ -78,8 +78,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Corrective action was added to the notification by #{user.decorate.display_name(viewer: recipient)}.",
-        "Notification updated"
+        "Corrective action was added to the Case by #{user.decorate.display_name(viewer: recipient)}.",
+        "Case updated"
       ).deliver_later
     end
   end

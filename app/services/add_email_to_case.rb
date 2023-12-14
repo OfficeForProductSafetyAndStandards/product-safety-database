@@ -68,6 +68,6 @@ private
   end
 
   def email_update_text(viewer = nil)
-    "Email details added to the notification by #{user&.decorate&.display_name(viewer:)}."
+    "Email details added to the Case by #{user&.decorate&.display_name(viewer:)}."
   end
 end

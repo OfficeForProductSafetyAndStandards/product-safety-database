@@ -21,19 +21,19 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     choose "Record phone call"
     click_button "Continue"
 
     expect_to_be_on_record_phone_call_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Test required fields
     click_button "Add phone call"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date of call"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Test date validation
     fill_in "Day", with: "333"
@@ -55,7 +55,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
     fill_in_record_phone_call_form(name:, phone:, date:)
 
     expect_to_be_on_record_phone_call_details_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     # Test required fields
     click_button "Add phone call"
@@ -68,7 +68,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
     click_link "Phone call on 5 May 2020"
 
     expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     click_on investigation.pretty_id
     click_on "Activity"
@@ -123,7 +123,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
     click_button "Add phone call"
 
     click_link "Test summary"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     click_on investigation.pretty_id
     click_on "Activity"
@@ -181,6 +181,6 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
   def expect_case_activity_page_to_show_restricted_information
     item = page.find("h3", text: "Phone call added").find(:xpath, "..")
     expect(item).to have_text("Phone call by #{user.name} (#{user.team.name}), #{Time.zone.today.strftime('%e %B %Y').lstrip}")
-    expect(item).to have_text("Only teams added to the notification can view correspondence")
+    expect(item).to have_text("Only teams added to the case can view correspondence")
   end
 end

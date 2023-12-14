@@ -48,8 +48,8 @@ private
         investigation.pretty_id,
         entity.name,
         entity.email,
-        "Test result was added to the notification by #{user.decorate.display_name(viewer: entity)}.",
-        "Notification updated"
+        "Test result was added to the case by #{user.decorate.display_name(viewer: entity)}.",
+        "Case updated"
       ).deliver_later
     end
   end

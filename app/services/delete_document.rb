@@ -51,10 +51,10 @@ private
   end
 
   def email_update_text(viewer = nil)
-    "Document attached to the notification was removed by #{user&.decorate&.display_name(viewer:)}."
+    "Document attached to the Case was removed by #{user&.decorate&.display_name(viewer:)}."
   end
 
   def email_subject
-    "Notification updated"
+    "Case updated"
   end
 end
