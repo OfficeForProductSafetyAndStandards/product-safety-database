@@ -19,7 +19,7 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
       scenario "visiting the PRISM risk assessment dashboard" do
         visit "/"
 
-        expect(page).to have_link("Risk assessments", class: "psd-header__link")
+        expect(page).to have_link("Risk assessments", class: "govuk-header__link")
 
         click_link "Risk assessments"
 
@@ -84,7 +84,7 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
       scenario "visiting the PRISM risk assessment dashboard" do
         visit "/"
 
-        expect(page).to have_link("Risk assessments", class: "psd-header__link")
+        expect(page).to have_link("Risk assessments", class: "govuk-header__link")
 
         click_link "Risk assessments"
 
@@ -105,7 +105,7 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
     scenario "visiting the PRISM risk assessment dashboard via the header link" do
       visit "/"
 
-      expect(page).not_to have_link("Risk assessments", class: "psd-header__link")
+      expect(page).not_to have_link("Risk assessments", class: "govuk-header__link")
     end
 
     scenario "visiting the PRISM risk assessment dashboard directly" do
