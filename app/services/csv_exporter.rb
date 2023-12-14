@@ -71,8 +71,8 @@ private
     filename = "#{output_directory}/#{table}.csv"
     attributes = attributes.map(&:keys).flatten - EXCLUDED_ATTRIBUTES
 
-    # Correctly classify PRISM model names
-    table_name = table.classify.gsub(/^Prism(.+)/, "Prism::\\1").constantize
+    # Correctly classify namespaced model names
+    table_name = table.classify.gsub(/^Prism(.+)/, "Prism::\\1").gsub(/^ActiveStorage(.+)/, "ActiveStorage::\\1").gsub(/^Version$/, "PaperTrail::Version").constantize
     batch_size = 10_000
     offset = 0
 
