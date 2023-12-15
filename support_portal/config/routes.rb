@@ -33,5 +33,12 @@ SupportPortal::Engine.routes.draw do
     end
   end
 
+  resources :notification_administration, path: "notification-admin", only: %i[index show] do
+    collection do
+      get "search"
+      get "search-results"
+    end
+  end
+
   resources :history, only: %i[index]
 end

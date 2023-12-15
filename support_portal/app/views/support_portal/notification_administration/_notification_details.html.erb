@@ -1,0 +1,45 @@
+<%=
+  govuk_summary_list do |summary_list|
+    summary_list.with_row do |row|
+      row.with_key(text: "PSD ID")
+      row.with_value(text: @notification.pretty_id)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Status")
+      row.with_value(text: @notification.status)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Visibility")
+      row.with_value(text: @notification.visibility_status)
+    end
+  end
+%>
+
+<%=
+  govuk_summary_list do |summary_list|
+    summary_list.with_row do |row|
+      row.with_key(text: "Name")
+      row.with_value(text: @notification.title)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Reference")
+      row.with_value(text: @notification.complainant_reference)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Created at")
+      row.with_value(text: @notification.created_at)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Last update")
+      row.with_value(text: @notification.updated_at)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Created by")
+      row.with_value(text: @notification.created_by)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Risk level")
+      row.with_value(text: @notification.risk_level_description)
+    end
+  end
+%>
