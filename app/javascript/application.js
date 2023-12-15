@@ -14,7 +14,6 @@ import './mutually_exclusive'
 import './variant_select'
 import './dynamic_nested_step_fields'
 import './date_input'
-import './clear_on_reset'
 import './clear_radios_on_other_input'
 import './govuk_frontend'
 
