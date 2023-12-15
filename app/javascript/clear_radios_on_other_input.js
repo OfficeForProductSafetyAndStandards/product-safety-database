@@ -1,6 +1,6 @@
 'use strict'
 
-function clearRadiosOnOtherInput(inputElements, radioButtons) {
+function clearRadiosOnOtherInput (inputElements, radioButtons) {
   for (let i = 0; i < inputElements.length; i++) {
     inputElements[i].addEventListener('input', (e) => {
       if (e.target.value !== '') {
@@ -18,14 +18,13 @@ function clearRadiosOnOtherInput(inputElements, radioButtons) {
   }
 }
 
-
-function resetAllRadioButtons(radioButtons) {
+function resetAllRadioButtons (radioButtons) {
   for (let i = 0; i < radioButtons.length; i++) {
     radioButtons[i].checked = false
   }
 }
 
-function clearAllInputElements(inputElements) {
+function clearAllInputElements (inputElements) {
   for (let i = 0; i < inputElements.length; i++) {
     inputElements[i].value = ''
   }

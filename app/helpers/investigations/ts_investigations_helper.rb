@@ -1,6 +1,7 @@
 module Investigations::TsInvestigationsHelper
   def edit_why_reporting_checkboxes(form, page_heading, errors, disabled: true, classes: nil, attribute: :base)
     base_errors = errors.full_messages_for(attribute)
+    attributes = {}
     attributes[:disabled] = "disabled" if disabled
 
     govukCheckboxes(
