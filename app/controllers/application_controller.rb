@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
   end
 
   def nav_items
-    return nil if hide_nav? || !current_user # On some pages we don't want to show the main navigation
+    return [] if hide_nav? || !current_user # On some pages we don't want to show the main navigation
 
     items = []
     items.push text: "Home", href: authenticated_root_path, active: params[:controller] == "homepage"

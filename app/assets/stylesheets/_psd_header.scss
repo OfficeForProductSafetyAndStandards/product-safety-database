@@ -54,29 +54,8 @@
   }
 
   .psd-header__product-name {
-    @include govuk-font($size: 24);
-    display: inline-table;
-    padding-right: govuk-spacing(2);
-  }
-
-  .psd-header__link {
-    text-decoration: none;
-
-    &:link,
-    &:visited {
-      color: $psd-header-link;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    // When focussed, the text colour needs to be darker to ensure that colour
-    // contrast is still acceptable
-    &:focus {
-      @include govuk-focused-text;
-      color: $govuk-focus-text-colour;
-    }
+    margin-top: 8px;
+    vertical-align: top;
   }
 
   .psd-header__link--homepage {

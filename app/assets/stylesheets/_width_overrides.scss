@@ -1,7 +1,7 @@
 // TODO: This is a transitional step as we revert back to a 960px page width.
 //   Once transition is complete this import can be deleted.
 
-@media (min-width: 40.0625em) {
+@include mq ($from: desktop) {
   .govuk-header {
     border-bottom: 10px solid $govuk-brand-colour;
     padding-bottom: 10px;
