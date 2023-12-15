@@ -1,1 +1,32 @@
-activity log
+
+<%=
+  govuk_table do |table|
+    table.with_head do |head|
+      head.with_row do |row|
+        row.with_cell(text: "Change by")
+        row.with_cell(text: "Time")
+        row.with_cell(text: "Action")
+        row.with_cell(text: "Details")
+      end
+    end
+    table.with_body do |body|
+      @paper_trail_records.each do |record|
+        body.with_row do |row|
+          row.with_cell(text: record.whodunnit)
+          row.with_cell(text: display_date_time(record.created_at))
+          row.with_cell(text: display_action(record))
+          row.with_cell(text: display_action_change(record).html_safe)
+        end
+      end
+
+      @activity_records.each do |record|
+        body.with_row do |row|
+          row.with_cell(text: record.added_by_user&.name ? record.added_by_user.name : "Unknown")
+          row.with_cell(text: display_date_time(record.created_at))
+          row.with_cell(text: display_activity_description(record).html_safe )
+          row.with_cell(text: "<a href=\"#{activity_details_notification_administration_path(@notification, activity_id: record.id, q: params[:q])}\" class=\"govuk-link\">Details<span class=\"govuk-visually-hidden\"> about this activity</span></a>".html_safe)
+        end
+      end
+    end
+  end
+%>

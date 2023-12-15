@@ -38,6 +38,10 @@ SupportPortal::Engine.routes.draw do
       get "search"
       get "search-results"
     end
+
+    member do
+      get "activity_details"
+    end
   end
 
   resources :history, only: %i[index]

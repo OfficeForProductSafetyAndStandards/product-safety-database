@@ -1,0 +1,69 @@
+<% content_for :page_title, "Activity details" %>
+<% @back_link_href = notification_administration_path(@notification, q: params[:q]) %>
+
+<%=
+  govuk_summary_list do |summary_list|
+    summary_list.with_row do |row|
+      row.with_key(text: "Title")
+      row.with_value(text: display_activity_description(@activity).html_safe)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Type")
+      row.with_value(text: @activity.type)
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Made by user")
+      row.with_value(text: @activity.added_by_user&.name || "Unknown")
+    end
+    summary_list.with_row do |row|
+      row.with_key(text: "Time")
+      row.with_value(text: display_date_time(@activity.created_at))
+    end
+
+    if @activity.investigation_id.present?
+      investigation = Investigation.find(@activity.investigation_id)
+      summary_list.with_row do |row|
+        row.with_key(text: "Notification")
+        row.with_value(text: investigation.pretty_id)
+      end
+    end
+
+    if @activity.investigation_product_id.present?
+      investigation_product = InvestigationProduct.find(@activity.investigation_product_id)
+      summary_list.with_row do |row|
+        row.with_key(text: "Product")
+        row.with_value(text: investigation_product.product.name)
+      end
+    end
+
+    if @activity.business_id.present?
+      business = Business.find(@activity.business_id)
+      summary_list.with_row do |row|
+        row.with_key(text: "Business")
+        row.with_value(text: business.name)
+      end
+    end
+
+    if @activity.correspondence_id.present?
+      correspondence = Correspondence.find(@activity.correspondence_id)
+      summary_list.with_row do |row|
+        row.with_key(text: "Correspondence")
+        row.with_value(text: correspondence.name)
+      end
+    end
+
+    if @activity.body.present?
+      summary_list.with_row do |row|
+        row.with_key(text: "Body")
+        row.with_value(text: @activity.body.html_safe)
+      end
+    end
+
+    if @activity.metadata.present?
+      summary_list.with_row do |row|
+        row.with_key(text: "Metadata")
+        row.with_value(text: display_activity_metadata(@activity).html_safe)
+      end
+    end
+  end
+%>

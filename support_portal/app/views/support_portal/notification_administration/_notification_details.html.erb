@@ -27,11 +27,11 @@
     end
     summary_list.with_row do |row|
       row.with_key(text: "Created at")
-      row.with_value(text: @notification.created_at)
+      row.with_value(text: display_date_time(@notification.created_at))
     end
     summary_list.with_row do |row|
       row.with_key(text: "Last update")
-      row.with_value(text: @notification.updated_at)
+      row.with_value(text: display_date_time(@notification.updated_at))
     end
     summary_list.with_row do |row|
       row.with_key(text: "Created by")
