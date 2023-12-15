@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "active_storage_validations", "~> 1.0"
   spec.add_runtime_dependency "aws-sdk-s3", "~> 1.122"
   spec.add_runtime_dependency "devise", "~> 4.9"
-  spec.add_runtime_dependency "govuk-components", "~> 4.1"
+  spec.add_runtime_dependency "govuk-components", ">= 4.1", "< 6.0"
   spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 4.1"
   spec.add_runtime_dependency "listen", "~> 3.8"
   spec.add_runtime_dependency "pagy", "~> 6.0"
