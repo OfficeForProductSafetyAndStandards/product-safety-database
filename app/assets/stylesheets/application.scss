@@ -17,45 +17,31 @@ $hmcts-images-path: "/assets/images/";
 @import "@hmcts/frontend/components/hmcts-identity-bar/identity-bar";
 @import "@hmcts/frontend/components/hmcts-sub-navigation/sub-navigation";
 
-@import "colours";
-
 @import "autocomplete";
 @import "badge";
-@import "summary_list";
 @import "permission_notice";
 @import "text";
 @import "remove-default-button-styling";
-@import "banner";
 @import "button";
 @import "block-link";
 @import "case-card";
 @import "documents";
 @import "email_display";
-@import "footer";
-@import "form";
-@import "header";
 @import "helpers/js-only";
 @import "helpers/field-widths";
-@import "helpers/media-queries";
 @import "helpers/password-manager-hidden";
 @import "helpers/product-recall-form";
 @import "helpers/nested-form";
-@import "identity-bar";
 @import "images";
 @import "inverted";
 @import "table";
 @import "teams";
 @import "moj_search";
-@import "search-box";
-@import "shared";
 @import "timeline";
 @import "psd_header";
 @import "task_list";
 
 @import "opss/opss-psd";
-
-// Pages
-@import "investigation";
 
 * {
   box-sizing: border-box;
