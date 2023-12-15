@@ -2,7 +2,6 @@ import * as GOVUKFrontend from 'govuk-frontend'
 
 import './controllers'
 
-import './location_picker'
 import './autocomplete'
 
 import './investigations/attachment_description'
