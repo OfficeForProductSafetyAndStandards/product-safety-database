@@ -33,7 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "devise", "~> 4.9"
   spec.add_runtime_dependency "govuk-components", "~> 4.1"
   spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 4.1"
-  spec.add_runtime_dependency "i18n-js", "~> 4.2"
   spec.add_runtime_dependency "listen", "~> 3.8"
   spec.add_runtime_dependency "pagy", "~> 6.0"
   spec.add_runtime_dependency "pg", "~> 1.5"

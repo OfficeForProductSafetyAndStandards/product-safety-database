@@ -1,7 +1,6 @@
 import * as GOVUKFrontend from 'govuk-frontend'
 
 import './controllers'
-import './i18n'
 
 import './location_picker'
 import './autocomplete'
