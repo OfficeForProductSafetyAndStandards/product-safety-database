@@ -16,7 +16,7 @@ RSpec.feature "Edit an case's reference number", :with_stubbed_mailer, type: :fe
     expect(page).to have_current_path "/cases/#{investigation.pretty_id}/reference_numbers/edit", ignore_query: true
     expect(page).to have_css("h1", text: "Edit the reference number")
     expect(page).to have_field("complainant_reference", with: original_reference_number)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     fill_in :complainant_reference, with: new_reference_number
 

@@ -26,7 +26,7 @@ private
   end
 
   def default_description
-    "\r\n\r\n\r\nMore details can be found on the notification page: #{investigation_url}"
+    "\r\n\r\n\r\nMore details can be found on the case page: #{investigation_url}"
   end
 
   def summary_validation

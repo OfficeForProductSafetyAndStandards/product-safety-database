@@ -9,9 +9,9 @@
                 <h1 class="govuk-fieldset__heading">Do you want to remove this product?</h1>
               </legend>
 
-              <div class="govuk-hint" id="remove-hint">The product record '<%= @product.name %>' (<%= @product.psd_ref %>) will be removed from the notification.</div>
+              <div class="govuk-hint" id="remove-hint">The product record '<%= @product.name %>' (<%= @product.psd_ref %>) will be removed from the case.</div>
 
-              <%= govukWarningText(iconFallbackText: "Warning", text: "Related Batch numbers, Customs codes and Units affected will be deleted from the notification.") %>
+              <%= govukWarningText(iconFallbackText: "Warning", text: "Related Batch numbers, Customs codes and Units affected will be deleted from the case.") %>
               <%= form.govuk_radios :remove_product, legend: nil, fieldset: false, classes: "govuk-!-padding-bottom-1", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, label_classes: "govuk-label", label: "Enter the reason for removing the product")} },  { text: "No", value: "false" }] %>
           </fieldset>
       </div>

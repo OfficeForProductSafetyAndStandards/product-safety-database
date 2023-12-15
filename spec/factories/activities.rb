@@ -42,7 +42,7 @@ FactoryBot.define do
   factory :legacy_audit_product_destroyed, class: "AuditActivity::Product::Destroy" do
     investigation { create :allegation }
     investigation_product
-    title { "Product removed from notification" }
+    title { "Product removed from case" }
   end
 
   factory :legacy_audit_investigation_visibility_status, class: "AuditActivity::Investigation::UpdateVisibility" do

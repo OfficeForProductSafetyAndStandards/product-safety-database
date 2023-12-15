@@ -1,17 +1,17 @@
-<% title = "Teams added to the notification" %>
+<% title = "Teams added to the case" %>
 <% page_title title %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l"><%= title %></h1>
     <% if policy(@investigation).manage_collaborators? %>
       <%= govukButton(
-        text: "Add a team to the notification",
+        text: "Add a team to the case",
         href: new_investigation_collaborator_path(@investigation))
       %>
     <% end %>
 
     <table class="govuk-table">
-      <caption class="govuk-table__body govuk-visually-hidden">Teams added to the notification</caption>
+      <caption class="govuk-table__body govuk-visually-hidden">Teams added to the case</caption>
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Team name</th>
@@ -24,6 +24,6 @@
       </tbody>
     </table>
 
-    <%= permission_notice(text: "Only the notification owner can add teams to the notification.") %>
+    <%= permission_notice(text: "Only the case owner can add teams to the case.") %>
   </div>
 </div>

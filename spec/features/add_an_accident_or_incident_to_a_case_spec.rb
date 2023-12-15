@@ -23,14 +23,14 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_link "Add an accident or incident"
 
     expect_to_be_on_accident_or_incident_type_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page).not_to have_error_messages
 
     click_button "Continue"
 
     expect(page).to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the type of information you're adding"
@@ -40,7 +40,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_button "Continue"
 
     expect_to_be_on_add_accident_or_incident_page("Accident")
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     click_button "Add accident"
 
@@ -56,7 +56,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_button "Add accident"
 
     expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page).to have_content "Supporting information"
     expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
@@ -66,7 +66,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect_case_activity_page_to_show_entered_data("Unknown", "MyBrand Washing Machine", "Serious", "Normal use")
 
@@ -83,14 +83,14 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_link "Add an accident or incident"
 
     expect_to_be_on_accident_or_incident_type_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page).not_to have_error_messages
 
     click_button "Continue"
 
     expect(page).to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the type of information you're adding"
@@ -100,13 +100,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_button "Continue"
 
     expect_to_be_on_add_accident_or_incident_page("Accident")
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     click_button "Add accident"
 
     expect(page).to have_error_messages
     expect_ordered_error_list
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     choose("Yes")
     fill_in("Day", with: date.day)
@@ -121,7 +121,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_button "Add accident"
 
     expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
@@ -130,13 +130,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
     expect_case_activity_page_to_show_entered_data(date.to_formatted_s(:govuk), product1.name, "Test", "Normal use")
 
     click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     expect_summary_list_to_have(date: date.to_formatted_s(:govuk), product_name: "#{product1.name} (#{product1.psd_ref})", severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
   end

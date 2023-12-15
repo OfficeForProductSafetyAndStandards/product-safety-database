@@ -11,7 +11,7 @@ class CreateBulkProductsUploadBusiness
     ActiveRecord::Base.transaction do
       # Use a fake name for now
       business = Business.create!(
-        trading_name: "Auto-generated business for notification #{bulk_products_upload.investigation.pretty_id}",
+        trading_name: "Auto-generated business for case #{bulk_products_upload.investigation.pretty_id}",
         added_by_user: user
       )
 

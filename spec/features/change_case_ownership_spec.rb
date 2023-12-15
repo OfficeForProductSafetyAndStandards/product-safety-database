@@ -16,7 +16,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       create_opss_teams
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
     end
 
     scenario "does not show inactive users or teams" do
@@ -36,14 +36,14 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       expect(page).not_to have_field("OPSS Enforcement")
       expect(page).not_to have_field("OPSS Operational support unit")
       expect(page).to have_checked_field(user.name)
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
     end
 
     scenario "change owner to the same user" do
       choose user.name
       click_button "Continue"
 
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
       expect_page_to_show_case_owner(user)
@@ -55,17 +55,17 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
 
       click_button "Continue"
 
-      expect(page).to have_summary_error("Select notification owner")
-      expect_to_have_notification_breadcrumbs
+      expect(page).to have_summary_error("Select case owner")
+      expect_to_have_case_breadcrumbs
 
       choose("Someone else in your team")
       select another_active_user.name, from: "change_case_owner_form_select_team_member"
       click_button "Continue"
 
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
-      expect_confirmation_banner("Notification owner changed to #{another_active_user.name}")
+      expect_confirmation_banner("Case owner changed to #{another_active_user.name}")
       expect_page_to_show_case_owner(another_active_user)
       expect_activity_page_to_show_case_owner_changed_to(another_active_user)
     end
@@ -74,10 +74,10 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       choose user.team.name
       click_button "Continue"
 
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
-      expect_confirmation_banner("Notification owner changed to #{user.team.name}")
+      expect_confirmation_banner("Case owner changed to #{user.team.name}")
       expect_page_to_show_case_owner(user.team)
       expect_activity_page_to_show_case_owner_changed_to(user.team)
     end
@@ -87,13 +87,13 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       select another_active_user_another_team.name, from: "change_case_owner_form_select_someone_else"
       click_button "Continue"
 
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
       fill_and_submit_change_owner_reason_form
 
       expect_page_to_show_case_owner(another_active_user_another_team)
       expect_activity_page_to_show_case_owner_changed_to(another_active_user_another_team)
 
-      within('nav[aria-label="Secondary"]') { click_link "Notification" }
+      within('nav[aria-label="Secondary"]') { click_link "Case" }
       expect(page).not_to have_link("Change owner")
     end
   end
@@ -110,7 +110,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       expect(page).to have_field("OPSS Incident Management")
       expect(page).to have_field("OPSS Trading Standards Co-ordination")
       expect(page).to have_field("OPSS Enforcement")
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
     end
   end
 
@@ -141,8 +141,8 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
     scenario "shows other teams in the `Other teams added to the case` section" do
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
-      expect_to_have_notification_breadcrumbs
-      expect(page).to have_css(".govuk-radios__divider", text: "Other teams added to the notification")
+      expect_to_have_case_breadcrumbs
+      expect(page).to have_css(".govuk-radios__divider", text: "Other teams added to the case")
       expect(page).to have_field(other_team_with_edit_access.name)
       expect(page).to have_field(other_team_with_read_only_access.name)
     end
@@ -154,9 +154,9 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
     scenario "does not show `Other teams added to the case` section" do
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
-      expect_to_have_notification_breadcrumbs
-      expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the notification")
-      expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the notification")
+      expect_to_have_case_breadcrumbs
+      expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
+      expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
     end
   end
 
@@ -166,12 +166,12 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
   end
 
   def expect_page_to_show_case_owner(owner)
-    expect(page.find("dt", text: "Notification owner")).to have_sibling("dd", text: owner.name)
+    expect(page.find("dt", text: "Case owner")).to have_sibling("dd", text: owner.name)
   end
 
   def expect_activity_page_to_show_case_owner_changed_to(owner)
     click_link "Activity"
-    expect(page).to have_css("h3", text: "Notification owner changed to #{owner.name}")
+    expect(page).to have_css("h3", text: "Case owner changed to #{owner.name}")
     expect(page).to have_css("p", text: "Test assign")
   end
 

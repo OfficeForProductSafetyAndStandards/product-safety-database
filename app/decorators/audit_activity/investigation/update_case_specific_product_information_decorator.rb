@@ -14,7 +14,7 @@ class AuditActivity::Investigation::UpdateCaseSpecificProductInformationDecorato
   end
 
   def title(_viewer)
-    "Notification specific product information updated"
+    "Case specific product information updated"
   end
 
   def new_number_of_affected_units

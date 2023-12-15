@@ -18,7 +18,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
     visit "/cases/#{investigation.pretty_id}"
 
     click_link "Add a comment"
-    expect_to_have_notification_breadcrumbs
+    expect_to_have_case_breadcrumbs
 
     add_comment
 
@@ -28,8 +28,8 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
     expect(delivered_emails.last.recipient).to eq creator_user.email
     expect(delivered_emails.last.personalization).to include(
       name: creator_user.name,
-      subject_text: "Notification updated",
-      update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the notification."
+      subject_text: "Case updated",
+      update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the case."
     )
   end
 
@@ -50,7 +50,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
 
       visit "/cases/#{investigation.pretty_id}"
       click_link "Add a comment"
-      expect_to_have_notification_breadcrumbs
+      expect_to_have_case_breadcrumbs
 
       add_comment
 
@@ -61,8 +61,8 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
 
       delivered_emails.each do |email|
         expect(email.personalization).to include(
-          subject_text: "Notification updated",
-          update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the notification."
+          subject_text: "Case updated",
+          update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the case."
         )
       end
     end

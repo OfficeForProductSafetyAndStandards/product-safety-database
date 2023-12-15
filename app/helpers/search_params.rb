@@ -81,8 +81,8 @@ class SearchParams
   def sort_by_items(with_relevant_option: false)
     items = if page_name == "team_cases" || page_name == "your_cases"
               [
-                SortByHelper::SortByItem.new("Newest notifications", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DESC),
-                SortByHelper::SortByItem.new("Oldest notifications", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_ASC),
+                SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DESC),
+                SortByHelper::SortByItem.new("Oldest cases", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_ASC),
                 SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DESC),
                 SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_ASC)
               ]
@@ -90,8 +90,8 @@ class SearchParams
               [
                 SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_DESC),
                 SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_UPDATED_AT, SortByHelper::SORT_DIRECTION_ASC),
-                SortByHelper::SortByItem.new("Newest notifications", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DESC),
-                SortByHelper::SortByItem.new("Oldest notifications", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_ASC)
+                SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DESC),
+                SortByHelper::SortByItem.new("Oldest cases", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_ASC)
               ]
             end
 

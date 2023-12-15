@@ -92,7 +92,7 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
           expect(activity_entry).to be_nil
         end
 
-        it "does not send any notification updated emails" do
+        it "does not send any case updated emails" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
         end
       end
@@ -135,14 +135,14 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
         # rubocop:enable RSpec/ExampleLength
 
         def expected_email_subject
-          "Email edited for notification"
+          "Email edited for Case"
         end
 
         def expected_email_body(name)
-          "#{name} edited an email on the notification."
+          "#{name} edited an email on the case."
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when a new email and attachment files have been uploaded" do

@@ -8,7 +8,7 @@
       <h1 class="govuk-heading-l govuk-!-margin-bottom-1"><%= title %></h1>
 
       <% if (@parent.is_a?(Investigation) || @parent.is_a?(Product)) %>
-        <% hint_text = @parent.is_a?(Investigation) ? "Image files will be saved to the notification images page." : "Image files will be saved to the product images." %>
+        <% hint_text = @parent.is_a?(Investigation) ? "Image files will be saved to the case images page." : "Image files will be saved to the product images." %>
         <div class="govuk-hint govuk-!-margin-bottom-8"><%= hint_text %></div>
       <% end %>
 

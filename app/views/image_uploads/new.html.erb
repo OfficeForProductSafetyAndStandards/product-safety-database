@@ -8,7 +8,7 @@
       <h1 class="govuk-heading-l govuk-!-margin-bottom-1"><%= title %></h1>
 
       <% if (@parent.is_a?(Investigation) || @parent.is_a?(Product)) %>
-        <% hint_text = @parent.is_a?(Investigation) ? "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the notification." : "Image files will be saved to the product images." %>
+        <% hint_text = @parent.is_a?(Investigation) ? "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the case." : "Image files will be saved to the product images." %>
         <div class="govuk-hint"><%= hint_text %></div>
         <div class="govuk-hint">Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF. Maximum file size: 100MB.</div>
       <% end %>
@@ -23,7 +23,7 @@
         <% end %>
         <table class="govuk-table">
           <caption class="govuk-visually-hidden">
-            A table of images already uploaded for this notification during the current session.
+            A table of images already uploaded for this case during the current session.
           </caption>
           <thead class="govuk-table__head govuk-visually-hidden">
             <tr class="govuk-table__row">

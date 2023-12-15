@@ -98,9 +98,9 @@ class InvestigationsController < ApplicationController
 
     if @delete_investigation_form.valid?
       DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
-      redirect_to your_cases_investigations_path, flash: { success: "The notification was deleted" }
+      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
     else
-      redirect_to your_cases_investigations_path, flash: { warning: "The notification could not be deleted" }
+      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
     end
   end
 
@@ -118,7 +118,7 @@ private
         format.html do
           redirect_to investigation_path(@investigation),
                       flash: {
-                        success: "Notification was successfully updated"
+                        success: "Case was successfully updated"
                       }
         end
         format.json { render :show, status: :ok, location: @investigation }

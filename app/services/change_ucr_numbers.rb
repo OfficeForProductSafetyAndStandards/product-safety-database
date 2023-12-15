@@ -44,7 +44,7 @@ private
         recipient.name,
         recipient.email,
         email_body(recipient),
-        "Notification UCR numbers updated"
+        "Case UCR numbers updated"
       ).deliver_later
     end
   end
@@ -55,6 +55,6 @@ private
 
   def email_body(viewer = nil)
     user_name = user.decorate.display_name(viewer:)
-    "Notification UCR numbers was updated by #{user_name}."
+    "Case UCR numbers was updated by #{user_name}."
   end
 end

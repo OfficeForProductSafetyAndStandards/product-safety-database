@@ -2,7 +2,7 @@
   <th scope="row" class="govuk-table__header govuk-!-font-weight-regular">
     <%= read_only.collaborator.name %>
   </th>
-  <td class="govuk-table__cell">View full notification</td>
+  <td class="govuk-table__cell">View full case</td>
   <td class="govuk-table__cell app-table__cell--align-right">
     <% if policy(read_only.investigation).manage_collaborators? %>
       <%= link_with_hidden_text_to "Change", "#{read_only.collaborator.name}’s permission level",  edit_investigation_collaborator_path(read_only.investigation, read_only) %>

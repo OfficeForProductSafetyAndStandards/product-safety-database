@@ -27,9 +27,9 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_mailer do
 
       it "contains four possible actions" do
         expect(form.actions).to eq({
-          close_case: "Close notification",
-          change_case_owner: "Change notification owner",
-          change_case_visibility: "Restrict this notification",
+          close_case: "Close case",
+          change_case_owner: "Change case owner",
+          change_case_visibility: "Restrict this case",
           change_case_risk_level: "Set risk level"
         })
       end
@@ -44,9 +44,9 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_mailer do
 
       it "contains four actions with alternative labels" do
         expect(form.actions).to eq({
-          reopen_case: "Re-open notification",
-          change_case_owner: "Change notification owner",
-          change_case_visibility: "Unrestrict this notification",
+          reopen_case: "Re-open case",
+          change_case_owner: "Change case owner",
+          change_case_visibility: "Unrestrict this case",
           change_case_risk_level: "Set risk level"
         })
       end
@@ -61,9 +61,9 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_mailer do
 
       it "contains four actions with alternative labels" do
         expect(form.actions).to eq({
-          reopen_case: "Re-open notification",
-          change_case_owner: "Change notification owner",
-          change_case_visibility: "Unrestrict this notification",
+          reopen_case: "Re-open case",
+          change_case_owner: "Change case owner",
+          change_case_visibility: "Unrestrict this case",
           change_case_risk_level: "Change risk level"
         })
       end
@@ -76,9 +76,9 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_mailer do
 
       it "contains four possible actions" do
         expect(form.actions).to eq({
-          close_case: "Close notification",
-          change_case_owner: "Change notification owner",
-          change_case_visibility: "Restrict this notification",
+          close_case: "Close case",
+          change_case_owner: "Change case owner",
+          change_case_visibility: "Restrict this case",
           change_case_risk_level: "Set risk level"
         })
       end

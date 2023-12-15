@@ -31,12 +31,12 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
     click_on "Team businesses"
 
     expect(highlighted_tab).to eq "Team businesses"
-    expect(page).to have_content "There are 0 businesses linked to open notifications where the #{team.name} team is the notification owner."
+    expect(page).to have_content "There are 0 businesses linked to open cases where the #{team.name} team is the case owner."
 
     click_on "Your businesses"
 
     expect(highlighted_tab).to eq "Your businesses"
-    expect(page).to have_content "There are 0 businesses linked to open notifications where you are the notification owner."
+    expect(page).to have_content "There are 0 businesses linked to open cases where you are the case owner."
   end
 
   scenario "Browsing businesses" do

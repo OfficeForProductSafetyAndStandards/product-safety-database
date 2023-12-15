@@ -44,7 +44,7 @@ private
   def must_not_find_a_product_already_linked
     return if errors.include?(:reference)
 
-    errors.add(:reference, "Enter a product record which has not already been added to the notification") if product.present? && duplicate_investigation_product
+    errors.add(:reference, "Enter a product record which has not already been added to the case") if product.present? && duplicate_investigation_product
   end
 
   def duplicate_investigation_product

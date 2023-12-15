@@ -32,11 +32,11 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed
   end
 
   def expected_email_body(user, viewing_user)
-    "Test result was added to the notification by #{user.decorate.display_name(viewer: viewing_user)}."
+    "Test result was added to the case by #{user.decorate.display_name(viewer: viewing_user)}."
   end
 
   def expected_email_subject
-    "Notification updated"
+    "Case updated"
   end
 
   describe "when provided with a user and an investigation" do

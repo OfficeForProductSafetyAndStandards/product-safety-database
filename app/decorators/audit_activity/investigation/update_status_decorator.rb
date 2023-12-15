@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateStatusDecorator < ApplicationDecorator
   delegate_all
 
   def title(_viewer)
-    I18n.t(".title", scope: object.class.i18n_scope, case_type: "Notification", status: new_status)
+    I18n.t(".title", scope: object.class.i18n_scope, case_type: "Case", status: new_status)
   end
 
   def subtitle(viewer)

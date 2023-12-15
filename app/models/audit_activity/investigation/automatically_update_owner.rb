@@ -6,13 +6,13 @@ class AuditActivity::Investigation::AutomaticallyUpdateOwner < AuditActivity::In
   end
 
   def title(user)
-    type = "Notification"
+    type = "Case"
     new_owner = owner.decorate.display_name(viewer: user)
-    "Notification owner automatically changed on #{type} to #{new_owner}"
+    "Case owner automatically changed on #{type} to #{new_owner}"
   end
 
   def subtitle(_viewer)
-    "Notification owner automatically changed, #{pretty_date_stamp}"
+    "Case owner automatically changed, #{pretty_date_stamp}"
   end
 
 private

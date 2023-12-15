@@ -50,7 +50,7 @@ RSpec.describe ChangeOverseasRegulator, :with_stubbed_mailer, :with_stubbed_anti
           expect(investigation.activities.where(type: AuditActivity::Investigation::ChangeOverseasRegulator.to_s)).to eq []
         end
 
-        it "does not send any notification updated emails" do
+        it "does not send any case updated emails" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
         end
       end
@@ -79,8 +79,8 @@ RSpec.describe ChangeOverseasRegulator, :with_stubbed_mailer, :with_stubbed_anti
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
-            "#{user.name} (#{user.team.name}) edited overseas regulator on the notification.",
-            "Overseas regulator edited for notification"
+            "#{user.name} (#{user.team.name}) edited overseas regulator on the case.",
+            "Overseas regulator edited for Case"
           )
         end
       end
