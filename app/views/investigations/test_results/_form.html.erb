@@ -4,9 +4,9 @@
     <% if investigation.investigation_products.empty? %>
       <h2 class="govuk-heading-m">Which product was tested?</h2>
       <span class="govuk-hint">
-        A product has not been added to this case.
+        A product has not been added to this notification.
         <br>
-        <%= link_to "Add the product", new_investigation_product_path(investigation), class: "govuk-link govuk-link--no-visited-state" %> which is the subject of the test report to the case first.
+        <%= link_to "Add the product", new_investigation_product_path(investigation), class: "govuk-link govuk-link--no-visited-state" %> which is the subject of the test report to the notification first.
       </span>
     <% elsif @investigation.investigation_products.size == 1 %>
       <h2 class="govuk-heading-m">Product tested</h2>
@@ -14,7 +14,7 @@
       <%= form.hidden_field :investigation_product_id, value: @investigation.investigation_products.first.id %>
     <% else %>
       <% span_html = capture do %>
-        Only products already added to the case are listed.
+        Only products already added to the notification are listed.
         <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
 

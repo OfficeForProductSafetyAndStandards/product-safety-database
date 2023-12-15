@@ -41,11 +41,11 @@ RSpec.describe AddCommentToCase, :with_test_queue_adapter do
 
     context "with required parameters" do
       def expected_email_subject
-        "Case updated"
+        "Notification updated"
       end
 
       def expected_email_body(name)
-        "#{name} commented on the case."
+        "#{name} commented on the notification."
       end
 
       let(:assessment_date) { Time.zone.today }
@@ -69,7 +69,7 @@ RSpec.describe AddCommentToCase, :with_test_queue_adapter do
         expect(last_added_activity.metadata["comment_text"]).to eql(body)
       end
 
-      it_behaves_like "a service which notifies the case owner"
+      it_behaves_like "a service which notifies the notification owner"
     end
   end
 end

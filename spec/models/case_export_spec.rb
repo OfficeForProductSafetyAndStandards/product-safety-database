@@ -59,11 +59,11 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   describe "#to_spreadsheet" do
     let(:spreadsheet) { case_export.to_spreadsheet.to_stream }
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
-    let(:sheet) { exported_data.sheet("Cases") }
+    let(:sheet) { exported_data.sheet("Notifications") }
 
     # rubocop:disable RSpec/ExampleLength
     it "exports the case data", :aggregate_failures do
-      expect(exported_data.sheets).to eq %w[Cases]
+      expect(exported_data.sheets).to eq %w[Notifications]
 
       expect(sheet.cell(1, 1)).to eq "ID"
       expect(sheet.cell(2, 1)).to eq investigation.pretty_id
@@ -189,7 +189,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:params) { { allegation: true, project: true, enquiry: true, notification: true } }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports all case types", :aggregate_failures do
@@ -202,7 +202,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:params) { { allegation: true } }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports allegations", :aggregate_failures do
@@ -215,7 +215,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:params) { { enquiry: true } }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports enquiries", :aggregate_failures do
@@ -228,7 +228,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:params) { { project: true } }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports projects", :aggregate_failures do
@@ -241,7 +241,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:params) { { notification: true } }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports notifications", :aggregate_failures do
@@ -270,7 +270,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:case_type) { "all" }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports all case types", :aggregate_failures do
@@ -283,7 +283,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:case_type) { "allegation" }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports allegations", :aggregate_failures do
@@ -296,7 +296,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:case_type) { "enquiry" }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports enquiries", :aggregate_failures do
@@ -309,7 +309,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:case_type) { "project" }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports projects", :aggregate_failures do
@@ -322,7 +322,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
           let(:case_type) { "notification" }
 
           it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Cases]
+            expect(exported_data.sheets).to eq %w[Notifications]
           end
 
           it "only exports notifications", :aggregate_failures do
@@ -344,7 +344,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       end
 
       it "exports the case data", :aggregate_failures do
-        expect(exported_data.sheets).to eq %w[Cases]
+        expect(exported_data.sheets).to eq %w[Notifications]
       end
 
       it "only exports cases that have been updated since the created_from_date date", :aggregate_failures do
@@ -367,7 +367,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
       end
 
       it "exports the case data", :aggregate_failures do
-        expect(exported_data.sheets).to eq %w[Cases]
+        expect(exported_data.sheets).to eq %w[Notifications]
       end
 
       it "only exports cases that have been updated up to the created_to_date date", :aggregate_failures do
@@ -395,7 +395,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
         let(:params) { { unsafe: true, safe_and_compliant: true } }
 
         it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+          expect(exported_data.sheets).to eq %w[Notifications]
         end
 
         it "only exports the cases with the selected reasons" do
@@ -408,7 +408,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
         let(:params) { {} }
 
         it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+          expect(exported_data.sheets).to eq %w[Notifications]
         end
 
         it "exports all cases" do
@@ -421,7 +421,7 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
         let(:params) { { unsafe: true, safe_and_compliant: true, non_compliant: true, unsafe_and_non_compliant: true } }
 
         it "exports the case data", :aggregate_failures do
-          expect(exported_data.sheets).to eq %w[Cases]
+          expect(exported_data.sheets).to eq %w[Notifications]
         end
 
         it "exports all cases with a reported reason" do

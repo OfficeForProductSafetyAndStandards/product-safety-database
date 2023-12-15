@@ -7,12 +7,12 @@ en:
       account:
         label: Your account
       cases:
-        label: Cases
-        index: All cases
-        your_cases: Your cases
-        team_cases: Team cases
-        assigned_cases: Assigned cases
-        all_cases: All cases - Search
+        label: Notifications
+        index: All notifications
+        your_cases: Your notifications
+        team_cases: Team notifications
+        assigned_cases: Assigned notifications
+        all_cases: All notifications - Search
       businesses:
         label: Businesses
         your_businesses: Your businesses

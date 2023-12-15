@@ -18,7 +18,7 @@ RSpec.describe AuditActivity::Investigation::TeamAddedDecorator, :with_stubbed_m
 
   describe "#title" do
     it "returns a generated String" do
-      expect(activity.title(user)).to eq("#{team.display_name} added to case")
+      expect(activity.title(user)).to eq("#{team.display_name} added to notification")
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe AuditActivity::Investigation::TeamAddedDecorator, :with_stubbed_m
 
   describe "#permission" do
     it "returns a generated String" do
-      expect(activity.permission).to eq("edit full case")
+      expect(activity.permission).to eq("edit full notification")
     end
   end
 end

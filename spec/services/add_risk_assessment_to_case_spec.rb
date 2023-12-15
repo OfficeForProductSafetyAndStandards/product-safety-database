@@ -40,11 +40,11 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_mailer, :with_test_queue_a
 
     context "with required parameters" do
       def expected_email_subject
-        "Case updated"
+        "Notification updated"
       end
 
       def expected_email_body(name)
-        "Risk assessment was added to the case by #{name}."
+        "Risk assessment was added to the notification by #{name}."
       end
 
       let(:assessment_date) { Time.zone.today }
@@ -93,7 +93,7 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_mailer, :with_test_queue_a
         expect(last_added_activity.decorate.title(nil)).to eql("Risk assessment")
       end
 
-      it_behaves_like "a service which notifies the case owner"
+      it_behaves_like "a service which notifies the notification owner"
     end
   end
 end

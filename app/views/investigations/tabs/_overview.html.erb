@@ -35,12 +35,12 @@
 ) %>
 
 <h3 id="product-info-1" class="govuk-heading-m govuk-!-margin-top-9">
-  Case specific product information
+  Notification specific product information
 </h3>
 
 <% if @investigation.investigation_products.empty? %>
   <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
-    You can add this information after a product has been added to the case.
+    You can add this information after a product has been added to the notification.
   </h4>
 
   <%= govukSummaryList(
@@ -64,11 +64,11 @@
 
 <% if @investigation.complainant %>
   <section class="govuk-!-margin-top-9 opss-grouping">
-    <h3 id="source" class="govuk-heading-m opss-grouping__heading-m">Case source</h3>
+    <h3 id="source" class="govuk-heading-m opss-grouping__heading-m">Notification source</h3>
     <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
   </section>
 <% end %>
 
 <% unless policy(@investigation).update?(user: current_user) %>
-  <p class="govuk-body-s govuk-!-margin-top-7 govuk-!-margin-bottom-2 opss-secondary-text opss-text-align-right">Only teams added to the case with editing rights can edit the case.</p>
+  <p class="govuk-body-s govuk-!-margin-top-7 govuk-!-margin-bottom-2 opss-secondary-text opss-text-align-right">Only teams added to the notification with editing rights can edit the notification.</p>
 <% end %>

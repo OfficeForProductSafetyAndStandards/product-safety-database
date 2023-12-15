@@ -108,7 +108,7 @@ RSpec.describe InviteUserToTeamForm do
 
           include_examples "invalid form", [:email, "test@example.com is already a member of Test Team"]
 
-          context "when the supplied email is in a different case to the existing user email" do
+          context "when the supplied email is in a different notification to the existing user email" do
             let(:email) { "TEst@example.com" }
 
             include_examples "invalid form", [:email, "TEst@example.com is already a member of Test Team"]

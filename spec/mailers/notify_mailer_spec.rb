@@ -65,7 +65,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
 
     it "sets the GOV.UK Notify reference" do
-      expect(mail.govuk_notify_reference).to eq("Case Export")
+      expect(mail.govuk_notify_reference).to eq("Notification Export")
     end
 
     it "sets the personalisation attributes" do
@@ -178,7 +178,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     let(:team_to_be_deleted) { create(:team, name: "Collaborator Team") }
     let(:edit_access_collaboration) { create(:collaboration_edit_access, collaborator: team_to_be_deleted) }
     let(:investigation) { edit_access_collaboration.investigation }
-    let(:case_type) { "case" }
+    let(:case_type) { "notification" }
     let(:case_title) { investigation.decorate.title }
 
     context "with a message" do
@@ -220,7 +220,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
 
     let(:investigation) { create(:allegation, creator: user) }
-    let(:case_type) { "case" }
+    let(:case_type) { "notification" }
     let(:case_title) { investigation.decorate.title }
     let(:user) { create(:user, :activated, name: "Bob Jones") }
     let(:team) { create(:team) }
@@ -235,8 +235,8 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "Message from Bob Jones (#{user.team.name}):\n\n^ Thanks for collaborating!",
-          old_permission: "view full case",
-          new_permission: "edit full case"
+          old_permission: "view full notification",
+          new_permission: "edit full notification"
         )
       end
     end
@@ -249,8 +249,8 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "",
-          old_permission: "view full case",
-          new_permission: "edit full case"
+          old_permission: "view full notification",
+          new_permission: "edit full notification"
         )
       end
     end

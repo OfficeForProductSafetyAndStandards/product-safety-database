@@ -42,8 +42,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{type} was added to the case by #{user.decorate.display_name(viewer: recipient)}.",
-        "Case updated"
+        "#{type} was added to the notification by #{user.decorate.display_name(viewer: recipient)}.",
+        "Notification updated"
       ).deliver_later
     end
   end

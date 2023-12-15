@@ -85,7 +85,7 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_mailer, :with_stubbed_antiv
           expect(investigation.activities.where(type: AuditActivity::Investigation::ChangeNotifyingCountry.to_s)).to eq []
         end
 
-        it "does not send any case updated emails" do
+        it "does not send any notification updated emails" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
         end
       end
@@ -115,8 +115,8 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_mailer, :with_stubbed_antiv
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
-            "#{user.name} (#{user.team.name}) edited notifying country on the case.",
-            "Notifying country edited for Case"
+            "#{user.name} (#{user.team.name}) edited notifying country on the notification.",
+            "Notifying country edited for notification"
           )
         end
       end

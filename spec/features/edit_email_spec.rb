@@ -40,7 +40,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
 
     click_link "Edit email"
     expect_to_be_on_edit_email_page(case_id: investigation.pretty_id, email_id: email.id)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     # Check that form is pre-filled with existing values
     expect_to_be_on_edit_email_page(case_id: investigation.pretty_id, email_id: email.id)
@@ -89,7 +89,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
     end
 
     click_button "Update email"
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
     expect(page).to have_text("Date sent must be a real date")
 
     # Field should retain invalid value
@@ -138,7 +138,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
     expect(page).to have_text("Email updated by #{user.name}")
-    expect(page).to have_text("Only teams added to the case can view correspondence")
+    expect(page).to have_text("Only teams added to the notification can view correspondence")
   end
 
   scenario "Removing attachment from an email" do
@@ -156,7 +156,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
     click_button "Update email"
     click_link "Email on 4 March 2020"
     expect_to_be_on_email_page(case_id: investigation.pretty_id, email_id: email.id)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     expect(page).not_to have_text("attachment_filename.txt")
   end

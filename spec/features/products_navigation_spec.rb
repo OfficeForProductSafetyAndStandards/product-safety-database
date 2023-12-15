@@ -25,12 +25,12 @@ RSpec.feature "Searching products", :with_stubbed_mailer, type: :feature do
     click_on "Your products"
 
     expect(highlighted_tab).to eq "Your products"
-    expect(page).to have_content "There are 0 product records included in open cases where you are the case owner."
+    expect(page).to have_content "There are 0 product records included in open notifications where you are the notification owner."
 
     click_on "Team products"
 
     expect(highlighted_tab).to eq "Team products"
-    expect(page).to have_content "There are 0 product records included in open cases where the #{team.name} team is the case owner."
+    expect(page).to have_content "There are 0 product records included in open notifications where the #{team.name} team is the notification owner."
   end
 
   scenario "Browsing products" do

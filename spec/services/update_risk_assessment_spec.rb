@@ -94,7 +94,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
           expect(risk_assessment.investigation.activities.where(type: AuditActivity::RiskAssessment::RiskAssessmentUpdated.to_s)).to eq []
         end
 
-        it "does not send any case updated emails" do
+        it "does not send any notification updated emails" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
         end
       end
@@ -146,14 +146,14 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
         # rubocop:enable RSpec/ExampleLength
 
         def expected_email_subject
-          "Risk assessment edited for Case"
+          "Risk assessment edited for notification"
         end
 
         def expected_email_body(name)
-          "#{name} edited a risk assessment on the case."
+          "#{name} edited a risk assessment on the notification."
         end
 
-        it_behaves_like "a service which notifies the case owner"
+        it_behaves_like "a service which notifies the notification owner"
       end
 
       context "when only the file has changed" do
