@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
   let(:user)             { create :user, :activated, has_viewed_introduction: true }
-  let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago, authenticity: "counterfeit") }
-  let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago, authenticity: "genuine") }
-  let!(:washing_machine) { create(:product_washing_machine, created_at: 3.days.ago, authenticity: "unsure") }
+  let!(:iphone)          { create(:product_iphone,          brand: "Apple", created_at: 1.day.ago, authenticity: "counterfeit") }
+  let!(:iphone_3g)       { create(:product_iphone_3g,       brand: "Apple", created_at: 2.days.ago, authenticity: "genuine") }
+  let!(:product_samsung) { create(:product_samsung,         brand: "Samsung", created_at: 2.days.ago, authenticity: "genuine") }
+  let!(:washing_machine) { create(:product_washing_machine, brand: "Whirlpool", created_at: 3.days.ago, authenticity: "unsure") }
   let!(:investigation)    { create(:allegation, products: [iphone], hazard_type: "Cuts") }
 
   context "with less than 12 products" do
     before do
-      create_list(:product, 8, created_at: 4.days.ago)
       sign_in(user)
     end
 
@@ -43,11 +43,11 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
       expect_correct_counterfeit_values
 
       within "#item-1" do
-        expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
+        expect(page).to have_link(product_samsung.name, href: product_path(product_samsung))
       end
 
       within "#item-2" do
-        expect(page).to have_link(washing_machine.name, href: product_path(washing_machine))
+        expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
       end
 
       expect(page).to have_css("tfoot")
@@ -55,17 +55,25 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
       expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
       expect(page).to have_link("Next page", href: all_products_path(page: 2))
 
-      pending 'this will be fixed once we re-add fuzzy "or" matching on'
-
       fill_in "Search", with: iphone.name
-      click_on "Search"
+      click_on "Submit search"
 
       within "#item-0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within "#item-1" do
-        expect(page).to have_link(iphone.name, href: product_path(iphone))
+      fill_in "Search", with: "Whirlpool"
+      click_on "Submit search"
+
+      within "#item-0" do
+        expect(page).to have_link(washing_machine.name, href: product_path(washing_machine))
+      end
+
+      fill_in "Search", with: "Samsung"
+      click_on "Submit search"
+
+      within "#item-0" do
+        expect(page).to have_link(product_samsung.name, href: product_path(product_samsung))
       end
     end
 
@@ -122,7 +130,8 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
     def expect_correct_counterfeit_values
       expect(counterfeit(0).text).to eq "Yes"
       expect(counterfeit(1).text).to eq "No"
-      expect(counterfeit(2).text).to eq "Unsure"
+      expect(counterfeit(2).text).to eq "No"
+      expect(counterfeit(3).text).to eq "Unsure"
     end
   end
 end

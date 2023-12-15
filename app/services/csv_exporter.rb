@@ -54,12 +54,25 @@ private
 
   attr_accessor :started_at, :started_at_safe, :output_directory, :tables_and_attributes, :clean_tables
 
+  # Exclude sensitive attributes
+  EXCLUDED_ATTRIBUTES = %w[
+    encrypted_password
+    reset_password_token
+    invitation_token
+    password_salt
+    encrypted_otp_secret_key
+    encrypted_otp_secret_key_iv
+    encrypted_otp_secret_key_salt
+    direct_otp
+    unlock_token
+  ].freeze
+
   def export_table(table:, attributes:)
     filename = "#{output_directory}/#{table}.csv"
-    attributes = attributes.map(&:keys).flatten
+    attributes = attributes.map(&:keys).flatten - EXCLUDED_ATTRIBUTES
 
-    # Correctly classify PRISM model names
-    table_name = table.classify.gsub(/^Prism(.+)/, "Prism::\\1").constantize
+    # Correctly classify namespaced model names
+    table_name = table.classify.gsub(/^Prism(.+)/, "Prism::\\1").gsub(/^ActiveStorage(.+)/, "ActiveStorage::\\1").gsub(/^Version$/, "PaperTrail::Version").constantize
     batch_size = 10_000
     offset = 0
 
