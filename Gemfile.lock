@@ -363,8 +363,6 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
-    pastel (0.8.0)
-      tty-color (~> 0.5)
     patience_diff (1.2.0)
       optimist (~> 3.0)
     pdf-core (0.9.0)
@@ -621,11 +619,6 @@ GEM
       railties (>= 6.0.0)
     store_attribute (1.2.0)
       activerecord (>= 6.0)
-    strings (0.2.1)
-      strings-ansi (~> 0.2)
-      unicode-display_width (>= 1.5, < 3.0)
-      unicode_utils (~> 1.4)
-    strings-ansi (0.2.0)
     strong_migrations (1.6.4)
       activerecord (>= 5.2)
     super_diff (0.10.0)
@@ -639,12 +632,6 @@ GEM
     timecop (0.9.8)
     timeout (0.4.1)
     ttfunk (1.7.0)
-    tty-color (0.6.0)
-    tty-screen (0.8.1)
-    tty-table (0.12.0)
-      pastel (~> 0.8)
-      strings (~> 0.2.0)
-      tty-screen (~> 0.8)
     turbo-rails (1.5.0)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -655,7 +642,6 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     unicode-display_width (2.5.0)
-    unicode_utils (1.4.0)
     validate_email (0.1.6)
       activemodel (>= 3.0)
       mail (>= 2.2.5)
@@ -783,7 +769,6 @@ DEPENDENCIES
   super_diff
   support_portal!
   timecop (~> 0.9)
-  tty-table
   turbo-rails
   validate_email (~> 0.1)
   web-console
