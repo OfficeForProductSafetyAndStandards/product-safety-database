@@ -18,7 +18,6 @@ en:
 
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
-    mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
     reason:
       unsafe: "As unsafe"
       non_compliant: "As non-compliant"

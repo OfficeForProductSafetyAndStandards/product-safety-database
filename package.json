@@ -12,7 +12,6 @@
     "accessible-autocomplete": "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main",
     "esbuild": "^0.19.8",
     "govuk-frontend": "4.7.0",
-    "i18n-js": "^4.3.2",
     "postcss": "^8.4.32",
     "sass": "^1.69.5",
     "standard": "^17.1.0",

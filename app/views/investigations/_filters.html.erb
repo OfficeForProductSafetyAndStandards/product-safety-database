@@ -25,7 +25,7 @@
 
     <div class="govuk-button-group">
       <%= form.submit "Apply", name: nil, class: "govuk-button" %>
-      <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
+      <a href="<%= all_cases_investigations_path %>" class="govuk-link govuk-link--no-visited-state">Reset</a>
     </div>
 
     <% if policy(Investigation).export? && @investigations.any? %>

@@ -26,7 +26,7 @@
               <div class="govuk-input__wrapper opss-search__wrapper">
                 <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
                 <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
-                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", data: { "opss-clear-on-reset" => "element" }, spellcheck: false, "aria-describedby" => "search-hint" %>
+                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", spellcheck: false, "aria-describedby" => "search-hint" %>
                 <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
                   <span class="govuk-visually-hidden">Submit search</span>
                 </button>

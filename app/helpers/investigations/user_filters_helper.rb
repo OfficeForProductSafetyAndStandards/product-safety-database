@@ -9,8 +9,7 @@ module Investigations::UserFiltersHelper
       form:,
       items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
       label: { text: "Person or team name" },
-      is_autocomplete: true,
-      attributes: { "data-opss-clear-on-reset" => "autocomplete" }
+      is_autocomplete: true
     )
   end
 
@@ -20,8 +19,7 @@ module Investigations::UserFiltersHelper
       form:,
       items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
       label: { text: "Person or team name" },
-      is_autocomplete: true,
-      attributes: { "data-opss-clear-on-reset" => "autocomplete" }
+      is_autocomplete: true
     )
   end
 
@@ -32,8 +30,7 @@ module Investigations::UserFiltersHelper
       form:,
       items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
       label: { text: "Team name" },
-      is_autocomplete: true,
-      attributes: { "data-opss-clear-on-reset" => "autocomplete" }
+      is_autocomplete: true
     )
   end
 
@@ -43,8 +40,7 @@ module Investigations::UserFiltersHelper
       form:,
       items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.created_by.id == e.id } },
       label: { text: "Name" },
-      is_autocomplete: true,
-      attributes: { "data-opss-clear-on-reset" => "autocomplete" }
+      is_autocomplete: true
     )
   end
 end
