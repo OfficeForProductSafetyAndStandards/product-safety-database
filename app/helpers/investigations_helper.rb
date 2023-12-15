@@ -523,7 +523,7 @@ module InvestigationsHelper
 
   def case_rows(investigation, user, team_list_html)
     reference_value = { text: investigation.complainant_reference }
-    reference_value[:secondary_text] = { text: "Optional reference number" } if investigation.complainant_reference
+    reference_value[:secondary_text] = { text: "Optional reference number" } if investigation.complainant_reference.present?
 
     rows = [
       {
