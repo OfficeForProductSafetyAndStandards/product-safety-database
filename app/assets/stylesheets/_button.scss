@@ -19,22 +19,3 @@
   min-height: auto;
   justify-content: center;
 }
-
-// An alternative secondary button, for use on the case bar (which has the
-// same background colour as the regular secondary button)
-.app-button--case-bar-secondary,
-.app-button--case-bar-secondary:link,
-.app-button--case-bar-secondary:visited {
-  color: $govuk-text-colour;
-  background-color: $case-bar-secondary-colour;
-  border-bottom: 1px solid $case-bar-secondary-border-color;
-}
-
-// An alternative secondary button, for use on the case bar (which has the
-// same background colour as the regular secondary button)
-.app-button--case-bar-secondary:hover,
-.app-button--case-bar-secondary:link:hover,
-.app-button--case-bar-secondary:visited:hover {
-  color: $govuk-text-colour;
-  background-color: $case-bar-secondary-hover-colour;
-}

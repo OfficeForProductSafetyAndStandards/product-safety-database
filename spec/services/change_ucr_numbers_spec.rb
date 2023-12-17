@@ -86,7 +86,7 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     it "does not set the UCR numbers on the investigation product" do
-      expect { result }.not_to change { investigation_product.ucr_numbers.count }
+      expect { result }.not_to(change { investigation_product.ucr_numbers.count })
     end
   end
 

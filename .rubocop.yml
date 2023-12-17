@@ -17,12 +17,10 @@ AllCops:
     - 'coverage/**/*'
     - 'db/schema.rb'
     - 'db/migrate/20200402142659_init_schema.rb'
-    - 'spec/migrations/20230215114714_migrate_documents_to_document_uploads_for_products_spec.rb'
     - 'log/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'
     - 'vendor/bundle/**/*'
-    - 'config/initializers/devise.rb'
     - 'config/initializers/devise.rb'
     - 'smoke_test/**/*'
 
@@ -36,9 +34,6 @@ Style/TrailingCommaInArguments:
   Enabled: false
 
 Rails/HelperInstanceVariable:
-  Enabled: false
-
-Lint/AmbiguousBlockAssociation:
   Enabled: false
 
 RSpec/NestedGroups:

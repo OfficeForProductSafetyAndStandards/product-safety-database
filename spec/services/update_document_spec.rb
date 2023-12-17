@@ -93,7 +93,7 @@ RSpec.describe UpdateDocument, :with_test_queue_adapter do
           let(:parent) { investigation }
 
           it "does not add an audit activity record" do
-            expect { result }.not_to change { investigation.activities.count }
+            expect { result }.not_to(change { investigation.activities.count })
           end
 
           it "does not send a notification email" do
