@@ -1,5 +1,7 @@
 'use strict'
 
+import { initAll } from 'govuk-frontend'
+
 document.addEventListener('DOMContentLoaded', () => {
-  window.GOVUKFrontend.initAll()
+  initAll()
 })

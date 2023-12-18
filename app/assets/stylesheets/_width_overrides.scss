@@ -2,49 +2,6 @@
 //   Once transition is complete this import can be deleted.
 
 @include mq ($from: desktop) {
-  .govuk-header {
-    border-bottom: 10px solid $govuk-brand-colour;
-    padding-bottom: 10px;
-  }
-
-  .govuk-header__container {
-    border-bottom: none 0;
-  }
-
-  .govuk-header__logo {
-    width: 74% !important;
-
-    &.no-width {
-      width: 33.33% !important;
-    }
-  }
-
-  .psd-header__secondary-navigation {
-    margin-left: 0 !important;
-  }
-
-  .psd-header__navigation {
-    margin-left: -14px !important;
-    padding-bottom: 8px !important;
-  }
-
-  .psd-header__navigation-item {
-    padding-bottom: 4px !important;
-  }
-
-  .psd-header__navigation-item.psd-header__navigation-item--active:before {
-    height: 3px !important;
-  }
-
-  .psd-header__navigation-item--active.psd-header__navigation-item--right,
-  .psd-header__navigation-item--right {
-    padding: 0;
-    float: none !important;
-    position: absolute;
-    right: 0;
-    bottom: 8px;
-  }
-
   .psd-case-card > .govuk-grid-column-one-quarter:last-of-type {
     text-align: right;
   }

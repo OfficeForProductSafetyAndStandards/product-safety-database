@@ -1,34 +1,22 @@
 <% badges = [] %>
 <% if investigation.serious? %>
   <% badges << capture do %>
-    <%= hmctsBadge(
-      text: t(:risk_level_serious, scope: "case.badges"),
-      classes: "app-badge--risk-serious app-tag--nowrap #{local_assigns[:classes]}"
-    ) %>
+    <%= govuk_tag(text: t(:risk_level_serious, scope: "case.badges"), colour: "red") %>
   <% end %>
 <% end %>
 <% if investigation.high? %>
   <% badges << capture do %>
-    <%= hmctsBadge(
-      text: t(:risk_level_high, scope: "case.badges"),
-      classes: "app-badge--risk-high app-tag--nowrap #{local_assigns[:classes]}"
-    ) %>
+    <%= govuk_tag(text: t(:risk_level_high, scope: "case.badges"), colour: "red") %>
   <% end %>
 <% end %>
 <% if investigation.is_closed? %>
   <% badges << capture do %>
-    <%= hmctsBadge(
-      text: t(:closed, scope: "case.badges"),
-      classes: "app-badge--closed app-tag--nowrap #{local_assigns[:classes]}"
-    ) %>
+    <%= govuk_tag(text: t(:closed, scope: "case.badges"), colour: "grey") %>
   <% end %>
 <% end %>
 <% if investigation.is_private? %>
   <% badges << capture do %>
-    <%= hmctsBadge(
-      text: t(:restricted, scope: "case.badges"),
-      classes: "app-badge--restricted app-tag--nowrap #{local_assigns[:classes]}"
-    ) %>
+    <%= govuk_tag(text: t(:restricted, scope: "case.badges"), colour: "grey") %>
   <% end %>
 <% end %>
 

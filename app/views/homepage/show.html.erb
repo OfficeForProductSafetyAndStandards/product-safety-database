@@ -11,32 +11,18 @@
       </p>
     </div>
   </div>
-  <div class="app-masthead app-inverted app-inverted--masthead">
-    <div class="govuk-width-container">
-      <main id="main-content" class="app-main-class govuk-main-wrapper" role="main">
+  <main id="main-content" role="main">
+    <div class="app-masthead">
+      <div class="govuk-width-container">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds-from-desktop">
-            <h1 class="govuk-heading-xl app-heading-xl--inverted">
-              Product Safety Database
-            </h1>
-            <p class="govuk-body-l app-body-l--inverted">
-              Report, track and share product safety information with the product safety community.
-            </p>
-            <%= govukButton(
-              text: "Sign in to your account",
-              href: new_user_session_path,
-              classes: "govuk-button--start app-button--inverted"
-            ) %>
-            <p class="govuk-body app-body--inverted">
-              or
-              <%= mail_to t(:enquiries_email),
-                "email OPSS",
-                class: "govuk-link app-link--inverted" %>
-              if you think you should have access
-            </p>
+            <h1 class="govuk-heading-xl app-masthead__title">Product Safety Database</h1>
+            <p class="govuk-body-l app-masthead__description">Report, track and share product safety information with the product safety community.</p>
+            <%= govuk_start_button(text: "Sign in", href: new_user_session_path, classes: ["govuk-button--inverse"]) %>
+            <p class="govuk-body app-masthead__description">or <a href="mailto:<%= t(:enquiries_email) %>" class="govuk-link govuk-link--inverse">email OPSS</a> if you think you should have access.</p>
           </div>
         </div>
-      </main>
+      </div>
     </div>
-  </div>
+  </main>
 <% end %>
