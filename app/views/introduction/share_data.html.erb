@@ -1,39 +1,25 @@
 <%= page_title "Share data" %>
-<% content_for :after_header do %>
-  <%= render "skip_introduction" %>
-<% end %>
 
-<div class="app-inverted app-inverted--card">
+<div class="app-introduction-card">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-l app-heading-l--inverted">
+      <h1 class="govuk-heading-l app-introduction-card__title">
         Share national data to improve product safety in the UK
       </h1>
-      <p class="govuk-body-l app-body-l--inverted">
+      <p class="govuk-body-l app-introduction-card__description">
         The information shared in the Product Safety Database can only be seen by other market surveillance authorities (MSAs).
       </p>
-
-      <p class="govuk-body-l app-body-l--inverted govuk-!-margin-bottom-3">
+      <p class="govuk-body-l app-introduction-card__description">
         Collaborating and sharing data in this way means you can see when other MSAs have:
       </p>
-
-      <ul class="govuk-list govuk-list--bullet govuk-body-l app-body-l--inverted">
+      <ul class="govuk-list govuk-list--bullet govuk-body-l app-introduction-card__description">
         <li>raised concerns about the safety of a product</li>
         <li>tested a product and shared the results</li>
       </ul>
-
-      <%= govukButton(
-        text: "Get started",
-        href: root_path_for(current_user),
-        classes: "app-button--inverted app-button--l govuk-!-margin-right-3 govuk-!-margin-bottom-3"
-      ) %>
-
-      <p class="govuk-body-l app-body-l--inverted app-body--adjacent-to-button app-body--adjacent-to-button--l govuk-!-margin-bottom-0">
-        or
-        <%= link_to "read more information",
-          help_about_path,
-          class: "govuk-link app-link--inverted" %>
-      </p>
+      <div class="govuk-button-group">
+        <%= govuk_button_link_to("Get started", root_path_for(current_user), inverse: true) %>
+        <a href="<%= help_about_path %>" class="govuk-link govuk-link--inverse">Read more information</a>
+      </div>
     </div>
   </div>
 </div>

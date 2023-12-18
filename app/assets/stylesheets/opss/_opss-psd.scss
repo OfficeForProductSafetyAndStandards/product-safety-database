@@ -149,7 +149,7 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50%);
 
     border-width: 2px;
     border-style: solid;
-    border-color: $govuk-brand-colour; // govuk-colour("mid-grey", $legacy: "grey-2");
+    border-color: $govuk-brand-colour; // govuk-colour("mid-grey");
 
     // border-radius: 5px;
     // border-image: linear-gradient(0deg, #969696, $govuk-border-colour) 1;
@@ -328,7 +328,7 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50%);
 
 // .opss-radio-list--borders {
 // li {
-// border-top: 1px solid govuk-colour("mid-grey", $legacy: "grey-2");
+// border-top: 1px solid govuk-colour("mid-grey");
 // }
 // }
 

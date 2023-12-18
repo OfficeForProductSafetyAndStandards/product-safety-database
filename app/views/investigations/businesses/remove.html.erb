@@ -5,12 +5,19 @@
 <div class="govuk-grid-row">
   <% if @business.supporting_information.any? %>
     <div class="govuk-grid-column-two-thirds">
-      <%= render 'supporting_information_warning' %>
+      <%= govuk_warning_text do %>
+        <p class="govuk-body govuk-!-font-weight-bold"><%= t(".cannot_remove_business_warning") %></p>
+        <ul class="govuk-list govuk-list--bullet">
+        <% @business.supporting_information.each do |supporting_information| %>
+          <% supporting_information = supporting_information.decorate %>
+          <li><%= link_to supporting_information.supporting_information_title, supporting_information.show_path %></li>
+        <% end %>
+        </ul>
+      <% end %>
     </div>
   <% else %>
     <div class="govuk-grid-column-two-thirds">
       <p class="govuk-body"><%= t(".remove_business_warning_html", href: investigation_businesses_path(@investigation)) %></p>
-
       <%= render 'form' %>
     </div>
   <% end %>

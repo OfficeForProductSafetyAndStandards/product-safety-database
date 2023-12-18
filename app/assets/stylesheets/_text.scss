@@ -1,7 +1,3 @@
-.tabular-data {
-  font-family: $govuk-font-family-tabular;
-}
-
 // Limit length of content containing elements
 // Needed when using wider site width as 2/3 columns are now too wide
 // Loosely based on https://github.com/alphagov/govuk-design-system/blob/master/src/stylesheets/main.scss#L69
@@ -59,22 +55,4 @@ h6 {
   @include govuk-font($size: 19);
   margin-top: 0;
   @include govuk-responsive-margin(4, "bottom");
-}
-
-.app-body--adjacent-to-button {
-  @include govuk-media-query( $from: tablet ) {
-    display: inline-block;
-  }
-}
-
-.app-body--adjacent-to-button--l {
-  @include govuk-media-query( $from: tablet ) {
-    margin-top: 8px; // to match padding on large buttons
-  }
-}
-
-.app-body--table-heading-supplementary {
-  color: $govuk-secondary-text-colour;
-  display: block;
-  margin-top: 8px;
 }

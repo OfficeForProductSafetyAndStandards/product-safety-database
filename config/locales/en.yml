@@ -104,8 +104,6 @@ en:
     businesses:
       destroy:
         business_successfully_deleted: "Business was successfully removed."
-      supporting_information_warning:
-        cannot_remove_business_warning: "Cannot remove the business from the case because it's associated with following supporting information"
       form:
         remove_business_legend: "Do you want to remove the business from the case?"
         yes_label: "Yes"
@@ -113,6 +111,7 @@ en:
         reason_for_removing_the_business_from_the_case: "Reason for removing the business from the case"
         cancel: "Cancel"
       remove:
+        cannot_remove_business_warning: "Cannot remove the business from the case because it's associated with the following supporting information:"
         remove_business_warning_html: Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
       empty: This case has not added any businesses.
     business_types:

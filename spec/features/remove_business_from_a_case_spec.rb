@@ -78,7 +78,7 @@ RSpec.feature "Remove a business from a case", :with_stubbed_mailer do
     expect_to_have_case_breadcrumbs
     click_on "Remove this business"
 
-    expect(page).to have_css(".hmcts-banner__message", text: "Cannot remove the business from the case because it's associated with following supporting information ")
+    expect(page).to have_css(".govuk-warning-text", text: "Cannot remove the business from the case because it's associated with the following supporting information:")
     expect(page).to have_link(supporting_information.supporting_information_title, href: supporting_information.show_path)
 
     click_on investigation.pretty_id
