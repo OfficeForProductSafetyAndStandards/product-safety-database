@@ -23,7 +23,7 @@ module LoginHelpers
   end
 
   def sign_out
-    return if page.has_css?("a", text: "Sign in to your account")
+    return if page.has_css?("a", text: "Sign in")
 
     click_on "Sign out", match: :first
   end

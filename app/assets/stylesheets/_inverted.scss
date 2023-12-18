@@ -11,11 +11,13 @@
   background-color: govuk-colour("blue");
 }
 
-.app-masthead__title, .app-introduction-card__title {
+.app-masthead__title,
+.app-introduction-card__title {
   @include govuk-responsive-margin(6, "bottom");
   color: govuk-colour("white");
 }
 
-.app-masthead__description, .app-introduction-card__description {
+.app-masthead__description,
+.app-introduction-card__description {
   color: govuk-colour("white");
 }
