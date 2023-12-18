@@ -256,7 +256,7 @@
   <div class="govuk-grid-column-one-quarter">
     <h2 class="govuk-heading-m">
       <% if current_user.can_access_new_search? %>
-        <%= link_to "All notifications", cases_path, class: "govuk-link govuk-link--no-visited-state" %>
+        <%= link_to "All notifications", notifications_path, class: "govuk-link govuk-link--no-visited-state" %>
       <% else %>
         <%= link_to "All notifications", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
       <% end %>
