@@ -7,7 +7,9 @@
     </h1>
 
     <p class="govuk-body govuk-!-margin-bottom-0">
-      The Product Safety Database (<abbr>PSD</abbr>) is the <abbr>UK</abbr> statutory record of products deemed unsafe or noncompliant. It allows the <abbr>UK</abbr> government to act to protect consumers and is the primary source for market surveillance activity, recorded corrective actions and the sharing and publishing of product safety information.
+      The Product Safety Database (<abbr>PSD</abbr>) is the <abbr>UK</abbr> statutory record of products deemed unsafe or noncompliant.
+      It allows the <abbr>UK</abbr> government to act to protect consumers and is the primary source for market surveillance activity,
+      recorded corrective actions and the sharing and publishing of product safety information.
     </p>
   </div>
 </div>
@@ -24,7 +26,7 @@
       </div>
 
       <p class="govuk-body">
-        <span class="govuk-!-font-weight-bold">Create a case</span> for a product notification. This starts from a product record page.
+        <span class="govuk-!-font-weight-bold">Create a notification</span> for a product. This starts from a product record page.
       </p>
     </div>
 
@@ -61,13 +63,13 @@
                   </span>
                 </span>
               </span>
-              Create your case
+              Create your notification
             </h3>
             <p class="govuk-body-s govuk-!-margin-bottom-1">
-              Select 'Create a product case' and complete the form journey.
+              Select 'Create a product notification' and complete the form journey.
             </p>
             <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-font-size-14">
-              The product record is automatically included within the case.
+              The product record is automatically included within the notification.
             </p>
           </div>
         </li>
@@ -81,13 +83,13 @@
                   </span>
                 </span>
               </span>
-              Add further information to the case
+              Add further information to the notification
             </h3>
             <p class="govuk-body-s govuk-!-margin-bottom-1">
               <% if current_user.is_prism_user? %>
-              You can access the case within the Cases area, where you have the option to add or modify supporting case information, including product <a href="<%= your_prism_risk_assessments_path %>" class="govuk-link govuk-link--no-visited-state">risk assessments</a>.
+              You can access the notification within the Notifications area, where you have the option to add or modify supporting notification information, including product <a href="<%= your_prism_risk_assessments_path %>" class="govuk-link govuk-link--no-visited-state">risk assessments</a>.
               <% else %>
-              You can access the case within the Cases area, where you have the option to add or modify supporting case information.
+              You can access the notification within the Notifications area, where you have the option to add or modify supporting notification information.
               <% end %>
             </p>
           </div>
@@ -102,7 +104,7 @@
                   </span>
                 </span>
               </span>
-              Add <abbr title="Incident Management Team">IMT</abbr> to the case
+              Add <abbr title="Incident Management Team">IMT</abbr> to the notification
             </h3>
             <p class="govuk-body-s govuk-!-margin-bottom-1">
               … if the product is a high or serious risk, has been recalled or you need to notify overseas regulators.
@@ -119,7 +121,7 @@
                   </span>
                 </span>
               </span>
-              Close the case
+              Close the notification
             </h3>
             <p class="govuk-body-s govuk-!-margin-bottom-1">
               … when you are satisfied you no longer need to add or change any information.
@@ -146,7 +148,7 @@
       </div>
 
       <p class="govuk-body">
-        Find information about cases and products.
+        Find information about notifications and products.
       </p>
     </div>
     <div class="opss-step-nav">
@@ -162,11 +164,11 @@
                 </span>
               </span>
 
-              Search for cases or products
+              Search for notifications or products
             </h3>
 
             <p class="govuk-body-s govuk-!-margin-bottom-1">
-              Search for products in the Products area and cases in the Cases area.
+              Search for products in the Products area and notifications in the Notifications area.
             </p>
 
             <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-font-size-14">
@@ -177,7 +179,7 @@
       </ol>
 
       <p class="govuk-body-s govuk-!-margin-top-6 govuk-!-margin-bottom-3">
-        Cases record information about supply chains, evidence, and corrective actions. A product record describes the product and is included within a case.
+        Notifications record information about supply chains, evidence, and corrective actions. A product record describes the product and is included within a notification.
       </p>
 
       <ol class="opss-step-nav__steps">
@@ -203,7 +205,7 @@
             </p>
 
             <p class="govuk-body-s govuk-!-margin-bottom-1">
-              The cases section of a product record page <span class="govuk-!-font-weight-bold">shows all the cases which have included this product record</span>.
+              The notifications section of a product record page <span class="govuk-!-font-weight-bold">shows all the notifications which have included this product record</span>.
             </p>
           </div>
         </li>
@@ -219,19 +221,19 @@
                   </span>
                 </span>
               </span>
-              Case pages
+              Notification pages
             </h3>
 
             <p class="govuk-body-s govuk-!-margin-bottom-2">
-              Find a case and open it to view the case page.
+              Find a notification and open it to view the notification page.
             </p>
 
             <p class="govuk-body-s govuk-!-margin-bottom-2">
-              The secondary navigation menu provides access to all the information that forms the case.
+              The secondary navigation menu provides access to all the information that forms the notification.
             </p>
 
             <p class="govuk-body-s govuk-!-margin-bottom-1">
-              In the products page for a case, <span class="govuk-!-font-weight-bold">all the cases which include the product record</span> are shown. To view these, select the 'Cases' tab (in the body of the case products page).
+              In the products page for a notification, <span class="govuk-!-font-weight-bold">all the notifications which include the product record</span> are shown. To view these, select the 'Notifications' tab (in the body of the notification products page).
             </p>
           </div>
         </li>
@@ -249,18 +251,18 @@
       <%= link_to "Your notifications", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
     </h2>
 
-    <p class="govuk-body">Cases you have created which are open.</p>
+    <p class="govuk-body">Notifications you have created which are open.</p>
   </div>
   <div class="govuk-grid-column-one-quarter">
     <h2 class="govuk-heading-m">
       <% if current_user.can_access_new_search? %>
-        <%= link_to "All notifications", notifications_path, class: "govuk-link govuk-link--no-visited-state" %>
+        <%= link_to "All notifications", cases_path, class: "govuk-link govuk-link--no-visited-state" %>
       <% else %>
         <%= link_to "All notifications", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
       <% end %>
     </h2>
 
-    <p class="govuk-body">All the cases in the <abbr>PSD</abbr>. Search for open or closed cases.</p>
+    <p class="govuk-body">All the notifications in the <abbr>PSD</abbr>. Search for open or closed notifications.</p>
   </div>
 
   <div class="govuk-grid-column-one-quarter">
