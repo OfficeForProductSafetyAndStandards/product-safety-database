@@ -18,7 +18,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
     expect(page).to have_content("Create a product safety notification")
-    expect(page).to have_selector(:id, "task-list-0-0-status", text: "Not started")
+    expect(page).to have_selector(:id, "task-list-0-0-status", text: "Not yet started")
   end
 
   scenario "Creating a notification from an existing product" do
@@ -76,7 +76,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
     expect(page).to have_content("Create a product safety notification")
-    expect(page).to have_selector(:id, "task-list-0-0-status", text: "Not started")
+    expect(page).to have_selector(:id, "task-list-0-0-status", text: "Not yet started")
 
     click_link "Search for or add a product"
     click_button "Select", match: :first
