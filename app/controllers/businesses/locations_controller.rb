@@ -51,7 +51,9 @@ module Businesses
     end
 
     def location_params
-      params.require(:location).permit(:business_id, :name, :address_line_1, :address_line_2, :phone_number, :city, :country, :postal_code)
+      params.require(:location).permit(
+        :business_id, :name, :address_line_1, :address_line_2, :phone_number, :city, :country, :postal_code
+      )
     end
   end
 end

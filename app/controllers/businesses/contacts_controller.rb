@@ -1,12 +1,10 @@
 module Businesses
   class ContactsController < ApplicationController
-    before_action :set_contact, only: %i[edit update remove destroy]
-    before_action :create_contact, only: %i[create]
-    before_action :assign_business, only: %i[edit remove]
+    before_action :set_business
+    before_action :set_contact, except: %i[new create]
     before_action :set_business_breadcrumbs, only: %i[new edit remove]
 
     def new
-      @business = Business.find(params[:business_id])
       @contact = @business.contacts.build
       breadcrumb @business.trading_name, business_path(@business)
     end
@@ -14,8 +12,9 @@ module Businesses
     def edit; end
 
     def create
+      @contact = @business.contacts.create!(contact_params.merge({ added_by_user: current_user }))
       if @contact.save
-        redirect_to business_url(@contact.business, anchor: "contacts"), flash: { success: "Contact was successfully created." }
+        redirect_to business_url(@business, anchor: "contacts"), flash: { success: "Contact was successfully created." }
       else
         render :new
       end
@@ -23,7 +22,7 @@ module Businesses
 
     def update
       if @contact.update(contact_params)
-        redirect_to business_url(@contact.business, anchor: "contacts"), flash: { success: "Contact was successfully updated." }
+        redirect_to business_url(@business, anchor: "contacts"), flash: { success: "Contact was successfully updated." }
       else
         render :edit
       end
@@ -33,18 +32,13 @@ module Businesses
 
     def destroy
       @contact.destroy!
-      redirect_to business_url(@contact.business, anchor: "contacts"), flash: { success: "Contact was successfully deleted." }
+      redirect_to business_url(@business, anchor: "contacts"), flash: { success: "Contact was successfully deleted." }
     end
 
   private
 
-    def assign_business
-      @business = @contact.business
-    end
-
-    def create_contact
-      business = Business.find(params[:business_id])
-      @contact = business.contacts.create!(contact_params.merge({ added_by_user: current_user }))
+    def set_business
+      @business = Business.find(params[:business_id])
     end
 
     def set_contact
