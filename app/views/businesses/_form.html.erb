@@ -28,11 +28,11 @@
 </fieldset>
 
 <%= form.fields_for :locations, business.primary_location do |ff| %>
-  <%= render "locations/address_form", form: ff, countries: countries %>
+  <%= render "businesses/locations/address_form", form: ff, countries: countries %>
 <% end %>
 
 <%= form.fields_for :contacts, business.primary_contact do |ff| %>
-  <%= render "contacts/form", form: ff %>
+  <%= render "businesses/contacts/form", form: ff %>
 <% end %>
 
 <%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>
