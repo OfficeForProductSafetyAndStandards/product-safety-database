@@ -334,7 +334,7 @@ Rails.application.routes.draw do
     end
 
     resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
-      resources :locations do
+      resources :locations, controller: "businesses/locations" do
         member do
           get :remove
         end
