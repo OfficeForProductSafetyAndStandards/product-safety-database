@@ -5,7 +5,7 @@ module BusinessesHelper
     business
   end
 
-  def search_for_businesses(page_size = Business.count, user = current_user, for_export: false)
+  def search_for_businesses(user = current_user, for_export: false)
     query = Business.without_online_marketplaces.includes(child_records(for_export))
 
     if @search.q.present?
@@ -25,10 +25,9 @@ module BusinessesHelper
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
 
-    query
-      .order(sorting_params)
-      .page(page_number)
-      .per(page_size)
+    return query if for_export
+
+    pagy(query.order(sorting_params))
   end
 
   def child_records(for_export)
@@ -55,10 +54,6 @@ module BusinessesHelper
 
   def sort_direction
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
-  end
-
-  def page_number
-    params[:page].to_i > 500 ? "500" : params[:page]
   end
 
   def business_params

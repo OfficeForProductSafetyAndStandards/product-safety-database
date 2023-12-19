@@ -1,5 +1,5 @@
 module ProductsHelper
-  def search_for_products(page_size = Product.count, user = current_user, for_export: false)
+  def search_for_products(user = current_user, for_export: false)
     query = Product.includes(child_records(for_export))
 
     if @search.q.present?
@@ -29,10 +29,7 @@ module ProductsHelper
 
     return query if for_export
 
-    query
-      .order(sorting_params)
-      .page(page_number)
-      .per(page_size)
+    pagy(query.order(sorting_params))
   end
 
   def product_export_params
@@ -55,10 +52,6 @@ module ProductsHelper
 
   def sort_direction
     SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
-  end
-
-  def page_number
-    params[:page].to_i > 500 ? "500" : params[:page]
   end
 
   def set_product

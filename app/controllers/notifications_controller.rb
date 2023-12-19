@@ -13,7 +13,7 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @answer         = new_opensearch_for_investigations(20)
+        @pagy, @answer  = pagy_searchkick(new_opensearch_for_investigations(20, paginate: true))
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
@@ -29,7 +29,7 @@ private
   end
 
   def count_to_display
-    default_params ? Investigation.not_deleted.count : @answer.total_count
+    default_params ? Investigation.not_deleted.count : @pagy.count
   end
 
   def set_search_params

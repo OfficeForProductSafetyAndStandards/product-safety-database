@@ -1,6 +1,5 @@
 module Notifications
   class CreateController < ApplicationController
-    include Pagy::Backend
     include Wicked::Wizard
     include BreadcrumbHelper
 

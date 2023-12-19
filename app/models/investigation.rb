@@ -1,4 +1,6 @@
 class Investigation < ApplicationRecord
+  extend Pagy::Searchkick
+
   include Documentable
   include SanitizationHelper
   include InvestigationSearchkick
