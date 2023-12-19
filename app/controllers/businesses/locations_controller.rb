@@ -42,12 +42,12 @@ module Businesses
 
   private
 
-    def set_location
-      @location = Location.find(params[:id])
-    end
-
     def set_business
       @business = Business.find(params[:business_id])
+    end
+
+    def set_location
+      @location = @business.locations.find(params[:id])
     end
 
     def location_params
