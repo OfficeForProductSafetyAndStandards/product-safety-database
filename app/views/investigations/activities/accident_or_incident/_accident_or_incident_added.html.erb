@@ -12,5 +12,4 @@
   <% end %>
 </div>
 
-<%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
-
+<%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]), class: "govuk-link" %>

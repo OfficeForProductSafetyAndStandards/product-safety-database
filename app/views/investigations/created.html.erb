@@ -22,13 +22,6 @@
 
     <p class="govuk-body">If you need to, you can add more information later.</p>
 
-    <%= govukButton(
-      text: "View notification",
-      href: investigation_path(@investigation)
-    ) %>
-
-    <div>
-      <%= link_to "Home", root_path_for(current_user), class: "govuk-link app-block-link govuk-body" %>
-    </div>
+    <%= govuk_button_link_to("View notification", investigation_path(@investigation)) %>
   </div>
 </div>

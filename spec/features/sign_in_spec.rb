@@ -50,12 +50,12 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
 
     expect(page).to have_css("h1", text: "Check your phone")
 
-    within(".psd-header__secondary-navigation") do
+    within(".psd-header__secondary-navigation-list") do
       click_link("Sign out")
     end
 
     expect(page).to have_css("h1", text: "Product Safety Database")
-    expect(page).to have_link("Sign in to your account")
+    expect(page).to have_link("Sign in")
   end
 
   scenario "user attempts to sign in with wrong two factor authentication code" do

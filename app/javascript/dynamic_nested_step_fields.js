@@ -2,6 +2,8 @@
 
 'use strict'
 
+import { initAll } from 'govuk-frontend'
+
 document.addEventListener('DOMContentLoaded', () => {
   const dynamicNestedStepFieldsCallback = () => {
     document.querySelectorAll('.nested-form-wrapper:not([style*="display: none;"])').forEach((el, i) => {
@@ -15,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Re-init GOV.UK Frontend to pick up new form fields
-    window.GOVUKFrontend.initAll({ scope: document.querySelector('opss-steps') })
+    initAll({ scope: document.querySelector('opss-steps') })
   }
 
   // Detect added or removed steps

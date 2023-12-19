@@ -1,10 +1,10 @@
 <%
   card_classes = []
   card_classes << "psd-case-card--closed" if investigation.is_closed?
-  card_classes << "psd-case-card--restricted" if investigation.is_private?
+  card_classes << "psd-case-card--restricted-access" if investigation.is_private?
 %>
 
-<div class="govuk-grid-row psd-case-card card_classes">
+<div class="govuk-grid-row psd-case-card <%= card_classes.join(" ") %>">
   <div class="govuk-grid-column-one-half">
     <span class="govuk-caption-m govuk-!-font-size-16">
       <%= investigation.pretty_description %>

@@ -27,7 +27,7 @@
       <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
          "(#{document.title}, opens in new tab)",
          document,
-         class: "govuk-link app-block-link govuk-!-margin-right-3 govuk-link--no-visited-state",
+         class: "govuk-link govuk-!-margin-right-3",
          target: '_blank',
          rel: "noreferrer noopener" %>
 
@@ -35,21 +35,8 @@
         <%= render "documents/document_card_links", document: document, parent: parent %>
       <% end %>
     <% elsif !analyzed %>
-      <div class="govuk-warning-text govuk-!-margin-right-7 govuk-!-margin-bottom-3 opss-warning-text--s">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-
-        <strong class="govuk-warning-text__text">
-            <span class="govuk-warning-text__assistive">Warning</span>
-            The file did not finish uploading - this may take several minutes or more. Refresh the file to confirm that the upload process has completed.
-        </strong>
-      </div>
-
-      <%= link_with_hidden_text_to "Refresh the #{pretty_type_description(document)}",
-         "#{document.title}",
-         "",
-         class: "govuk-button govuk-button--secondary opss-button-refresh",
-         "role" => "button"
-      %>
+      <%= govuk_warning_text(text: "The file did not finish uploading - this may take several minutes or more. Refresh the file to confirm that the upload process has completed.") %>
+      <%= govuk_button_link_to("Refresh the #{pretty_type_description(document)}", "", secondary: true) %>
     <% end %>
   </div>
 </div>

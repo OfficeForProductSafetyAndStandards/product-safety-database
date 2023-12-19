@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
   def secondary_nav_items
     items = []
     if user_signed_in?
-      items.push text: "Your account", href: account_path
+      items.push text: "Your account", href: account_path, active: params[:controller].start_with?("account")
       items.push text: "Sign out", href: destroy_user_session_path
     else
       items.push text: "Sign in", href: new_user_session_path

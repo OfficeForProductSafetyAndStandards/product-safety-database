@@ -5,7 +5,7 @@ RSpec.describe "Viewing a product owner", type: :request, with_stubbed_mailer: t
   let(:creation_time) { 1.day.ago }
 
   before do
-    travel_to creation_time { product }
+    travel_to(creation_time { product })
     sign_in user
   end
 

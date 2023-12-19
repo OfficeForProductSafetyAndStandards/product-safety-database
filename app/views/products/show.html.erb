@@ -43,7 +43,7 @@
 
   <section id="page-content" role="region" class="govuk-grid-column-three-quarters">
     <% if @product.retired? %>
-      <%= govukWarningText(iconFallbackText: "Warning", text: "This product record is retired.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-4") %>
+      <%= govuk_warning_text(text: "This product record is retired.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-4") %>
     <% end %>
     <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The product record</h2>
     <div class="govuk-grid-row">
@@ -91,18 +91,18 @@
       <% if @product.owning_team.nil? %>
         <% if policy(@product).update? %>
           <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-            This product record currently has no owner<span class="opss-hidden-desktop">.</span>
+            This product record currently has no owner.
           </p>
         <% end %>
       <% elsif @product.owning_team == current_user.team %>
         <% if policy(@product).update? %>
           <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-            This product record is currently owned by your team<span class="opss-hidden-desktop">.</span>
+            This product record is currently owned by your team.
           </p>
         <% end %>
       <% else %>
         <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-          This product record is currently owned by <%= @product.owning_team.name %><span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries<span class="opss-hidden-desktop">.</span> <br class="opss-br-desktop">You can still add this product record to your notification<span class="opss-hidden-desktop">.</span>
+          This product record is currently owned by <%= @product.owning_team.name %>. You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries. You can still add this product record to your notification.
         </p>
       <% end %>
     <% end %>

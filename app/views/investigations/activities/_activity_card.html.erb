@@ -27,7 +27,7 @@
       <% end %>
 
       <% if activity.business_id %>
-        <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
+        <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link" %>
       <% end %>
 
       <% if activity.is_a?(AuditActivity::Test::Result) %>
@@ -40,17 +40,17 @@
           <%= link_with_hidden_text_to "View test result", " from #{activity.test_result.date.to_formatted_s(:govuk)}", investigation_test_result_path(@investigation, activity.test_result.id) %>
         <% end %>
       <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) && activity.correspondence %>
-        <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link govuk-link--no-visited-state" %>
+        <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
       <% elsif activity.is_a?(AuditActivity::Correspondence::AddPhoneCall) %>
-        <%=  link_to "View phone call", investigation_phone_call_path(@investigation, activity.correspondence), class: "govuk-link govuk-link--no-visited-state" %>
+        <%=  link_to "View phone call", investigation_phone_call_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
       <% elsif activity.is_a?(AuditActivity::Correspondence::AddMeeting) %>
-        <%=  link_to "View meeting", investigation_meeting_path(@investigation, activity.correspondence), class: "govuk-link govuk-link--no-visited-state" %>
+        <%=  link_to "View meeting", investigation_meeting_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
       <% elsif activity.has_attachment? %>
         <% activity.attachments.each do |name, attachment| %>
-          <%= link_to "View #{name} (opens in new tab)", attachment, class: "psd-block-link govuk-link--no-visited-state", target: "_blank", rel: "noreferrer noopener" %>
+          <%= link_to "View #{name} (opens in new tab)", attachment, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
         <% end %>
       <% end %>
     <% end %>

@@ -86,13 +86,13 @@ module Prism
     def task_status_tag(status)
       case status
       when "cannot_start_yet"
-        govuk_tag(text: "Cannot start yet", colour: "grey")
+        "Cannot start yet"
       when "not_started"
-        govuk_tag(text: "Not started", colour: "grey")
+        govuk_tag(text: "Not yet started")
       when "in_progress"
-        govuk_tag(text: "In progress")
+        govuk_tag(text: "In progress", colour: "light-blue")
       when "completed"
-        govuk_tag(text: "Completed")
+        "Completed"
       end
     end
 

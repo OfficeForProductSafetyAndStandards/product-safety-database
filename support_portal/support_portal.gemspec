@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
   # Run `bundle install` for both this engine and the main app when adding or changing gems
   spec.add_runtime_dependency "active_record_extended", "~> 3.2"
   spec.add_runtime_dependency "devise", "~> 4.9"
-  spec.add_runtime_dependency "govuk-components", "~> 4.1"
-  spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 4.1"
+  spec.add_runtime_dependency "govuk-components", "~> 5.0"
+  spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 5.0"
   spec.add_runtime_dependency "pagy", "~> 6.0"
   spec.add_runtime_dependency "paper_trail", "~> 15.0"
   spec.add_runtime_dependency "pg", "~> 1.5"

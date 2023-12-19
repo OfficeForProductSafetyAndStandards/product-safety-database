@@ -31,7 +31,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_antivirus,
 
     expect_to_be_on_the_homepage
 
-    click_link "Sign in to your account"
+    click_link "Sign in"
 
     fill_in "Email address", with: invited_user.email
     fill_in "Password", with: "testpassword123@"

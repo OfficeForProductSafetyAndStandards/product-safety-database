@@ -38,13 +38,15 @@
       <%= activity.details %>
     </div>
 
-    <% if activity.business_id %>
-      <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link govuk-link--no-visited-state" %>
-    <% end %>
+    <div class="govuk-button-group">
+      <% if activity.business_id %>
+        <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link" %>
+      <% end %>
 
-    <% if activity.corrective_action.present? %>
-      <%= link_to "View corrective action", investigation_corrective_action_path(@investigation.pretty_id, activity.corrective_action), class: "govuk-link govuk-link--no-visited-state" %>
-    <% end %>
+      <% if activity.corrective_action.present? %>
+        <%= link_to "View corrective action", investigation_corrective_action_path(@investigation.pretty_id, activity.corrective_action), class: "govuk-link" %>
+      <% end %>
+    </div>
 
 <% if activity.attached_image? %>
   </div>

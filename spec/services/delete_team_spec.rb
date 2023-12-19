@@ -86,7 +86,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       context "when a user is attributed to historic activity on a notification" do
         it "retains the user attribution" do
           activity = team_case.activities.find_by!(type: team_case.case_created_audit_activity_class.to_s)
-          expect { delete_team }.not_to change { activity.added_by_user }
+          expect { delete_team }.not_to(change { activity.added_by_user })
         end
       end
 
@@ -240,12 +240,12 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
           let(:read_only_teams) { [team, new_team] }
 
           it "does not add activity showing the new team added to the notification" do
-            expect { delete_team }.not_to change { other_team_case.activities.where(type: AuditActivity::Investigation::TeamAdded.to_s).count }
+            expect { delete_team }.not_to(change { other_team_case.activities.where(type: AuditActivity::Investigation::TeamAdded.to_s).count })
           end
 
           context "when the new team has the same level of access to the notification as the old team" do
             it "does not change the new team's access level on the notification" do
-              expect { delete_team }.not_to change { other_team_case.teams_with_read_only_access.where(id: new_team.id).count }
+              expect { delete_team }.not_to(change { other_team_case.teams_with_read_only_access.where(id: new_team.id).count })
             end
           end
 
@@ -254,7 +254,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
             let(:edit_access_teams) { [team] }
 
             it "does not change the new team's access level on the notification" do
-              expect { delete_team }.not_to change { other_team_case.teams_with_read_only_access.where(id: new_team.id).count }
+              expect { delete_team }.not_to(change { other_team_case.teams_with_read_only_access.where(id: new_team.id).count })
             end
           end
 
@@ -263,7 +263,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
             let(:edit_access_teams) { [new_team] }
 
             it "does not change the new team's access level on the notification" do
-              expect { delete_team }.not_to change { other_team_case.teams_with_read_only_access.where(id: new_team.id).count }
+              expect { delete_team }.not_to(change { other_team_case.teams_with_read_only_access.where(id: new_team.id).count })
             end
           end
         end

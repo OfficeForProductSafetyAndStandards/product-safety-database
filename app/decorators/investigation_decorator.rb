@@ -108,22 +108,6 @@ class InvestigationDecorator < ApplicationDecorator
     "#{creator_user.full_name} - #{creator_user.team.name}"
   end
 
-  def products_list
-    product_count = products.count
-    limit         = PRODUCT_DISPLAY_LIMIT
-
-    limit += 1 if product_count - PRODUCT_DISPLAY_LIMIT == 1
-
-    products_remaining_count = products.offset(limit).count
-
-    h.tag.ul(class: "govuk-list") do
-      h.concat(h.render(products.limit(limit)))
-      if product_count > limit
-        h.concat(h.link_to("View #{products_remaining_count} more products...", h.investigation_products_path(object)))
-      end
-    end
-  end
-
   def owner_display_name_for(viewer:)
     return "No notification owner" unless investigation.owner
 

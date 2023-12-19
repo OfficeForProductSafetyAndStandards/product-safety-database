@@ -53,7 +53,7 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new#{image_upload_id.present? ? '?image_upload_id[]=' + image_upload_id.to_s : ''}")
     # rubocop:enable Style/StringConcatenation
     expect(page).to have_selector("h1", text: "Add an image")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Notifications")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
   def expect_to_have_notification_breadcrumbs
@@ -214,14 +214,14 @@ module PageExpectations
     expect(page).to have_content "Image files will be saved to the notification images page."
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
     expect(page).to have_h1("Add attachment")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Notifications")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
   def expect_to_be_on_add_image_to_a_case_page
     expect(page).to have_content "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the notification."
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new")
     expect(page).to have_h1("Add an image")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Notifications")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
   def expect_to_be_on_case_actions_page(case_id:)
@@ -277,7 +277,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_new_comment_page
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Notifications")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
     expect_page_to_have_h1("Add comment")
   end
 
@@ -472,7 +472,7 @@ module PageExpectations
     expect(page).to have_current_path("/products/#{product.id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
     expect(page).to have_link("Back", href: "/products/#{product.id}#attachments")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Products")
   end
 
   def expect_to_be_on_product_page(product_id:, product_name:)
@@ -489,13 +489,13 @@ module PageExpectations
     expect(page).to have_content "Image files will be saved to the product images"
     expect(page).to have_current_path("/products/#{product_id}/image_uploads/new")
     expect(page).to have_h1("Add an image")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Products")
   end
 
   def expect_to_be_on_delete_attachment_for_a_product_page(product_id:, image_upload_id:)
     expect(page).to have_current_path("/products/#{product_id}/image_uploads/#{image_upload_id}/remove")
     expect(page).to have_h2("Remove image")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Products")
   end
 
   # Login and account management pages
@@ -601,7 +601,7 @@ module PageExpectations
     expect(page).not_to have_content "Image files will be saved to the product images"
     expect(page).to have_current_path("/businesses/#{business_id}/documents/new")
     expect(page).to have_h1("Add attachment")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Businesses")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Businesses")
   end
 
   def expect_to_be_on_add_contact_to_a_business_page(business_id:)

@@ -62,7 +62,7 @@ en:
       risk_level_serious: "Serious risk notification"
     coronavirus_related:
       true: "Coronavirus related notification"
-    protected_details: "Only teams added to the notification can view %{data_type}"
+    protected_details: "Only teams added to the notification can view %{data_type}."
     is_private:
       false: Visible to all
       true: Restricted for legal privilege
@@ -104,8 +104,6 @@ en:
     businesses:
       destroy:
         business_successfully_deleted: "Business was successfully removed."
-      supporting_information_warning:
-        cannot_remove_business_warning: "Cannot remove the business from the notification because it's associated with following supporting information"
       form:
         remove_business_legend: "Do you want to remove the business from the notification?"
         yes_label: "Yes"
@@ -113,6 +111,7 @@ en:
         reason_for_removing_the_business_from_the_case: "Reason for removing the business from the notification"
         cancel: "Cancel"
       remove:
+        cannot_remove_business_warning: "Cannot remove the business from the notification because it's associated with the following supporting information:"
         remove_business_warning_html: Remove a business from a notification if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
       empty: This notification has not added any businesses.
     business_types:

@@ -9,7 +9,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
       expect(page).to have_css(".govuk-phase-banner")
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
-      expect(page).to have_link("Sign in to your account")
+      expect(page).to have_link("Sign in")
 
       expect(page).not_to have_link("Sign out")
       expect(page).not_to have_link("Your account")

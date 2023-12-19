@@ -1,9 +1,11 @@
 <% if investigation.products.none? %>
-  <%= govukWarningText(iconFallbackText: "Warning", text: "A product has not been added to this notification.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-0 opss-warning-text--s") %>
-  <%= govukWarningText(iconFallbackText: "Warning", text: "Notifications without products are subject to deletion during notification audits.", classes: "govuk-!-display-inline-block govuk-!-margin-top-0 govuk-!-margin-bottom-4 opss-warning-text--s opss-warning-text--normal") %>
+  <%= govuk_warning_text do %>
+    A product has not been added to this notification.
+    <p class="govuk-body">Notifications without products are subject to deletion during notification audits.</p>
+  <% end %>
 <% end %>
 
-<section class="govuk-grid-column-full govuk-!-padding-top-3 govuk-!-padding-bottom-1 opss-desktop-padding-top-3 opss-desktop-padding-bottom-4 govuk-!-padding-right-3 govuk-!-padding-left-3 opss-border-all opss-grey-bg opss-3-col-flow opss-responsive-margin-bottom-6">
+<section class="govuk-grid-column-full govuk-!-padding-top-3 govuk-!-padding-bottom-1 opss-desktop-padding-top-3 opss-desktop-padding-bottom-4 govuk-!-padding-right-3 govuk-!-padding-left-3 opss-border-all opss-grey-bg opss-3-col-flow govuk-!-margin-bottom-6">
   <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0 opss-summary-list-mixed opss-summary-list-mixed--sm">
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Product&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.products.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
