@@ -339,7 +339,7 @@ Rails.application.routes.draw do
           get :remove
         end
       end
-      resources :contacts do
+      resources :contacts, controller: "businesses/contacts" do
         member do
           get :remove
         end
