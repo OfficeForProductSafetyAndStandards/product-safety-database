@@ -10,9 +10,7 @@
           <h1 class="govuk-heading-l govuk-!-margin-bottom-8">
             Delete the case
           </h1>
-
-          <%= govukWarningText(iconFallbackText: "Warning", text: "Case #{@investigation.pretty_id} – including its images and supporting information – will be deleted.") %>
-
+          <%= govuk_warning_text(text: "Case #{@investigation.pretty_id} – including its images and supporting information – will be deleted.") %>
           <div class="govuk-button-group govuk-!-margin-top-8">
             <%= form_with url: investigation_path(@investigation), method: :delete, local: true do |form| %>
               <%= form.submit  "Delete the case", class: "govuk-button govuk-link--no-underline govuk-button--warning" %>

@@ -47,13 +47,7 @@
                 <%= image_tag "img-icon.png", alt: "Blank image", class: "opss-blank-img" %>
               </a>
               <% if !analyzed %>
-                <figcaption class="govuk-warning-text govuk-!-margin-top-2 govuk-!-margin-bottom-0 opss-warning-text--s">
-                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                  <strong class="govuk-warning-text__text">
-                      <span class="govuk-warning-text__assistive">Warning</span>
-                      The image file has not finished uploading – this may take several minutes or more. Refresh the page to confirm it has finished.
-                  </strong>
-                </figcaption>
+                <%= govuk_warning_text(text: "The image file has not finished uploading – this may take several minutes or more. Refresh the page to confirm it has finished.") %>
               <% end %>
             </figure>
           <% end %>
@@ -109,13 +103,7 @@
                 <%= image_tag "img-icon.png", alt: "Blank image", class: "opss-blank-img" %>
               </a>
               <% if !analyzed %>
-                <figcaption class="govuk-warning-text govuk-!-margin-top-2 govuk-!-margin-bottom-0 opss-warning-text--s">
-                  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                  <strong class="govuk-warning-text__text">
-                      <span class="govuk-warning-text__assistive">Warning</span>
-                      The image file has not finished uploading – this may take several minutes or more. Refresh the page to confirm it has finished.
-                  </strong>
-                </figcaption>
+                <%= govuk_warning_text(text: "The image file has not finished uploading – this may take several minutes or more. Refresh the page to confirm it has finished.") %>
               <% end %>
             </figure>
           <% end %>

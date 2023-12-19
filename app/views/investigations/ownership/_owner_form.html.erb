@@ -54,8 +54,8 @@
 
   <%= govukRadios form: form, key: :owner_id, items: items, classes: "opss-radios__divider--title" %>
 
-  <div class="govuk-form-group">
+  <div class="govuk-button-group">
     <%= form.submit "Continue", class: "govuk-button" %>
-    <p><%= link_to "Cancel", investigation_path(investigation), class: "psd-block-link" %></p>
+    <%= link_to "Cancel", investigation_path(investigation), class: "govuk-link" %>
   </div>
 <% end %>

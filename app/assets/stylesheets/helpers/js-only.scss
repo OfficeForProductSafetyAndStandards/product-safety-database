@@ -1,9 +1,0 @@
-// This can be added to any element to hide it when javascript
-// is not enabled or available.
-//
-// This relies upon an inline script which adds the js-enabled class to
-// the <body> element.
-// See https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/template.njk#L31
-body:not(.js-enabled) .js-only {
-  display: none;
-}

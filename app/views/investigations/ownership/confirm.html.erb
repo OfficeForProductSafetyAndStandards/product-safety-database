@@ -26,10 +26,10 @@
           attributes: { maxlength: 5000 }
         ) %>
       </div>
+      <div class="govuk-button-group">
+        <%= form.submit "Confirm change", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link" %>
+      </div>
     </div>
   </div>
-  <%= form.submit "Confirm change", class: "govuk-button" %>
-  <p>
-    <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link psd-block-link" %>
-  </p>
 <% end %>

@@ -1,7 +1,7 @@
 <% display_link = local_assigns[:display_link].nil? ? policy(@investigation).update? : local_assigns[:display_link] %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
-    <span class="govuk-caption-m <%= " opss-visibility-hidden" if current_tab == "overview" %>"><%= current_tab == "overview" ? "Case page" : investigation.pretty_description %></span>
+    <% unless current_tab == "overview" %><span class="govuk-caption-m"><%= investigation.pretty_description %></span><% end %>
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3"><%= case_page_heading %>
       <% if current_tab == "overview" %>
         <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= investigation.pretty_id %></span>
