@@ -43,16 +43,6 @@ en:
   update_phone_call:
     email_subject_text: "%{case_type} updated"
   create_case: "Create a notification"
-  contacts:
-    form:
-      legend:
-        title: Contacts
-        hint: These are the details for a contact at the business.
-  locations:
-    address_form:
-      legend:
-        title: Official address
-        hint: You can add additional addresses after you have added the business.
   case:
     badges:
       coronavirus_related: "COVID-19 related notification"
@@ -96,6 +86,16 @@ en:
       company_number:
         label: Company number
         hint_html: In the <abbr>UK</abbr> this is an eight-digit number assigned to incorporated businesses.
+    contacts:
+      form:
+        legend:
+          title: Contacts
+          hint: These are the details for a contact at the business.
+    locations:
+      address_form:
+        legend:
+          title: Official address
+          hint: You can add additional addresses after you have added the business.
   investigations:
     activities:
       business:
