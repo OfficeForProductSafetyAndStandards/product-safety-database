@@ -42,11 +42,13 @@ module Businesses
     end
 
     def set_contact
-      @contact = Contact.find(params[:id])
+      @contact = @business.contacts.find(params[:id])
     end
 
     def contact_params
-      params.require(:contact).permit(:business_id, :name, :email, :phone_number, :job_title)
+      params.require(:contact).permit(
+        :business_id, :name, :email, :phone_number, :job_title
+      )
     end
   end
 end
