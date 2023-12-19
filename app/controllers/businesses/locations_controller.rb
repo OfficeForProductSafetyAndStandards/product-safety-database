@@ -2,16 +2,14 @@ module Businesses
   class LocationsController < ApplicationController
     include CountriesHelper
 
-    before_action :set_location, only: %i[show edit update remove destroy]
-    before_action :create_location, only: %i[create]
-    before_action :assign_business, only: %i[show edit update remove create]
+    before_action :set_business
+    before_action :set_location, except: %i[new create]
     before_action :set_countries, only: %i[create update new edit]
     before_action :set_business_breadcrumbs, only: %i[new show edit remove]
 
     def show; end
 
     def new
-      @business = Business.find(params[:business_id])
       @location = @business.locations.build
       breadcrumb @business.trading_name, business_path(@business)
     end
@@ -19,8 +17,9 @@ module Businesses
     def edit; end
 
     def create
+      @location = @business.locations.create!(location_params.merge({ added_by_user: current_user }))
       if @location.save
-        redirect_to business_url(@location.business, anchor: "locations"), flash: { success: "Location was successfully created." }
+        redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully created." }
       else
         render :new
       end
@@ -28,7 +27,7 @@ module Businesses
 
     def update
       if @location.update(location_params)
-        redirect_to business_url(@location.business, anchor: "locations"), flash: { success: "Location was successfully updated." }
+        redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully updated." }
       else
         render :edit
       end
@@ -38,22 +37,17 @@ module Businesses
 
     def destroy
       @location.destroy!
-      redirect_to business_url(@location.business, anchor: "locations"), flash: { success: "Location was successfully deleted." }
+      redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully deleted." }
     end
 
   private
 
-    def assign_business
-      @business = @location.business
-    end
-
-    def create_location
-      business = Business.find(params[:business_id])
-      @location = business.locations.create!(location_params.merge({ added_by_user: current_user }))
-    end
-
     def set_location
       @location = Location.find(params[:id])
+    end
+
+    def set_business
+      @business = Business.find(params[:business_id])
     end
 
     def location_params
