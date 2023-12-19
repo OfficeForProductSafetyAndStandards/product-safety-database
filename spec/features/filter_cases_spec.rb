@@ -83,7 +83,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
       expect(page.find_field("Serious and high risk")).to be_checked
 
-      click_link("page-2-link")
+      click_link("2")
 
       expect(page.find_field("Serious and high risk")).to be_checked
     end

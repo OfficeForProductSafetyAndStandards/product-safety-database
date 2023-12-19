@@ -29,7 +29,7 @@ private
 
   def businesses
     @search = SearchParams.new(params)
-    search_for_businesses(nil, nil, for_export: true).sort
+    search_for_businesses(nil, for_export: true).sort
   end
 
   def add_businesses_worksheet(book)

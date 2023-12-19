@@ -4,7 +4,7 @@ module InvestigationsHelper
   CASE_TYPES = %i[allegation enquiry project notification].freeze
   REPORTED_REASONS = %i[safe_and_compliant unsafe_and_non_compliant unsafe non_compliant].freeze
 
-  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
+  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
@@ -100,19 +100,32 @@ module InvestigationsHelper
       wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
     end
 
-    Investigation.search(
-      query,
-      where: wheres,
-      order: @search.sorting_params,
-      misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
-      page: page_number,
-      per_page: page_size,
-      body_options: { track_total_hits: true },
-      scroll: scroll_time(scroll)
-    )
+    if paginate
+      Investigation.pagy_search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    else
+      Investigation.search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    end
   end
 
-  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false)
+  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
@@ -224,19 +237,32 @@ module InvestigationsHelper
     reported_reasons = REPORTED_REASONS.map { |reason| reason.to_s if @search.send(reason) }.compact
     wheres[:reported_reason] = reported_reasons unless reported_reasons.empty?
 
-    Investigation.search(
-      query,
-      where: wheres,
-      order: @search.sorting_params,
-      misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
-      page: page_number,
-      per_page: page_size,
-      body_options: { track_total_hits: true },
-      scroll: scroll_time(scroll)
-    )
+    if paginate
+      Investigation.pagy_search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    else
+      Investigation.search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    end
   end
 
-  def search_for_investigations(page_size = Investigation.count, user = current_user, ids_only: false)
+  def search_for_investigations(user = current_user, ids_only: false)
     query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses, :activities)
 
     if @search.q.present?
@@ -322,10 +348,7 @@ module InvestigationsHelper
     if ids_only
       query.distinct.pluck(:id)
     else
-      query
-        .order(@search.sorting_params)
-        .page(page_number)
-        .per(page_size)
+      pagy(query.order(@search.sorting_params))
     end
   end
 

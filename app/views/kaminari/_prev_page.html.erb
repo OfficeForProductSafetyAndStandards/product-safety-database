@@ -1,7 +1,0 @@
-<% unless current_page.first? %>
-  <li class="opss-pagination-link__wrap opss-pagination-link--prev">
-    <a href="<%= url %>" class="govuk-link govuk-link--no-visited-state" id="page-<%= current_page - 1 %>-link">
-      <span>Previous page</span><span class="govuk-visually-hidden">:</span> <span>Page <%= current_page - 1 %> of <%= total_pages %></span>
-    </a>
-  </li>
-<% end %>

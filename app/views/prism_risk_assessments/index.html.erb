@@ -41,7 +41,7 @@
           <div class="govuk-grid-column-full" role="region" aria-label="Draft risk assessments">
             <h2 class="govuk-heading-m">Draft risk assessments</h2>
             <%= render "table", prism_risk_assessments: @draft_prism_risk_assessments, type: "draft" %>
-            <%= paginate @draft_prism_risk_assessments, param_name: :draft_page %>
+            <%= govuk_pagination(pagy: @draft_pagy) %>
           </div>
         </div>
       <% end %>
@@ -53,7 +53,7 @@
               <h2 class="govuk-heading-m">Submitted risk assessments</h2>
             <% end %>
             <%= render "table", prism_risk_assessments: @submitted_prism_risk_assessments, type: "submitted" %>
-            <%= paginate @submitted_prism_risk_assessments, param_name: :submitted_page %>
+            <%= govuk_pagination(pagy: @submitted_pagy) %>
           </div>
         </div>
       <% elsif @page_name == "your_prism_risk_assessments" && @draft_prism_risk_assessments.blank? %>
@@ -69,6 +69,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-quarter">&nbsp;</div>
   <div class="govuk-grid-column-three-quarters">
-    <%= govukButton(text: "Start a new risk assessment", href: all_products_path) %>
+    <%= govuk_button_link_to("Start a new risk assessment", all_products_path) %>
   </div>
 </div>

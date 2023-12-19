@@ -31,7 +31,7 @@ private
 
   def products
     @search = SearchParams.new(params)
-    search_for_products(nil, user, for_export: true).sort
+    search_for_products(user, for_export: true).sort
   end
 
   def add_product_to_sheets(product)

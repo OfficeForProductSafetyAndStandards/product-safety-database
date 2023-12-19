@@ -27,7 +27,7 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
     Investigation.reindex
 
     sign_in(user)
-    visit investigations_path
+    visit all_cases_investigations_path
 
     # Expect investigations to be in reverse chronological order
     expect(page)
@@ -37,9 +37,9 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
     expect(page)
       .to have_css("tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
-    expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
+    expect(page).to have_css(".govuk-pagination__link", text: "1")
 
-    expect(page).to have_link("Next page", href: /#{Regexp.escape(all_cases_investigations_path(pagination_link_params))}/)
+    expect(page).to have_link("Next", href: /#{Regexp.escape(all_cases_investigations_path(pagination_link_params))}/)
 
     fill_in "Search", with: "electric skateboard"
     click_on "Apply"
