@@ -13,10 +13,10 @@
       <% @business.contacts.each do |contact| %>
         <table class="govuk-table govuk-!-margin-bottom-0">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-!-width-one-third" scope="row" %>
+            <th class="govuk-table__header" scope="row" %>
               <%= contact.name %>
             </th>
-            <td class="govuk-table__cell govuk-!-width-one-third" %>
+            <td class="govuk-table__cell" %>
               <%= contact.job_title %>
             </td>
             <td class="govuk-table__cell">
@@ -28,17 +28,16 @@
           </tr>
         </table>
 
-        <p class="govuk-body">
+        <div class="govuk-button-group">
           <%= link_to "Edit contact",
             edit_business_contact_path(@business, contact),
-            class: "govuk-link psd-block-link"
+            class: "govuk-link"
           %>
-
           <%= link_to "Remove contact",
             remove_business_contact_path(@business, contact),
-            class: "govuk-link psd-block-link"
+            class: "govuk-link"
           %>
-        </p>
+        </div>
       <% end %>
 
     <% else %>

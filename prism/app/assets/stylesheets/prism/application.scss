@@ -22,7 +22,6 @@ $govuk-global-styles: true;
 @import "govuk-frontend/dist/govuk/all";
 @import "accessible-autocomplete/src/autocomplete";
 @import "autocomplete";
-@import "task_list";
 
 .opss-nojs-hide {
   display: none;
@@ -71,4 +70,9 @@ body.js-enabled .opss-nojs-hide {
   p {
     margin-bottom: 0;
   }
+}
+
+// Keep section numbers in line with the rest of the column
+.opss-task-list-group {
+  margin-left: govuk-spacing(2);
 }

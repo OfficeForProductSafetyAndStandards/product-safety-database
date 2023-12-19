@@ -62,7 +62,7 @@ en:
       risk_level_serious: "Serious risk case"
     coronavirus_related:
       true: "Coronavirus related case"
-    protected_details: "Only teams added to the case can view %{data_type}"
+    protected_details: "Only teams added to the case can view %{data_type}."
     is_private:
       false: Visible to all
       true: Restricted for legal privilege

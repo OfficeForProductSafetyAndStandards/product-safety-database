@@ -13,10 +13,10 @@
       <% @business.locations.each do |location| %>
         <table class="govuk-table govuk-!-margin-bottom-0">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-!-width-one-third" scope="row">
+            <th class="govuk-table__header" scope="row">
               <%= location.name %>
             </th>
-            <td class="govuk-table__cell govuk-!-width-one-half">
+            <td class="govuk-table__cell">
               <%= location.summary %>
             </td>
             <td class="govuk-table__cell">
@@ -24,18 +24,16 @@
             </td>
           </tr>
         </table>
-
-        <p class="govuk-body">
+        <div class="govuk-button-group">
           <%= link_to "Edit location",
             edit_business_location_path(@business, location),
-            class: "govuk-link psd-block-link"
+            class: "govuk-link"
           %>
-
           <%= link_to "Remove location",
             remove_business_location_path(@business, location),
-            class: "govuk-link psd-block-link"
+            class: "govuk-link"
           %>
-        </p>
+        </div>
       <% end %>
 
     <% else %>
