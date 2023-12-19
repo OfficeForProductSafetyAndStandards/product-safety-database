@@ -9,14 +9,14 @@
       <% if non_search_cases_page_names.exclude?(@page_name) %>
         <div class="govuk-grid-row">
           <%= render 'investigations/search_bar', form: form %>
-          <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir if (@answer.total_count && @answer.total_count > 11) %>
+          <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir if (@count > 11) %>
         </div>
         <div class="govuk-grid-row">
           <%= search_result_statement(@search.q, @count) %>
         </div>
       <% else %>
         <div class="govuk-grid-row">
-          <%= render_sort_by(form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir, "govuk-grid-column-one-third opss-float-right-desktop") if (@answer.total_count && @answer.total_count > 11) %>
+          <%= render_sort_by(form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir, "govuk-grid-column-one-third opss-float-right-desktop") if @count > 11 %>
         </div>
       <% end %>
 
@@ -84,7 +84,7 @@
               <% end %>
             </table>
 
-            <%= paginate @investigations.object %>
+            <%= govuk_pagination(pagy: @pagy) %>
           </div>
         </div>
       <% elsif non_search_cases_page_names.include?(@page_name)%>

@@ -22,14 +22,14 @@
               </div>
             </div>
           </div>
-          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@results.total_count && @results.total_count > 11) %>
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@count > 11) %>
         </div>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
             <%= render "search_statement", count: @count, keywords: params[:q], filter: { category: params[:category], retired_status: params[:retired_status] } %>
           </div>
         </div>
-      <% elsif (@results.total_count && @results.total_count > 11) %>
+      <% elsif (@count > 11) %>
         <div class="govuk-grid-row">
           <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third opss-float-right-desktop" %>
         </div>
@@ -39,7 +39,7 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full" role="region" aria-label="Products">
             <%= render "table", products: @products %>
-            <%= paginate @products.object %>
+            <%= govuk_pagination(pagy: @pagy) %>
           </div>
         </div>
       <% elsif ["team_products", "your_products"].include?(@page_name) %>

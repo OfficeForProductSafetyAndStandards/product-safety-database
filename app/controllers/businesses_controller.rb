@@ -18,7 +18,7 @@ class BusinessesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @results = search_for_businesses(20)
+        @pagy, @results = search_for_businesses
         @count = count_to_display
         @businesses = BusinessDecorator.decorate_collection(@results)
         @page_name = "all_businesses"
@@ -61,8 +61,8 @@ class BusinessesController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_businesses" })
-    @results = search_for_businesses(20)
-    @count = @results.length
+    @pagy, @results = search_for_businesses
+    @count = @pagy.count
     @businesses = BusinessDecorator.decorate_collection(@results)
     @page_name = "your_businesses"
 
@@ -75,8 +75,8 @@ class BusinessesController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_businesses" })
-    @results = search_for_businesses(20)
-    @count = @results.length
+    @pagy, @results = search_for_businesses
+    @count = @pagy.count
     @businesses = BusinessDecorator.decorate_collection(@results)
     @page_name = "team_businesses"
 
@@ -122,6 +122,6 @@ private
   end
 
   def count_to_display
-    params[:q].blank? ? Business.count : @results.total_count
+    params[:q].blank? ? Business.without_online_marketplaces.count : @pagy.count
   end
 end

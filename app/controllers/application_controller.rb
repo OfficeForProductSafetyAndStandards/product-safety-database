@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
   include Pundit::Authorization
   include CacheConcern
   include HttpAuthConcern
