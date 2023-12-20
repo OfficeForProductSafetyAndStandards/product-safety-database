@@ -258,6 +258,6 @@ RSpec.feature "notification export", :with_opensearch, :with_stubbed_antivirus, 
   end
 
   def expand_help_details
-    click_link "Help with the notifications search"
+    first(".govuk-details__summary").click
   end
 end

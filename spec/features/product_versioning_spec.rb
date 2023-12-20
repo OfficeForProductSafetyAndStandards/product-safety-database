@@ -58,7 +58,7 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
     visit "/cases/#{first_investigation.pretty_id}/products"
 
     expect(page).to have_selector("h3.govuk-heading-m", text: product.name)
-    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{first_investigation.date_closed.to_i} - The PSD reference number for this version of the product record - as recorded when the notification was closed: #{first_investigation.date_closed.to_formatted_s(:govuk)}")
+    expect(page).to have_selector("dd.govuk-summary-list__value", text: "psd-#{product.id}_#{first_investigation.date_closed.to_i} - The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the notification was closed: #{first_investigation.date_closed.to_formatted_s(:govuk)}")
     expect(page).to have_selector("dd.govuk-summary-list__value", text: initial_product_description)
     expect(page).not_to have_link "Edit this product"
     expect(page).to have_link("Images (1)")
