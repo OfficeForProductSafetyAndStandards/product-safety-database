@@ -87,7 +87,7 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     expect(page).to have_summary_item(key: "Webpage", value: attributes[:webpage])
     expect(page).to have_summary_item(key: "Country of origin", value: attributes[:country])
     expect(page).to have_summary_item(key: "Description", value: attributes[:description])
-    expect(page).to have_summary_item(key: "Market date", value: "#{I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key)} - Placed on the market")
+    expect(page).to have_summary_item(key: "Market date", value: I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key))
   end
 
   scenario "Adding a product with blank origin, it asserts validations" do
