@@ -55,7 +55,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "country:CN",
@@ -128,7 +128,7 @@ if run_seeds
 
   investigation.documents.attach(create_blob("putty 2.jpg"))
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   blob = create_blob("putty.jpg", title: "Crazy Geezer's putty world", description: "Top")
   investigation.documents.attach(blob)
@@ -183,7 +183,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "territory:TW",
@@ -225,7 +225,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "territory:TW",
@@ -267,7 +267,7 @@ if run_seeds
 
   investigation.documents.attach(create_blob("2019-w6_27550-1f.jpg"))
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "",
@@ -307,7 +307,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "country:CN",
@@ -378,7 +378,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "country:CN",
@@ -421,7 +421,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "country:CN",
@@ -475,7 +475,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "country:ES",
@@ -514,7 +514,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   product_params = {
     country_of_origin: "country:ES",
@@ -546,7 +546,7 @@ if run_seeds
     complainant_reference: nil
   )
 
-  CreateCase.call!(investigation:, user:)
+  CreateNotification.call!(investigation:, user:)
 
   if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:

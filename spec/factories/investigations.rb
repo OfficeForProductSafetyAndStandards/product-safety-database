@@ -117,9 +117,9 @@ FactoryBot.define do
     # Cases created by non OPSS users must have a product assigned to them.
     before(:create) do |investigation, options|
       if options.creator.is_opss?
-        CreateCase.call(investigation:, user: options.creator)
+        CreateNotification.call(investigation:, user: options.creator)
       else
-        CreateCase.call(investigation:, user: options.creator, product: create(:product))
+        CreateNotification.call(investigation:, user: options.creator, product: create(:product))
       end
     end
 

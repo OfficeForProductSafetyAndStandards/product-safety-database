@@ -1,4 +1,4 @@
-class CreateCase
+class CreateNotification
   include Interactor
 
   delegate :investigation, :user, :product, :prism_risk_assessment, :bulk, :from_task_list, to: :context
