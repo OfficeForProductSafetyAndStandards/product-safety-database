@@ -19,7 +19,7 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
 
   scenario "editing a product" do
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference number for this product record")
+    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The <abbr>PSD</abbr> reference number for this product record")
     expect(page).to have_summary_item(key: "Description", value: initial_product_description)
     expect(page).to have_link("Images (1)")
 
@@ -50,7 +50,7 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
 
     # Ensure product page shows latest version
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The PSD reference number for this product record")
+    expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{product.id} - The <abbr>PSD</abbr> reference number for this product record")
     expect(page).to have_summary_item(key: "Description", value: new_product_description)
     expect(page).to have_link("Images (1)")
 

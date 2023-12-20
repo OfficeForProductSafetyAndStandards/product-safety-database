@@ -109,7 +109,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       expect(page).to have_summary_item(key: "Category", value: product.category)
       expect(page).to have_summary_item(key: "Subcategory", value: new_subcategory)
-      expect(page).to have_summary_item(key: "Counterfeit", value: "Yes This is a product record for a counterfeit product")
+      expect(page).to have_summary_item(key: "Counterfeit", value: "Yes - This is a product record for a counterfeit product")
       expect(page).to have_summary_item(key: "Product marking", value: expected_markings)
       expect(page).to have_summary_item(key: "Brand name", value: product.brand)
       expect(page).to have_summary_item(key: "Product name", value: product.name)
@@ -205,7 +205,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       expect(page).to have_summary_item(key: "Category", value: product.category)
       expect(page).to have_summary_item(key: "Subcategory", value: new_subcategory)
-      expect(page).to have_summary_item(key: "Counterfeit", value: "Yes This is a product record for a counterfeit product")
+      expect(page).to have_summary_item(key: "Counterfeit", value: "Yes - This is a product record for a counterfeit product")
       expect(page).to have_summary_item(key: "Product marking", value: expected_markings)
       expect(page).to have_summary_item(key: "Brand name", value: product.brand)
       expect(page).to have_summary_item(key: "Product name", value: product.name)

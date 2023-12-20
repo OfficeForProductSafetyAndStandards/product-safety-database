@@ -54,7 +54,7 @@ RSpec.feature "Changing the status of a notification", :with_opensearch, :with_s
 
       expect_to_be_on_case_page(case_id: investigation.pretty_id)
       expect_confirmation_banner("The notification was closed")
-      expect(page).to have_summary_item(key: "Status", value: "Notification closed #{Date.current.to_formatted_s(:govuk)}")
+      expect(page).to have_summary_item(key: "Status", value: "Notification closed (#{Date.current.to_formatted_s(:govuk)})")
 
       click_link "Activity"
 

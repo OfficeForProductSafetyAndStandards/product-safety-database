@@ -44,7 +44,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, type: :feature d
 
     expect(page).to have_text "The product record was updated"
 
-    expect(page).to have_summary_item(key: "PSD ref", value: "#{product.psd_ref} - The PSD reference number for this product record")
+    expect(page).to have_summary_item(key: "PSD ref", value: "#{product.psd_ref} - The <abbr>PSD</abbr> reference number for this product record")
     expect(page).to have_summary_item(key: "Brand name", value: "MyBrand")
     expect(page).to have_summary_item(key: "Product name", value: "Washing machine")
     expect(page).to have_summary_item(key: "Category", value: "Electrical appliances and equipment")

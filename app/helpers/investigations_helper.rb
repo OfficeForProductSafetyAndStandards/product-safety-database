@@ -752,7 +752,7 @@ private
     [
       {
         href: edit_investigation_notifying_country_path(investigation),
-        text: "Edit",
+        text: "Change",
         visually_hidden_text: "notifying country"
       }
     ]
@@ -764,7 +764,7 @@ private
     [
       {
         href: edit_investigation_overseas_regulator_path(investigation),
-        text: "Edit",
+        text: "Change",
         visually_hidden_text: "overseas regulator"
       }
     ]

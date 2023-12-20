@@ -172,7 +172,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
 
     visit "/cases/all-cases"
 
-    expect_warning_banner("We have noticed that your recent product upload is not complete, and the products have yet to be allocated to their respective notification. Resume the upload process.")
+    expect_warning_banner("Important\nWe have noticed that your recent product upload is not complete, and the products have yet to be allocated to their respective notification. Resume the upload process")
 
     click_link "Resume the upload process"
 

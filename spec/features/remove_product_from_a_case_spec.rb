@@ -130,7 +130,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
       old_product_psd_text = "#{product.psd_ref}_#{investigation.reload.investigation_products.first.investigation_closed_at.to_i}"
 
       expect(page).to have_css(".govuk-summary-list__value", text: old_product_psd_text)
-      expect(page).to have_css(".govuk-summary-list__value", text: "#{product.psd_ref} - The PSD reference number for this product record")
+      expect(page).to have_css(".govuk-summary-list__value", text: "#{product.psd_ref} - The <abbr>PSD</abbr> reference number for this product record")
 
       # Only the timestamped product can be removed
       click_link "Remove this #{product.name} product from the notification"
@@ -157,7 +157,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
       expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
 
       expect(page).to have_css(".govuk-summary-list__value", text: old_product_psd_text)
-      expect(page).not_to have_css(".govuk-summary-list__value", text: "#{product.psd_ref} - The PSD reference number for this product record")
+      expect(page).not_to have_css(".govuk-summary-list__value", text: "#{product.psd_ref} - The <abbr>PSD</abbr> reference number for this product record")
 
       click_link "Activity"
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

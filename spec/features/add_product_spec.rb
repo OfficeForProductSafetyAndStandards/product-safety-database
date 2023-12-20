@@ -72,8 +72,8 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
                         end
 
     expected_counterfeit_value = case attributes[:authenticity]
-                                 when "genuine" then "No This product record is about a genuine product"
-                                 when "counterfeit" then "Yes This is a product record for a counterfeit product"
+                                 when "genuine" then "No - This product record is about a genuine product"
+                                 when "counterfeit" then "Yes - This is a product record for a counterfeit product"
                                  end
 
     expect(page).to have_summary_item(key: "Brand name", value: attributes[:brand])
