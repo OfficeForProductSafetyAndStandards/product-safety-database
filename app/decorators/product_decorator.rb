@@ -25,16 +25,16 @@ class ProductDecorator < ApplicationDecorator
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = if date_case_closed.present?
-                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the notification was closed: #{date_case_closed.to_formatted_s(:govuk)}."
+                                " - The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the notification was closed: #{date_case_closed.to_formatted_s(:govuk)}."
                               else
-                                "<span class=\"govuk-visually-hidden\"> - </span>The <abbr>PSD</abbr> reference number for this product record"
+                                " - The <abbr>PSD</abbr> reference number for this product record"
                               end.html_safe
     webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
     when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
-    psd_ref_value_html = date_case_closed.present? ? h.safe_join([psd_ref(timestamp:, investigation_was_closed: true), "<br>".html_safe]) : psd_ref(timestamp:, investigation_was_closed: false)
+    psd_ref_value_html = date_case_closed.present? ? psd_ref(timestamp:, investigation_was_closed: true) : psd_ref(timestamp:, investigation_was_closed: false)
 
     rows = [
-      { key: { text: psd_ref_key_html }, value: { text: psd_ref_value_html } },
+      { key: { text: psd_ref_key_html }, value: { text: "#{psd_ref_value_html}#{psd_secondary_text_html}" } },
       { key: { text: "Brand name" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Category" }, value: { text: category } },

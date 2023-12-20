@@ -788,7 +788,7 @@ private
     [
       {
         href: investigation_collaborators_path(investigation),
-        text: "Edit",
+        text: "Change",
         visually_hidden_text: "the teams added"
       }
     ]
@@ -800,7 +800,7 @@ private
     [
       {
         href: investigation_visibility_path(investigation),
-        text: "Edit",
+        text: "Change",
         visually_hidden_text: "the notification restriction"
       }
     ]
@@ -812,7 +812,7 @@ private
     [
       {
         href: investigation_risk_level_path(investigation),
-        text: "Edit",
+        text: "Change",
         visually_hidden_text: "the risk level"
       }
     ]
