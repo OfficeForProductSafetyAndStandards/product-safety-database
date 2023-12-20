@@ -93,11 +93,11 @@ class ProductDecorator < ApplicationDecorator
 
   def counterfeit_row_value
     if product.counterfeit?
-      return { html: "<span class='opss-tag opss-tag--risk2 opss-tag--lrg'>Yes</span>".html_safe, secondary_text: { text: counterfeit_explanation } }
+      return { text: "<span class=\"opss-tag opss-tag--risk2 opss-tag--lrg\">Yes</span> - #{counterfeit_explanation}".html_safe }
     end
 
     if product.genuine?
-      return { text: "No", secondary_text: { text: counterfeit_explanation } }
+      return { text: "No - #{counterfeit_explanation}" }
     end
 
     { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }

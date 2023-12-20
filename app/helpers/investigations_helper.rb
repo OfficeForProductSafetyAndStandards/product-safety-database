@@ -880,8 +880,7 @@ private
   def status_value(investigation)
     if investigation.is_closed?
       {
-        html: '<span class="opss-tag opss-tag--risk3">Notification closed</span>'.html_safe,
-        secondary_text: { text: investigation.date_closed.to_formatted_s(:govuk) }
+        text: "<span class=\"opss-tag opss-tag--risk3\">Notification closed</span> (#{investigation.date_closed.to_formatted_s(:govuk)})".html_safe
       }
     else
       {
