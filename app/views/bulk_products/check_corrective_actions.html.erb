@@ -1,7 +1,7 @@
 <% page_heading = "Check products selected for corrective actions - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_upload.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: choose_products_for_corrective_actions_bulk_upload_products_path) %>
+  <%= govuk_back_link(href: choose_products_for_corrective_actions_bulk_upload_products_path) %>
 <% end %>
 <%= form_with model: @bulk_products_upload, url: check_corrective_actions_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">

@@ -31,7 +31,7 @@
           <%= link_to "#{file_blob.filename} (opens in new tab)", file_blob, target: "_blank", rel: "noreferrer noopener" %>
         </p>
 
-        <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>
+        <%= govuk_details(summary_text: "Replace this file", text: file_upload_field) %>
       <% else %>
         <%= file_upload_field %>
       <% end %>

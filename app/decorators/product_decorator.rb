@@ -21,7 +21,7 @@ class ProductDecorator < ApplicationDecorator
     description
   end
 
-  def details_list(date_case_closed: nil, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
+  def details_list(date_case_closed: nil)
     timestamp = date_case_closed.to_i if date_case_closed
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = if date_case_closed.present?
@@ -34,26 +34,22 @@ class ProductDecorator < ApplicationDecorator
     psd_ref_value_html = date_case_closed.present? ? h.safe_join([psd_ref(timestamp:, investigation_was_closed: true), "<br>".html_safe]) : psd_ref(timestamp:, investigation_was_closed: false)
 
     rows = [
-      { key: { html: psd_ref_key_html }, value: { html: psd_ref_value_html, secondary_text: { html: psd_secondary_text_html } } },
+      { key: { text: psd_ref_key_html }, value: { text: psd_ref_value_html } },
       { key: { text: "Brand name" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Subcategory" }, value: { text: subcategory } },
       { key: { text: "Barcode" }, value: { text: barcode } },
       { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Webpage" }, value: { html: webpage_html } },
-      { key: { text: "Market date" }, value: { text: when_placed_on_market_value, secondary_text: { text: "Placed on the market" } } },
+      { key: { text: "Webpage" }, value: { text: webpage_html } },
+      { key: { text: "Market date" }, value: { text: when_placed_on_market_value } },
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
       { key: { text: "Counterfeit" }, value: counterfeit_row_value },
       { key: { text: "Product marking" }, value: { text: markings } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
     ]
 
-    h.govukSummaryList classes:, rows:
-  end
-
-  def summary_list
-    details_list classes: "govuk-!-margin-top-8 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions"
+    h.govuk_summary_list(rows:)
   end
 
   def authenticity

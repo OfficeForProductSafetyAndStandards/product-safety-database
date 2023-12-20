@@ -40,9 +40,9 @@
                   ]
                 ) %>
                 <% if @product.virus_free_images.any? %>
-                  <%= govukDetails(
-                    summaryText: "Product image",
-                    html: capture {
+                  <%= govuk_details(
+                    summary_text: "Product image",
+                    text: capture {
                       render "image_uploads/image_preview",
                         image: @product.virus_free_images.first,
                         dimensions: [300, 500],

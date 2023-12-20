@@ -1,7 +1,7 @@
 <% page_heading = "Choose products that require the same corrective action - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_choose_products_for_corrective_actions_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: review_products_bulk_upload_products_path(product_ids: @products.ids)) %>
+  <%= govuk_back_link(href: review_products_bulk_upload_products_path(product_ids: @products.ids)) %>
 <% end %>
 <%= form_with model: @bulk_products_choose_products_for_corrective_actions_form, url: choose_products_for_corrective_actions_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true, data: { controller: "checkbox-select-all" } do |form| %>
   <div class="govuk-grid-row">

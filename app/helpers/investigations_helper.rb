@@ -545,9 +545,6 @@ module InvestigationsHelper
   end
 
   def case_rows(investigation, user, team_list_html)
-    reference_value = { text: investigation.complainant_reference }
-    reference_value[:secondary_text] = { text: "Optional reference number" } if investigation.complainant_reference.present?
-
     rows = [
       {
         key: { text: "Notification name" },
@@ -556,59 +553,43 @@ module InvestigationsHelper
       },
       {
         key: { text: "Notification number" },
-        value: {
-          text: investigation.pretty_id,
-        },
-        actions: {}
+        value: { text: investigation.pretty_id }
       },
       {
         key: { text: "Reference" },
-        value: reference_value,
+        value: { text: investigation.complainant_reference },
         actions: reference_actions(investigation, user)
       },
       {
         key: { text: "Summary" },
-        value: {
-          html: summary_html(investigation)
-        },
+        value: { text: summary_html(investigation) },
         actions: summary_actions(investigation, user)
       },
       {
         key: { text: "Status" },
         value: status_value(investigation),
         actions: status_actions(investigation, user),
-        classes: "opss-summary-list__row--split"
       },
       {
         key: { text: "Last updated" },
-        value: {
-          text: time_ago_or_date(@investigation.updated_at)
-        }
+        value: { text: time_ago_or_date(@investigation.updated_at) }
       },
       {
         key: { text: "Created" },
-        value: {
-          text: time_ago_or_date(@investigation.created_at)
-        }
+        value: { text: time_ago_or_date(@investigation.created_at) }
       },
       {
         key: { text: "Created by" },
-        value: {
-          text: investigation.created_by
-        }
+        value: { text: investigation.created_by }
       },
       {
         key: { text: "Notification owner" },
-        value: {
-          text: investigation_owner(investigation)
-        },
+        value: { text: investigation_owner(investigation) },
         actions: case_owner_actions(investigation, user)
       },
       {
         key: { text: "Teams added" },
-        value: {
-          html: team_list_html
-        },
+        value: { text: team_list_html },
         actions: case_teams_actions(investigation)
       }
     ]
@@ -616,9 +597,7 @@ module InvestigationsHelper
     if investigation.is_private?
       rows << {
         key: { text: "Notification restriction" },
-        value: {
-          html: case_restriction_value(investigation)
-        },
+        value: { text: case_restriction_value(investigation) },
         actions: case_restriction_actions(investigation, user)
       }
     end
@@ -626,13 +605,11 @@ module InvestigationsHelper
     rows << [
       {
         key: { text: "Notification risk level" },
-        value: {
-          html: case_risk_level_value(investigation)
-        },
+        value: { text: case_risk_level_value(investigation) },
         actions: risk_level_actions(investigation, user)
       },
       {
-        key: { html: 'Risk <span class="govuk-visually-hidden">level</span> validated'.html_safe },
+        key: { text: 'Risk <span class="govuk-visually-hidden">level</span> validated'.html_safe },
         value: { text: risk_validated_value(investigation) },
         actions: risk_validation_actions(investigation, user)
       }
@@ -642,21 +619,14 @@ module InvestigationsHelper
     if investigation.coronavirus_related
       rows << {
         key: { text: "COVID-19" },
-        value: {
-          html: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe
-        },
-        actions: {
-          items: []
-        }
+        value: { text: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe }
       }
     end
 
     if policy(investigation).view_notifying_country?(user:)
       rows << {
         key: { text: "Notifying country" },
-        value: {
-          text: country_from_code(investigation.notifying_country, Country.notifying_countries)
-        },
+        value: { text: country_from_code(investigation.notifying_country, Country.notifying_countries) },
         actions: notifying_country_actions(investigation, user)
       }
     end
@@ -664,9 +634,7 @@ module InvestigationsHelper
     if policy(investigation).view_overseas_regulator?(user:)
       rows << {
         key: { text: "Overseas regulator" },
-        value: {
-          text: overseas_regulator_value(investigation)
-        },
+        value: { text: overseas_regulator_value(investigation) },
         actions: overseas_regulator_actions(investigation, user)
       }
     end
@@ -728,126 +696,126 @@ private
   end
 
   def case_name_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_case_names_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the notification name"
-      ]
-    }
+        visually_hidden_text: "the notification name"
+      }
+    ]
   end
 
   def reference_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_reference_numbers_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the reference number"
-      ]
-    }
+        visually_hidden_text: "the reference number"
+      }
+    ]
   end
 
   def summary_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_summary_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the summary"
-      ]
-    }
+        visually_hidden_text: "the summary"
+      }
+    ]
   end
 
   def status_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?(user:)
+    return [] unless policy(investigation).change_owner_or_status?(user:)
 
     status_path = investigation.is_closed ? reopen_investigation_status_path(investigation) : close_investigation_status_path(investigation)
     status_link_text = investigation.is_closed? ? "Re-open" : "Close"
 
-    {
-      items: [
+    [
+      {
         href: status_path,
         text: status_link_text,
-        visuallyHiddenText: " this notification"
-      ]
-    }
+        visually_hidden_text: "this notification"
+      }
+    ]
   end
 
   def notifying_country_actions(investigation, user)
-    return {} unless policy(investigation).change_notifying_country?(user:)
+    return [] unless policy(investigation).change_notifying_country?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_notifying_country_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "notifying country"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "notifying country"
+      }
+    ]
   end
 
   def overseas_regulator_actions(investigation, user)
-    return {} unless policy(investigation).change_overseas_regulator?(user:)
+    return [] unless policy(investigation).change_overseas_regulator?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_overseas_regulator_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "overseas regulator"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "overseas regulator"
+      }
+    ]
   end
 
   def case_owner_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?(user:)
+    return [] unless policy(investigation).change_owner_or_status?(user:)
 
-    {
-      items: [
+    [
+      {
         href: new_investigation_ownership_path(investigation),
-        text: "Change",
-        visuallyHiddenText: " the notification owner"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "the notification owner"
+      }
+    ]
   end
 
   def case_teams_actions(investigation)
-    return {} unless policy(investigation).manage_collaborators?
+    return [] unless policy(investigation).manage_collaborators?
 
-    {
-      items: [
+    [
+      {
         href: investigation_collaborators_path(investigation),
-        text: "Change",
-        visuallyHiddenText: " the teams added"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "the teams added"
+      }
+    ]
   end
 
   def case_restriction_actions(investigation, user)
-    return {} unless policy(investigation).can_unrestrict?(user:)
+    return [] unless policy(investigation).can_unrestrict?(user:)
 
-    {
-      items: [
+    [
+      {
         href: investigation_visibility_path(investigation),
-        text: "Change",
-        visuallyHiddenText: " the notification restriction"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "the notification restriction"
+      }
+    ]
   end
 
   def risk_level_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: investigation_risk_level_path(investigation),
-        text: "Change",
-        visuallyHiddenText: " the risk level"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "the risk level"
+      }
+    ]
   end
 
   def batch_number_actions(investigation_product, user)
@@ -899,14 +867,14 @@ private
   end
 
   def risk_validation_actions(investigation, user)
-    return {} unless policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
+    return [] unless policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_risk_validations_path(investigation.pretty_id),
         text: risk_validated_link_text(investigation)
-      ]
-    }
+      }
+    ]
   end
 
   def status_value(investigation)

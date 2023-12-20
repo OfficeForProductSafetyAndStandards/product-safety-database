@@ -9,12 +9,12 @@
   <% if non_search_cases_page_names.exclude? @page_name %>
     <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
 
-    <%= govukSkipLink(text: "Skip to results", href: "#page-content") %>
+    <%= govuk_skip_link(text: "Skip to results", href: "#page-content") %>
 
     <%= render "investigations/case_status_radios", form: form %>
     <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
 
-    <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details", open: search.uses_expanded_filter_options?) do %>
+    <%= govuk_details(summary_text: "More options", id: "filter-details", open: search.uses_expanded_filter_options?) do %>
       <%= render "investigations/case_owner_radios", form: form %>
       <%= render "investigations/teams_with_access_radios", form: form %>
       <%= render "investigations/case_creator_radios", form: form %>
