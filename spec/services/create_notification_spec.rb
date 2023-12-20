@@ -139,7 +139,6 @@ RSpec.describe CreateNotification, :with_test_queue_adapter do
           "test notification title",
           "notification"
         ).once
-
       end
 
       context "when the product is previously unowned" do
