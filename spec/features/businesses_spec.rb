@@ -9,12 +9,12 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
   before do
     create_list :business, 18, created_at: 4.days.ago
     sign_in(user)
-    visit businesses_path
+    visit all_businesses_path
   end
 
   context "when no keywords are entered" do
     it "shows total number of businesses" do
-      expect(page).to have_content "There are currently #{Business.count} businesses."
+      expect(page).to have_content "There are currently #{Business.without_online_marketplaces.count} businesses."
     end
   end
 
@@ -31,8 +31,8 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
 
-    expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
-    expect(page).to have_link("Next page", href: all_businesses_path(page: 2))
+    expect(page).to have_css(".govuk-pagination__link", text: "1")
+    expect(page).to have_link("Next", href: all_businesses_path(page: 2))
 
     fill_in "Search", with: business_three.trading_name
     click_on "Submit search"
@@ -62,17 +62,6 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
     visit "/businesses/#{business_one.id}"
     within ".psd-case-card" do
       expect(page).to have_css("span", text: "Notification restricted")
-    end
-  end
-
-  context "when over 10k cases exist" do
-    before do
-      allow(Business).to receive(:count).and_return(10_001)
-    end
-
-    it "shows total number of cases" do
-      visit businesses_path
-      expect(page).to have_content "There are currently 10001 businesses."
     end
   end
 end

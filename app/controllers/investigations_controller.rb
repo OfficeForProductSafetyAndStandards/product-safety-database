@@ -15,7 +15,7 @@ class InvestigationsController < ApplicationController
         # Find the most recent incomplete bulk products upload for the current user, if any
         @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
 
-        @answer         = opensearch_for_investigations(20)
+        @pagy, @answer  = pagy_searchkick(opensearch_for_investigations(20, paginate: true))
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
@@ -44,7 +44,8 @@ class InvestigationsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_cases" })
-    @answer         = search_for_investigations(20)
+    @pagy, @answer = search_for_investigations
+    @count = @pagy.count
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
@@ -63,7 +64,8 @@ class InvestigationsController < ApplicationController
         "page_name" => "team_cases"
       }
     )
-    @answer         = search_for_investigations(20)
+    @pagy, @answer = search_for_investigations
+    @count = @pagy.count
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
@@ -76,7 +78,8 @@ class InvestigationsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => @page_name })
-    @answer         = search_for_investigations(20)
+    @pagy, @answer = search_for_investigations
+    @count = @pagy.count
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
@@ -149,7 +152,7 @@ private
   end
 
   def count_to_display
-    default_params ? Investigation.not_deleted.count : @answer.total_count
+    default_params ? Investigation.not_deleted.count : @pagy.count
   end
 
   def default_params

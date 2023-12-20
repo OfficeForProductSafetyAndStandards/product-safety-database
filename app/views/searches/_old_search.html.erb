@@ -11,7 +11,7 @@
         <%= render_sort_by form, @search.sort_by_items(with_relevant_option: true), @search.selected_sort_by, @search.sort_dir %>
       </div>
       <div class="govuk-grid-row">
-        <%= search_result_statement(@search.q, @answer.total_count) %>
+        <%= search_result_statement(@search.q, @count) %>
       </div>
       <% if @investigations.any? %>
         <div class="govuk-grid-row">
@@ -64,7 +64,7 @@
               <% end %>
             </table>
 
-            <%= paginate @answer %>
+            <%= govuk_pagination(pagy: @pagy) %>
           </div>
         </div>
       <% end %>

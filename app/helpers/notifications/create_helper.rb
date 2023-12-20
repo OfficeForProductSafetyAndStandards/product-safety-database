@@ -1,7 +1,5 @@
 module Notifications
   module CreateHelper
-    include Pagy::Frontend
-
     def sections_complete
       tasks_status = @notification.tasks_status
       Notifications::CreateController::TASK_LIST_SECTIONS.map { |_section, tasks|

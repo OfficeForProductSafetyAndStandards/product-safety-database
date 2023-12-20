@@ -15,7 +15,7 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
 
     scenario "does not display pagination on the product list" do
       visit products_path
-      expect(page).not_to have_css("nav.opss-pagination-link")
+      expect(page).not_to have_css(".govuk-pagination__link")
     end
 
     scenario "does not display a table footer on the product list" do
@@ -31,7 +31,7 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
     end
 
     scenario "lists products according to search relevance" do
-      visit products_path
+      visit all_products_path
 
       within "#item-0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
@@ -52,8 +52,8 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
 
       expect(page).to have_css("tfoot")
 
-      expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
-      expect(page).to have_link("Next page", href: all_products_path(page: 2))
+      expect(page).to have_css(".govuk-pagination__link", text: "1")
+      expect(page).to have_link("Next", href: all_products_path(page: 2))
 
       fill_in "Search", with: iphone.name
       click_on "Submit search"

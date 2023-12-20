@@ -24,17 +24,17 @@ class PrismRiskAssessmentsController < ApplicationController
         .or(PrismRiskAssessment.where("products_prism_associated_investigation_products.name ILIKE ?", "%#{@search.q}%"))
     end
 
-    @submitted_prism_risk_assessments = @submitted_prism_risk_assessments.order(sorting_params).page(params[:submitted_page]).per(20)
-    @count = @submitted_prism_risk_assessments.total_count
+    @submitted_pagy, @submitted_prism_risk_assessments = pagy(@submitted_prism_risk_assessments.order(sorting_params), page_param: :submitted_page)
+    @count = @submitted_pagy.count
     @page_name = "all_prism_risk_assessments"
   end
 
   def your_prism_risk_assessments
     authorize PrismRiskAssessment, :index?
 
-    @draft_prism_risk_assessments = PrismRiskAssessment.for_user(current_user).draft.order(sorting_params).page(params[:draft_page]).per(20)
-    @submitted_prism_risk_assessments = PrismRiskAssessment.for_user(current_user).submitted.order(sorting_params).page(params[:submitted_page]).per(20)
-    @count = @draft_prism_risk_assessments.total_count + @submitted_prism_risk_assessments.total_count
+    @draft_pagy, @draft_prism_risk_assessments = pagy(PrismRiskAssessment.for_user(current_user).draft.order(sorting_params), page_param: :draft_page)
+    @submitted_pagy, @submitted_prism_risk_assessments = pagy(PrismRiskAssessment.for_user(current_user).submitted.order(sorting_params), page_param: :submitted_page)
+    @count = @draft_pagy.count + @submitted_pagy.count
     @page_name = "your_prism_risk_assessments"
 
     render "prism_risk_assessments/index"
@@ -43,8 +43,8 @@ class PrismRiskAssessmentsController < ApplicationController
   def team_prism_risk_assessments
     authorize PrismRiskAssessment, :index?
 
-    @submitted_prism_risk_assessments = PrismRiskAssessment.for_team(current_user.team).submitted.order(sorting_params).page(params[:submitted_page]).per(20)
-    @count = @submitted_prism_risk_assessments.total_count
+    @submitted_pagy, @submitted_prism_risk_assessments = pagy(PrismRiskAssessment.for_team(current_user.team).submitted.order(sorting_params), page_param: :submitted_page)
+    @count = @submitted_pagy.count
     @page_name = "team_prism_risk_assessments"
 
     render "prism_risk_assessments/index"

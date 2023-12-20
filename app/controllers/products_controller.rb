@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
   def index
     # Find the most recent incomplete bulk products upload for the current user, if any
     @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
-    @results = search_for_products(20)
+    @pagy, @results = search_for_products
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "all_products"
@@ -90,8 +90,8 @@ class ProductsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_products" })
-    @results = search_for_products(20)
-    @count = @results.length
+    @pagy, @results = search_for_products
+    @count = @pagy.count
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "your_products"
 
@@ -104,8 +104,8 @@ class ProductsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_products" })
-    @results = search_for_products(20)
-    @count = @results.length
+    @pagy, @results = search_for_products
+    @count = @pagy.count
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "team_products"
 
@@ -163,6 +163,6 @@ private
   end
 
   def count_to_display
-    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @results.total_count
+    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @pagy.count
   end
 end

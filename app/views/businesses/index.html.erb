@@ -33,14 +33,14 @@
               </div>
             </div>
           </div>
-          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@results.total_count && @results.total_count > 11) %>
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@count > 11) %>
         </div>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
             <%= render "search_statement", count: @count, keywords: params[:q] %>
           </div>
         </div>
-      <% elsif (@results.total_count && @results.total_count > 11) %>
+      <% elsif (@count > 11) %>
         <div class="govuk-grid-row">
           <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third opss-float-right-desktop" %>
         </div>
@@ -50,7 +50,7 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full" role="region" aria-label="Businesses">
             <%= render "table", businesses: @businesses %>
-            <%= paginate @businesses.object %>
+            <%= govuk_pagination(pagy: @pagy) %>
           </div>
         </div>
       <% elsif ["team_businesses", "your_businesses"].include?(@page_name) %>
