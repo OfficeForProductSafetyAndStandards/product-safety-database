@@ -134,7 +134,8 @@
           <% end %>
           <% %i[success information warning].each do |key| %>
             <% if flash[key] %>
-              <%= govukNotificationBanner text: flash[key], type: key %>
+              <% title = key.to_s.gsub("information", "important") %>
+              <%= govuk_notification_banner(title_text: title.titlecase, text: flash[key], success: (key == :success)) %>
             <% end %>
           <% end %>
           <%= content %>

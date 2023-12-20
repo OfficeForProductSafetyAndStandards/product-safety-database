@@ -6,27 +6,19 @@
   </div>
 </div>
 
-<%= govukTabs(
-  items: [
-    {
-      id: "full-detail",
-      label: "Full detail",
-      panel: { html: render("businesses/tabs/details") }
-    },
-    {
-      id: "locations",
-      label: "Locations (#{@business.locations.count})",
-      panel: { html: render("businesses/tabs/locations") }
-    },
-    {
-      id: "contacts",
-      label: "Contacts (#{@business.contacts.count})",
-      panel: { html: render("businesses/tabs/contacts") }
-    },
-    {
-      id: "cases",
-      label: "Notifications",
-      panel: { html: render("businesses/tabs/cases") }
-    }
-  ]
-) %>
+<%=
+  govuk_tabs(title: "Business details") do |tabs|
+    tabs.with_tab(label: "Full detail") do
+      render("businesses/tabs/details")
+    end
+    tabs.with_tab(label: "Locations (#{@business.locations.count})") do
+      render("businesses/tabs/locations")
+    end
+    tabs.with_tab(label: "Contacts (#{@business.contacts.count})") do
+      render("businesses/tabs/contacts")
+    end
+    tabs.with_tab(label: "Notifications") do
+      render("businesses/tabs/cases")
+    end
+  end
+%>

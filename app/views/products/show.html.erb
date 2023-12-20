@@ -66,26 +66,18 @@
 
     <h4 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-visually-hidden">Product details</h4>
 
-    <%= @product.summary_list %>
+    <%= @product.details_list %>
 
-    <%= govukAccordion id: "product-accordion", classes: "govuk-!-margin-top-9 opss-accordion--sm-all", items: [
-      {
-        heading: {
-          html: "Images <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.virus_free_images.size })</span>".html_safe
-        },
-        content: {
-          html: render("images", product: @product)
-        }
-      },
-      {
-        heading: {
-          html: "<span class=\"govuk-visually-hidden\">Related</span> Notifications <span class=\"govuk-!-font-weight-regular govuk-!-font-size-19\">(#{ @product.unique_investigation_products.size })</span>".html_safe
-        },
-        content: {
-          html: render("cases", product: @product)
-        }
-      }
-    ] %>
+    <%=
+      govuk_accordion do |accordion|
+        accordion.with_section(heading_text: "Images (#{@product.virus_free_images.size})") do
+          render("images", product: @product)
+        end
+        accordion.with_section(heading_text: "Notifications (#{@product.unique_investigation_products.size})") do
+          render("cases", product: @product)
+        end
+      end
+    %>
 
     <% unless @product.retired? %>
       <% if @product.owning_team.nil? %>

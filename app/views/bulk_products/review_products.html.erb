@@ -1,7 +1,7 @@
 <% page_heading = "Review details of the products you are uploading - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_review_products_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: resolve_duplicate_products_bulk_upload_products_path) %>
+  <%= govuk_back_link(href: resolve_duplicate_products_bulk_upload_products_path) %>
 <% end %>
 <%= form_with model: @bulk_products_review_products_form, url: review_products_bulk_upload_products_path(barcodes: params[:barcodes], product_ids: params[:product_ids]), html: { novalidate: true }, method: :put, local: true, multipart: true do |form| %>
   <div class="govuk-grid-row">

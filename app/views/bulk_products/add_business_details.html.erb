@@ -1,7 +1,7 @@
 <% page_heading = "Provide the business details - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_add_business_details_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: create_business_bulk_upload_products_path) %>
+  <%= govuk_back_link(href: create_business_bulk_upload_products_path) %>
 <% end %>
 <%= form_with model: @bulk_products_add_business_details_form, url: add_business_details_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">

@@ -14,7 +14,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
 
     scenario "the user can view a live product" do
       visit product_path(live_product)
-      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference number for this product record")
+      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The <abbr>PSD</abbr> reference number for this product record")
       expect(page.find("dt", text: "Product record owner")).to have_sibling("dd", text: owning_team.name)
       expect(page).not_to have_content("This product record has been retired and can no longer be added to notifications")
       expect(page).to have_content "This product record is currently owned by #{owning_team.name}."
@@ -28,7 +28,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
 
     scenario "the user can view a retired product" do
       visit product_path(retired_product)
-      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{retired_product.id} - The PSD reference number for this product record")
+      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{retired_product.id} - The <abbr>PSD</abbr> reference number for this product record")
       expect(page).not_to have_css("dt", text: "Product record owner")
       expect(page).to have_content("This product record has been retired and can no longer be added to notifications")
       expect(page).not_to have_content "This product record is currently owned by #{Team.find(live_product.owning_team_id).name}."
@@ -48,7 +48,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
 
     scenario "the user can view a live product" do
       visit product_path(live_product)
-      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The PSD reference number for this product record")
+      expect(page).to have_summary_item(key: "PSD ref", value: "psd-#{live_product.id} - The <abbr>PSD</abbr> reference number for this product record")
     end
 
     scenario "the user can view a live product's owner" do

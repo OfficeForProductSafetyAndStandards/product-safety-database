@@ -1,7 +1,6 @@
 <%= render('investigations/actions', investigation: @investigation) unless @investigation.is_closed? %>
 <%= render('investigations/actions', investigation: @investigation) if @investigation.is_closed? && current_user.is_superuser?  %>
 
-
 <% team_list_html = capture do %>
   <% if @investigation.teams_with_access.length > 1 %>
     <ul class="govuk-list govuk-list--bullet">
@@ -16,9 +15,8 @@
   <% end %>
 <% end %>
 
-<%= govukSummaryList(
-      classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
-      rows: case_rows(@investigation, current_user, team_list_html)
+<%= govuk_summary_list(
+    rows: case_rows(@investigation, current_user, team_list_html)
 ) %>
 
 <h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">

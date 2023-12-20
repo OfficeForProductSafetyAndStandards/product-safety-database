@@ -6,18 +6,15 @@
     <p class="govuk-body opss-secondary-text">
       Search all product records in the Product Safety Database (<%= psd_abbr %>).
     </p>
-    <%= govukDetails(summaryText: "Help with the products search", classes: "opss-details--sm") do %>
-      <p class="govuk-body-s">
+    <%= govuk_details(summary_text: "Help with the products search") do %>
+      <p class="govuk-body">
         <span id="search-hint">You can search for one or more products by using the keywords that describe them or use a single <%= psd_abbr title: false %> reference number to find a specific product record.</span> You can also sort the ordering of the search results.
       </p>
-      <p class="govuk-body-s govuk-!-margin-bottom-1">
+      <p class="govuk-body">
         You can filter the results by product category.
         <% if policy(Product).can_view_retired_products? %>
           As an OPSS user you can also include 'retired' product records in your search. (These are records which are no longer active and are now considered less relevant).
         <% end %>
-      </p>
-      <p class="govuk-body-s govuk-visually-hidden">
-        Search results appear within the following <code>form</code> and within the <code>role = region</code>.
       </p>
     <% end %>
   </div>

@@ -629,25 +629,6 @@ div[class$="inset-text"] > ol li:last-child {
   border-width: 1px;
 }
 
-.opss-details--sm {
-  @include govuk-media-query($from: desktop) {
-    summary {
-      @include opss-font-size($s: 16px, $l: 1.25);
-      padding-left: govuk-spacing(3);
-
-      &:before {
-        border-width: 5px 0 7px 9px;
-      }
-    }
-
-    &[open] > summary:before {
-      border-width: 10px 6px 0 !important;
-    }
-
-    margin-bottom: govuk-spacing(2);
-  }
-}
-
 .opss-details--plain {
   & > div {
     padding: govuk-spacing(3) 0;

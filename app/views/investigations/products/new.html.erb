@@ -11,18 +11,15 @@
       </div>
     </div>
     <div class="govuk-grid-column-two-thirds">
-      <%= govukDetails(
-        classes: "govuk-!-margin-bottom-9 opss-details--sm",
-        summaryText: "Help with adding a product to the notification"
-      ) do %>
-        <p class="govuk-body-s">
+      <%= govuk_details(summary_text: "Help with adding a product to the notification") do %>
+        <p class="govuk-body">
           Use the Products area to find a product and its product record reference number. For example, psd-301.
         </p>
-        <p class="govuk-body-s">
+        <p class="govuk-body">
           Search for the product in the <%= link_to "Products area (opens in a new tab)", your_products_path, class: "govuk-link govuk-link--no-visited-state", rel: "noreferrer noopener", target: "_blank" %>
         </p>
-        <p class="govuk-body-s">
-        Using an existing <%= psd_abbr title: false %> product record to add to your notification avoids the need to create a new one and highlights other notifications investigating the same product. After checking that the product does not already exist within the <%= psd_abbr title: false %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr title: false %> reference number to add it to your notification.
+        <p class="govuk-body">
+          Using an existing <%= psd_abbr title: false %> product record to add to your notification avoids the need to create a new one and highlights other notifications investigating the same product. After checking that the product does not already exist within the <%= psd_abbr title: false %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr title: false %> reference number to add it to your notification.
         </p>
       <% end %>
       <%= form.govuk_input(:reference, prefix: { text: "psd-" }, classes: "govuk-input--width-5", spellcheck: false, describedBy: "add-product-hint") %>
