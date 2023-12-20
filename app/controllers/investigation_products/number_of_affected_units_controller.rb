@@ -17,7 +17,7 @@ module InvestigationProducts
                                                  investigation_product: @investigation_product,
                                                  user: current_user)
 
-      redirect_to investigation_path(@investigation_product.investigation, anchor: "case_units_affected_#{@investigation_product.id}"), flash: result.changed ? { success: "The case information was updated" } : nil
+      redirect_to investigation_path(@investigation_product.investigation, anchor: "case_units_affected_#{@investigation_product.id}"), flash: result.changed ? { success: "The notification information was updated" } : nil
     end
 
   private

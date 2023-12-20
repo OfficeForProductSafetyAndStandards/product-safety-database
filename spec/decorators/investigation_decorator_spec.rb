@@ -121,7 +121,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   describe "#pretty_description" do
     it {
       expect(decorated_investigation.pretty_description)
-        .to eq("Case: #{investigation.pretty_id}")
+        .to eq("Notification: #{investigation.pretty_id}")
     }
   end
 
@@ -166,7 +166,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     end
 
     def expect_to_display_protect_details_message
-      expect(source_details_summary_list).to summarise("Contact details", text: /Only teams added to the case can view allegation contact details/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /Only teams added to the notification can view allegation contact details/)
     end
   end
 
@@ -238,7 +238,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     context "with restricted case" do
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
 
-      it { expect(case_title_key).to eq("Case restricted") }
+      it { expect(case_title_key).to eq("Notification restricted") }
     end
 
     context "with restricted case as a super user" do

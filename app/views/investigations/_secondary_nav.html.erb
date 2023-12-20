@@ -5,7 +5,7 @@
     <% else %>
       <li>
     <% end %>
-        <%= link_to "Your cases", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_cases") %>
+        <%= link_to "Your notifications", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_cases") %>
       </li>
 
     <% if @page_name == "team_cases" %>
@@ -13,7 +13,7 @@
     <% else %>
       <li>
     <% end %>
-        <%= link_to "Team cases", team_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_cases") %>
+        <%= link_to "Team notifications", team_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_cases") %>
       </li>
 
     <% if @page_name == "assigned_cases" %>
@@ -21,7 +21,7 @@
     <% else %>
       <li>
     <% end %>
-        <%= link_to "Assigned cases", assigned_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "assigned_cases") %>
+        <%= link_to "Assigned notifications", assigned_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "assigned_cases") %>
       </li>
 
     <% unless non_search_cases_page_names.include? @page_name %>
@@ -30,9 +30,9 @@
       <li>
     <% end %>
         <% if current_user.can_access_new_search? %>
-          <%= link_to "All cases – Search", notifications_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
+          <%= link_to "All notifications – Search", notifications_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
         <% else %>
-          <%= link_to "All cases – Search", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
+          <%= link_to "All notifications – Search", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
         <% end %>
       </li>
   </ul>

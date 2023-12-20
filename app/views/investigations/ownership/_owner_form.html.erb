@@ -15,7 +15,7 @@
   <% items = add_your_team_values([], investigation, someone_else_in_your_team_dropdown) %>
 
   <% unless @other_teams_added_to_case.empty? %>
-    <% items << { divider: "Other teams added to the case" } %>
+    <% items << { divider: "Other teams added to the notification" } %>
     <%
       teams = @other_teams_added_to_case.each do |team|
         items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }

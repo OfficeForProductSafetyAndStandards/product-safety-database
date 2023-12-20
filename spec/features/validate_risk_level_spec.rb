@@ -35,19 +35,19 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-      within_fieldset("Has the case risk level been validated?") do
+      within_fieldset("Has the notification risk level been validated?") do
         choose "Yes"
       end
 
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-      expect_confirmation_banner("The case risk level has updated")
+      expect_confirmation_banner("The notification risk level has updated")
       expect(page).to have_css(".govuk-summary-list__value", text: "Validated by #{user.team.name} on #{investigation.risk_validated_at}")
       expect(page).not_to have_link("Validate")
 
       click_on "Activity"
-      expect(page).to have_content "The case risk level has updated"
+      expect(page).to have_content "The notification risk level has updated"
 
       expect_email_with_correct_details_to_be_set("has been validated")
     end
@@ -59,25 +59,25 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-      within_fieldset("Has the case risk level been validated?") do
+      within_fieldset("Has the notification risk level been validated?") do
         choose "No"
       end
 
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-      expect(page).not_to have_content("The case risk level has updated")
+      expect(page).not_to have_content("The notification risk level has updated")
       expect(page).not_to have_content("Validated by #{user.team.name} on #{investigation.risk_validated_at}")
       expect(page).to have_link("Validate")
 
       click_on "Activity"
-      expect(page).not_to have_content "The case risk level has updated"
+      expect(page).not_to have_content "The notification risk level has updated"
     end
 
     scenario "remove validation" do
       visit("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-      within_fieldset("Has the case risk level been validated?") do
+      within_fieldset("Has the notification risk level been validated?") do
         choose "Yes"
       end
 
@@ -90,7 +90,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       validation_link.click
 
-      within_fieldset("Has the case risk level been validated?") do
+      within_fieldset("Has the notification risk level been validated?") do
         choose "No"
       end
 
@@ -98,7 +98,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       expect(page).to have_content("Enter details")
 
-      within_fieldset("Has the case risk level been validated?") do
+      within_fieldset("Has the notification risk level been validated?") do
         choose "No"
         fill_in "Further details", with: "Mistake made by team member"
       end
@@ -106,12 +106,12 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-      expect(page).not_to have_content("The case risk level has updated")
+      expect(page).not_to have_content("The notification risk level has updated")
       expect(page).not_to have_content("Validated by #{user.team.name} on #{investigation.risk_validated_at}")
       expect(page).to have_link("Validate")
 
       click_on "Activity"
-      expect(page).to have_css(".govuk-heading-s", text: "Case risk level validation removed")
+      expect(page).to have_css(".govuk-heading-s", text: "Notification risk level validation removed")
       expect(page).to have_css("p", text: "Mistake made by team member")
 
       expect_email_with_correct_details_to_be_set("has had validation removed")
@@ -125,7 +125,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
       expect(delivered_email.personalization).to include(
         name: creator_user.team.name,
         case_title: investigation.user_title,
-        case_type: "case",
+        case_type: "notification",
         case_id: investigation.pretty_id,
         updater_name: user.name,
         updater_team_name: user.team.name,

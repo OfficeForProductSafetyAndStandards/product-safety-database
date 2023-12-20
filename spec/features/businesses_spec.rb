@@ -61,7 +61,7 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
     investigation.update!(is_private: true)
     visit "/businesses/#{business_one.id}"
     within ".psd-case-card" do
-      expect(page).to have_css("span", text: "Case restricted")
+      expect(page).to have_css("span", text: "Notification restricted")
     end
   end
 end

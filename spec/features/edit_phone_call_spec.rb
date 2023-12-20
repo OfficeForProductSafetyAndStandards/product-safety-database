@@ -11,7 +11,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_antivirus, :with
     visit "/cases/#{investigation.pretty_id}/phone-calls/#{correspondence.id}"
 
     click_on "Edit phone call"
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
     expect(page).to have_title("Edit phone call: #{correspondence.title}")
 
     # Test update without changing anything
@@ -24,7 +24,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_antivirus, :with
     visit "/cases/#{investigation.pretty_id}/phone-calls/#{correspondence.id}"
 
     click_on "Edit phone call"
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     within_fieldset("Who was the call with?") do
       expect(page).to have_field("Name",         with: correspondence.correspondent_name)

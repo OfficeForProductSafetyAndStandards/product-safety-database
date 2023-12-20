@@ -22,7 +22,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/[\d-]+$/)
     end
-    expect(page).to have_selector("h1", text: "Case")
+    expect(page).to have_selector("h1", text: "Notification")
   end
 
   def expect_to_be_on_investigation_businesses_page
@@ -53,11 +53,11 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new#{image_upload_id.present? ? '?image_upload_id[]=' + image_upload_id.to_s : ''}")
     # rubocop:enable Style/StringConcatenation
     expect(page).to have_selector("h1", text: "Add an image")
-    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Cases")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
-  def expect_to_have_case_breadcrumbs
-    expect(page).to have_breadcrumb("Cases")
+  def expect_to_have_notification_breadcrumbs
+    expect(page).to have_breadcrumb("Notifications")
     expect(page).to have_breadcrumb(investigation.pretty_id)
   end
 
@@ -77,7 +77,7 @@ module PageExpectations
 
   def expect_to_view_supporting_information_sections(can_view_protected_details:)
     within("section#correspondence") do
-      phone_call_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
+      phone_call_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the notification can view correspondence"
       expect(page).to have_css(".govuk-summary-list__key", text: "Type")
       expect(page).to have_css(".govuk-summary-list__value", text: "Telephone")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
@@ -87,7 +87,7 @@ module PageExpectations
       expect(page).to have_css(".govuk-summary-list__key", text: "Added")
       expect(page).to have_css(".govuk-summary-list__value", text: phone_call.date_added)
 
-      meeting_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
+      meeting_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the notification can view correspondence"
       expect(page).to have_css(".govuk-summary-list__key", text: "Type")
       expect(page).to have_css(".govuk-summary-list__value", text: "Meeting")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
@@ -97,7 +97,7 @@ module PageExpectations
       expect(page).to have_css(".govuk-summary-list__key", text: "Added")
       expect(page).to have_css(".govuk-summary-list__value", text: meeting.date_added)
 
-      email_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the case can view correspondence"
+      email_title = can_view_protected_details ? phone_call.supporting_information_title : "Only teams added to the notification can view correspondence"
       expect(page).to have_css(".govuk-summary-list__key", text: "Type")
       expect(page).to have_css(".govuk-summary-list__value", text: "Email")
       expect(page).to have_css(".govuk-summary-list__key", text: "Title")
@@ -197,12 +197,12 @@ module PageExpectations
 
   def expect_to_be_on_teams_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/teams")
-    expect(page).to have_selector("h1", text: "Teams added to the case")
+    expect(page).to have_selector("h1", text: "Teams added to the notification")
   end
 
   def expect_to_be_on_add_team_to_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/teams/add")
-    expect(page).to have_selector("h1", text: "Add a team to the case")
+    expect(page).to have_selector("h1", text: "Add a team to the notification")
   end
 
   def expect_to_be_on_supporting_information_page(case_id:)
@@ -211,17 +211,17 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_attachment_to_a_case_page
-    expect(page).to have_content "Image files will be saved to the case images page."
+    expect(page).to have_content "Image files will be saved to the notification images page."
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
     expect(page).to have_h1("Add attachment")
-    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Cases")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
   def expect_to_be_on_add_image_to_a_case_page
-    expect(page).to have_content "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the case."
+    expect(page).to have_content "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the notification."
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new")
     expect(page).to have_h1("Add an image")
-    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Cases")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
   def expect_to_be_on_case_actions_page(case_id:)
@@ -231,22 +231,22 @@ module PageExpectations
 
   def expect_to_be_on_close_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/status/close")
-    expect(page).to have_h1("Why are you closing the case?")
+    expect(page).to have_h1("Why are you closing the notification?")
   end
 
   def expect_to_be_on_cannot_close_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/cannot_close")
-    expect(page).to have_h1("A product has not been added to this case")
+    expect(page).to have_h1("A product has not been added to this notification")
   end
 
   def expect_to_be_on_confirm_case_deletion_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/confirm_deletion")
-    expect(page).to have_h1("Delete the case")
+    expect(page).to have_h1("Delete the notification")
   end
 
   def expect_to_be_on_reopen_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/status/reopen")
-    expect(page).to have_h1("Why are you re-opening the case?")
+    expect(page).to have_h1("Why are you re-opening the notification?")
   end
 
   def expect_to_be_on_add_correspondence_page
@@ -272,12 +272,12 @@ module PageExpectations
 
   def expect_to_be_on_case_created_page
     expect(page).to have_current_path(/\/cases\/([\d-]+)\/created/)
-    expect(page).to have_selector("h1", text: "Case created")
+    expect(page).to have_selector("h1", text: "Notification created")
     expect(page).to have_text(/Case ID: ([\d-]+)/)
   end
 
   def expect_to_be_on_new_comment_page
-    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Cases")
+    expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
     expect_page_to_have_h1("Add comment")
   end
 
@@ -287,18 +287,18 @@ module PageExpectations
 
   def expect_to_be_on_about_alerts_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/alerts/about")
-    expect(page).to have_h1("You cannot send an alert about a restricted case")
+    expect(page).to have_h1("You cannot send an alert about a restricted notification")
   end
 
   def expect_to_be_on_case_visiblity_page(case_id:, status:, action:)
     expect(page).to have_current_path("/cases/#{case_id}/visibility")
-    expect(page).to have_h1("#{action.capitalize} case")
-    expect(page).to have_content("This case is currently #{status}.")
+    expect(page).to have_h1("#{action.capitalize} notification")
+    expect(page).to have_content("This notification is currently #{status}.")
   end
 
   def expect_to_be_on_change_case_visiblity_page(case_id:, future_status:, action:)
     expect(page).to have_current_path("/cases/#{case_id}/visibility/#{action}")
-    expect(page).to have_css(".govuk-label--l", text: "Why is the case being #{future_status}?")
+    expect(page).to have_css(".govuk-label--l", text: "Why is the notification being #{future_status}?")
   end
 
   def expect_to_be_on_record_test_result_opss_funding_decision_page(case_id:)
@@ -597,7 +597,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_attachment_to_a_business_page(business_id:)
-    expect(page).not_to have_content "Image files will be saved to the case images page."
+    expect(page).not_to have_content "Image files will be saved to the notification images page."
     expect(page).not_to have_content "Image files will be saved to the product images"
     expect(page).to have_current_path("/businesses/#{business_id}/documents/new")
     expect(page).to have_h1("Add attachment")
@@ -620,7 +620,7 @@ module PageExpectations
   end
 
   def expect_teams_tables_to_contain(expected_teams)
-    teams_table = page.find(:table, "Teams added to the case")
+    teams_table = page.find(:table, "Teams added to the notification")
 
     within(teams_table) do
       expected_teams.each do |expected_team|
@@ -628,14 +628,14 @@ module PageExpectations
         expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
 
         if expected_team[:creator]
-          expect(row_heading).to have_text("Case creator")
+          expect(row_heading).to have_text("Notification creator")
         end
       end
     end
   end
 
   def expect_teams_tables_not_to_contain(teams)
-    teams_table = page.find(:table, "Teams added to the case")
+    teams_table = page.find(:table, "Teams added to the notification")
 
     within(teams_table) do
       teams.each do |expected_team|
@@ -675,12 +675,12 @@ module PageExpectations
 
   def expect_to_be_on_set_risk_level_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/edit-risk-level")
-    expect_page_to_have_h1("Set case risk level")
+    expect_page_to_have_h1("Set notification risk level")
   end
 
   def expect_to_be_on_change_risk_level_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/edit-risk-level")
-    expect_page_to_have_h1("Change case risk level")
+    expect_page_to_have_h1("Change notification risk level")
   end
 
   def expect_to_be_on_add_risk_assessment_for_a_case_page(case_id:)
@@ -706,7 +706,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+\/update-case-risk-level/)
     end
-    expect_page_to_have_h1("Do you want to match this case risk level to the risk assessment level?")
+    expect_page_to_have_h1("Do you want to match this notification risk level to the risk assessment level?")
   end
 
   def expect_to_be_on_case_summary_edit_page(case_id:)

@@ -54,8 +54,8 @@ private
         investigation.pretty_id,
         entity.name,
         entity.email,
-        "#{user.name} (#{user.team.name}) edited safety and compliance data on the case.",
-        "Safety and compliance data edited for Case"
+        "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
+        "Safety and compliance data edited for notification"
       ).deliver_later
     end
   end

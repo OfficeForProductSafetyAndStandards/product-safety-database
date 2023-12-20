@@ -22,19 +22,19 @@
 
       <% if @investigations.any? %>
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full" role="region" aria-label="Cases">
+          <div class="govuk-grid-column-full" role="region" aria-label="Notifications">
             <table class="govuk-table opss-table-items opss-table-items--sm">
               <caption class="govuk-visually-hidden">
-                Cases data: 5 columns with each case described across rows within each table body.
+                Notifications data: 5 columns with each notification described across rows within each table body.
               </caption>
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th class="govuk-visually-hidden">&nbsp;</th>
-                  <th id="case" scope="col" class="govuk-table__header">Case number</th>
+                  <th id="case" scope="col" class="govuk-table__header">Notification number</th>
                   <% if non_search_cases_page_names.include? @page_name %>
-                    <th id="casecreated" scope="col" class="govuk-table__header">Case created</th>
+                    <th id="casecreated" scope="col" class="govuk-table__header">Notification created</th>
                   <% else %>
-                    <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
+                    <th id="caseowner" scope="col" class="govuk-table__header">Notification owner</th>
                   <% end %>
 
                   <% if @page_name == "assigned_cases" %>
@@ -63,8 +63,8 @@
                 <tfoot class="govuk-table__head">
                   <tr class="govuk-table__row">
                     <th class="govuk-visually-hidden">&nbsp;</th>
-                    <th scope="col" class="govuk-table__header">Case number</th>
-                    <th scope="col" class="govuk-table__header">Case <%= non_search_cases_page_names.include?(@page_name) ? "created" : "owner" %></th>
+                    <th scope="col" class="govuk-table__header">Notification number</th>
+                    <th scope="col" class="govuk-table__header">Notification <%= non_search_cases_page_names.include?(@page_name) ? "created" : "owner" %></th>
 
                     <% if @page_name == "assigned_cases" %>
                       <th scope="col" class="govuk-table__header">Assigner</th>

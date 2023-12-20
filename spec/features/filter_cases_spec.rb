@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:other_organisation) { create(:organisation) }
 
   let(:organisation)          { create(:organisation) }
@@ -44,7 +44,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     visit all_cases_investigations_path
   end
 
-  scenario "no filters applied shows all open cases but does not show closed or deleted cases" do
+  scenario "no filters applied shows all open notifications but does not show closed or deleted notifications" do
     expect(page).to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
@@ -53,17 +53,17 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).not_to have_listed_case(deleted_investigation.pretty_id)
     expect(page).not_to have_listed_case(closed_investigation.pretty_id)
     number_of_open_cases = Investigation.not_deleted.where(is_closed: false).count
-    expect(page).to have_content("#{number_of_open_cases} cases using the current filters, were found.")
+    expect(page).to have_content("#{number_of_open_cases} notifications using the current filters, were found.")
 
     expect(find("details#filter-details")["open"]).to eq(nil)
 
     find("details#filter-details").click
-    within_fieldset "Case status" do
+    within_fieldset "Notification status" do
       expect(page).to have_checked_field("Open")
       expect(page).to have_unchecked_field("Closed")
     end
 
-    expect(page).to have_content("#{number_of_open_cases} cases using the current filters, were found.")
+    expect(page).to have_content("#{number_of_open_cases} notifications using the current filters, were found.")
 
     within "#sort-by-fieldset" do
       expect(page).to have_select("Sort the results by", selected: "Recent updates")
@@ -71,7 +71,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
   end
 
-  context "when there are multiple pages of cases" do
+  context "when there are multiple pages of notifications" do
     before do
       20.times { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
       Investigation.reindex
@@ -89,15 +89,15 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     end
   end
 
-  describe "Case priority" do
-    scenario "filtering by serious and high risk-level cases only" do
+  describe "notification priority" do
+    scenario "filtering by serious and high risk-level notifications only" do
       choose "Serious and high risk"
       click_on "Apply"
       expect(page).to have_checked_field("Serious and high risk")
 
       expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
       expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
-      expect(page).to have_css(".opss-tag--risk1", text: "High risk case")
+      expect(page).to have_css(".opss-tag--risk1", text: "High risk notification")
 
       expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
       expect(page).not_to have_listed_case(investigation.pretty_id)
@@ -108,9 +108,9 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       expect(find("details#filter-details")["open"]).to eq(nil)
     end
 
-    describe "Case status" do
-      scenario "filtering for both open and closed cases" do
-        within_fieldset("Case status") { choose "All" }
+    describe "notification status" do
+      scenario "filtering for both open and closed notification" do
+        within_fieldset("Notification status") { choose "All" }
         click_button "Apply"
 
         expect(page).to have_listed_case(investigation.pretty_id)
@@ -119,8 +119,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(find("details#filter-details")["open"]).to eq(nil)
       end
 
-      scenario "filtering only closed cases" do
-        within_fieldset "Case status" do
+      scenario "filtering only closed notifications" do
+        within_fieldset "Notification status" do
           choose "Closed"
         end
         click_button "Apply"
@@ -138,8 +138,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       find("details#filter-details").click
     end
 
-    scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
-      within_fieldset("Case owner") do
+    scenario "selecting filters only shows other active users and teams in the notification owner and created by filters" do
+      within_fieldset("Notification owner") do
         expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
         expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
       end
@@ -150,9 +150,9 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
     end
 
-    describe "Case owner" do
-      scenario "filtering cases where the user is the owner" do
-        within_fieldset("Case owner") { choose "Me" }
+    describe "Notification owner" do
+      scenario "filtering notifications where the user is the owner" do
+        within_fieldset("Notification owner") { choose "Me" }
         click_button "Apply"
 
         expect(page).to have_listed_case(investigation.pretty_id)
@@ -163,8 +163,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering cases where the user's team is the owner" do
-        within_fieldset("Case owner") { choose "Me and my team" }
+      scenario "filtering notifications where the user's team is the owner" do
+        within_fieldset("Notification owner") { choose "Me and my team" }
         click_button "Apply"
 
         expect(page).to have_listed_case(investigation.pretty_id)
@@ -175,7 +175,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering cases where the owner is someone else" do
+      scenario "filtering notifications where the owner is someone else" do
         choose "Others", id: "case_owner_others"
         click_button "Apply"
         expect(page).not_to have_listed_case(investigation.pretty_id)
@@ -186,8 +186,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering cases where another person or team is the owner" do
-        within_fieldset("Case owner") do
+      scenario "filtering notifications where another person or team is the owner" do
+        within_fieldset("Notification owner") do
           choose "Others", id: "case_owner_others"
           select other_team.name, from: "case_owner_is_someone_else_id"
         end
@@ -213,7 +213,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
     end
 
-    describe "Teams added to cases", :with_stubbed_mailer do
+    describe "Teams added to notifications", :with_stubbed_mailer do
       before do
         AddTeamToCase.call!(
           investigation: other_user_other_team_investigation,
@@ -223,11 +223,11 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         )
       end
 
-      context "when filtering case where my team has access" do
+      context "when filtering notifications where my team has access" do
         let(:chosen_team) { team }
 
-        scenario "filtering cases having a given team a collaborator" do
-          within_fieldset("Teams added to cases") { choose "My team" }
+        scenario "filtering notifications having a given team a collaborator" do
+          within_fieldset("Teams added to notifications") { choose "My team" }
           click_button "Apply"
 
           expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
@@ -239,11 +239,11 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         end
       end
 
-      context "when filtering case where another team has access" do
+      context "when filtering notifications where another team has access" do
         let(:chosen_team) { other_team }
 
-        scenario "filters the cases by other team with access" do
-          within_fieldset("Teams added to cases") do
+        scenario "filters the notifications by other team with access" do
+          within_fieldset("Teams added to notifications") do
             choose "Others"
             select other_team.name, from: "Team name"
           end
@@ -255,13 +255,13 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
           expect(find("details#filter-details")["open"]).to eq("open")
 
-          within_fieldset("Teams added to cases") do
+          within_fieldset("Teams added to notifications") do
             expect(page).to have_checked_field("Other")
             expect(page).to have_select("Team name", with_options: [other_team.name])
           end
 
-          within_fieldset("Teams added to cases") { choose "All" }
-          within_fieldset("Case owner")           { choose "Me and my team" }
+          within_fieldset("Teams added to notifications") { choose "All" }
+          within_fieldset("Notification owner")           { choose "Me and my team" }
           click_button "Apply"
 
           expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
@@ -277,7 +277,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
           find("#filter-details").click
 
-          within_fieldset("Teams added to cases") do
+          within_fieldset("Teams added to notifications") do
             choose "Others"
             select other_team.name, from: "Team name"
           end
@@ -287,11 +287,11 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         end
       end
 
-      context "when filtering case where any other team has access" do
+      context "when filtering notifications where any other team has access" do
         let(:chosen_team) { other_team }
 
-        scenario "filters the cases by other team with access but do not specify team" do
-          within_fieldset("Teams added to cases") do
+        scenario "filters the notifications by other team with access but do not specify team" do
+          within_fieldset("Teams added to notifications") do
             choose "Other"
           end
           click_button "Apply"
@@ -318,7 +318,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
 
         number_of_total_cases = Investigation.not_deleted.where(hazard_type: "Fire").count
-        expect(page).to have_content("#{number_of_total_cases} cases using the current filters, were found.")
+        expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
       end
     end
 
@@ -387,9 +387,9 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
     end
 
-    describe "Case type" do
+    describe "notification type" do
       scenario "filtering for projects" do
-        within_fieldset "Case type" do
+        within_fieldset "Notification type" do
           choose "Project"
         end
         click_button "Apply"
@@ -403,7 +403,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
 
       scenario "filtering for enquiries" do
-        within_fieldset "Case type" do
+        within_fieldset "Notification type" do
           choose "Enquiry"
         end
         click_button "Apply"
@@ -417,7 +417,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
 
       scenario "filtering for notifications" do
-        within_fieldset "Case type" do
+        within_fieldset "Notification type" do
           choose "Notification"
         end
         click_button "Apply"
@@ -431,7 +431,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
 
       scenario "filtering for allegations" do
-        within_fieldset "Case type" do
+        within_fieldset "Notification type" do
           choose "Allegation"
         end
         click_button "Apply"
@@ -445,27 +445,27 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       end
     end
 
-    describe "Case status" do
+    describe "Notification status" do
       scenario "filtering for both open and closed cases" do
-        within_fieldset("Case status") { choose "All" }
+        within_fieldset("Notification status") { choose "All" }
         click_button "Apply"
 
         expect(page).to have_listed_case(investigation.pretty_id)
         expect(page).to have_listed_case(closed_investigation.pretty_id)
         expect(page).not_to have_listed_case(deleted_investigation.pretty_id)
         number_of_total_cases = Investigation.not_deleted.count
-        expect(page).to have_content("#{number_of_total_cases} cases using the current filters, were found.")
+        expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
 
         expect(find("details#filter-details")["open"]).to eq(nil)
       end
 
-      scenario "filtering only closed cases" do
-        within_fieldset "Case status" do
+      scenario "filtering only closed notifications" do
+        within_fieldset "Notification status" do
           choose "Closed"
         end
         click_button "Apply"
 
-        expect(page).to have_content("1 case using the current filters, was found.")
+        expect(page).to have_content("1 notification using the current filters, was found.")
 
         expect(page).not_to have_listed_case(investigation.pretty_id)
         expect(page).to have_listed_case(closed_investigation.pretty_id)
@@ -475,9 +475,9 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     end
   end
 
-  scenario "filtering cases assigned to me via homepage link" do
+  scenario "filtering notifications assigned to me via homepage link" do
     visit "/"
-    click_link "Your cases"
+    click_link "Your notifications"
 
     expect(page).to have_listed_case(investigation.pretty_id)
 
@@ -486,7 +486,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "search returning a restricted cases" do
+  scenario "search returning a restricted notifications" do
     fill_in "Search", with: restricted_case_title
     click_on "Search"
 
@@ -532,7 +532,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     context "with sort by most recently created option selected" do
       let(:cases) { default_filtered_cases.order(created_at: :desc) }
 
-      before { select_sorting_option("Newest cases") }
+      before { select_sorting_option("Newest notifications") }
 
       it "shows results by most recently created" do
         expect(page).to list_cases_in_order(cases.map(&:pretty_id))
@@ -551,16 +551,16 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
       it "allows user to sort by other options" do
         within "form dl.govuk-list.opss-dl-select" do
-          click_on "Oldest cases"
+          click_on "Oldest notifications"
         end
 
-        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Oldest cases")
+        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Oldest notifications")
 
         within "form dl.govuk-list.opss-dl-select" do
-          click_on "Newest cases"
+          click_on "Newest notifications"
         end
 
-        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest cases")
+        expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newest notifications")
 
         within "form dl.govuk-list.opss-dl-select" do
           click_on "Oldest updates"

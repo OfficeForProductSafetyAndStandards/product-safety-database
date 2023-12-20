@@ -19,12 +19,12 @@
       <% end %>
 
       <% hint_html = capture do %>
-        <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this case.</div>
+        <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this notification.</div>
 
         <%= govukDetails(summaryText: "Help with adding a number", classes: "govuk-!-margin-bottom-8 opss-details--sm") do %>
           <p class="govuk-body-s">
-            This might be a number already created in a different internal system for your case, or a number you intend to use globally across different systems to reference your case.
-            The reference number will be searchable in the <%= psd_abbr %> case search page. (You can add or edit this number later).
+            This might be a number already created in a different internal system for your notification, or a number you intend to use globally across different systems to reference your notification.
+            The reference number will be searchable in the <%= psd_abbr %> notification search page. (You can add or edit this number later).
           </p>
         <% end %>
       <% end %>

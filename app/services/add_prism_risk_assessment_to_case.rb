@@ -15,12 +15,12 @@ class AddPrismRiskAssessmentToCase
     context.fail!(error: "The PRISM risk assessment is not submitted") unless prism_risk_assessment.state == "submitted"
 
     ActiveRecord::Base.transaction do
-      (context.fail!(error: "The PRISM risk assessment is already linked to the case") and return false) if duplicate_prism_associated_investigation
+      (context.fail!(error: "The PRISM risk assessment is already linked to the notification") and return false) if duplicate_prism_associated_investigation
 
       # When a PRISM risk assessment is associated with a case, any direct product associations are deleted
       prism_risk_assessment.prism_associated_products.destroy_all
       unless prism_risk_assessment.prism_associated_investigations.create!(investigation_id: investigation.id, prism_associated_investigation_products_attributes: [{ product_id: product.id }])
-        context.fail!(error: "Error adding PRISM risk assessment to case")
+        context.fail!(error: "Error adding PRISM risk assessment to notification")
         false
       end
     end

@@ -16,7 +16,7 @@ RSpec.feature "Investigation business page", :with_stubbed_antivirus, :with_stub
       it "shows no businesses" do
         visit "cases/#{investigation_without_business.pretty_id}/businesses"
 
-        expect(page).to have_content "This case has not added any businesses."
+        expect(page).to have_content "This notification has not added any businesses."
       end
     end
 

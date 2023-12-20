@@ -48,7 +48,7 @@ class InvestigationDecorator < ApplicationDecorator
 
   def case_title_key(viewing_user)
     if object.is_private? && !viewing_user.has_role?(:super_user)
-      "Case restricted"
+      "Notification restricted"
     else
       h.link_to(title, h.investigation_path(object), class: "govuk-link govuk-link--no-visited-state")
     end
@@ -66,7 +66,7 @@ class InvestigationDecorator < ApplicationDecorator
     end
 
     tag_class_name = is_closed? ? "opss-tag--risk3" : "opss-tag--plain"
-    action = h.tag.span("Case #{status}", class: "opss-tag #{tag_class_name}")
+    action = h.tag.span("Notification #{status}", class: "opss-tag #{tag_class_name}")
     values << { html: h.tag.dd(action, class: "govuk-summary-list__actions") }
     values
   end
@@ -99,7 +99,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def pretty_description
-    "Case: #{pretty_id}"
+    "Notification: #{pretty_id}"
   end
 
   def created_by
@@ -109,7 +109,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner_display_name_for(viewer:)
-    return "No case owner" unless investigation.owner
+    return "No notification owner" unless investigation.owner
 
     owner.owner_short_name(viewer:)
   end

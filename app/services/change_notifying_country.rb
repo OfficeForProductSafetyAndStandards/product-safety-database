@@ -52,8 +52,8 @@ private
         investigation.pretty_id,
         entity.name,
         email,
-        "#{user.name} (#{user.team.name}) edited notifying country on the case.",
-        "Notifying country edited for Case"
+        "#{user.name} (#{user.team.name}) edited notifying country on the notification.",
+        "Notifying country edited for notification"
       ).deliver_later
     end
   end

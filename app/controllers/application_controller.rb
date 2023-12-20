@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
 
     items = []
     items.push text: "Home", href: authenticated_root_path, active: params[:controller] == "homepage"
-    items.push text: "Cases", href: your_cases_investigations_path, active: highlight_cases?
+    items.push text: "Notifications", href: your_cases_investigations_path, active: highlight_notifications?
     items.push text: "Businesses", href: your_businesses_path, active: highlight_businesses?
     items.push text: "Products", href: your_products_path, active: highlight_products?
     items.push text: "Risk assessments", href: your_prism_risk_assessments_path, active: params[:controller] == "prism_risk_assessments" if current_user.is_prism_user?
@@ -139,7 +139,7 @@ private
     return true if %w[documents document_uploads image_uploads].include?(params[:controller]) && params[:product_id]
   end
 
-  def highlight_cases?
+  def highlight_notifications?
     return true if params[:controller].match?(/investigations|notifications|searches|collaborators|comments/)
     return true if %w[documents image_uploads].include?(params[:controller]) && params[:investigation_pretty_id]
   end

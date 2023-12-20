@@ -43,7 +43,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       visit investigation_path(investigation_1)
       expect_to_be_on_case_page(case_id: investigation_1.pretty_id)
       expect(page).to have_css(".govuk-warning-text")
-      expect(page).to have_text("A product has not been added to this case.")
+      expect(page).to have_text("A product has not been added to this notification.")
 
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (0 added)")
