@@ -58,7 +58,13 @@ module PageExpectations
 
   def expect_to_have_notification_breadcrumbs
     expect(page).to have_breadcrumb("Notifications")
-    expect(page).to have_breadcrumb(investigation.pretty_id)
+
+    # TODO ASC: Remove once all specs use notification instead of investigation
+    if defined?(investigation)
+      expect(page).to have_breadcrumb(investigation.pretty_id)
+    elsif defined?(notification)
+      expect(page).to have_breadcrumb(notification.pretty_id)
+    end
   end
 
   def expect_to_have_business_breadcrumbs
