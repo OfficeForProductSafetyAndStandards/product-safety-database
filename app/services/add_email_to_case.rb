@@ -56,7 +56,7 @@ private
   def send_notification_email(investigation, _user)
     return unless investigation.sends_notifications?
 
-    email_recipients_for_case_owner.each do |recipient|
+    email_recipients_for_case_owner(investigation).each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,

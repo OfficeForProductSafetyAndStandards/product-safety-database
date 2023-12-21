@@ -15,7 +15,7 @@ module EntitiesToNotify
   end
 
   # Notify the case owner, unless it is the same user/team performing the change
-  def email_recipients_for_case_owner
+  def email_recipients_for_case_owner(investigation)
     if investigation.owner_user && investigation.owner_user == user
       []
     elsif investigation.owner_user
