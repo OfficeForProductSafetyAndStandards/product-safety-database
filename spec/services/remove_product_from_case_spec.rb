@@ -73,7 +73,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
             expect(activity.added_by_user).to eq(user)
           end
 
-          it_behaves_like "a service which notifies the notification owner"
+          it_behaves_like "a service which notifies the investigation owner"
         end
 
         context "when case has been closed while product was linked to it" do
@@ -112,7 +112,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
           expect(product.reload.owning_team).to eq(nil)
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the investigation owner"
 
         context "when the product is owned by another team" do
           let(:product) { create(:product_washing_machine, owning_team: create(:team)) }

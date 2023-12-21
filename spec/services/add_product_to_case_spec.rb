@@ -74,7 +74,7 @@ RSpec.describe AddProductToCase, :with_test_queue_adapter do
         expect(activity.title(nil)).to eq(product.name)
       end
 
-      it_behaves_like "a service which notifies the notification owner"
+      it_behaves_like "a service which notifies the investigation owner"
 
       context "with a product owned by someone else" do
         let(:product) { create(:product, owning_team: create(:team)) }

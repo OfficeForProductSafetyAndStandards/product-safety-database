@@ -142,7 +142,7 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
           "#{name} edited an email on the notification."
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the investigation owner"
       end
 
       context "when a new email and attachment files have been uploaded" do

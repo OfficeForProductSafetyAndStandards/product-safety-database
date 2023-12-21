@@ -153,7 +153,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
           "#{name} edited a risk assessment on the notification."
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the investigation owner"
       end
 
       context "when only the file has changed" do
