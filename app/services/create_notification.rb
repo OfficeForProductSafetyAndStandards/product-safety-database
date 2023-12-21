@@ -1,17 +1,17 @@
-class CreateCase
+class CreateNotification
   include Interactor
 
-  delegate :investigation, :user, :product, :prism_risk_assessment, :bulk, :from_task_list, to: :context
+  delegate :notification, :user, :product, :prism_risk_assessment, :bulk, :from_task_list, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
     context.fail!(error: "Product must be supplied for non opss users") if !bulk && !from_task_list && !user.is_opss? && !product.is_a?(Product)
     team = user.team
 
-    investigation.creator_user = user
-    investigation.creator_team = team
-    investigation.notifying_country = team.country
+    notification.creator_user = user
+    notification.creator_team = team
+    notification.notifying_country = team.country
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happening concurrently.
@@ -19,15 +19,15 @@ class CreateCase
       # case saving) but this is currently not implemented elsewhere
       ActiveRecord::Base.connection.execute("SELECT pg_advisory_xact_lock(1)")
 
-      investigation.pretty_id = generate_pretty_id
+      notification.pretty_id = generate_pretty_id
 
-      investigation.build_owner_collaborations_from(user)
+      notification.build_owner_collaborations_from(user)
 
-      investigation.save!
+      notification.save!
 
-      AddProductToCase.call!(investigation:, product:, user:, skip_email: true) if product
+      AddProductToCase.call!(investigation: notification, product:, user:, skip_email: true) if product
 
-      AddPrismRiskAssessmentToCase.call!(investigation:, product:, prism_risk_assessment:, user:) if prism_risk_assessment
+      AddPrismRiskAssessmentToCase.call!(investigation: notification, product:, prism_risk_assessment:, user:) if prism_risk_assessment
 
       create_audit_activity_for_case_added
     end
@@ -42,12 +42,12 @@ private
   end
 
   def create_audit_activity_for_case_added
-    activity_class = investigation.case_created_audit_activity_class
-    metadata = activity_class.build_metadata(investigation)
+    activity_class = notification.case_created_audit_activity_class
+    metadata = activity_class.build_metadata(notification)
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       title: nil,
       body: nil,
       metadata:
@@ -55,12 +55,12 @@ private
   end
 
   def send_confirmation_email
-    NotifyMailer.investigation_created(
-      investigation.pretty_id,
+    NotifyMailer.notification_created(
+      notification.pretty_id,
       user.name,
       user.email,
-      investigation.decorate.title,
-      "case"
+      notification.decorate.title,
+      "notification"
     ).deliver_later
   end
 

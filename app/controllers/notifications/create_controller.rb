@@ -29,20 +29,20 @@ module Notifications
         disallow_changing_submitted_notification
       else
         # Create a new draft notification then redirect to it
-        investigation = Investigation::Notification.new(state: "draft")
-        CreateCase.call!(investigation:, user: current_user, from_task_list: true, silent: true)
-        redirect_to notification_create_index_path(investigation)
+        notification = Investigation::Notification.new(state: "draft")
+        CreateNotification.call!(notification:, user: current_user, from_task_list: true, silent: true)
+        redirect_to notification_create_index_path(notification)
       end
     end
 
     def from_product
       # Create a new draft notification with attached product, save progress, then redirect to it
-      investigation = Investigation::Notification.new(state: "draft")
+      notification = Investigation::Notification.new(state: "draft")
       product = Product.find(params[:product_id])
-      CreateCase.call!(investigation:, product:, user: current_user, from_task_list: true, silent: true)
-      investigation.tasks_status["search_for_or_add_a_product"] = "completed"
-      investigation.save!(context: :search_for_or_add_a_product)
-      redirect_to notification_create_index_path(investigation)
+      CreateNotification.call!(notification:, product:, user: current_user, from_task_list: true, silent: true)
+      notification.tasks_status["search_for_or_add_a_product"] = "completed"
+      notification.save!(context: :search_for_or_add_a_product)
+      redirect_to notification_create_index_path(notification)
     end
 
     def add_product

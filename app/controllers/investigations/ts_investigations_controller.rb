@@ -35,7 +35,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       @product = authorize_product
       @investigation.build_owner_collaborations_from(current_user)
       prism_risk_assessment = PrismRiskAssessment.find(session[:prism_risk_assessment_id]) if session[:prism_risk_assessment_id].present?
-      CreateCase.call(investigation: session[:investigation], user: current_user, product: Product.find(session[:product_id]), prism_risk_assessment:)
+      CreateNotification.call(notification: session[:investigation], user: current_user, product: Product.find(session[:product_id]), prism_risk_assessment:)
       clear_session
     end
 
