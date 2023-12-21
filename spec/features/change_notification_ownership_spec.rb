@@ -20,14 +20,14 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
     end
 
     scenario "does not show inactive users or teams" do
-      expect(page).to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_active_user.id}\"]")
-      expect(page).not_to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_inactive_user.id}\"]")
+      expect(page).to have_css("#change_notification_owner_form_select_team_member option[value=\"#{another_active_user.id}\"]")
+      expect(page).not_to have_css("#change_notification_owner_form_select_team_member option[value=\"#{another_inactive_user.id}\"]")
 
-      expect(page).to have_css("#change_case_owner_form_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
-      expect(page).not_to have_css("#change_case_owner_form_select_other_team option[value=\"#{deleted_team.id}\"]")
+      expect(page).to have_css("#change_notification_owner_form_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
+      expect(page).not_to have_css("#change_notification_owner_form_select_other_team option[value=\"#{deleted_team.id}\"]")
 
-      expect(page).to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
-      expect(page).not_to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
+      expect(page).to have_css("#change_notification_owner_form_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
+      expect(page).not_to have_css("#change_notification_owner_form_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
     end
 
     scenario "shows correct fields" do
@@ -59,7 +59,7 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
       expect_to_have_notification_breadcrumbs
 
       choose("Someone else in your team")
-      select another_active_user.name, from: "change_case_owner_form_select_team_member"
+      select another_active_user.name, from: "change_notification_owner_form_select_team_member"
       click_button "Continue"
 
       expect_to_have_notification_breadcrumbs
@@ -84,7 +84,7 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
 
     scenario "a case owned by someone else in another team can no longer have ownership changed by original owner" do
       choose("Someone else")
-      select another_active_user_another_team.name, from: "change_case_owner_form_select_someone_else"
+      select another_active_user_another_team.name, from: "change_notification_owner_form_select_someone_else"
       click_button "Continue"
 
       expect_to_have_notification_breadcrumbs
@@ -161,7 +161,7 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
   end
 
   def fill_and_submit_change_owner_reason_form
-    fill_in "change_case_owner_form_owner_rationale", with: "Test assign"
+    fill_in "change_notification_owner_form_owner_rationale", with: "Test assign"
     click_button "Confirm change"
   end
 

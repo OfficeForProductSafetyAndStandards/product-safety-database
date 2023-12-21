@@ -622,7 +622,7 @@ en:
               inclusion: "Select whether you want to include a message"
             permission_level:
               blank: "Select the permission level the team should have"
-        change_case_owner_form:
+        change_notification_owner_form:
           attributes:
             owner_id:
               blank: Select notification owner
