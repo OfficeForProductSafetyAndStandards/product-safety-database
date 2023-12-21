@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
+  subject(:result) { delete_team }
+
   let(:team) { create(:team) }
   let(:new_team) { create(:team) }
 
   let(:team_user) { create(:user, :activated, :team_admin, team:, organisation: team.organisation) }
   let(:new_team_user) { create(:user, :activated, :team_admin, team: new_team, organisation: new_team.organisation) }
   let(:deleting_user) { create(:user) }
-
-  subject(:result) { delete_team }
 
   def delete_team
     described_class.call(team:, new_team:, user: deleting_user)
