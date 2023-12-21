@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::UpdateStatus, :with_stubbed_mailer do
-  let(:investigation) { create(:allegation, is_closed: false) }
-  let(:metadata) { described_class.build_metadata(investigation, rationale) }
+  let(:notification) { create(:allegation, is_closed: false) }
+  let(:metadata) { described_class.build_metadata(notification, rationale) }
   let(:rationale) { "Test" }
 
   before do
-    # Investigation changes must be saved for the metadata to build correctly
-    investigation.is_closed = true
-    investigation.save!
+    # Notification changes must be saved for the metadata to build correctly
+    notification.is_closed = true
+    notification.save!
   end
 
   describe ".build_metadata" do

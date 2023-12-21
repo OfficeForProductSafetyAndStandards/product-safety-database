@@ -19,12 +19,12 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
     )
   end
 
-  context "when the user belongs to the case owner’s team" do
+  context "when the user belongs to the case owner's team" do
     before do
       sign_in user_from_owner_team
       patch close_investigation_status_path(investigation),
             params: {
-              change_case_status_form: { rationale: "Test" }
+              change_notification_status_form: { rationale: "Test" }
             }
     end
 
@@ -40,7 +40,7 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
       before do
         patch reopen_investigation_status_path(investigation),
               params: {
-                change_case_status_form: { rationale: "Test" }
+                change_notification_status_form: { rationale: "Test" }
               }
       end
 
@@ -57,11 +57,11 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
       sign_in user_from_collaborator_team
       patch close_investigation_status_path(investigation),
             params: {
-              change_case_status_form: { rationale: "Test" }
+              change_notification_status_form: { rationale: "Test" }
             }
     end
 
-    it "returns a forbidden status code and doesn’t update the investigation" do
+    it "returns a forbidden status code and doesn't update the investigation" do
       aggregate_failures do
         expect(response).to have_http_status(:forbidden)
         expect(investigation.reload.is_closed).to be false
@@ -74,11 +74,11 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
       sign_in other_user
       patch close_investigation_status_path(investigation),
             params: {
-              change_case_status_form: { rationale: "Test" }
+              change_notification_status_form: { rationale: "Test" }
             }
     end
 
-    it "returns a forbidden status code and doesn’t update the investigation" do
+    it "returns a forbidden status code and doesn't update the investigation" do
       aggregate_failures do
         expect(response).to have_http_status(:forbidden)
         expect(investigation.reload.is_closed).to be false

@@ -283,7 +283,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
     context "when searching by product subcategory" do
       context "when notification is closed" do
         before do
-          ChangeCaseStatus.call!(new_status: "closed", investigation: mobile_phone_investigation, user:)
+          ChangeNotificationStatus.call!(new_status: "closed", notification: mobile_phone_investigation, user:)
           mobile_phone.update!(subcategory: "handset", barcode: "22222", description: "anewone", product_code: "BBBBB")
           Investigation.reindex
 

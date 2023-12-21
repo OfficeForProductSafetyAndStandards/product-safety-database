@@ -1,4 +1,4 @@
-class ChangeCaseStatusForm
+class ChangeNotificationStatusForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization

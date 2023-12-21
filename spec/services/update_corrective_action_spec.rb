@@ -147,7 +147,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_antiv
           "#{name} edited a corrective action on the notification."
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the investigation owner"
 
         context "when removing the previously attached file" do
           let(:related_file) { false }

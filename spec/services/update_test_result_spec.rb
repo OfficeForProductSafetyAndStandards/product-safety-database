@@ -103,7 +103,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_antivirus, 
           expect(activity_timeline_entry.metadata).to eq(expected_changes_metadata)
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the investigation owner"
 
         it "retains the original file" do
           expect { result }.not_to have_enqueued_job(ActiveStorage::PurgeJob)

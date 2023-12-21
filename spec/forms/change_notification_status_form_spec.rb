@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe ChangeCaseStatusForm, :with_test_queue_adapter do
-  subject(:form) { described_class.from(investigation) }
+RSpec.describe ChangeNotificationStatusForm, :with_test_queue_adapter do
+  subject(:form) { described_class.from(notification) }
 
-  let(:investigation) { build(:allegation) }
+  let(:notification) { build(:notification) }
 
   describe ".from" do
-    it "sets the case type" do
+    it "sets the case_type" do
       expect(form.case_type).to eq("notification")
     end
 
