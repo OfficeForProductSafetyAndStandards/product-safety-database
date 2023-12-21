@@ -1,4 +1,4 @@
-class ChangeCaseOwner
+class ChangeNotificationOwner
   include Interactor
   include NotifyHelper
 
