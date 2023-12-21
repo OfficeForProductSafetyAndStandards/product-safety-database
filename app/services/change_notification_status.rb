@@ -30,11 +30,11 @@ class ChangeNotificationStatus
 private
 
   def create_audit_activity_for_case_status_changed
-    metadata = activity_class.build_metadata(investigation, rationale)
+    metadata = activity_class.build_metadata(notification, rationale)
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       title: nil,
       body: nil,
       metadata:
