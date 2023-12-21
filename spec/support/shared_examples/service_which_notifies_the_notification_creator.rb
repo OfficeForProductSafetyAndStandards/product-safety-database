@@ -24,7 +24,7 @@ RSpec.shared_examples "a service which notifies the investigation creator", :wit
 
     unless even_when_the_investigation_is_closed
       context "when the investigation is closed" do
-        before { ChangeCaseStatus.call!(investigation:, user:, new_status: "closed") }
+        before { ChangeNotificationStatus.call!(notification: investigation, user:, new_status: "closed") }
 
         it "does not send an email" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
@@ -60,7 +60,7 @@ RSpec.shared_examples "a service which notifies the notification creator", :with
 
     unless even_when_the_notification_is_closed
       context "when the notification is closed" do
-        before { ChangeCaseStatus.call!(notification:, user:, new_status: "closed") }
+        before { ChangeNotificationStatus.call!(notification:, user:, new_status: "closed") }
 
         it "does not send an email" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
