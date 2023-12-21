@@ -62,7 +62,7 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
         retired_product.reload.decorate
       end
 
-      it "shows retired product page and links to the investigations related to the product" do
+      it "shows retired product page and links to the notifications related to the product" do
         visit product_path(retired_product)
         expect(page).to have_css("h1", text: "The product record does not exist")
         expect(page).to have_link(retired_product.investigations.first.title, href: "/cases/#{retired_product.investigations.first.pretty_id}")
@@ -76,13 +76,13 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
     end
   end
 
-  context "when a product is linked to a closed historic case" do
-    let!(:investigation) { travel(-3.years) { create(:allegation, products: [live_product], creator: opss_user) } }
+  context "when a product is linked to a closed historic notification" do
+    let!(:notification) { travel(-3.years) { create(:notification, products: [live_product], creator: opss_user) } }
 
     before do
       travel(-2.years) do
         live_product.update! name: "Name at closure"
-        ChangeCaseStatus.call! investigation:, new_status: "closed", user: opss_user
+        ChangeNotificationStatus.call! notification:, new_status: "closed", user: opss_user
       end
 
       travel(-19.months) do
@@ -93,17 +93,17 @@ RSpec.feature "Retired products", :with_opensearch, :with_stubbed_mailer, type: 
     end
 
     scenario "a live product shows its timestamped PSD reference" do
-      visit "/cases/#{investigation.pretty_id}/products"
+      visit "/cases/#{notification.pretty_id}/products"
       expect(page).to have_css("h3", text: "Name at closure")
-      expect(page).to have_css("dl.govuk-summary-list dd.govuk-summary-list__value", text: "#{live_product.psd_ref}_#{investigation.date_closed.to_i}")
+      expect(page).to have_css("dl.govuk-summary-list dd.govuk-summary-list__value", text: "#{live_product.psd_ref}_#{notification.date_closed.to_i}")
     end
 
     scenario "a retired product shows its timestamped PSD reference" do
       live_product.mark_as_retired!
 
-      visit "/cases/#{investigation.pretty_id}/products"
+      visit "/cases/#{notification.pretty_id}/products"
       expect(page).to have_css("h3", text: "Name at closure")
-      expect(page).to have_css("dl.govuk-summary-list dd.govuk-summary-list__value", text: "#{live_product.psd_ref}_#{investigation.date_closed.to_i}")
+      expect(page).to have_css("dl.govuk-summary-list dd.govuk-summary-list__value", text: "#{live_product.psd_ref}_#{notification.date_closed.to_i}")
     end
   end
 end
