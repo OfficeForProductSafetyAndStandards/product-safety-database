@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'devise/encryptable/encryptors/pbkdf2'
+require 'devise/custom_failure_app'
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -10,6 +11,7 @@ Devise.setup do |config|
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
   # config.secret_key = 'a42569d608e842dbe8251e1e4e3313072b13016850e3f5c129fe5771f20d8fb84016d646ce6ac5288d4c3e61832b9bb7dec303a93699aca2f5c7083ce2ed85e2'
+  config.secret_key = Rails.application.secret_key_base
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -271,10 +273,11 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  # config.warden do |manager|
+  config.warden do |manager|
+    manager.failure_app = Devise::CustomFailureApp
   #   manager.intercept_401 = false
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
-  # end
+  end
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

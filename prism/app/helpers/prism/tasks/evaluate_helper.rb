@@ -40,12 +40,6 @@ module Prism
       I18n.t("prism.evaluation.multiple_casualties.#{@harm_scenarios.map(&:multiple_casualties).include?(true)}")
     end
 
-    def people_at_increased_risk
-      return unless @harm_scenarios
-
-      @harm_scenarios.map(&:product_aimed_at_description).reject(&:blank?).join(", ").presence || I18n.t("prism.evaluation.people_at_increased_risk.false")
-    end
-
     def risk_to_non_users
       return unless @harm_scenarios
 
@@ -98,11 +92,23 @@ module Prism
     end
 
     def harm_scenario_overall_probability_of_harm(harm_scenario)
-      Prism::RiskMatrixService.risk_level(probability_frequency: Prism::ProbabilityService.overall_probability_of_harm(harm_scenario:).probability, severity_level: harm_scenario.severity.to_sym)
+      Prism::ProbabilityService.overall_probability_of_harm(harm_scenario:).probability
+    end
+
+    def sensitivity_analysis_with_details(sensitivity_analysis, sensitivity_analysis_details)
+      sensitivity_analysis_details.present? ? "#{I18n.t('prism.evaluation.yes_no.true')}: #{sensitivity_analysis_details}" : I18n.t("prism.evaluation.yes_no.#{sensitivity_analysis}")
     end
 
     def other_types_of_harm(other_types_of_harm)
       other_types_of_harm.present? ? other_types_of_harm.map { |oth| I18n.t("prism.evaluation.other_types_of_harm.#{oth}") }.join(", ") : I18n.t("prism.evaluation.other_types_of_harm.not_applicable")
+    end
+
+    def people_at_increased_risk(people_at_increased_risk, people_at_increased_risk_details)
+      people_at_increased_risk_details.present? ? "#{I18n.t('prism.evaluation.yes_no.true')}: #{people_at_increased_risk_details}" : I18n.t("prism.evaluation.yes_no.#{people_at_increased_risk}")
+    end
+
+    def factors_to_take_into_account(factors_to_take_into_account, factors_to_take_into_account_details)
+      factors_to_take_into_account_details.present? ? "#{I18n.t('prism.evaluation.yes_no.true')}: #{factors_to_take_into_account_details}" : I18n.t("prism.evaluation.yes_no.#{factors_to_take_into_account}")
     end
 
     def other_risk_perception_matters(other_risk_perception_matters)

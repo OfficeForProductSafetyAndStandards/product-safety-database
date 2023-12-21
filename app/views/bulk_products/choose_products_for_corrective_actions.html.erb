@@ -1,0 +1,46 @@
+<% page_heading = "Choose products that require the same corrective action - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_choose_products_for_corrective_actions_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: review_products_bulk_upload_products_path(product_ids: @products.ids)) %>
+<% end %>
+<%= form_with model: @bulk_products_choose_products_for_corrective_actions_form, url: choose_products_for_corrective_actions_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true, data: { controller: "checkbox-select-all" } do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= error_summary @bulk_products_choose_products_for_corrective_actions_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Choose products that require the same corrective action
+      </h1>
+      <p class="govuk-body">Select all that are applicable.</p>
+      <%
+        select_all = if @products.length > 1
+          [
+            { key: :product_ids, id: "product-id-select-all", name: "bulk_products_choose_products_for_corrective_actions_form[product_ids][]", value: "select_all", text: "Select all", attributes: { data: { checkbox_select_all_target: "checkboxAll" } }, disable_ghost: true },
+            { key: :product_ids, divider: "or" }
+          ]
+        else
+          []
+        end
+      %>
+      <%= govukCheckboxes(
+        form: form,
+        key: :agree,
+        items: select_all + @products.decorate.map do |product|
+          {
+            key: :product_ids,
+            id: "product-id-#{product.id}",
+            name: "bulk_products_choose_products_for_corrective_actions_form[product_ids][]",
+            value: product.id,
+            text: product.name_with_brand,
+            attributes: { data: { checkbox_select_all_target: "checkbox" } },
+            disable_ghost: true
+          }
+        end
+      ) %>
+      <div class="govuk-button-group">
+        <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
   include Pundit::Authorization
   include CacheConcern
   include HttpAuthConcern
@@ -23,6 +24,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :nav_items, :secondary_nav_items, :current_user, :root_path_for
 
+  rescue_from Pundit::NotAuthorizedError, with: :render_403_page
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
 
   def check_current_user_status
@@ -54,11 +56,11 @@ class ApplicationController < ActionController::Base
   end
 
   def nav_items
-    return nil if hide_nav? || !current_user # On some pages we don't want to show the main navigation
+    return [] if hide_nav? || !current_user # On some pages we don't want to show the main navigation
 
     items = []
     items.push text: "Home", href: authenticated_root_path, active: params[:controller] == "homepage"
-    items.push text: "Cases", href: your_cases_investigations_path, active: highlight_cases?
+    items.push text: "Notifications", href: your_cases_investigations_path, active: highlight_notifications?
     items.push text: "Businesses", href: your_businesses_path, active: highlight_businesses?
     items.push text: "Products", href: your_products_path, active: highlight_products?
     items.push text: "Risk assessments", href: your_prism_risk_assessments_path, active: params[:controller] == "prism_risk_assessments" if current_user.is_prism_user?
@@ -69,7 +71,7 @@ class ApplicationController < ActionController::Base
   def secondary_nav_items
     items = []
     if user_signed_in?
-      items.push text: "Your account", href: account_path
+      items.push text: "Your account", href: account_path, active: params[:controller].start_with?("account")
       items.push text: "Sign out", href: destroy_user_session_path
     else
       items.push text: "Sign in", href: new_user_session_path
@@ -123,6 +125,10 @@ private
     render "errors/not_found", status: :not_found
   end
 
+  def render_403_page
+    render "errors/forbidden", status: :forbidden
+  end
+
   def highlight_businesses?
     return true if params[:controller].start_with?("businesses")
     return true if params[:controller] == "documents" && params[:business_id]
@@ -133,8 +139,8 @@ private
     return true if %w[documents document_uploads image_uploads].include?(params[:controller]) && params[:product_id]
   end
 
-  def highlight_cases?
-    return true if params[:controller].match?(/investigations|searches|collaborators|comments/)
+  def highlight_notifications?
+    return true if params[:controller].match?(/investigations|notifications|searches|collaborators|comments/)
     return true if %w[documents image_uploads].include?(params[:controller]) && params[:investigation_pretty_id]
   end
 end

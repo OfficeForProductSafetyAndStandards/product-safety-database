@@ -9,9 +9,9 @@
     <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
   </td>
   <td class="govuk-table__cell">
-    <% if type == "submitted" %><%= govukTag(text: "Submitted", classes: "govuk-tag--green") %><% else %><%= govukTag(text: "Draft", classes: "govuk-tag--grey") %><% end %>
+    <% if type == "submitted" %><%= govuk_tag(text: "Submitted", colour: "green") %><% else %><%= govuk_tag(text: "Draft", colour: "grey") %><% end %>
   </td>
   <td class="govuk-table__cell">
-    <% if type == "submitted" %><a href="<%= prism.view_submitted_assessment_risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">View assessment</a><hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"><a href="<%= add_to_case_prism_risk_assessments_path(prism_risk_assessment_id: prism_risk_assessment.id) %>" class="govuk-link">Add to a case</a><% else %><a href="<%= prism.risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">Make changes</a><% end %>
+    <% if type == "submitted" %><a href="<%= prism.view_submitted_assessment_risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">View assessment</a><hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"><a href="<%= add_to_case_prism_risk_assessments_path(prism_risk_assessment_id: prism_risk_assessment.id) %>" class="govuk-link">Add to a notification</a><% else %><a href="<%= prism.risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">Make changes</a><hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"><a href="<%= prism.remove_risk_assessment_tasks_path(prism_risk_assessment, back_to: "dashboard") %>" class="govuk-link">Delete</a><% end %>
   </td>
 </tr>

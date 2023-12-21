@@ -39,7 +39,7 @@
             label: { text: "Country of origin" },
             value: @product.country_of_origin,
           ) %>
-      <%= form.govuk_radios :counterfeit, legend: "Counterfeit", classes: "govuk-radios--small govuk-radios--inline", legend_classes: "govuk-fieldset__legend", items: [{ text: "Yes", value: "true" }, { text: "No", value: "false" }], value: @product.counterfeit? && !@product.unsure? %>
+      <%= form.govuk_radios :counterfeit, legend: "Counterfeit", classes: "govuk-radios--small govuk-radios--inline", legend_classes: "govuk-fieldset__legend", items: [{ text: "Yes", value: "counterfeit" }, { text: "No", value: "genuine" }, { text: "Unsure", value: "unsure" }], value: @product.authenticity %>
       <%= govukSelect(
             choices: hazard_types,
             key: :risk_type,

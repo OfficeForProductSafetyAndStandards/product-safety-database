@@ -1,0 +1,19 @@
+<% content_for :page_title, @user.name %>
+<% @back_link_href = search_results_account_administration_index_path(q: params[:q]) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%=
+      govuk_tabs(title: "Account management") do |t|
+        t.with_tab(label: "Account details") do
+          render partial: "account_details"
+        end
+        t.with_tab(label: "Roles") do
+          render partial: "account_roles"
+        end
+      end
+    %>
+    <%# Button removed pending process for account deletion and recovery %>
+    <%# govuk_button_link_to("Delete account", remove_user_account_administration_path(@user, q: params[:q]), warning: true) %>
+  </div>
+</div>

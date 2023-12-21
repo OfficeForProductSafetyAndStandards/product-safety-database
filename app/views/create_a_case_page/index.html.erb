@@ -1,55 +1,51 @@
-<%= page_title "Create a case" %>
+<%= page_title "Create a notification" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <div class="govuk-!-margin-top-4 govuk-!-padding-bottom-4">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-
           <h1 class="govuk-heading-l govuk-!-margin-bottom-7">
-              Create a case
+            Create a notification
           </h1>
 
           <% inset_html = capture do %>
-              <p class="govuk-body-l govuk-!-margin-bottom-4">
-                  Creating a case starts from a product record page.
+            <p class="govuk-body-l govuk-!-margin-bottom-4">
+              Creating a notification starts from a product record page.
+            </p>
+
+            <p class="govuk-body">
+              Find a product and create the notification from there.
+            </p>
+
+            <%= govuk_details(summary_text: "How to create a notification") do %>
+              <p class="govuk-body">
+                A notification and a product record are separate. Notifications record information about supply chains, evidence, and corrective actions. A product record describes the product and is included <em>within</em>&nbsp; a notification.
+              </p>
+
+              <ol class="govuk-list govuk-list--number govuk-list--spaced govuk-!-margin-left-6">
+                <li>In the products area search for your product.</li>
+                <li>Select a product record to view the product record page.</li>
+                <li>Select the '<span class="govuk-!-font-weight-bold">Create a product notification</span>' option.</li>
+              </ol>
+
+              <p class="govuk-body">
+                When you have finished creating the notification, the product record will automatically be included.
               </p>
 
               <p class="govuk-body">
-                  Find a product and create the case from there.
+                <span class="govuk-!-font-weight-bold">If a suitable product record does not already exist</span>, create a new product record and then create your notification from that product record.
               </p>
 
-              <%= govukDetails(summaryText: "How to create a case") do %>
-                <p class="govuk-body">
-                  A case and a product record are separate. Cases record information about supply chains, evidence, and corrective actions. A product record describes the product and is included <em>within</em>&nbsp; a case.
-                </p>
-
-                <ol class="govuk-list govuk-list--number govuk-list--spaced govuk-!-margin-left-6">
-                  <li>In the products area search for your product</li>
-                  <li>Select a product record to view the product record page</li>
-                  <li>Select the '<span class="govuk-!-font-weight-bold">Create a product case</span>' option</li>
-                </ol>
-
-                <p class="govuk-body">
-                  When you have finished creating the case, the product record will automatically be included.
-                </p>
-
-                <p class="govuk-body">
-                  <span class="govuk-!-font-weight-bold">If a suitable product record does not already exist</span>, create a new product record and then create your case from that product record.
-                </p>
-
-                <p class="govuk-body">
-                  For more information, visit <%= link_to help_about_path, class: "govuk-link govuk-link--no-visited-state", rel: "noreferrer noopener", target: "_blank" do %>how to use the <%= psd_abbr %> <span class="govuk-visually-hidden">online service</span> (opens in a new tab)<% end %>
-                </p>
-              <% end %>
+              <p class="govuk-body">
+                For more information, visit <%= link_to help_about_path, class: "govuk-link", rel: "noreferrer noopener", target: "_blank" do %>how to use the <%= psd_abbr %> (opens in a new tab)<% end %>.
+              </p>
+            <% end %>
           <% end %>
 
-          <%= govukInsetText({
-            html: inset_html,
-            classes: "govuk-!-margin-bottom-7"
-          }) %>
+          <%= govuk_inset_text(text: inset_html) %>
 
-          <%= link_to "Go to the products search page", products_path, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-24" %>
+          <%= link_to "Go to the products search page", products_path, class: "govuk-link govuk-!-font-size-24" %>
         </div>
       </div>
     </div>

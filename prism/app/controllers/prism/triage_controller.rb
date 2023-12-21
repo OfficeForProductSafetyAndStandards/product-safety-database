@@ -76,6 +76,17 @@ module Prism
 
     def perform_risk_triage; end
 
+    def continue_with_risk_assessment
+      @prism_risk_assessment.update!(triage_complete: true)
+
+      if @prism_risk_assessment.associated_investigations.present? || @prism_risk_assessment.associated_products.present?
+        redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
+      else
+        session[:prism_risk_assessment_id] = @prism_risk_assessment.id
+        redirect_to main_app.all_products_path
+      end
+    end
+
   private
 
     def prism_risk_assessment

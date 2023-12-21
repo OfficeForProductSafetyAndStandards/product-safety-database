@@ -1,0 +1,17 @@
+<% content_for :page_title, "Delete account for #{@user.name}" %>
+<% @back_link_href = account_administration_path(@user, q: params[:q]) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_warning_text do %>
+      Deleted users cannot currently be recovered via the Support Portal.
+      To recover a deleted user, contact the PSD team.
+    <% end %>
+    <%= form_with model: @user, url: delete_user_account_administration_path, method: :delete do |f| %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Confirm delete account", warning: true %>
+        <%= govuk_button_link_to "Cancel", account_administration_path(@user, q: params[:q]), secondary: true %>
+      </div>
+    <% end %>
+  </div>
+</div>

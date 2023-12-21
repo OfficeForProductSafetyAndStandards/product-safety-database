@@ -50,7 +50,7 @@ class CorrectiveActionForm
   validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
-  validates :details, length: { maximum: 50_000 }
+  validates :details, length: { maximum: 32_767 }
 
   before_validation { trim_whitespace(:other_action, :details, :file_description, :online_recall_information) }
   before_validation { nilify_blanks(:other_action, :details, :online_recall_information) }

@@ -28,6 +28,9 @@ class ProductForm
   attribute :image
   attribute :existing_image_file_id
 
+  # Used when creating a new product as part of the notification task list workflow
+  attribute :notification_pretty_id
+
   before_validation { trim_line_endings(:description) }
   before_validation { trim_whitespace(:brand) }
   before_validation { nilify_blanks(:barcode, :brand) }
@@ -55,17 +58,21 @@ class ProductForm
   end
 
   def cache_file!(user, product)
-    if image.present? && !image.is_a?(ActiveStorage::Blob)
-      self.image = ActiveStorage::Blob.create_and_upload!(
-        io: image,
-        filename: image.original_filename,
-        content_type: image.content_type
-      )
+    if image.present?
+      unless image.is_a?(ActiveStorage::Blob)
+        self.image = ActiveStorage::Blob.create_and_upload!(
+          io: image,
+          filename: image.original_filename,
+          content_type: image.content_type
+        )
 
-      image.analyze_later
+        image.analyze_later
+      end
 
       self.existing_image_file_id = image.signed_id
-    elsif existing_image_file_id.present? && product.present?
+    end
+
+    if existing_image_file_id.present? && product.present?
       image_upload = ImageUpload.new(upload_model: product, created_by: user.id, file_upload: ActiveStorage::Blob.find_signed!(existing_image_file_id))
       image_upload.save!
 

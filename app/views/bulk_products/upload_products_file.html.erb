@@ -1,19 +1,31 @@
 <% page_heading = "Upload products by Excel - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_upload_products_file_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: add_business_details_bulk_upload_products_path) %>
+  <%= govuk_back_link(href: add_business_details_bulk_upload_products_path) %>
 <% end %>
 <%= form_with model: @bulk_products_upload_products_file_form, url: upload_products_file_bulk_upload_products_path, builder: ApplicationFormBuilder, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-three-quarters">
       <%= error_summary @bulk_products_upload_products_file_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
         Upload products by Excel
       </h1>
-      <p class="govuk-body"><a href="/files/PSD%20High%20volume%20product%20entry%20Non%20compliance%20Form%20-%20V1.xlsx" class="govuk-link" download>Download a template Excel file</a> to see an example of the format required.</p>
+      <p class="govuk-body"><a href="/files/PSD%20High%20volume%20product%20entry%20Non%20compliance%20Form%20-%20V5.xlsx" class="govuk-link" download>Download a template Excel file</a> to see an example of the format required.</p>
       <p class="govuk-body">The Excel file provided includes all the essential product details needed to create new products on the <abbr>PSD</abbr>.</p>
-      <%= form.govuk_file_upload :products_file, label: nil, attributes: { accept: ".xlsx" } %>
+      <% if @bulk_products_upload_products_file_form.products_file.present? %>
+        <p class="govuk-body opss-file-attachment">
+          Current file:
+          <% if @bulk_products_upload_products_file_form.products_file.metadata["safe"] == true %>
+            <a href="<%= rails_storage_proxy_path(@bulk_products_upload_products_file_form.products_file) %>" class="govuk-link" rel="noreferrer noopener" target="_blank"><%= @bulk_products_upload_products_file_form.products_file.filename %></a>
+          <% elsif @bulk_products_upload_products_file_form.products_file.metadata["safe"] == false %>
+            <%= @bulk_products_upload_products_file_form.products_file.filename %> (failed virus scan)
+          <% else %>
+            <%= @bulk_products_upload_products_file_form.products_file.filename %> (pending virus scan)
+          <% end %>
+        </p>
+      <% end %>
+      <%= form.govuk_file_upload :products_file_upload, label: nil, attributes: { accept: ".xlsx" } %>
       <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
       <% if @bulk_products_upload_products_file_form.product_error_messages.present? %>
         <h2 class="govuk-heading-m">Product errors</h2>

@@ -13,7 +13,7 @@ class ChangeCaseVisibilityForm
 
   def self.from(investigation)
     old_visibility = investigation.is_private? ? "restricted" : "unrestricted"
-    new(case_type: "case", old_visibility:)
+    new(case_type: "notification", old_visibility:)
   end
 
 private

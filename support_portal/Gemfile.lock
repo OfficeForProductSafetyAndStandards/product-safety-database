@@ -4,8 +4,8 @@ PATH
     support_portal (0.1.0)
       active_record_extended (~> 3.2)
       devise (~> 4.9)
-      govuk-components (~> 4.0)
-      govuk_design_system_formbuilder (~> 4.0)
+      govuk-components (~> 5.0)
+      govuk_design_system_formbuilder (~> 5.0)
       pagy (~> 6.0)
       paper_trail (~> 15.0)
       pg (~> 1.5)
@@ -96,11 +96,11 @@ GEM
     erubi (1.12.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    govuk-components (4.0.0)
+    govuk-components (5.0.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
-      view_component (~> 3.0.0)
-    govuk_design_system_formbuilder (4.1.1)
+      view_component (>= 3.3, < 3.8)
+    govuk_design_system_formbuilder (5.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -189,7 +189,7 @@ GEM
     timeout (0.3.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    view_component (3.0.0)
+    view_component (3.5.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -202,6 +202,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES

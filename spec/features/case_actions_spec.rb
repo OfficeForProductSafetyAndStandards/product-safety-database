@@ -23,7 +23,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (1 added)")
         expect(page).to have_text("Business (1 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")
@@ -43,12 +43,12 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       visit investigation_path(investigation_1)
       expect_to_be_on_case_page(case_id: investigation_1.pretty_id)
       expect(page).to have_css(".govuk-warning-text")
-      expect(page).to have_text("A product has not been added to this case.")
+      expect(page).to have_text("A product has not been added to this notification.")
 
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (0 added)")
         expect(page).to have_text("Business (0 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")
@@ -66,7 +66,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (1 added)")
         expect(page).to have_text("Business (0 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")
@@ -81,7 +81,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_link("Add a product", href: new_investigation_product_path(investigation_1))
         expect(page).to have_link("Add a business", href: new_investigation_business_types_path(investigation_1))
-        expect(page).to have_link("Add an image", href: new_investigation_image_upload_path(investigation_1))
+        expect(page).to have_link("Add a notification image", href: new_investigation_image_upload_path(investigation_1))
         expect(page).to have_link("Add an accident or incident", href: new_investigation_accident_or_incidents_type_path(investigation_1))
         expect(page).to have_link("Add a corrective action", href: new_investigation_corrective_action_path(investigation_1))
         expect(page).to have_link("Add a risk assessment", href: new_investigation_prism_risk_assessment_path(investigation_1))
@@ -113,7 +113,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
       within("#page-content section dl.govuk-summary-list") do
         expect(page).to have_text("Product (1 added)")
         expect(page).to have_text("Business (1 added)")
-        expect(page).to have_text("Image (0 added)")
+        expect(page).to have_text("Notification image (0 added)")
         expect(page).to have_text("Accident / Incident (0 added)")
         expect(page).to have_text("Corrective action (0 added)")
         expect(page).to have_text("Risk assessment (0 added)")

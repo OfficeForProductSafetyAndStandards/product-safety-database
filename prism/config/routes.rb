@@ -12,6 +12,7 @@ Prism::Engine.routes.draw do
     patch "full-risk-assessment-required/:id", to: "triage#full_risk_assessment_required_choose"
     put "full-risk-assessment-required/:id", to: "triage#full_risk_assessment_required_choose"
     get "perform-risk-triage(/:id)", to: "triage#perform_risk_triage", as: "perform_risk_triage"
+    get "continue-with-risk-assessment/:id", to: "triage#continue_with_risk_assessment", as: "continue_with_risk_assessment"
   end
 
   resources :risk_assessment, path: "risk-assessment", only: [] do
@@ -28,6 +29,7 @@ Prism::Engine.routes.draw do
               put ":harm_scenario_id", to: "create#update"
             end
           end
+          resources :outcome, only: %i[show update]
           resources :evaluate, only: %i[show update]
         end
         scope "/harm-scenarios" do
@@ -38,6 +40,8 @@ Prism::Engine.routes.draw do
         get "confirmation", to: "tasks#confirmation"
         get "view-submitted-assessment", to: "tasks#view_submitted_assessment"
         get "download-assessment-pdf", to: "tasks#download_assessment_pdf"
+        get "remove", to: "tasks#remove"
+        delete "delete", to: "tasks#delete"
       end
     end
   end

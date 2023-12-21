@@ -22,7 +22,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     expect(page).to have_css("p#email-error", text: "Error: Enter correct email address and password")
     expect(page).to have_css("p#password-error", text: "")
 
-    expect(page).not_to have_link("Cases")
+    expect(page).not_to have_link("Notifications")
   end
 
   def expect_user_to_have_received_sms_code(code)
@@ -40,7 +40,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Enter security code", with: "#{otp_code} "
     click_on "Continue"
 
-    expect(page).to have_css("h2", text: "Your cases")
+    expect(page).to have_css("h2", text: "Your notifications")
     expect(page).to have_link("Sign out", href: destroy_user_session_path)
   end
 
@@ -50,12 +50,12 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
 
     expect(page).to have_css("h1", text: "Check your phone")
 
-    within(".psd-header__secondary-navigation") do
+    within(".psd-header__secondary-navigation-list") do
       click_link("Sign out")
     end
 
     expect(page).to have_css("h1", text: "Product Safety Database")
-    expect(page).to have_link("Sign in to your account")
+    expect(page).to have_link("Sign in")
   end
 
   scenario "user attempts to sign in with wrong two factor authentication code" do
@@ -98,7 +98,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Enter security code", with: otp_code
     click_button "Continue"
 
-    expect(page).to have_css("h2", text: "Your cases")
+    expect(page).to have_css("h2", text: "Your notifications")
     expect(page).to have_link("Sign out", href: destroy_user_session_path)
   end
 
@@ -123,7 +123,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
 
       fill_in_credentials
 
-      expect(page).to have_css("h2", text: "Your cases")
+      expect(page).to have_css("h2", text: "Your notifications")
       expect(page).to have_link("Sign out")
     end
 
@@ -136,7 +136,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
       fill_in "Enter security code", with: otp_code
       click_on "Continue"
 
-      expect(page).to have_css("h2", text: "Your cases")
+      expect(page).to have_css("h2", text: "Your notifications")
 
       visit unlock_path
       expect(page).to have_css("h1", text: "Check your phone")

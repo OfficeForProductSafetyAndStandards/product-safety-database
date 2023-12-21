@@ -2,16 +2,14 @@
 <% page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <span class="govuk-caption-l">Meeting</span>
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
+    <%= govuk_warning_text(text: t("case.protected_details", data_type: "meeting correspondence")) %>
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
         Added <%= @meeting.created_at.to_formatted_s(:govuk) %>
       </p>
     </div>
-
     <% rows = [
         {
           key: { text: "Date of meeting" },
@@ -40,26 +38,18 @@
           value: { text: format_with_line_breaks(@meeting.details) }
         }
       end
-
     %>
-
     <%= govukSummaryList(rows: rows) %>
-
-    <%= permission_notice(text: t("case.protected_details", data_type: "meeting correspondence")) %>
   </div>
 
   <% if @meeting.related_attachment.attached? %>
     <div class="govuk-grid-column-one-third">
       <h2 class="govuk-heading-m">Attachments</h2>
       <p class="govuk-body"><%= link_to @meeting.related_attachment.filename, @meeting.related_attachment, class: "govuk-link" %></p>
-
       <%= document_placeholder(@meeting.related_attachment) %>
-
       <% if @meeting.related_attachment.blob.metadata["description"].present? %>
         <p class="govuk-body"><%= @meeting.related_attachment.blob.metadata["description"] %></p>
       <% end %>
-
-
     </div>
   <% end %>
 </div>

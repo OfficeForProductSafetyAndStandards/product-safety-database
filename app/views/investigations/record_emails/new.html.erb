@@ -3,16 +3,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary form.object.errors %>
-
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-
       <h1 class="govuk-heading-l">Record email</h1>
-
+      <%= govuk_warning_text(text: t("case.protected_details", data_type: "email correspondence")) %>
       <%= render "form_fields", form: form, email: @email %>
-
       <%= form.submit "Add email", class: "govuk-button" %>
-
-      <%= permission_notice(text: t("case.protected_details", data_type: "email correspondence")) %>
     </div>
   </div>
 <% end %>

@@ -14,10 +14,24 @@
         <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
       <% end %>
       <%=
+        f.govuk_collection_radio_buttons :featured_in_media,
+        [
+          OpenStruct.new(id: "significant", name: "Yes - significant coverage"),
+          OpenStruct.new(id: "minor", name: "Yes - minor coverage"),
+          OpenStruct.new(id: "no", name: "No"),
+          OpenStruct.new(id: "unknown", name: "Unknown")
+        ],
+        :id,
+        :name,
+        legend: { text: "Has the risk featured in the media?" },
+        bold_labels: false
+      %>
+      <%=
         f.govuk_collection_radio_buttons :other_hazards,
         [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
+          OpenStruct.new(id: "yes", name: "Yes"),
+          OpenStruct.new(id: "no", name: "No"),
+          OpenStruct.new(id: "unknown", name: "Unknown")
         ],
         :id,
         :name,
@@ -28,8 +42,7 @@
         f.govuk_collection_radio_buttons :low_likelihood_high_severity,
         [
           OpenStruct.new(id: "yes", name: "Yes"),
-          OpenStruct.new(id: "no", name: "No"),
-          OpenStruct.new(id: "unknown", name: "Unknown")
+          OpenStruct.new(id: "no", name: "No")
         ],
         :id,
         :name,
@@ -64,8 +77,7 @@
         f.govuk_collection_radio_buttons :designed_to_provide_protective_function,
         [
           OpenStruct.new(id: "yes", name: "Yes"),
-          OpenStruct.new(id: "no", name: "No"),
-          OpenStruct.new(id: "unknown", name: "Unknown")
+          OpenStruct.new(id: "no", name: "No")
         ],
         :id,
         :name,

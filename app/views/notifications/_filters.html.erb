@@ -1,0 +1,54 @@
+<section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+  <a href="#page-content" class="govuk-skip-link opss-skip-link">
+    Skip to the main content
+  </a>
+  <%= render "investigations/secondary_nav" %>
+  <% unless non_search_cases_page_names.include? @page_name %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-6 govuk-!-margin-right-6">
+  <% end %>
+  <% if non_search_cases_page_names.exclude? @page_name %>
+    <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
+
+    <%= govuk_skip_link(text: "Skip to results", href: "#page-content") %>
+
+    <%= govuk_details(summary_text: "Notification status", classes: "opss-details--plain", id: "case-status") do %>
+      <%= render "notifications/case_status_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Notification priority", classes: "opss-details--plain", id: "case-status") do %>
+      <%= render "notifications/case_risk_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Notification owner", classes: "opss-details--plain", id: "case-owner") do %>
+      <%= render "notifications/case_owner_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Teams added to the notification", classes: "opss-details--plain", id: "cases-added-to-team") do %>
+      <%= render "notifications/teams_with_access_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Created by", classes: "opss-details--plain", id: "cases-created-by") do %>
+      <%= render "notifications/case_creator_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Notification type", classes: "opss-details--plain", id: "case-type") do %>
+      <%= render "notifications/case_type_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Notification hazard type", classes: "opss-details--plain", id: "case-hazard-type") do %>
+      <%= render "notifications/case_hazard_type_checkboxes", form: form %>
+    <% end %>
+    <%= govuk_details(summary_text: "Reported reason", classes: "opss-details--plain", id: "reported-reason") do %>
+      <%= render "notifications/reported_reason_checkboxes", form: form %>
+    <% end %>
+
+    <%= render "investigations/case_change_date_filter", form: form %>
+
+    <div class="govuk-button-group">
+      <%= form.submit "Apply", name: nil, class: "govuk-button" %>
+      <%= link_to "Reset", notifications_path, class: "govuk-link govuk-link--no-visited-state" %>
+    </div>
+
+    <% if policy(Investigation).export? && @investigations.any? %>
+      <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
+        <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
+            Request this list as a downloadable <br class="opss-br-desktop"><%= link_to generate_case_exports_path(params: case_export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+        </p>
+      </div>
+    <% end %>
+  <% end %>
+</section>

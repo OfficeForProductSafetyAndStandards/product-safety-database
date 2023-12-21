@@ -121,7 +121,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   describe "#pretty_description" do
     it {
       expect(decorated_investigation.pretty_description)
-        .to eq("Case: #{investigation.pretty_id}")
+        .to eq("Notification: #{investigation.pretty_id}")
     }
   end
 
@@ -166,68 +166,13 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     end
 
     def expect_to_display_protect_details_message
-      expect(source_details_summary_list).to summarise("Contact details", text: /Only teams added to the case can view allegation contact details/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /Only teams added to the notification can view allegation contact details/)
     end
   end
 
   describe "#description" do
     include_examples "a formated text", :investigation, :description
     include_examples "with a blank description", :investigation, :decorated_investigation
-  end
-
-  describe "#products_list" do
-    let(:products)           { create_list :product, product_count }
-    let(:products_remaining) { investigation.products.count - described_class::PRODUCT_DISPLAY_LIMIT }
-    let(:products_list)      { Capybara.string(decorated_investigation.products_list) }
-
-    context "with 6 images or less" do
-      let(:product_count) { 6 }
-
-      it "lists all the images" do
-        products.each do |product|
-          expect(products_list).to have_link(product.name, href: product_path(product))
-        end
-      end
-
-      it "does not display a link to see all attached images" do
-        expect(products_list).not_to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
-      end
-    end
-
-    context "with 7 images" do
-      let(:product_count) { 7 }
-
-      it "list all the products" do
-        products.each do |product|
-          expect(products_list).to have_link(product.name, href: product_path(product))
-        end
-      end
-
-      it "does not display a link to see all the products" do
-        expect(products_list).not_to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
-      end
-    end
-
-    context "with more than 8 products" do
-      let(:product_count) { 6 }
-      let!(:products_not_to_display) { create_list :product, 2, investigations: [investigation] }
-
-      it "lists the first page of products" do
-        products.each do |product|
-          expect(products_list).to have_link(product.name, href: product_path(product))
-        end
-      end
-
-      it "does not display the products beyond the first page" do
-        products_not_to_display.each do |product|
-          expect(products_list).not_to have_link(product.name, href: product_path(product))
-        end
-      end
-
-      it "displays a link to see all the products" do
-        expect(products_list).to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
-      end
-    end
   end
 
   describe "#owner_display_name_for" do
@@ -293,7 +238,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     context "with restricted case" do
       let(:investigation) { create(:allegation, user_title:, is_private: true) }
 
-      it { expect(case_title_key).to eq("Case restricted") }
+      it { expect(case_title_key).to eq("Notification restricted") }
     end
 
     context "with restricted case as a super user" do

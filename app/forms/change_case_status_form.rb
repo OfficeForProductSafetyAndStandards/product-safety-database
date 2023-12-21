@@ -13,7 +13,7 @@ class ChangeCaseStatusForm
 
   def self.from(investigation)
     old_status = investigation.is_closed? ? "closed" : "open"
-    new(case_type: "case", old_status:)
+    new(case_type: "notification", old_status:)
   end
 
 private

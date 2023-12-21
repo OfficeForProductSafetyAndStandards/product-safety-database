@@ -5,7 +5,7 @@ module Users
         id: "email",
         name: "user[email]",
         type: "email",
-        classes: "app-!-max-width-two-thirds",
+        classes: "govuk-!-width-two-thirds",
         label: { text: "Email address" },
         errorMessage: format_errors_for(user, user.errors.full_messages_for(:email)),
         value: user.email
@@ -18,7 +18,7 @@ module Users
         id: "password",
         name: "user[password]",
         type: "password",
-        classes: "app-!-max-width-two-thirds",
+        classes: "govuk-!-width-two-thirds",
         label: { text: "Password" },
         errorMessage: format_errors_for(user, user.errors.full_messages_for(:password))
       )

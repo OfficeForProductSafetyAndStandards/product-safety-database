@@ -27,8 +27,6 @@ Rails.application.routes.draw do
     resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
     get "missing-mobile-number", to: "users#missing_mobile_number"
     post "sign-out-before-resetting-password", to: "users/passwords#sign_out_before_resetting_password", as: :sign_out_before_resetting_password
-    get "remove_user", to: "users#remove", as: :remove_user
-    delete "delete", to: "users#delete", as: :delete_user
   end
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
@@ -112,6 +110,28 @@ Rails.application.routes.draw do
     end
 
     get "cases/new", to: "ts_investigations#new"
+
+    resource :notifications, only: [] do
+      resource :search, only: :show
+
+      scope module: :notifications do
+        resources :create, only: %i[index] do
+          collection do
+            get "from-product/:product_id", to: "create#from_product", as: "from_product"
+          end
+        end
+      end
+    end
+
+    resources :notifications, param: :pretty_id, only: %i[index] do
+      scope module: :notifications do
+        resources :create, only: %i[index show update] do
+          collection do
+            get "add-product/:product_id", to: "create#add_product", as: "add_product"
+          end
+        end
+      end
+    end
 
     resources :investigations,
               path: "cases",
@@ -204,12 +224,6 @@ Rails.application.routes.draw do
       resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
       resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
       resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create edit update], path: "phone-calls"
-      resources :alerts, controller: "investigations/alerts", only: %i[show new create update] do
-        collection do
-          get :about
-          post :preview
-        end
-      end
 
       resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
         collection do
@@ -268,6 +282,15 @@ Rails.application.routes.draw do
             put "upload-products-file", to: "bulk_products#upload_products_file"
             get "resolve-duplicate-products", to: "bulk_products#resolve_duplicate_products", as: "resolve_duplicate_products_bulk_upload"
             put "resolve-duplicate-products", to: "bulk_products#resolve_duplicate_products"
+            get "review-products", to: "bulk_products#review_products", as: "review_products_bulk_upload"
+            put "review-products", to: "bulk_products#review_products"
+            get "cancel-and-reupload", to: "bulk_products#cancel_and_reupload", as: "cancel_and_reupload_bulk_upload"
+            get "choose-products-for-corrective-actions", to: "bulk_products#choose_products_for_corrective_actions", as: "choose_products_for_corrective_actions_bulk_upload"
+            put "choose-products-for-corrective-actions", to: "bulk_products#choose_products_for_corrective_actions"
+            get "create-corrective-action", to: "bulk_products#create_corrective_action", as: "create_corrective_action_bulk_upload"
+            put "create-corrective-action", to: "bulk_products#create_corrective_action"
+            get "check-corrective-actions", to: "bulk_products#check_corrective_actions", as: "check_corrective_actions_bulk_upload"
+            put "check-corrective-actions", to: "bulk_products#check_corrective_actions"
           end
         end
       end
@@ -313,12 +336,12 @@ Rails.application.routes.draw do
     end
 
     resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
-      resources :locations do
+      resources :locations, controller: "businesses/locations" do
         member do
           get :remove
         end
       end
-      resources :contacts do
+      resources :contacts, controller: "businesses/contacts" do
         member do
           get :remove
         end

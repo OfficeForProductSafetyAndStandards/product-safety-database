@@ -2,6 +2,8 @@ class User < ApplicationRecord
   include Deletable
   include UserCollaboratorInterface
 
+  has_paper_trail on: %i[create update destroy], only: %i[name email mobile_number team_id deleted_at], meta: { entity_type: "User", entity_id: :id }
+
   enum locked_reason: {
     failed_attempts: "failed_attempts",
     inactivity: "inactivity"
@@ -40,6 +42,7 @@ class User < ApplicationRecord
             unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
+  validates :mobile_number, presence: true, on: :change_mobile_number
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
@@ -112,10 +115,6 @@ class User < ApplicationRecord
     has_role? :risk_level_validator
   end
 
-  def can_send_email_alert?
-    has_role? :email_alert_sender
-  end
-
   def can_view_restricted_cases?
     has_role? :restricted_case_viewer
   end
@@ -124,8 +123,16 @@ class User < ApplicationRecord
     has_role? :product_bulk_uploader
   end
 
+  def can_use_notification_task_list?
+    has_role? :notification_task_list_user
+  end
+
   def can_use_product_recall_tool?
     team.name == "OPSS Incident Management"
+  end
+
+  def can_access_new_search?
+    has_role? :use_new_search
   end
 
   def has_role?(role)

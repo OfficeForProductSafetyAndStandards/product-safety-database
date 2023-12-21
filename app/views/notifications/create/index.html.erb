@@ -1,0 +1,35 @@
+<%= page_title("Create a product safety notification") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Create a product safety notification</h1>
+    <% if !@notification.submitted? %>
+      <p class="govuk-body govuk-!-font-weight-bold">Product safety notification incomplete</p>
+    <% end %>
+    <p class="govuk-body">You have completed <%= sections_complete %> of 6 sections.</p>
+    <p class="govuk-body">You must first complete Sections 1, 2, and 3 in order to access Section 6 for the final submission. Note that Sections 4 and 5 are optional and can be completed after you have made your initial submission.</p>
+    <ol class="govuk-list govuk-list--number govuk-heading-m opss-task-list-group">
+      <% Notifications::CreateController::TASK_LIST_SECTIONS.each_with_index do |(section, tasks), section_index| %>
+        <li>
+          <h2 class="govuk-heading-m"><%= t(".sections.#{section}.title") %><% if Notifications::CreateController::TASK_LIST_SECTIONS_OPTIONAL.include?(section) %> <small class="govuk-body-s">(can be completed after the initial submission)</small><% end %></h2>
+          <ul class="govuk-task-list">
+            <% tasks.each_with_index do |task, task_index| %>
+              <li class="govuk-task-list__item<% if task_status(task) != "cannot_start_yet" %> govuk-task-list__item--with-link<% end %>">
+                <div class="govuk-task-list__task-name-and-hint">
+                  <% if task_status(task) != "cannot_start_yet" %>
+                    <a class="govuk-link govuk-task-list__link" href="<%= wizard_path(task) %>" aria-describedby="task-list-<%= section_index %>-<%= task_index %>-status" data-test="task-list-<%= section_index %>-<%= task_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></a>
+                  <% else %>
+                    <div data-test="task-list-<%= section_index %>-<%= task_index %>-status"><%= t(".sections.#{section}.tasks.#{task}.title") %></div>
+                  <% end %>
+                </div>
+                <div class="govuk-task-list__status" id="task-list-<%= section_index %>-<%= task_index %>-status">
+                  <%= task_status_tag(task_status(task)) %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</div>

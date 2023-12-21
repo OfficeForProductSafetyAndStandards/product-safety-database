@@ -1,6 +1,7 @@
 # 0. Title
 
 Date: `<date>`
+
 Status: [Accepted|Amended by `#`|Retired]
 
 ## Context

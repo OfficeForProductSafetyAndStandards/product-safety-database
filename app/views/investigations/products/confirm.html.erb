@@ -8,7 +8,7 @@
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l opss-fieldset__legend">
-            <h1 class="govuk-fieldset__heading">Is this the correct product record to add to your case?</h1>
+            <h1 class="govuk-fieldset__heading">Is this the correct product record to add to your notification?</h1>
           </legend>
           <div class="govuk-grid-row">
             <section class="govuk-grid-column-three-quarters opss-panels">
@@ -40,9 +40,9 @@
                   ]
                 ) %>
                 <% if @product.virus_free_images.any? %>
-                  <%= govukDetails(
-                    summaryText: "Product image",
-                    html: capture {
+                  <%= govuk_details(
+                    summary_text: "Product image",
+                    text: capture {
                       render "image_uploads/image_preview",
                         image: @product.virus_free_images.first,
                         dimensions: [300, 500],

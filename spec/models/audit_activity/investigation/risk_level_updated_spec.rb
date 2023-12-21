@@ -34,7 +34,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
       let(:new_risk) { "medium" }
 
       it "generates title based on the update_verb and risk level" do
-        expect(audit_activity.title(user)).to eq "Case risk level set to medium risk"
+        expect(audit_activity.title(user)).to eq "Notification risk level set to medium risk"
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
       let(:new_risk) { "medium" }
 
       it "generates title based on the update_verb and risk level" do
-        expect(audit_activity.title(user)).to eq "Case risk level changed to medium risk"
+        expect(audit_activity.title(user)).to eq "Notification risk level changed to medium risk"
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
       let(:new_risk) { nil }
 
       it "generates title based on the update_verb" do
-        expect(audit_activity.title(user)).to eq "Case risk level removed"
+        expect(audit_activity.title(user)).to eq "Notification risk level removed"
       end
     end
   end

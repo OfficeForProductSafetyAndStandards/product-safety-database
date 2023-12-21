@@ -26,6 +26,7 @@ module Prism
       "microbiological" => "microbiological",
       "chemical" => "chemical",
       "lack_of_protection" => "lack_of_protection",
+      "functional" => "functional",
       "other" => "other",
     }
 
@@ -41,7 +42,7 @@ module Prism
       "level_4" => "level_4",
     }
 
-    validates :hazard_type, inclusion: %w[mechanical size_and_shape electrical fire_and_explosion thermal ergonomic noise_and_vibration microbiological chemical lack_of_protection other], on: :choose_hazard_type
+    validates :hazard_type, inclusion: %w[mechanical size_and_shape electrical fire_and_explosion thermal ergonomic noise_and_vibration microbiological chemical lack_of_protection functional other], on: :choose_hazard_type
     validates :other_hazard_type, presence: true, if: -> { hazard_type == "other" }, on: :choose_hazard_type
     validates :description, presence: true, on: :choose_hazard_type
     validates :product_aimed_at, inclusion: %w[particular_group_of_users general_population], on: :identify_who_might_be_harmed

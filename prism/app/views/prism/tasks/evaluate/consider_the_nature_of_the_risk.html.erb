@@ -9,6 +9,9 @@
         <span class="govuk-caption-l">Evaluate product risk and submit assessment</span>
         Consider the nature of the risk
       </h1>
+      <p class="govuk-body govuk-hint">
+        A risk evaluation is required because decisions on whether risk management action is needed, and the nature of that action, should not be made purely according to the level of risk involved. Other factors are potentially relevant, such as those identified in this section.
+      </p>
       <%= govuk_inset_text do %>
         <p class="govuk-body">Overall product risk recorded in the assessment</p>
         <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
@@ -83,18 +86,12 @@
         hint: { text: "The risk differential is the gap between the level of risk presented by the non-compliant product and the level of risk it would present if it was fully compliant." },
         bold_labels: false
       %>
-      <%=
-        f.govuk_collection_radio_buttons :people_at_increased_risk,
-        [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
-        ],
-        :id,
-        :name,
-        legend: { text: "Are there people at increased risk?" },
-        hint: { text: question_hint_panel(people_at_increased_risk).html_safe },
-        bold_labels: false
-      %>
+      <%= f.govuk_radio_buttons_fieldset(:people_at_increased_risk, legend: { text: "Are there people at increased risk?" }) do %>
+        <%= f.govuk_radio_button :people_at_increased_risk, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_area :people_at_increased_risk_details, label: nil %>
+        <% end %>
+        <%= f.govuk_radio_button :people_at_increased_risk, false, label: { text: "No" } %>
+      <% end %>
       <%=
         f.govuk_collection_radio_buttons :relevant_action_by_others,
         [
@@ -104,20 +101,15 @@
         ],
         :id,
         :name,
-        legend: { text: "Is relevant action planned or underway by another MSA or other organisation?" },
+        legend: { text: "Is relevant risk management action planned or underway by another MSA or other organisation?" },
         bold_labels: false
       %>
-      <%=
-        f.govuk_collection_radio_buttons :factors_to_take_into_account,
-        [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
-        ],
-        :id,
-        :name,
-        legend: { text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?" },
-        bold_labels: false
-      %>
+      <%= f.govuk_radio_buttons_fieldset(:factors_to_take_into_account, legend: { text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?" }) do %>
+        <%= f.govuk_radio_button :factors_to_take_into_account, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_area :factors_to_take_into_account_details, label: nil %>
+        <% end %>
+        <%= f.govuk_radio_button :factors_to_take_into_account, false, label: { text: "No" } %>
+      <% end %>
       <%= f.govuk_submit "Save and continue" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>

@@ -1,0 +1,100 @@
+<% page_heading = "Review details of the products you are uploading - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_review_products_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: resolve_duplicate_products_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_review_products_form, url: review_products_bulk_upload_products_path(barcodes: params[:barcodes], product_ids: params[:product_ids]), html: { novalidate: true }, method: :put, local: true, multipart: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= error_summary @bulk_products_review_products_form.errors %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Review details of the products you are uploading
+      </h1>
+      <% @products_to_review_length = @products_to_review.length - 1 %>
+      <% @products_to_review.each_with_index do |data, index| %>
+        <% product = data[:product].decorate %>
+        <% investigation_product = data[:investigation_product] %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-quarter">
+            <% if product.virus_free_images.present? %>
+              <%= image_tag(product.virus_free_images.first.file_upload, alt: product.virus_free_images.first.file_upload.filename, class: "opss-details-img") %>
+            <% else %>
+              <%= image_tag("no-product-image.jpg", width: 200, height: 200, alt: "No product image available", class: "opss-details-img") %>
+              <% if product.id.nil? %>
+                <div data-controller="add-remove" data-add-remove-template-id="product-image-upload-field-<%= product.barcode %>">
+                  <p class="govuk-body">
+                    <a href="#" class="govuk-link govuk-link--no-visited-state" data-action="click->add-remove#add" data-add-remove-target="addLink">Add product image</a>
+                  </p>
+                  <div data-add-remove-target="item"></div>
+                </div>
+                <template id="product-image-upload-field-<%= product.barcode %>">
+                  <%= govukFileUpload(
+                    id: "product-image-upload-#{product.barcode}",
+                    name: "bulk_products_review_products_form[images][#{product.barcode}]",
+                    label: {
+                      text: "Upload a file",
+                      classes: "govuk-label--s"
+                    }
+                  ) %>
+                  <p class="govuk-body">
+                    <a href="#" class="govuk-link govuk-link--no-visited-state" data-action="click->add-remove#remove">Remove product image</a>
+                  </p>
+                </template>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= product.name_with_brand %></h2>
+            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Product category</dt>
+                <dd class="govuk-summary-list__value"><%= product.category %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Product subcategory</dt>
+                <dd class="govuk-summary-list__value"><%= product.subcategory %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Customs code</dt>
+                <dd class="govuk-summary-list__value"><%= investigation_product&.customs_code %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Country of origin</dt>
+                <dd class="govuk-summary-list__value"><%= country_from_code(product.country_of_origin) %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Barcode</dt>
+                <dd class="govuk-summary-list__value"><%= product.barcode %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Product description</dt>
+                <dd class="govuk-summary-list__value"><%= product.description %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">How many units affected?</dt>
+                <dd class="govuk-summary-list__value"><%= investigation_product&.number_of_affected_units %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Manufacturer's brand name</dt>
+                <dd class="govuk-summary-list__value"><%= product.brand %></dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Batch number</dt>
+                <dd class="govuk-summary-list__value"><%= investigation_product&.batch_number %></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <% if index < @products_to_review_length %>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <% end %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= govukButton(text: "Cancel and re-upload", href: cancel_and_reupload_bulk_upload_products_path, classes: "govuk-button--secondary") %>
+      </div>
+    </div>
+  </div>
+<% end %>

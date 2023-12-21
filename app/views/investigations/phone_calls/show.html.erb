@@ -2,23 +2,20 @@
 <% page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <span class="govuk-caption-l">Phone call</span>
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
-
+    <%= govuk_warning_text(text: t("case.protected_details", data_type: "phone call correspondence")) %>
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
         Added <%= @phone_call.created_at.to_formatted_s(:govuk) %>
       </p>
     </div>
-
     <% rows = [
         {
           key: { text: "Date of call" },
           value: { text: @phone_call.correspondence_date.to_formatted_s(:govuk) }
         }
       ]
-
 
       if @phone_call.correspondent_name.present? || @phone_call.phone_number.present?
         rows << {
@@ -42,11 +39,7 @@
       end
 
     %>
-
     <%= govukSummaryList(rows: rows) %>
-
-    <%= permission_notice(text: t("case.protected_details", data_type: "phone call correspondence")) %>
-
     <%= link_to_if policy(@investigation).update?, "Edit phone call", edit_investigation_phone_call_path(@investigation, @phone_call), class: "govuk-link" %>
   </div>
 </div>

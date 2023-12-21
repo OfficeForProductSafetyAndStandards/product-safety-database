@@ -67,7 +67,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_opensearch do
         expect { delete_call }.to change(update_owner_activities, :count).by(3)
 
         update_owner_activities.last(3).each do |activity|
-          expect(activity.title(user)).to start_with "Case owner automatically changed on"
+          expect(activity.title(user)).to start_with "Notification owner automatically changed on"
           expect(activity.title(user)).to end_with "to #{user.team.name}"
         end
       end

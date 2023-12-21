@@ -78,7 +78,7 @@ private
   end
 
   def same_email_file?
-    email_file_action == "replace" && @previous_email_file_checksum ==  email.email_file.checksum
+    email_file_action == "replace" && @previous_email_file_checksum == email.email_file.checksum
   end
 
   def email_file_changed?
@@ -128,8 +128,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited an email on the case.",
-        "Email edited for Case"
+        "#{user.decorate.display_name(viewer: recipient)} edited an email on the notification.",
+        "Email edited for notification"
       ).deliver_later
     end
   end

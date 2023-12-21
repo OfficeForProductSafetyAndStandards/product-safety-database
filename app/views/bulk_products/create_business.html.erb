@@ -1,15 +1,15 @@
-<% page_heading = "Add the business to the case - Upload multiple products" %>
+<% page_heading = "Add the business to the notification - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_add_business_type_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: create_case_bulk_upload_products_path) %>
+  <%= govuk_back_link(href: create_case_bulk_upload_products_path) %>
 <% end %>
 <%= form_with model: @bulk_products_add_business_type_form, url: create_business_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-three-quarters">
       <%= error_summary @bulk_products_add_business_type_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
-        Add the business to the case
+        Add the business to the notification
       </h1>
       <% online_marketplace_radios = capture do %>
         <% number_of_market_places = @online_marketplaces.length %>

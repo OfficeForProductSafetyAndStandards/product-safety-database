@@ -12,7 +12,10 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @answer         = opensearch_for_investigations(20)
+        # Find the most recent incomplete bulk products upload for the current user, if any
+        @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
+
+        @pagy, @answer  = pagy_searchkick(opensearch_for_investigations(20, paginate: true))
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
@@ -26,6 +29,9 @@ class InvestigationsController < ApplicationController
     authorize @investigation, :view_non_protected_details?
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
     @complainant = @investigation.complainant&.decorate
+
+    # Find the most recent incomplete bulk products upload for the current user and case, if any
+    @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil, investigation: @investigation.object).order(updated_at: :desc).first
   end
 
   def created
@@ -38,7 +44,8 @@ class InvestigationsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_cases" })
-    @answer         = search_for_investigations(20)
+    @pagy, @answer = search_for_investigations
+    @count = @pagy.count
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
@@ -57,7 +64,8 @@ class InvestigationsController < ApplicationController
         "page_name" => "team_cases"
       }
     )
-    @answer         = search_for_investigations(20)
+    @pagy, @answer = search_for_investigations
+    @count = @pagy.count
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
@@ -70,7 +78,8 @@ class InvestigationsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => @page_name })
-    @answer         = search_for_investigations(20)
+    @pagy, @answer = search_for_investigations
+    @count = @pagy.count
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
 
@@ -92,9 +101,9 @@ class InvestigationsController < ApplicationController
 
     if @delete_investigation_form.valid?
       DeleteInvestigation.call!(investigation: @investigation, deleted_by: current_user)
-      redirect_to your_cases_investigations_path, flash: { success: "The case was deleted" }
+      redirect_to your_cases_investigations_path, flash: { success: "The notification was deleted" }
     else
-      redirect_to your_cases_investigations_path, flash: { warning: "The case could not be deleted" }
+      redirect_to your_cases_investigations_path, flash: { warning: "The notification could not be deleted" }
     end
   end
 
@@ -112,7 +121,7 @@ private
         format.html do
           redirect_to investigation_path(@investigation),
                       flash: {
-                        success: "Case was successfully updated"
+                        success: "Notification was successfully updated"
                       }
         end
         format.json { render :show, status: :ok, location: @investigation }
@@ -143,7 +152,7 @@ private
   end
 
   def count_to_display
-    default_params ? Investigation.not_deleted.count : @answer.total_count
+    default_params ? Investigation.not_deleted.count : @pagy.count
   end
 
   def default_params

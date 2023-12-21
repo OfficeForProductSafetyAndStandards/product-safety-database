@@ -1,1 +1,1898 @@
-[{"team_name":"Aberdeenshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Aberdeenshire"},{"team_name":"Angus Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Angus"},{"team_name":"Antrim \u0026 Newtownabbey Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Antrim and Newtownabbey"},{"team_name":"Ards and North Down Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Ards and North Down"},{"team_name":"Argyll and Bute Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Argyll and Bute"},{"team_name":"Armagh, Banbridge and Craigavon Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Armagh, Banbridge and Craigavon"},{"team_name":"Barking and Dagenham Borough","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Barking and Dagenham"},{"team_name":"Barnsley Metropolitan Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"Barnsley"},{"team_name":"Bath and North East Somerset Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Bath and NE Somerset"},{"team_name":"Bedford Borough Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Bedford Borough"},{"team_name":"Belfast City Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Belfast"},{"team_name":"Birmingham City Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Birmingham"},{"team_name":"Blackburn with Darwen Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Blackburn"},{"team_name":"Blackpool Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Blackpool"},{"team_name":"Blaenau Gwent and Torfaen County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Blaeneu"},{"team_name":"Bolton Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Bolton"},{"team_name":"Bournemouth, Christchurch and Poole Councils","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Bournemouth, Christchurch and Poole"},{"team_name":"Bracknell Forest, West Berkshire and Wokingham Councils","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Bracknell Forest, West Berkshire and Wokingham"},{"team_name":"Bridgend, Cardiff and the Vale of Glamorgan","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Bridgend, Cardiff and the Vale of Glamorgan"},{"team_name":"Brighton \u0026 Hove City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Brighton and Hove"},{"team_name":"Bristol City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Bristol"},{"team_name":"Buckinghamshire \u0026 Surrey Councils","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Buckinghamshire"},{"team_name":"Bury Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Bury "},{"team_name":"Caerphilly County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Caerphilly"},{"team_name":"Cambridgeshire and Peterborough Trading Standards Service","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Bedford Borough"},{"team_name":"Carmarthenshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Carmarthenshire"},{"team_name":"Causeway Coast and Glens Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Causeway Coast and Glens"},{"team_name":"Central Bedfordshire Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Central Bedfordshire"},{"team_name":"Ceredigion County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Ceredigion"},{"team_name":"Cheshire East Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Cheshire East"},{"team_name":"Cheshire West and Chester Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Cheshire West"},{"team_name":"City of Edinburgh Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Edinburgh"},{"team_name":"City of London","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"City of London"},{"team_name":"City of Stoke on Trent","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Stoke City"},{"team_name":"City of Westminster","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Westminster"},{"team_name":"City of York","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"York"},{"team_name":"Comhairle Nan Eilean Siar","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Comhairle nan Wilean Siar"},{"team_name":"Conwy County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Conwy"},{"team_name":"Cornwall County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Cornwall"},{"team_name":"Coventry City Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Coventry"},{"team_name":"Cumbria County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Cumbria"},{"team_name":"Darlington Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Darlington"},{"team_name":"Denbighshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Denbighshire"},{"team_name":"Department for the Economy (NI)","type":"external","regulator_name":"Department for the Economy Northern Ireland","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Department of Justice Northern Ireland","type":"external","regulator_name":"Department of Justice Northern Ireland","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Derby City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Derby City"},{"team_name":"Derbyshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Derbyshire"},{"team_name":"Derry City and Strabane Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Derry and Strabane"},{"team_name":"Doncaster Metropolitan Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"Doncaster"},{"team_name":"Dorset County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Dorset"},{"team_name":"Driver and Vehicle Standards Agency","type":"external","regulator_name":"Driver and Vehicle Standards Agency","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Dudley Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Dudley"},{"team_name":"Dumfries and Galloway Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Dumfries and Galloway"},{"team_name":"Dundee City Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Dundee"},{"team_name":"Durham County Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Durham"},{"team_name":"East Ayrshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Dundee"},{"team_name":"East Dunbartonshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"East Dunbartonshire"},{"team_name":"East Lothian Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"East Lothian"},{"team_name":"East Renfrewshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"East Renfrewshire"},{"team_name":"East Riding of Yorkshire Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"East Riding"},{"team_name":"East Sussex County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"East Sussex"},{"team_name":"Essex County Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Essex"},{"team_name":"Falkirk Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Falkirk"},{"team_name":"Fermanagh and Omagh Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Fermanagh and Omagh"},{"team_name":"Fife Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Fife "},{"team_name":"Flintshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Flintshire"},{"team_name":"Gateshead Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Gateshead"},{"team_name":"Glasgow City Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Glasgow"},{"team_name":"Gloucestershire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Gloucestershire"},{"team_name":"Gwynedd County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Gwynedd"},{"team_name":"Halton Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Halton "},{"team_name":"Hammersmith \u0026 Fulham Borough","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Hammersmith and Fulham"},{"team_name":"Hampshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Hampshire"},{"team_name":"Hartlepool Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Hartlepool"},{"team_name":"Heart of the South West Trading Standards","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"South West"},{"team_name":"Herefordshire Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Herefordshire"},{"team_name":"Hertfordshire County Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Hertfordshire"},{"team_name":"Highland Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"The Highlands"},{"team_name":"HSE chemical regulations division","type":"external","regulator_name":"Health and Safety Executive","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"HSE civil explosives","type":"external","regulator_name":"Health and Safety Executive","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"HSE Northern Ireland","type":"external","regulator_name":"Health and Safety Executive Northern Ireland","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"HSE Product Safety and Market Surveillance Unit","type":"external","regulator_name":"Health and Safety Executive","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Hull City Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"Hull"},{"team_name":"Inverclyde Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Inverclyde"},{"team_name":"Isle of Anglesey County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Anglesey"},{"team_name":"Isle of Wight Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Isle of Wight"},{"team_name":"Kent County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Kent"},{"team_name":"Knowsley Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Knowsley"},{"team_name":"Lancashire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Lancashire"},{"team_name":"Leicester City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Leicester City"},{"team_name":"Leicestershire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Leicestershire"},{"team_name":"Lincolnshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Lincolnshire"},{"team_name":"Lisburn \u0026 Castlereagh City Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Lisburn and Castlereagh"},{"team_name":"Liverpool City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Liverpool"},{"team_name":"London Borough of Barnet","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Barnet"},{"team_name":"London Borough of Bexley","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Bexley"},{"team_name":"London Borough of Brent","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Brent"},{"team_name":"London Borough of Bromley","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Bromley"},{"team_name":"London Borough of Camden","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Camden"},{"team_name":"London Borough of Croydon","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Croydon"},{"team_name":"London Borough of Ealing","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Ealing"},{"team_name":"London Borough of Enfield","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Enfield"},{"team_name":"London Borough of Hackney","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Hackney"},{"team_name":"London Borough of Haringey","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Haringey"},{"team_name":"London Borough of Havering","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Havering"},{"team_name":"London Borough of Hillingdon","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Hillingdon"},{"team_name":"London Borough of Hounslow","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Houndslow"},{"team_name":"London Borough of Islington","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Islington"},{"team_name":"London Borough of Lambeth","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Lambeth"},{"team_name":"London Borough of Lewisham","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Lewisham"},{"team_name":"London Borough of Newham","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Newham"},{"team_name":"London Borough of Redbridge","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Redbridge"},{"team_name":"London Borough of Southwark","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Southwark"},{"team_name":"London Borough of Sutton","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Sutton"},{"team_name":"London Borough of Tower Hamlets","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Tower Hamlets"},{"team_name":"London Borough of Waltham Forest","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Waltham Forest"},{"team_name":"London Economics","type":"external","regulator_name":"[NB should be deleted - academic provided with access for research]","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Luton Borough Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Luton"},{"team_name":"Manchester City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Manchester"},{"team_name":"Medicines and Healthcare Products Regulatory Agency","type":"external","regulator_name":"Medicines and Healthcare products Regulatory Agency","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Medway Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Medway"},{"team_name":"Merthyr Tydfil County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Merthyr Tydfil"},{"team_name":"MHRA Medicine Borderline Section","type":"external","regulator_name":"Medicines and Healthcare products Regulatory Agency","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Mid \u0026 East Antrim Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Mid and East Antrim"},{"team_name":"Mid Ulster District Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Mid Ulster"},{"team_name":"Middlesbrough Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Middlesborough"},{"team_name":"Midlothian Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Midlothian"},{"team_name":"Milton Keynes Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Milton Keynes"},{"team_name":"Monmouthshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Monmouthshire"},{"team_name":"Moray Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"The Moray"},{"team_name":"Neath Port Talbot County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Neath"},{"team_name":"Newcastle upon Tyne City Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Newcastle Under Tyne"},{"team_name":"Newport City Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Newport"},{"team_name":"Newry, Mourne and Down Council","type":"local_authority","regulator_name":null,"ts_region":"Northern Ireland","ts_acronym":"NI","ts_area":"Newry, Mourne and Down"},{"team_name":"NIEA Chemicals Compliance Team","type":"external","regulator_name":"Department of Agriculture, Environment and Rural Affairs (DAERA)","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Norfolk County Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Norfolk"},{"team_name":"North Ayrshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"North Ayrshire"},{"team_name":"North East Lincolnshire Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"North East Lincolnshire"},{"team_name":"North Lanarkshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"North Lanarkshire"},{"team_name":"North Lincolnshire Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"North Lincolnshire"},{"team_name":"North Northamptonshire Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"North Northamptonshire"},{"team_name":"North Somerset Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"North Somerset"},{"team_name":"North Tyneside Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"North Tyneside"},{"team_name":"North Yorkshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"North Yorkshire"},{"team_name":"Northamptonshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Northamptonshire"},{"team_name":"Northumberland County Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Northumberland"},{"team_name":"Nottingham City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Nottingham City"},{"team_name":"Nottinghamshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Nottinghamshire"},{"team_name":"Ofcom","type":"external","regulator_name":"Ofcom","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Oldham Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Oldham"},{"team_name":"OPSS Enforcement","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Behavioural Insights","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Ecodesign","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Incident Management","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Policy","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Trading Standards Co-ordination","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Digital","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Ports and Borders","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Connections","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Intelligence","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Engineering \u0026 Technology","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Stakeholder Engagement","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Compliance \u0026 Testing","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Legal","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Analysis","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS PPE business liason","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Science","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Operational support unit","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Construction Products","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Product Safety Enforcement","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Risk","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Business Compliance","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Local Authority Unit","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Border Profiling Unit","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"OPSS Product Safety Review","type":"internal","regulator_name":null,"ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Orkney Islands Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Orkney Islands"},{"team_name":"Oxfordshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Oxfordshire"},{"team_name":"Pembrokeshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Pembrokeshire"},{"team_name":"Perth and Kinross Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Perth and Kinross"},{"team_name":"Plymouth City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Plymouth"},{"team_name":"Portsmouth City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Portsmouth"},{"team_name":"Powys County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Powys"},{"team_name":"Reading Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Reading"},{"team_name":"Redcar \u0026 Cleveland Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Redcar and Cleveland"},{"team_name":"Renfrewshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Renfrewshire"},{"team_name":"Rhondda Cynon Taf County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Rhondda Cynon Taf"},{"team_name":"Richmond, Merton and Wandsworth Borough","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Richmond, Merton and Wandsworth"},{"team_name":"Rochdale Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Rochdale"},{"team_name":"Rotherham Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"Rotherham"},{"team_name":"Royal Borough of Greenwich","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Greenwich"},{"team_name":"Royal Borough of Kensington and Chelsea","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Kensington and Chelsea"},{"team_name":"Royal Borough of Kingston upon Thames","type":"local_authority","regulator_name":null,"ts_region":"London Trading Standards","ts_acronym":"LTS","ts_area":"Kingston upon Thames"},{"team_name":"Royal Borough of Windsor and Maidenhead Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Windsor and Maidenhead"},{"team_name":"Salford City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Salford"},{"team_name":"Sandwell Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Sandwell"},{"team_name":"Scottish Borders Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Scottish Borders"},{"team_name":"SE product safety and construction","type":"external","regulator_name":"Health and Safety Executive Northern Ireland","ts_region":null,"ts_acronym":null,"ts_area":null},{"team_name":"Sefton Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Sefton"},{"team_name":"Sheffield City Council","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"Sheffield"},{"team_name":"Shetland Islands Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Shetland Islands"},{"team_name":"Shropshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Shropshire"},{"team_name":"Slough Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Slough"},{"team_name":"Solihull Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Solihull "},{"team_name":"South Ayrshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"South Ayrshire"},{"team_name":"South Gloucestershire Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"South Gloucestershire"},{"team_name":"South Lanarkshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"South Lanarkshire"},{"team_name":"South Tyneside Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"South Tyneside"},{"team_name":"Southampton City Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"Southampton"},{"team_name":"Southend-on-Sea Borough Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Southend-on-sea"},{"team_name":"St Helens Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"St Helens"},{"team_name":"Staffordshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Staffordshire"},{"team_name":"Stirling \u0026 Clackmannanshire Councils","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"Stirling"},{"team_name":"Stockport Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Stockport"},{"team_name":"Stockton-on-Tees Borough Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Stockton on Tees"},{"team_name":"Suffolk County Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Suffolk"},{"team_name":"Sunderland City Council","type":"local_authority","regulator_name":null,"ts_region":"North East Trading Standards Authorities","ts_acronym":"NETSA","ts_area":"Sunderland"},{"team_name":"Swansea City and County Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Swansea"},{"team_name":"Swindon Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Swindon"},{"team_name":"Tameside Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Tameside"},{"team_name":"Telford \u0026 Wrekin Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Telford and Wrekin"},{"team_name":"Thurrock  Council","type":"local_authority","regulator_name":null,"ts_region":"East of England Trading Standards Authorities","ts_acronym":"EETSA","ts_area":"Thurrock"},{"team_name":"Trafford Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Trafford"},{"team_name":"Walsall Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Walsall"},{"team_name":"Warrington Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Warrington"},{"team_name":"Warwickshire county Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Warwickshire"},{"team_name":"West Dunbartonshire Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"West Dunbartonshire"},{"team_name":"West Lothian Council","type":"local_authority","regulator_name":null,"ts_region":"Scotland ","ts_acronym":"SCOTSS","ts_area":"West Lothian"},{"team_name":"West Northamptonshire Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards East Midlands","ts_acronym":"TSEM","ts_area":"Nottinghamshire"},{"team_name":"West Sussex County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South East","ts_acronym":"TSSE","ts_area":"West Sussex"},{"team_name":"West Yorkshire Joint Services","type":"local_authority","regulator_name":null,"ts_region":"Yorkshire and Humber Trading Standards","ts_acronym":"YAHTSG","ts_area":"West Yorkshire"},{"team_name":"Wigan Metropolitan Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Wigan"},{"team_name":"Wiltshire County Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards South West","ts_acronym":"TSSW","ts_area":"Wiltshire"},{"team_name":"Wirral Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Trading Standards North West","ts_acronym":"TSNW","ts_area":"Wirral"},{"team_name":"Wolverhampton City Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Wolverhampton"},{"team_name":"Worcestershire County Council","type":"local_authority","regulator_name":null,"ts_region":"Central England Trading Standards","ts_acronym":"CEnTSA","ts_area":"Worcestershire"},{"team_name":"Wrexham County Borough Council","type":"local_authority","regulator_name":null,"ts_region":"Wales Heads of Trading Standards","ts_acronym":"WHOTS","ts_area":"Wrexham"}]
+[
+  {
+    "team_name": "Aberdeenshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Aberdeenshire"
+  },
+  {
+    "team_name": "Angus Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Angus"
+  },
+  {
+    "team_name": "Antrim \u0026 Newtownabbey Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Antrim and Newtownabbey"
+  },
+  {
+    "team_name": "Ards and North Down Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Ards and North Down"
+  },
+  {
+    "team_name": "Argyll and Bute Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Argyll and Bute"
+  },
+  {
+    "team_name": "Armagh, Banbridge and Craigavon Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Armagh, Banbridge and Craigavon"
+  },
+  {
+    "team_name": "Barking and Dagenham Borough",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Barking and Dagenham"
+  },
+  {
+    "team_name": "Barnsley Metropolitan Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "Barnsley"
+  },
+  {
+    "team_name": "Bath and North East Somerset Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Bath and NE Somerset"
+  },
+  {
+    "team_name": "Bedford Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Bedford Borough"
+  },
+  {
+    "team_name": "Belfast City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Belfast"
+  },
+  {
+    "team_name": "Birmingham City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Birmingham"
+  },
+  {
+    "team_name": "Blackburn with Darwen Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Blackburn"
+  },
+  {
+    "team_name": "Blackpool Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Blackpool"
+  },
+  {
+    "team_name": "Blaenau Gwent and Torfaen County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Blaeneu"
+  },
+  {
+    "team_name": "Bolton Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Bolton"
+  },
+  {
+    "team_name": "Bournemouth, Christchurch and Poole Councils",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Bournemouth, Christchurch and Poole"
+  },
+  {
+    "team_name": "Bracknell Forest, West Berkshire and Wokingham Councils",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Bracknell Forest, West Berkshire and Wokingham"
+  },
+  {
+    "team_name": "Bridgend, Cardiff and the Vale of Glamorgan",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Bridgend, Cardiff and the Vale of Glamorgan"
+  },
+  {
+    "team_name": "Brighton \u0026 Hove City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Brighton and Hove"
+  },
+  {
+    "team_name": "Bristol City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Bristol"
+  },
+  {
+    "team_name": "Buckinghamshire \u0026 Surrey Councils",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Buckinghamshire"
+  },
+  {
+    "team_name": "Bury Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Bury "
+  },
+  {
+    "team_name": "Caerphilly County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Caerphilly"
+  },
+  {
+    "team_name": "Cambridgeshire and Peterborough Trading Standards Service",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Bedford Borough"
+  },
+  {
+    "team_name": "Carmarthenshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Carmarthenshire"
+  },
+  {
+    "team_name": "Causeway Coast and Glens Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Causeway Coast and Glens"
+  },
+  {
+    "team_name": "Central Bedfordshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Central Bedfordshire"
+  },
+  {
+    "team_name": "Ceredigion County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Ceredigion"
+  },
+  {
+    "team_name": "Cheshire East Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Cheshire East"
+  },
+  {
+    "team_name": "Cheshire West and Chester Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Cheshire West"
+  },
+  {
+    "team_name": "City of Edinburgh Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Edinburgh"
+  },
+  {
+    "team_name": "City of London",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "City of London"
+  },
+  {
+    "team_name": "City of Stoke on Trent",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Stoke City"
+  },
+  {
+    "team_name": "City of Westminster",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Westminster"
+  },
+  {
+    "team_name": "City of York",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "York"
+  },
+  {
+    "team_name": "Comhairle Nan Eilean Siar",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Comhairle nan Wilean Siar"
+  },
+  {
+    "team_name": "Conwy County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Conwy"
+  },
+  {
+    "team_name": "Cornwall County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Cornwall"
+  },
+  {
+    "team_name": "Coventry City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Coventry"
+  },
+  {
+    "team_name": "Cumbria County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Cumbria"
+  },
+  {
+    "team_name": "Darlington Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Darlington"
+  },
+  {
+    "team_name": "Denbighshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Denbighshire"
+  },
+  {
+    "team_name": "Department for the Economy (NI)",
+    "type": "external",
+    "regulator_name": "Department for the Economy Northern Ireland",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Department of Justice Northern Ireland",
+    "type": "external",
+    "regulator_name": "Department of Justice Northern Ireland",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Derby City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Derby City"
+  },
+  {
+    "team_name": "Derbyshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Derbyshire"
+  },
+  {
+    "team_name": "Derry City and Strabane Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Derry and Strabane"
+  },
+  {
+    "team_name": "Doncaster Metropolitan Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "Doncaster"
+  },
+  {
+    "team_name": "Dorset County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Dorset"
+  },
+  {
+    "team_name": "Driver and Vehicle Standards Agency",
+    "type": "external",
+    "regulator_name": "Driver and Vehicle Standards Agency",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Dudley Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Dudley"
+  },
+  {
+    "team_name": "Dumfries and Galloway Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Dumfries and Galloway"
+  },
+  {
+    "team_name": "Dundee City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Dundee"
+  },
+  {
+    "team_name": "Durham County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Durham"
+  },
+  {
+    "team_name": "East Ayrshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Dundee"
+  },
+  {
+    "team_name": "East Dunbartonshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "East Dunbartonshire"
+  },
+  {
+    "team_name": "East Lothian Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "East Lothian"
+  },
+  {
+    "team_name": "East Renfrewshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "East Renfrewshire"
+  },
+  {
+    "team_name": "East Riding of Yorkshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "East Riding"
+  },
+  {
+    "team_name": "East Sussex County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "East Sussex"
+  },
+  {
+    "team_name": "Essex County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Essex"
+  },
+  {
+    "team_name": "Falkirk Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Falkirk"
+  },
+  {
+    "team_name": "Fermanagh and Omagh Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Fermanagh and Omagh"
+  },
+  {
+    "team_name": "Fife Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Fife "
+  },
+  {
+    "team_name": "Flintshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Flintshire"
+  },
+  {
+    "team_name": "Gateshead Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Gateshead"
+  },
+  {
+    "team_name": "Glasgow City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Glasgow"
+  },
+  {
+    "team_name": "Gloucestershire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Gloucestershire"
+  },
+  {
+    "team_name": "Gwynedd County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Gwynedd"
+  },
+  {
+    "team_name": "Halton Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Halton "
+  },
+  {
+    "team_name": "Hammersmith \u0026 Fulham Borough",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Hammersmith and Fulham"
+  },
+  {
+    "team_name": "Hampshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Hampshire"
+  },
+  {
+    "team_name": "Hartlepool Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Hartlepool"
+  },
+  {
+    "team_name": "Heart of the South West Trading Standards",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "South West"
+  },
+  {
+    "team_name": "Herefordshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Herefordshire"
+  },
+  {
+    "team_name": "Hertfordshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Hertfordshire"
+  },
+  {
+    "team_name": "Highland Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "The Highlands"
+  },
+  {
+    "team_name": "HSE chemical regulations division",
+    "type": "external",
+    "regulator_name": "Health and Safety Executive",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "HSE civil explosives",
+    "type": "external",
+    "regulator_name": "Health and Safety Executive",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "HSE Northern Ireland",
+    "type": "external",
+    "regulator_name": "Health and Safety Executive Northern Ireland",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "HSE Product Safety and Market Surveillance Unit",
+    "type": "external",
+    "regulator_name": "Health and Safety Executive",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Hull City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "Hull"
+  },
+  {
+    "team_name": "Inverclyde Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Inverclyde"
+  },
+  {
+    "team_name": "Isle of Anglesey County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Anglesey"
+  },
+  {
+    "team_name": "Isle of Wight Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Isle of Wight"
+  },
+  {
+    "team_name": "Kent County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Kent"
+  },
+  {
+    "team_name": "Knowsley Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Knowsley"
+  },
+  {
+    "team_name": "Lancashire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Lancashire"
+  },
+  {
+    "team_name": "Leicester City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Leicester City"
+  },
+  {
+    "team_name": "Leicestershire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Leicestershire"
+  },
+  {
+    "team_name": "Lincolnshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Lincolnshire"
+  },
+  {
+    "team_name": "Lisburn \u0026 Castlereagh City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Lisburn and Castlereagh"
+  },
+  {
+    "team_name": "Liverpool City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Liverpool"
+  },
+  {
+    "team_name": "London Borough of Barnet",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Barnet"
+  },
+  {
+    "team_name": "London Borough of Bexley",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Bexley"
+  },
+  {
+    "team_name": "London Borough of Brent",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Brent"
+  },
+  {
+    "team_name": "London Borough of Bromley",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Bromley"
+  },
+  {
+    "team_name": "London Borough of Camden",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Camden"
+  },
+  {
+    "team_name": "London Borough of Croydon",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Croydon"
+  },
+  {
+    "team_name": "London Borough of Ealing",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Ealing"
+  },
+  {
+    "team_name": "London Borough of Enfield",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Enfield"
+  },
+  {
+    "team_name": "London Borough of Hackney",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Hackney"
+  },
+  {
+    "team_name": "London Borough of Haringey",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Haringey"
+  },
+  {
+    "team_name": "London Borough of Havering",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Havering"
+  },
+  {
+    "team_name": "London Borough of Hillingdon",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Hillingdon"
+  },
+  {
+    "team_name": "London Borough of Hounslow",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Houndslow"
+  },
+  {
+    "team_name": "London Borough of Islington",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Islington"
+  },
+  {
+    "team_name": "London Borough of Lambeth",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Lambeth"
+  },
+  {
+    "team_name": "London Borough of Lewisham",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Lewisham"
+  },
+  {
+    "team_name": "London Borough of Newham",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Newham"
+  },
+  {
+    "team_name": "London Borough of Redbridge",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Redbridge"
+  },
+  {
+    "team_name": "London Borough of Southwark",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Southwark"
+  },
+  {
+    "team_name": "London Borough of Sutton",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Sutton"
+  },
+  {
+    "team_name": "London Borough of Tower Hamlets",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Tower Hamlets"
+  },
+  {
+    "team_name": "London Borough of Waltham Forest",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Waltham Forest"
+  },
+  {
+    "team_name": "London Economics",
+    "type": "external",
+    "regulator_name": "[NB should be deleted - academic provided with access for research]",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Luton Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Luton"
+  },
+  {
+    "team_name": "Manchester City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Manchester"
+  },
+  {
+    "team_name": "Medicines and Healthcare Products Regulatory Agency",
+    "type": "external",
+    "regulator_name": "Medicines and Healthcare products Regulatory Agency",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Medway Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Medway"
+  },
+  {
+    "team_name": "Merthyr Tydfil County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Merthyr Tydfil"
+  },
+  {
+    "team_name": "MHRA Medicine Borderline Section",
+    "type": "external",
+    "regulator_name": "Medicines and Healthcare products Regulatory Agency",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Mid \u0026 East Antrim Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Mid and East Antrim"
+  },
+  {
+    "team_name": "Mid Ulster District Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Mid Ulster"
+  },
+  {
+    "team_name": "Middlesbrough Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Middlesborough"
+  },
+  {
+    "team_name": "Midlothian Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Midlothian"
+  },
+  {
+    "team_name": "Milton Keynes Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Milton Keynes"
+  },
+  {
+    "team_name": "Monmouthshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Monmouthshire"
+  },
+  {
+    "team_name": "Moray Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "The Moray"
+  },
+  {
+    "team_name": "Neath Port Talbot County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Neath"
+  },
+  {
+    "team_name": "Newcastle upon Tyne City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Newcastle Under Tyne"
+  },
+  {
+    "team_name": "Newport City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Newport"
+  },
+  {
+    "team_name": "Newry, Mourne and Down Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Northern Ireland",
+    "ts_acronym": "NI",
+    "ts_area": "Newry, Mourne and Down"
+  },
+  {
+    "team_name": "NIEA Chemicals Compliance Team",
+    "type": "external",
+    "regulator_name": "Department of Agriculture, Environment and Rural Affairs (DAERA)",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Norfolk County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Norfolk"
+  },
+  {
+    "team_name": "North Ayrshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "North Ayrshire"
+  },
+  {
+    "team_name": "North East Lincolnshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "North East Lincolnshire"
+  },
+  {
+    "team_name": "North Lanarkshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "North Lanarkshire"
+  },
+  {
+    "team_name": "North Lincolnshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "North Lincolnshire"
+  },
+  {
+    "team_name": "North Northamptonshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "North Northamptonshire"
+  },
+  {
+    "team_name": "North Somerset Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "North Somerset"
+  },
+  {
+    "team_name": "North Tyneside Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "North Tyneside"
+  },
+  {
+    "team_name": "North Yorkshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "North Yorkshire"
+  },
+  {
+    "team_name": "Northamptonshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Northamptonshire"
+  },
+  {
+    "team_name": "Northumberland County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Northumberland"
+  },
+  {
+    "team_name": "Nottingham City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Nottingham City"
+  },
+  {
+    "team_name": "Nottinghamshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Nottinghamshire"
+  },
+  {
+    "team_name": "Ofcom",
+    "type": "external",
+    "regulator_name": "Ofcom",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Oldham Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Oldham"
+  },
+  {
+    "team_name": "OPSS Enforcement",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Behavioural Insights",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Ecodesign",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Incident Management",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Policy",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Trading Standards Co-ordination",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Digital",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Ports and Borders",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Connections",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Intelligence",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Engineering \u0026 Technology",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Stakeholder Engagement",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Compliance \u0026 Testing",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Legal",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Analysis",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS PPE business liason",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Science",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Operational support unit",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Construction Products",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Product Safety Enforcement",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Risk",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Business Compliance",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Local Authority Unit",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Border Profiling Unit",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "OPSS Product Safety Review",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Orkney Islands Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Orkney Islands"
+  },
+  {
+    "team_name": "Oxfordshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Oxfordshire"
+  },
+  {
+    "team_name": "Pembrokeshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Pembrokeshire"
+  },
+  {
+    "team_name": "Perth and Kinross Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Perth and Kinross"
+  },
+  {
+    "team_name": "Plymouth City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Plymouth"
+  },
+  {
+    "team_name": "Portsmouth City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Portsmouth"
+  },
+  {
+    "team_name": "Powys County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Powys"
+  },
+  {
+    "team_name": "Reading Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Reading"
+  },
+  {
+    "team_name": "Redcar \u0026 Cleveland Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Redcar and Cleveland"
+  },
+  {
+    "team_name": "Renfrewshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Renfrewshire"
+  },
+  {
+    "team_name": "Rhondda Cynon Taf County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Rhondda Cynon Taf"
+  },
+  {
+    "team_name": "Richmond, Merton and Wandsworth Borough",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Richmond, Merton and Wandsworth"
+  },
+  {
+    "team_name": "Rochdale Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Rochdale"
+  },
+  {
+    "team_name": "Rotherham Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "Rotherham"
+  },
+  {
+    "team_name": "Royal Borough of Greenwich",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Greenwich"
+  },
+  {
+    "team_name": "Royal Borough of Kensington and Chelsea",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Kensington and Chelsea"
+  },
+  {
+    "team_name": "Royal Borough of Kingston upon Thames",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "London Trading Standards",
+    "ts_acronym": "LTS",
+    "ts_area": "Kingston upon Thames"
+  },
+  {
+    "team_name": "Royal Borough of Windsor and Maidenhead Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Windsor and Maidenhead"
+  },
+  {
+    "team_name": "Salford City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Salford"
+  },
+  {
+    "team_name": "Sandwell Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Sandwell"
+  },
+  {
+    "team_name": "Scottish Borders Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Scottish Borders"
+  },
+  {
+    "team_name": "SE product safety and construction",
+    "type": "external",
+    "regulator_name": "Health and Safety Executive Northern Ireland",
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  },
+  {
+    "team_name": "Sefton Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Sefton"
+  },
+  {
+    "team_name": "Sheffield City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "Sheffield"
+  },
+  {
+    "team_name": "Shetland Islands Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Shetland Islands"
+  },
+  {
+    "team_name": "Shropshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Shropshire"
+  },
+  {
+    "team_name": "Slough Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Slough"
+  },
+  {
+    "team_name": "Solihull Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Solihull "
+  },
+  {
+    "team_name": "South Ayrshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "South Ayrshire"
+  },
+  {
+    "team_name": "South Gloucestershire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "South Gloucestershire"
+  },
+  {
+    "team_name": "South Lanarkshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "South Lanarkshire"
+  },
+  {
+    "team_name": "South Tyneside Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "South Tyneside"
+  },
+  {
+    "team_name": "Southampton City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "Southampton"
+  },
+  {
+    "team_name": "Southend-on-Sea Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Southend-on-sea"
+  },
+  {
+    "team_name": "St Helens Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "St Helens"
+  },
+  {
+    "team_name": "Staffordshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Staffordshire"
+  },
+  {
+    "team_name": "Stirling \u0026 Clackmannanshire Councils",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "Stirling"
+  },
+  {
+    "team_name": "Stockport Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Stockport"
+  },
+  {
+    "team_name": "Stockton-on-Tees Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Stockton on Tees"
+  },
+  {
+    "team_name": "Suffolk County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Suffolk"
+  },
+  {
+    "team_name": "Sunderland City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "North East Trading Standards Authorities",
+    "ts_acronym": "NETSA",
+    "ts_area": "Sunderland"
+  },
+  {
+    "team_name": "Swansea City and County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Swansea"
+  },
+  {
+    "team_name": "Swindon Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Swindon"
+  },
+  {
+    "team_name": "Tameside Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Tameside"
+  },
+  {
+    "team_name": "Telford \u0026 Wrekin Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Telford and Wrekin"
+  },
+  {
+    "team_name": "Thurrock  Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "East of England Trading Standards Authorities",
+    "ts_acronym": "EETSA",
+    "ts_area": "Thurrock"
+  },
+  {
+    "team_name": "Trafford Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Trafford"
+  },
+  {
+    "team_name": "Walsall Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Walsall"
+  },
+  {
+    "team_name": "Warrington Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Warrington"
+  },
+  {
+    "team_name": "Warwickshire county Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Warwickshire"
+  },
+  {
+    "team_name": "West Dunbartonshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "West Dunbartonshire"
+  },
+  {
+    "team_name": "West Lothian Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Scotland ",
+    "ts_acronym": "SCOTSS",
+    "ts_area": "West Lothian"
+  },
+  {
+    "team_name": "West Northamptonshire Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards East Midlands",
+    "ts_acronym": "TSEM",
+    "ts_area": "Nottinghamshire"
+  },
+  {
+    "team_name": "West Sussex County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South East",
+    "ts_acronym": "TSSE",
+    "ts_area": "West Sussex"
+  },
+  {
+    "team_name": "West Yorkshire Joint Services",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Yorkshire and Humber Trading Standards",
+    "ts_acronym": "YAHTSG",
+    "ts_area": "West Yorkshire"
+  },
+  {
+    "team_name": "Wigan Metropolitan Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Wigan"
+  },
+  {
+    "team_name": "Wiltshire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards South West",
+    "ts_acronym": "TSSW",
+    "ts_area": "Wiltshire"
+  },
+  {
+    "team_name": "Wirral Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Trading Standards North West",
+    "ts_acronym": "TSNW",
+    "ts_area": "Wirral"
+  },
+  {
+    "team_name": "Wolverhampton City Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Wolverhampton"
+  },
+  {
+    "team_name": "Worcestershire County Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Central England Trading Standards",
+    "ts_acronym": "CEnTSA",
+    "ts_area": "Worcestershire"
+  },
+  {
+    "team_name": "Wrexham County Borough Council",
+    "type": "local_authority",
+    "regulator_name": null,
+    "ts_region": "Wales Heads of Trading Standards",
+    "ts_acronym": "WHOTS",
+    "ts_area": "Wrexham"
+  },
+  {
+    "team_name": "OPSS Regulatory Information and Intelligence Team",
+    "type": "internal",
+    "regulator_name": null,
+    "ts_region": null,
+    "ts_acronym": null,
+    "ts_area": null
+  }
+]

@@ -13,7 +13,9 @@ class ProductsController < ApplicationController
   breadcrumb "products.label", :products_path
 
   def index
-    @results = search_for_products(20)
+    # Find the most recent incomplete bulk products upload for the current user, if any
+    @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
+    @pagy, @results = search_for_products
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "all_products"
@@ -45,6 +47,8 @@ class ProductsController < ApplicationController
       @product = context.product
       @product_form.cache_file!(current_user, @product)
 
+      return redirect_to add_product_notification_create_index_path(notification_pretty_id: product_params[:notification_pretty_id], product_id: @product.id) if product_params[:notification_pretty_id].present?
+
       render :confirmation
     else
       set_countries
@@ -70,7 +74,7 @@ class ProductsController < ApplicationController
     if @product_form.valid?
       UpdateProduct.call!(
         product: @product.object,
-        product_params: @product_form.serializable_hash.except("image", "existing_image_file_id"),
+        product_params: @product_form.serializable_hash.except("image", "existing_image_file_id", "notification_pretty_id"),
         updating_team: current_user.team
       )
 
@@ -86,8 +90,8 @@ class ProductsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "your_products" })
-    @results = search_for_products(20)
-    @count = @results.length
+    @pagy, @results = search_for_products
+    @count = @pagy.count
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "your_products"
 
@@ -100,8 +104,8 @@ class ProductsController < ApplicationController
                                  "sort_by" => params["sort_by"],
                                  "sort_dir" => params["sort_dir"],
                                  "page_name" => "team_products" })
-    @results = search_for_products(20)
-    @count = @results.length
+    @pagy, @results = search_for_products
+    @count = @pagy.count
     @products = ProductDecorator.decorate_collection(@results)
     @page_name = "team_products"
 
@@ -117,7 +121,7 @@ private
   def product_params
     params.require(:product).permit(
       :name, :brand, :category, :subcategory, :product_code,
-      :image, :existing_image_file_id,
+      :image, :existing_image_file_id, :notification_pretty_id,
       :webpage, :description, :country_of_origin, :barcode,
       :authenticity, :when_placed_on_market, :has_markings, markings: []
     )
@@ -159,6 +163,6 @@ private
   end
 
   def count_to_display
-    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @results.total_count
+    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @pagy.count
   end
 end

@@ -17,14 +17,14 @@ RSpec.feature "PRISM tasks", type: :feature do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_text("Determine and evaluate the level of product risk")
-      expect(page).to have_text("You have completed 0 of 4 sections.")
+      expect(page).to have_text("You have completed 0 of 5 sections.")
     end
 
     scenario "task list", :aggregate_failures do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_link("Add assessment details")
-      expect(page).to have_selector("#task-list-0-0-status", text: "Not started")
+      expect(page).to have_selector("#task-list-0-0-status", text: "Not yet started")
 
       expect(page).not_to have_link("Add details about products in use and safety")
       expect(page).to have_selector("#task-list-0-1-status", text: "Cannot start yet")
@@ -51,7 +51,7 @@ RSpec.feature "PRISM tasks", type: :feature do
       expect(page).to have_selector("#task-list-0-0-status", text: "Completed")
 
       expect(page).to have_link("Add details about products in use and safety")
-      expect(page).to have_selector("#task-list-0-1-status", text: "Not started")
+      expect(page).to have_selector("#task-list-0-1-status", text: "Not yet started")
 
       click_link "Add assessment details"
       click_button "Save as draft"
@@ -78,7 +78,7 @@ RSpec.feature "PRISM tasks", type: :feature do
         click_button "Save and complete tasks in this section"
 
         expect(page).to have_text("Determine and evaluate the level of product risk")
-        expect(page).to have_text("You have completed 1 of 4 sections.")
+        expect(page).to have_text("You have completed 1 of 5 sections.")
       end
     end
 
@@ -133,14 +133,14 @@ RSpec.feature "PRISM tasks", type: :feature do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_text("Evaluate the product deemed serious risk")
-      expect(page).to have_text("You have completed 0 of 2 sections.")
+      expect(page).to have_text("You have completed 0 of 3 sections.")
     end
 
     scenario "task list", :aggregate_failures do
       visit prism.risk_assessment_tasks_path(prism_risk_assessment)
 
       expect(page).to have_link("Add evaluation details")
-      expect(page).to have_selector("#task-list-0-0-status", text: "Not started")
+      expect(page).to have_selector("#task-list-0-0-status", text: "Not yet started")
 
       expect(page).not_to have_link("Complete product risk evaluation")
       expect(page).to have_selector("#task-list-1-0-status", text: "Cannot start yet")

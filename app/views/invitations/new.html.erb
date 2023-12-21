@@ -1,7 +1,7 @@
 <%= page_title "Invite a team member to #{@team.decorate.display_name(viewer: current_user)}", errors: @invite_user_to_team_form.errors.any? %>
 
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: @team) %>
+  <%= govuk_back_link(href: @team) %>
 <% end %>
 
 <%= form_with model: @invite_user_to_team_form, url: team_invitations_path(@team), local: true do |form| %>

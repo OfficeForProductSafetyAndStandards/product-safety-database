@@ -1,10 +1,8 @@
 <% page_heading = "Edit the Unique Consignment Reference (UCR) numbers" %>
 
 <% page_title page_heading, errors: @investigation_product.errors.any? %>
-<%= govukBackLink(
-  text: "Back",
-  href: investigation_path(@investigation_product.investigation)
-) %>
+
+<%= govuk_back_link(href: investigation_path(@investigation_product.investigation)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

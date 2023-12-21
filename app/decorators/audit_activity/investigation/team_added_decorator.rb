@@ -2,7 +2,7 @@ class AuditActivity::Investigation::TeamAddedDecorator < ApplicationDecorator
   delegate_all
 
   def title(_viewer)
-    I18n.t(".title", scope: object.class.i18n_scope, team_name: metadata["team"]["name"], case_type: "case")
+    I18n.t(".title", scope: object.class.i18n_scope, team_name: metadata["team"]["name"], case_type: "notification")
   end
 
   def subtitle(viewer)

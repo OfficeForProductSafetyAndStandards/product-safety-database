@@ -5,10 +5,9 @@ class NotifyMailer < GovukNotifyRails::Mailer
     {
       account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d",
       account_locked_inactive: "4e5294f8-04ac-4791-a265-3504a1df964e",
-      alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
       case_risk_level_updated: "66c2f2dd-f3a1-4ef1-a9cc-a99a1b7dff22",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
-      investigation_created: "b5457546-9633-4a9c-a844-b61f2e818c24",
+      notification_created: "b5457546-9633-4a9c-a844-b61f2e818c24",
       investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
@@ -62,7 +61,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def investigation_updated(investigation_pretty_id, name, email, update_text, subject_text)
     set_template(TEMPLATES[:investigation_updated])
-    set_reference("Case updated")
+    set_reference("Notification updated")
 
     set_personalisation(
       name:,
@@ -74,29 +73,17 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-  def alert(email, subject_text:, body_text:)
-    set_template(TEMPLATES[:alert])
-    set_reference("Alert")
-
-    set_personalisation(
-      subject_text:,
-      email_text: body_text
-    )
-
-    mail(to: email)
-  end
-
-  def investigation_created(investigation_pretty_id, name, email, investigation_title, investigation_type)
-    set_template(TEMPLATES[:investigation_created])
-    set_reference("Case created")
+  def notification_created(notification_pretty_id, name, email, notification_title, notification_type)
+    set_template(TEMPLATES[:notification_created])
+    set_reference("Notification created")
 
     set_personalisation(
       name:,
-      case_title: investigation_title,
-      case_type: investigation_type,
-      capitalized_case_type: investigation_type.capitalize,
-      case_id: investigation_pretty_id,
-      investigation_url: investigation_url(pretty_id: investigation_pretty_id)
+      case_title: notification_title,
+      case_type: notification_type,
+      capitalized_case_type: notification_type.capitalize,
+      case_id: notification_pretty_id,
+      investigation_url: investigation_url(pretty_id: notification_pretty_id)
     )
 
     mail(to: email)
@@ -171,7 +158,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
@@ -184,7 +171,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
   def risk_validation_updated(email:, updater:, investigation:, action:, name:)
     set_template(TEMPLATES[:risk_validation_updated])
     set_personalisation(
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: updater.name,
@@ -216,7 +203,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
@@ -237,7 +224,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_personalisation(
       verb_with_level:,
       name:,
-      case_type: "case",
+      case_type: "notification",
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       investigation_url: investigation_url(pretty_id: investigation.pretty_id)
@@ -260,7 +247,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def case_export(email:, name:, case_export:)
     set_template(TEMPLATES[:case_export])
-    set_reference("Case Export")
+    set_reference("Notification Export")
 
     set_personalisation(
       name:,

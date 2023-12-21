@@ -15,12 +15,13 @@ class AddProductToCase
     context.fail!(error: "The product is retired") if product.retired?
 
     InvestigationProduct.transaction do
-      (context.fail!(error: "The product is already linked to the case") and return false) if duplicate_investigation_product
+      (context.fail!(error: "The product is already linked to the notification") and return false) if duplicate_investigation_product
       investigation.products << product
     end
 
     change_product_owner_if_unowned
 
+    context.investigation_product = investigation_product
     context.activity = create_audit_activity_for_product_added
 
     send_notification_email unless skip_email
@@ -49,8 +50,8 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Product was added to the case by #{user.decorate.display_name(viewer: recipient)}.",
-        "Case updated"
+        "Product was added to the notification by #{user.decorate.display_name(viewer: recipient)}.",
+        "Notification updated"
       ).deliver_later
     end
   end

@@ -13,7 +13,7 @@
       <%= govukErrorSummary form: form %>
       <%= render "minimal_investigation_heading", investigation: @investigation, title: page_heading %>
       <p>
-        You are changing the case owner to:
+        You are changing the notification owner to:
         <strong><%= @potential_owner.display_name(viewer: current_user) %></strong>
       </p>
       <div class="govuk-form-group">
@@ -22,14 +22,14 @@
           form: form,
           classes: "govuk-!-width-two-thirds",
           rows: "3",
-          label: { text: "Message to new case owner (optional)" },
+          label: { text: "Message to new notification owner (optional)" },
           attributes: { maxlength: 5000 }
         ) %>
       </div>
+      <div class="govuk-button-group">
+        <%= form.submit "Confirm change", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link" %>
+      </div>
     </div>
   </div>
-  <%= form.submit "Confirm change", class: "govuk-button" %>
-  <p>
-    <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link psd-block-link" %>
-  </p>
 <% end %>

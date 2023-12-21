@@ -77,10 +77,10 @@ private
   end
 
   def email_update_text(viewer = nil)
-    "Document attached to the Case was updated by #{user&.decorate&.display_name(viewer:)}."
+    "Document attached to the notification was updated by #{user&.decorate&.display_name(viewer:)}."
   end
 
   def email_subject
-    "Case updated"
+    "Notification updated"
   end
 end

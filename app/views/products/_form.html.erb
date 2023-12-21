@@ -22,7 +22,7 @@
   hint: { text: "For example, 'Face mask' or 'Washing machine'" }
 ) %>
 
-<% if product_form.authenticity_unsure?  %>
+<% if product_form.authenticity_unsure? %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is the product counterfeit?</legend>
     <p class="govuk-body">The original record was recorded as 'unsure'</p>
@@ -52,7 +52,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= opss_aside title: "Number of units affected?", text: "The number of units affected is case related data (and has now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+    <%= opss_aside title: "Number of units affected?", text: "The number of units affected is notification related data (and has now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
   </div>
 </div>
 
@@ -89,7 +89,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= opss_aside title: "Batch numbers", text: "Batch numbers are case related data (and have now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+    <%= opss_aside title: "Batch numbers", text: "Batch numbers are notification related data (and have now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
   </div>
 </div>
 
@@ -119,7 +119,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= opss_aside title: "Customs codes", text: "Customs codes are case related data (and have now moved to the case page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+    <%= opss_aside title: "Customs codes", text: "Customs codes are notification related data (and have now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
   </div>
 </div>
 
@@ -130,5 +130,7 @@
   label: { text: "Description of product", classes: label_class },
   hint: { text: "Details about the product you haven't included above. For example, colour, size, packaging description. Do not include details of damage or incidents" }
 ) %>
+
+<%= form.hidden_field :notification_pretty_id, value: product_form.notification_pretty_id || params[:notification_pretty_id] %>
 
 <%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>

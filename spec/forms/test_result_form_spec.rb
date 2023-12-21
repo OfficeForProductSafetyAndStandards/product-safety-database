@@ -32,7 +32,7 @@ RSpec.describe TestResultForm, :with_stubbed_mailer, :with_stubbed_antivirus, ty
   end
 
   describe "validations" do
-    it { is_expected.to validate_length_of(:details).is_at_most(50_000) }
+    it { is_expected.to validate_length_of(:details).is_at_most(32_767) }
     it { is_expected.to validate_inclusion_of(:legislation).in_array(Rails.application.config.legislation_constants["legislation"]).with_message("Select the legislation that relates to this test") }
     it { is_expected.to validate_inclusion_of(:result).in_array(Test::Result.results.keys).with_message("Select result of the test") }
     it { is_expected.to validate_presence_of(:document).with_message("Provide the test results file") }

@@ -29,15 +29,15 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and complete tasks in this section"
 
-      expect(page).to have_text("You have completed 1 of 4 sections.")
+      expect(page).to have_text("You have completed 1 of 5 sections.")
 
-      click_link "Add the hazards and who/what could be harmed"
+      click_link "Add the hazards"
 
       choose "3" # Number of hazards identified
 
       click_button "Save and complete tasks in this section"
 
-      expect(page).to have_text("You have completed 2 of 4 sections.")
+      expect(page).to have_text("You have completed 2 of 5 sections.")
 
       click_link "task-list-2-0-0-status" # Choose hazard type (scenario 1)
 
@@ -117,16 +117,16 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       expect(page).to have_text("Step 1Test description for step 1Probability of harm: 1 in 100Evidence: Sole judgement or estimation")
       expect(page).to have_text("Overall probability of harm1 in 100")
       expect(page).to have_text("Severity levelLevel 1, multiple casualties: no")
-      expect(page).to have_text("Scenario risk level\nMedium risk")
+      expect(page).to have_text("Scenario risk level\nLow risk")
 
       click_button "Confirm and create scenario"
 
-      expect(page).to have_text("You have completed 3 of 4 sections.")
+      expect(page).to have_text("You have completed 3 of 5 sections.")
 
       click_link "Review the overall product risk level"
 
       expect(page).to have_text("Electrical1 in 4Level 3Serious risk")
-      expect(page).to have_text("Mechanical1 in 100Level 1Medium risk")
+      expect(page).to have_text("Mechanical1 in 100Level 1Low risk")
       expect(page).to have_css("p[data-test='overall-product-risk-level']", text: "Serious risk")
       expect(page).to have_button("Add a risk level plus label")
 
@@ -135,7 +135,11 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       choose "Medium" # What is the level of uncertainty associated with the risk assessment?
       choose "No" # Has sensitivity analysis been undertaken?
 
-      click_button "Save and continue"
+      click_button "Save and complete tasks in this section"
+
+      expect(page).to have_text("You have completed 4 of 5 sections.")
+
+      click_link "Consider the nature of the risk"
 
       expect(page).to have_text("Is the number of products estimated to be in use expected to change?\nAs recorded in the assessment\nEstimated 1,000,000 products in use")
       choose "No changes" # Is the number of products estimated to be in use expected to change?
@@ -150,20 +154,22 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
 
-      expect(page).to have_text("Are there people at increased risk?\nAs recorded in the assessment\nChildren")
+      expect(page).to have_text("Are there people at increased risk?")
       choose "evaluation-people-at-increased-risk-true-field" # Are there people at increased risk? (Yes)
 
-      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant action planned or underway by another MSA or other organisation? (Unknown)
+      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant risk management action planned or underway by another MSA or other organisation? (Unknown)
 
       choose "evaluation-factors-to-take-into-account-field" # As regards the nature of the risk, are there factors to take account of in relation to risk management decisions? (No)
 
       click_button "Save and continue"
 
-      choose "evaluation-other-hazards-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
+      choose "evaluation-featured-in-media-significant-field" # Has the risk featured in the media? (Yes - significant coverage)
+
+      choose "evaluation-other-hazards-no-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
 
       choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
 
-      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product might be at risk")
+      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product are at risk")
       choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users of the product? (No)
 
       choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)
@@ -178,7 +184,7 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       click_button "Save and continue"
 
-      expect(page).to have_text("Check your risk assessment details")
+      expect(page).to have_text("Check your risk assessment and risk evaluation details")
 
       click_button "Submit"
 
@@ -209,7 +215,9 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       choose "Medium" # What is the level of uncertainty associated with the risk assessment?
       choose "No" # Has sensitivity analysis been undertaken?
 
-      click_button "Save and continue"
+      click_button "Save and complete tasks in this section"
+
+      click_link "Consider the nature of the risk"
 
       expect(page).to have_text("Is the number of products estimated to be in use expected to change?\nAs recorded in the assessment\nUnknown")
       choose "No changes" # Is the number of products estimated to be in use expected to change?
@@ -224,20 +232,22 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
 
-      expect(page).to have_text("Are there people at increased risk?\nAs recorded in the assessment\nNo")
+      expect(page).to have_text("Are there people at increased risk?")
       choose "evaluation-people-at-increased-risk-true-field" # Are there people at increased risk? (Yes)
 
-      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant action planned or underway by another MSA or other organisation? (Unknown)
+      choose "evaluation-relevant-action-by-others-unknown-field" # Is relevant risk management action planned or underway by another MSA or other organisation? (Unknown)
 
       choose "evaluation-factors-to-take-into-account-field" # As regards the nature of the risk, are there factors to take account of in relation to risk management decisions? (No)
 
       click_button "Save and continue"
 
-      choose "evaluation-other-hazards-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
+      choose "evaluation-featured-in-media-significant-field" # Has the risk featured in the media? (Yes - significant coverage)
+
+      choose "evaluation-other-hazards-no-field" # As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm? (No)
 
       choose "evaluation-low-likelihood-high-severity-no-field" # Is this a low likelihood but high severity risk? (No)
 
-      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product might not be at risk")
+      expect(page).to have_text("Is there a risk to non-users of the product?\nAs recorded in the assessment\nNon-users of the product are not at risk")
       choose "evaluation-risk-to-non-users-field" # Is there a risk to non-users of the product? (No)
 
       choose "evaluation-aimed-at-vulnerable-users-yes-field" # Is this a type of product aimed at vulnerable users? (Yes)

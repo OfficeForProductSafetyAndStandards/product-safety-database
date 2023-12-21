@@ -73,11 +73,11 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_antivirus, 
 
     context "with required parameters" do
       def expected_email_subject
-        "Test result edited for Case"
+        "Test result edited for notification"
       end
 
       def expected_email_body(name)
-        "#{name} edited a test result on the case."
+        "#{name} edited a test result on the notification."
       end
       let!(:expected_changes_metadata) do
         {
@@ -103,7 +103,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_antivirus, 
           expect(activity_timeline_entry.metadata).to eq(expected_changes_metadata)
         end
 
-        it_behaves_like "a service which notifies the case owner"
+        it_behaves_like "a service which notifies the notification owner"
 
         it "retains the original file" do
           expect { result }.not_to have_enqueued_job(ActiveStorage::PurgeJob)

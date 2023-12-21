@@ -4,77 +4,101 @@ $govuk-fonts-path: "";
 $govuk-page-width: 960px;
 $govuk-global-styles: true;
 
-@import "govuk-frontend/govuk/all";
+@import "govuk-frontend/dist/govuk/all";
 @import "accessible-autocomplete/src/autocomplete";
 
-$hmcts-page-width: $govuk-page-width;
-$hmcts-gutter: $govuk-gutter;
-$hmcts-gutter-half: $govuk-gutter-half;
-$hmcts-images-path: "/assets/images/";
-@import "@hmcts/frontend/objects/width-container";
-@import "@hmcts/frontend/components/hmcts-badge/badge";
-@import "@hmcts/frontend/components/hmcts-banner/banner";
-@import "@hmcts/frontend/components/hmcts-identity-bar/identity-bar";
-@import "@hmcts/frontend/components/hmcts-sub-navigation/sub-navigation";
-
-@import "colours";
-
 @import "autocomplete";
-@import "badge";
-@import "summary_list";
-@import "permission_notice";
-@import "text";
-@import "remove-default-button-styling";
-@import "banner";
-@import "button";
-@import "block-link";
 @import "case-card";
 @import "documents";
-@import "email_display";
-@import "footer";
-@import "form";
-@import "header";
-@import "helpers/js-only";
-@import "helpers/field-widths";
-@import "helpers/media-queries";
 @import "helpers/password-manager-hidden";
 @import "helpers/product-recall-form";
 @import "helpers/nested-form";
-@import "identity-bar";
-@import "images";
-@import "inverted";
-@import "table";
-@import "teams";
-@import "search-box";
-@import "shared";
+@import "moj_search";
 @import "timeline";
-@import "psd_header";
-@import "menu";
 
+@import "opss/opss-shared";
+@import "opss/opss-search";
+@import "opss/opss-step-by-step-nav";
 @import "opss/opss-psd";
-
-// Pages
-@import "investigation";
 
 * {
   box-sizing: border-box;
 }
 
-@media print {
-  .no-print {
-    display: none !important; // sass-lint:disable-line no-important
+// Header links
+@include govuk-exports("psd/component/header") {
+  // Only show these in desktop view
+  .psd-header__secondary-navigation-list {
+    display: none;
+
+    @include mq ($from: desktop) {
+      display: block;
+    }
+
+    position: absolute;
+    top: govuk-spacing(1);
+    right: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Only show these items in mobile view
+  .psd-header__secondary-navigation-item {
+    @include mq ($from: desktop) {
+      display: none;
+    }
+  }
+
+  .psd-header__navigation-item--right {
+    @include mq ($from: desktop) {
+      float: right;
+    }
   }
 }
 
+// Non-authenticated homepage masthead and introduction page cards
+.app-masthead {
+  @include govuk-responsive-padding(6, "top");
+  @include govuk-responsive-padding(6, "bottom");
+  color: govuk-colour("white");
+  background-color: govuk-colour("blue");
+}
+
+.app-introduction-card {
+  @include govuk-responsive-padding(9);
+  color: govuk-colour("white");
+  background-color: govuk-colour("blue");
+}
+
+.app-masthead__title,
+.app-introduction-card__title {
+  @include govuk-responsive-margin(6, "bottom");
+  color: govuk-colour("white");
+}
+
+.app-masthead__description,
+.app-introduction-card__description {
+  color: govuk-colour("white");
+}
+
+// Single file attachment display
+.opss-file-attachment {
+  margin-top: govuk-spacing(2);
+  padding: govuk-spacing(2);
+  background-color: govuk-colour("light-grey");
+}
+
+// Keep section numbers in line with the rest of the column
+.opss-task-list-group {
+  margin-left: govuk-spacing(2);
+}
+
+// TODO: get rid of these
 .right {
   float: right;
   margin-left: 2em;
 }
 
-.app-tag--nowrap {
-  white-space: nowrap;
+.app-table__cell--align-right {
+  text-align: right;
 }
-
-// TODO: This is a transitional step as we revert back to a 960px page width.
-//   Once transition is complete this import can be deleted.
-@import "width_overrides";

@@ -33,7 +33,7 @@ module Investigations
 
       ChangeCaseVisibility.call!(@change_case_visibility_form.serializable_hash.merge(user: current_user, investigation: @investigation))
 
-      redirect_to investigation_path(@investigation), flash: { success: "Case was #{flash}" }
+      redirect_to investigation_path(@investigation), flash: { success: "Notification was #{flash}" }
     end
 
     def change_case_visibility_form_params

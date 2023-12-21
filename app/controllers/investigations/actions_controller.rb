@@ -35,8 +35,6 @@ module Investigations
         new_investigation_ownership_path(@investigation)
       when "change_case_visibility"
         investigation_visibility_path(@investigation)
-      when "send_email_alert"
-        about_investigation_alerts_path(@investigation)
       when "change_case_risk_level"
         investigation_risk_level_path(@investigation)
       end

@@ -7,7 +7,11 @@ class CaseExportsController < ApplicationController
     case_export = CaseExport.create!(params: case_export_params, user: current_user)
     CaseExportJob.perform_later(case_export)
 
-    redirect_to investigations_path(q: params[:q]), flash: { success: "Your case export is being prepared. You will receive an email when your export is ready to download." }
+    if current_user.can_access_new_search?
+      redirect_to notifications_path(q: params[:q]), flash: { success: "Your notification export is being prepared. You will receive an email when your export is ready to download." }
+    else
+      redirect_to investigations_path(q: params[:q]), flash: { success: "Your notification export is being prepared. You will receive an email when your export is ready to download." }
+    end
   end
 
   def show

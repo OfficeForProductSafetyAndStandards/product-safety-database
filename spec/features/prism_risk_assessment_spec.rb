@@ -19,7 +19,7 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
       scenario "visiting the PRISM risk assessment dashboard" do
         visit "/"
 
-        expect(page).to have_link("Risk assessments", class: "psd-header__link")
+        expect(page).to have_link("Risk assessments", class: "govuk-header__link")
 
         click_link "Risk assessments"
 
@@ -27,6 +27,7 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
         expect(page).to have_text(draft_prism_risk_assessment.product_name)
         expect(page).to have_text(draft_prism_risk_assessment.name)
         expect(page).to have_link("Make changes")
+        expect(page).to have_link("Delete")
         expect(page).to have_text(submitted_prism_risk_assessment.product_name)
         expect(page).to have_text(submitted_prism_risk_assessment.name)
         expect(page).to have_link("View assessment")
@@ -51,6 +52,15 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
         expect(page).to have_current_path("/prism/risk-assessment/#{draft_prism_risk_assessment.id}/tasks")
       end
 
+      scenario "deleting an existing PRISM risk assessment" do
+        visit "/"
+
+        click_link "Risk assessments"
+        click_link "Delete"
+
+        expect(page).to have_current_path("/prism/risk-assessment/#{draft_prism_risk_assessment.id}/tasks/remove?back_to=dashboard")
+      end
+
       context "without an associated product" do
         before do
           draft_prism_risk_assessment.associated_products.destroy_all
@@ -70,11 +80,11 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
       end
     end
 
-    context "without existing PRISM risk asssessments" do
+    context "without existing PRISM risk assessments" do
       scenario "visiting the PRISM risk assessment dashboard" do
         visit "/"
 
-        expect(page).to have_link("Risk assessments", class: "psd-header__link")
+        expect(page).to have_link("Risk assessments", class: "govuk-header__link")
 
         click_link "Risk assessments"
 
@@ -95,11 +105,12 @@ RSpec.feature "PRISM risk assessment dashboard", type: :feature do
     scenario "visiting the PRISM risk assessment dashboard via the header link" do
       visit "/"
 
-      expect(page).not_to have_link("Risk assessments", class: "psd-header__link")
+      expect(page).not_to have_link("Risk assessments", class: "govuk-header__link")
     end
 
     scenario "visiting the PRISM risk assessment dashboard directly" do
-      expect { visit "/prism-risk-assessments/your-prism-risk-assessments" }.to raise_error(Pundit::NotAuthorizedError)
+      visit "/prism-risk-assessments/your-prism-risk-assessments"
+      expect(page).to have_http_status(:forbidden)
     end
   end
 end

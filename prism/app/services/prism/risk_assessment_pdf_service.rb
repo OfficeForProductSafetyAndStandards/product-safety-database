@@ -15,7 +15,7 @@ module Prism
       new(prism_risk_assessment, file).generate_pdf
     end
 
-    def generate_pdf
+    def generate_pdf(skip_images: false)
       metadata = {
         Title: "OPSS - PRISM risk assessment - #{prism_risk_assessment.name}",
         Author: prism_risk_assessment.user.name,
@@ -37,7 +37,7 @@ module Prism
       pdf.table([
         [
           { image: File.open(Prism::Engine.root.join("app/assets/images/prism/opss-logo.jpg")), fit: [200, 200] },
-          prism_risk_assessment.product.virus_free_images.present? ? prism_risk_assessment.product.virus_free_images.first.file_upload.blob.open { |file| { image: File.open(file.path), fit: [200, 200], position: :right } } : ""
+          !skip_images && prism_risk_assessment.product.virus_free_images.present? ? prism_risk_assessment.product.virus_free_images.first.file_upload.blob.open { |file| { image: File.open(file.path), fit: [200, 200], position: :right } } : ""
         ],
       ], width: 522, cell_style: { borders: [] })
       pdf.text "About assessment", color: "000000", style: :bold, size: 20
@@ -87,11 +87,11 @@ module Prism
             [{ content: "Other users that may be at risk", font_style: :bold }, harm_scenario_unintended_risks_for(harm_scenario.unintended_risks_for)],
             *harm_scenario.harm_scenario_steps.each_with_index.map do |hss, hss_index|
               # rubocop:disable Style/StringConcatenation
-              [{ content: "Step #{hss_index + 1}", font_style: :bold }, "#{hss.description}\n\nProbability of harm: #{hss.probability_decimal || '1 in ' + ActiveSupport::NumberHelper.number_to_delimited(hss.probability_frequency.to_s)}\n\nSupporting information: #{harm_scenario_probability_evidence(hss.probability_evidence)}"]
+              [{ content: "Step #{hss_index + 1}", font_style: :bold }, "#{hss.description}\n\nProbability of harm: #{hss.probability_decimal || '1 in ' + ActiveSupport::NumberHelper.number_to_delimited(hss.probability_frequency.to_s)}\n\nSupporting information: #{harm_scenario_probability_evidence(hss.probability_evidence)}#{attachment(hss.harm_scenario_step_evidence&.evidence_file)}"]
               # rubocop:enable Style/StringConcatenation
             end,
             [{ content: "Severity level", font_style: :bold }, "#{harm_scenario_severity_level(harm_scenario.severity)}\n#{harm_scenario_multiple_casualties(harm_scenario.multiple_casualties)}"],
-            [{ content: "Overall probability of harm", font_style: :bold }, harm_scenario_overall_probability_of_harm(harm_scenario).risk_level.capitalize],
+            [{ content: "Overall probability of harm", font_style: :bold }, "1 in #{ActiveSupport::NumberHelper.number_to_delimited(harm_scenario_overall_probability_of_harm(harm_scenario))}"],
           ], width: 522, column_widths: { 0 => 200 })
         end
         pdf.move_down 20
@@ -106,7 +106,7 @@ module Prism
       pdf.move_down 10
       pdf.table([
         [{ content: "Level of uncertainty associated with the risk assessment", font_style: :bold }, evaluation_translate_simple("level_of_uncertainty", prism_risk_assessment.evaluation.level_of_uncertainty)],
-        [{ content: "Has sensitivity analysis been undertaken?", font_style: :bold }, evaluation_translate_simple("yes_no", prism_risk_assessment.evaluation.sensitivity_analysis)],
+        [{ content: "Has sensitivity analysis been undertaken?", font_style: :bold }, sensitivity_analysis_with_details(prism_risk_assessment.evaluation.sensitivity_analysis, prism_risk_assessment.evaluation.sensitivity_analysis_details)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.move_down 20
       pdf.text "Risk evaluation", color: "000000", style: :bold, size: 20
@@ -119,14 +119,15 @@ module Prism
         [{ content: "How does the risk level compare to that of comparable products?", font_style: :bold }, evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level)],
         [{ content: "Is there potential for multiple casualties in a single incident?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.multiple_casualties)],
         [{ content: "Is there a significant risk differential?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.significant_risk_differential)],
-        [{ content: "Are there people at increased risk?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk)],
-        [{ content: "Is relevant action planned or underway by another MSA or other organisation?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others)],
-        [{ content: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.factors_to_take_into_account)],
+        [{ content: "Are there people at increased risk?", font_style: :bold }, people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details)],
+        [{ content: "Is relevant risk management action planned or underway by another MSA or other organisation?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others)],
+        [{ content: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?", font_style: :bold }, factors_to_take_into_account(@prism_risk_assessment.evaluation.factors_to_take_into_account, @prism_risk_assessment.evaluation.factors_to_take_into_account_details)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.move_down 10
       pdf.text "Perception and tolerability of risk", color: "000000", style: :bold, size: 15
       pdf.move_down 10
       pdf.table([
+        [{ content: "Has the risk featured in the media?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.featured_in_media)],
         [{ content: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards)],
         [{ content: "Is this a low likelihood but high severity risk?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.low_likelihood_high_severity)],
         [{ content: "Is there a risk to non-users of the product?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.risk_to_non_users)],
@@ -142,6 +143,29 @@ module Prism
         [{ content: "How would you describe the risk presented by the product?", font_style: :bold }, evaluation_translate_simple("risk_tolerability", @prism_risk_assessment.evaluation.risk_tolerability)],
       ], width: 522, column_widths: { 0 => 200 })
       pdf.render(file)
+    rescue Prawn::Errors::UnsupportedImageType
+      # Prawn doesn't know what to do with the product image.
+      # Re-run the PDF generation while skipping the image so
+      # the user can at least get something.
+      skip_images = true
+      retry
+    end
+
+  private
+
+    def attachment(file)
+      return if file.nil?
+
+      if file.attached?
+        filename = if file.metadata["safe"] == true
+                     file.blob.filename
+                   elsif file.metadata["safe"] == false
+                     "#{file.blob.filename} (failed virus scan)"
+                   else
+                     "#{file.blob.filename} (pending virus scan)"
+                   end
+        "\n\nAttachment: #{filename}"
+      end
     end
   end
 end

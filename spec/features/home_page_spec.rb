@@ -9,7 +9,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
       expect(page).to have_css(".govuk-phase-banner")
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
-      expect(page).to have_link("Sign in to your account")
+      expect(page).to have_link("Sign in")
 
       expect(page).not_to have_link("Sign out")
       expect(page).not_to have_link("Your account")
@@ -29,11 +29,6 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
     before do
       sign_in user
-    end
-
-    def expect_small_beta_phase_banner
-      expect(page).to have_css(".govuk-header .govuk-phase-banner__content__tag")
-      expect(page).not_to have_css(".govuk-phase-banner")
     end
 
     def expect_header_to_have_signed_in_links
@@ -58,7 +53,6 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
         scenario "shows the declaration page before the home page" do
           expect(page).to have_current_path(declaration_index_path)
-          expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("Declaration")
 
@@ -66,10 +60,9 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           click_button "Continue"
 
           expect(page).to have_current_path(authenticated_root_path)
-          expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_link("Your cases")
-          expect(page).to have_link("All cases")
+          expect(page).to have_link("Your notifications")
+          expect(page).to have_link("All notifications")
           expect(page).to have_link("Guidance")
           expect(page).to have_link("How to use the PSD")
         end
@@ -78,10 +71,9 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
       context "when the user has previously accepted the declaration" do
         scenario "shows the authenticated home page" do
           expect(page).to have_current_path(authenticated_root_path)
-          expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_link("Your cases")
-          expect(page).to have_link("All cases")
+          expect(page).to have_link("Your notifications")
+          expect(page).to have_link("All notifications")
           expect(page).to have_link("Guidance")
           expect(page).to have_link("How to use the PSD")
         end
@@ -96,7 +88,6 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
         scenario "shows the declaration page before the introduction" do
           expect(page).to have_current_path(declaration_index_path)
-          expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("Declaration")
 
@@ -104,7 +95,6 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           click_button "Continue"
 
           expect(page).to have_current_path(introduction_overview_path)
-          expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("The Product Safety Database (PSD) has been developed with")
           expect(page).to have_link("Continue")
@@ -117,7 +107,6 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
           scenario "shows the introduction" do
             expect(page).to have_current_path(introduction_overview_path)
-            expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
             expect(page).to have_text("The Product Safety Database (PSD) has been developed with")
             expect(page).to have_link("Continue")
@@ -127,10 +116,9 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
         context "when the user has previously viewed the introduction" do
           scenario "shows the non-OPSS home page" do
             expect(page).to have_current_path(authenticated_root_path)
-            expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
-            expect(page).to have_link("Your cases")
-            expect(page).to have_link("All cases")
+            expect(page).to have_link("Your notifications")
+            expect(page).to have_link("All notifications")
             expect(page).to have_link("Guidance")
             expect(page).to have_link("How to use the PSD")
           end

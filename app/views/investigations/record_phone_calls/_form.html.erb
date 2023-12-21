@@ -41,14 +41,14 @@
               <%= link_to "#{form.object.transcript.filename} (opens in new tab)", url_for(form.object.transcript), target: "_blank", rel: "noreferrer noopener" %>
             </p>
 
-            <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>
+            <%= govuk_details(summary_text: "Replace this file", text: file_upload_field) %>
           <% else %>
             <%= file_upload_field %>
           <% end %>
 
         </div>
 
-        <%= form.govuk_text_area :details, label: "Notes", label_classes: "govuk-!-width-two-thirds", attributes: { maxlength: 50_000 } %>
+        <%= form.govuk_text_area :details, label: "Notes", label_classes: "govuk-!-width-two-thirds", attributes: { maxlength: 32_767 } %>
 
       <% end %>
 

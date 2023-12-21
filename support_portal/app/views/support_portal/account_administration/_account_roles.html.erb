@@ -1,0 +1,16 @@
+<h2 class="govuk-heading-m">Current roles</h2>
+<% if @user.roles.present? %>
+  <%=
+    govuk_summary_list do |summary_list|
+      @user.roles.order(:name).pluck(:id, :name).each do |role|
+        summary_list.with_row do |row|
+          row.with_value(text: role.last)
+          row.with_action(text: "Remove", href: remove_role_account_administration_path(@user, role_id: role.first, q: params[:q]), visually_hidden_text: "role")
+        end
+      end
+    end
+  %>
+<% else %>
+  <p class="govuk-body">This user has no roles.</p>
+<% end %>
+<%= govuk_button_link_to "Add a role", add_role_account_administration_path(@user, q: params[:q]), secondary: true %>

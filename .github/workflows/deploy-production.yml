@@ -1,9 +1,9 @@
-name: Deploy Production
+name: Deploy to Pre-Prod and Production
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - released
 
 jobs:
   deploy:
@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref_name }}
 
     - name: Install cf client
       env:
@@ -163,7 +165,7 @@ jobs:
         bundle config path vendor/bundle
         bundle check || bundle install --without development --jobs=4 --retry=3
 
-    - name: Run Smoke Tests
+    - name: Run smoke tests
       if: success()
       env:
         SMOKE_USER: ${{secrets.SMOKE_USER}}

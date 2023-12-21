@@ -2,7 +2,7 @@
 <% page_title(title, errors: @user.errors.any?) %>
 
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: new_secondary_authentication_path) %>
+  <%= govuk_back_link(href: new_secondary_authentication_path) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -15,11 +15,11 @@
     <p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can resend it.</p>
     <%= form_with(model: @user,url: resend_secondary_authentication_code_path, method: "post", local: true) do |form| %>
       <% if @user.mobile_number_change_allowed? %>
-        <%= govukDetails(summaryText: "Change where the text message is sent", open: @user.errors.any?) do %>
+        <%= govuk_details(summary_text: "Change where the text message is sent", open: @user.errors.any?) do %>
           <%= govukInput(
             key: :mobile_number,
             form: form,
-            classes: "app-!-max-width-two-thirds",
+            classes: "govuk-!-width-two-thirds",
             label: { text: "Mobile number" },
             value: @user.mobile_number,
             id: "mobile_number",

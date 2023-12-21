@@ -12,6 +12,9 @@
     log_db_metrics_job:
       cron: "*/15 * * * *"
       class: "LogDbMetricsJob"
+    generate_and_upload_export_csv_job:
+      cron: "10 0 * * *"
+      class: "GenerateAndUploadExportCsvJob"
     lock_inactive_users_job:
       cron: "0 1 * * *"
       class: "LockInactiveUsersJob"
@@ -21,3 +24,6 @@
     delete_old_exports_job:
       cron: "0 3 * * *"
       class: "DeleteOldExportsJob"
+    delete_abandoned_bulk_products_uploads_job:
+      cron: "0 4 * * *"
+      class: "DeleteAbandonedBulkProductsUploadsJob"

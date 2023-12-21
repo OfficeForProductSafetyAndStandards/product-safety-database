@@ -100,7 +100,7 @@ private
   def counterfeit
     return "Unknown" if params["counterfeit"].nil?
 
-    params["counterfeit"] ? "Yes" : "No"
+    { "counterfeit" => "Yes", "genuine" => "No", "unsure" => "Unsure" }[params["counterfeit"]]
   end
 
   def online_marketplace

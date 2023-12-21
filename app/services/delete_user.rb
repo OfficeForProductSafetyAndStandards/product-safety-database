@@ -8,7 +8,7 @@ class DeleteUser
     context.fail!(error: "User already deleted") if user.deleted?
 
     ActiveRecord::Base.transaction do
-      user.mark_as_deleted!
+      user.mark_as_deleted!(deleted_by)
 
       change_user_investigations_ownership_to_their_team
     end
@@ -30,7 +30,7 @@ private
     metadata = activity_class.build_metadata(investigation.owner)
 
     activity_class.create!(
-      added_by_user: nil, # DeleteUser is called from rake user:delete where no user source is available
+      added_by_user: nil,
       investigation:,
       title: nil,
       body: nil,

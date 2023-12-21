@@ -1,0 +1,2 @@
+class CsvExport < ApplicationRecord
+end

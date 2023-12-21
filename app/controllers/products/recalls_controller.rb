@@ -3,8 +3,6 @@ module Products
     include Wicked::Wizard
     include CountriesHelper
 
-    layout "tool"
-
     steps :start, :"select-images", :"product-details", :complete
 
     before_action :authorize_user

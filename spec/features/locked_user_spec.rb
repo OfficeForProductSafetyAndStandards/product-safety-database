@@ -13,10 +13,10 @@ RSpec.feature "Locked user", :with_stubbed_mailer, type: :feature do
     user.lock_access!(reason: User.locked_reasons[:inactivity])
     expect(delivered_emails).to be_empty
 
-    click_link "All cases"
+    click_link "All notifications"
 
     expect_to_be_on_the_homepage
-    expect(page).to have_link "Sign in to your account"
+    expect(page).to have_link "Sign in"
 
     sign_in(user)
 

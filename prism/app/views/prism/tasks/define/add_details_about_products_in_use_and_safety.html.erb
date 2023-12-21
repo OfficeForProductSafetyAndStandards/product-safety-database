@@ -14,7 +14,7 @@
         <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
       <% end %>
       <%= f.govuk_text_field :selling_organisation, label: { text: "Name of the business that sold the product", size: "m" }, hint: { text: "This information is essential for product traceability." } %>
-      <%= f.govuk_radio_buttons_fieldset :total_products_sold_estimatable, legend: { text: "Can the total number of product items in use across the UK be estimated?", size: "m" } do %>
+      <%= f.govuk_radio_buttons_fieldset :total_products_sold_estimatable, legend: { text: "Can the total number of product items in use across the UK be reasonably estimated?", size: "m" } do %>
         <%= f.govuk_radio_button :total_products_sold_estimatable, true, label: { text: "Yes" }, hint: { text: "Based on information provided by the business or other evidence." }, link_errors: true do %>
           <%= f.govuk_number_field :total_products_sold, label: { text: "Estimated number of products in use" }, width: 4 %>
         <% end %>
@@ -22,9 +22,9 @@
       <% end %>
       <%= f.govuk_select(
         :safety_legislation_standards,
-        options_for_select([""] + Rails.application.config.legislation_constants["legislation"], @product_market_detail.safety_legislation_standards),
-        label: { text: "Product safety legislation and standards", size: "m" },
-        hint: { text: "Search applicable safety legislation and standards and choose the ones you feel are relevant to your product." },
+        options_for_select([""] + Rails.application.config.legislation_constants["legislation"] + ["Not yet determined"], @product_market_detail.safety_legislation_standards),
+        label: { text: "Product safety legislation", size: "m" },
+        hint: { text: "Search applicable safety legislation and choose the ones you feel are relevant to your product." },
         multiple: true
       ) %>
       <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>

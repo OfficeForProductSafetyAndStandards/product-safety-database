@@ -16,7 +16,7 @@ module Products
       return render :new unless @product_duplicate_check_form.valid?
 
       @product_duplicates = FindClosestProductDuplicate.call(barcode: @product_duplicate_check_form.barcode)
-      if @product_duplicates.duplicate&.present?
+      if @product_duplicates.duplicate.present?
         first_duplicate_product = @product_duplicates.duplicate
         return redirect_to product_duplicate_checks_path(first_duplicate_product)
       end

@@ -1,11 +1,11 @@
 <% page_heading = "Provide the business details - Upload multiple products" %>
 <% page_title page_heading, errors: @bulk_products_add_business_details_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= govukBackLink(text: "Back", href: create_business_bulk_upload_products_path) %>
+  <%= govuk_back_link(href: create_business_bulk_upload_products_path) %>
 <% end %>
 <%= form_with model: @bulk_products_add_business_details_form, url: add_business_details_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-three-quarters">
       <%= error_summary @bulk_products_add_business_details_form.errors %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
@@ -39,10 +39,10 @@
         ) %>
       </fieldset>
       <%= form.fields_for :locations, @bulk_products_upload.investigation_business.business.primary_location do |ff| %>
-        <%= render "locations/address_form", form: ff, countries: @countries %>
+        <%= render "businesses/locations/address_form", form: ff, countries: @countries %>
       <% end %>
       <%= form.fields_for :contacts, @bulk_products_upload.investigation_business.business.primary_contact do |ff| %>
-        <%= render "contacts/form", form: ff %>
+        <%= render "businesses/contacts/form", form: ff %>
       <% end %>
       <div class="govuk-button-group">
         <%= form.submit "Continue", class: "govuk-button" %>

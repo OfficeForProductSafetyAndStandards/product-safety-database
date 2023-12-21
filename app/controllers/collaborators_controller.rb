@@ -29,7 +29,7 @@ class CollaboratorsController < Investigations::BaseController
       message: @form.message
     )
 
-    redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{@form.team.name} added to the case" }
+    redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{@form.team.name} added to the notification" }
   end
 
   def edit
@@ -37,6 +37,8 @@ class CollaboratorsController < Investigations::BaseController
     @collaborator = @collaboration.collaborator
 
     @edit_form = EditCaseCollaboratorForm.new(collaboration: @collaboration)
+  rescue ActiveRecord::RecordNotFound
+    render_404_page
   end
 
   def update
@@ -58,7 +60,7 @@ class CollaboratorsController < Investigations::BaseController
         message: @edit_form.message
       )
 
-      flash[:success] = "#{@collaborator.display_name} has been removed from the case"
+      flash[:success] = "#{@collaborator.display_name} has been removed from the notification"
     else
       ChangeCasePermissionLevelForTeam.call!(
         existing_collaboration: @collaboration,
@@ -67,7 +69,7 @@ class CollaboratorsController < Investigations::BaseController
         message: @edit_form.message
       )
 
-      flash[:success] = "#{@collaborator.display_name}'s case permission level has been changed"
+      flash[:success] = "#{@collaborator.display_name}'s notification permission level has been changed"
     end
 
     redirect_to investigation_collaborators_path(@investigation)

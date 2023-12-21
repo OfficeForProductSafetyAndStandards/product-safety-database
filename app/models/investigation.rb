@@ -1,4 +1,6 @@
 class Investigation < ApplicationRecord
+  extend Pagy::Searchkick
+
   include Documentable
   include SanitizationHelper
   include InvestigationSearchkick
@@ -47,7 +49,6 @@ class Investigation < ApplicationRecord
 
   has_many :tests, dependent: :destroy
   has_many :test_results, class_name: "Test::Result", dependent: :destroy
-  has_many :alerts, dependent: :destroy
 
   has_many_attached :documents
 
@@ -129,7 +130,7 @@ class Investigation < ApplicationRecord
   end
 
   def number_of_related_images
-    images.size + image_uploads.size + products.flat_map(&:virus_free_images).count
+    images.size + image_uploads.size
   end
 
   def generic_supporting_information_attachments

@@ -1,10 +1,10 @@
-<div class="govuk-grid-row psd-case-card psd-case-card--restricted psd-case-card--restricted-access <%= "psd-case-card--closed" if investigation.is_closed? %>">
+<div class="govuk-grid-row psd-case-card psd-case-card--restricted-access <%= "psd-case-card--closed" if investigation.is_closed? %>">
   <div class="govuk-grid-column-one-half">
     <span class="govuk-caption-m govuk-!-font-size-16">
       <%= investigation.pretty_description %>
     </span>
     <span>
-      <%= "Case restricted" %>
+      <%= "Notification restricted" %>
     </span>
     <%= render "investigations/case_card_status_area", investigation: investigation %>
   </div>

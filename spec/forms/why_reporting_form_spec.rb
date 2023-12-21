@@ -29,17 +29,6 @@ RSpec.describe WhyReportingForm do
 
       it { is_expected.to be_valid }
     end
-
-    context "when two mutually exclusive options are set" do
-      let(:why_reporting_params) do
-        { reported_reason_safe_and_compliant: true, reported_reason_non_compliant: true }
-      end
-
-      it "is invalid and sets and error", :aggregate_failures do
-        expect(form).to be_invalid
-        expect(form.errors.full_messages_for(:base)).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
-      end
-    end
   end
 
   describe "#validates unsafe" do

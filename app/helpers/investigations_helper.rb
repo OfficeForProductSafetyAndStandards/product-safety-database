@@ -1,5 +1,10 @@
 module InvestigationsHelper
-  def opensearch_for_investigations(page_size = Investigation.count, user = current_user)
+  HAZARD_TYPES = Rails.application.config.hazard_constants["hazard_type"]
+  HAZARD_PARAMS = HAZARD_TYPES.map { |type| type.parameterize.underscore.to_sym }
+  CASE_TYPES = %i[allegation enquiry project notification].freeze
+  REPORTED_REASONS = %i[safe_and_compliant unsafe_and_non_compliant unsafe non_compliant].freeze
+
+  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
     query = (@search.q.presence || "*")
@@ -95,17 +100,169 @@ module InvestigationsHelper
       wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
     end
 
-    Investigation.search(
-      query,
-      where: wheres,
-      order: @search.sorting_params,
-      misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
-      page: page_number,
-      per_page: page_size
-    )
+    if paginate
+      Investigation.pagy_search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    else
+      Investigation.search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    end
   end
 
-  def search_for_investigations(page_size = Investigation.count, user = current_user, ids_only: false)
+  def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
+    # Opensearch is only used for searching across all investigations
+    @search.q.strip! if @search.q
+    query = (@search.q.presence || "*")
+
+    wheres = {}
+
+    case_types = CASE_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
+    wheres[:type] = case_types unless case_types.empty?
+
+    risk_levels = []
+
+    %i[serious high medium low].each do |risk_level|
+      risk_levels << risk_level if @search.send(risk_level)
+    end
+
+    risk_levels << nil if @search.not_set
+
+    wheres[:risk_level] = risk_levels unless risk_levels.empty?
+
+    hazard_types = HAZARD_TYPES.map { |type| type if @search.send(type.parameterize.underscore.to_sym) }.compact
+
+    wheres[:hazard_type] = hazard_types unless hazard_types.empty?
+
+    unless @search.case_status_open && @search.case_status_closed
+      wheres[:is_closed] = false if @search.case_status_open
+      wheres[:is_closed] = true if @search.case_status_closed
+    end
+
+    creator_ids = []
+    creator_team_ids = []
+
+    creator_ids << user.id if @search.created_by_me
+
+    if @search.created_by_my_team
+      team = user.team
+
+      creator_ids += team.users.pluck(:id)
+      creator_team_ids << team.id
+    end
+
+    if @search.created_by_others && @search.created_by_other_id.present?
+      if (team = Team.find_by(id: @search.created_by_other_id))
+        creator_ids += team.users.pluck(:id)
+        creator_team_ids << team.id
+      else
+        creator_ids << @search.created_by_other_id
+      end
+    end
+
+    if creator_ids.empty? && creator_team_ids.empty?
+      if @search.created_by_others
+        wheres[:_not] = { creator_user: user.team.user_ids }
+      end
+    else
+      unless @search.created_by_others && @search.created_by_other_id.blank?
+        wheres[:_or] = [
+          { creator_user: creator_ids },
+          { creator_team: creator_team_ids }
+        ]
+      end
+    end
+
+    case_owner_ids = []
+    teams_with_access_ids = []
+
+    case_owner_ids << user.id if @search.case_owner_me
+
+    if @search.case_owner_my_team
+      team = user.team
+      case_owner_ids += team.users.pluck(:id)
+      teams_with_access_ids << team.id
+    end
+
+    if @search.case_owner_other && @search.case_owner_is_someone_else_id.present?
+      if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+        case_owner_ids += team.users.pluck(:id)
+      else
+        case_owner_ids << @search.case_owner_is_someone_else_id
+      end
+    end
+
+    if case_owner_ids.empty? && teams_with_access_ids.empty?
+      wheres[:_not] ||= {}
+      wheres[:_not][:owner_id] = user.team.user_ids if @search.case_owner_other
+    else
+      unless @search.case_owner_other && @search.case_owner_is_someone_else_id.blank?
+        wheres[:_or] ||= []
+        wheres[:_or] += [
+          { owner_id: case_owner_ids },
+          { team_ids_with_access: teams_with_access_ids }
+        ]
+      end
+    end
+
+    team_ids_with_access = []
+    team_ids_with_access << user.team.id if @search.teams_with_access_my_team
+    team_ids_with_access << @search.teams_with_access_other_id if @search.teams_with_access_others && @search.teams_with_access_other_id.present?
+
+    wheres[:team_ids_with_access] = team_ids_with_access if @search.teams_with_access_my_team || @search.teams_with_access_others
+
+    if @search.created_from_date.present? && @search.created_to_date.present?
+      wheres[:created_at] = { gte: @search.created_from_date.at_midnight, lte: @search.created_to_date.at_end_of_day }
+    elsif @search.created_from_date.present?
+      wheres[:created_at] = { gte: @search.created_from_date.at_midnight }
+    elsif @search.created_to_date.present?
+      wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
+    end
+
+    reported_reasons = REPORTED_REASONS.map { |reason| reason.to_s if @search.send(reason) }.compact
+    wheres[:reported_reason] = reported_reasons unless reported_reasons.empty?
+
+    if paginate
+      Investigation.pagy_search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    else
+      Investigation.search(
+        query,
+        where: wheres,
+        order: @search.sorting_params,
+        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+        page: page_number,
+        per_page: page_size,
+        body_options: { track_total_hits: true },
+        scroll: scroll_time(scroll)
+      )
+    end
+  end
+
+  def search_for_investigations(user = current_user, ids_only: false)
     query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses, :activities)
 
     if @search.q.present?
@@ -191,10 +348,7 @@ module InvestigationsHelper
     if ids_only
       query.distinct.pluck(:id)
     else
-      query
-        .order(@search.sorting_params)
-        .page(page_number)
-        .per(page_size)
+      pagy(query.order(@search.sorting_params))
     end
   end
 
@@ -202,21 +356,39 @@ module InvestigationsHelper
     params.permit(
       :q,
       :case_status,
+      :case_status_open,
+      :case_status_closed,
       :case_type,
+      *CASE_TYPES,
       :page,
       :case_owner,
+      :case_owner_me,
+      :case_owner_my_team,
+      :case_owner_other,
       :sort_by,
       :sort_dir,
       :priority,
+      :serious,
+      :high,
+      :medium,
+      :low,
+      :not_set,
       :teams_with_access,
       :case_owner_is_someone_else_id,
       :teams_with_access_other_id,
       :created_by,
       :created_by_other_id,
+      :created_by_me,
+      :created_by_my_team,
+      :created_by_others,
       :page_name,
       :hazard_type,
+      *HAZARD_PARAMS,
+      *REPORTED_REASONS,
+      :teams_with_access_my_team,
+      :teams_with_access_others,
       created_from_date: %i[day month year],
-      created_to_date: %i[day month year]
+      created_to_date: %i[day month year],
     )
   end
 
@@ -224,15 +396,33 @@ module InvestigationsHelper
     params.permit(
       :q,
       :case_status,
+      :case_status_open,
+      :case_status_closed,
       :case_type,
+      *CASE_TYPES,
       :case_owner,
+      :case_owner_me,
+      :case_owner_my_team,
+      :case_owner_other,
       :priority,
+      :serious,
+      :high,
+      :medium,
+      :low,
+      :not_set,
       :teams_with_access,
       :case_owner_is_someone_else_id,
       :teams_with_access_other_id,
       :created_by,
       :created_by_other_id,
+      :created_by_me,
+      :created_by_my_team,
+      :created_by_others,
       :hazard_type,
+      *HAZARD_PARAMS,
+      *REPORTED_REASONS,
+      :teams_with_access_my_team,
+      :teams_with_access_others,
       created_from_date: %i[day month year],
       created_to_date: %i[day month year]
     )
@@ -346,7 +536,7 @@ module InvestigationsHelper
     title_link = link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state"
 
     [
-      { key: { text: "Case" }, value: { text: investigation.pretty_id } },
+      { key: { text: "Notification" }, value: { text: investigation.pretty_id } },
       { key: { text: "Name" }, value: { html: title_link } },
       { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
       { key: { text: "Created" }, value: { text: investigation.created_at.to_formatted_s(:govuk) } },
@@ -355,94 +545,71 @@ module InvestigationsHelper
   end
 
   def case_rows(investigation, user, team_list_html)
-    reference_value = { text: investigation.complainant_reference }
-    reference_value[:secondary_text] = { text: "Optional reference number" } if investigation.complainant_reference
-
     rows = [
       {
-        key: { text: "Case name" },
+        key: { text: "Notification name" },
         value: { text: investigation.title },
         actions: case_name_actions(investigation, user)
       },
       {
-        key: { text: "Case number" },
-        value: {
-          text: investigation.pretty_id,
-        },
-        actions: {}
+        key: { text: "Notification number" },
+        value: { text: investigation.pretty_id }
       },
       {
         key: { text: "Reference" },
-        value: reference_value,
+        value: { text: investigation.complainant_reference },
         actions: reference_actions(investigation, user)
       },
       {
         key: { text: "Summary" },
-        value: {
-          html: summary_html(investigation)
-        },
+        value: { text: summary_html(investigation) },
         actions: summary_actions(investigation, user)
       },
       {
         key: { text: "Status" },
         value: status_value(investigation),
         actions: status_actions(investigation, user),
-        classes: "opss-summary-list__row--split"
       },
       {
         key: { text: "Last updated" },
-        value: {
-          text: time_ago_or_date(@investigation.updated_at)
-        }
+        value: { text: time_ago_or_date(@investigation.updated_at) }
       },
       {
         key: { text: "Created" },
-        value: {
-          text: time_ago_or_date(@investigation.created_at)
-        }
+        value: { text: time_ago_or_date(@investigation.created_at) }
       },
       {
         key: { text: "Created by" },
-        value: {
-          text: investigation.created_by
-        }
+        value: { text: investigation.created_by }
       },
       {
-        key: { text: "Case owner" },
-        value: {
-          text: investigation_owner(investigation)
-        },
+        key: { text: "Notification owner" },
+        value: { text: investigation_owner(investigation) },
         actions: case_owner_actions(investigation, user)
       },
       {
         key: { text: "Teams added" },
-        value: {
-          html: team_list_html
-        },
+        value: { text: team_list_html },
         actions: case_teams_actions(investigation)
       }
     ]
 
     if investigation.is_private?
       rows << {
-        key: { text: "Case restriction" },
-        value: {
-          html: case_restriction_value(investigation)
-        },
+        key: { text: "Notification restriction" },
+        value: { text: case_restriction_value(investigation) },
         actions: case_restriction_actions(investigation, user)
       }
     end
 
     rows << [
       {
-        key: { text: "Case risk level" },
-        value: {
-          html: case_risk_level_value(investigation)
-        },
+        key: { text: "Notification risk level" },
+        value: { text: case_risk_level_value(investigation) },
         actions: risk_level_actions(investigation, user)
       },
       {
-        key: { html: 'Risk <span class="govuk-visually-hidden">level</span> validated'.html_safe },
+        key: { text: 'Risk <span class="govuk-visually-hidden">level</span> validated'.html_safe },
         value: { text: risk_validated_value(investigation) },
         actions: risk_validation_actions(investigation, user)
       }
@@ -452,21 +619,14 @@ module InvestigationsHelper
     if investigation.coronavirus_related
       rows << {
         key: { text: "COVID-19" },
-        value: {
-          html: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe
-        },
-        actions: {
-          items: []
-        }
+        value: { text: '<span class="opss-tag opss-tag--covid opss-tag--lrg">COVID-19 related</span>'.html_safe }
       }
     end
 
     if policy(investigation).view_notifying_country?(user:)
       rows << {
         key: { text: "Notifying country" },
-        value: {
-          text: country_from_code(investigation.notifying_country, Country.notifying_countries)
-        },
+        value: { text: country_from_code(investigation.notifying_country, Country.notifying_countries) },
         actions: notifying_country_actions(investigation, user)
       }
     end
@@ -474,9 +634,7 @@ module InvestigationsHelper
     if policy(investigation).view_overseas_regulator?(user:)
       rows << {
         key: { text: "Overseas regulator" },
-        value: {
-          text: overseas_regulator_value(investigation)
-        },
+        value: { text: overseas_regulator_value(investigation) },
         actions: overseas_regulator_actions(investigation, user)
       }
     end
@@ -529,7 +687,7 @@ private
   def search_result_values(_search_terms, number_of_results)
     word = number_of_results == 1 ? "was" : "were"
 
-    number_of_cases_in_english = "#{number_of_results} #{'case'.pluralize(number_of_results)}"
+    number_of_cases_in_english = "#{number_of_results} #{'notification'.pluralize(number_of_results)}"
 
     {
       number_of_cases_in_english:,
@@ -538,126 +696,126 @@ private
   end
 
   def case_name_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_case_names_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the case name"
-      ]
-    }
+        visually_hidden_text: "the notification name"
+      }
+    ]
   end
 
   def reference_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_reference_numbers_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the reference number"
-      ]
-    }
+        visually_hidden_text: "the reference number"
+      }
+    ]
   end
 
   def summary_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_summary_path(investigation.pretty_id),
         text: "Edit",
-        visuallyHiddenText: " the summary"
-      ]
-    }
+        visually_hidden_text: "the summary"
+      }
+    ]
   end
 
   def status_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?(user:)
+    return [] unless policy(investigation).change_owner_or_status?(user:)
 
     status_path = investigation.is_closed ? reopen_investigation_status_path(investigation) : close_investigation_status_path(investigation)
     status_link_text = investigation.is_closed? ? "Re-open" : "Close"
 
-    {
-      items: [
+    [
+      {
         href: status_path,
         text: status_link_text,
-        visuallyHiddenText: " this case"
-      ]
-    }
+        visually_hidden_text: "this notification"
+      }
+    ]
   end
 
   def notifying_country_actions(investigation, user)
-    return {} unless policy(investigation).change_notifying_country?(user:)
+    return [] unless policy(investigation).change_notifying_country?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_notifying_country_path(investigation),
         text: "Change",
-        visuallyHiddenText: "notifying country"
-      ]
-    }
+        visually_hidden_text: "notifying country"
+      }
+    ]
   end
 
   def overseas_regulator_actions(investigation, user)
-    return {} unless policy(investigation).change_overseas_regulator?(user:)
+    return [] unless policy(investigation).change_overseas_regulator?(user:)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_overseas_regulator_path(investigation),
         text: "Change",
-        visuallyHiddenText: "overseas regulator"
-      ]
-    }
+        visually_hidden_text: "overseas regulator"
+      }
+    ]
   end
 
   def case_owner_actions(investigation, user)
-    return {} unless policy(investigation).change_owner_or_status?(user:)
+    return [] unless policy(investigation).change_owner_or_status?(user:)
 
-    {
-      items: [
+    [
+      {
         href: new_investigation_ownership_path(investigation),
-        text: "Change",
-        visuallyHiddenText: " the case owner"
-      ]
-    }
+        text: "Edit",
+        visually_hidden_text: "the notification owner"
+      }
+    ]
   end
 
   def case_teams_actions(investigation)
-    return {} unless policy(investigation).manage_collaborators?
+    return [] unless policy(investigation).manage_collaborators?
 
-    {
-      items: [
+    [
+      {
         href: investigation_collaborators_path(investigation),
         text: "Change",
-        visuallyHiddenText: " the teams added"
-      ]
-    }
+        visually_hidden_text: "the teams added"
+      }
+    ]
   end
 
   def case_restriction_actions(investigation, user)
-    return {} unless policy(investigation).can_unrestrict?(user:)
+    return [] unless policy(investigation).can_unrestrict?(user:)
 
-    {
-      items: [
+    [
+      {
         href: investigation_visibility_path(investigation),
         text: "Change",
-        visuallyHiddenText: " the case restriction"
-      ]
-    }
+        visually_hidden_text: "the notification restriction"
+      }
+    ]
   end
 
   def risk_level_actions(investigation, user)
-    return {} unless policy(investigation).update?(user:)
+    return [] unless policy(investigation).update?(user:)
 
-    {
-      items: [
+    [
+      {
         href: investigation_risk_level_path(investigation),
         text: "Change",
-        visuallyHiddenText: " the risk level"
-      ]
-    }
+        visually_hidden_text: "the risk level"
+      }
+    ]
   end
 
   def batch_number_actions(investigation_product, user)
@@ -709,21 +867,20 @@ private
   end
 
   def risk_validation_actions(investigation, user)
-    return {} unless policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
+    return [] unless policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
 
-    {
-      items: [
+    [
+      {
         href: edit_investigation_risk_validations_path(investigation.pretty_id),
         text: risk_validated_link_text(investigation)
-      ]
-    }
+      }
+    ]
   end
 
   def status_value(investigation)
     if investigation.is_closed?
       {
-        html: '<span class="opss-tag opss-tag--risk3">Case closed</span>'.html_safe,
-        secondary_text: { text: investigation.date_closed.to_formatted_s(:govuk) }
+        text: "<span class=\"opss-tag opss-tag--risk3\">Notification closed</span> (#{investigation.date_closed.to_formatted_s(:govuk)})".html_safe
       }
     else
       {
@@ -733,7 +890,7 @@ private
   end
 
   def case_restriction_value(investigation)
-    investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This case is </span>Restricted'.html_safe : "Unrestricted"
+    investigation.is_private ? '<span class="opss-tag opss-tag--risk2 opss-tag--lrg"><span class="govuk-visually-hidden">This notification is </span>Restricted'.html_safe : "Unrestricted"
   end
 
   def case_risk_level_value(investigation)
@@ -764,5 +921,11 @@ private
     else
       date.to_formatted_s(:govuk)
     end
+  end
+
+  def scroll_time(scroll)
+    return nil unless scroll
+
+    "1m"
   end
 end

@@ -34,14 +34,18 @@ class SetBusinessTypeOnCaseForm
     session.delete(:authorised_representative_choice)
   end
 
+  def is_approved_online_marketplace?
+    type == "online_marketplace" && other_marketplace_name.blank?
+  end
+
+  def approved_online_marketplace
+    OnlineMarketplace.approved.find(online_marketplace_id)
+  end
+
 private
 
   def is_authorised_representative?
     type == "authorised_representative"
-  end
-
-  def is_approved_online_marketplace?
-    type == "online_marketplace" && other_marketplace_name.blank?
   end
 
   def is_other_online_marketplace?

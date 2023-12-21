@@ -13,7 +13,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
 
     scenario "cannot view the new corrective action form" do
       sign_in(read_only_user)
-      expect { visit "/cases/#{investigation.pretty_id}/corrective-actions/new" }.to raise_error(Pundit::NotAuthorizedError)
+      visit "/cases/#{investigation.pretty_id}/corrective-actions/new"
+      expect(page).to have_http_status(:forbidden)
     end
   end
 
@@ -25,7 +26,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
 
       visit "/cases/#{investigation.pretty_id}/corrective-actions/new"
 
-      expect(page).to have_text("There are no products on this case.")
+      expect(page).to have_text("There are no products on this notification.")
 
       click_button "Continue"
 
@@ -41,7 +42,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
 
     expect_to_be_on_record_corrective_action_for_case_page
     expect(page).not_to have_error_messages
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_button "Continue"
     expect(page).to have_error_messages
@@ -69,12 +70,12 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(page).to have_text("Currently selected file: #{File.basename(file)}")
     expect(page).to have_text("Replace this file")
     expect(page).to have_field("Attachment description", with: file_description)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     fill_and_submit_form
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_link CorrectiveAction.first.decorate.supporting_information_title
 
@@ -93,7 +94,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     click_link "Supporting information (1)"
 
     expect_case_supporting_information_page_to_show_file
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     click_on "Activity"
 
@@ -104,7 +105,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     click_link "View corrective action"
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
 
     expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine (#{product.psd_ref})")

@@ -112,7 +112,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Overall probability of harm")
-            row.with_value(text: harm_scenario_overall_probability_of_harm(harm_scenario).risk_level_tag_html)
+            row.with_value(text: "1 in #{ActiveSupport::NumberHelper.number_to_delimited(harm_scenario_overall_probability_of_harm(harm_scenario))}")
           end
         end
       %>
@@ -136,7 +136,7 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Has sensitivity analysis been undertaken?")
-          row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.sensitivity_analysis))
+          row.with_value(text: sensitivity_analysis_with_details(@prism_risk_assessment.evaluation.sensitivity_analysis, @prism_risk_assessment.evaluation.sensitivity_analysis_details))
         end
       end
     %>
@@ -170,21 +170,25 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Are there people at increased risk?")
-          row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.people_at_increased_risk))
+          row.with_value(text: people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details))
         end
         summary_list.with_row do |row|
-          row.with_key(text: "Is relevant action planned or underway by another MSA or other organisation?")
+          row.with_key(text: "Is relevant risk management action planned or underway by another MSA or other organisation?")
           row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others))
         end
         summary_list.with_row do |row|
           row.with_key(text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?")
-          row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.factors_to_take_into_account))
+          row.with_value(text: factors_to_take_into_account(@prism_risk_assessment.evaluation.factors_to_take_into_account, @prism_risk_assessment.evaluation.factors_to_take_into_account_details))
         end
       end
     %>
     <h3 class="govuk-heading-s">Perception and tolerability of risk</h3>
     <%=
       govuk_summary_list do |summary_list|
+        summary_list.with_row do |row|
+          row.with_key(text: "Has the risk featured in the media?")
+          row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.featured_in_media))
+        end
         summary_list.with_row do |row|
           row.with_key(text: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?")
           row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards))

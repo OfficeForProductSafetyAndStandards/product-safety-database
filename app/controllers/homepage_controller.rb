@@ -2,9 +2,7 @@ class HomepageController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :require_secondary_authentication, if: -> { current_user.nil? }
 
-  def show
-    @show_full_phase_banner = true
-  end
+  def show; end
 
 private
 

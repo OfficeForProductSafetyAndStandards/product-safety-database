@@ -9,7 +9,7 @@
       <%= render 'businesses/secondary_nav' %>
 
       <% if @businesses.any? && policy(Business).export? && ["team_businesses", "your_businesses"].exclude?(@page_name) %>
-        <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-padding-left-3 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
+        <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
           <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
             Request this list as a downloadable <br class="opss-br-desktop">
             <%= link_to(generate_business_exports_path(params: business_export_params), class: "govuk-link govuk-link--no-visited-state") do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
@@ -26,21 +26,21 @@
               <div class="govuk-input__wrapper opss-search__wrapper">
                 <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
                 <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
-                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", data: { "opss-clear-on-reset" => "element" }, spellcheck: false, "aria-describedby" => "search-hint" %>
+                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", spellcheck: false, "aria-describedby" => "search-hint" %>
                 <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
                   <span class="govuk-visually-hidden">Submit search</span>
                 </button>
               </div>
             </div>
           </div>
-          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@results.total_count && @results.total_count > 11) %>
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@count > 11) %>
         </div>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
             <%= render "search_statement", count: @count, keywords: params[:q] %>
           </div>
         </div>
-      <% elsif (@results.total_count && @results.total_count > 11) %>
+      <% elsif (@count > 11) %>
         <div class="govuk-grid-row">
           <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third opss-float-right-desktop" %>
         </div>
@@ -50,7 +50,7 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full" role="region" aria-label="Businesses">
             <%= render "table", businesses: @businesses %>
-            <%= paginate @businesses.object %>
+            <%= govuk_pagination(pagy: @pagy) %>
           </div>
         </div>
       <% elsif ["team_businesses", "your_businesses"].include?(@page_name) %>

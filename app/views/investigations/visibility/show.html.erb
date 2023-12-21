@@ -1,20 +1,17 @@
 <% page_heading =  I18n.t(".investigations.visibility.show", future_status: @investigation.visibility_action.capitalize) %>
 <% page_title page_heading %>
 <h1 class="govuk-heading-l"><%= page_heading %></h1>
-<p>This case is currently <strong><%= @investigation.visibility_status %>.</strong></p>
-
+<%= govuk_warning_text(text: "Only the case owner can change notification restriction.") %>
+<p>This notification is currently <strong><%= @investigation.visibility_status %>.</strong></p>
 <% if @investigation.is_private? %>
-  <p>Only teams added to the case can view it.</p>
+  <p>Only teams added to the notification can view it.</p>
   <% if @last_update_visibility_activity %>
-    <p>This case was <%= @investigation.visibility_status %> on <%= @last_update_visibility_activity.govuk_created_at %> by <%= @last_update_visibility_activity.user_name %> for the following reason:</p>
-
+    <p>This notification was <%= @investigation.visibility_status %> on <%= @last_update_visibility_activity.govuk_created_at %> by <%= @last_update_visibility_activity.user_name %> for the following reason:</p>
     <p class="govuk-inset-text"><%= @last_update_visibility_activity.rationale %></p>
   <% end %>
 <% else %>
-  <p>This means that all teams can view the case, except for protected items like correspondence. </p>
-
-  <p>If the case is going to court or it contains commercially sensitive information you should consider restricting the case.<p>
+  <p>This means that all teams can view the notification, except for protected items like correspondence. </p>
+  <p>If the notification is going to court or it contains commercially sensitive information you should consider restricting the notification.<p>
 <% end %>
 <% continue_path = @investigation.is_private? ? unrestrict_investigation_visibility_path(@investigation.pretty_id) : restrict_investigation_visibility_path(@investigation.pretty_id) %>
-<%= govukButton(text: "Continue", href: continue_path) %>
-<%= permission_notice(text: "Only the case owner can change case restriction") %>
+<%= govuk_button_link_to("Continue", continue_path) %>

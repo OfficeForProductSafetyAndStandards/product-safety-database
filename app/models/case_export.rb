@@ -4,6 +4,7 @@ class CaseExport < ApplicationRecord
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
+  OPENSEARCH_PAGE_SIZE = 10_000
 
   belongs_to :user
   has_one_attached :export_file
@@ -15,7 +16,7 @@ class CaseExport < ApplicationRecord
   end
 
   def export!
-    raise "No cases to export" unless case_ids.length.positive?
+    raise "No notifications to export" unless case_ids.length.positive?
 
     spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "cases_export.xlsx" }
@@ -27,7 +28,7 @@ class CaseExport < ApplicationRecord
 
   def to_spreadsheet
     package = Axlsx::Package.new
-    sheet = package.workbook.add_worksheet name: "Cases"
+    sheet = package.workbook.add_worksheet name: "Notifications"
 
     add_header_row(sheet)
 
@@ -46,7 +47,26 @@ private
     return @case_ids if @case_ids
 
     @search = SearchParams.new(params)
-    search_for_investigations(nil, user, ids_only: true).sort
+
+    ids = []
+
+    results = search_results
+
+    while results.any?
+      ids += results.pluck(:id)
+
+      results = results.scroll
+    end
+
+    results.clear_scroll
+
+    ids.sort
+  end
+
+  def search_results
+    return new_opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, scroll: true) if user.can_access_new_search?
+
+    opensearch_for_investigations(OPENSEARCH_PAGE_SIZE, user, scroll: true)
   end
 
   def activity_counts
@@ -95,15 +115,10 @@ private
                      Description
                      Product_Category
                      Hazard_Type
-                     Coronavirus_Related
                      Risk_Level
                      Case_Owner_Team
-                     Case_Owner_User
-                     Source_Type
                      Products
                      Businesses
-                     Activities
-                     Correspondences
                      Corrective_Actions
                      Tests
                      Risk_Assessments
@@ -114,10 +129,8 @@ private
                      Case_Creator_Team
                      Notifying_Country
                      Reported_Reason
-                     Complainant_Reference
-                     Case_Type
+                     Notifiers_Reference
                      Trading_Standards_Region
-                     Trading_Standards_Region_Code
                      Regulator_Name
                      OPSS_Internal_Team
                      Non_Compliant_Reason]
@@ -144,15 +157,10 @@ private
       investigation.object.description,
       investigation.categories.join(", "),
       investigation.hazard_type,
-      investigation.coronavirus_related?,
       investigation.risk_level_description,
       investigation.owner_team&.name,
-      investigation.owner_user&.name,
-      investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,
-      activity_counts[investigation.id] || 0,
-      correspondence_counts[investigation.id] || 0,
       corrective_action_counts[investigation.id] || 0,
       test_counts[investigation.id] || 0,
       risk_assessment_counts[investigation.id] || 0,
@@ -164,9 +172,7 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       investigation.complainant_reference,
-      investigation.case_type,
       team_data.ts_region,
-      team_data.ts_acronym,
       team_data.regulator_name,
       (team_data.type == "internal"),
       investigation.non_compliant_reason
@@ -184,15 +190,10 @@ private
       "Restricted",
       investigation.categories.join(", "),
       investigation.hazard_type,
-      investigation.coronavirus_related?,
       investigation.risk_level_description,
       investigation.owner_team&.name,
-      "Restricted",
-      investigation.complainant&.complainant_type,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,
-      activity_counts[investigation.id] || 0,
-      correspondence_counts[investigation.id] || 0,
       corrective_action_counts[investigation.id] || 0,
       test_counts[investigation.id] || 0,
       risk_assessment_counts[investigation.id] || 0,
@@ -204,9 +205,7 @@ private
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       "Restricted",
-      investigation.case_type,
       team_data.ts_region,
-      team_data.ts_acronym,
       team_data.regulator_name,
       (team_data.type == "internal")
     ]

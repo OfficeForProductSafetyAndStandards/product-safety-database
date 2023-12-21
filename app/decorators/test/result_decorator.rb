@@ -10,7 +10,7 @@ class Test < ApplicationRecord
                       "Test result"
                     end
 
-      "#{result_text}: #{investigation_product.name}"
+      "#{result_text}: #{investigation_product&.name}"
     end
 
     def result_text

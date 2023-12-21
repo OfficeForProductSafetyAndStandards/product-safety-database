@@ -9,7 +9,7 @@ module Prism
     validates :selling_organisation, presence: true
     validates :total_products_sold_estimatable, inclusion: [true, false]
     validates :total_products_sold, presence: true, numericality: { only_integer: true }, if: -> { total_products_sold_estimatable }
-    validates :safety_legislation_standards, presence: true, array_intersection: { in: Rails.application.config.legislation_constants["legislation"] }
+    validates :safety_legislation_standards, presence: true, array_intersection: { in: Rails.application.config.legislation_constants["legislation"] + ["Not yet determined"] }
 
     before_save :clear_total_products_sold
 

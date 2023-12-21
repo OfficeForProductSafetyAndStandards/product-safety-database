@@ -1,27 +1,21 @@
-<%= page_title "Track investigations" %>
-<% content_for :after_header do %>
-  <%= render "skip_introduction" %>
-<% end %>
+notification<%= page_title "Track investigations" %>
 
-<div class="app-inverted app-inverted--card">
+<div class="app-introduction-card">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-l app-heading-l--inverted">
+      <h1 class="govuk-heading-l app-introduction-card__title">
         Manage and track investigations
       </h1>
-      <p class="govuk-body-l app-body-l--inverted">
-        You can manage investigations and pass them onto another market surveillance authority, track the progress of cases, and you will soon be able to export data.
+      <p class="govuk-body-l app-introduction-card__description">
+        You can manage investigations and pass them onto another market surveillance authority, track the progress of notifications, and you will soon be able to export data.
       </p>
-
-      <p class="govuk-body-l app-body-l--inverted">
+      <p class="govuk-body-l app-introduction-card__description">
         You will also receive alerts from the Office for Product Safety and Standards about serious product safety issues.
       </p>
-
-      <%= govukButton(
-        text: "Continue",
-        href: introduction_share_data_path,
-        classes: "app-button--inverted app-button--l govuk-!-margin-bottom-0"
-      ) %>
+      <div class="govuk-button-group">
+        <%= govuk_button_link_to("Continue", introduction_share_data_path, inverse: true) %>
+        <a href="<%= introduction_skip_path %>" class="govuk-link govuk-link--inverse">Skip introduction</a>
+      </div>
     </div>
   </div>
 </div>

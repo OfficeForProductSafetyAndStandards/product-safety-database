@@ -1,4 +1,4 @@
-name: Review application
+name: Deploy review app
 
 on: [pull_request]
 
@@ -7,7 +7,7 @@ env:
 
 jobs:
   reviewapp:
-    name: Deploy Review App
+    name: Deploy review app
     runs-on: ubuntu-latest
     # Skip if it is a Dependabot created PR.
     # For security reasons they do not have write permissions to deploy or access to secrets.
@@ -15,7 +15,7 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Create GitHub deployment
       env:
@@ -116,7 +116,7 @@ jobs:
         bundle config path vendor/bundle
         bundle check || bundle install --without development --jobs=4 --retry=3
 
-    - name: Run Smoke Tests
+    - name: Run smoke tests
       if: success()
       env:
         SMOKE_USER: ${{secrets.SMOKE_USER}}
@@ -133,7 +133,7 @@ jobs:
         mkdir -p tmp/capybara
         bundle exec rspec ./smoke_test/cases_page_without_2fa_spec.rb
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: capybara screenshots

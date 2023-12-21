@@ -9,54 +9,54 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
     specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
   end
 
-  describe "#summary_list" do
+  describe "#details_list" do
     include CountriesHelper
 
-    let(:summary_list) { decorated_product.summary_list }
+    let(:details_list) { decorated_product.details_list }
 
     context "when displaying the product summary" do
       it "displays the Brand name" do
-        expect(summary_list).to summarise("Brand name", text: product.brand)
+        expect(details_list).to summarise("Brand name", text: product.brand)
       end
 
       it "displays the Product name" do
-        expect(summary_list).to summarise("Product name", text: product.name)
+        expect(details_list).to summarise("Product name", text: product.name)
       end
 
       it "displays the Category" do
-        expect(summary_list).to summarise("Category", text: product.category)
+        expect(details_list).to summarise("Category", text: product.category)
       end
 
       it "displays the Subcategory" do
-        expect(summary_list).to summarise("Subcategory", text: product.subcategory)
+        expect(details_list).to summarise("Subcategory", text: product.subcategory)
       end
 
       it "displays the Barcode" do
-        expect(summary_list).to summarise("Barcode", text: product.barcode)
+        expect(details_list).to summarise("Barcode", text: product.barcode)
       end
 
       it "displays the Description" do
-        expect(summary_list).to summarise("Description", text: product.description)
+        expect(details_list).to summarise("Description", text: product.description)
       end
 
       it "displays the Webpage" do
-        expect(summary_list).to summarise("Webpage", text: product.webpage)
+        expect(details_list).to summarise("Webpage", text: product.webpage)
       end
 
       it "displays the Country of origin" do
-        expect(summary_list).to summarise("Country of origin", text: country_from_code(product.country_of_origin))
+        expect(details_list).to summarise("Country of origin", text: country_from_code(product.country_of_origin))
       end
 
       it "displays product Authenticity" do
-        expect(summary_list).to summarise("Counterfeit", text: "Unsure")
+        expect(details_list).to summarise("Counterfeit", text: "Unsure")
       end
 
       it "displays the Product marking" do
-        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
+        expect(details_list).to summarise("Product marking", text: decorated_product.markings)
       end
 
       it "displays the Other product identifiers" do
-        expect(summary_list).to summarise("Other product identifiers", text: product.product_code)
+        expect(details_list).to summarise("Other product identifiers", text: product.product_code)
       end
     end
   end

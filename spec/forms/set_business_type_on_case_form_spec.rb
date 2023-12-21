@@ -94,6 +94,88 @@ RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
     end
   end
 
+  describe "#is_approved_online_marketplace?" do
+    context "when type is online_marketplace" do
+      let(:type) { "online_marketplace" }
+
+      context "when an other_marketplace_name is provided (unapproved marketplace)" do
+        let(:other_marketplace_name) { "Other marketplace" }
+        let(:params) do
+          {
+            type:,
+            online_marketplace_id: nil,
+            other_marketplace_name:
+          }
+        end
+
+        it "returns false" do
+          expect(form).to be_valid
+          expect(form).not_to be_is_approved_online_marketplace
+        end
+      end
+
+      context "when an other_marketplace_name is not provided" do
+        let(:online_marketplace_id) { "123" }
+        let(:params) do
+          {
+            type:,
+            online_marketplace_id:
+          }
+        end
+
+        it "returns true" do
+          expect(form).to be_valid
+          expect(form).to be_is_approved_online_marketplace
+        end
+      end
+    end
+
+    context "when type is not online_marketplace" do
+      let(:type) { "retailer" }
+
+      it "returns false" do
+        expect(form).to be_valid
+        expect(form).not_to be_is_approved_online_marketplace
+      end
+    end
+  end
+
+  describe "#approved_online_marketplace" do
+    let(:type) { "online_marketplace" }
+    let(:params) do
+      {
+        type:,
+        online_marketplace_id:
+      }
+    end
+
+    context "when online_marketplace_id is blank" do
+      let(:online_marketplace_id) { nil }
+
+      it "throws an exception" do
+        expect { form.approved_online_marketplace }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when online_marketplace_id resolves to an online marketplace" do
+      let(:online_marketplace) { create(:online_marketplace, :approved) }
+      let(:online_marketplace_id) { online_marketplace.id }
+
+      it "returns the object" do
+        expect(form.approved_online_marketplace).to eq(online_marketplace)
+      end
+    end
+
+    context "when online_marketplace_id resolves to an unapproved marketplace" do
+      let(:online_marketplace) { create(:online_marketplace, approved_by_opss: false) }
+      let(:online_marketplace_id) { online_marketplace.id }
+
+      it "throws an exception" do
+        expect { form.approved_online_marketplace }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
   describe "#set_params_on_session" do
     context "when type is online_marketplace" do
       let(:type) { "online_marketplace" }

@@ -152,6 +152,8 @@ en:
               inclusion: Select whether relevant action is planned or underway by another MSA or other organisation
             factors_to_take_into_account:
               inclusion: Select whether there are factors to take account of in relation to risk management decisions
+            featured_in_media:
+              inclusion: Select whether the risk has been featured in the media
             other_hazards:
               inclusion: Select whether the product has any other hazards that can and do cause harm
             low_likelihood_high_severity:
@@ -183,7 +185,7 @@ en:
             title: Identify product hazards
             tasks:
               add_a_number_of_hazards:
-                title: Add the hazards and who/what could be harmed
+                title: Add the hazards
           create:
             title: Create product harm scenarios
             tasks:
@@ -199,19 +201,22 @@ en:
                 title: Estimate probability of harm
               check_your_harm_scenario:
                 title: Check your harm scenario
-          evaluate:
-            title: Evaluate product risk and submit assessment
+          outcome:
+            title: Risk assessment outcome
             tasks:
               confirm_overall_product_risk:
                 title: Review the overall product risk level
               add_level_of_uncertainty_and_sensitivity_analysis:
                 title: Add level of uncertainty and sensitivity analysis
+          evaluate:
+            title: Evaluate product risk and submit assessment
+            tasks:
               consider_the_nature_of_the_risk:
                 title: Consider the nature of the risk
               consider_perception_and_tolerability_of_the_risk:
                 title: Consider perception and tolerability of the risk
               risk_evaluation_outcome:
-                title: Risk evalation outcome
+                title: Risk evaluation outcome
               review_and_submit_results_of_the_assessment:
                 title: Review and submit results of the assessment
               review_and_submit_results_of_the_evaluation:
@@ -228,6 +233,7 @@ en:
         microbiological: Microbiological
         chemical: Chemical
         lack_of_protection: Lack of protection
+        functional: Functional
         other: Other
       product_aimed_at:
         particular_group_of_users: Particular group of users
@@ -238,9 +244,6 @@ en:
         level_3: Level 3
         level_4: Level 4
     harm_scenario_steps:
-      step_0_hint: Step 1 should cover the existence of a hazard which can foreseeably cause harm during the lifetime of the product. For example, the car seat is occupied by an infant while the vehicle is in use.
-      step_1_hint: Step 2 should describe how the user (and/or other subjects) becomes exposed to risk. For example, the vehicle containing the seat/child is involved in a frontal collision of sufficient magnitude that the protection offered by the seat is necessary.
-      step_2_hint: Step 3 should describe how exposure to the risk results in harm. For example, the occupant of the seat suffers injury as a result of the collision.
       probability_evidence:
         sole_judgement_or_estimation: Sole judgement or estimation
         some_limited_empirical_evidence: Some limited empirical evidence
@@ -257,11 +260,9 @@ en:
       multiple_casualties:
         "true": "Yes"
         "false": No multiple casualties
-      people_at_increased_risk:
-        "false": "No"
       risk_to_non_users:
-        "true": Non-users of the product might be at risk
-        "false": Non-users of the product might not be at risk
+        "true": Non-users of the product are at risk
+        "false": Non-users of the product are not at risk
       counterfeit:
         counterfeit: "Yes"
         genuine: "No"
@@ -312,3 +313,5 @@ en:
         "no": "No"
         unknown: Unknown
         not_applicable: Not applicable
+        significant: Yes - significant coverage
+        minor: Yes - minor coverage

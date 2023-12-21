@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Changing a case's notifying country", :with_stubbed_mailer, :with_stubbed_opensearch do
+RSpec.feature "Changing a notification's notifying country", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, creator: user) }
 
@@ -45,6 +45,6 @@ RSpec.feature "Changing a case's notifying country", :with_stubbed_mailer, :with
       choose "UK nations"
     end
     expect(page).to have_select("Select which country or collection of countries", selected: country)
-    expect_to_have_case_breadcrumbs
+    expect_to_have_notification_breadcrumbs
   end
 end

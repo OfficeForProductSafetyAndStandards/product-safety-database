@@ -91,7 +91,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       sign_out
 
-      click_on "Sign in to your account"
+      click_on "Sign in"
 
       fill_in "Email address", with: user.email
       fill_in "Password", with: "a_new_password"
