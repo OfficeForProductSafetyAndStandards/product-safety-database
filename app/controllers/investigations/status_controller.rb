@@ -26,7 +26,7 @@ module Investigations
         return render(template)
       end
 
-      ChangeCaseStatus.call!(@change_case_status_form.serializable_hash.merge(user: current_user, investigation: @investigation))
+      ChangeNotificationStatus.call!(@change_case_status_form.serializable_hash.merge(user: current_user, notification: @investigation))
 
       redirect_to investigation_path(@investigation), flash: { success: "The notification was #{flash}" }
     end
