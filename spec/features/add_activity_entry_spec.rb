@@ -8,21 +8,21 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
   let(:commentator_user) { create(:user, :activated).decorate }
 
   # Create the case up front and clear the case created email so we can test update email functionality
-  let!(:investigation) { create(:allegation, creator: creator_user, edit_access_teams: commentator_user.team) }
+  let!(:notification) { create(:allegation, creator: creator_user, edit_access_teams: commentator_user.team) }
 
   before { delivered_emails.clear }
 
   scenario "Assigned user to the case receives activity notifications" do
     sign_in commentator_user
 
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
 
     click_link "Add a comment"
     expect_to_have_notification_breadcrumbs
 
     add_comment
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_confirmation_banner("The comment was successfully added")
 
     expect(delivered_emails.last.recipient).to eq creator_user.email
@@ -41,20 +41,20 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
       create(:user, :inactive, email: "not_activated@example.com", team: team_without_email, organisation: team_without_email.organisation)
       create(:user, :activated, :deleted, email: "deleted@example.com", team: team_without_email, organisation: team_without_email.organisation)
 
-      ChangeCaseOwner.call!(investigation:, owner: investigation_owner, user: creator_user, old_owner: creator_user)
+      ChangeNotificationOwner.call!(notification:, owner: investigation_owner, user: creator_user, old_owner: creator_user)
       delivered_emails.clear
     end
 
     scenario "case updates send a notification to the team's active users" do
       sign_in commentator_user
 
-      visit "/cases/#{investigation.pretty_id}"
+      visit "/cases/#{notification.pretty_id}"
       click_link "Add a comment"
       expect_to_have_notification_breadcrumbs
 
       add_comment
 
-      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
       expect_confirmation_banner("The comment was successfully added")
 
       expect(delivered_emails.map(&:recipient).uniq.sort).to eq ["active@example.com", "creator@example.com"]
