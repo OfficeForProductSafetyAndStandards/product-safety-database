@@ -93,7 +93,7 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_mailer, :with_test_queue_a
         expect(last_added_activity.decorate.title(nil)).to eql("Risk assessment")
       end
 
-      it_behaves_like "a service which notifies the notification owner"
+      it_behaves_like "a service which notifies the investigation owner"
     end
   end
 end

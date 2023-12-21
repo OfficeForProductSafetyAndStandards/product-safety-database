@@ -96,7 +96,7 @@ RSpec.describe AddDocument, :with_test_queue_adapter do
           expect(last_added_activity.metadata).to match(hash_including(document_metadata))
         end
 
-        it_behaves_like "a service which notifies the notification owner"
+        it_behaves_like "a service which notifies the investigation owner"
       end
     end
   end

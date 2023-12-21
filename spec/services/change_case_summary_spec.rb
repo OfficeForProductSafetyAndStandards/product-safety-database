@@ -83,7 +83,7 @@ RSpec.describe ChangeCaseSummary, :with_test_queue_adapter do
         expect(activity.metadata).to eq({ "updates" => { "description" => ["Old summary", "New summary"] } })
       end
 
-      it_behaves_like "a service which notifies the notification owner"
+      it_behaves_like "a service which notifies the investigation owner"
     end
   end
 end

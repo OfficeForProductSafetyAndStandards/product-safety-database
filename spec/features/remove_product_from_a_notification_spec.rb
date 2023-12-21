@@ -1,37 +1,35 @@
 require "rails_helper"
 
-RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Remove product from notification", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)                  { create(:user, :opss_user, :activated) }
-  let(:investigation)         { create(:enquiry, :with_products, creator: user) }
+  let(:notification) { create(:notification, :with_products, creator: user) }
   let(:removal_reason)        { "I made a mistake" }
-  let(:investigation_product) { investigation.investigation_products.first }
+  let(:investigation_product) { notification.investigation_products.first }
   let(:product)               { investigation_product.product }
 
-  context "when investigation is closed" do
+  context "when notification is closed" do
     before do
-      ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+      ChangeNotificationStatus.call!(notification:, new_status: "closed", user:)
     end
 
     it "does not allow user to remove product" do
       sign_in user
-      visit "/cases/#{investigation.pretty_id}/products"
-
+      visit "/cases/#{notification.pretty_id}/products"
       have_css("h2", text: product.name)
-
       expect(page).to have_no_link("Remove this #{product.name} product from the notification")
     end
   end
 
   context "when trying to remove a versioned product" do
     before do
-      ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+      ChangeNotificationStatus.call!(notification:, new_status: "closed", user:)
       product.update!(subcategory: "changed")
-      ChangeCaseStatus.call!(investigation:, new_status: "open", user:)
+      ChangeNotificationStatus.call!(notification:, new_status: "open", user:)
     end
 
     it "does not allow user to remove product" do
       sign_in user
-      visit "/cases/#{investigation.pretty_id}/products"
+      visit "/cases/#{notification.pretty_id}/products"
 
       have_css("h2", text: product.name)
 
@@ -40,9 +38,9 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
   end
 
   context "when product does not have any linked supporting information" do
-    it "allows user to remove product from investigation" do
+    it "allows user to remove product from notification" do
       sign_in user
-      visit "/cases/#{investigation.pretty_id}/products"
+      visit "/cases/#{notification.pretty_id}/products"
 
       have_css("h2", text: product.name)
 
@@ -68,13 +66,13 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
       click_on "Save and continue"
 
       expect_confirmation_banner("The product record was removed from the notification")
-      expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
+      expect_to_be_on_investigation_products_page(case_id: notification.pretty_id)
 
       expect(page).not_to have_css("h2", text: product.name)
       expect(page).to have_css("p.govuk-body", text: "This notification has not added any products.")
 
       click_link "Activity"
-      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
       expect(page.find("h3", text: "#{product.name} removed"))
         .to have_sibling(".govuk-body", text: removal_reason)
@@ -82,12 +80,12 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
   end
 
   context "when product has linked supporting information" do
-    let!(:accident) { create :accident, investigation_product:, investigation: }
-    let!(:risk_assessment) { create :risk_assessment, investigation_products: [investigation_product], investigation: }
+    let!(:accident) { create :accident, investigation_product:, investigation: notification }
+    let!(:risk_assessment) { create :risk_assessment, investigation_products: [investigation_product], investigation: notification }
 
-    it "does not allow user to remove product from investigation" do
+    it "does not allow user to remove product from notification" do
       sign_in user
-      visit "/cases/#{investigation.pretty_id}/products"
+      visit "/cases/#{notification.pretty_id}/products"
       click_link "Remove this #{product.name} product from the notification"
 
       expect(page).not_to have_css("h1", text: "Remove #{product.name}")
@@ -99,14 +97,14 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
     end
   end
 
-  context "when there are two investigation products from the same base product model" do
-    let(:investigation) { create(:enquiry, :with_products, creator: user) }
-    let(:investigation_product) { investigation.investigation_products.first }
+  context "when there are two notification products from the same base product model" do
+    let(:notification) { create(:notification, :with_products, creator: user) }
+    let(:investigation_product) { notification.investigation_products.first }
     let(:product) { investigation_product.product }
 
     it "allows the user to remove the product that was just added" do
       sign_in user
-      visit "/cases/#{investigation.pretty_id}/products"
+      visit "/cases/#{notification.pretty_id}/products"
 
       close_and_reopen_case
 
@@ -123,11 +121,11 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
       choose "Yes"
       click_button "Save and continue"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}/products")
       expect(page).to have_text("The product record was added to the notification")
 
       # Now we see two products with the same PSD ref, one timestamped & the other not
-      old_product_psd_text = "#{product.psd_ref}_#{investigation.reload.investigation_products.first.investigation_closed_at.to_i}"
+      old_product_psd_text = "#{product.psd_ref}_#{notification.reload.investigation_products.first.investigation_closed_at.to_i}"
 
       expect(page).to have_css(".govuk-summary-list__value", text: old_product_psd_text)
       expect(page).to have_css(".govuk-summary-list__value", text: "#{product.psd_ref} - The <abbr>PSD</abbr> reference number for this product record")
@@ -154,13 +152,13 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
       click_on "Save and continue"
 
       expect_confirmation_banner("The product record was removed from the notification")
-      expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
+      expect_to_be_on_investigation_products_page(case_id: notification.pretty_id)
 
       expect(page).to have_css(".govuk-summary-list__value", text: old_product_psd_text)
       expect(page).not_to have_css(".govuk-summary-list__value", text: "#{product.psd_ref} - The <abbr>PSD</abbr> reference number for this product record")
 
       click_link "Activity"
-      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
       expect(page.find("h3", text: "#{product.name} removed"))
         .to have_sibling(".govuk-body", text: removal_reason)
@@ -168,8 +166,8 @@ RSpec.feature "Remove product from investigation", :with_stubbed_antivirus, :wit
   end
 
   def close_and_reopen_case
-    ChangeCaseStatus.call!(investigation:, new_status: "closed", user:)
+    ChangeNotificationStatus.call!(notification:, new_status: "closed", user:)
     product.update!(description: "wowthisisnew!")
-    ChangeCaseStatus.call!(investigation:, new_status: "open", user:)
+    ChangeNotificationStatus.call!(notification:, new_status: "open", user:)
   end
 end

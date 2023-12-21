@@ -1,10 +1,10 @@
-<%= page_title t(".title"), errors: @change_case_status_form.errors.any? %>
-<% unless @change_case_status_form.errors[:new_status].empty? %>
+<%= page_title t(".title"), errors: @change_notification_status_form.errors.any? %>
+<% unless @change_notification_status_form.errors[:new_status].empty? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-l"><%= t(".title") %></h1>
 
-      <p><%= @change_case_status_form.errors[:new_status].first %>. Do you want to <%= link_to "re-open it", reopen_investigation_status_path(@investigation) %>?</p>
+      <p><%= @change_notification_status_form.errors[:new_status].first %>. Do you want to <%= link_to "re-open it", reopen_investigation_status_path(@investigation) %>?</p>
     </div>
   </div>
 <% else %>
