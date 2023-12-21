@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
+RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, creator: user) }
+  let(:notification) { create(:notification, creator: user) }
 
   let!(:another_active_user) { create(:user, :activated, name: "other user same team", organisation: user.organisation, team:) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team:) }
@@ -15,7 +15,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
     before do
       create_opss_teams
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/assign/new"
+      visit "/cases/#{notification.pretty_id}/assign/new"
       expect_to_have_notification_breadcrumbs
     end
 
@@ -103,7 +103,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       create_opss_teams
       user.roles.create!(name: "opss")
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/assign/new"
+      visit "/cases/#{notification.pretty_id}/assign/new"
     end
 
     scenario "shows correct fields" do
@@ -114,7 +114,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
     end
   end
 
-  context "when investigation has other teams added to the case" do
+  context "when notification has other teams added to the case" do
     let(:other_team_with_edit_access) { create(:team) }
     let(:other_team_with_read_only_access) { create(:team) }
 
@@ -122,7 +122,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       AddTeamToCase.call(
         team: other_team_with_edit_access,
         message: "na",
-        investigation:,
+        investigation: notification,
         collaboration_class: Collaboration::Access::Edit,
         user:,
         silent: true
@@ -131,7 +131,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
       AddTeamToCase.call(
         team: other_team_with_read_only_access,
         message: "na",
-        investigation:,
+        investigation: notification,
         collaboration_class: Collaboration::Access::ReadOnly,
         user:,
         silent: true
@@ -140,7 +140,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
 
     scenario "shows other teams in the `Other teams added to the case` section" do
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/assign/new"
+      visit "/cases/#{notification.pretty_id}/assign/new"
       expect_to_have_notification_breadcrumbs
       expect(page).to have_css(".govuk-radios__divider", text: "Other teams added to the notification")
       expect(page).to have_field(other_team_with_edit_access.name)
@@ -153,7 +153,7 @@ RSpec.feature "Changing case ownership", :with_stubbed_mailer, type: :feature do
 
     scenario "does not show `Other teams added to the case` section" do
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/assign/new"
+      visit "/cases/#{notification.pretty_id}/assign/new"
       expect_to_have_notification_breadcrumbs
       expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the notification")
       expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the notification")

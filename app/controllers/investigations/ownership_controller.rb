@@ -31,7 +31,7 @@ class Investigations::OwnershipController < Investigations::BaseController
   end
 
   def create
-    ChangeCaseOwner.call!(investigation: @investigation, owner: form.owner, rationale: form.owner_rationale, user: current_user)
+    ChangeNotificationOwner.call!(notification: @investigation, owner: form.owner, rationale: form.owner_rationale, user: current_user)
 
     session[session_store_key] = nil
 
