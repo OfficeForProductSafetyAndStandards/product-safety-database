@@ -277,10 +277,15 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     interactor (3.1.2)
     jaro_winkler (1.5.6)
+    jbuilder (2.11.5)
+      actionview (>= 5.0.0)
+      activesupport (>= 5.0.0)
     jmespath (1.6.2)
     jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
     json (2.7.1)
+    json-schema (4.1.1)
+      addressable (>= 2.8)
     jsonapi-renderer (0.2.2)
     jwt (2.7.0)
     kramdown (2.4.0)
@@ -490,6 +495,17 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
+    rswag-api (2.13.0)
+      activesupport (>= 3.1, < 7.2)
+      railties (>= 3.1, < 7.2)
+    rswag-specs (2.13.0)
+      activesupport (>= 3.1, < 7.2)
+      json-schema (>= 2.2, < 5.0)
+      railties (>= 3.1, < 7.2)
+      rspec-core (>= 2.14)
+    rswag-ui (2.13.0)
+      actionpack (>= 3.1, < 7.2)
+      railties (>= 3.1, < 7.2)
     rubocop (1.55.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -744,6 +760,9 @@ DEPENDENCIES
   rspec
   rspec-mocks (~> 3.12)
   rspec-rails
+  rswag-api
+  rswag-specs
+  rswag-ui
   rubocop (~> 1.55)
   rubocop-govuk (~> 4.12)
   rubocop-performance (~> 1.19)

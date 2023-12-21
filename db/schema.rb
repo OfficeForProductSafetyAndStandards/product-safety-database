@@ -78,36 +78,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.index ["type"], name: "index_activities_on_type"
   end
 
-  create_table "ahoy_events", force: :cascade do |t|
-    t.string "name"
-    t.jsonb "properties"
-    t.datetime "time"
-    t.bigint "user_id"
-    t.bigint "visit_id"
-    t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
-    t.index ["properties"], name: "index_ahoy_events_on_properties", opclass: :jsonb_path_ops, using: :gin
-    t.index ["user_id"], name: "index_ahoy_events_on_user_id"
-    t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
-  end
-
-  create_table "ahoy_visits", force: :cascade do |t|
-    t.string "browser"
-    t.string "device_type"
-    t.string "ip"
-    t.text "landing_page"
-    t.string "os"
-    t.text "referrer"
-    t.string "referring_domain"
-    t.datetime "started_at"
-    t.text "user_agent"
-    t.bigint "user_id"
-    t.string "visit_token"
-    t.string "visitor_token"
-    t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
-    t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
-    t.index ["visitor_token", "started_at"], name: "index_ahoy_visits_on_visitor_token_and_started_at"
-  end
-
   create_table "bulk_products_uploads", force: :cascade do |t|
     t.bigint "business_id"
     t.datetime "created_at", null: false
@@ -683,6 +653,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
   add_foreign_key "activities", "businesses"
   add_foreign_key "activities", "correspondences"
   add_foreign_key "activities", "investigations"
+  add_foreign_key "api_tokens", "users"
   add_foreign_key "collaborations", "investigations"
   add_foreign_key "collaborations", "investigations"
   add_foreign_key "complainants", "investigations"
