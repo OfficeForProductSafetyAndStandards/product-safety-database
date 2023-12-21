@@ -822,6 +822,10 @@ en:
           attributes:
             product_ids:
               blank: Select at least one product to add a corrective action for
+        declaration_form:
+          attributes:
+            agree:
+              accepted: You must agree to the declaration to use this service
 
   activerecord:
     models:

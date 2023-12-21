@@ -518,7 +518,7 @@ module PageExpectations
   def expect_to_be_on_complete_registration_page
     expect(page).to have_current_path(/\/complete-registration?.+$/)
     expect(page).to have_h1("Create an account")
-    expect(page).to have_field("username", type: "email", with: invited_user.email, disabled: true)
+    expect(page).to have_field("user[username]", type: "email", with: invited_user.email, disabled: true)
   end
 
   def expect_to_be_on_signed_in_as_another_user_page

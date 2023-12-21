@@ -5,8 +5,10 @@ RSpec.describe "User accepting declaration", type: :request do
 
   before { sign_in(user) }
 
-  context "with no parameters" do
-    before { post declaration_accept_path }
+  context "with the agree checkbox not checked" do
+    let(:params) { { "declaration_form[agree]": "0" } }
+
+    before { post declaration_accept_path(params:) }
 
     it "renders the index template again" do
       expect(response).to render_template(:index)
@@ -18,17 +20,18 @@ RSpec.describe "User accepting declaration", type: :request do
   end
 
   context "with the agree checkbox checked" do
-    let(:params) { { agree: "checked" } }
+    let(:params) { { "declaration_form[agree]": "1" } }
 
-    before { allow(UserDeclarationService).to receive(:accept_declaration) }
+    before do
+      allow(UserDeclarationService).to receive(:accept_declaration)
+      post declaration_accept_path(params:)
+    end
 
     it "calls UserDeclarationService.accept_declaration" do
-      post(declaration_accept_path, params:)
       expect(UserDeclarationService).to have_received(:accept_declaration).with(user)
     end
 
     it "redirects the user to root_path" do
-      post(declaration_accept_path, params:)
       expect(response).to redirect_to(authenticated_root_path)
     end
   end

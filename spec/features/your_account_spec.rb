@@ -33,7 +33,7 @@ RSpec.feature "Your Account", :with_stubbed_mailer, type: :feature do
     fill_in "Full name", with: ""
     click_button "Save"
 
-    expect(page).to have_link("Enter your full name", href: "#name")
+    expect(page).to have_text("Enter your full name")
     expect_to_have_account_breadcrumbs
 
     fill_in "Full name", with: "Joe Smith"
