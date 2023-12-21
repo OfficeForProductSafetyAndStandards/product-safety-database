@@ -58,7 +58,7 @@ private
   end
 
   def email_recipients
-    (email_recipients_for_case_owner + email_recipients_for_case_creator).uniq
+    (email_recipients_for_case_owner(notification) + email_recipients_for_notification_creator).uniq
   end
 
   def email_subject
