@@ -31,25 +31,25 @@ RSpec.describe ProductPolicy do
       let(:user) { create(:user, team:) }
       let(:product) { create(:product, owning_team: nil) }
 
-      context "when the user's team does not have any cases linked to the product" do
+      context "when the user's team does not have any notifications linked to the product" do
         it { is_expected.not_to be_update }
       end
 
-      context "when the user's team has closed cases linked to the product" do
-        let(:investigation) { create(:allegation, creator: user) }
+      context "when the user's team has closed notifications linked to the product" do
+        let(:notification) { create(:notification, creator: user) }
 
         before do
-          AddProductToCase.call!(investigation:, user:, product:)
-          ChangeCaseStatus.call!(investigation:, user:, new_status: "closed")
+          AddProductToCase.call!(investigation: notification, user:, product:)
+          ChangeNotificationStatus.call!(notification:, user:, new_status: "closed")
         end
 
         it { is_expected.not_to be_update }
       end
 
-      context "when the user's team has open cases linked to the product" do
-        let(:investigation) { create(:allegation, creator: user) }
+      context "when the user's team has open notifications linked to the product" do
+        let(:notification) { create(:notification, creator: user) }
 
-        before { AddProductToCase.call! investigation:, user:, product: }
+        before { AddProductToCase.call! investigation: notification, user:, product: }
 
         it { is_expected.to be_update }
       end
