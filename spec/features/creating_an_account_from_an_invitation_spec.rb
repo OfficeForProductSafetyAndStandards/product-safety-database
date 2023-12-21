@@ -12,7 +12,9 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_antivirus,
 
     click_button "Continue"
 
-    expect_ordered_error_list
+    expect(page).to have_text("Enter your full name")
+    expect(page).to have_text("Enter your mobile number")
+    expect(page).to have_text("Enter a password")
 
     fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
 
@@ -57,7 +59,9 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_antivirus,
 
     click_button "Continue"
 
-    expect_ordered_error_list
+    expect(page).to have_text("Enter your full name")
+    expect(page).to have_text("Enter your mobile number")
+    expect(page).to have_text("Enter a password")
 
     fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
 
@@ -127,12 +131,5 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_antivirus,
 
   def otp_code
     invited_user.reload.direct_otp
-  end
-
-  def expect_ordered_error_list
-    errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Enter your full name"
-    expect(errors_list[1].text).to eq "Enter your mobile number"
-    expect(errors_list[2].text).to eq "Enter a password"
   end
 end

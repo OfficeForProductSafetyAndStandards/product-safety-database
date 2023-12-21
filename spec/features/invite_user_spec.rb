@@ -169,8 +169,8 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
     visit "/teams/#{team.id}/invitations/new"
     expect_to_be_on_invite_a_team_member_page
 
-    fill_in "invite_user_to_team_form_email", with: email
-    fill_in "invite_user_to_team_form_name", with: name
+    fill_in "invite-user-to-team-form-email-field", with: email
+    fill_in "invite-user-to-team-form-name-field", with: name
     click_button "Send invitation email"
   end
 

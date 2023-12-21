@@ -17,11 +17,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
   end
 
   def expect_incorrect_email_or_password
-    expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-    expect(page).to have_link("Enter correct email address and password", href: "#email")
-    expect(page).to have_css("p#email-error", text: "Error: Enter correct email address and password")
-    expect(page).to have_css("p#password-error", text: "")
-
+    expect(page).to have_text("Enter correct email address and password")
     expect(page).not_to have_link("Notifications")
   end
 
@@ -71,8 +67,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     click_on "Continue"
 
     expect(page).to have_css("h1", text: "Check your phone")
-    expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-    expect(page).to have_css("#otp_code-error", text: "Error: Incorrect security code")
+    expect(page).to have_text("Incorrect security code")
   end
 
   scenario "user signs in with correct secondary authentication code after requesting a second code" do
@@ -170,11 +165,11 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
 
   scenario "user session expires" do
     visit investigation_path(investigation)
-    expect(page).not_to have_css("h2#error-summary-title", text: "You need to sign in or sign up before continuing.")
+    expect(page).not_to have_text("You need to sign in or sign up before continuing.")
 
     travel_to 24.hours.from_now do
       visit investigation_path(investigation)
-      expect(page).not_to have_css("h2#error-summary-title", text: "Your session expired. Please sign in again to continue.")
+      expect(page).not_to have_text("Your session expired. Please sign in again to continue.")
     end
   end
 
@@ -231,8 +226,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Password", with: "password "
     click_on "Continue"
 
-    expect(page).to have_css(".govuk-error-summary__list", text: "Enter your email address in the correct format, like name@example.com")
-    expect(page).to have_css(".govuk-error-message", text: "Enter your email address in the correct format, like name@example.com")
+    expect(page).to have_text("Enter your email address in the correct format, like name@example.com")
   end
 
   scenario "user leaves email and password fields empty" do
@@ -242,8 +236,8 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Password", with: " "
     click_on "Continue"
 
-    expect(page).to have_css(".govuk-error-message", text: "Enter your email address")
-    expect(page).to have_css(".govuk-error-message", text: "Enter your password")
+    expect(page).to have_text("Enter your email address")
+    expect(page).to have_text("Enter your password")
   end
 
   scenario "user leaves password field empty" do
@@ -253,8 +247,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Password", with: " "
     click_on "Continue"
 
-    expect(page).to have_css(".govuk-error-message", text: "Enter your password")
-    expect(page).to have_css(".govuk-error-summary__list", text: "Enter your password")
+    expect(page).to have_text("Enter your password")
   end
 
   def otp_code

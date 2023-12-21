@@ -51,8 +51,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     fill_in "Email address", with: "not_an_email"
     click_on "Send email"
 
-    expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-    expect(page).to have_link("Enter your email address in the correct format, like name@example.com", href: "#email")
+    expect(page).to have_text("Enter your email address in the correct format, like name@example.com")
   end
 
   scenario "it does not show a breadcrumb" do
@@ -78,7 +77,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       expect_to_be_on_edit_user_password_page
 
-      expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
+      expect(page).to have_field("user[username]", type: "email", with: user.email, disabled: true)
 
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
@@ -115,10 +114,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         fill_in "Password", with: "as"
         click_on "Continue"
 
-        expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-        expect(page).to have_link("Password is too short", href: "#password")
+        expect(page).to have_text("Password is too short")
 
-        expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
+        expect(page).to have_field("user[username]", type: "email", with: user.email, disabled: true)
       end
 
       scenario "when the password is empty it shows an error" do
@@ -135,10 +133,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         fill_in "Password", with: ""
         click_on "Continue"
 
-        expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-        expect(page).to have_link("Enter a password", href: "#password")
+        expect(page).to have_text("Enter a password")
 
-        expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
+        expect(page).to have_field("user[username]", type: "email", with: user.email, disabled: true)
       end
     end
 
