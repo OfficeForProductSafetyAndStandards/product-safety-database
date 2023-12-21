@@ -101,8 +101,8 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
     context "when the team is the owner of a notification" do
       before do
-        ChangeCaseOwner.call!(
-          investigation: team_case,
+        ChangeNotificationOwner.call!(
+          notification: team_case,
           owner: team,
           user: team_user
         )

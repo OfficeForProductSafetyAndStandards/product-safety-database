@@ -5,7 +5,7 @@ module UserCollaboratorInterface
     self
   end
 
-  # Do not use on its own. Use ChangeCaseOwner service class
+  # Do not use on its own. Use ChangeNotificationOwner service class
   def own!(investigation)
     investigation.owner_user_collaboration&.destroy!
     investigation.create_owner_user_collaboration!(collaborator: self)
