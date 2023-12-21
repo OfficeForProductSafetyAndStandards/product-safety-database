@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
-  subject(:result) { described_class.call(investigation:, user:, owner: new_owner, rationale:) }
+  subject(:result) { described_class.call(notification:, user:, owner: new_owner, rationale:) }
 
   let(:team) { create(:team) }
 
@@ -11,7 +11,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
   let(:new_owner) { create(:user, :activated, team: new_team, organisation: team.organisation) }
   let(:user) { create(:user, :activated, team:, organisation: team.organisation) }
   let(:rationale) { "Test rationale" }
-  let(:investigation) { create(:enquiry, creator:) }
+  let(:notification) { create(:notification, creator:) }
 
   context "without search index", :with_stubbed_opensearch do
     before { set_old_owner }
@@ -24,7 +24,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
       end
     end
 
-    context "with no investigation parameter" do
+    context "with no notification parameter" do
       subject(:result) { described_class.call(owner: new_owner, user:) }
 
       it "returns a failure" do
@@ -33,7 +33,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
     end
 
     context "with no user parameter" do
-      subject(:result) { described_class.call(owner: new_owner, investigation:) }
+      subject(:result) { described_class.call(owner: new_owner, notification:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -41,7 +41,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
     end
 
     context "with no owner parameter" do
-      subject(:result) { described_class.call(investigation:, user:) }
+      subject(:result) { described_class.call(notification:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -56,7 +56,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
       context "when the silent parameter is true", :with_test_queue_adapter do
         subject(:result) do
           described_class.call(
-            investigation:,
+            notification:,
             user:,
             owner: new_owner,
             rationale:,
@@ -73,7 +73,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
         let(:new_owner) { create(:team) }
 
         before do
-          AddTeamToCase.call!(investigation:, user: investigation.owner_user, team: new_owner, collaboration_class: Collaboration::Access::ReadOnly)
+          AddTeamToCase.call!(investigation: notification, user: notification.owner_user, team: new_owner, collaboration_class: Collaboration::Access::ReadOnly)
         end
 
         specify { expect(result).to be_success }
@@ -92,12 +92,12 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
       end
 
       it "changes the owner" do
-        expect { result }.to change(investigation, :owner).from(old_owner).to(new_owner)
+        expect { result }.to change(notification, :owner).from(old_owner).to(new_owner)
       end
 
       it "creates an audit activity for owner changed", :aggregate_failures do
         expect { result }.to change(Activity, :count).by(1)
-        activity = investigation.reload.activities.first
+        activity = notification.reload.activities.first
         expect(activity).to be_a(AuditActivity::Investigation::UpdateOwner)
         expect(activity.added_by_user).to eq(user)
         expect(activity.metadata).to eq(AuditActivity::Investigation::UpdateOwner.build_metadata(new_owner, rationale).deep_stringify_keys)
@@ -105,7 +105,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
       it "sends a notification email to the new owner" do
         expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
-          investigation.pretty_id,
+          notification.pretty_id,
           new_owner.name,
           new_owner.email,
           expected_email_body,
@@ -128,7 +128,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
         it "does not add a message to the notification email" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
-            investigation.pretty_id,
+            notification.pretty_id,
             old_owner.name,
             old_owner.email,
             "Owner changed on notification to #{new_owner.name} by #{user.name}.",
@@ -142,7 +142,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
         it "does not send a notification email to the old owner" do
           expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
-            investigation.pretty_id,
+            notification.pretty_id,
             old_owner.name,
             old_owner.email,
             expected_email_body,
@@ -159,7 +159,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
           it "sends a notification email to the team" do
             expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
-              investigation.pretty_id,
+              notification.pretty_id,
               team.name,
               team.team_recipient_email,
               expected_email_body,
@@ -185,9 +185,9 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           before { result }
 
           it "creates a new owner collaboration and retains the creator", :aggregate_failures do
-            expect(investigation.creator_team_collaboration.collaborator).to eq(creator.team)
-            expect(investigation.owner_team_collaboration.collaborator).to eq(new_owner)
-            expect(investigation.owner_user_collaboration).to be_nil
+            expect(notification.creator_team_collaboration.collaborator).to eq(creator.team)
+            expect(notification.owner_team_collaboration.collaborator).to eq(new_owner)
+            expect(notification.owner_user_collaboration).to be_nil
           end
         end
       end
@@ -200,12 +200,12 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
           it "creates proper collaboration" do
             result
-            expect(investigation.teams_with_edit_access).to contain_exactly(creator_team, investigation.owner_team)
+            expect(notification.teams_with_edit_access).to contain_exactly(creator_team, investigation.owner_team)
           end
         end
 
         shared_examples "collaborator not created" do
-          subject(:result) { described_class.call(investigation:, user:, owner: new_owner, rationale:) }
+          subject(:result) { described_class.call(notification:, user:, owner: new_owner, rationale:) }
 
           it "creates no collaboration" do
             expect { result }.not_to(change(Collaboration::Access::Edit, :count))
@@ -227,10 +227,10 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           let(:new_owner) { other_team }
 
           it "correctly swaps the owner" do
-            expect { result }.to change(investigation, :owner_user)
+            expect { result }.to change(notification, :owner_user)
                                     .from(old_owner)
                                     .to(nil)
-                                    .and change(investigation, :owner_team)
+                                    .and change(notification, :owner_team)
                                           .from(old_owner.team).to(new_owner)
           end
         end
@@ -247,10 +247,10 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           let(:new_owner) { create(:user, :activated, team: other_team, organisation: other_team.organisation) }
 
           it "correctly swaps the owner" do
-            expect { result }.to change(investigation, :owner_user)
+            expect { result }.to change(notification, :owner_user)
                                     .from(nil)
                                     .to(new_owner)
-                                    .and change(investigation, :owner_team)
+                                    .and change(notification, :owner_team)
                                           .from(old_owner).to(new_owner.team)
           end
         end
@@ -260,8 +260,8 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           let(:new_owner) { create(:user, :activated, team:, organisation: team.organisation) }
 
           it "correctly swaps the owner", :aggregate_failures do
-            expect { result }.to change(investigation, :owner_user).from(nil).to(new_owner)
-            expect(investigation.owner_team).to eq(old_owner)
+            expect { result }.to change(notification, :owner_user).from(nil).to(new_owner)
+            expect(notification.owner_team).to eq(old_owner)
           end
         end
 
@@ -275,8 +275,8 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           let(:new_owner) { team }
 
           it "correctly swaps the owner", :aggregate_failures do
-            expect { result }.to change(investigation, :owner_user).from(old_owner).to(nil)
-            expect(investigation.owner_team).to eq(team)
+            expect { result }.to change(notification, :owner_user).from(old_owner).to(nil)
+            expect(notification.owner_team).to eq(team)
           end
         end
       end
@@ -284,14 +284,14 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
       context "when the new owner was previously a collaborator" do
         let(:new_owner) { create(:team) }
         let(:old_collaborator) do
-          investigation.edit_access_collaborations.create!(
+          notification.edit_access_collaborations.create!(
             collaborator: new_owner, include_message: false,
             added_by_user: user
           )
         end
 
         it "changes the edit collaborator to the owner" do
-          expect { result }.to change(investigation.reload, :owner_team).from(old_owner.team).to(new_owner)
+          expect { result }.to change(notification.reload, :owner_team).from(old_owner.team).to(new_owner)
         end
       end
     end
@@ -299,7 +299,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 end
 
 def set_old_owner
-  described_class.call!(investigation:, owner: old_owner, user: creator)
+  described_class.call!(notification:, owner: old_owner, user: creator)
 end
 
 def expected_email_subject
