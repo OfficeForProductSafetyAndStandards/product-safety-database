@@ -8,7 +8,7 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
       let(:notification) { create(:notification, creator: user) }
 
       it "displays their team name as well as their name" do
-        result = helper.investigation_owner(investigation)
+        result = helper.investigation_owner(notification)
         expect(result).to eq("John Doe - Southampton Council")
       end
     end

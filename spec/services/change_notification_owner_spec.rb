@@ -115,7 +115,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
       it "sends a notification email to the old owner" do
         expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
-          investigation.pretty_id,
+          notification.pretty_id,
           old_owner.name,
           old_owner.email,
           expected_email_body,
@@ -200,7 +200,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
 
           it "creates proper collaboration" do
             result
-            expect(notification.teams_with_edit_access).to contain_exactly(creator_team, investigation.owner_team)
+            expect(notification.teams_with_edit_access).to contain_exactly(creator_team, notification.owner_team)
           end
         end
 

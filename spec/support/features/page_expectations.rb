@@ -25,8 +25,8 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Notification")
   end
 
-  def expect_to_be_on_investigation_businesses_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses")
+  def expect_to_be_on_notification_businesses_page
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/businesses")
     expect(page).to have_selector("h1", text: "Businesses")
   end
 

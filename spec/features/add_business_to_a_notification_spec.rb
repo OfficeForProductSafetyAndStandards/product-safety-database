@@ -105,7 +105,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
 
     click_on "Save"
 
-    expect_to_be_on_investigation_businesses_page
+    expect_to_be_on_notification_businesses_page
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 
@@ -158,7 +158,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
     click_on "Continue"
 
     # Uses stored marketplace business & location, does not ask for details
-    expect_to_be_on_investigation_businesses_page
+    expect_to_be_on_notification_businesses_page
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 
@@ -224,7 +224,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
 
     click_on "Save"
 
-    expect_to_be_on_investigation_businesses_page
+    expect_to_be_on_notification_businesses_page
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 
@@ -269,7 +269,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
 
     click_on "Save"
 
-    expect_to_be_on_investigation_businesses_page
+    expect_to_be_on_notification_businesses_page
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 
