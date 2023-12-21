@@ -2,20 +2,20 @@ class ChangeNotificationStatus
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :new_status, :rationale, :user, to: :context
+  delegate :notification, :new_status, :rationale, :user, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No status supplied") if new_status.nil?
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.is_closed = closed?
-    investigation.date_closed = closed? ? Time.zone.now : nil
+    notification.is_closed = closed?
+    notification.date_closed = closed? ? Time.zone.now : nil
 
-    return if investigation.changes.none?
+    return if notification.changes.none?
 
     ActiveRecord::Base.transaction do
-      investigation.save!
+      notification.save!
       if closed?
         mark_investigation_products_as_closed
         handle_product_ownership_changes
@@ -48,7 +48,7 @@ private
   def send_notification_email
     email_recipients.each do |recipient|
       NotifyMailer.investigation_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         recipient.name,
         recipient.email,
         email_body(recipient),
@@ -86,20 +86,20 @@ private
     closed? ? "closed" : "re-opened"
   end
 
-  def number_of_other_team_investigation_linked_to_product(product)
-    product.investigation_products.where(investigation_closed_at: nil).map(&:investigation).count { |investigation| investigation.owner_team == user.team }
+  def number_of_other_team_notification_linked_to_product(product)
+    product.investigation_products.where(investigation_closed_at: nil).map(&:investigation).count { |notification| notification.owner_team == user.team }
   end
 
   def handle_product_ownership_changes
-    investigation.products.each do |product|
-      next if product.owning_team_id != user.team.id || number_of_other_team_investigation_linked_to_product(product).positive?
+    notification.products.each do |product|
+      next if product.owning_team_id != user.team.id || number_of_other_team_notification_linked_to_product(product).positive?
 
       product.update!(owning_team_id: nil)
     end
   end
 
   def mark_investigation_products_as_closed
-    investigation.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: investigation.date_closed)
+    notification.investigation_products.where(investigation_closed_at: nil).update_all(investigation_closed_at: notification.date_closed)
   end
 
   def email_update_text_key
