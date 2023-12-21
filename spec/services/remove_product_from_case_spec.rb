@@ -6,7 +6,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
   end
 
   let(:notification) { create(:notification, products: [product], creator:) }
-  let(:product)       { create(:product_washing_machine, owning_team: creator.team) }
+  let(:product) { create(:product_washing_machine, owning_team: creator.team) }
   let(:investigation_product) { notification.investigation_products.first }
   let(:reason)        { Faker::Hipster.sentence }
   let(:user)          { create(:user, :opss_user) }

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Remove product from notification", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)                  { create(:user, :opss_user, :activated) }
-  let(:notification)         { create(:notification, :with_products, creator: user) }
+  let(:notification) { create(:notification, :with_products, creator: user) }
   let(:removal_reason)        { "I made a mistake" }
   let(:investigation_product) { notification.investigation_products.first }
   let(:product)               { investigation_product.product }
