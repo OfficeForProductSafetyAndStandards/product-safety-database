@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :with_stubbed_opensearch do
+RSpec.feature "Adding and removing business to a notification", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:city)             { Faker::Address.city }
   let(:trading_name)     { Faker::Company.name }
   let(:business_details) { Faker::Company.buzzword }
@@ -14,7 +14,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:phone_number)     { Faker::PhoneNumber.phone_number  }
   let(:job_title)        { Faker::Job.title }
   let(:user)             { create(:user, :activated) }
-  let(:investigation)    { create(:enquiry, creator: user) }
+  let(:notification)     { create(:notification, creator: user) }
   let(:other_user)       { create(:user, :activated) }
 
   # rubocop:disable RSpec/LetSetup
@@ -30,14 +30,14 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   # rubocop:enable RSpec/LetSetup
 
   before do
-    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
+    ChangeNotificationOwner.call!(notification:, owner: user.team, user:)
 
     create_list(:online_marketplace, 2)
   end
 
   scenario "Adding a business" do
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/businesses"
+    visit "/cases/#{notification.pretty_id}/businesses"
 
     click_link "Add business"
     expect_to_have_notification_breadcrumbs
@@ -116,7 +116,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     end
 
     # Check that adding  the business was recorded in the
-    # activity log for the investigation.
+    # activity log for the notification.
     click_link "Activity"
     expect(page).to have_text("Business added")
     expect_to_have_notification_breadcrumbs
@@ -127,7 +127,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
   scenario "Adding an approved online marketplace business" do
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/businesses"
+    visit "/cases/#{notification.pretty_id}/businesses"
 
     click_link "Add business"
     expect_to_have_notification_breadcrumbs
@@ -171,7 +171,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     end
 
     # Check that adding  the business was recorded in the
-    # activity log for the investigation.
+    # activity log for the notification.
     click_link "Activity"
     expect(page).to have_text("Business added")
     expect_to_have_notification_breadcrumbs
@@ -182,7 +182,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
   scenario "Adding a EU authorised rep business" do
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/businesses"
+    visit "/cases/#{notification.pretty_id}/businesses"
 
     click_link "Add business"
     expect_to_have_notification_breadcrumbs
@@ -236,7 +236,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
   scenario "Adding an 'other' online marketplace business" do
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/businesses"
+    visit "/cases/#{notification.pretty_id}/businesses"
 
     click_link "Add business"
     expect_to_have_notification_breadcrumbs
@@ -279,7 +279,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     end
 
     # Check that adding  the business was recorded in the
-    # activity log for the investigation.
+    # activity log for the notification.
     click_link "Activity"
     expect(page).to have_text("Business added")
     expect_to_have_notification_breadcrumbs
@@ -290,7 +290,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
   scenario "Not being able to add a business to another team's case" do
     sign_in other_user
-    visit "/cases/#{investigation.pretty_id}/businesses"
+    visit "/cases/#{notification.pretty_id}/businesses"
     expect(page).not_to have_link("Add a business")
   end
 end
