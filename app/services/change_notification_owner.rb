@@ -1,49 +1,49 @@
-class ChangeCaseOwner
+class ChangeNotificationOwner
   include Interactor
   include NotifyHelper
 
-  delegate :investigation, :owner, :rationale, :user, :old_owner, to: :context
+  delegate :notification, :owner, :rationale, :user, :old_owner, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No owner supplied") unless owner.is_a?(User) || owner.is_a?(Team)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.reload # force cached associations to be reloaded
+    notification.reload # force cached associations to be reloaded
 
-    context.old_owner = investigation.owner
+    context.old_owner = notification.owner
 
     return if old_owner == owner
 
     ActiveRecord::Base.transaction do
-      unless owner.team == investigation.owner_team
-        investigation.owner_team_collaboration.swap_to_edit_access!
+      unless owner.team == notification.owner_team
+        notification.owner_team_collaboration.swap_to_edit_access!
       end
 
-      old_collaboration = investigation
+      old_collaboration = notification
                             .collaboration_accesses
                             .changeable
                             .find_by(collaborator: owner.team)
 
-      (old_collaboration || owner).own!(investigation)
+      (old_collaboration || owner).own!(notification)
 
-      investigation.reindex
+      notification.reindex
 
-      create_audit_activity_for_case_owner_changed
+      create_audit_activity_for_notification_owner_changed
     end
 
-    investigation.reload
+    notification.reload
     send_notification_email unless context.silent
   end
 
 private
 
-  def create_audit_activity_for_case_owner_changed
+  def create_audit_activity_for_notification_owner_changed
     metadata = activity_class.build_metadata(owner, rationale)
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       title: nil,
       body: nil,
       metadata:
@@ -55,11 +55,11 @@ private
   end
 
   def send_notification_email
-    return unless investigation.sends_notifications?
+    return unless notification.sends_notifications?
 
     entities_to_notify.each do |recipient|
       NotifyMailer.investigation_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         recipient.name,
         recipient.email,
         email_body(recipient),

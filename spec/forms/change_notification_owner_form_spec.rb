@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeCaseOwnerForm do
+RSpec.describe ChangeNotificationOwnerForm do
   subject(:form) { described_class.new(owner_id:, owner_rationale: rationale) }
 
   let(:owner) { create(:team) }

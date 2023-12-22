@@ -7,7 +7,7 @@ RSpec.feature "Changing the status of a notification", :with_opensearch, :with_s
   let(:other_team) { create(:team) }
 
   before do
-    ChangeCaseOwner.call!(investigation: notification, owner: user, user:)
+    ChangeNotificationOwner.call!(notification:, owner: user, user:)
     delivered_emails.clear
   end
 

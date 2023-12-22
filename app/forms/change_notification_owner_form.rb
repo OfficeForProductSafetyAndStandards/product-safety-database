@@ -1,4 +1,4 @@
-class ChangeCaseOwnerForm
+class ChangeNotificationOwnerForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 

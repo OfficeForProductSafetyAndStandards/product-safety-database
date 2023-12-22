@@ -4,17 +4,17 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user_different_org) { create(:user, :activated) }
 
-  let(:investigation) { create(:allegation, creator: user) }
+  let(:notification) { create(:allegation, creator: user) }
   let(:file) { Rails.root.join "test/fixtures/files/testImage.png" }
   let(:file_name) { "testImage.png" }
 
   before do
-    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
+    ChangeNotificationOwner.call!(notification:, owner: user.team, user:)
     sign_in user
   end
 
   scenario "completing the add image flow saves the image" do
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
 
     click_link "Images"
 
@@ -28,10 +28,10 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
     attach_and_submit_file
 
-    expect_to_be_on_add_image_page(image_upload_id: investigation.reload.image_uploads.first.id)
+    expect_to_be_on_add_image_page(image_upload_id: notification.reload.image_uploads.first.id)
     expect_confirmation_banner("The image was uploaded")
 
-    visit "/cases/#{investigation.pretty_id}/images"
+    visit "/cases/#{notification.pretty_id}/images"
 
     expect_to_be_on_images_page
 
@@ -44,7 +44,7 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
     sign_in(other_user_different_org)
 
-    visit "/cases/#{investigation.pretty_id}/images"
+    visit "/cases/#{notification.pretty_id}/images"
 
     expect_to_be_on_images_page
 
@@ -57,11 +57,11 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
     let(:product) { create(:product) }
 
     before do
-      InvestigationProduct.create(investigation_id: investigation.id, product_id: product.id)
+      InvestigationProduct.create(investigation_id: notification.id, product_id: product.id)
     end
 
     scenario "case images tab numbers the case images" do
-      visit "/cases/#{investigation.pretty_id}"
+      visit "/cases/#{notification.pretty_id}"
 
       expect(page).to have_content "Images (0)"
 
@@ -79,7 +79,7 @@ RSpec.feature "Case images", :with_stubbed_antivirus, :with_stubbed_mailer do
 
       attach_and_submit_file
 
-      expect_to_be_on_add_image_page(image_upload_id: investigation.reload.image_uploads.first.id)
+      expect_to_be_on_add_image_page(image_upload_id: notification.reload.image_uploads.first.id)
       expect_confirmation_banner("The image was uploaded")
 
       click_link "Finish uploading images"

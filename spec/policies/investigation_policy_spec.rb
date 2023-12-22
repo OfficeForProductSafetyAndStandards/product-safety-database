@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
-  subject(:policy) { described_class.new(user, investigation) }
+  subject(:policy) { described_class.new(user, notification) }
 
   let(:team) { create(:team) }
   let(:user) { create(:user, team:) }
-  let(:investigation) { create(:allegation, is_private: false) }
+  let(:notification) { create(:notification, is_private: false) }
 
   context "when the investigation is not restricted" do
     context "when the user's team has not been added to the case" do
@@ -36,8 +36,8 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
 
     context "when the user's has been given read-only access" do
       before do
-        create(:read_only_collaboration, investigation:, collaborator: team)
-        investigation.reload
+        create(:read_only_collaboration, investigation: notification, collaborator: team)
+        notification.reload
       end
 
       it "cannot update the case" do
@@ -71,8 +71,8 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
 
     context "when the user's has been given edit access" do
       before do
-        create(:collaboration_edit_access, investigation:, collaborator: team)
-        investigation.reload
+        create(:collaboration_edit_access, investigation: notification, collaborator: team)
+        notification.reload
       end
 
       it "can update the case" do
@@ -106,7 +106,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
 
     context "when the user's team is the current case owner" do
       before do
-        ChangeCaseOwner.call!(investigation:, owner: team, user: create(:user))
+        ChangeNotificationOwner.call!(notification:, owner: team, user: create(:user))
       end
 
       it "can update the case" do
@@ -140,9 +140,9 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
 
     context "when the user's team is the current case owner and the case is restricted" do
       before do
-        ChangeCaseOwner.call!(investigation:, owner: team, user: create(:user))
-        investigation.update!(is_private: true)
-        investigation.reload
+        ChangeNotificationOwner.call!(notification:, owner: team, user: create(:user))
+        notification.update!(is_private: true)
+        notification.reload
       end
 
       it "can update the case" do
@@ -224,8 +224,8 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
     end
   end
 
-  context "when the investigation has been closed" do
-    let(:investigation) { create(:allegation, is_closed: true) }
+  context "when the notification has been closed" do
+    let(:notification) { create(:notification, is_closed: true) }
 
     context "when the user is not a super user" do
       it "cannot update the case" do
@@ -242,8 +242,8 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
     end
   end
 
-  context "when the investigation has been restricted" do
-    let(:investigation) { create(:allegation, is_private: true) }
+  context "when the notification has been restricted" do
+    let(:notification) { create(:notification, is_private: true) }
 
     context "when the user's team has not been added to the case" do
       it "cannot update the case" do
@@ -322,15 +322,15 @@ RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
   end
 
   describe "#can_be_deleted?" do
-    context "when investigation has products" do
-      let(:investigation) { create(:allegation, :with_products, is_private: false) }
+    context "when notification has products" do
+      let(:notification) { create(:allegation, :with_products, is_private: false) }
 
       it "returns false" do
         expect(policy.can_be_deleted?).to be false
       end
     end
 
-    context "when investigation does not have products" do
+    context "when notification does not have products" do
       it "returns true" do
         expect(policy.can_be_deleted?).to be true
       end

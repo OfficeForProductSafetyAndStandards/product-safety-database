@@ -1,16 +1,16 @@
 require "rails_helper"
 
-RSpec.feature "Deleting an attachment from a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Deleting an attachment from a notification", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, :with_antivirus_checked_image, creator: user) }
-  let(:document) { investigation.documents.first }
+  let(:notification) { create(:notification, :with_antivirus_checked_image, creator: user) }
+  let(:document) { notification.documents.first }
 
   before { sign_in(user) }
 
   scenario "deletes the attachment and creates activity" do
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
+    visit "/cases/#{notification.pretty_id}/supporting-information"
 
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: notification.pretty_id)
     click_link "Images (1)"
     expect(page).to have_selector("figure figcaption", text: document.decorate.title)
     expect(page).to have_selector("dd.govuk-summary-list__value", text: document.description)
