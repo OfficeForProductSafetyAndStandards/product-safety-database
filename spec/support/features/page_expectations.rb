@@ -44,13 +44,13 @@ module PageExpectations
   end
 
   def expect_to_be_on_images_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/images")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/images")
     expect(page).to have_selector("h1", text: "Images")
   end
 
   def expect_to_be_on_add_image_page(image_upload_id: nil)
     # rubocop:disable Style/StringConcatenation
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new#{image_upload_id.present? ? '?image_upload_id[]=' + image_upload_id.to_s : ''}")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/image_uploads/new#{image_upload_id.present? ? '?image_upload_id[]=' + image_upload_id.to_s : ''}")
     # rubocop:enable Style/StringConcatenation
     expect(page).to have_selector("h1", text: "Add an image")
     expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
@@ -216,16 +216,16 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Supporting information")
   end
 
-  def expect_to_be_on_add_attachment_to_a_case_page
+  def expect_to_be_on_add_attachment_to_a_notification_page
     expect(page).to have_content "Image files will be saved to the notification images page."
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/documents/new")
     expect(page).to have_h1("Add attachment")
     expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
 
-  def expect_to_be_on_add_image_to_a_case_page
+  def expect_to_be_on_add_image_to_a_notification_page
     expect(page).to have_content "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the notification."
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/image_uploads/new")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/image_uploads/new")
     expect(page).to have_h1("Add an image")
     expect(page).to have_css(".govuk-header__navigation-item--active", text: "Notifications")
   end
