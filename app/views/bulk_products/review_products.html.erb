@@ -3,10 +3,10 @@
 <% content_for :after_header do %>
   <%= govuk_back_link(href: resolve_duplicate_products_bulk_upload_products_path) %>
 <% end %>
-<%= form_with model: @bulk_products_review_products_form, url: review_products_bulk_upload_products_path(barcodes: params[:barcodes], product_ids: params[:product_ids]), html: { novalidate: true }, method: :put, local: true, multipart: true do |form| %>
+<%= form_with model: @bulk_products_review_products_form, url: review_products_bulk_upload_products_path(barcodes: params[:barcodes], product_ids: params[:product_ids]), method: :put, multipart: true, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <%= error_summary @bulk_products_review_products_form.errors %>
+      <%= form.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
         Review details of the products you are uploading
@@ -29,14 +29,15 @@
                   <div data-add-remove-target="item"></div>
                 </div>
                 <template id="product-image-upload-field-<%= product.barcode %>">
-                  <%= govukFileUpload(
-                    id: "product-image-upload-#{product.barcode}",
-                    name: "bulk_products_review_products_form[images][#{product.barcode}]",
-                    label: {
-                      text: "Upload a file",
-                      classes: "govuk-label--s"
-                    }
-                  ) %>
+                  <%# This field does not use the Design System helpers because it uses multiple levels of nesting for the name %>
+                  <div class="govuk-form-group">
+                    <%= label_tag("product-image-upload-#{product.barcode}", "Upload a file", class: "govuk-label govuk-label--s") %>
+                    <%= file_field_tag(
+                      "bulk_products_review_products_form[images][#{product.barcode}]",
+                      id: "product-image-upload-#{product.barcode}",
+                      class: "govuk-file-upload"
+                    ) %>
+                  </div>
                   <p class="govuk-body">
                     <a href="#" class="govuk-link govuk-link--no-visited-state" data-action="click->add-remove#remove">Remove product image</a>
                   </p>
@@ -45,45 +46,47 @@
             <% end %>
           </div>
           <div class="govuk-grid-column-three-quarters">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= product.name_with_brand %></h2>
-            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product category</dt>
-                <dd class="govuk-summary-list__value"><%= product.category %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product subcategory</dt>
-                <dd class="govuk-summary-list__value"><%= product.subcategory %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Customs code</dt>
-                <dd class="govuk-summary-list__value"><%= investigation_product&.customs_code %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Country of origin</dt>
-                <dd class="govuk-summary-list__value"><%= country_from_code(product.country_of_origin) %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Barcode</dt>
-                <dd class="govuk-summary-list__value"><%= product.barcode %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product description</dt>
-                <dd class="govuk-summary-list__value"><%= product.description %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">How many units affected?</dt>
-                <dd class="govuk-summary-list__value"><%= investigation_product&.number_of_affected_units %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Manufacturer's brand name</dt>
-                <dd class="govuk-summary-list__value"><%= product.brand %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Batch number</dt>
-                <dd class="govuk-summary-list__value"><%= investigation_product&.batch_number %></dd>
-              </div>
-            </dl>
+            <h2 class="govuk-heading-m"><%= product.name_with_brand %></h2>
+            <%=
+              govuk_summary_list(actions: false) do |summary_list|
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product category")
+                  row.with_value(text: product.category)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product subcategory")
+                  row.with_value(text: product.subcategory)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Customs code")
+                  row.with_value(text: investigation_product&.customs_code)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Country of origin")
+                  row.with_value(text: country_from_code(product.country_of_origin))
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Barcode")
+                  row.with_value(text: product.barcode)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product description")
+                  row.with_value(text: product.description)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "How many units affected?")
+                  row.with_value(text: investigation_product&.number_of_affected_units)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Manufacturer's brand name")
+                  row.with_value(text: product.brand)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Batch number")
+                  row.with_value(text: investigation_product&.batch_number)
+                end
+              end
+            %>
           </div>
         </div>
         <% if index < @products_to_review_length %>
@@ -92,8 +95,8 @@
       <% end %>
       <div class="govuk-button-group">
         <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
-        <%= form.submit "Continue", class: "govuk-button" %>
-        <%= govukButton(text: "Cancel and re-upload", href: cancel_and_reupload_bulk_upload_products_path, classes: "govuk-button--secondary") %>
+        <%= form.govuk_submit("Continue") %>
+        <%= govuk_button_link_to("Cancel and re-upload", cancel_and_reupload_bulk_upload_products_path, secondary: true) %>
       </div>
     </div>
   </div>

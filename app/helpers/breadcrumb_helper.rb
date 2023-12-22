@@ -1,7 +1,7 @@
 module BreadcrumbHelper
   def display_breadcrumbs?
     devise_controllers = ["users/sessions", "users/unlocks", "users/passwords", "users/check_your_email"]
-    other_controllers = %w[introduction]
+    other_controllers = ["introduction", "secondary_authentications", "secondary_authentications/resend_code"]
 
     return false if devise_controllers.include?(params[:controller]) || other_controllers.include?(params[:controller])
 

@@ -93,7 +93,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
     expect_to_have_notification_breadcrumbs
 
     expect(page).to have_selector("h3", text: right_product.name)
-    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref} - The <abbr>PSD</abbr> reference number for this product record", exact: true)
+    expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref} - The PSD reference number for this product record", exact: true)
     expect(page).to have_css(".govuk-summary-list__value", text: "#{right_product.psd_ref}_#{notification.reload.investigation_products.first.investigation_closed_at.to_i}")
     expect(notification.reload.products.count).to eq(2)
     expect(notification.products.first).to eq(right_product)

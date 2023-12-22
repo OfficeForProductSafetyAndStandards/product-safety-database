@@ -1,5 +1,4 @@
 <%= page_title "Product recall tool" %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
     <h1 class="govuk-heading-l">
@@ -15,7 +14,7 @@
       <h2 class="govuk-heading-s">
         <%= @form.pdf_title %>
       </h2>
-      <%= form_with model: @form, url: pdf_product_recalls_path, method: :post, id: "product-safety-report-form", builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+      <%= form_with model: @form, url: pdf_product_recalls_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
         <% @form.attributes.each do |attribute_name, attribute_value| %>
           <% if attribute_value.is_a?(Array) %>
             <% attribute_value.each do |member| %>
@@ -26,7 +25,7 @@
           <% end %>
         <% end %>
         <%= form.hidden_field :type, value: "product_safety_report" %>
-        <%= form.submit "Download the PDF", class: "govuk-button opss-download-link-m", role: "button" %>
+        <%= form.govuk_submit("Download the PDF") %>
       <% end %>
     </section>
     <h3 class="govuk-heading-s">
@@ -74,7 +73,7 @@ PSD notification number: <%= @form.attributes["alert_number"] %>
 Notified by: <%= @form.attributes["notified_by"] %>
       </textarea>
       <div class="govuk-form-group">
-        <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
+        <button class="govuk-button govuk-button--secondary opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
           Copy to clipboard
         </button>
       </div>
@@ -87,7 +86,7 @@ Notified by: <%= @form.attributes["notified_by"] %>
       <h2 class="govuk-heading-s">
         <%= @form.pdf_title %>
       </h2>
-      <%= form_with model: @form, url: pdf_product_recalls_path, method: :post, id: "product-recall-form", builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+      <%= form_with model: @form, url: pdf_product_recalls_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
         <% @form.attributes.each do |attribute_name, attribute_value| %>
           <% if attribute_value.is_a?(Array) %>
             <% attribute_value.each do |member| %>
@@ -98,7 +97,7 @@ Notified by: <%= @form.attributes["notified_by"] %>
           <% end %>
         <% end %>
         <%= form.hidden_field :type, value: "product_recall" %>
-        <%= form.submit "Download the PDF", class: "govuk-button opss-download-link-m", role: "button" %>
+        <%= form.govuk_submit("Download the PDF") %>
       <% end %>
     </section>
     <h3 class="govuk-heading-s">
@@ -146,7 +145,7 @@ PSD notification number: <%= @form.attributes["alert_number"] %>
 Notified by: <%= @form.attributes["notified_by"] %>
       </textarea>
       <div class="govuk-form-group">
-        <button class="govuk-button opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
+        <button class="govuk-button govuk-button--secondary opss-nojs-hide" data-action="clipboard#copy" data-clipboard-target="button">
           Copy to clipboard
         </button>
       </div>
