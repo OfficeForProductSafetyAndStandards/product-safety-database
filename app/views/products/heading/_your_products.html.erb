@@ -12,7 +12,7 @@
           Upload multiple products
         <% end %>
       <% end %>
-      <%= govukButton(text: "Create a product record", href: duplicate_check_products_path, classes: "govuk-button--secondary", attributes: { data: { cy: "new-product" } }) %>
+      <%= govuk_button_link_to("Create a product record", duplicate_check_products_path, secondary: true, "data-cy": "new-product") %>
     </div>
   </div>
 </div>

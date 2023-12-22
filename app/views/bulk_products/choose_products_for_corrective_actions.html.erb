@@ -3,43 +3,27 @@
 <% content_for :after_header do %>
   <%= govuk_back_link(href: review_products_bulk_upload_products_path(product_ids: @products.ids)) %>
 <% end %>
-<%= form_with model: @bulk_products_choose_products_for_corrective_actions_form, url: choose_products_for_corrective_actions_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true, data: { controller: "checkbox-select-all" } do |form| %>
+<%= form_with model: @bulk_products_choose_products_for_corrective_actions_form, url: choose_products_for_corrective_actions_bulk_upload_products_path, method: :put, data: { controller: "checkbox-select-all" }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-      <%= error_summary @bulk_products_choose_products_for_corrective_actions_form.errors %>
+      <%= form.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
         Choose products that require the same corrective action
       </h1>
       <p class="govuk-body">Select all that are applicable.</p>
-      <%
-        select_all = if @products.length > 1
-          [
-            { key: :product_ids, id: "product-id-select-all", name: "bulk_products_choose_products_for_corrective_actions_form[product_ids][]", value: "select_all", text: "Select all", attributes: { data: { checkbox_select_all_target: "checkboxAll" } }, disable_ghost: true },
-            { key: :product_ids, divider: "or" }
-          ]
-        else
-          []
-        end
-      %>
-      <%= govukCheckboxes(
-        form: form,
-        key: :agree,
-        items: select_all + @products.decorate.map do |product|
-          {
-            key: :product_ids,
-            id: "product-id-#{product.id}",
-            name: "bulk_products_choose_products_for_corrective_actions_form[product_ids][]",
-            value: product.id,
-            text: product.name_with_brand,
-            attributes: { data: { checkbox_select_all_target: "checkbox" } },
-            disable_ghost: true
-          }
-        end
-      ) %>
+      <%= form.govuk_check_boxes_fieldset(:product_ids, legend: nil) do %>
+        <% if @products.length > 1 %>
+          <%= form.govuk_check_box :product_ids, "select_all", label: { text: "Select all" }, "data-checkbox-select-all-target": "checkboxAll" %>
+          <%= form.govuk_check_box_divider %>
+        <% end %>
+        <% @products.decorate.each_with_index do |product, index| %>
+          <%= form.govuk_check_box :product_ids, product.id, label: { text: product.name_with_brand }, "data-checkbox-select-all-target": "checkbox", link_errors: index.zero? %>
+        <% end %>
+      <% end %>
       <div class="govuk-button-group">
         <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
-        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= form.govuk_submit("Continue") %>
       </div>
     </div>
   </div>

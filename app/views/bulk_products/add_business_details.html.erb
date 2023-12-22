@@ -3,41 +3,34 @@
 <% content_for :after_header do %>
   <%= govuk_back_link(href: create_business_bulk_upload_products_path) %>
 <% end %>
-<%= form_with model: @bulk_products_add_business_details_form, url: add_business_details_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+<%= form_with model: @bulk_products_add_business_details_form, url: add_business_details_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-      <%= error_summary @bulk_products_add_business_details_form.errors %>
+      <%= form.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
         Provide the business details
       </h1>
-      <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Name and company number</legend>
-        <%= govukInput(
-          form: form,
-          key: :trading_name,
+      <%= form.govuk_fieldset legend: { text: "Name and company number", size: "s" } do %>
+        <%= form.govuk_text_field(
+          :trading_name,
           label: { text: t("businesses.form.trading_name.label") },
-          hint: { text: t("businesses.form.trading_name.hint"), classes: "govuk-!-font-size-16" },
-          id: "trading_name",
-          classes: "govuk-!-width-two-thirds"
+          hint: { text: t("businesses.form.trading_name.hint") },
+          class: ["govuk-!-width-two-thirds"]
         ) %>
-        <%= govukInput(
-          form: form,
-          key: :legal_name,
+        <%= form.govuk_text_field(
+          :legal_name,
           label: { text: t("businesses.form.legal_name.label") },
-          hint: { html: t("businesses.form.legal_name.hint_html"), classes: "govuk-!-font-size-16" },
-          id: "legal_name",
-          classes: "govuk-!-width-two-thirds"
+          hint: { html: t("businesses.form.legal_name.hint_html") },
+          class: ["govuk-!-width-two-thirds"]
         ) %>
-        <%= govukInput(
-          form: form,
-          key: :company_number,
+        <%= form.govuk_text_field(
+          :company_number,
           label: { text: t("businesses.form.company_number.label") },
-          hint: { html: t("businesses.form.company_number.hint_html"), classes: "govuk-!-font-size-16" },
-          id: "company_number",
-          classes: "govuk-!-width-one-third"
+          hint: { html: t("businesses.form.company_number.hint_html") },
+          class: ["govuk-!-width-one-third"]
         ) %>
-      </fieldset>
+      <% end %>
       <%= form.fields_for :locations, @bulk_products_upload.investigation_business.business.primary_location do |ff| %>
         <%= render "businesses/locations/address_form", form: ff, countries: @countries %>
       <% end %>
@@ -45,7 +38,7 @@
         <%= render "businesses/contacts/form", form: ff %>
       <% end %>
       <div class="govuk-button-group">
-        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= form.govuk_submit("Continue") %>
       </div>
     </div>
   </div>

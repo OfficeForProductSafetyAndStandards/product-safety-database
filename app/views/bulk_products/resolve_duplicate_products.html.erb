@@ -3,10 +3,10 @@
 <% content_for :after_header do %>
   <%= govuk_back_link(href: upload_products_file_bulk_upload_products_path) %>
 <% end %>
-<%= form_with model: @bulk_products_resolve_duplicate_products_form, url: resolve_duplicate_products_bulk_upload_products_path, html: { novalidate: true }, method: :put, local: true do |form| %>
+<%= form_with model: @bulk_products_resolve_duplicate_products_form, url: resolve_duplicate_products_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <%= error_summary @bulk_products_resolve_duplicate_products_form.errors %>
+      <%= form.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">Upload multiple products</span>
         We found duplicate product records
@@ -16,117 +16,85 @@
       <% @duplicate_products.decorate.each_with_index do |product, index| %>
         <div class="opss-panels">
           <!-- Existing record -->
-          <div class="opss-panels__pair opss-panels__pair--merged--left" id="variant-select-<%= product.barcode %>-existing-panel">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><%= product.name_with_brand %></h2>
-            <div class="govuk-tag govuk-tag--yellow govuk-!-margin-bottom-3">Existing PSD record</div>
-            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
-                <dd class="govuk-summary-list__value"><%= product.psd_ref %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Brand name</dt>
-                <dd class="govuk-summary-list__value"><%= product.brand %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product name</dt>
-                <dd class="govuk-summary-list__value"><%= product.name %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Barcode</dt>
-                <dd class="govuk-summary-list__value"><%= product.barcode %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Counterfeit</dt>
-                <dd class="govuk-summary-list__value">
-                  <%= product.counterfeit_value %>
-                  <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= product.counterfeit_explanation %></span>
-                </dd>
-              </div>
-            </dl>
+          <div class="opss-panels__pair opss-panels__pair--merged--left" data-type="panel" data-identifier="<%= product.barcode %>" data-variant="existing">
+            <h2 class="govuk-heading-m"><%= product.name_with_brand %></h2>
+            <p class="govuk-body"><%= govuk_tag(text: "Existing PSD record", colour: "yellow") %></p>
+            <%=
+              govuk_summary_list(actions: false) do |summary_list|
+                summary_list.with_row do |row|
+                  row.with_key(text: "<abbr>PSD</abbr> <span title=\"reference\">ref</span>".html_safe)
+                  row.with_value(text: product.psd_ref)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Brand name")
+                  row.with_value(text: product.brand)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product name")
+                  row.with_value(text: product.name)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Barcode")
+                  row.with_value(text: product.barcode)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Counterfeit")
+                  row.with_value(text: product.counterfeit_value)
+                end
+              end
+            %>
             <% if product.virus_free_images.present? %>
-              <details class="govuk-details govuk-!-margin-bottom-3" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text">
-                    Product image
-                  </span>
-                </summary>
-                  <div class="govuk-details__text">
-                    <%= image_tag(product.virus_free_images.first.file_upload, alt: product.virus_free_images.first.file_upload.filename, class: 'opss-details-img') %>
-                  </div>
-              </details>
+              <%= govuk_details(summary_text: "Product image", text: image_tag(product.virus_free_images.first.file_upload, alt: product.virus_free_images.first.file_upload.filename, class: "opss-details-img")) %>
             <% end %>
-            <%= govukButton(text: "Select", href: "#", classes: "govuk-button--secondary opss-nojs-hide opss-variant-select-button", attributes: { data: { identifier: product.barcode, variant: "existing" } }) %>
+            <%= govuk_button_link_to("Select", "#", secondary: true, class: "opss-nojs-hide opss-variant-select-button", "data-identifier": product.barcode, "data-variant": "existing") %>
           </div>
           <!-- New record -->
           <% new_record = new_record_for_product(product).decorate %>
-          <div class="opss-panels__pair opss-panels__pair--merged--right" id="variant-select-<%= product.barcode %>-new-panel">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><%= new_record.name_with_brand %></h2>
-            <div class="govuk-tag govuk-tag--green govuk-!-margin-bottom-3">Imported Excel record</div>
-            <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
-                <dd class="govuk-summary-list__value">Not available</dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Brand name</dt>
-                <dd class="govuk-summary-list__value"><%= new_record.brand %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Product name</dt>
-                <dd class="govuk-summary-list__value"><%= new_record.name %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Barcode</dt>
-                <dd class="govuk-summary-list__value"><%= new_record.barcode %></dd>
-              </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Counterfeit</dt>
-                <dd class="govuk-summary-list__value">
-                  <%= new_record.counterfeit_value %>
-                  <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= new_record.counterfeit_explanation %></span>
-                </dd>
-              </div>
-            </dl>
-            <%= govukButton(text: "Select", href: "#", classes: "govuk-button--secondary opss-nojs-hide opss-variant-select-button", attributes: { data: { identifier: product.barcode, variant: "new" } }) %>
+          <div class="opss-panels__pair opss-panels__pair--merged--right" data-type="panel" data-identifier="<%= product.barcode %>" data-variant="new">
+            <h2 class="govuk-heading-m"><%= new_record.name_with_brand %></h2>
+            <p class="govuk-body"><%= govuk_tag(text: "Imported Excel record", colour: "green") %></p>
+            <%=
+              govuk_summary_list(actions: false) do |summary_list|
+                summary_list.with_row do |row|
+                  row.with_key(text: "<abbr>PSD</abbr> <span title=\"reference\">ref</span>".html_safe)
+                  row.with_value(text: "Not available")
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Brand name")
+                  row.with_value(text: new_record.brand)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product name")
+                  row.with_value(text: new_record.name)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Barcode")
+                  row.with_value(text: new_record.barcode)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Counterfeit")
+                  row.with_value(text: new_record.counterfeit_value)
+                end
+              end
+            %>
+            <%= govuk_button_link_to("Select", "#", secondary: true, class: "opss-nojs-hide opss-variant-select-button", "data-identifier": product.barcode, "data-variant": "new") %>
           </div>
         </div>
-        <%= form.fields_for :resolution do |resolution_form| %>
-          <%= govukRadios(
-            form: resolution_form,
-            key: product.barcode,
-            fieldset: {
-              legend: {
-                text: "What would you like to do?",
-                classes: "govuk-fieldset__legend--m"
-              },
-              classes: "opss-js-enabled-hidden"
-            },
-            classes: "opss-variant-select-form",
-            items: [
-              {
-                text: "Use existing PSD record",
-                value: "existing_record;#{product.id}",
-                checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "existing_record;#{product.id}",
-                id: "variant-select-#{product.barcode}-existing-form"
-              },
-              {
-                text: "Use imported Excel record",
-                value: "new_record",
-                checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "new_record",
-                id: "variant-select-#{product.barcode}-new-form"
-              }
-            ],
-            errorMessage: @bulk_products_resolve_duplicate_products_form.errors.include?(product.barcode) ? { text: @bulk_products_resolve_duplicate_products_form.errors.full_messages_for(product.barcode).first } : nil
-          ) %>
-        <% end %>
+        <div class="opss-js-enabled-hidden">
+          <%= form.fields_for :resolution do |resolution_form| %>
+            <%= resolution_form.govuk_radio_buttons_fieldset(product.barcode, legend: { text: "What would you like to do?", size: "m" }, class: ["opss-variant-select-form"]) do %>
+              <%= resolution_form.govuk_radio_button product.barcode, "existing_record;#{product.id}", label: { text: "Use existing PSD record" }, checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "existing_record;#{product.id}", "data-type": "form", "data-identifier": product.barcode, "data-variant": "existing" %>
+              <%= resolution_form.govuk_radio_button product.barcode, "new_record", label: { text: "Use imported Excel record" }, checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "new_record", "data-type": "form", "data-identifier": product.barcode, "data-variant": "new", link_errors: true %>
+            <% end %>
+          <% end %>
+        </div>
         <% if index < @duplicate_products_length %>
           <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
         <% end %>
       <% end %>
       <div class="govuk-button-group">
         <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
-        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= form.govuk_submit("Continue") %>
       </div>
     </div>
   </div>

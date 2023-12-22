@@ -23,18 +23,6 @@ class ProductRecallForm
   attribute :other_marketplace_name, :string
   attribute :notified_by, :string
 
-  def product_images(product)
-    product.virus_free_images.map do |img|
-      {
-        text: img.file_upload.filename,
-        value: img.id,
-        disable_ghost: true,
-        checked: product_image_ids.to_a.include?(img.id),
-        html: "<div class='opss-checkboxes-thumbnails_img' style='background-image: url(#{rails_storage_proxy_path(img.file_upload, only_path: true)})'></div>".html_safe
-      }
-    end
-  end
-
   def advance!(num = 1)
     self.step += num
   end

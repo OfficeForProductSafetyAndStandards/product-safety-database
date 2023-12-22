@@ -222,7 +222,7 @@ class BulkProductsController < ApplicationController
 
   def create_corrective_action
     # Redirect if there are no product IDs to create an corrective action for
-    return redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload) if params[:product_ids].blank?
+    return redirect_to choose_products_for_corrective_actions_bulk_upload_products_path(@bulk_products_upload) if params[:product_ids]&.compact_blank.blank?
 
     @products = @bulk_products_upload.investigation.products.where(id: params[:product_ids])
 

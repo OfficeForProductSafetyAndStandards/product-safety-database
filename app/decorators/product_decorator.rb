@@ -34,7 +34,7 @@ class ProductDecorator < ApplicationDecorator
     psd_ref_value_html = date_case_closed.present? ? psd_ref(timestamp:, investigation_was_closed: true) : psd_ref(timestamp:, investigation_was_closed: false)
 
     rows = [
-      { key: { text: psd_ref_key_html }, value: { text: "#{psd_ref_value_html}#{psd_secondary_text_html}" } },
+      { key: { text: psd_ref_key_html }, value: { text: "#{psd_ref_value_html}#{psd_secondary_text_html}".html_safe } },
       { key: { text: "Brand name" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Category" }, value: { text: category } },
