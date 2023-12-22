@@ -24,7 +24,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_
     include_context "with all types of supporting information"
 
     before do
-      ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
+      ChangeNotificationOwner.call!(notification: investigation, owner: user.team, user:)
       investigation.documents.attach(io: StringIO.new, filename: generic_supporting_information_filename)
       investigation.documents.attach(io: File.open(image), filename: generic_image_filename, content_type: "image/png")
       investigation.save!
@@ -88,7 +88,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_
       let(:investigation) { create(:allegation, creator: user) }
 
       before do
-        ChangeCaseOwner.call!(investigation:, user:, owner: team)
+        ChangeNotificationOwner.call!(notification: investigation, user:, owner: team)
       end
 
       it "is is the team the user belongs to" do

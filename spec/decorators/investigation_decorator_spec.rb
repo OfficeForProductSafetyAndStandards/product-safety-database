@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
-  subject(:decorated_investigation) { investigation.decorate }
+  subject(:decorated_notification) { notification.decorate }
 
   let(:organisation)  { create :organisation }
   let(:user)          { create(:user, organisation:).decorate }
@@ -12,7 +12,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   let(:products)      { [] }
   let(:risk_level)    { :serious }
   let(:coronavirus_related) { false }
-  let(:investigation) do
+  let(:notification) do
     create(:allegation,
            :reported_unsafe_and_non_compliant,
            products:,
@@ -22,29 +22,29 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   end
 
   before do
-    ChangeCaseOwner.call!(investigation:, user: creator, owner: user)
-    create(:complainant, investigation:)
+    ChangeNotificationOwner.call!(notification:, user: creator, owner: user)
+    create(:complainant, investigation: notification)
   end
 
   describe "#display_product_summary_list?" do
-    let(:investigation) { create(:enquiry) }
+    let(:notification) { create(:enquiry) }
 
     context "with no product" do
       it { is_expected.not_to be_display_product_summary_list }
     end
 
     context "with products" do
-      before { investigation.products << create(:product) }
+      before { notification.products << create(:product) }
 
       it { is_expected.to be_display_product_summary_list }
     end
   end
 
   describe "#risk_level_description" do
-    let(:risk_level_description) { decorated_investigation.risk_level_description }
+    let(:risk_level_description) { decorated_notification.risk_level_description }
 
     context "when the risk level is set" do
-      let(:investigation) { create(:allegation, risk_level: :high) }
+      let(:notification) { create(:allegation, risk_level: :high) }
 
       it "displays the risk level text corresponding to the risk level" do
         expect(risk_level_description).to eq "High risk"
@@ -52,7 +52,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     end
 
     context "when the risk level is set to other" do
-      let(:investigation) { create(:allegation, risk_level: "other", custom_risk_level: "Custom risk") }
+      let(:notification) { create(:allegation, risk_level: "other", custom_risk_level: "Custom risk") }
 
       it "displays the custom risk level" do
         expect(risk_level_description).to eq "Custom risk"
@@ -60,7 +60,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     end
 
     context "when the risk level and the custom risk level are not set" do
-      let(:investigation) { create(:allegation, risk_level: nil, custom_risk_level: nil) }
+      let(:notification) { create(:allegation, risk_level: nil, custom_risk_level: nil) }
 
       it "displays 'Not set'" do
         expect(risk_level_description).to eq "Not set"
@@ -69,7 +69,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   end
 
   describe "#product_summary_list" do
-    let(:product_summary_list) { decorated_investigation.product_summary_list }
+    let(:product_summary_list) { decorated_notification.product_summary_list }
     let(:products) { create_list(:product, 2) }
 
     it "displays the product details" do
@@ -77,7 +77,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     end
 
     it "displays the categories" do
-      investigation.products.each do |product|
+      notification.products.each do |product|
         expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i)
       end
     end
@@ -90,14 +90,14 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
       let(:products_list)   { [iphone_3g, samsung] }
 
       before do
-        investigation.assign_attributes(
+        notification.assign_attributes(
           product_category: iphone_3g.category,
           products: products_list
         )
       end
 
       it "displays the only category present a paragraphe" do
-        random_product_category = investigation.products.sample.category
+        random_product_category = notification.products.sample.category
         expect(Capybara.string(product_summary_list))
           .to have_css("dd.govuk-summary-list__value p.govuk-body", text: random_product_category.upcase_first)
       end
@@ -120,25 +120,25 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
 
   describe "#pretty_description" do
     it {
-      expect(decorated_investigation.pretty_description)
-        .to eq("Notification: #{investigation.pretty_id}")
+      expect(decorated_notification.pretty_description)
+        .to eq("Notification: #{notification.pretty_id}")
     }
   end
 
   describe "#source_details_summary_list" do
     let(:view_protected_details) { true }
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details:) }
+    let(:source_details_summary_list) { decorated_notification.source_details_summary_list(view_protected_details:) }
 
     it "does not display the Received date" do
-      expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_formatted_s(:govuk))
+      expect(source_details_summary_list).not_to summarise("Received date", text: notification.date_received.to_formatted_s(:govuk))
     end
 
     it "does not display the Received by" do
-      expect(source_details_summary_list).not_to summarise("Received by", text: investigation.received_type.upcase_first)
+      expect(source_details_summary_list).not_to summarise("Received by", text: notification.received_type.upcase_first)
     end
 
     it "displays the Source type" do
-      expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
+      expect(source_details_summary_list).to summarise("Source type", text: notification.complainant.complainant_type)
     end
 
     context "when view_protected_details is true" do
@@ -146,10 +146,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
 
       it "displays the complainant details", :aggregate_failures do
         expect_to_display_protect_details_message
-        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
-        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
-        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
-        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.name)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.phone_number)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.email_address)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.other_details)}/)
       end
     end
 
@@ -158,10 +158,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
 
       it "does not display the Complainant details", :aggregate_failures do
         expect_to_display_protect_details_message
-        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
-        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
-        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
-        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.name)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.phone_number)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.email_address)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(notification.complainant.other_details)}/)
       end
     end
 
@@ -171,24 +171,24 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   end
 
   describe "#description" do
-    include_examples "a formated text", :investigation, :description
-    include_examples "with a blank description", :investigation, :decorated_investigation
+    include_examples "a formated text", :notification, :description
+    include_examples "with a blank description", :notification, :decorated_notification
   end
 
   describe "#owner_display_name_for" do
     let(:viewer) { build(:user) }
 
     it "displays the owner name" do
-      expect(decorated_investigation.owner_display_name_for(viewer:))
+      expect(decorated_notification.owner_display_name_for(viewer:))
         .to eq(user.owner_short_name(viewer:))
     end
   end
 
   describe "#generic_attachment_partial" do
-    let(:partial) { decorated_investigation.generic_attachment_partial(viewing_user) }
+    let(:partial) { decorated_notification.generic_attachment_partial(viewing_user) }
 
     context "when the viewer has accees to view the restricted details" do
-      let(:viewing_user) { investigation.owner }
+      let(:viewing_user) { notification.owner }
 
       it { expect(partial).to eq("documents/generic_document_card") }
     end
@@ -203,46 +203,46 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   describe "#title" do
     context "with a user_title" do
       let(:user_title) { "user title" }
-      let(:investigation) { create(:notification, user_title:, complainant_reference: nil) }
+      let(:notification) { create(:notification, user_title:, complainant_reference: nil) }
 
-      it { expect(decorated_investigation.title).to eq(user_title) }
+      it { expect(decorated_notification.title).to eq(user_title) }
     end
 
     context "without a user_title but with a complainant_reference" do
       let(:complainant_reference) { "complainant reference" }
-      let(:investigation) { create(:notification, user_title: nil, complainant_reference:) }
+      let(:notification) { create(:notification, user_title: nil, complainant_reference:) }
 
-      it { expect(decorated_investigation.title).to eq(complainant_reference) }
+      it { expect(decorated_notification.title).to eq(complainant_reference) }
     end
 
     context "without a user_title or a complainant_reference" do
-      let(:investigation) { create(:notification, user_title: nil, complainant_reference: nil) }
+      let(:notification) { create(:notification, user_title: nil, complainant_reference: nil) }
 
       it "uses the pretty_id" do
-        expect(decorated_investigation.title).to eq(investigation.pretty_id)
+        expect(decorated_notification.title).to eq(notification.pretty_id)
       end
     end
   end
 
   describe "#case_title_key" do
     let(:viewing_user) { create(:user) }
-    let(:case_title_key) { decorated_investigation.case_title_key(viewing_user) }
+    let(:case_title_key) { decorated_notification.case_title_key(viewing_user) }
     let(:user_title)     { "user title" }
 
     context "with unrestricted case" do
-      let(:investigation) { create(:allegation, user_title:) }
+      let(:notification) { create(:allegation, user_title:) }
 
       it { expect(case_title_key).to include(user_title) }
     end
 
     context "with restricted case" do
-      let(:investigation) { create(:allegation, user_title:, is_private: true) }
+      let(:notification) { create(:allegation, user_title:, is_private: true) }
 
       it { expect(case_title_key).to eq("Notification restricted") }
     end
 
     context "with restricted case as a super user" do
-      let(:investigation) { create(:allegation, user_title:, is_private: true) }
+      let(:notification) { create(:allegation, user_title:, is_private: true) }
       let(:viewing_user) { create(:user, :super_user) }
 
       it { expect(case_title_key).to include("user title") }
@@ -250,23 +250,23 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   end
 
   describe "#case_summary_values" do
-    let(:case_summary_values) { decorated_investigation.case_summary_values }
+    let(:case_summary_values) { decorated_notification.case_summary_values }
     let(:text_values) { case_summary_values.pluck(:text).compact }
     let(:html_value) { case_summary_values.pluck(:html).compact.join }
 
     context "with unrestricted case" do
-      let(:investigation) { create(:allegation, is_closed: true) }
+      let(:notification) { create(:allegation, is_closed: true) }
 
-      it { expect(text_values).to include(investigation.pretty_id) }
-      it { expect(text_values).to include(investigation.owner_team.name) }
+      it { expect(text_values).to include(notification.pretty_id) }
+      it { expect(text_values).to include(notification.owner_team.name) }
       it { expect(html_value).to include("Closed") }
     end
 
     context "with restricted case" do
-      let(:investigation) { create(:allegation, is_private: true, is_closed: false) }
+      let(:notification) { create(:allegation, is_private: true, is_closed: false) }
 
-      it { expect(text_values).not_to include(investigation.pretty_id) }
-      it { expect(text_values).not_to include(investigation.owner_team.name) }
+      it { expect(text_values).not_to include(notification.pretty_id) }
+      it { expect(text_values).not_to include(notification.owner_team.name) }
       it { expect(html_value).to include("Open") }
     end
   end

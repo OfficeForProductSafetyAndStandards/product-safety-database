@@ -30,8 +30,8 @@ private
   end
 
   def change_case_ownership_when_owner_is_team(collaboration)
-    ChangeCaseOwner.call!(
-      investigation: collaboration.investigation,
+    ChangeNotificationOwner.call!(
+      notification: collaboration.investigation,
       owner: new_team,
       user:,
       rationale: change_case_owner_rationale,

@@ -31,7 +31,7 @@ class Investigations::OwnershipController < Investigations::BaseController
   end
 
   def create
-    ChangeCaseOwner.call!(investigation: @investigation, owner: form.owner, rationale: form.owner_rationale, user: current_user)
+    ChangeNotificationOwner.call!(notification: @investigation, owner: form.owner, rationale: form.owner_rationale, user: current_user)
 
     session[session_store_key] = nil
 
@@ -47,20 +47,20 @@ private
   end
 
   def form_params
-    params[:change_case_owner_form] ||= {}
-    params[:change_case_owner_form][:owner_id] = case params[:change_case_owner_form][:owner_id]
-                                                 when "someone_else_in_your_team"
-                                                   params[:change_case_owner_form][:select_team_member]
-                                                 when "previous_owners"
-                                                   params[:change_case_owner_form][:select_previous_owner]
-                                                 when "other_team"
-                                                   params[:change_case_owner_form][:select_other_team]
-                                                 when "someone_else"
-                                                   params[:change_case_owner_form][:select_someone_else]
-                                                 else
-                                                   params[:change_case_owner_form][:owner_id]
-                                                 end
-    params.require(:change_case_owner_form).permit(:owner_id, :owner_rationale).merge(session_params)
+    params[:change_notification_owner_form] ||= {}
+    params[:change_notification_owner_form][:owner_id] = case params[:change_notification_owner_form][:owner_id]
+                                                         when "someone_else_in_your_team"
+                                                           params[:change_notification_owner_form][:select_team_member]
+                                                         when "previous_owners"
+                                                           params[:change_notification_owner_form][:select_previous_owner]
+                                                         when "other_team"
+                                                           params[:change_notification_owner_form][:select_other_team]
+                                                         when "someone_else"
+                                                           params[:change_notification_owner_form][:select_someone_else]
+                                                         else
+                                                           params[:change_notification_owner_form][:owner_id]
+                                                         end
+    params.require(:change_notification_owner_form).permit(:owner_id, :owner_rationale).merge(session_params)
   end
 
   def session_params
@@ -68,7 +68,7 @@ private
   end
 
   def form
-    @form ||= ChangeCaseOwnerForm.new(form_params)
+    @form ||= ChangeNotificationOwnerForm.new(form_params)
   end
 
   def get_potential_assignees

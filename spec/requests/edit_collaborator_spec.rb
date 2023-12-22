@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
+RSpec.describe "Editing a collaborator for a notification", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user_team) { create(:team) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
   let(:team) { create(:team) }
-  let(:investigation) { create(:allegation, creator: user) }
+  let(:notification) { create(:notification, creator: user) }
   let(:edit_access_collaboration) do
-    create(:collaboration_edit_access, investigation:, collaborator: team, added_by_user: user)
+    create(:collaboration_edit_access, investigation: notification, collaborator: team, added_by_user: user)
   end
 
   before do
@@ -18,7 +18,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
   context "when editing" do
     context "with owner collaboration" do
       before do
-        get edit_investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id)
+        get edit_investigation_collaborator_path(notification.pretty_id, notification.owner_team_collaboration.id)
       end
 
       it "responds with a 404 (not found) status" do
@@ -41,7 +41,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
     end
 
     let(:do_request) do
-      put investigation_collaborator_path(investigation.pretty_id, edit_access_collaboration.id), params:
+      put investigation_collaborator_path(notification.pretty_id, edit_access_collaboration.id), params:
     end
 
     context "when successful" do
@@ -49,8 +49,8 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
         expect { do_request }.to change(Collaboration::Access::Edit, :count).from(3).to(2)
       end
 
-      it "redirects back to the 'teams added to case' page" do
-        expect(do_request).to redirect_to(investigation_collaborators_path(investigation))
+      it "redirects back to the 'teams added to notification' page" do
+        expect(do_request).to redirect_to(investigation_collaborators_path(notification))
       end
 
       it "displays proper flash message" do
@@ -70,7 +70,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
 
     context "with owner collaboration" do
       before do
-        put investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id), params:
+        put investigation_collaborator_path(notification.pretty_id, notification.owner_team_collaboration.id), params:
       end
 
       it "responds with a 404 (not found) status" do
@@ -84,21 +84,21 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
       end
 
       it "redirects back to the 'teams added to case' page" do
-        expect(do_request).to redirect_to(investigation_collaborators_path(investigation))
+        expect(do_request).to redirect_to(investigation_collaborators_path(notification))
       end
     end
   end
 
   context "when the user isn't part of the team assigned" do
     let(:creator) { create(:user) }
-    let(:investigation) { create(:allegation, creator:) }
+    let(:notification) { create(:notification, creator:) }
 
     before do
-      ChangeCaseOwner.call!(investigation:, owner: creator.team, user: creator)
+      ChangeNotificationOwner.call!(notification:, owner: creator.team, user: creator)
     end
 
     it "responds with a 403 (Forbidden) status code on update" do
-      put investigation_collaborator_path(investigation.pretty_id, team.id)
+      put investigation_collaborator_path(notification.pretty_id, team.id)
       expect(response).to have_http_status(:forbidden)
     end
   end

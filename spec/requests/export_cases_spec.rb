@@ -121,7 +121,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         team = create(:team)
         case_with_team_owner = create(:allegation, creator: user)
 
-        ChangeCaseOwner.call!(investigation: case_with_team_owner, user:, owner: team)
+        ChangeNotificationOwner.call!(notification: case_with_team_owner, user:, owner: team)
 
         Investigation.reindex
 

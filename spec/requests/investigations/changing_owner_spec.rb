@@ -19,12 +19,12 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_mailer, :with_stubb
     )
   end
 
-  context "when the user is from the case owner’s team" do
+  context "when the user is from the notification owner's team" do
     before do
       sign_in user_from_owner_team
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
-            change_case_owner_form: {
+            change_notification_owner_form: {
               owner_id: "someone_else",
               select_someone_else: other_user.id
             }
@@ -41,7 +41,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_mailer, :with_stubb
       sign_in user_from_collaborator_team
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
-            change_case_owner_form: {
+            change_notification_owner_form: {
               owner_id: "someone_else",
               select_someone_else: other_user.id
             }
@@ -53,12 +53,12 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_mailer, :with_stubb
     end
   end
 
-  context "when the user is not involved with the case" do
+  context "when the user is not involved with the notification" do
     before do
       sign_in other_user
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
-            change_case_owner_form: {
+            change_notification_owner_form: {
               owner_id: "someone_else",
               select_someone_else: other_user.id
             }
