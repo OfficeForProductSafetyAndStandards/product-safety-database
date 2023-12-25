@@ -2215,10 +2215,10 @@ standard@^17.1.0:
     standard-engine "^15.0.0"
     version-guard "^1.1.1"
 
-stimulus-checkbox-select-all@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/stimulus-checkbox-select-all/-/stimulus-checkbox-select-all-5.2.0.tgz#5ce778e5241978c0b6cdc2b000092c7e3dc357a2"
-  integrity sha512-gONmYrkWMkw5adNUAX8UnS5riCiO//qLpqtVcFaD63ffMmNLAbS8N03Q/e4eCjvFPTfP5tOSI0TLFNx7MRq9aA==
+stimulus-checkbox-select-all@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/stimulus-checkbox-select-all/-/stimulus-checkbox-select-all-5.3.0.tgz#45d2dad5a84fc0d3a135aa4fdd46564cd292572e"
+  integrity sha512-1Ohy4UIIgcYkVhuosrqaQaZO/0eVxpyrIj/8AVJ/O9CB73bu3hlZLGzfpMZKmcDAT+g6Q/NfzCJfQ/eTWxmNGQ==
 
 stimulus-clipboard@^4.0.1:
   version "4.0.1"
