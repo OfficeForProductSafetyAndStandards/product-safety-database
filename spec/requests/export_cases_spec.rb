@@ -112,7 +112,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
         aggregate_failures "risk level cells values" do
           expect(categories_cell_title).to eq "Risk_Level"
-          expect(categories_cell_content).to eq investigation.decorate.risk_level_description
+          expect(categories_cell_content).to eq notification.decorate.risk_level_description
         end
       end
 
