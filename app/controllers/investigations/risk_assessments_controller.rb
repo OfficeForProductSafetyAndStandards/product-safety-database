@@ -32,8 +32,8 @@ module Investigations
         # page below and skip the "Do you want to match this case risk level to the risk assessment level?"
         # page.
         if @investigation.risk_level.nil?
-          ChangeCaseRiskLevel.call!(
-            investigation: @investigation_object,
+          ChangeNotificationRiskLevel.call!(
+            notification: @investigation_object,
             user: current_user,
             risk_level: result.risk_assessment.risk_level
           )
@@ -98,8 +98,8 @@ module Investigations
         # page below and skip the "Do you want to match this case risk level to the risk assessment level?"
         # page.
         if @investigation.risk_level.nil?
-          ChangeCaseRiskLevel.call!(
-            investigation: @investigation_object,
+          ChangeNotificationRiskLevel.call!(
+            notification: @investigation_object,
             user: current_user,
             risk_level: result.risk_assessment.risk_level
           )

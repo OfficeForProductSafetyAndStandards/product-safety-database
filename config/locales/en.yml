@@ -1,7 +1,7 @@
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
   mail:
-    case_risk_level_updated:
+    notification_risk_level_updated:
       verb_with_level:
         set: "set to %{level}"
         changed: "changed to %{level}"
