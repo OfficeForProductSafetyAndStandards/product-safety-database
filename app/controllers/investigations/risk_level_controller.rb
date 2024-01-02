@@ -13,7 +13,7 @@ module Investigations
       return render :show unless @risk_level_form.valid?
 
       result = ChangeNotificationRiskLevel.call!(
-        @risk_level_form.attributes.merge(investigation: @investigation, user: current_user)
+        @risk_level_form.attributes.merge(notification: @investigation, user: current_user)
       )
       set_success_flash_message(result)
       redirect_to investigation_path(@investigation)

@@ -33,7 +33,7 @@ module Investigations
         # page.
         if @investigation.risk_level.nil?
           ChangeNotificationRiskLevel.call!(
-            investigation: @investigation_object,
+            notification: @investigation_object,
             user: current_user,
             risk_level: result.risk_assessment.risk_level
           )
@@ -99,7 +99,7 @@ module Investigations
         # page.
         if @investigation.risk_level.nil?
           ChangeNotificationRiskLevel.call!(
-            investigation: @investigation_object,
+            notification: @investigation_object,
             user: current_user,
             risk_level: result.risk_assessment.risk_level
           )

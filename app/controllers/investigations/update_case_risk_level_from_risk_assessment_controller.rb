@@ -17,7 +17,7 @@ module Investigations
 
       if @update_risk_level_from_risk_assessment_form.update_case_risk_level_to_match_investigation
         ChangeNotificationRiskLevel.call!(
-          investigation: @investigation,
+          notification: @investigation,
           user: current_user,
           risk_level: @risk_assessment.risk_level
         )
