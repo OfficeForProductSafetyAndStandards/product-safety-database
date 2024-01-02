@@ -97,7 +97,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       it "exports the case risk level" do
         investigation = create(:allegation)
-        ChangeCaseRiskLevel.call!(
+        ChangeNotificationRiskLevel.call!(
           investigation:,
           user:,
           risk_level: (Investigation.risk_levels.values - %w[other]).sample
