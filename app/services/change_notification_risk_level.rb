@@ -1,4 +1,4 @@
-class ChangeCaseRiskLevel
+class ChangeNotificationRiskLevel
   include Interactor
   include EntitiesToNotify
 

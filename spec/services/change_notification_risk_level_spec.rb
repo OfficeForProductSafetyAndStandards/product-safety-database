@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeCaseRiskLevel, :with_test_queue_adapter do
+RSpec.describe ChangeNotificationRiskLevel, :with_test_queue_adapter do
   describe ".call" do
     subject(:result) do
       described_class.call(investigation:,
