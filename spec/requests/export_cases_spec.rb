@@ -8,7 +8,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
   end
 
   context "when logged in as a normal user" do
-    let(:user) { create(:user, :activated, :viewed_introduction) }
+    let(:user) { create(:user, :activated, :viewed_introduction, :opss_user) }
 
     context "when generating a case export" do
       it "shows a forbidden error", :aggregate_failures do
@@ -31,7 +31,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
   end
 
   context "when logged in as a user with the all_data_exporter role" do
-    let(:user) { create(:user, :activated, :all_data_exporter, :viewed_introduction) }
+    let(:user) { create(:user, :activated, :all_data_exporter, :viewed_introduction, :opss_user) }
 
     context "when generating a case export" do
       it "allows user to generate a case export and redirects back to cases page" do
@@ -117,7 +117,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       end
 
       it "exports owner team" do
-        user = create(:user)
+        user = create(:user, :opss_user)
         team = create(:team)
         case_with_team_owner = create(:allegation, creator: user)
 
