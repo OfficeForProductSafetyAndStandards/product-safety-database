@@ -97,7 +97,7 @@ RSpec.describe UpdateDocument, :with_test_queue_adapter do
           end
 
           it "does not send a notification email" do
-            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
           end
         end
       end

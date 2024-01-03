@@ -120,7 +120,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       end
 
       it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
       end
 
@@ -157,7 +157,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       end
 
       it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
       end
 

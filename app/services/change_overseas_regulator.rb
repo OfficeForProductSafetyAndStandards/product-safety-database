@@ -45,7 +45,7 @@ private
 
     email_recipients_for_team_with_access(investigation, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         investigation.pretty_id,
         entity.name,
         email,

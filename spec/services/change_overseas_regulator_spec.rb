@@ -51,7 +51,7 @@ RSpec.describe ChangeOverseasRegulator, :with_stubbed_mailer, :with_stubbed_anti
         end
 
         it "does not send any notification updated emails" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
 
@@ -75,7 +75,7 @@ RSpec.describe ChangeOverseasRegulator, :with_stubbed_mailer, :with_stubbed_anti
         end
 
         it "sends an email to notify of the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,

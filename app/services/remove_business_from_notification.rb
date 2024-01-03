@@ -34,7 +34,7 @@ private
     return unless notification.sends_notifications?
 
     email_recipients_for_case_owner(notification).each do |recipient|
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         notification.pretty_id,
         recipient.name,
         recipient.email,

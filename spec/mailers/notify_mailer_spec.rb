@@ -206,6 +206,32 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
+  describe "#notification_updated" do
+    subject(:mail) do
+      described_class.notification_updated(
+        notification.pretty_id,
+        user.name,
+        user.email,
+        update_text,
+        subject_text
+      )
+    end
+
+    let(:notification) { create(:notification, creator: user) }
+    let(:user) { create(:user, :activated, name: "Bob Jones") }
+    let(:update_text) { "thing updated" }
+    let(:subject_text) { "subject" }
+
+    it "sets the personalisation" do
+      expect(mail.govuk_notify_personalisation).to include(
+        name: "Bob Jones",
+        update_text: "thing updated",
+        subject_text: "subject",
+        investigation_url: investigation_url(pretty_id: notification.pretty_id)
+      )
+    end
+  end
+
   describe "#case_permission_changed_for_team" do
     subject(:mail) do
       described_class.case_permission_changed_for_team(
