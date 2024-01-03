@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
+RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
   subject(:result) do
     described_class.call(investigation: notification, investigation_product:, user:, reason:)
   end

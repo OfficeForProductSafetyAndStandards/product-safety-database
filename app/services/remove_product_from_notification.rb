@@ -1,4 +1,4 @@
-class RemoveProductFromCase
+class RemoveProductFromNotification
   include Interactor
   include EntitiesToNotify
 
