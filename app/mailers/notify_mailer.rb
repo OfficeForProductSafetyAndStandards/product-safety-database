@@ -8,7 +8,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       notification_risk_level_updated: "66c2f2dd-f3a1-4ef1-a9cc-a99a1b7dff22",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
       notification_created: "b5457546-9633-4a9c-a844-b61f2e818c24",
-      investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
+      notification_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
       team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
@@ -59,13 +59,13 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-  def investigation_updated(investigation_pretty_id, name, email, update_text, subject_text)
-    set_template(TEMPLATES[:investigation_updated])
+  def notification_updated(notification_pretty_id, name, email, update_text, subject_text)
+    set_template(TEMPLATES[:notification_updated])
     set_reference("Notification updated")
 
     set_personalisation(
       name:,
-      investigation_url: investigation_url(pretty_id: investigation_pretty_id),
+      investigation_url: investigation_url(pretty_id: notification_pretty_id),
       update_text:,
       subject_text:
     )

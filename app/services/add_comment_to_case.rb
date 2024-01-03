@@ -27,7 +27,7 @@ class AddCommentToCase
     return unless investigation.sends_notifications?
 
     email_recipients_for_case_owner(investigation).each do |recipient|
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,

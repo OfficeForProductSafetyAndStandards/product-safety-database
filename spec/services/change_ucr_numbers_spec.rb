@@ -42,7 +42,7 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
   end
 
   it "sends an email" do
-    expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated)
+    expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated)
   end
 
   context "when we are adding multiple UCR numbers" do
@@ -68,7 +68,7 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     it "sends an email" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -115,7 +115,7 @@ RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     it "sends an email" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 end

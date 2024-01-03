@@ -47,7 +47,7 @@ private
 
   def send_notification_email
     email_recipients.each do |recipient|
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         notification.pretty_id,
         recipient.name,
         recipient.email,

@@ -126,7 +126,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
       describe "notifications" do
         context "with a team email" do
           it "notifies the relevant users", :with_test_queue_adapter do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
               investigation.pretty_id,
               investigation.owner_team.name,
               investigation.owner_team.email,
@@ -140,7 +140,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
           let(:team_recipient_email) { nil }
 
           it "notifies the relevant users", :with_test_queue_adapter do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
               investigation.pretty_id,
               investigation.owner_user.name,
               investigation.owner_user.email,

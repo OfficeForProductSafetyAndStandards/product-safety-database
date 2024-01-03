@@ -3,7 +3,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
     before { ChangeNotificationOwner.call!(notification: investigation, owner: user, user:) }
 
     it "does not send an email" do
-      expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -11,7 +11,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
     before { ChangeNotificationOwner.call!(notification: investigation, owner: user.team, user:) }
 
     it "does not send an email" do
-      expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -21,7 +21,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
     before { ChangeNotificationOwner.call!(notification: investigation, owner: user_same_team, user:) }
 
     it "sends an email to the user" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+      expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
         investigation.pretty_id,
         user_same_team.name,
         user_same_team.email,
@@ -35,7 +35,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
         before { ChangeNotificationStatus.call!(notification: investigation, user:, new_status: "closed") }
 
         it "does not send an email" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
     end
@@ -49,7 +49,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
       before { ChangeNotificationOwner.call!(notification: investigation, owner: user_other_team, user:) }
 
       it "sends an email to the user" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
           investigation.pretty_id,
           user_other_team.name,
           user_other_team.email,
@@ -63,7 +63,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
           before { ChangeNotificationStatus.call!(notification: investigation, user:, new_status: "closed") }
 
           it "does not send an email" do
-            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
           end
         end
       end
@@ -73,7 +73,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
       before { ChangeNotificationOwner.call!(notification: investigation, owner: other_team, user:) }
 
       it "sends an email to the team email" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
           investigation.pretty_id,
           other_team.name,
           other_team.email,
@@ -87,7 +87,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
           before { ChangeNotificationStatus.call!(notification: investigation, user:, new_status: "closed") }
 
           it "does not send an email" do
-            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
           end
         end
       end
@@ -102,7 +102,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
         end
 
         it "sends an email to each of the team's active users" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             investigation.pretty_id,
             user_other_team.name,
             user_other_team.email,
@@ -116,7 +116,7 @@ RSpec.shared_examples "a service which notifies the investigation owner", :with_
             before { ChangeNotificationStatus.call!(notification: investigation, user:, new_status: "closed") }
 
             it "does not send an email" do
-              expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+              expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
             end
           end
         end
@@ -130,7 +130,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
     before { ChangeNotificationOwner.call!(notification:, owner: user, user:) }
 
     it "does not send an email" do
-      expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -138,7 +138,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
     before { ChangeNotificationOwner.call!(notification:, owner: user.team, user:) }
 
     it "does not send an email" do
-      expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -148,7 +148,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
     before { ChangeNotificationOwner.call!(notification:, owner: user_same_team, user:) }
 
     it "sends an email to the user" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+      expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
         notification.pretty_id,
         user_same_team.name,
         user_same_team.email,
@@ -162,7 +162,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
         before { ChangeNotificationStatus.call!(notification:, user:, new_status: "closed") }
 
         it "does not send an email" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
     end
@@ -176,7 +176,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
       before { ChangeNotificationOwner.call!(notification:, owner: user_other_team, user:) }
 
       it "sends an email to the user" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
           notification.pretty_id,
           user_other_team.name,
           user_other_team.email,
@@ -190,7 +190,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
           before { ChangeNotificationStatus.call!(notification:, user:, new_status: "closed") }
 
           it "does not send an email" do
-            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
           end
         end
       end
@@ -200,7 +200,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
       before { ChangeNotificationOwner.call!(notification:, owner: other_team, user:) }
 
       it "sends an email to the team email" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
           notification.pretty_id,
           other_team.name,
           other_team.email,
@@ -214,7 +214,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
           before { ChangeNotificationStatus.call!(notification:, user:, new_status: "closed") }
 
           it "does not send an email" do
-            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
           end
         end
       end
@@ -229,7 +229,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
         end
 
         it "sends an email to each of the team's active users" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             notification.pretty_id,
             user_other_team.name,
             user_other_team.email,
@@ -243,7 +243,7 @@ RSpec.shared_examples "a service which notifies the notification owner", :with_t
             before { ChangeNotificationStatus.call!(notification:, user:, new_status: "closed") }
 
             it "does not send an email" do
-              expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+              expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
             end
           end
         end
