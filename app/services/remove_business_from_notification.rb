@@ -1,4 +1,4 @@
-class RemoveBusinessFromCase
+class RemoveBusinessFromNotification
   include Interactor
   include EntitiesToNotify
 

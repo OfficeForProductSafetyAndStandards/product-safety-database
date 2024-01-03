@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapter do
+RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queue_adapter do
   subject(:result) { described_class.call({ business:, reason: }.merge(common_context)) }
 
   let(:business)                 { create(:business) }
