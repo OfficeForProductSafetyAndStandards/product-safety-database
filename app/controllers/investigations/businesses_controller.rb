@@ -12,13 +12,13 @@ class Investigations::BusinessesController < Investigations::BaseController
   def index; end
 
   def new
-    @business_form = AddBusinessToCaseForm.new(current_user:)
+    @business_form = AddBusinessToNotificationForm.new(current_user:)
     @business_form.locations = [Location.new]
     @business_form.contacts = [Contact.new]
   end
 
   def create
-    @business_form = AddBusinessToCaseForm.new(
+    @business_form = AddBusinessToNotificationForm.new(
       business_form_params.merge(
         current_user:,
         relationship: session[:business_type],
@@ -32,13 +32,13 @@ class Investigations::BusinessesController < Investigations::BaseController
       @business = @business_form.business_object
 
       if @business.save
-        AddBusinessToCase.call!(
+        AddBusinessToNotification.call!(
           business: @business,
           relationship: @business_form.relationship,
           online_marketplace: @business_form.online_marketplace,
           other_marketplace_name: @business_form.other_marketplace_name,
           authorised_representative_choice: @business_form.authorised_representative_choice,
-          investigation: @investigation,
+          notification: @investigation,
           user: current_user
         )
         redirect_to_investigation_businesses_tab success: "The business was created"
@@ -107,7 +107,7 @@ private
   end
 
   def business_form_params
-    params.require(:add_business_to_case_form).permit(
+    params.require(:add_business_to_notification_form).permit(
       :legal_name,
       :trading_name,
       :company_number,

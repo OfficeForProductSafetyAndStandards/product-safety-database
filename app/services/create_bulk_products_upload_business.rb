@@ -20,13 +20,13 @@ class CreateBulkProductsUploadBusiness
 
       business.contacts.create!
 
-      AddBusinessToCase.call!(
+      AddBusinessToNotification.call!(
         business:,
         relationship: type,
         online_marketplace: online_marketplace_id.present? ? OnlineMarketplace.find(online_marketplace_id) : nil,
         other_marketplace_name:,
         authorised_representative_choice:,
-        investigation: bulk_products_upload.investigation,
+        notification: bulk_products_upload.investigation,
         user:,
         skip_email: true
       )
