@@ -112,7 +112,7 @@ en:
         cancel: "Cancel"
       remove:
         cannot_remove_business_warning: "Cannot remove the business from the notification because it's associated with the following supporting information:"
-        remove_business_warning_html: Remove a business from a notification if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
+        remove_business_warning_html: Remove a business from a notification if it's not relevant. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
       empty: This notification has not added any businesses.
     business_types:
       new:
