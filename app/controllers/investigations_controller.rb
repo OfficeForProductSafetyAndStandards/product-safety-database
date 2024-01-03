@@ -97,9 +97,9 @@ class InvestigationsController < ApplicationController
   def destroy
     authorize @investigation, :change_owner_or_status?
 
-    @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
+    @delete_notification_form = DeleteNotificationForm.new(notification: @investigation)
 
-    if @delete_investigation_form.valid?
+    if @delete_notification_form.valid?
       DeleteNotification.call!(notification: @investigation, deleted_by: current_user)
       redirect_to your_cases_investigations_path, flash: { success: "The notification was deleted" }
     else
