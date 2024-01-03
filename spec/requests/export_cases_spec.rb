@@ -31,7 +31,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
   end
 
   context "when logged in as a user with the all_data_exporter role" do
-    context "who is not an opss user" do
+    context "when user is not in an opss team" do
       let(:user) { create(:user, :activated, :all_data_exporter, :viewed_introduction) }
 
       context "when generating a case export" do
@@ -76,7 +76,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         end
 
         it "restricts risk_validated_at" do
-          investigation = create(:allegation, risk_validated_at: Date.current)
+          create(:allegation, risk_validated_at: Date.current)
 
           Investigation.reindex
 
@@ -89,7 +89,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         end
 
         it "restricts the opss_internal_team field" do
-          investigation = create(:notification)
+          create(:notification)
 
           Investigation.reindex
 
@@ -103,7 +103,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       end
     end
 
-    context "who is an opss user" do
+    context "when user is in an opss team" do
       let(:user) { create(:user, :activated, :all_data_exporter, :viewed_introduction, :opss_user) }
 
       context "when generating a case export" do
