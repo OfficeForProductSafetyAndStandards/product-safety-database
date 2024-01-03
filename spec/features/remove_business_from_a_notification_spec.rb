@@ -1,22 +1,22 @@
 require "rails_helper"
 
 RSpec.feature "Remove a business from a notification", :with_stubbed_mailer do
-  let(:business)      { create(:business) }
-  let(:user)          { create(:user, :activated, has_accepted_declaration: true) }
-  let(:investigation) { create(:allegation, :with_business, business_to_add: business, creator: user) }
+  let(:business)     { create(:business) }
+  let(:user)         { create(:user, :activated, has_accepted_declaration: true) }
+  let(:notification) { create(:notification, :with_business, business_to_add: business, creator: user) }
 
   before { sign_in user }
 
   scenario "removing a business" do
-    visit "/cases/#{investigation.pretty_id}/businesses"
-    expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
-    expect(page).to have_summary_item(key: "Legal name",               value: "#{business.legal_name} Registered name")
-    expect(page).to have_summary_item(key: "Company number",           value: "#{business.company_number} Registration number for incorporated businesses")
+    visit "/cases/#{notification.pretty_id}/businesses"
+    expect(page).to have_summary_item(key: "Trading name", value: business.trading_name)
+    expect(page).to have_summary_item(key: "Legal name", value: "#{business.legal_name} Registered name")
+    expect(page).to have_summary_item(key: "Company number", value: "#{business.company_number} Registration number for incorporated businesses")
 
     click_on "Remove this business"
 
-    expect(page).to have_css("p.govuk-body", text: "Remove a business from a notification if it's not relevant to the investigation. Business details can be changed from the Businesses tab.")
-    expect(page).to have_link("Businesses tab", href: investigation_businesses_path(investigation))
+    expect(page).to have_css("p.govuk-body", text: "Remove a business from a notification if it's not relevant. Business details can be changed from the Businesses tab.")
+    expect(page).to have_link("Businesses tab", href: investigation_businesses_path(notification))
     expect(page).to have_unchecked_field("No")
     expect(page).to have_unchecked_field("Yes")
     expect_to_have_notification_breadcrumbs
@@ -33,9 +33,9 @@ RSpec.feature "Remove a business from a notification", :with_stubbed_mailer do
     click_on "Submit"
 
     expect(page).to have_title("Businesses")
-    expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
-    expect(page).to have_summary_item(key: "Legal name",               value: "#{business.legal_name} Registered name")
-    expect(page).to have_summary_item(key: "Company number",           value: "#{business.company_number} Registration number for incorporated businesses")
+    expect(page).to have_summary_item(key: "Trading name", value: business.trading_name)
+    expect(page).to have_summary_item(key: "Legal name", value: "#{business.legal_name} Registered name")
+    expect(page).to have_summary_item(key: "Company number", value: "#{business.company_number} Registration number for incorporated businesses")
 
     click_on "Activity"
 
@@ -50,7 +50,7 @@ RSpec.feature "Remove a business from a notification", :with_stubbed_mailer do
     end
 
     expect_to_have_notification_breadcrumbs
-    expect(page).to have_link("Cancel", href: investigation_businesses_path(investigation))
+    expect(page).to have_link("Cancel", href: investigation_businesses_path(notification))
 
     click_on "Submit"
 
@@ -67,21 +67,21 @@ RSpec.feature "Remove a business from a notification", :with_stubbed_mailer do
   end
 
   scenario "when the business is attached to supporting information" do
-    create(:product, investigations: [investigation])
-    investigation_product = investigation.investigation_products.first
+    create(:product, investigations: [notification])
+    investigation_product = notification.investigation_products.first
 
     corrective_action_params = attributes_for(:corrective_action, business_id: business.id, investigation_product_id: investigation_product.id)
-      .merge(user:, investigation:)
+      .merge(user:, investigation: notification)
     supporting_information = AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action.decorate
 
-    visit "/cases/#{investigation.pretty_id}/businesses"
+    visit "/cases/#{notification.pretty_id}/businesses"
     expect_to_have_notification_breadcrumbs
     click_on "Remove this business"
 
     expect(page).to have_css(".govuk-warning-text", text: "Cannot remove the business from the notification because it's associated with the following supporting information:")
     expect(page).to have_link(supporting_information.supporting_information_title, href: supporting_information.show_path)
 
-    click_on investigation.pretty_id
+    click_on notification.pretty_id
     click_on "Activity"
     expect(page).not_to have_css("h3", text: "Removed: #{business.trading_name}")
   end
