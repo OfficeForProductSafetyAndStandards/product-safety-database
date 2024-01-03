@@ -78,9 +78,9 @@ class Investigations::BusinessesController < Investigations::BaseController
 
     return redirect_to investigation_businesses_path(@investigation, @business) unless @remove_business_form.remove?
 
-    result = RemoveBusinessFromCase.call!(
+    result = RemoveBusinessFromNotification.call!(
       reason: @remove_business_form.reason,
-      investigation: @investigation.object,
+      notification: @investigation.object,
       business: @business,
       user: current_user
     )
