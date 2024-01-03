@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queue_adapter do
   subject(:result) do
-    described_class.call( business:, reason:, user:, notification:)
+    described_class.call(business:, reason:, user:, notification:)
   end
 
   let(:business)              { create(:business) }
