@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddBusinessToCase, :with_test_queue_adapter do
+RSpec.describe AddBusinessToNotification, :with_test_queue_adapter do
   subject(:result) { described_class.call(investigation:, business:, user:) }
 
   let(:investigation) { create(:allegation, creator:) }

@@ -32,7 +32,7 @@ RSpec.feature "Your businesses listing", :with_stubbed_mailer, type: :feature do
     let!(:explosion_investigation) { create(:allegation, hazard_type: "Explosion", creator: user) }
 
     before do
-      AddBusinessToCase.call!(
+      AddBusinessToNotification.call!(
         business: business_four,
         relationship: "online_marketplace",
         online_marketplace:,

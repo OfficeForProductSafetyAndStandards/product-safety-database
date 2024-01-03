@@ -32,7 +32,7 @@ class Investigations::BusinessesController < Investigations::BaseController
       @business = @business_form.business_object
 
       if @business.save
-        AddBusinessToCase.call!(
+        AddBusinessToNotification.call!(
           business: @business,
           relationship: @business_form.relationship,
           online_marketplace: @business_form.online_marketplace,

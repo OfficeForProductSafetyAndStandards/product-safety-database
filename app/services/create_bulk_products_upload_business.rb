@@ -20,7 +20,7 @@ class CreateBulkProductsUploadBusiness
 
       business.contacts.create!
 
-      AddBusinessToCase.call!(
+      AddBusinessToNotification.call!(
         business:,
         relationship: type,
         online_marketplace: online_marketplace_id.present? ? OnlineMarketplace.find(online_marketplace_id) : nil,

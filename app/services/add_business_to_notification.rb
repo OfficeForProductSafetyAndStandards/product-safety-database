@@ -1,4 +1,4 @@
-class AddBusinessToCase
+class AddBusinessToNotification
   include Interactor
   include EntitiesToNotify
 
