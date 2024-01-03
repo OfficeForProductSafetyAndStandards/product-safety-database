@@ -1,4 +1,4 @@
-class DeleteInvestigation
+class DeleteNotification
   include Interactor
 
   delegate :investigation, :deleted_by, to: :context
