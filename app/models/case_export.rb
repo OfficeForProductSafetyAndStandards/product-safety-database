@@ -133,7 +133,8 @@ private
                      Trading_Standards_Region
                      Regulator_Name
                      OPSS_Internal_Team
-                     Non_Compliant_Reason]
+                     Non_Compliant_Reason
+                     Unsafe_Reason]
   end
 
   def find_cases(ids)
@@ -175,7 +176,8 @@ private
       team_data.ts_region,
       team_data.regulator_name,
       restrict_data_for_non_opss_user((team_data.type == "internal")),
-      investigation.non_compliant_reason
+      investigation.non_compliant_reason,
+      investigation.hazard_description
     ]
   end
 
@@ -212,7 +214,8 @@ private
       team_data.ts_region,
       team_data.regulator_name,
       (team_data.type == "internal"),
-      investigation.non_compliant_reason
+      investigation.non_compliant_reason,
+      investigation.hazard_description
     ]
   end
 end
