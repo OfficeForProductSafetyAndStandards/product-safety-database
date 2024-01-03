@@ -481,7 +481,7 @@ en:
   activemodel:
     errors:
       models:
-        add_business_to_case_form:
+        add_business_to_notification_form:
           attributes:
             relationship:
               inclusion: Select a business type
