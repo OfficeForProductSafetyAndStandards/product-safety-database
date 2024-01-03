@@ -19,7 +19,7 @@ class Investigations::BusinessTypesController < Investigations::BaseController
           business: online_marketplace.business,
           relationship: "online_marketplace",
           online_marketplace:,
-          investigation: @investigation,
+          notification: @investigation,
           user: current_user
         )
 

@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe AddBusinessToNotification, :with_test_queue_adapter do
-  subject(:result) { described_class.call(investigation:, business:, user:) }
+  subject(:result) { described_class.call(notification:, business:, user:) }
 
-  let(:investigation) { create(:allegation, creator:) }
-  let(:business)      { build(:business) }
-  let(:user)          { create(:user) }
-  let(:creator)       { user }
-  let(:owner)         { user }
+  let(:notification) { create(:notification, creator:) }
+  let(:business)     { build(:business) }
+  let(:user)         { create(:user) }
+  let(:creator)      { user }
+  let(:owner)        { user }
 
   context "with no parameters" do
     let(:result) { described_class.call }
@@ -17,7 +17,7 @@ RSpec.describe AddBusinessToNotification, :with_test_queue_adapter do
     end
   end
 
-  context "with no investigation parameter" do
+  context "with no notification" do
     let(:result) { described_class.call(business:, user:) }
 
     it "returns a failure" do
@@ -26,7 +26,7 @@ RSpec.describe AddBusinessToNotification, :with_test_queue_adapter do
   end
 
   context "with no product parameter" do
-    let(:result) { described_class.call(investigation:, user:) }
+    let(:result) { described_class.call(notification:, user:) }
 
     it "returns a failure" do
       expect(result).to be_failure
@@ -35,7 +35,7 @@ RSpec.describe AddBusinessToNotification, :with_test_queue_adapter do
 
   context "with the required parameter" do
     it "saves the the businesses" do
-      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+      expect { result }.to change(notification.businesses, :count).from(0).to(1)
     end
 
     context "with a primary location" do
@@ -55,126 +55,126 @@ RSpec.describe AddBusinessToNotification, :with_test_queue_adapter do
       result
 
       business = Business.last
-      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      activity = notification.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation: notification).attributes.to_json) })
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the investigation owner"
+    it_behaves_like "a service which notifies the notification owner"
   end
 
   context "with a relationship" do
-    subject(:result) { described_class.call(investigation:, business:, user:, relationship:) }
+    subject(:result) { described_class.call(notification:, business:, user:, relationship:) }
 
     let(:relationship) { "Manufacturer" }
 
     it "saves the the businesses" do
-      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+      expect { result }.to change(notification.businesses, :count).from(0).to(1)
     end
 
     it "persists the relationship on the investigation_business" do
       result
 
-      expect(Business.last.investigation_businesses.find_by!(investigation:).relationship).to eq(relationship)
+      expect(Business.last.investigation_businesses.find_by!(investigation: notification).relationship).to eq(relationship)
     end
 
     it "creates and audit log", :aggregate_failures do
       result
 
       business = Business.last
-      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      activity = notification.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation: notification).attributes.to_json) })
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the investigation owner"
+    it_behaves_like "a service which notifies the notification owner"
   end
 
   context "with an approved online marketplace" do
-    subject(:result) { described_class.call(investigation:, business:, user:, online_marketplace:) }
+    subject(:result) { described_class.call(notification:, business:, user:, online_marketplace:) }
 
     let(:online_marketplace) { create(:online_marketplace) }
 
     it "saves the the businesses" do
-      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+      expect { result }.to change(notification.businesses, :count).from(0).to(1)
     end
 
     it "associates the online marketplace to the investigation_business" do
       result
 
-      expect(Business.last.investigation_businesses.find_by!(investigation:).online_marketplace).to eq(online_marketplace)
+      expect(Business.last.investigation_businesses.find_by!(investigation: notification).online_marketplace).to eq(online_marketplace)
     end
 
     it "creates an audit log", :aggregate_failures do
       result
 
       business = Business.last
-      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      activity = notification.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation: notification).attributes.to_json) })
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the investigation owner"
+    it_behaves_like "a service which notifies the notification owner"
   end
 
   context "with a choice for authorised_representative" do
-    subject(:result) { described_class.call(investigation:, business:, user:, authorised_representative_choice:) }
+    subject(:result) { described_class.call(notification:, business:, user:, authorised_representative_choice:) }
 
     let(:authorised_representative_choice) { "EU Authorised representative" }
 
     it "saves the the businesses" do
-      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+      expect { result }.to change(notification.businesses, :count).from(0).to(1)
     end
 
     it "sets the authorised_representative_choice on investigation_business" do
       result
 
-      expect(Business.last.investigation_businesses.find_by!(investigation:).authorised_representative_choice).to eq("EU Authorised representative")
+      expect(Business.last.investigation_businesses.find_by!(investigation: notification).authorised_representative_choice).to eq("EU Authorised representative")
     end
 
     it "creates an audit log", :aggregate_failures do
       result
 
       business = Business.last
-      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      activity = notification.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation: notification).attributes.to_json) })
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the investigation owner"
+    it_behaves_like "a service which notifies the notification owner"
   end
 
   context "when given just the name of a new 'other' online marketplace" do
-    subject(:result) { described_class.call(investigation:, business:, user:, other_marketplace_name:) }
+    subject(:result) { described_class.call(notification:, business:, user:, other_marketplace_name:) }
 
     let(:other_marketplace_name) { Faker::Company.name }
 
     it "saves the the businesses" do
-      expect { result }.to change(investigation.businesses, :count).from(0).to(1)
+      expect { result }.to change(notification.businesses, :count).from(0).to(1)
     end
 
     it "creates a new online marketplace as unapproved" do
       result
 
-      expect(Business.last.investigation_businesses.find_by!(investigation:).online_marketplace.approved_by_opss).to be_falsey
+      expect(Business.last.investigation_businesses.find_by!(investigation: notification).online_marketplace.approved_by_opss).to be_falsey
     end
 
     it "associates the new online marketplace to the investigation_business" do
       result
 
-      expect(Business.last.investigation_businesses.find_by!(investigation:).online_marketplace.name).to eq(other_marketplace_name)
+      expect(Business.last.investigation_businesses.find_by!(investigation: notification).online_marketplace.name).to eq(other_marketplace_name)
     end
 
     it "creates and audit log", :aggregate_failures do
       result
 
       business = Business.last
-      activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
+      activity = notification.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
+      expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation: notification).attributes.to_json) })
       expect(activity.added_by_user).to eq(user)
     end
 
-    it_behaves_like "a service which notifies the investigation owner"
+    it_behaves_like "a service which notifies the notification owner"
 
     context "when the name is not unique" do
       let(:online_marketplace) { create(:online_marketplace) }

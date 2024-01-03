@@ -38,7 +38,7 @@ class Investigations::BusinessesController < Investigations::BaseController
           online_marketplace: @business_form.online_marketplace,
           other_marketplace_name: @business_form.other_marketplace_name,
           authorised_representative_choice: @business_form.authorised_representative_choice,
-          investigation: @investigation,
+          notification: @investigation,
           user: current_user
         )
         redirect_to_investigation_businesses_tab success: "The business was created"
