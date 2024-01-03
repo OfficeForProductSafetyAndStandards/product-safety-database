@@ -100,7 +100,7 @@ class InvestigationsController < ApplicationController
     @delete_investigation_form = DeleteInvestigationForm.new(investigation: @investigation)
 
     if @delete_investigation_form.valid?
-      DeleteNotification.call!(investigation: @investigation, deleted_by: current_user)
+      DeleteNotification.call!(notification: @investigation, deleted_by: current_user)
       redirect_to your_cases_investigations_path, flash: { success: "The notification was deleted" }
     else
       redirect_to your_cases_investigations_path, flash: { warning: "The notification could not be deleted" }
