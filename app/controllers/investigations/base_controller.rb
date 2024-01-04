@@ -3,7 +3,7 @@ private
 
   def set_notification
     @notification_object = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    @notification = @investigation_object.decorate
+    @notification = @notification_object.decorate
   rescue ActiveRecord::RecordNotFound
     render_404_page
   end

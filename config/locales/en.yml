@@ -692,7 +692,7 @@ en:
               blank: "Select the primary hazard"
             hazard_description:
               blank: "Enter why the product is unsafe"
-        case_name_form:
+        change_notification_name_form:
           attributes:
             user_title:
               blank: "Enter a notification name"

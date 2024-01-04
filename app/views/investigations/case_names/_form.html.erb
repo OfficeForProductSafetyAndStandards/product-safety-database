@@ -1,5 +1,5 @@
-<%= error_summary @case_name_form.errors %>
-<% error_message = { text: @case_name_form.errors.full_messages_for("user_title").first } if @case_name_form.errors.any? %>
+<%= error_summary @notification_name_form.errors %>
+<% error_message = { text: @notification_name_form.errors.full_messages_for("user_title").first } if @notification_name_form.errors.any? %>
 
 <%= govukInput(
       form: form,
