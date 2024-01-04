@@ -10,7 +10,7 @@ RSpec.feature "Deleted user", :with_stubbed_mailer, type: :feature do
 
     user.mark_as_deleted!
 
-    click_link "All notifications"
+    click_link "Create a product safety notification"
 
     expect_to_be_on_the_homepage
     expect(page).to have_link "Sign in"

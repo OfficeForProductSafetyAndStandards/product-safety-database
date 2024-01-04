@@ -5,9 +5,6 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
     scenario "shows the home page" do
       visit unauthenticated_root_path
 
-      expect(page).not_to have_css(".govuk-header .govuk-phase-banner__content__tag")
-      expect(page).to have_css(".govuk-phase-banner")
-
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
       expect(page).to have_link("Sign in")
 
@@ -33,8 +30,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
     def expect_header_to_have_signed_in_links
       expect(page).to have_link("Sign out")
-      # TODO: Remove comment when account page is re-implemented in app
-      # expect(page).to have_link("Your account")
+      expect(page).to have_link("Your account")
       expect(page).not_to have_link("Sign in")
     end
 
@@ -61,10 +57,8 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
           expect(page).to have_current_path(authenticated_root_path)
           expect_header_to_have_signed_in_links
-          expect(page).to have_link("Your notifications")
-          expect(page).to have_link("All notifications")
-          expect(page).to have_link("Guidance")
-          expect(page).to have_link("How to use the PSD")
+          expect(page).to have_link("1. Search for or add products")
+          expect(page).to have_link("2. Create a product safety notification")
         end
       end
 
@@ -72,10 +66,8 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
         scenario "shows the authenticated home page" do
           expect(page).to have_current_path(authenticated_root_path)
           expect_header_to_have_signed_in_links
-          expect(page).to have_link("Your notifications")
-          expect(page).to have_link("All notifications")
-          expect(page).to have_link("Guidance")
-          expect(page).to have_link("How to use the PSD")
+          expect(page).to have_link("1. Search for or add products")
+          expect(page).to have_link("2. Create a product safety notification")
         end
       end
     end
@@ -117,10 +109,8 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           scenario "shows the non-OPSS home page" do
             expect(page).to have_current_path(authenticated_root_path)
             expect_header_to_have_signed_in_links
-            expect(page).to have_link("Your notifications")
-            expect(page).to have_link("All notifications")
-            expect(page).to have_link("Guidance")
-            expect(page).to have_link("How to use the PSD")
+            expect(page).to have_link("1. Search for or add products")
+            expect(page).to have_link("2. Create a product safety notification")
           end
         end
       end

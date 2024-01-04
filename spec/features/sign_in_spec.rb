@@ -36,7 +36,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Enter security code", with: "#{otp_code} "
     click_on "Continue"
 
-    expect(page).to have_css("h2", text: "Your notifications")
+    expect(page).to have_css("h2", text: "How to create a product safety notification")
     expect(page).to have_link("Sign out", href: destroy_user_session_path)
   end
 
@@ -93,7 +93,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
     fill_in "Enter security code", with: otp_code
     click_button "Continue"
 
-    expect(page).to have_css("h2", text: "Your notifications")
+    expect(page).to have_css("h2", text: "How to create a product safety notification")
     expect(page).to have_link("Sign out", href: destroy_user_session_path)
   end
 
@@ -118,7 +118,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
 
       fill_in_credentials
 
-      expect(page).to have_css("h2", text: "Your notifications")
+      expect(page).to have_css("h2", text: "How to create a product safety notification")
       expect(page).to have_link("Sign out")
     end
 
@@ -131,7 +131,7 @@ RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbe
       fill_in "Enter security code", with: otp_code
       click_on "Continue"
 
-      expect(page).to have_css("h2", text: "Your notifications")
+      expect(page).to have_css("h2", text: "How to create a product safety notification")
 
       visit unlock_path
       expect(page).to have_css("h1", text: "Check your phone")

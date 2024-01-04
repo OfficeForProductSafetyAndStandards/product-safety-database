@@ -183,13 +183,6 @@ body.js-enabled .opss-nojs-hide {
   }
 }
 
-@include govuk-media-query($from: mobile, $until: tablet, $and: false, $media-type: "all") {
-  // for mobile only
-  .opss-padding-bottom-4-mobile {
-    padding-bottom: govuk-spacing(4);
-  }
-}
-
 @include govuk-media-query($from: desktop) {
   .opss-float-right-desktop {
     float: right;
@@ -1097,40 +1090,6 @@ dd dl.opss-nested-definition-list {
           padding: 0 govuk-spacing(2) govuk-spacing(2) govuk-spacing(2);
         }
       }
-    }
-  }
-}
-
-@include govuk-media-query($from: tablet) {
-  .opss-equal-height-container {
-    // on a .govuk-grid-row div
-    margin-left: 0;
-    margin-right: 0;
-    display: -webkit-flex;
-    display: flex;
-
-    .opss-equal-height__col {
-      // on a .govuk-grid-column-one-half
-      margin-right: 0;
-      margin-left: govuk-spacing(3);
-      -webkit-flex: 1 auto;
-      -ms-flex: 1 auto;
-      flex: 1 auto;
-    }
-
-    .opss-equal-height__col:first-child {
-      margin-right: govuk-spacing(3);
-      margin-left: 0;
-    }
-
-    &.opss-equal-height-container--flush {
-      .opss-equal-height__col {
-        padding: 0;
-      }
-    }
-
-    .opss-equal-height-container__panel-1 {
-      min-height: 120px;
     }
   }
 }

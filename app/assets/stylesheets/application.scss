@@ -18,7 +18,6 @@ $govuk-global-styles: true;
 
 @import "opss/opss-shared";
 @import "opss/opss-search";
-@import "opss/opss-step-by-step-nav";
 @import "opss/opss-psd";
 
 * {
@@ -79,6 +78,29 @@ $govuk-global-styles: true;
 .app-masthead__description,
 .app-introduction-card__description {
   color: govuk-colour("white");
+}
+
+// Authenticated homepage action links
+.app-chevron-card-list__entry {
+  position: relative;
+  margin-bottom: govuk-spacing(4) !important; // To override the Design System default `li` margin
+  border-bottom: 1px solid $govuk-border-colour;
+}
+
+.app-chevron-card-list__link:before {
+  border-right: 3px solid $govuk-link-colour;
+  border-top: 3px solid $govuk-link-colour;
+  content: "";
+  display: block;
+  height: 7px;
+  position: absolute;
+  right: 5px;
+  top: calc(50% - govuk-spacing(4)); // Halfway down taking into account the bottom margin of the parent `li`
+  margin-top: 5px;
+  -webkit-transform: translateY(0) rotate(45deg) scale(1);
+  -ms-transform: translateY(0) rotate(45deg) scale(1);
+  transform: translateY(0) rotate(45deg) scale(1);
+  width: 7px;
 }
 
 // Single file attachment display

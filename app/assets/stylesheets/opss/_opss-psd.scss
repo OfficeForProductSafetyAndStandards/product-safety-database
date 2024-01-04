@@ -26,23 +26,6 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50%);
   }
 }
 
-.opss-colour-block-title {
-  background-color: govuk-colour("black");
-  padding: govuk-spacing(2) govuk-spacing(4);
-  margin-bottom: govuk-spacing(3);
-
-  &.opss-colour-block-title--blue {
-    background-color: govuk-colour("blue");
-  }
-
-  h2,
-  h3 {
-    color: govuk-colour("white");
-    text-align: center;
-    margin: 0;
-  }
-}
-
 .opss-border-bottom-none {
   border-bottom: 0 none !important;
 }

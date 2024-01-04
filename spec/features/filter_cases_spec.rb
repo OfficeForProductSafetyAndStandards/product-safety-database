@@ -477,7 +477,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
 
   scenario "filtering notifications assigned to me via homepage link" do
     visit "/"
-    click_link "Your notifications"
+    click_link "Notifications"
 
     expect(page).to have_listed_case(investigation.pretty_id)
 
