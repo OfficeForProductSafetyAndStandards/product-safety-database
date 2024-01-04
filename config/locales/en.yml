@@ -10,7 +10,7 @@ en:
       message_from: "Message from %{user_name}:"
     team_removed_from_notification:
       message_from: "Message from %{user_name}:"
-    case_permission_changed_for_team:
+    notification_permission_changed_for_team:
       message_from: "Message from %{user_name}:"
       permission:
         edit: "edit full notification"

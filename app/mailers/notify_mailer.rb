@@ -13,7 +13,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
       team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
       team_removed_from_notification: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
-      case_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
+      notification_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
       product_export: "1c88c503-638e-4f91-b55f-726900b83f92",
@@ -184,8 +184,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-  def case_permission_changed_for_team(message:, investigation:, team:, user:, to_email:, old_permission:, new_permission:)
-    set_template(TEMPLATES[:case_permission_changed_for_team])
+  def notification_permission_changed_for_team(message:, notification:, team:, user:, to_email:, old_permission:, new_permission:)
+    set_template(TEMPLATES[:notification_permission_changed_for_team])
 
     user_name = user.decorate.display_name(viewer: team)
 
@@ -194,7 +194,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                            I18n.t(
                              :message_from,
                              user_name:,
-                             scope: "mail.case_permission_changed_for_team"
+                             scope: "mail.notification_permission_changed_for_team"
                            ),
                            inset_text_for_notify(message)
                          ].join("\n\n")
@@ -204,12 +204,12 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     set_personalisation(
       case_type: "notification",
-      case_title: investigation.decorate.title,
-      case_id: investigation.pretty_id,
+      case_title: notification.decorate.title,
+      case_id: notification.pretty_id,
       updater_name: user_name,
       optional_message:,
-      old_permission: I18n.t(".permission.#{old_permission}", scope: "mail.case_permission_changed_for_team"),
-      new_permission: I18n.t(".permission.#{new_permission}", scope: "mail.case_permission_changed_for_team")
+      old_permission: I18n.t(".permission.#{old_permission}", scope: "mail.notification_permission_changed_for_team"),
+      new_permission: I18n.t(".permission.#{new_permission}", scope: "mail.notification_permission_changed_for_team")
     )
 
     mail(to: to_email)
