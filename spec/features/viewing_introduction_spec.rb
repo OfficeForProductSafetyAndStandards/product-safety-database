@@ -19,7 +19,7 @@ RSpec.feature "Viewing the introduction", :with_stubbed_antivirus, :with_stubbed
     expect(page).to have_current_path("/introduction/share_data")
     click_on "Get started"
 
-    expect(page).to have_content("Create a notification")
+    expect(page).to have_content("Create a product safety notification")
     expect(page).to have_current_path("/")
   end
 
