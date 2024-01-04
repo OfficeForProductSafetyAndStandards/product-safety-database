@@ -14,7 +14,7 @@ class RemoveTeamFromNotification
     end
 
     send_notification_email unless context.silent
-    investigation.reindex
+    notification.reindex
   end
 
 private
@@ -23,7 +23,7 @@ private
     collaboration.collaborator
   end
 
-  def investigation
+  def notification
     collaboration.investigation
   end
 
@@ -36,7 +36,7 @@ private
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       metadata:
     )
   end
@@ -48,12 +48,12 @@ private
   end
 
   def send_notification_email
-    return unless investigation.sends_notifications?
+    return unless notification.sends_notifications?
 
     entities_to_notify.each do |entity|
-      NotifyMailer.team_deleted_from_case_email(
+      NotifyMailer.team_removed_from_notification_email(
         message:,
-        investigation:,
+        notification:,
         team_deleted: team,
         user_who_deleted: user,
         to_email: entity.email
