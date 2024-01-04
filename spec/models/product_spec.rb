@@ -93,15 +93,15 @@ RSpec.describe Product do
       end
     end
 
-    context "when the product had a case unlinked within the last 18 months" do
-      let(:investigation) { create :allegation, created_at: 2.years.ago }
+    context "when the product had a notification unlinked within the last 18 months" do
+      let(:notification) { create :notification, created_at: 2.years.ago }
       let(:product) { create :product }
       let(:user) { create :user }
 
       before do
         travel(-6.months) do
-          AddProductToCase.call!(user:, investigation:, product:)
-          RemoveProductFromNotification.call! user:, investigation_product: product.investigation_products.find_by(investigation:), investigation:
+          AddProductToCase.call!(user:, investigation: notification, product:)
+          RemoveProductFromNotification.call!(user:, investigation_product: product.investigation_products.find_by(investigation: notification), notification:)
         end
       end
 
@@ -110,15 +110,15 @@ RSpec.describe Product do
       end
     end
 
-    context "when the product had a case unlinked outside the last 18 months" do
-      let(:investigation) { create :allegation, created_at: 2.years.ago }
+    context "when the product had a notification unlinked outside the last 18 months" do
+      let(:notification) { create :notification, created_at: 2.years.ago }
       let(:product) { create :product }
       let(:user) { create :user }
 
       before do
         travel(-20.months) do
-          AddProductToCase.call!(user:, investigation:, product:)
-          RemoveProductFromNotification.call! user:, investigation_product: product.investigation_products.find_by(investigation:), investigation:
+          AddProductToCase.call!(user:, investigation: notification, product:)
+          RemoveProductFromNotification.call!(user:, investigation_product: product.investigation_products.find_by(investigation: notification), notification:)
         end
       end
 
@@ -130,12 +130,12 @@ RSpec.describe Product do
 
   describe ".retire_stale_products!", :with_stubbed_notify, :with_stubbed_mailer do
     let!(:young_product) { create :product, created_at: 1.day.ago }
-    let(:open_case) { create :allegation, :with_products }
-    let!(:product_with_open_case) { open_case.products.first }
-    let(:newly_closed_case) { create :allegation, :with_products, :closed, date_closed: 3.months.ago }
-    let!(:product_with_newly_closed_case) { newly_closed_case.products.first }
-    let(:older_case_1) { create :allegation, created_at: 2.years.ago }
-    let(:older_case_2) { create :allegation, created_at: 3.years.ago }
+    let(:open_notification) { create :notification, :with_products }
+    let!(:product_with_open_notification) { open_notification.products.first }
+    let(:newly_closed_notification) { create :notification, :with_products, :closed, date_closed: 3.months.ago }
+    let!(:product_with_newly_closed_notification) { newly_closed_notification.products.first }
+    let(:older_notification_1) { create :notification, created_at: 2.years.ago }
+    let(:older_notification_2) { create :notification, created_at: 3.years.ago }
     let(:product_unlinked_recently) { create :product }
     let(:product_unlinked_in_the_past) { create :product }
     let!(:old_product_never_linked) { create :product, created_at: (18.months + 1.day).ago }
@@ -143,18 +143,18 @@ RSpec.describe Product do
 
     before do
       travel(-6.months) do
-        AddProductToCase.call! user:, investigation: older_case_1, product: product_unlinked_recently
-        RemoveProductFromNotification.call! user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_case_1), investigation: older_case_1
+        AddProductToCase.call! user:, investigation: older_notification_1, product: product_unlinked_recently
+        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_notification_1), notification: older_notification_1)
       end
 
       travel(-19.months) do
-        AddProductToCase.call! user:, investigation: older_case_1, product: product_unlinked_in_the_past
-        RemoveProductFromNotification.call! user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_case_1), investigation: older_case_1
+        AddProductToCase.call! user:, investigation: older_notification_1, product: product_unlinked_in_the_past
+        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_1), notification: older_notification_1)
       end
 
       travel(-20.months) do
-        AddProductToCase.call! user:, investigation: older_case_2, product: product_unlinked_in_the_past
-        RemoveProductFromNotification.call! user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_case_2), investigation: older_case_2
+        AddProductToCase.call! user:, investigation: older_notification_2, product: product_unlinked_in_the_past
+        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_2), notification: older_notification_2)
       end
     end
 
@@ -162,8 +162,8 @@ RSpec.describe Product do
       described_class.retire_stale_products!
 
       expect(young_product.reload.retired_at).to be(nil)
-      expect(product_with_open_case.reload.retired_at).to be(nil)
-      expect(product_with_newly_closed_case.reload.retired_at).to be(nil)
+      expect(product_with_open_notification.reload.retired_at).to be(nil)
+      expect(product_with_newly_closed_notification.reload.retired_at).to be(nil)
       expect(product_unlinked_recently.reload.retired_at).to be(nil)
 
       expect(product_unlinked_in_the_past.reload.retired_at).not_to be(nil)

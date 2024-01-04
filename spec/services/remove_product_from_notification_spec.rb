@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
   subject(:result) do
-    described_class.call(investigation: notification, investigation_product:, user:, reason:)
+    described_class.call(notification:, investigation_product:, user:, reason:)
   end
 
   let(:notification) { create(:notification, products: [product], creator:) }
@@ -39,7 +39,7 @@ RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
     end
 
     context "with no product parameter" do
-      let(:result) { described_class.call(investigation: notification, user:) }
+      let(:result) { described_class.call(notification:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -47,7 +47,7 @@ RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation: notification, product:) }
+      let(:result) { described_class.call(notification:, product:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -81,12 +81,12 @@ RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
         end
 
         it "returns failure" do
-          result = described_class.call(investigation: notification.reload, investigation_product: investigation_product.reload, user:, reason:)
+          result = described_class.call(notification: notification.reload, investigation_product: investigation_product.reload, user:, reason:)
           expect(result).to be_failure
         end
 
         it "does not remove the product from the notification" do
-          described_class.call(investigation: notification.reload, investigation_product: investigation_product.reload, user:, reason:)
+          described_class.call(notification: notification.reload, investigation_product: investigation_product.reload, user:, reason:)
           expect(notification.reload.products).to include(product)
         end
       end
