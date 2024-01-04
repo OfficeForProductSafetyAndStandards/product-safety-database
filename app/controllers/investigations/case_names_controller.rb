@@ -12,7 +12,7 @@ module Investigations
       @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
 
       if @case_name_form.valid?
-        ChangeCaseName.call!(investigation: @investigation, user_title: @case_name_form.user_title, user: current_user)
+        ChangeNotificationName.call!(notification: @investigation, user_title: @case_name_form.user_title, user: current_user)
         redirect_to investigation_path(@investigation), flash: { success: "The notification name was updated" }
       else
         render :edit
