@@ -282,7 +282,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
-  # TODO remove this once all mailers are migrated to use notification param
+  # TODO: remove this once all mailers are migrated to use notification param
   def expect_personalisation_to_include_case_attributes
     expect(mail.govuk_notify_personalisation).to include(
       case_type:,
