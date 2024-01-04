@@ -1,4 +1,4 @@
-class ChangeCasePermissionLevelForTeam
+class ChangeNotificationPermissionLevelForTeam
   include Interactor
 
   delegate :existing_collaboration, :new_collaboration_class, :user, :message, :collaboration, to: :context

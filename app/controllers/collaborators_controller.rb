@@ -62,7 +62,7 @@ class CollaboratorsController < Investigations::BaseController
 
       flash[:success] = "#{@collaborator.display_name} has been removed from the notification"
     else
-      ChangeCasePermissionLevelForTeam.call!(
+      ChangeNotificationPermissionLevelForTeam.call!(
         existing_collaboration: @collaboration,
         user: current_user,
         new_collaboration_class: @edit_form.new_collaboration_class,
