@@ -12,7 +12,7 @@ private
     authorize @notification, :update?
   end
 
-  # TODO Remove all below once all investigation controllers use notification instead
+  # TODO: Remove all below once all investigation controllers use notification instead
   def set_investigation
     @investigation_object = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     @investigation = @investigation_object.decorate

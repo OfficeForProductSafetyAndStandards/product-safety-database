@@ -109,7 +109,7 @@ protected
     breadcrumb @notification.pretty_id, investigation_path(@notification) if @notification&.persisted?
   end
 
-  # TODO Remove this once all investigation controllers use notification instead
+  # TODO: Remove this once all investigation controllers use notification instead
   def set_investigation_breadcrumbs
     breadcrumb "cases.label", :businesses_path
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
