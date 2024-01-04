@@ -1,5 +1,5 @@
 <% page_heading = "Edit the reference number" %>
-<%= page_title page_heading, errors: @investigation.errors.any? %>
+<%= page_title page_heading, errors: @notification.errors.any? %>
 
 <% hint_html = capture do %>
   <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this notification.</div>
@@ -14,7 +14,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with scope: :investigation, model: @investigation, url: investigation_reference_numbers_path, method: :put, local: true do |form| %>
+    <%= form_with scope: :investigation, model: @notification, url: investigation_reference_numbers_path, method: :put, local: true do |form| %>
       <%= govukInput(
         key: :complainant_reference,
         id: "complainant_reference",
@@ -28,10 +28,9 @@
         classes: "govuk-input--width-20"
       ) %>
 
-
       <div class="govuk-button-group">
         <%= form.submit "Save", class: "govuk-button" %>
-        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+        <%= link_to "Cancel", investigation_path(@notification), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     <% end %>
   </div>
