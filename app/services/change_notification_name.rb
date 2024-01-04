@@ -1,19 +1,19 @@
-class ChangeCaseName
+class ChangeNotificationName
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :user_title, :user, to: :context
+  delegate :notification, :user_title, :user, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No case name supplied") unless user_title.is_a?(String)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.assign_attributes(user_title:)
-    return if investigation.changes.none?
+    notification.assign_attributes(user_title:)
+    return if notification.changes.none?
 
     ActiveRecord::Base.transaction do
-      investigation.save!
+      notification.save!
       create_audit_activity_for_user_title_changed
     end
 
@@ -23,11 +23,10 @@ class ChangeCaseName
 private
 
   def create_audit_activity_for_user_title_changed
-    metadata = activity_class.build_metadata(investigation)
-
+    metadata = activity_class.build_metadata(notification)
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       title: nil,
       body: nil,
       metadata:
@@ -39,9 +38,9 @@ private
   end
 
   def send_notification_email
-    email_recipients_for_case_owner(investigation).each do |recipient|
+    email_recipients_for_case_owner(notification).each do |recipient|
       NotifyMailer.notification_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         recipient.name,
         recipient.email,
         email_body(recipient),

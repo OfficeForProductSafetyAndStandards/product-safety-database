@@ -28,7 +28,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                                  ReferenceNumberForm.new
                                end
     when :case_name
-      @case_name_form = CaseNameForm.new
+      @notification_name_form = ChangeNotificationNameForm.new
       @product = authorize_product
     when :case_created
       @investigation = session[:investigation]
@@ -79,11 +79,11 @@ class Investigations::TsInvestigationsController < ApplicationController
       session[:investigation].assign_attributes(complainant_reference: @reference_number_form.complainant_reference) if @reference_number_form.has_complainant_reference
       session[:form_answers].merge!(reference_number_params)
     when :case_name
-      @case_name_form = CaseNameForm.new(case_name_params.merge(current_user:))
+      @notification_name_form = ChangeNotificationNameForm.new(case_name_params.merge(current_user:))
       @product = authorize_product
-      return render_wizard unless @case_name_form.valid?
+      return render_wizard unless @notification_name_form.valid?
 
-      session[:investigation].assign_attributes(user_title: @case_name_form.user_title)
+      session[:investigation].assign_attributes(user_title: @notification_name_form.user_title)
     end
     redirect_to next_wizard_path
   end

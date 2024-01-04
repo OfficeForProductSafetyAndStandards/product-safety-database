@@ -1,6 +1,18 @@
 class Investigations::BaseController < ApplicationController
 private
 
+  def set_notification
+    @notification_object = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @notification = @notification_object.decorate
+  rescue ActiveRecord::RecordNotFound
+    render_404_page
+  end
+
+  def authorize_notification_updates
+    authorize @notification, :update?
+  end
+
+  # TODO: Remove all below once all investigation controllers use notification instead
   def set_investigation
     @investigation_object = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     @investigation = @investigation_object.decorate

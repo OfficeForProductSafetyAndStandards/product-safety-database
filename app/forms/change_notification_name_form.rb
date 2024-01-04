@@ -1,4 +1,4 @@
-class CaseNameForm
+class ChangeNotificationNameForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
