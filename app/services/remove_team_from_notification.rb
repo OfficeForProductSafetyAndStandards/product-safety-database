@@ -1,4 +1,4 @@
-class RemoveTeamFromCase
+class RemoveTeamFromNotification
   include Interactor
 
   delegate :collaboration, :user, :message, to: :context
