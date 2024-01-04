@@ -24,13 +24,13 @@ private
     existing_collaboration.collaborator
   end
 
-  def investigation
+  def notification
     existing_collaboration.investigation
   end
 
   def create_new_collaboration!
     new_collaboration_class.create!(
-      investigation:,
+      investigation: notification,
       collaborator: team,
       added_by_user: user,
       message:
@@ -54,7 +54,7 @@ private
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       metadata:
     )
   end
@@ -66,12 +66,12 @@ private
   end
 
   def send_notification_email
-    return unless investigation.sends_notifications?
+    return unless notification.sends_notifications?
 
     entities_to_notify.each do |entity|
-      NotifyMailer.case_permission_changed_for_team(
+      NotifyMailer.notification_permission_changed_for_team(
         message:,
-        investigation:,
+        notification:,
         team:,
         user:,
         to_email: entity.email,
