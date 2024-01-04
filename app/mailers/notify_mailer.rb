@@ -12,7 +12,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
       team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
-      team_deleted_from_case: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
+      team_removed_from_notification: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
       case_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
@@ -139,8 +139,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: to_email)
   end
 
-  def team_deleted_from_case_email(message:, investigation:, team_deleted:, user_who_deleted:, to_email:)
-    set_template(TEMPLATES[:team_deleted_from_case])
+  def team_removed_from_notification_email(message:, notification:, team_deleted:, user_who_deleted:, to_email:)
+    set_template(TEMPLATES[:team_removed_from_notification])
 
     user_name = user_who_deleted.decorate.display_name(viewer: team_deleted)
 
@@ -149,7 +149,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                            I18n.t(
                              :message_from,
                              user_name:,
-                             scope: "mail.team_removed_from_case"
+                             scope: "mail.team_removed_from_notification"
                            ),
                            inset_text_for_notify(message)
                          ].join("\n\n")
@@ -159,8 +159,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     set_personalisation(
       case_type: "notification",
-      case_title: investigation.decorate.title,
-      case_id: investigation.pretty_id,
+      case_title: notification.decorate.title,
+      case_id: notification.pretty_id,
       updater_name: user_name,
       optional_message:,
     )

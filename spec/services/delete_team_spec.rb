@@ -121,7 +121,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
       end
 
       context "when the new team was already a collaborator on the notification" do
@@ -158,7 +158,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
       end
 
       context "when the new team is already a collaborator on the notification" do
@@ -200,7 +200,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       end
 
       it "does not send notification e-mails", :with_test_queue_adapter do
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
       end
     end
 
@@ -218,7 +218,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_added_to_case_email)
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :case_permission_changed_for_team)
       end
 

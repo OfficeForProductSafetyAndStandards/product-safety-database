@@ -54,7 +54,7 @@ class CollaboratorsController < Investigations::BaseController
     return render :edit, status: :bad_request unless @edit_form.valid?
 
     if @edit_form.delete?
-      RemoveTeamFromCase.call!(
+      RemoveTeamFromNotification.call!(
         collaboration: @collaboration,
         user: current_user,
         message: @edit_form.message
