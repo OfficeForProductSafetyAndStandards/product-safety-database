@@ -162,11 +162,11 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
-  describe "#team_deleted_from_case_email" do
+  describe "#team_removed_from_notification_email" do
     subject(:mail) do
-      described_class.team_deleted_from_case_email(
+      described_class.team_removed_from_notification_email(
         message:,
-        investigation:,
+        notification:,
         team_deleted: team_to_be_deleted,
         user_who_deleted:,
         to_email: "test@example.com"
@@ -177,15 +177,15 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     let(:user_team) { create(:team, name: "User Team") }
     let(:team_to_be_deleted) { create(:team, name: "Collaborator Team") }
     let(:edit_access_collaboration) { create(:collaboration_edit_access, collaborator: team_to_be_deleted) }
-    let(:investigation) { edit_access_collaboration.investigation }
+    let(:notification) { edit_access_collaboration.investigation }
     let(:case_type) { "notification" }
-    let(:case_title) { investigation.decorate.title }
+    let(:case_title) { notification.decorate.title }
 
     context "with a message" do
       let(:message) { "Thanks for collaborating!" }
 
       it "sets the personalisation" do
-        expect_personalisation_to_include_case_attributes
+        expect_personalisation_to_include_notification_attributes
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (User Team)",
           optional_message: "Message from Bob Jones (User Team):\n\n^ Thanks for collaborating!",
@@ -197,7 +197,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       let(:message) { nil }
 
       it "sets the personalisation" do
-        expect_personalisation_to_include_case_attributes
+        expect_personalisation_to_include_notification_attributes
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (User Team)",
           optional_message: "",
@@ -282,11 +282,20 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
+  # TODO remove this once all mailers are migrated to use notification param
   def expect_personalisation_to_include_case_attributes
     expect(mail.govuk_notify_personalisation).to include(
       case_type:,
       case_title:,
       case_id: investigation.pretty_id,
+    )
+  end
+
+  def expect_personalisation_to_include_notification_attributes
+    expect(mail.govuk_notify_personalisation).to include(
+      case_type:,
+      case_title:,
+      case_id: notification.pretty_id,
     )
   end
 end
