@@ -1,4 +1,4 @@
-class ChangeCaseName
+class ChangeNotificationName
   include Interactor
   include EntitiesToNotify
 
