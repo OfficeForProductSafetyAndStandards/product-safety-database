@@ -8,7 +8,7 @@ en:
         removed: "removed"
     team_added_to_case:
       message_from: "Message from %{user_name}:"
-    team_removed_from_case:
+    team_removed_from_notification:
       message_from: "Message from %{user_name}:"
     case_permission_changed_for_team:
       message_from: "Message from %{user_name}:"

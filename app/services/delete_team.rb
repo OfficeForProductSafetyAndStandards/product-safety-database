@@ -82,7 +82,7 @@ private
   end
 
   def remove_team_from_case(collaboration)
-    RemoveTeamFromCase.call!(
+    RemoveTeamFromNotification.call!(
       collaboration:,
       user:,
       message: add_remove_team_message,
