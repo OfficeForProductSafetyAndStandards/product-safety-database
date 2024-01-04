@@ -45,9 +45,9 @@ RSpec.shared_examples "a service which notifies teams with access" do
 
       it "notifies the teams with a read only or edit access to the case", :aggregate_failures do
         expect { result }
-          .to  have_enqueued_mail(NotifyMailer, :investigation_updated)
+          .to  have_enqueued_mail(NotifyMailer, :notification_updated)
                  .with(*expected_edit_notification_args)
-                 .and have_enqueued_mail(NotifyMailer, :investigation_updated)
+                 .and have_enqueued_mail(NotifyMailer, :notification_updated)
                         .with(*expected_readonly_notification_args)
       end
     end
@@ -77,9 +77,9 @@ RSpec.shared_examples "a service which notifies teams with access" do
 
       it "notifies the teams with a read only or edit access to the case", :aggregate_failures do
         expect { result }
-          .to  have_enqueued_mail(NotifyMailer, :investigation_updated)
+          .to  have_enqueued_mail(NotifyMailer, :notification_updated)
                  .with(*expected_edit_notification_args)
-                 .and have_enqueued_mail(NotifyMailer, :investigation_updated)
+                 .and have_enqueued_mail(NotifyMailer, :notification_updated)
                         .with(*expected_readonly_notification_args)
       end
     end

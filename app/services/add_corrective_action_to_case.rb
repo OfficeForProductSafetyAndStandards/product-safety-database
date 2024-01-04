@@ -74,7 +74,7 @@ private
     return unless investigation.sends_notifications?
 
     email_recipients_for_team_with_access(investigation, user).each do |recipient|
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,

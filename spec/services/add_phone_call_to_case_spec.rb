@@ -47,7 +47,7 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_mailer, :with_stubbed_antivirus
     end
 
     it "notifies the relevant users", :with_test_queue_adapter do
-      expect { described_class.call(params) }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+      expect { described_class.call(params) }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
         investigation.pretty_id,
         investigation.owner_team.name,
         investigation.owner_team.email,

@@ -133,7 +133,8 @@ private
                      Trading_Standards_Region
                      Regulator_Name
                      OPSS_Internal_Team
-                     Non_Compliant_Reason]
+                     Non_Compliant_Reason
+                     Unsafe_Reason]
   end
 
   def find_cases(ids)
@@ -154,7 +155,7 @@ private
       investigation.is_closed? ? "Closed" : "Open",
       investigation.title,
       investigation.type,
-      investigation.object.description,
+      restrict_data_for_non_opss_user(investigation.object.description),
       investigation.categories.join(", "),
       investigation.hazard_type,
       investigation.risk_level_description,
@@ -167,16 +168,21 @@ private
       investigation.created_at,
       investigation.updated_at,
       investigation.date_closed,
-      investigation.risk_validated_at,
+      restrict_data_for_non_opss_user(investigation.risk_validated_at),
       investigation.creator_user&.team&.name,
       country_from_code(investigation.notifying_country, Country.notifying_countries),
       investigation.reported_reason,
       investigation.complainant_reference,
       team_data.ts_region,
       team_data.regulator_name,
-      (team_data.type == "internal"),
-      investigation.non_compliant_reason
+      restrict_data_for_non_opss_user((team_data.type == "internal")),
+      investigation.non_compliant_reason,
+      investigation.hazard_description
     ]
+  end
+
+  def restrict_data_for_non_opss_user(field)
+    user.is_opss? ? field : "Restricted"
   end
 
   def restricted_data(investigation)
@@ -207,7 +213,9 @@ private
       "Restricted",
       team_data.ts_region,
       team_data.regulator_name,
-      (team_data.type == "internal")
+      (team_data.type == "internal"),
+      investigation.non_compliant_reason,
+      investigation.hazard_description
     ]
   end
 end

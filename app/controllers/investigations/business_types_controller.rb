@@ -15,11 +15,11 @@ class Investigations::BusinessTypesController < Investigations::BaseController
       if @business_type_form.is_approved_online_marketplace?
         online_marketplace = @business_type_form.approved_online_marketplace
 
-        AddBusinessToCase.call!(
+        AddBusinessToNotification.call!(
           business: online_marketplace.business,
           relationship: "online_marketplace",
           online_marketplace:,
-          investigation: @investigation,
+          notification: @investigation,
           user: current_user
         )
 

@@ -93,7 +93,7 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
         end
 
         it "does not send any notification updated emails" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
 

@@ -88,7 +88,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
         result
         email = delivered_emails.last
         expect(email.recipient).to eq(team.email)
-        expect(email.action_name).to eq("investigation_updated")
+        expect(email.action_name).to eq("notification_updated")
       end
     end
 

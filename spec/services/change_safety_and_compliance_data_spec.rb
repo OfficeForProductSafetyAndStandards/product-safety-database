@@ -88,7 +88,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
         end
 
         it "sends an email to notify of the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
@@ -137,7 +137,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
         end
 
         it "sends an email to notify of the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
@@ -184,7 +184,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
         end
 
         it "sends an email to notify of the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
@@ -230,7 +230,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
         end
 
         it "sends an email to notify of the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,

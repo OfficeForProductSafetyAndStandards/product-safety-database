@@ -65,7 +65,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
         end
 
         it "does not send any emails" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
 
@@ -87,7 +87,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
         end
 
         it "does not send an email" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
 
@@ -104,7 +104,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
       end
 
       it "sends a notification email to the new owner" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
           notification.pretty_id,
           new_owner.name,
           new_owner.email,
@@ -114,7 +114,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
       end
 
       it "sends a notification email to the old owner" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
           notification.pretty_id,
           old_owner.name,
           old_owner.email,
@@ -127,7 +127,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
         let(:rationale) { nil }
 
         it "does not add a message to the notification email" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             notification.pretty_id,
             old_owner.name,
             old_owner.email,
@@ -141,7 +141,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
         let(:user) { old_owner }
 
         it "does not send a notification email to the old owner" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated).with(
             notification.pretty_id,
             old_owner.name,
             old_owner.email,
@@ -158,7 +158,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           let(:team) { create(:team, team_recipient_email: Faker::Internet.email) }
 
           it "sends a notification email to the team" do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
               notification.pretty_id,
               team.name,
               team.team_recipient_email,
@@ -175,7 +175,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
           before { create(:user, team:, organisation: team.organisation) }
 
           it "sends an email to each of the team's active users" do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).twice
+            expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).twice
           end
         end
 

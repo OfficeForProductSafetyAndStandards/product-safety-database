@@ -5,7 +5,7 @@ RSpec.shared_examples "a service which notifies the investigation creator", :wit
     let(:creator_user) { user }
 
     it "does not send an email" do
-      expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -13,7 +13,7 @@ RSpec.shared_examples "a service which notifies the investigation creator", :wit
     let(:creator_user) { create(:user, :activated, team: user.team, organisation: user.organisation) }
 
     it "sends an email to the user" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+      expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
         investigation.pretty_id,
         creator_user.name,
         creator_user.email,
@@ -27,7 +27,7 @@ RSpec.shared_examples "a service which notifies the investigation creator", :wit
         before { ChangeNotificationStatus.call!(notification: investigation, user:, new_status: "closed") }
 
         it "does not send an email" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
     end
@@ -41,7 +41,7 @@ RSpec.shared_examples "a service which notifies the notification creator", :with
     let(:creator_user) { user }
 
     it "does not send an email" do
-      expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.shared_examples "a service which notifies the notification creator", :with
     let(:creator_user) { create(:user, :activated, team: user.team, organisation: user.organisation) }
 
     it "sends an email to the user" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+      expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
         notification.pretty_id,
         creator_user.name,
         creator_user.email,
@@ -63,7 +63,7 @@ RSpec.shared_examples "a service which notifies the notification creator", :with
         before { ChangeNotificationStatus.call!(notification:, user:, new_status: "closed") }
 
         it "does not send an email" do
-          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         end
       end
     end

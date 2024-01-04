@@ -149,7 +149,7 @@ private
     return unless @parent.sends_notifications?
 
     email_recipients_for_case_owner.each do |recipient|
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         @parent.pretty_id,
         recipient.name,
         recipient.email,
@@ -163,7 +163,7 @@ private
     return unless @parent.sends_notifications?
 
     email_recipients_for_case_owner.each do |recipient|
-      NotifyMailer.investigation_updated(
+      NotifyMailer.notification_updated(
         @parent.pretty_id,
         recipient.name,
         recipient.email,
