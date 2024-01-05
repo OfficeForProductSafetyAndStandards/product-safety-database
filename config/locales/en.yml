@@ -383,26 +383,24 @@ en:
       index:
         sections:
           product:
-            title: Choose the product for the notification
+            title: Choose the product for your notification
             tasks:
               search_for_or_add_a_product:
                 title: Search for or add a product
           notification_details:
             title: Add notification and additional product details
             tasks:
-              add_product_notification_details:
-                title: Add product notification details
+              add_notification_details:
+                title: Add notification details
               add_product_safety_and_compliance_details:
                 title: Add product safety and compliance details
               add_product_identification_details:
                 title: Add product identification details
           business_details:
-            title: Add business that supplied the product
+            title: Add the business in the product's supply chain
             tasks:
-              select_business_type:
-                title: Select business type
               add_business_details:
-                title: Add business details
+                title: Add the type and details of the business
           evidence:
             title: Add evidence
             tasks:
@@ -410,15 +408,17 @@ en:
                 title: Add test reports
               add_supporting_images:
                 title: Add supporting images
+              add_supporting_documents:
+                title: Add supporting documents
               create_or_add_risk_assessment:
                 title: Create or add risk assessment
-              determine_overall_product_risk_level:
-                title: Determine overall product risk level
+              determine_notification_risk_level:
+                title: Determine notification risk level
           corrective_actions:
             title: Add corrective actions
             tasks:
-              record_a_corrective_action_for_the_product:
-                title: Record a corrective action for the product
+              record_a_corrective_action:
+                title: Record a corrective action
           submit:
             title: Submit notification
             tasks:

@@ -14,14 +14,14 @@ module Notifications
 
     TASK_LIST_SECTIONS = {
       "product" => %i[search_for_or_add_a_product],
-      "notification_details" => %i[add_product_notification_details add_product_safety_and_compliance_details add_product_identification_details],
-      "business_details" => %i[select_business_type add_business_details],
-      "evidence" => %i[add_test_reports add_supporting_images create_or_add_risk_assessment determine_overall_product_risk_level],
-      "corrective_actions" => %i[record_a_corrective_action_for_the_product],
+      "notification_details" => %i[add_notification_details add_product_safety_and_compliance_details add_product_identification_details],
+      "business_details" => %i[add_business_details],
+      "evidence" => %i[add_test_reports add_supporting_images add_supporting_documents create_or_add_risk_assessment determine_notification_risk_level],
+      "corrective_actions" => %i[record_a_corrective_action],
       "submit" => %i[check_notification_details_and_submit]
     }.freeze
 
-    TASK_LIST_SECTIONS_OPTIONAL = %w[evidence corrective_actions].freeze
+    TASK_LIST_SECTIONS_OPTIONAL = %w[evidence].freeze
 
     def index
       if params[:notification_pretty_id].present?
