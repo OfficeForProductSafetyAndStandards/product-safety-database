@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:investigation) { create(:project, creator: creator_user) }
+  let(:notification) { create(:notification, creator: creator_user) }
   let(:user) { create(:user, :activated) }
   let(:creator_user) { create(:user, :activated) }
 
   context "when user does not have `risk_level_validator` role" do
     it "does not show the validate button" do
       sign_in user
-      visit investigation_path(investigation)
+      visit investigation_path(notification)
 
       expect(page).not_to have_link "Validate"
     end
@@ -18,7 +18,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
     before do
       AddTeamToNotification.call!(
         user:,
-        investigation:,
+        notification:,
         team: user.team,
         collaboration_class: Collaboration::Access::Edit
       )
@@ -29,11 +29,11 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
     end
 
     scenario "validate the level" do
-      visit investigation_path(investigation)
+      visit investigation_path(notification)
 
       click_link "Validate"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}/validate-risk-level/edit")
 
       within_fieldset("Has the notification risk level been validated?") do
         choose "Yes"
@@ -41,9 +41,9 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       click_on "Continue"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}")
       expect_confirmation_banner("The notification risk level has updated")
-      expect(page).to have_css(".govuk-summary-list__value", text: "Validated by #{user.team.name} on #{investigation.risk_validated_at}")
+      expect(page).to have_css(".govuk-summary-list__value", text: "Validated by #{user.team.name} on #{notification.risk_validated_at}")
       expect(page).not_to have_link("Validate")
 
       click_on "Activity"
@@ -53,11 +53,11 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
     end
 
     scenario "do not validate the level" do
-      visit investigation_path(investigation)
+      visit investigation_path(notification)
 
       click_link "Validate"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}/validate-risk-level/edit")
 
       within_fieldset("Has the notification risk level been validated?") do
         choose "No"
@@ -65,9 +65,9 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       click_on "Continue"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}")
       expect(page).not_to have_content("The notification risk level has updated")
-      expect(page).not_to have_content("Validated by #{user.team.name} on #{investigation.risk_validated_at}")
+      expect(page).not_to have_content("Validated by #{user.team.name} on #{notification.risk_validated_at}")
       expect(page).to have_link("Validate")
 
       click_on "Activity"
@@ -75,7 +75,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
     end
 
     scenario "remove validation" do
-      visit("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
+      visit("/cases/#{notification.pretty_id}/validate-risk-level/edit")
 
       within_fieldset("Has the notification risk level been validated?") do
         choose "Yes"
@@ -83,9 +83,9 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       click_on "Continue"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}")
 
-      validation_link = page.find(:css, "a[href='/cases/#{investigation.pretty_id}/validate-risk-level/edit']")
+      validation_link = page.find(:css, "a[href='/cases/#{notification.pretty_id}/validate-risk-level/edit']")
       expect(validation_link.text).to eq "Change"
 
       validation_link.click
@@ -105,9 +105,9 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       click_on "Continue"
 
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}")
       expect(page).not_to have_content("The notification risk level has updated")
-      expect(page).not_to have_content("Validated by #{user.team.name} on #{investigation.risk_validated_at}")
+      expect(page).not_to have_content("Validated by #{user.team.name} on #{notification.risk_validated_at}")
       expect(page).to have_link("Validate")
 
       click_on "Activity"
@@ -124,9 +124,9 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
       expect(delivered_email.action_name).to eq "risk_validation_updated"
       expect(delivered_email.personalization).to include(
         name: creator_user.team.name,
-        case_title: investigation.user_title,
+        case_title: notification.user_title,
         case_type: "notification",
-        case_id: investigation.pretty_id,
+        case_id: notification.pretty_id,
         updater_name: user.name,
         updater_team_name: user.team.name,
         action:
