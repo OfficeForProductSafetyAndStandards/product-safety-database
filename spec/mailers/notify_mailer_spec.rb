@@ -130,10 +130,10 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
-  describe "#team_added_to_case_email" do
-    subject(:mail) { described_class.team_added_to_case_email(investigation:, team:, added_by_user: user, message:, to_email: "test@example.com") }
+  describe "#team_added_to_notification_email" do
+    subject(:mail) { described_class.team_added_to_notification_email(notification:, team:, added_by_user: user, message:, to_email: "test@example.com") }
 
-    let(:investigation) { create(:allegation, creator: user) }
+    let(:notification) { create(:notification, creator: user) }
     let(:user) { create(:user, :activated, name: "Bob Jones") }
     let(:team) { create(:team) }
 
@@ -144,7 +144,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
         expect(mail.govuk_notify_personalisation).to eql(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "Message from Bob Jones (#{user.team.name}):\n\n^ Thanks for collaborating!",
-          investigation_url: investigation_url(investigation)
+          investigation_url: investigation_url(notification)
         )
       end
     end
@@ -156,7 +156,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
         expect(mail.govuk_notify_personalisation).to eql(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "",
-          investigation_url: investigation_url(investigation)
+          investigation_url: investigation_url(notification)
         )
       end
     end

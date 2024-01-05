@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe CorrespondenceDecorator, :with_stubbed_mailer do
-  subject { build(:email, investigation:).decorate }
+  subject { build(:email, investigation: notification).decorate }
 
-  let(:user)          { create(:user) }
-  let(:investigation) { create(:allegation) }
+  let(:user)         { create(:user) }
+  let(:notification) { create(:notification) }
 
   describe "#activity_cell_partial" do
     let(:partial) { subject.activity_cell_partial(viewing_user) }
@@ -13,9 +13,9 @@ RSpec.describe CorrespondenceDecorator, :with_stubbed_mailer do
       let(:viewing_user) { user }
 
       before do
-        AddTeamToCase.call!(
+        AddTeamToNotification.call!(
           user:,
-          investigation:,
+          notification:,
           team: viewing_user.team,
           collaboration_class: Collaboration::Access::Edit
         )
