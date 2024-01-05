@@ -1,4 +1,4 @@
-class EditCaseCollaboratorForm
+class EditNotificationCollaboratorForm
   PERMISSION_LEVEL_DELETE = "delete".freeze
   include ActiveModel::Model
   include ActiveModel::Attributes

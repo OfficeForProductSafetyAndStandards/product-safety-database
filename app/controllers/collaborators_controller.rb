@@ -36,7 +36,7 @@ class CollaboratorsController < Investigations::BaseController
     @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
 
-    @edit_form = EditCaseCollaboratorForm.new(collaboration: @collaboration)
+    @edit_form = EditNotificationCollaboratorForm.new(collaboration: @collaboration)
   rescue ActiveRecord::RecordNotFound
     render_404_page
   end
@@ -49,7 +49,7 @@ class CollaboratorsController < Investigations::BaseController
 
     @collaborator = @collaboration.collaborator
 
-    @edit_form = EditCaseCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))
+    @edit_form = EditNotificationCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))
 
     return render :edit, status: :bad_request unless @edit_form.valid?
 
