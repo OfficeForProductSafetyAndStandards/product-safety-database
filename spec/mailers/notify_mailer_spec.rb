@@ -271,7 +271,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       let(:message) { nil }
 
       it "sets the personalisation" do
-      expect_personalisation_to_include_notification_attributes
+        expect_personalisation_to_include_notification_attributes
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "",
