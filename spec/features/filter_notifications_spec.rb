@@ -11,8 +11,8 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
   let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation:, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
-  let!(:notification)                       { create(:notification, creator: user, hazard_type: "Fire") }
-  let!(:notification)                        { create(:notification, creator: user) }
+  let!(:notification) { create(:notification, creator: user, hazard_type: "Fire") }
+  let!(:notification) { create(:notification, creator: user) }
   let!(:deleted_notification)               { create(:notification, creator: user, hazard_type: "Fire", deleted_at: Time.zone.now) }
   let!(:other_user_notification)            { create(:notification, creator: other_user_same_team, hazard_type: "Fire") }
   let!(:other_user_other_team_notification) { create(:notification, creator: other_user_other_team) }
