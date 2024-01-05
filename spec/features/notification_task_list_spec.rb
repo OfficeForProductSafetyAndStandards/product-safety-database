@@ -33,7 +33,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     visit "/notifications/create"
 
     click_link "Search for or add a product"
-    click_link "Create a product record"
+    click_link "Add a product"
 
     select new_product_attributes[:category], from: "Product category"
 

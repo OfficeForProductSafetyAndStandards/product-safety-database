@@ -47,10 +47,8 @@ module Notifications
 
     def add_product
       # Add a newly-created product to an existing notification
-      if @notification.investigation_products.blank?
-        product = Product.find(params[:product_id])
-        AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
-      end
+      product = Product.find(params[:product_id])
+      AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
       @notification.tasks_status["search_for_or_add_a_product"] = "completed"
       @notification.save!(context: :search_for_or_add_a_product)
       redirect_to notification_create_index_path(@notification)
@@ -88,6 +86,7 @@ module Notifications
 
         @records_count = products.size
         @pagy, @records = pagy(products)
+        @existing_product_ids = InvestigationProduct.where(investigation: @notification).pluck(:product_id)
       end
 
       render_wizard
@@ -96,10 +95,8 @@ module Notifications
     def update
       case step
       when :search_for_or_add_a_product
-        if @notification.investigation_products.blank?
-          product = Product.find(params[:product_id])
-          AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
-        end
+        product = Product.find(params[:product_id])
+        AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
       end
 
       @notification.tasks_status[step.to_s] = "completed"
