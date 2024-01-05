@@ -49,14 +49,14 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
   context "when there are notifications" do
     let(:other_user_same_team) { create(:user, :activated, has_viewed_introduction: true, team:) }
-    let!(:user_case) { create(:allegation, :with_products, creator: user, user_title: "User notification title") }
-    let!(:user_case_without_products) { create(:allegation, creator: user, user_title: "User notification no products title") }
-    let!(:other_case) { create(:allegation, user_title: "Other notification title") }
-    let!(:team_case) { create(:allegation, creator: other_user_same_team, user_title: "Team notification title") }
+    let!(:user_notification) { create(:notification, :with_products, creator: user, user_title: "User notification title") }
+    let!(:user_notification_without_products) { create(:notification, creator: user, user_title: "User notification no products title") }
+    let!(:other_notification) { create(:notification, user_title: "Other notification title") }
+    let!(:team_notification) { create(:notification, creator: other_user_same_team, user_title: "Team notification title") }
 
     let(:different_team) { create :team, name: "Different team" }
     let(:different_user) { create :user, :activated, has_viewed_introduction: true, team: different_team }
-    let!(:different_team_case) { create(:allegation, creator: different_user, user_title: "Different team notification title") }
+    let!(:different_team_notification) { create(:notification, creator: different_user, user_title: "Different team notification title") }
 
     before do
       Investigation.reindex
@@ -68,32 +68,32 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
       end
 
       it "shows notifications that are owned by the user" do
-        expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
-        expect(page).to have_selector("td.govuk-table__cell", text: user_case_without_products.pretty_id)
-        expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
-        expect(page).not_to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
-        expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: user_notification.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: user_notification_without_products.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: other_notification.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: team_notification.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_notification.pretty_id)
       end
 
       it "indicates which notifications do not have a product attached" do
-        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case.id)) do
+        within(sprintf('td[headers="item_investigation_%{id} status_investigation_%{id}"]', id: user_notification.id)) do
           expect(page).not_to have_content("This notification has no product")
         end
 
-        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case_without_products.id)) do
+        within(sprintf('td[headers="item_investigation_%{id} status_investigation_%{id}"]', id: user_notification_without_products.id)) do
           expect(page).to have_content("This notification has no product")
         end
       end
 
       context "when we click on a notification" do
         before do
-          within "#item_investigation_allegation_#{user_case.id}" do
-            click_on user_case.title
+          within "#item_investigation_#{user_notification.id}" do
+            click_on user_notification.title
           end
         end
 
         it "takes us to the notification page" do
-          expect(page).to have_current_path("/cases/#{user_case.pretty_id}")
+          expect(page).to have_current_path("/cases/#{user_notification.pretty_id}")
         end
 
         it "has 'Your notifications' in the breadcrumb" do
@@ -111,7 +111,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       context "when more than 11 notifications" do
         before do
-          create_list(:allegation, 11, creator: user)
+          create_list(:notification, 11, creator: user)
           Investigation.reindex
           visit "/cases/your-cases"
         end
@@ -141,31 +141,31 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
       end
 
       it "shows cases that are owned by the users team" do
-        expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
-        expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
-        expect(page).not_to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
-        expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: user_notification.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: team_notification.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: other_notification.pretty_id)
+        expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_notification.pretty_id)
       end
 
       it "indicates which cases do not have a product attached" do
-        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case.id)) do
+        within(sprintf('td[headers="item_investigation_%{id} status_investigation_%{id}"]', id: user_notification.id)) do
           expect(page).not_to have_content("This notification has no product")
         end
 
-        within(sprintf('td[headers="item_investigation_allegation_%{id} status_investigation_allegation_%{id}"]', id: user_case_without_products.id)) do
+        within(sprintf('td[headers="item_investigation_%{id} status_investigation_%{id}"]', id: user_notification_without_products.id)) do
           expect(page).to have_content("This notification has no product")
         end
       end
 
       context "when we click on a notification" do
         before do
-          within "#item_investigation_allegation_#{team_case.id}" do
-            click_on team_case.title
+          within "#item_investigation_#{team_notification.id}" do
+            click_on team_notification.title
           end
         end
 
         it "takes us to the notifications page" do
-          expect(page).to have_current_path("/cases/#{team_case.pretty_id}")
+          expect(page).to have_current_path("/cases/#{team_notification.pretty_id}")
         end
 
         it "has 'Team notifications' in the breadcrumb" do
@@ -183,7 +183,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       context "when more than 11 notifications" do
         before do
-          create_list(:allegation, 11, creator: other_user_same_team)
+          create_list(:notification, 11, creator: other_user_same_team)
           Investigation.reindex
           visit "/cases/team-cases"
         end
@@ -212,10 +212,10 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
       end
 
       it "shows all notifications" do
-        expect(page).to have_selector("td.govuk-table__cell", text: user_case.pretty_id)
-        expect(page).to have_selector("td.govuk-table__cell", text: other_case.pretty_id)
-        expect(page).to have_selector("td.govuk-table__cell", text: team_case.pretty_id)
-        expect(page).to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: user_notification.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: other_notification.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: team_notification.pretty_id)
+        expect(page).to have_selector("td.govuk-table__cell", text: different_team_notification.pretty_id)
       end
 
       it "highlights the all notifications tab" do
@@ -224,13 +224,13 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       context "when we click on a notifications" do
         before do
-          within "#item_investigation_allegation_#{user_case.id}" do
-            click_on user_case.title
+          within "#item_investigation_#{user_notification.id}" do
+            click_on user_notification.title
           end
         end
 
         it "takes us to the notifications page" do
-          expect(page).to have_current_path("/cases/#{user_case.pretty_id}")
+          expect(page).to have_current_path("/cases/#{user_notification.pretty_id}")
         end
 
         it "has 'All notifications' in the breadcrumb" do
@@ -248,7 +248,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
       context "when more than 11 notifications" do
         before do
-          create_list(:allegation, 11)
+          create_list(:notification, 11)
           Investigation.reindex
           visit "/cases/all-cases"
         end
@@ -273,7 +273,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     context "when the different team notification is assigned to the user's team" do
       before do
-        AddTeamToNotification.call(user:, investigation: different_team_case, team:, collaboration_class: Collaboration::Access::Edit)
+        AddTeamToNotification.call(user:, notification: different_team_notification, team:, collaboration_class: Collaboration::Access::Edit)
         Investigation.reindex
         click_on "All notifications"
       end
@@ -284,7 +284,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         end
 
         it "does not show the notification" do
-          expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+          expect(page).not_to have_selector("td.govuk-table__cell", text: different_team_notification.pretty_id)
         end
       end
 
@@ -294,7 +294,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         end
 
         it "shows the notification" do
-          expect(page).to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+          expect(page).to have_selector("td.govuk-table__cell", text: different_team_notification.pretty_id)
         end
       end
 
@@ -304,7 +304,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
         end
 
         it "shows the notification" do
-          expect(page).to have_selector("td.govuk-table__cell", text: different_team_case.pretty_id)
+          expect(page).to have_selector("td.govuk-table__cell", text: different_team_notification.pretty_id)
         end
       end
     end
