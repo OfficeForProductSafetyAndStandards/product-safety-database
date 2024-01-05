@@ -6,7 +6,7 @@ en:
         set: "set to %{level}"
         changed: "changed to %{level}"
         removed: "removed"
-    team_added_to_case:
+    team_added_to_notification:
       message_from: "Message from %{user_name}:"
     team_removed_from_notification:
       message_from: "Message from %{user_name}:"

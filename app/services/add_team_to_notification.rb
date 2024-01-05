@@ -1,17 +1,17 @@
 class AddTeamToNotification
   include Interactor
 
-  delegate :collaboration, :user, :investigation, :team, :collaboration_class, :message, to: :context
+  delegate :collaboration, :user, :notification, :team, :collaboration_class, :message, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No team supplied") unless team.is_a?(Team)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     begin
       ActiveRecord::Base.transaction do
         context.collaboration = collaboration_class.create!(
-          investigation:,
+          investigation: notification,
           collaborator: team,
           added_by_user: user,
           message:
@@ -21,7 +21,7 @@ class AddTeamToNotification
       end
 
       send_notification_email unless context.silent
-      investigation.reindex
+      notification.reindex
     rescue ActiveRecord::RecordNotUnique
       # Collaborator already added, so return successful but without notifying the team
       # or creating an audit log.
@@ -37,11 +37,11 @@ private
   end
 
   def send_notification_email
-    return unless investigation.sends_notifications?
+    return unless notification.sends_notifications?
 
     entities_to_notify.each do |entity|
-      NotifyMailer.team_added_to_case_email(
-        investigation:,
+      NotifyMailer.team_added_to_notification_email(
+        notification:,
         team:,
         added_by_user: user,
         message:,
@@ -59,7 +59,7 @@ private
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       metadata:
     )
   end

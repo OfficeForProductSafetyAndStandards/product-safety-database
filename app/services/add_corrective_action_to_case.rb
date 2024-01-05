@@ -46,7 +46,7 @@ private
     return if team.blank?
 
     AddTeamToNotification.call!(
-      investigation:,
+      notification: investigation,
       team:,
       collaboration_class: Collaboration::Access::Edit,
       user:,

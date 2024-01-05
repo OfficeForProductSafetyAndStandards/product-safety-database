@@ -72,7 +72,7 @@ private
 
   def add_new_team_to_case(collaboration)
     AddTeamToNotification.call!(
-      investigation: collaboration.investigation,
+      notification: collaboration.investigation,
       team: new_team,
       collaboration_class: collaboration.class,
       user:,

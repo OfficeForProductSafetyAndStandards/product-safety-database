@@ -9,13 +9,13 @@ RSpec.shared_examples "a service which notifies teams with access" do
   before do
     AddTeamToNotification.call!(
       user:,
-      investigation:,
+      notification: investigation,
       team: team_with_edit_access,
       collaboration_class: Collaboration::Access::Edit
     )
     AddTeamToNotification.call!(
       user:,
-      investigation:,
+      notification: investigation,
       team: team_with_readonly_access,
       collaboration_class: Collaboration::Access::ReadOnly
     )

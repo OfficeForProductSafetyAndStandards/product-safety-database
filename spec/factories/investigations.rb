@@ -123,11 +123,11 @@ FactoryBot.define do
       end
     end
 
-    after(:create) do |investigation, evaluator|
+    after(:create) do |notification, evaluator|
       Array.wrap(evaluator.read_only_teams).each do |read_only_team|
         AddTeamToNotification.call!(
-          investigation:,
-          user: investigation.creator_user,
+          notification:,
+          user: notification.creator_user,
           team: read_only_team,
           collaboration_class: Collaboration::Access::ReadOnly
         )
@@ -135,8 +135,8 @@ FactoryBot.define do
 
       Array.wrap(evaluator.edit_access_teams).each do |edit_access_team|
         AddTeamToNotification.call!(
-          investigation:,
-          user: investigation.creator_user,
+          notification:,
+          user: notification.creator_user,
           team: edit_access_team,
           collaboration_class: Collaboration::Access::Edit
         )

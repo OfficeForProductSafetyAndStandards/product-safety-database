@@ -73,7 +73,7 @@ RSpec.describe ChangeNotificationOwner, :with_test_queue_adapter do
         let(:new_owner) { create(:team) }
 
         before do
-          AddTeamToNotification.call!(investigation: notification, user: notification.owner_user, team: new_owner, collaboration_class: Collaboration::Access::ReadOnly)
+          AddTeamToNotification.call!(notification:, user: notification.owner_user, team: new_owner, collaboration_class: Collaboration::Access::ReadOnly)
         end
 
         specify { expect(result).to be_success }

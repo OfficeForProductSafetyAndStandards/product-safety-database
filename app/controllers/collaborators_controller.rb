@@ -22,7 +22,7 @@ class CollaboratorsController < Investigations::BaseController
     end
 
     AddTeamToNotification.call!(
-      investigation: @investigation,
+      notification: @investigation,
       collaboration_class: @form.collaboration_class,
       user: current_user,
       team: @form.team,
