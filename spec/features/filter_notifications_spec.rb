@@ -19,6 +19,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
   let!(:another_team_notification)          { create(:notification, creator: create(:user)) }
 
   let!(:closed_notification) { create(:notification, :closed) }
+  let!(:allegation) { create(:allegation) }
   let!(:project) { create(:project) }
   let!(:enquiry) { create(:enquiry) }
 
@@ -393,7 +394,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(allegation.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).to     have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
@@ -407,7 +408,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(allegation.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).to     have_listed_case(enquiry.pretty_id)
@@ -421,7 +422,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(allegation.pretty_id)
         expect(page).to     have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
@@ -435,7 +436,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).to     have_listed_case(notification.pretty_id)
+        expect(page).to     have_listed_case(allegation.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
