@@ -9,112 +9,136 @@
           <%= t("notifications.create.index.sections.product.tasks.search_for_or_add_a_product.title") %>
         </h1>
       </div>
-      <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-        <%= govuk_button_link_to "Add a product", new_product_path(notification_pretty_id: @notification.pretty_id), secondary: true %>
-      </div>
+      <% unless @manage %>
+        <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+          <%= govuk_button_link_to "Add a product", new_product_path(notification_pretty_id: @notification.pretty_id), secondary: true %>
+        </div>
+      <% end %>
     </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-quarter">
-        <nav aria-label="Secondary">
-          <ul class="govuk-list opss-left-nav">
-          <% unless ["team_products", "your_products"].include?(@page_name) %>
-            <li class="opss-left-nav__active">
-          <% else %>
-            <li>
-          <% end %>
-              <%= link_to "All products", wizard_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_products", "your_products"].include?(@page_name)) %>
-            </li>
-          <% if @page_name == "team_products" %>
-            <li class="opss-left-nav__active">
-          <% else %>
-            <li>
-          <% end %>
-              <%= link_to "Team products", "#{wizard_path}?page_name=team_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_products") %>
-            </li>
-          <% if @page_name == "your_products" %>
-            <li class="opss-left-nav__active">
-          <% else %>
-            <li>
-          <% end %>
-              <%= link_to "Your products", "#{wizard_path}?page_name=your_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_products") %>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div class="govuk-grid-column-three-quarters">
-        <% unless ["team_products", "your_products"].include?(@page_name) %>
-          <%= form_with url: wizard_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-two-thirds">
-                <div class="moj-search">
-                  <div class="govuk-form-group">
-                    <label for="q-field" class="govuk-label moj-search__label">Search</label>
-                    <input id="q-field" class="govuk-input moj-search__input" aria-describedby="q-hint" type="search" name="q" value="<%= params[:q] %>">
-                  </div>
-                  <button type="submit" formnovalidate="formnovalidate" class="govuk-button moj-search__button" data-module="govuk-button" data-prevent-double-click="true">
-                    <span class="govuk-visually-hidden">Search</span>
-                  </button>
-                </div>
-              </div>
-              <div class="govuk-grid-column-one-third">
-                <%= f.govuk_collection_select :sort_by, sort_by_options, :id, :name, label: { text: "Sort by" }, options: { selected: params[:sort_by] } %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
-        <% if @records.any? %>
-          <p class="govuk-body"><% if @records_count == 1 %>There is currently 1 product.<% else %>There are currently <%= @records_count %> products.<% end %></p>
+    <% if @manage %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <p class="govuk-body">You have added <%= pluralize(@existing_product_ids.length, "product") %>.
           <%=
-            govuk_table do |table|
-              table.with_caption(size: "s", text: "Product details")
-
-              table.with_body do |body|
-                @records.decorate.each do |record|
-                  image = if record.virus_free_images.present?
-                    image_tag(record.virus_free_images.first.file_upload, width: 80, alt: record.virus_free_images.first.file_upload.filename)
-                  else
-                    image_tag("no-product-image.jpg", width: 80, height: 80, alt: "No product image available")
-                  end
-
-                  details = <<~DETAILS.strip
-                    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><a href="#{product_path(record)}" class="govuk-link" target="_blank" rel="noreferrer noopener">#{record.name_with_brand}</a></p>
-                    <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.subcategory_with_brand}</p>
-                    <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.psd_ref}</p>
-                  DETAILS
-
-                  select_button = form_with url: "#{wizard_path}?product_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
-                    f.govuk_submit "Select", name: "final", value: true, secondary: true
-                  end
-
-                  body.with_row do |row|
-                    row.with_cell(text: image.html_safe)
-                    row.with_cell(header: true, text: details.html_safe)
-                    if @existing_product_ids.include?(record.id)
-                      row.with_cell(text: "")
-                    else
-                      row.with_cell(text: select_button)
-                    end
-                  end
+            govuk_summary_list do |summary_list|
+              @notification.products.decorate.each do |product|
+                summary_list.with_row do |row|
+                  row.with_key(text: product.name_with_brand)
+                  row.with_action(text: "Remove", href: "#", visually_hidden_text: "product from notification")
                 end
               end
             end
           %>
-          <%= govuk_pagination(pagy: @pagy) %>
-        <% elsif ["team_products", "your_products"].include?(@page_name) %>
-          <p class="govuk-body">
-            <%= "There are no product records linked to your open cases." if @page_name == "your_products" %>
-            <%= "There are no product records linked to the team's open cases." if @page_name == "team_products" %>
-          </p>
-          <p class="govuk-body">
-            You can search all product records in the <a href="<%= wizard_path %>" class="govuk-link">all products</a> search page.
-          </p>
-        <% else %>
-          <p class="govuk-body">
-            <%= "There are no product records." unless @search_query.present? %>
-            <%= "There are no product records for \"#{@search_query}\"." if @search_query.present? %>
-          </p>
-        <% end %>
+          <%= form_with url: request.fullpath, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+            <%= f.govuk_collection_radio_buttons :add_another_product, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another product?", size: "m" } %>
+            <%= f.govuk_submit("Save and continue") %>
+          <% end %>
+        </div>
       </div>
-    </div>
+    <% else %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+          <nav aria-label="Secondary">
+            <ul class="govuk-list opss-left-nav">
+            <% unless ["team_products", "your_products"].include?(@page_name) %>
+              <li class="opss-left-nav__active">
+            <% else %>
+              <li>
+            <% end %>
+                <%= link_to "All products", wizard_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_products", "your_products"].include?(@page_name)) %>
+              </li>
+            <% if @page_name == "team_products" %>
+              <li class="opss-left-nav__active">
+            <% else %>
+              <li>
+            <% end %>
+                <%= link_to "Team products", "#{wizard_path}?page_name=team_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_products") %>
+              </li>
+            <% if @page_name == "your_products" %>
+              <li class="opss-left-nav__active">
+            <% else %>
+              <li>
+            <% end %>
+                <%= link_to "Your products", "#{wizard_path}?page_name=your_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_products") %>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+          <% unless ["team_products", "your_products"].include?(@page_name) %>
+            <%= form_with url: wizard_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="moj-search">
+                    <div class="govuk-form-group">
+                      <label for="q-field" class="govuk-label moj-search__label">Search</label>
+                      <input id="q-field" class="govuk-input moj-search__input" aria-describedby="q-hint" type="search" name="q" value="<%= params[:q] %>">
+                    </div>
+                    <button type="submit" formnovalidate="formnovalidate" class="govuk-button moj-search__button" data-module="govuk-button" data-prevent-double-click="true">
+                      <span class="govuk-visually-hidden">Search</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-third">
+                  <%= f.govuk_collection_select :sort_by, sort_by_options, :id, :name, label: { text: "Sort by" }, options: { selected: params[:sort_by] } %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+          <% if @records.any? %>
+            <p class="govuk-body"><% if @records_count == 1 %>There is currently 1 product.<% else %>There are currently <%= @records_count %> products.<% end %></p>
+            <%=
+              govuk_table do |table|
+                table.with_caption(size: "s", text: "Product details")
+
+                table.with_body do |body|
+                  @records.decorate.each do |record|
+                    image = if record.virus_free_images.present?
+                      image_tag(record.virus_free_images.first.file_upload, width: 80, alt: record.virus_free_images.first.file_upload.filename)
+                    else
+                      image_tag("no-product-image.jpg", width: 80, height: 80, alt: "No product image available")
+                    end
+
+                    details = <<~DETAILS.strip
+                      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><a href="#{product_path(record)}" class="govuk-link" target="_blank" rel="noreferrer noopener">#{record.name_with_brand}</a></p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.subcategory_with_brand}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.psd_ref}</p>
+                    DETAILS
+
+                    select_button = form_with url: "#{wizard_path}?product_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
+                      f.govuk_submit "Select", name: "final", value: true, secondary: true
+                    end
+
+                    body.with_row do |row|
+                      row.with_cell(text: image.html_safe)
+                      row.with_cell(header: true, text: details.html_safe)
+                      if @existing_product_ids.include?(record.id)
+                        row.with_cell(text: "")
+                      else
+                        row.with_cell(text: select_button)
+                      end
+                    end
+                  end
+                end
+              end
+            %>
+            <%= govuk_pagination(pagy: @pagy) %>
+          <% elsif ["team_products", "your_products"].include?(@page_name) %>
+            <p class="govuk-body">
+              <%= "There are no product records linked to your open cases." if @page_name == "your_products" %>
+              <%= "There are no product records linked to the team's open cases." if @page_name == "team_products" %>
+            </p>
+            <p class="govuk-body">
+              You can search all product records in the <a href="<%= wizard_path %>" class="govuk-link">all products</a> search page.
+            </p>
+          <% else %>
+            <p class="govuk-body">
+              <%= "There are no product records." unless @search_query.present? %>
+              <%= "There are no product records for \"#{@search_query}\"." if @search_query.present? %>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
