@@ -33,7 +33,7 @@ RSpec.describe "Editing a collaborator for a notification", type: :request, with
     let(:include_message) { "false" }
 
     let(:params) do
-      { edit_case_collaborator_form: {
+      { edit_notification_collaborator_form: {
         permission_level:,
         message:,
         include_message:,

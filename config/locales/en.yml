@@ -650,7 +650,7 @@ en:
           attributes:
             action:
               blank: "Select an action"
-        edit_case_collaborator_form:
+        edit_notification_collaborator_form:
           attributes:
             include_message:
               inclusion: "Select whether you want to include a message"

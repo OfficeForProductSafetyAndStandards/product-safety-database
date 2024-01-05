@@ -90,6 +90,6 @@ private
   end
 
   def edit_params
-    params.require(:edit_case_collaborator_form).permit(:permission_level, :include_message, :message)
+    params.require(:edit_notification_collaborator_form).permit(:permission_level, :include_message, :message)
   end
 end
