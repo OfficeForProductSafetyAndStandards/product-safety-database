@@ -33,7 +33,7 @@ RSpec.describe AddTeamToNotification, :with_stubbed_mailer, :with_stubbed_opense
   end
 
   context "with no team parameter" do
-    let(:result) { described_class.call(investigation:, user:) }
+    let(:result) { described_class.call(notification:, user:) }
 
     it "returns a failure" do
       expect(result).to be_failure
