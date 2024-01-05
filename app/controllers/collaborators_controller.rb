@@ -9,19 +9,19 @@ class CollaboratorsController < Investigations::BaseController
   end
 
   def new
-    @form = AddTeamToCaseForm.new
+    @form = AddTeamToNotificationForm.new
     @teams = teams_without_access
   end
 
   def create
-    @form = AddTeamToCaseForm.new(params.require(:add_team_to_case_form).permit(:team_id, :permission_level, :message, :include_message))
+    @form = AddTeamToNotificationForm.new(params.require(:add_team_to_case_form).permit(:team_id, :permission_level, :message, :include_message))
 
     unless @form.valid?
       @teams = teams_without_access
       return render(:new, status: :unprocessable_entity)
     end
 
-    AddTeamToCase.call!(
+    AddTeamToNotification.call!(
       investigation: @investigation,
       collaboration_class: @form.collaboration_class,
       user: current_user,

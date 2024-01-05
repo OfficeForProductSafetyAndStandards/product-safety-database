@@ -16,7 +16,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_antiv
   let(:investigation)    { create(:allegation, creator: case_creator) }
   let(:editor_team)      do
     create(:team).tap do |t|
-      AddTeamToCase.call!(
+      AddTeamToNotification.call!(
         investigation:,
         team: t,
         collaboration_class: Collaboration::Access::Edit,

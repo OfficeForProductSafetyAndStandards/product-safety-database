@@ -16,7 +16,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
   context "when user has `risk_level_validator` role" do
     before do
-      AddTeamToCase.call!(
+      AddTeamToNotification.call!(
         user:,
         investigation:,
         team: user.team,

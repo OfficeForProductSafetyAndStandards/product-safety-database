@@ -13,7 +13,7 @@ RSpec.describe CorrespondenceDecorator, :with_stubbed_mailer do
       let(:viewing_user) { user }
 
       before do
-        AddTeamToCase.call!(
+        AddTeamToNotification.call!(
           user:,
           investigation:,
           team: viewing_user.team,

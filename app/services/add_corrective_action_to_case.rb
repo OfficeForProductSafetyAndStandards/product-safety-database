@@ -37,7 +37,7 @@ private
     # OPSS IMT is automatically added to an investigation with edit permissions
     # on adding a corrective action if either the risk level is serious/high or
     # the corrective action indicates a recall. If OPSS IMT has already been added,
-    # `AddTeamToCase` returns silently.
+    # `AddTeamToNotification` returns silently.
 
     return unless %w[serious high].include?(investigation.risk_level) || action == "recall_of_the_product_from_end_users"
 
@@ -45,7 +45,7 @@ private
 
     return if team.blank?
 
-    AddTeamToCase.call!(
+    AddTeamToNotification.call!(
       investigation:,
       team:,
       collaboration_class: Collaboration::Access::Edit,

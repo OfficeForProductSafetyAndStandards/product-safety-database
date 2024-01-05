@@ -273,7 +273,7 @@ RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer,
 
     context "when the different team notification is assigned to the user's team" do
       before do
-        AddTeamToCase.call(user:, investigation: different_team_case, team:, collaboration_class: Collaboration::Access::Edit)
+        AddTeamToNotification.call(user:, investigation: different_team_case, team:, collaboration_class: Collaboration::Access::Edit)
         Investigation.reindex
         click_on "All notifications"
       end

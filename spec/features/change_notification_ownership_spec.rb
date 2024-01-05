@@ -119,7 +119,7 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
     let(:other_team_with_read_only_access) { create(:team) }
 
     before do
-      AddTeamToCase.call(
+      AddTeamToNotification.call(
         team: other_team_with_edit_access,
         message: "na",
         investigation: notification,
@@ -128,7 +128,7 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
         silent: true
       )
 
-      AddTeamToCase.call(
+      AddTeamToNotification.call(
         team: other_team_with_read_only_access,
         message: "na",
         investigation: notification,

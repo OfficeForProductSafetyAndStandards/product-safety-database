@@ -126,7 +126,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       context "when the new team was already a collaborator on the notification" do
         before do
-          AddTeamToCase.call!(
+          AddTeamToNotification.call!(
             investigation: team_case,
             user: team_user,
             team: new_team,
@@ -163,7 +163,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       context "when the new team is already a collaborator on the notification" do
         before do
-          AddTeamToCase.call!(
+          AddTeamToNotification.call!(
             investigation: team_case,
             user: team_user,
             team: new_team,

@@ -1,4 +1,4 @@
-class AddTeamToCase
+class AddTeamToNotification
   include Interactor
 
   delegate :collaboration, :user, :investigation, :team, :collaboration_class, :message, to: :context

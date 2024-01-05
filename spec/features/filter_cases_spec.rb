@@ -215,7 +215,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
 
     describe "Teams added to notifications", :with_stubbed_mailer do
       before do
-        AddTeamToCase.call!(
+        AddTeamToNotification.call!(
           investigation: other_user_other_team_investigation,
           user:,
           team: chosen_team,

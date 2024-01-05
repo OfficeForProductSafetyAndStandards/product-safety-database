@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_opensearch do
+RSpec.describe AddTeamToNotification, :with_stubbed_mailer, :with_stubbed_opensearch do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation) }
 
