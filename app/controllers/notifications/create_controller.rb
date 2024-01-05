@@ -57,6 +57,9 @@ module Notifications
     def show
       case step
       when :search_for_or_add_a_product
+        return redirect_to wizard_path(:search_for_or_add_a_product) if params[:add_another_product] == "true"
+        return redirect_to notification_create_index_path(@notification) if params[:add_another_product] == "false"
+
         @page_name = params[:page_name]
         @search_query = params[:q].presence
         sort_by = {
@@ -87,6 +90,7 @@ module Notifications
         @records_count = products.size
         @pagy, @records = pagy(products)
         @existing_product_ids = InvestigationProduct.where(investigation: @notification).pluck(:product_id)
+        @manage = request.query_string != "search" && @existing_product_ids.present?
       end
 
       render_wizard
