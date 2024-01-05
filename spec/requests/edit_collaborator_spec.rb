@@ -28,12 +28,12 @@ RSpec.describe "Editing a collaborator for a notification", type: :request, with
   end
 
   context "when deleting" do
-    let(:permission_level) { EditCaseCollaboratorForm::PERMISSION_LEVEL_DELETE }
+    let(:permission_level) { EditNotificationCollaboratorForm::PERMISSION_LEVEL_DELETE }
     let(:message) { "" }
     let(:include_message) { "false" }
 
     let(:params) do
-      { edit_case_collaborator_form: {
+      { edit_notification_collaborator_form: {
         permission_level:,
         message:,
         include_message:,

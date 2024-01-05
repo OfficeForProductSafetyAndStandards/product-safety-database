@@ -36,7 +36,7 @@ class CollaboratorsController < Investigations::BaseController
     @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
 
-    @edit_form = EditCaseCollaboratorForm.new(collaboration: @collaboration)
+    @edit_form = EditNotificationCollaboratorForm.new(collaboration: @collaboration)
   rescue ActiveRecord::RecordNotFound
     render_404_page
   end
@@ -49,7 +49,7 @@ class CollaboratorsController < Investigations::BaseController
 
     @collaborator = @collaboration.collaborator
 
-    @edit_form = EditCaseCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))
+    @edit_form = EditNotificationCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))
 
     return render :edit, status: :bad_request unless @edit_form.valid?
 
@@ -62,7 +62,7 @@ class CollaboratorsController < Investigations::BaseController
 
       flash[:success] = "#{@collaborator.display_name} has been removed from the notification"
     else
-      ChangeCasePermissionLevelForTeam.call!(
+      ChangeNotificationPermissionLevelForTeam.call!(
         existing_collaboration: @collaboration,
         user: current_user,
         new_collaboration_class: @edit_form.new_collaboration_class,
@@ -90,6 +90,6 @@ private
   end
 
   def edit_params
-    params.require(:edit_case_collaborator_form).permit(:permission_level, :include_message, :message)
+    params.require(:edit_notification_collaborator_form).permit(:permission_level, :include_message, :message)
   end
 end

@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.feature "Adding a team to a case", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.feature "Adding a team to a notification", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   include_context "with read only team and user"
   let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
-  let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
-  let!(:deleted_team)  { create(:team, :deleted) }
+  let(:notification) { create(:notification, read_only_teams: read_only_team, creator: user) }
+  let!(:deleted_team) { create(:team, :deleted) }
 
   before do
     read_only_team.update!(name: "Birmingham Trading Standards")
@@ -15,11 +15,11 @@ RSpec.feature "Adding a team to a case", :with_stubbed_antivirus, :with_stubbed_
   scenario "when signed in as an owner of the case" do
     sign_in user
 
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
 
     click_link "Change the teams added"
 
-    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_be_on_teams_page(notification_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
 
     expect_teams_tables_to_contain([
@@ -29,7 +29,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_antivirus, :with_stubbed_
 
     click_link "Add a team to the notification"
 
-    expect_to_be_on_add_team_to_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_add_team_to_notification_page(notification_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
 
     click_button "Add team to this notification"
@@ -62,7 +62,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_antivirus, :with_stubbed_
 
     click_button "Add team to this notification"
 
-    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+    expect_to_be_on_teams_page(notification_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
 
     expect_teams_tables_to_contain([
@@ -76,16 +76,16 @@ RSpec.feature "Adding a team to a case", :with_stubbed_antivirus, :with_stubbed_
     expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
     expect(notification_email.personalization[:updater_name]).to eq("Bob Jones (Portsmouth Trading Standards)")
     expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this notification with us.")
-    expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
+    expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{notification.pretty_id}")
 
-    click_link investigation.pretty_id
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    click_link notification.pretty_id
+    expect_to_be_on_case_page(case_id: notification.pretty_id)
 
     expect(page).to have_summary_item(key: "Teams added", value: "Portsmouth Trading Standards Birmingham Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
     expect(page).to have_text("Southampton Trading Standards added to notification")
     expect(page).to have_text("Team added by Bob Jones")
