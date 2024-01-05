@@ -11,47 +11,47 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
   let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation:, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
-  let!(:investigation)                       { create(:allegation, creator: user, hazard_type: "Fire") }
+  let!(:notification)                       { create(:notification, creator: user, hazard_type: "Fire") }
   let!(:notification)                        { create(:notification, creator: user) }
-  let!(:deleted_investigation)               { create(:allegation, creator: user, hazard_type: "Fire", deleted_at: Time.zone.now) }
-  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team, hazard_type: "Fire") }
-  let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
-  let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team, hazard_type: "Fire") }
-  let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
+  let!(:deleted_notification)               { create(:notification, creator: user, hazard_type: "Fire", deleted_at: Time.zone.now) }
+  let!(:other_user_notification)            { create(:notification, creator: other_user_same_team, hazard_type: "Fire") }
+  let!(:other_user_other_team_notification) { create(:notification, creator: other_user_other_team) }
+  let!(:other_team_notification)            { create(:notification, creator: yet_another_user_same_team, hazard_type: "Fire") }
+  let!(:another_team_notification)          { create(:notification, creator: create(:user)) }
 
-  let!(:closed_investigation) { create(:allegation, :closed) }
+  let!(:closed_notification) { create(:notification, :closed) }
   let!(:project) { create(:project) }
   let!(:enquiry) { create(:enquiry) }
 
-  let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
-  let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
-  let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
+  let!(:coronavirus_notification)        { create(:notification, creator: user, coronavirus_related: true) }
+  let!(:serious_risk_level_notification) { create(:notification, creator: user, risk_level: Investigation.risk_levels[:serious]) }
+  let!(:high_risk_level_notification)    { create(:notification, creator: user, risk_level: Investigation.risk_levels[:high]) }
 
   let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team:) }
   let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team:) }
   let!(:other_deleted_team)    { create(:team, :deleted) }
 
-  let(:restricted_case_title) { "Restricted case title" }
-  let(:restricted_case_team) { create(:team, organisation: other_organisation) }
-  let(:restricted_case_team_user) { create(:user, team: restricted_case_team, organisation: other_organisation) }
-  let!(:restricted_case) { create(:allegation, creator: restricted_case_team_user, is_private: true, description: restricted_case_title).decorate }
+  let(:restricted_notification_title) { "Restricted notification title" }
+  let(:restricted_notification_team) { create(:team, organisation: other_organisation) }
+  let(:restricted_notification_team_user) { create(:user, team: restricted_notification_team, organisation: other_organisation) }
+  let!(:restricted_notification) { create(:notification, creator: restricted_notification_team_user, is_private: true, description: restricted_notification_title).decorate }
 
   before do
-    create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
-    other_team_investigation.touch # Tests sort order
+    create(:notification, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
+    other_team_notification.touch # Tests sort order
     Investigation.reindex
     sign_in(user)
     visit all_cases_investigations_path
   end
 
   scenario "no filters applied shows all open notifications but does not show closed or deleted notifications" do
-    expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).to have_listed_case(other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(notification.pretty_id)
+    expect(page).to have_listed_case(other_user_notification.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+    expect(page).to have_listed_case(other_team_notification.pretty_id)
 
-    expect(page).not_to have_listed_case(deleted_investigation.pretty_id)
-    expect(page).not_to have_listed_case(closed_investigation.pretty_id)
+    expect(page).not_to have_listed_case(deleted_notification.pretty_id)
+    expect(page).not_to have_listed_case(closed_notification.pretty_id)
     number_of_open_cases = Investigation.not_deleted.where(is_closed: false).count
     expect(page).to have_content("#{number_of_open_cases} notifications using the current filters, were found.")
 
@@ -73,7 +73,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
 
   context "when there are multiple pages of notifications" do
     before do
-      20.times { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
+      20.times { create(:notification, creator: user, risk_level: Investigation.risk_levels[:serious]) }
       Investigation.reindex
     end
 
@@ -95,15 +95,15 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       click_on "Apply"
       expect(page).to have_checked_field("Serious and high risk")
 
-      expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
-      expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
+      expect(page).to have_listed_case(serious_risk_level_notification.pretty_id)
+      expect(page).to have_listed_case(high_risk_level_notification.pretty_id)
       expect(page).to have_css(".opss-tag--risk1", text: "High risk notification")
 
-      expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(coronavirus_notification.pretty_id)
+      expect(page).not_to have_listed_case(notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_team_notification.pretty_id)
 
       expect(find("details#filter-details")["open"]).to eq(nil)
     end
@@ -113,8 +113,8 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         within_fieldset("Notification status") { choose "All" }
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(closed_investigation.pretty_id)
+        expect(page).to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(closed_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq(nil)
       end
@@ -125,8 +125,8 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(closed_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(closed_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq(nil)
       end
@@ -155,10 +155,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         within_fieldset("Notification owner") { choose "Me" }
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
@@ -167,10 +167,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         within_fieldset("Notification owner") { choose "Me and my team" }
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(other_user_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
@@ -178,10 +178,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       scenario "filtering notifications where the owner is someone else" do
         choose "Others", id: "case_owner_others"
         click_button "Apply"
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(other_user_notification.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
@@ -193,10 +193,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
 
@@ -204,10 +204,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         select other_user_same_team.name, from: "case_owner_is_someone_else_id"
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(other_user_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
@@ -216,7 +216,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     describe "Teams added to notifications", :with_stubbed_mailer do
       before do
         AddTeamToNotification.call!(
-          investigation: other_user_other_team_investigation,
+          notification: other_user_other_team_notification,
           user:,
           team: chosen_team,
           collaboration_class: Collaboration::Access::Edit
@@ -230,10 +230,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
           within_fieldset("Teams added to notifications") { choose "My team" }
           click_button "Apply"
 
-          expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-          expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-          expect(page).to have_listed_case(other_user_investigation.pretty_id)
-          expect(page).to have_listed_case(investigation.pretty_id)
+          expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+          expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+          expect(page).to have_listed_case(other_user_notification.pretty_id)
+          expect(page).to have_listed_case(notification.pretty_id)
 
           expect(find("details#filter-details")["open"]).to eq("open")
         end
@@ -249,9 +249,9 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
           end
           click_button "Apply"
 
-          expect(page).to have_listed_case(other_team_investigation.pretty_id)
-          expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-          expect(page).not_to have_listed_case(investigation.pretty_id)
+          expect(page).to have_listed_case(other_team_notification.pretty_id)
+          expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+          expect(page).not_to have_listed_case(notification.pretty_id)
 
           expect(find("details#filter-details")["open"]).to eq("open")
 
@@ -264,15 +264,15 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
           within_fieldset("Notification owner")           { choose "Me and my team" }
           click_button "Apply"
 
-          expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-          expect(page).to have_listed_case(investigation.pretty_id)
-          expect(page).to have_listed_case(other_user_investigation.pretty_id)
+          expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+          expect(page).to have_listed_case(notification.pretty_id)
+          expect(page).to have_listed_case(other_user_notification.pretty_id)
 
           expect(find("details#filter-details")["open"]).to eq("open")
         end
 
         scenario "with keywords entered" do
-          fill_in "Search", with: other_user_other_team_investigation.description
+          fill_in "Search", with: other_user_other_team_notification.description
           click_on "Submit search"
 
           find("#filter-details").click
@@ -283,7 +283,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
           end
           click_button "Apply"
 
-          expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+          expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
         end
       end
 
@@ -296,10 +296,10 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
           end
           click_button "Apply"
 
-          expect(page).to have_listed_case(other_team_investigation.pretty_id)
-          expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-          expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-          expect(page).not_to have_listed_case(investigation.pretty_id)
+          expect(page).to have_listed_case(other_team_notification.pretty_id)
+          expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+          expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+          expect(page).not_to have_listed_case(notification.pretty_id)
 
           expect(find("details#filter-details")["open"]).to eq("open")
         end
@@ -311,11 +311,11 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         select "Fire", from: "Hazard type"
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
+        expect(page).to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(other_user_notification.pretty_id)
+        expect(page).to have_listed_case(other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(another_team_notification.pretty_id)
 
         number_of_total_cases = Investigation.not_deleted.where(hazard_type: "Fire").count
         expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
@@ -323,60 +323,60 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     end
 
     describe "Created by" do
-      scenario "filtering investigations created by another team" do
+      scenario "filtering notifications created by another team" do
         within_fieldset("Created by") do
           choose "Others"
           select other_team.name, from: "Person or team name"
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering investigations created by my team" do
+      scenario "filtering notifications created by my team" do
         within_fieldset("Created by") { choose "Me and my team" }
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering investigations created by anybody but my team" do
+      scenario "filtering notifications created by anybody but my team" do
         within_fieldset("Created by") { choose "Others" }
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
 
-        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(another_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+        expect(page).to have_listed_case(other_team_notification.pretty_id)
+        expect(page).to have_listed_case(another_team_notification.pretty_id)
 
         within_fieldset("Created by") { expect(page).to have_checked_field "Others" }
 
         expect(find("details#filter-details")["open"]).to eq("open")
       end
 
-      scenario "filtering investigations created by a different user" do
+      scenario "filtering notifications created by a different user" do
         within_fieldset("Created by") do
           choose "Others"
           select other_user_other_team.name, from: "Person or team name"
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+        expect(page).not_to have_listed_case(another_team_notification.pretty_id)
 
-        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
 
         within_fieldset("Created by") do
           expect(page).to have_checked_field "Others"
@@ -394,7 +394,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).to     have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
@@ -408,7 +408,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).to     have_listed_case(enquiry.pretty_id)
@@ -422,7 +422,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).to     have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
@@ -436,7 +436,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         end
         click_button "Apply"
 
-        expect(page).to     have_listed_case(investigation.pretty_id)
+        expect(page).to     have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
         expect(page).not_to have_listed_case(project.pretty_id)
         expect(page).not_to have_listed_case(enquiry.pretty_id)
@@ -450,9 +450,9 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
         within_fieldset("Notification status") { choose "All" }
         click_button "Apply"
 
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(closed_investigation.pretty_id)
-        expect(page).not_to have_listed_case(deleted_investigation.pretty_id)
+        expect(page).to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(closed_notification.pretty_id)
+        expect(page).not_to have_listed_case(deleted_notification.pretty_id)
         number_of_total_cases = Investigation.not_deleted.count
         expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
 
@@ -467,8 +467,8 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
 
         expect(page).to have_content("1 notification using the current filters, was found.")
 
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(closed_investigation.pretty_id)
+        expect(page).not_to have_listed_case(notification.pretty_id)
+        expect(page).to have_listed_case(closed_notification.pretty_id)
 
         expect(find("details#filter-details")["open"]).to eq(nil)
       end
@@ -479,18 +479,18 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     visit "/"
     click_link "Notifications"
 
-    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(notification.pretty_id)
 
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+    expect(page).not_to have_listed_case(other_team_notification.pretty_id)
   end
 
   scenario "search returning a restricted notifications" do
-    fill_in "Search", with: restricted_case_title
+    fill_in "Search", with: restricted_notification_title
     click_on "Search"
 
-    expect(page).not_to have_link(restricted_case.title, href: "/cases/#{restricted_case.pretty_id}")
+    expect(page).not_to have_link(restricted_notification.title, href: "/cases/#{restricted_notification.pretty_id}")
 
     expect(find("details#filter-details")["open"]).to eq(nil)
   end
