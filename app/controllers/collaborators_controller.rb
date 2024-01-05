@@ -14,7 +14,9 @@ class CollaboratorsController < Investigations::BaseController
   end
 
   def create
-    @form = AddTeamToNotificationForm.new(params.require(:add_team_to_case_form).permit(:team_id, :permission_level, :message, :include_message))
+    @form = AddTeamToNotificationForm.new(
+      params.require(:add_team_to_notification_form).permit(:team_id, :permission_level, :message, :include_message)
+    )
 
     unless @form.valid?
       @teams = teams_without_access

@@ -612,7 +612,7 @@ en:
           attributes:
             update_case_risk_level_to_match_investigation:
               inclusion: Select yes if you want to match the notification risk level to the risk assessment level
-        add_team_to_case_form:
+        add_team_to_notification_form:
           attributes:
             team_id:
               blank: "Select a team to add to the notification"
