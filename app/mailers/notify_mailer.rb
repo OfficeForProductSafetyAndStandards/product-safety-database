@@ -11,7 +11,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       notification_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
-      team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
+      team_added_to_notification: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
       team_removed_from_notification: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
       notification_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
@@ -112,8 +112,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: user.email)
   end
 
-  def team_added_to_case_email(investigation:, team:, added_by_user:, message:, to_email:)
-    set_template(TEMPLATES[:team_added_to_case])
+  def team_added_to_notification_email(notification:, team:, added_by_user:, message:, to_email:)
+    set_template(TEMPLATES[:team_added_to_notification])
 
     user_name = added_by_user.decorate.display_name(viewer: team)
 
@@ -122,7 +122,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                            I18n.t(
                              :message_from,
                              user_name:,
-                             scope: "mail.team_added_to_case"
+                             scope: "mail.team_added_to_notification"
                            ),
                            inset_text_for_notify(message)
                          ].join("\n\n")
@@ -133,7 +133,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_personalisation(
       updater_name: user_name,
       optional_message:,
-      investigation_url: investigation_url(investigation)
+      investigation_url: investigation_url(notification)
     )
 
     mail(to: to_email)

@@ -1,4 +1,4 @@
-class AddTeamToCaseForm
+class AddTeamToNotificationForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 

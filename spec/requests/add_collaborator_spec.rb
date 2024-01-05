@@ -14,7 +14,7 @@ RSpec.describe "Adding a collaborator to a notification", type: :request, with_s
 
       post investigation_collaborators_path(notification.pretty_id),
            params: {
-             add_team_to_case_form: {
+             add_team_to_notification_form: {
                include_message: "true",
                message:,
                team_id: other_team.id,
@@ -50,7 +50,7 @@ RSpec.describe "Adding a collaborator to a notification", type: :request, with_s
 
       post investigation_collaborators_path(notification.pretty_id),
            params: {
-             add_team_to_case_form: {
+             add_team_to_notification_form: {
                include_message: "true",
                message: "",
                team_id: ""
@@ -84,7 +84,7 @@ RSpec.describe "Adding a collaborator to a notification", type: :request, with_s
 
       post investigation_collaborators_path(notification.pretty_id),
            params: {
-             add_team_to_case_form: {
+             add_team_to_notification_form: {
                include_message: "false",
                team_id: existing_collaborator_team.id
              }

@@ -126,8 +126,8 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       context "when the new team was already a collaborator on the notification" do
         before do
-          AddTeamToCase.call!(
-            investigation: team_case,
+          AddTeamToNotification.call!(
+            notification: team_case,
             user: team_user,
             team: new_team,
             collaboration_class: Collaboration::Access::ReadOnly
@@ -163,8 +163,8 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
 
       context "when the new team is already a collaborator on the notification" do
         before do
-          AddTeamToCase.call!(
-            investigation: team_case,
+          AddTeamToNotification.call!(
+            notification: team_case,
             user: team_user,
             team: new_team,
             collaboration_class: Collaboration::Access::ReadOnly
@@ -217,7 +217,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
       end
 
       it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
-        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_added_to_case_email)
+        expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_added_to_notification_email)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_permission_changed_for_team)
       end
