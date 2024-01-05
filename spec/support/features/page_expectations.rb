@@ -201,13 +201,13 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{case_id}/products/#{product_id}/remove")
   end
 
-  def expect_to_be_on_teams_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams")
+  def expect_to_be_on_teams_page(notification_id:)
+    expect(page).to have_current_path("/cases/#{notification_id}/teams")
     expect(page).to have_selector("h1", text: "Teams added to the notification")
   end
 
-  def expect_to_be_on_add_team_to_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams/add")
+  def expect_to_be_on_add_team_to_notification_page(notification_id:)
+    expect(page).to have_current_path("/cases/#{notification_id}/teams/add")
     expect(page).to have_selector("h1", text: "Add a team to the notification")
   end
 

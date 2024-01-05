@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EditCaseCollaboratorForm, :with_opensearch, :with_stubbed_mailer do
+RSpec.describe EditNotificationCollaboratorForm, :with_opensearch, :with_stubbed_mailer do
   subject(:form) { described_class.new(params) }
 
   let!(:investigation) { create(:allegation, creator: user, edit_access_teams: [team]) }
@@ -8,7 +8,7 @@ RSpec.describe EditCaseCollaboratorForm, :with_opensearch, :with_stubbed_mailer 
   let(:team) { create(:team) }
 
   let(:collaboration) { investigation.edit_access_collaborations.last }
-  let(:permission_level) { EditCaseCollaboratorForm::PERMISSION_LEVEL_DELETE }
+  let(:permission_level) { EditNotificationCollaboratorForm::PERMISSION_LEVEL_DELETE }
   let(:message) { "This is a message" }
   let(:include_message) { "true" }
 
@@ -81,7 +81,7 @@ RSpec.describe EditCaseCollaboratorForm, :with_opensearch, :with_stubbed_mailer 
   describe "#permission_level" do
     context "when permission_level is set" do
       it "returns the set level" do
-        expect(form.permission_level).to eq(EditCaseCollaboratorForm::PERMISSION_LEVEL_DELETE)
+        expect(form.permission_level).to eq(EditNotificationCollaboratorForm::PERMISSION_LEVEL_DELETE)
       end
     end
 

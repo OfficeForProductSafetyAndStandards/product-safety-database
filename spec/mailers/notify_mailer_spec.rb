@@ -232,10 +232,10 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
-  describe "#case_permission_changed_for_team" do
+  describe "#notification_permission_changed_for_team" do
     subject(:mail) do
-      described_class.case_permission_changed_for_team(
-        investigation:,
+      described_class.notification_permission_changed_for_team(
+        notification:,
         team:,
         user:,
         message:,
@@ -245,9 +245,9 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       )
     end
 
-    let(:investigation) { create(:allegation, creator: user) }
+    let(:notification) { create(:notification, creator: user) }
     let(:case_type) { "notification" }
-    let(:case_title) { investigation.decorate.title }
+    let(:case_title) { notification.decorate.title }
     let(:user) { create(:user, :activated, name: "Bob Jones") }
     let(:team) { create(:team) }
     let(:old_permission) { "readonly" }
@@ -257,7 +257,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       let(:message) { "Thanks for collaborating!" }
 
       it "sets the personalisation" do
-        expect_personalisation_to_include_case_attributes
+        expect_personalisation_to_include_notification_attributes
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "Message from Bob Jones (#{user.team.name}):\n\n^ Thanks for collaborating!",
@@ -271,7 +271,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       let(:message) { nil }
 
       it "sets the personalisation" do
-        expect_personalisation_to_include_case_attributes
+        expect_personalisation_to_include_notification_attributes
         expect(mail.govuk_notify_personalisation).to include(
           updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "",
