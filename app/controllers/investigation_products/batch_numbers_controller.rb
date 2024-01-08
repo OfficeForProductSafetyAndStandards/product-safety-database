@@ -12,6 +12,7 @@ module InvestigationProducts
       end
 
       ChangeBatchNumber.call!(investigation_product: @investigation_product, batch_number: batch_number_params[:batch_number], user: current_user)
+      ahoy.track "Updated batch number", { notification_id: @investigation.id }
       redirect_to investigation_path(@investigation_product.investigation, anchor: "case_batch_numbers_#{@investigation_product.id}"), flash: { success: "The notification information was updated" }
     end
 

@@ -18,6 +18,7 @@ module Investigations
             user: current_user
           })
         )
+        ahoy.track "Updated overseas regulator", { notification_id: @investigation.id }
         redirect_to investigation_path(@investigation), flash: { success: "The overseas regulator was updated." }
       else
         render :edit

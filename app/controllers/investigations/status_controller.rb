@@ -26,6 +26,7 @@ module Investigations
         return render(template)
       end
 
+      ahoy.track "Updated notification status", { notification_id: @investigation.id }
       ChangeNotificationStatus.call!(@change_notification_status_form.serializable_hash.merge(user: current_user, notification: @investigation))
 
       redirect_to investigation_path(@investigation), flash: { success: "The notification was #{flash}" }

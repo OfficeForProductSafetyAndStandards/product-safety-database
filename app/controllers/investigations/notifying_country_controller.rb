@@ -18,6 +18,7 @@ module Investigations
             user: current_user
           })
         )
+        ahoy.track "Updated notifying country", { notification_id: @investigation.id }
 
         redirect_to investigation_path(@investigation), flash: { success: "The notifying country was updated" }
       else

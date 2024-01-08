@@ -12,6 +12,7 @@ module Investigations
       end
 
       ChangeNotificationReferenceNumber.call!(notification: @notification, reference_number: reference_number_params[:complainant_reference], user: current_user)
+      ahoy.track "Updated reference number", { notification_id: @notification.id }
       redirect_to investigation_path(@notification), flash: { success: "The reference number was updated" }
     end
 
