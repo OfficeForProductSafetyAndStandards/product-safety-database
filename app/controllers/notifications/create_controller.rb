@@ -111,7 +111,7 @@ module Notifications
         @change_notification_details_form = ChangeNotificationDetailsForm.new(add_notification_details_params.merge(current_user:, notification_id: @notification.id))
 
         if @change_notification_details_form.valid?
-          ChangeNotificationName.call!(notification: @notification, user_title: add_notification_details_params[:user_title], user: current_user, silent: true)# unless @notification.user_title == add_notification_details_params[:user_title]
+          ChangeNotificationName.call!(notification: @notification, user_title: add_notification_details_params[:user_title], user: current_user, silent: true)
           ChangeCaseSummary.call!(investigation: @notification, summary: add_notification_details_params[:description], user: current_user, silent: true)
           ChangeReportedReason.call!(investigation: @notification, reported_reason: add_notification_details_params[:reported_reason], user: current_user, silent: true) if add_notification_details_params[:reported_reason] == "safe_and_compliant"
         else
