@@ -23,7 +23,7 @@ class Investigations::TestResultsController < Investigations::BaseController
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
-      ahoy.track "Added test result", { investigation_id: @investigation.id, test_result_id: result.test_result.id }
+      ahoy.track "Added test result", { investigation_id: @investigation.id }
       return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     end
 
@@ -60,7 +60,7 @@ class Investigations::TestResultsController < Investigations::BaseController
                changes: @test_result_form.changes)
     )
 
-    ahoy.track "Updated test result", { investigation_id: @investigation.id, test_result_id: result.test_result.id }
+    ahoy.track "Updated test result", { investigation_id: @investigation.id }
     redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
   end
 
