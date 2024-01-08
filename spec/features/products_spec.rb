@@ -83,8 +83,8 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
 
       within "#notifications-1-section" do
         expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
-        expect(page).to have_css("dd", text: investigation.pretty_id)
-        expect(page).to have_css("dd", text: investigation.owner_team.name)
+        expect(page).to have_css("td", text: investigation.pretty_id)
+        expect(page).to have_css("td", text: investigation.owner_team.name)
       end
       investigation.update!(is_private: true)
       visit "/products/#{iphone.id}"

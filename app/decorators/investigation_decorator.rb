@@ -47,7 +47,7 @@ class InvestigationDecorator < ApplicationDecorator
       values << { text: object.owner_team&.name || "&ndash;".html_safe }
     end
 
-    values << { text: is_closed? ? "Closed (#{date_closed.to_formatted_s(:govuk)})" : "Open" }
+    values << { text: status }
 
     values
   end
