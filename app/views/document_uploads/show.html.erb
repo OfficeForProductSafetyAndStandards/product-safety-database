@@ -40,11 +40,10 @@
           },
           value: {
             text: @document_upload.created_at.to_formatted_s(:govuk)
-
           }
         }
       ] %>
-    <%= govukSummaryList(rows: rows) %>
+    <%= govuk_summary_list(rows:) %>
 
     <% if documentable_policy(@parent).update? %>
       <p class="govuk-body"><%= link_to "Edit attachment", edit_associated_document_upload_path(@parent, @document_upload), class: "govuk-link" %></p>

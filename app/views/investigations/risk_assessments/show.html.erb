@@ -55,7 +55,7 @@
         } %>
       <% end %>
 
-    <%= govukSummaryList(rows: rows) %>
+    <%= govuk_summary_list(rows:) %>
 
     <% if policy(@investigation).update? %>
       <p class="govuk-body"><%= link_to "Edit risk assessment", edit_investigation_risk_assessment_path(@investigation, @risk_assessment), class: "govuk-link" %></p>

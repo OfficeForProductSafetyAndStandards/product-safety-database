@@ -26,20 +26,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
     create(:complainant, investigation: notification)
   end
 
-  describe "#display_product_summary_list?" do
-    let(:notification) { create(:enquiry) }
-
-    context "with no product" do
-      it { is_expected.not_to be_display_product_summary_list }
-    end
-
-    context "with products" do
-      before { notification.products << create(:product) }
-
-      it { is_expected.to be_display_product_summary_list }
-    end
-  end
-
   describe "#risk_level_description" do
     let(:risk_level_description) { decorated_notification.risk_level_description }
 
@@ -64,56 +50,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
 
       it "displays 'Not set'" do
         expect(risk_level_description).to eq "Not set"
-      end
-    end
-  end
-
-  describe "#product_summary_list" do
-    let(:product_summary_list) { decorated_notification.product_summary_list }
-    let(:products) { create_list(:product, 2) }
-
-    it "displays the product details" do
-      expect(product_summary_list).to summarise("Product details", text: "2 products added")
-    end
-
-    it "displays the categories" do
-      notification.products.each do |product|
-        expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i)
-      end
-    end
-
-    context "with two products of the same category" do
-      let(:washing_machine) { build(:product_washing_machine) }
-      let(:iphone_3g)       { build(:product_iphone_3g) }
-      let(:iphone)          { build(:product_iphone)  }
-      let(:samsung)         { build(:product_samsung) }
-      let(:products_list)   { [iphone_3g, samsung] }
-
-      before do
-        notification.assign_attributes(
-          product_category: iphone_3g.category,
-          products: products_list
-        )
-      end
-
-      it "displays the only category present a paragraphe" do
-        random_product_category = notification.products.sample.category
-        expect(Capybara.string(product_summary_list))
-          .to have_css("dd.govuk-summary-list__value p.govuk-body", text: random_product_category.upcase_first)
-      end
-
-      context "with two products on different categories" do
-        let(:products_list) { [iphone, washing_machine] }
-
-        it "displays the first product category" do
-          expect(Capybara.string(product_summary_list))
-            .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone_3g.category.upcase_first)
-        end
-
-        it "displays the second product category" do
-          expect(Capybara.string(product_summary_list))
-            .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
-        end
       end
     end
   end
@@ -252,7 +188,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_mailer do
   describe "#case_summary_values" do
     let(:case_summary_values) { decorated_notification.case_summary_values }
     let(:text_values) { case_summary_values.pluck(:text).compact }
-    let(:html_value) { case_summary_values.pluck(:html).compact.join }
+    let(:html_value) { case_summary_values.pluck(:text).compact.join }
 
     context "with unrestricted case" do
       let(:notification) { create(:allegation, is_closed: true) }

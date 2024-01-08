@@ -206,7 +206,7 @@ module Investigations::DisplayTextHelper
     # TODO: PSD-693 Add primary authorities to businesses
     # { key: { text: 'Primary authority' }, value: { text: 'Suffolk Trading Standards' } }
 
-    govukSummaryList rows:
+    govuk_summary_list(rows:)
   end
 
   def correspondence_summary_list(correspondence, attachments: nil)
@@ -218,7 +218,7 @@ module Investigations::DisplayTextHelper
       { key: { text: "Attachments" }, value: { text: attachments } }
     ]
 
-    govukSummaryList rows:
+    govuk_summary_list(rows:)
   end
 
   def report_summary_list(investigation)
@@ -235,6 +235,6 @@ module Investigations::DisplayTextHelper
       rows << { key: { text: "Hazard type" }, value: { text: investigation.hazard_type } }
     end
 
-    govukSummaryList rows:
+    govuk_summary_list(rows:)
   end
 end

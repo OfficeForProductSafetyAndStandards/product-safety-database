@@ -487,24 +487,24 @@ module InvestigationsHelper
   def investigation_product_rows(investigation_product = nil, user = nil)
     [
       {
-        key: { html: "<span id='case_batch_numbers_#{investigation_product&.id}'>Batch numbers</span>".html_safe },
+        key: { text: "<span id='case_batch_numbers_#{investigation_product&.id}'>Batch numbers</span>".html_safe },
         value: { text: investigation_product&.batch_number || "" },
         actions: batch_number_actions(investigation_product, user)
       },
       {
-        key: { html: "<span id='case_customs_codes_#{investigation_product&.id}'>Customs codes</span>".html_safe },
+        key: { text: "<span id='case_customs_codes_#{investigation_product&.id}'>Customs codes</span>".html_safe },
         value: { text: investigation_product&.customs_code || "" },
         actions: customs_code_actions(investigation_product, user)
       },
       {
-        key: { html: "<span id='case_ucr_numbers_#{investigation_product&.id}'>UCR numbers</span>".html_safe },
+        key: { text: "<span id='case_ucr_numbers_#{investigation_product&.id}'>UCR numbers</span>".html_safe },
         value: {
-          html: ucr_number_unordered_list(investigation_product&.ucr_numbers_list) || ""
+          text: ucr_number_unordered_list(investigation_product&.ucr_numbers_list) || ""
         },
         actions: ucr_numbers_actions(investigation_product, user)
       },
       {
-        key: { html: "<span id='case_units_affected_#{investigation_product&.id}'>Units affected</span>".html_safe },
+        key: { text: "<span id='case_units_affected_#{investigation_product&.id}'>Units affected</span>".html_safe },
         value: units_affected(investigation_product),
         actions: number_of_affected_units_actions(investigation_product, user)
       }
@@ -528,16 +528,16 @@ module InvestigationsHelper
     if investigation_product.number_of_affected_units.blank?
       { text: I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}") }
     else
-      { html: "#{investigation_product.number_of_affected_units} <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>#{I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")} number</span>".html_safe }
+      { text: "#{investigation_product.number_of_affected_units} <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>#{I18n.t("product.affected_units_status.#{investigation_product.affected_units_status}")} number</span>".html_safe }
     end
   end
 
   def details_for_products_tab(investigation)
-    title_link = link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state"
+    title_link = link_to investigation.title, investigation_path(investigation), class: "govuk-link"
 
     [
       { key: { text: "Notification" }, value: { text: investigation.pretty_id } },
-      { key: { text: "Name" }, value: { html: title_link } },
+      { key: { text: "Name" }, value: { text: title_link } },
       { key: { text: "Team" }, value: { text: investigation.owner_team.name } },
       { key: { text: "Created" }, value: { text: investigation.created_at.to_formatted_s(:govuk) } },
       { key: { text: "Status" }, value: status_value(investigation) }
@@ -819,51 +819,43 @@ private
   end
 
   def batch_number_actions(investigation_product, user)
-    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+    return [] unless investigation_product && policy(investigation_product.investigation).update?(user:)
 
-    {
-      items: [
-        href: edit_investigation_product_batch_numbers_path(investigation_product),
-        text: "Edit",
-        visuallyHiddenText: "  the batch numbers for #{investigation_product.name}"
-      ]
-    }
+    [
+      href: edit_investigation_product_batch_numbers_path(investigation_product),
+      text: "Edit",
+      visually_hidden_text: "the batch numbers for #{investigation_product.name}"
+    ]
   end
 
   def customs_code_actions(investigation_product, user)
-    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+    return [] unless investigation_product && policy(investigation_product.investigation).update?(user:)
 
-    {
-      items: [
-        href: edit_investigation_product_customs_code_path(investigation_product),
-        text: "Edit",
-        visuallyHiddenText: "  the customs codes for #{investigation_product.name}"
-      ]
-    }
+    [
+      href: edit_investigation_product_customs_code_path(investigation_product),
+      text: "Edit",
+      visually_hidden_text: "the customs codes for #{investigation_product.name}"
+    ]
   end
 
   def ucr_numbers_actions(investigation_product, user)
-    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+    return [] unless investigation_product && policy(investigation_product.investigation).update?(user:)
 
-    {
-      items: [
-        href: edit_investigation_product_ucr_numbers_path(investigation_product),
-        text: "Edit",
-        visuallyHiddenText: "  the UCR numbers for #{investigation_product.name}"
-      ]
-    }
+    [
+      href: edit_investigation_product_ucr_numbers_path(investigation_product),
+      text: "Edit",
+      visually_hidden_text: "the UCR numbers for #{investigation_product.name}"
+    ]
   end
 
   def number_of_affected_units_actions(investigation_product, user)
-    return {} unless investigation_product && policy(investigation_product.investigation).update?(user:)
+    return [] unless investigation_product && policy(investigation_product.investigation).update?(user:)
 
-    {
-      items: [
-        href: edit_investigation_product_number_of_affected_units_path(investigation_product),
-        text: "Edit",
-        visuallyHiddenText: " the units affected for #{investigation_product.name}"
-      ]
-    }
+    [
+      href: edit_investigation_product_number_of_affected_units_path(investigation_product),
+      text: "Edit",
+      visually_hidden_text: "the units affected for #{investigation_product.name}"
+    ]
   end
 
   def risk_validation_actions(investigation, user)

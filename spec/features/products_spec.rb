@@ -81,7 +81,7 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
       visit "/products/#{iphone.id}"
       expect(page).to have_text("This product record has been added to 1 notification")
 
-      within ".capy-cases" do
+      within "#notifications-1-section" do
         expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
         expect(page).to have_css("dd", text: investigation.pretty_id)
         expect(page).to have_css("dd", text: investigation.owner_team.name)
@@ -91,7 +91,7 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
 
       expect(page).to have_text("This product record has been added to 1 notification")
 
-      within ".capy-cases" do
+      within "#notifications-1-section" do
         expect(page).to have_css("dt", text: "Notification restricted")
         expect(page).not_to have_css("dd", text: investigation.pretty_id)
         expect(page).not_to have_css("dd", text: investigation.owner_team.name)

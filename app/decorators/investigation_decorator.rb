@@ -10,26 +10,8 @@ class InvestigationDecorator < ApplicationDecorator
     user_title || complainant_reference || pretty_id
   end
 
-  def display_product_summary_list?
-    products.any?
-  end
-
   def risk_assessment_risk_levels
     risk_assessments.collect(&:risk_level_description).uniq
-  end
-
-  def product_summary_list
-    products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
-    rows = [
-      category.present? ? { key: { text: "Category" }, value: { text: category } } : nil,
-      {
-        key: { text: "Product details" },
-        value: { text: products_details },
-        actions: { items: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"] }
-      },
-    ]
-    rows.compact!
-    h.govukSummaryList rows:, classes: "govuk-summary-list--no-border"
   end
 
   def risk_level_set?
@@ -65,9 +47,8 @@ class InvestigationDecorator < ApplicationDecorator
       values << { text: object.owner_team&.name || "&ndash;".html_safe }
     end
 
-    tag_class_name = is_closed? ? "opss-tag--risk3" : "opss-tag--plain"
-    action = h.tag.span("Notification #{status}", class: "opss-tag #{tag_class_name}")
-    values << { html: h.tag.dd(action, class: "govuk-summary-list__actions") }
+    values << { text: is_closed? ? "Closed (#{date_closed.to_formatted_s(:govuk)})" : "Open" }
+
     values
   end
 
@@ -84,7 +65,7 @@ class InvestigationDecorator < ApplicationDecorator
 
     rows.compact!
 
-    h.govukSummaryList rows:, classes: "govuk-summary-list govuk-summary-list--no-border opss-summary-list-mixed opss-summary-list-mixed--narrow-dt"
+    h.govuk_summary_list(rows:, borders: false, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
   end
 
   def contact_details_list

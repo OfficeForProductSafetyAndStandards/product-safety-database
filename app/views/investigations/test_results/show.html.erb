@@ -9,7 +9,7 @@
       <p class="govuk-body govuk-hint">Added <%= @test_result.date_added %></p>
     </div>
 
-    <%= govukSummaryList(rows: test_result_summary_rows(@test_result)) %>
+    <%= govuk_summary_list(rows: test_result_summary_rows(@test_result)) %>
 
     <% if policy(@investigation).update? %>
       <p class="govuk-body"><%= link_to "Edit test result", edit_investigation_test_result_path(@investigation, @test_result), class: "govuk-link" %></p>

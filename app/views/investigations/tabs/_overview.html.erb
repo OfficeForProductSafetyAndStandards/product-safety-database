@@ -27,10 +27,7 @@
     Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
   </a>
 <% end %>
-<%= govukSummaryList(
-  classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
-  rows: safety_and_compliance_rows(@investigation)
-) %>
+<%= govuk_summary_list(rows: safety_and_compliance_rows(@investigation)) %>
 
 <h3 id="product-info-1" class="govuk-heading-m govuk-!-margin-top-9">
   Notification specific product information
@@ -41,19 +38,15 @@
     You can add this information after a product has been added to the notification.
   </h4>
 
-  <%= govukSummaryList(
-    classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
-    rows: investigation_product_rows
-  ) %>
+  <%= govuk_summary_list(rows: investigation_product_rows) %>
 <% else %>
   <% @investigation.investigation_products.each_with_index do |investigation_product, index| %>
     <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
       <%= investigation_product.name %> (<%= investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).psd_ref(timestamp: investigation_product.investigation_closed_at.to_i, investigation_was_closed: investigation_product.investigation_closed_at.present?) %>)
     </h4>
-    <%= govukSummaryList(
-      classes: "govuk-summary-list opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--narrow-actions",
+    <%= govuk_summary_list(
       rows: investigation_product_rows(investigation_product.decorate, current_user),
-      attributes: {
+      html_attributes: {
         id: "product-#{index}"
       }
     ) %>

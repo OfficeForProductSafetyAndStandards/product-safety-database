@@ -14,11 +14,11 @@
             <section class="govuk-grid-column-three-quarters opss-panels">
               <div class="opss-panels__single">
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
-                <%= govukSummaryList(
-                  classes: "govuk-summary-list--no-border govuk-!-margin-bottom-6",
+                <%= govuk_summary_list(
+                  borders: false,
                   rows: [
                     {
-                      key: { html: "#{psd_abbr title: false} <span title=\"reference\">ref</span>".html_safe },
+                      key: { text: "#{psd_abbr title: false} <span title=\"reference\">ref</span>".html_safe },
                       value: { text: @product.psd_ref }
                     },
                     {
@@ -35,7 +35,7 @@
                     },
                     {
                       key: { text: "Counterfeit" },
-                      value: { html: render("product_authenticity", authenticity: @product.object.authenticity) }
+                      value: { text: render("product_authenticity", authenticity: @product.object.authenticity) }
                     }
                   ]
                 ) %>

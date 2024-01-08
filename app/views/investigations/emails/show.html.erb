@@ -58,7 +58,7 @@
         }
       end
     %>
-    <%= govukSummaryList(rows: rows) %>
+    <%= govuk_summary_list(rows:) %>
     <% if policy(@investigation).update? %>
       <p class="govuk-body"><%= link_to "Edit email", edit_investigation_email_path(@investigation, @email), class: "govuk-link" %></p>
     <% end %>

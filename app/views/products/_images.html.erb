@@ -21,7 +21,7 @@
   <ul class="govuk-list govuk-!-margin-top-6">
     <% @product.virus_free_images.each do |image| %>
       <li>
-        <%= govukSummaryList classes: "govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image opss-summary-list-mixed--sm-font", rows: [
+        <%= govuk_summary_list(rows: [
           {
             key: { text: "Image" },
             value: { text: product_image_preview(image, [400, 400]) },
@@ -30,16 +30,16 @@
             key: { text: "Updated" },
             value: { text: image_upload_updated_date_in_govuk_format(image) },
           }
-        ] %>
-        <div class="opss-text-align-right govuk-!-margin-bottom-8">
-          <ul class="govuk-list">
-            <% if imageable_policy(@product).destroy? %>
+        ], classes: "opss-summary-list-mixed opss-summary-list-mixed--image") %>
+        <% if imageable_policy(@product).destroy? %>
+          <div class="opss-text-align-right govuk-!-margin-bottom-8">
+            <ul class="govuk-list">
               <li class="govuk-!-display-inline govuk-!-margin-left-2">
                 <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= remove_product_image_upload_path(@product, image) %>">Remove this image</a>
               </li>
-            <% end %>
-          </ul>
-        </div>
+            </ul>
+          </div>
+        <% end %>
       </li>
 
     <% end %>
