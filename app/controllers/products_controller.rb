@@ -77,6 +77,7 @@ class ProductsController < ApplicationController
         product_params: @product_form.serializable_hash.except("image", "existing_image_file_id", "notification_pretty_id"),
         updating_team: current_user.team
       )
+      ahoy.track "Updated product", { product_id: @product.id, product_name: @product.name, updating_team: current_user.team }
 
       redirect_to product_path(@product), flash: { success: "The product record was updated" }
     else

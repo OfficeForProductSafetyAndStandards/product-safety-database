@@ -13,6 +13,7 @@ module Investigations
 
       if @notification_name_form.valid?
         ChangeNotificationName.call!(notification: @notification, user_title: @notification_name_form.user_title, user: current_user)
+        ahoy.track "Updated notification name", { notification_id: @notification.id }
         redirect_to investigation_path(@notification), flash: { success: "The notification name was updated" }
       else
         render :edit

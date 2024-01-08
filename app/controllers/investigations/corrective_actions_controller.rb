@@ -21,6 +21,7 @@ module Investigations
       )
 
       if result.success?
+        ahoy.track "Added corrective action", { investigation_id: @investigation.id }
         return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
       end
 
@@ -56,6 +57,8 @@ module Investigations
             changes: @corrective_action_form.changes
           )
       )
+
+      ahoy.track "Updated corrective action", { notification_id: @investigation.id }
 
       if params[:bulk_products_upload_id].present?
         redirect_to check_corrective_actions_bulk_upload_products_path(bulk_products_upload_id: params[:bulk_products_upload_id])

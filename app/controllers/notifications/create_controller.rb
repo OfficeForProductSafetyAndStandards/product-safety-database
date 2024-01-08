@@ -42,6 +42,7 @@ module Notifications
       CreateNotification.call!(notification:, product:, user: current_user, from_task_list: true, silent: true)
       notification.tasks_status["search_for_or_add_a_product"] = "completed"
       notification.save!(context: :search_for_or_add_a_product)
+      ahoy.track "Created notification from product", { notification_id: notification.id, product_id: product.id }
       redirect_to notification_create_index_path(notification)
     end
 
@@ -51,6 +52,8 @@ module Notifications
       AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
       @notification.tasks_status["search_for_or_add_a_product"] = "completed"
       @notification.save!(context: :search_for_or_add_a_product)
+      ahoy.track "Added product to existing notification", { notification_id: @notification.id, product_id: product.id }
+
       redirect_to notification_create_index_path(@notification)
     end
 

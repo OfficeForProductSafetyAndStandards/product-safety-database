@@ -15,6 +15,7 @@ module Investigations
       result = ChangeNotificationRiskLevel.call!(
         @risk_level_form.attributes.merge(notification: @investigation, user: current_user)
       )
+      ahoy.track "Updated risk level", { notification_id: @investigation.id }
       set_success_flash_message(result)
       redirect_to investigation_path(@investigation)
     end

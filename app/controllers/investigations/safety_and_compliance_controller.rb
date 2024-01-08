@@ -18,6 +18,7 @@ module Investigations
             user: current_user
           })
         )
+        ahoy.track "Updated reported reason", { notification_id: @investigation.id }
 
         flash[:success] = "The notification information was updated" if result.changes_made
         redirect_to investigation_path(@investigation)

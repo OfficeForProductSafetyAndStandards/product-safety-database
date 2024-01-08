@@ -18,6 +18,7 @@ module Investigations
             user: current_user
           })
         )
+        ahoy.track "Updated reported reason", { notification_id: @investigation.id }
 
         if @reported_reason_form.reported_reason == "safe_and_compliant"
           flash[:success] = "The notification information was updated" if result.changes_made

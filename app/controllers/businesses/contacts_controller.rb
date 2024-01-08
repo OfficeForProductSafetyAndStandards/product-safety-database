@@ -14,6 +14,7 @@ module Businesses
     def create
       @contact = @business.contacts.create!(contact_params.merge({ added_by_user: current_user }))
       if @contact.save
+        ahoy.track "Created business contact", { business_id: @business.id }
         redirect_to business_url(@business, anchor: "contacts"), flash: { success: "Contact was successfully created." }
       else
         render :new
@@ -22,6 +23,7 @@ module Businesses
 
     def update
       if @contact.update(contact_params)
+        ahoy.track "Updated business contact", { business_id: @business.id }
         redirect_to business_url(@business, anchor: "contacts"), flash: { success: "Contact was successfully updated." }
       else
         render :edit
@@ -32,6 +34,7 @@ module Businesses
 
     def destroy
       @contact.destroy!
+      ahoy.track "Removed business contact", { business_id: @business.id }
       redirect_to business_url(@business, anchor: "contacts"), flash: { success: "Contact was successfully deleted." }
     end
 

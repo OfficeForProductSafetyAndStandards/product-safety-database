@@ -34,6 +34,8 @@ class User < ApplicationRecord
   has_many :business_exports
   has_many :product_exports
 
+  has_many :visits, class_name: "Ahoy::Visit", dependent: :nullify
+
   belongs_to :team
 
   validates :password,

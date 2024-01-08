@@ -1,6 +1,8 @@
 class Investigation < ApplicationRecord
   extend Pagy::Searchkick
 
+  visitable :ahoy_visit
+
   include Documentable
   include SanitizationHelper
   include InvestigationSearchkick

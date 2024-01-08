@@ -19,6 +19,7 @@ module Businesses
     def create
       @location = @business.locations.create!(location_params.merge({ added_by_user: current_user }))
       if @location.save
+        ahoy.track "Created business location", { business_id: @business.id }
         redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully created." }
       else
         render :new
@@ -27,6 +28,7 @@ module Businesses
 
     def update
       if @location.update(location_params)
+        ahoy.track "Updated business location", { business_id: @business.id }
         redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully updated." }
       else
         render :edit
@@ -37,6 +39,7 @@ module Businesses
 
     def destroy
       @location.destroy!
+      ahoy.track "Removed business location", { business_id: @business.id }
       redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully deleted." }
     end
 
