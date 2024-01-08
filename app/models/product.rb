@@ -3,6 +3,8 @@ class Product < ApplicationRecord
   include Documentable
   include Retireable
 
+  visitable :ahoy_visit
+
   self.ignored_columns = %w[batch_number customs_code number_of_affected_units affected_units_status]
 
   has_paper_trail
