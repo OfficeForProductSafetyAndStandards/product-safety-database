@@ -826,6 +826,14 @@ en:
           attributes:
             agree:
               accepted: You must agree to the declaration to use this service
+        change_notification_details_form:
+          attributes:
+            user_title:
+              blank: Enter a notification title
+            description:
+              too_long: The notification description must be %{count} characters or less
+            reported_reason:
+              blank: Choose why you are creating the notification
 
   activerecord:
     models:

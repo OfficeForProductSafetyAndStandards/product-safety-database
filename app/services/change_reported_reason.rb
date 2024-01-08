@@ -20,7 +20,7 @@ class ChangeReportedReason
 
       context.changes_made = true
 
-      send_notification_email(investigation, user)
+      send_notification_email(investigation, user) unless context.silent
     end
   end
 

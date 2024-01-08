@@ -91,6 +91,12 @@ module Notifications
         @pagy, @records = pagy(products)
         @existing_product_ids = InvestigationProduct.where(investigation: @notification).pluck(:product_id)
         @manage = request.query_string != "search" && @existing_product_ids.present?
+      when :add_notification_details
+        @change_notification_details_form = ChangeNotificationDetailsForm.new(
+          user_title: @notification.user_title,
+          description: @notification.description,
+          reported_reason: notification_reported_reason(@notification)
+        )
       end
 
       render_wizard
@@ -101,6 +107,16 @@ module Notifications
       when :search_for_or_add_a_product
         product = Product.find(params[:product_id])
         AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
+      when :add_notification_details
+        @change_notification_details_form = ChangeNotificationDetailsForm.new(add_notification_details_params.merge(current_user:, notification_id: @notification.id))
+
+        if @change_notification_details_form.valid?
+          ChangeNotificationName.call!(notification: @notification, user_title: add_notification_details_params[:user_title], user: current_user, silent: true)# unless @notification.user_title == add_notification_details_params[:user_title]
+          ChangeCaseSummary.call!(investigation: @notification, summary: add_notification_details_params[:description], user: current_user, silent: true)
+          ChangeReportedReason.call!(investigation: @notification, reported_reason: add_notification_details_params[:reported_reason], user: current_user, silent: true) if add_notification_details_params[:reported_reason] == "safe_and_compliant"
+        else
+          return render_wizard
+        end
       end
 
       @notification.tasks_status[step.to_s] = "completed"
@@ -145,6 +161,20 @@ module Notifications
 
     def finish_wizard_path
       notification_create_index_path(@notification)
+    end
+
+    def notification_reported_reason(notification)
+      if notification.reported_reason.present?
+        if notification.reported_reason == "safe_and_compliant"
+          "safe_and_compliant"
+        else
+          "unsafe_or_non_compliant"
+        end
+      end
+    end
+
+    def add_notification_details_params
+      params.require(:change_notification_details_form).permit(:user_title, :description, :reported_reason, :draft)
     end
   end
 end

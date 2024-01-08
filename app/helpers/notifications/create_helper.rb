@@ -41,6 +41,13 @@ module Notifications
       ]
     end
 
+    def reported_reason_options
+      [
+        OpenStruct.new(id: "unsafe_or_non_compliant", name: "A product is unsafe or non-compliant", description: "Examples of non-compliance in products include missing or incomplete markings, errors in product labeling, or inadequate documentation."),
+        OpenStruct.new(id: "safe_and_compliant", name: "A product is safe and compliant", description: "This helps other market surveillance authorities avoid testing the same product again.")
+      ]
+    end
+
   private
 
     def previous_task(task)
