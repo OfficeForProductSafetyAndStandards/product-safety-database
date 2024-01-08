@@ -10,8 +10,7 @@ class InvestigationProductDecorator < Draper::Decorator
   end
 
   def product_overview_summary_list
-    h.govukSummaryList(
-      classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
+    h.govuk_summary_list(
       rows: [
         {
           key: { text: "Last updated" },
@@ -23,9 +22,11 @@ class InvestigationProductDecorator < Draper::Decorator
         },
         {
           key: { text: "Product record owner" },
-          value: { html: owning_team_link }
+          value: { text: owning_team_link }
         }
-      ]
+      ],
+      borders: false,
+      classes: "govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact"
     )
   end
 

@@ -39,7 +39,7 @@
       end
 
     %>
-    <%= govukSummaryList(rows: rows) %>
+    <%= govuk_summary_list(rows:) %>
     <%= link_to_if policy(@investigation).update?, "Edit phone call", edit_investigation_phone_call_path(@investigation, @phone_call), class: "govuk-link" %>
   </div>
 </div>

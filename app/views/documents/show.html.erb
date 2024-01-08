@@ -40,11 +40,10 @@
           },
           value: {
             text: @file.date_added
-
           }
         }
       ] %>
-    <%= govukSummaryList(rows: rows) %>
+    <%= govuk_summary_list(rows:) %>
 
     <% if documentable_policy(@parent).update? %>
       <p class="govuk-body"><%= link_to "Edit attachment", edit_investigation_document_path(@parent, @file), class: "govuk-link" %></p>
