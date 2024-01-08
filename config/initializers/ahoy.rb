@@ -1,7 +1,4 @@
 class Ahoy::Store < Ahoy::DatabaseStore
-  def authenticate(data)
-    # disables automatic linking of visits and users
-  end
 end
 
 # GDPR compliance - no cookies & use anonymity sets instead of IPs
