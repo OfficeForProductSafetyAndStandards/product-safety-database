@@ -71,7 +71,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
   end
 
-  scenario "Adding an existing product" do
+  scenario "Creating a notification with the normal flow" do
     visit "/notifications/create"
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
@@ -82,5 +82,15 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Select", match: :first
 
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
+
+    click_link "Add notification details"
+    fill_in "Notification title", with: "Fake name"
+    fill_in "Notification summary", with: "This is a fake summary"
+    within_fieldset("Why are you creating the notification?") do
+      choose "A product is unsafe or non-compliant"
+    end
+    click_button "Save as draft"
+
+    expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
   end
 end

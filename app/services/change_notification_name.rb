@@ -17,7 +17,7 @@ class ChangeNotificationName
       create_audit_activity_for_user_title_changed
     end
 
-    send_notification_email
+    send_notification_email unless context.silent
   end
 
 private
