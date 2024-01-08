@@ -8,6 +8,8 @@ end
 Ahoy.mask_ips = true
 Ahoy.cookies = :none
 
+Ahoy.visit_duration = 4.hours
+
 # set to true for JavaScript tracking
 Ahoy.api = false
 
