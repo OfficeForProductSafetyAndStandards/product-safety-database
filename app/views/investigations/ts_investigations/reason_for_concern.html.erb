@@ -1,7 +1,7 @@
 <% page_heading = "Why is the product of concern?" %>
 <%= page_title page_heading, errors: @edit_why_reporting_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: @edit_why_reporting_form, url: wizard_path, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @edit_why_reporting_form, url: wizard_path, method: :put do |form| %>
   <%= error_summary @edit_why_reporting_form.errors, %i[hazard_type hazard_description anon_compliant_reason] %>
   <%= edit_why_reporting_checkboxes(form, page_heading, @edit_why_reporting_form.errors, disabled: false, classes: "govuk-!-padding-top-3", attribute: :reported_reason) %>
 

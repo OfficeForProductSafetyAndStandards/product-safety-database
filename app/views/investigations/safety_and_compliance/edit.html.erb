@@ -2,7 +2,7 @@
 
 <%= page_title page_heading, errors: @edit_why_reporting_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: @edit_why_reporting_form, url: investigation_safety_and_compliance_path, html: {novalidate: true}, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @edit_why_reporting_form, url: investigation_safety_and_compliance_path, method: :put do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <%= error_summary @edit_why_reporting_form.errors %>

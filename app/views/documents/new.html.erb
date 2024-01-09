@@ -1,6 +1,6 @@
 <% title = "Add attachment" %>
 <%= page_title title, errors: @document_form.errors.any? %>
-<%= form_with model: @document_form, scope: :document, local: true, builder: ApplicationFormBuilder, html: {novalidate: true}, url: associated_documents_path(@parent) do |form| %>
+<%= form_with model: @document_form, scope: :document, builder: ApplicationFormBuilder, url: associated_documents_path(@parent) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary(@document_form.errors, %i[document title description])%>

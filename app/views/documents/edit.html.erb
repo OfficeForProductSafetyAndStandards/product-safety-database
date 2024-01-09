@@ -1,6 +1,6 @@
 <% title = "Edit attachment" %>
 <% page_title title, errors: @document_form.errors.any? %>
-<%= form_with model: @document_form, scope: :document, local: true, builder: ApplicationFormBuilder, url: associated_document_path(@parent, @file), html: {novalidate: true}, method: :patch do |form| %>
+<%= form_with model: @document_form, scope: :document, builder: ApplicationFormBuilder, url: associated_document_path(@parent, @file), method: :patch do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary(@document_form.errors, %i[title description])%>

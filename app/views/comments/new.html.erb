@@ -1,6 +1,6 @@
 <% page_title = "Add comment" %>
 <% page_title page_title, errors: @comment_form.errors.any? %>
-<%= form_with model: @comment_form, scope: :comment_form, local: true, builder: ApplicationFormBuilder, method: :post, html: {novalidate: true}, url: investigation_activity_comment_path(@investigation.pretty_id) do |form| %>
+<%= form_with model: @comment_form, scope: :comment_form, builder: ApplicationFormBuilder, method: :post, url: investigation_activity_comment_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary(@comment_form.errors)%>

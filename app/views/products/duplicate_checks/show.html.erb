@@ -1,5 +1,5 @@
 <% page_title "Is this the same product?", errors: @product_duplicate_confirmation_form.errors.any? %>
-<%= form_with model: @product_duplicate_confirmation_form, url: confirm_product_duplicate_checks_path(product_id: @product.id), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
+<%= form_with model: @product_duplicate_confirmation_form, url: confirm_product_duplicate_checks_path(product_id: @product.id), builder: ApplicationFormBuilder do |f| %>
   <%= error_summary(@product_duplicate_confirmation_form.errors, %i[correct]) %>
 
   <div class="govuk-grid-row">

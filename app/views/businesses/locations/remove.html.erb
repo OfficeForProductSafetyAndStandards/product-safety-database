@@ -26,7 +26,7 @@
       </tbody>
     </table>
 
-    <%= form_with url: business_location_path(@business, @location), method: :delete, local: true do |form| %>
+    <%= form_with url: business_location_path(@business, @location), method: :delete do |form| %>
       <%= form.submit "Remove location", class: "govuk-button govuk-button--warning" %>
     <% end %>
   </div>
