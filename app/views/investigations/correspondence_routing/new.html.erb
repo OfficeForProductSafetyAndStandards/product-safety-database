@@ -9,7 +9,7 @@
                  item
                end
     %>
-    <%= form_with local: true, url: investigation_correspondence_index_path(@investigation) do |form| %>
+    <%= form_with url: investigation_correspondence_index_path(@investigation) do |form| %>
       <%= govukRadios(
         form: form,
         key: :type,

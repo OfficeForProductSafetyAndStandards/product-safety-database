@@ -2,101 +2,24 @@
 <% page_title title, errors: @form.errors.any? %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= error_summary @form.errors %>
-    <h1 class="govuk-heading-l"><%= title %></h1>
-    <%= form_with model: @form, url: investigation_collaborators_path(@investigation), method: :post, local: true do |form| %>
-      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @form.team_id) } } %>
-      <% if @form.errors.include?(:team_id) %>
-        <% error_message = { text: @form.errors.full_messages_for(:team_id).first } %>
-      <% end %>
-
-      <%= govukSelect(
-        name: "add_team_to_notification_form[team_id]",
-        id: "team",
-        errorMessage: error_message,
-        items: team_select_items,
-        label: {
-          text: "Choose team",
-          classes: "govuk-label--s"
-        },
-        is_autocomplete: true,
-        show_all_values: true
-      ) %>
-
+    <%= form_with model: @form, url: investigation_collaborators_path(@investigation), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <% team_select_items = [OpenStruct.new(id: "", name: "")] + @teams.map { |team| OpenStruct.new(id: team.id, name: team.name, selected: (team.id == @form.team_id)) } %>
+      <%= form.govuk_collection_select(:team_id, team_select_items, :id, :name, label: { text: "Choose team", size: "s" }) %>
       <p class="govuk-body">We’ll email the team to let them know they’ve been added to the notification.</p>
-
-      <%= govukRadios(
-        form: form,
-        key: :permission_level,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Permission level",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: [
-          {
-            id: "permission_level",
-            text: "View full notification",
-            value: Collaboration::Access::ReadOnly.model_name.human,
-            hint: {
-              text: "View full notification details including correspondence",
-            }
-          },
-          {
-            id: "permission_level_edit",
-            text: "Edit full notification",
-            value: Collaboration::Access::Edit.model_name.human,
-            hint: {
-              text: "View and edit all notification details. Cannot add or remove teams or close the notification.",
-            }
-          }
-        ]
-      ) %>
-
-      <% message_html = capture do %>
-        <%= govukTextarea(
-          form: form,
-          key: :message,
-          id: "message",
-          label: {
-            text: "Message to the team"
-          },
-          hint: {
-            text: "Message will also be included on the notification timeline"
-          }
-        ) %>
+      <% permission_level_items = [
+        OpenStruct.new(id: Collaboration::Access::ReadOnly.model_name.human, name: "View full notification", description: "View full notification details including correspondence."),
+        OpenStruct.new(id: Collaboration::Access::Edit.model_name.human, name: "Edit full notification", description: "View and edit all notification details. Cannot add or remove teams or close the notification.")
+      ] %>
+      <%= form.govuk_collection_radio_buttons(:permission_level, permission_level_items, :id, :name, :description, legend: { text: "Permission level" }, bold_labels: false) %>
+      <%= form.govuk_radio_buttons_fieldset(:include_message, legend: { text: "Do you want to include instructions or more information?" }) do %>
+        <%= form.govuk_radio_button :include_message, "true", label: { text: "Yes, add a message" }, link_errors: true do %>
+          <%= form.govuk_text_area :message, label: { text: "Message to the team" }, hint: { text: "Message will also be included on the notification timeline" } %>
+        <% end %>
+        <%= form.govuk_radio_button :include_message, "false", label: { text: "No" } %>
       <% end %>
-
-      <%= govukRadios(
-        form: form,
-        key: :include_message,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Do you want to include instructions or more information?"
-          }
-        },
-        items: [
-          {
-            id: "include_message",
-            text: "Yes, add a message",
-            value: "true",
-            conditional: {
-              html: message_html
-            }
-          },
-          {
-            text: "No",
-            value: "false"
-          }
-        ]
-      ) %>
-
-
-      <%= govukButton(text: "Add team to this notification") %>
+      <%= form.govuk_submit("Add team to this notification") %>
     <% end %>
   </div>
 </div>

@@ -1,5 +1,5 @@
 <%= page_title "Do you have a barcode number?", errors: @product_duplicate_check_form.errors.any? %>
-<%= form_with model: @product_duplicate_check_form, url: duplicate_check_products_path(@product_duplicate_check_form), html: {novalidate: true}, local: true, builder: ApplicationFormBuilder do |f| %>
+<%= form_with model: @product_duplicate_check_form, url: duplicate_check_products_path(@product_duplicate_check_form), builder: ApplicationFormBuilder do |f| %>
   <%= error_summary(@product_duplicate_check_form.errors, %i[barcode]) %>
 
   <div class="govuk-grid-row">

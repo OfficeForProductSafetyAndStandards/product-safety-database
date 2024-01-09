@@ -2,93 +2,24 @@
 <% page_title title, errors: @edit_form.errors.any? %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= error_summary @edit_form.errors %>
-    <h1 class="govuk-heading-l"><%= title %></h1>
-    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, local: true do |form| %>
-      <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view notification details as it is restricted" :  "Will have default view rights"%>
-      <%= govukRadios(
-        form: form,
-        key: :permission_level,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Permission level",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: [
-          {
-            id: "permission_level",
-            text: "View full notification",
-            value: Collaboration::Access::ReadOnly.model_name.human,
-            hint: {
-              text: "View full notification details including correspondence",
-            }
-          },
-          {
-            id: "permission_level_edit",
-            text: "Edit full notification",
-            value: Collaboration::Access::Edit.model_name.human,
-            hint: {
-              text: "View and edit all notification details. Cannot add or remove teams or close the notification.",
-            }
-          },
-          { key: "or", divider: "or" },
-          {
-            id: "permission_level_delete",
-            text: "Remove #{@collaborator.name} from the notification",
-            hint: {
-              text: remove_hint
-            },
-            value: EditNotificationCollaboratorForm::PERMISSION_LEVEL_DELETE
-          }
-        ]
-      ) %>
-
-      <p class="govuk-body">We’ll email <%= @collaborator.name %> to let them know that their permission level has been changed.
-      </p>
-
-      <% message_html = capture do %>
-        <%= govukTextarea(
-          form: form,
-          key: :message,
-          id: "message",
-          label: {
-            text: "Message to the #{@collaborator.name}"
-          },
-          hint: {
-            text: "Message will also be included on the notification timeline"
-          }
-        ) %>
+    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view notification details as it is restricted." :  "Will have default view rights." %>
+      <%= form.govuk_radio_buttons_fieldset(:permission_level, legend: { text: "Permission level" }) do %>
+        <%= form.govuk_radio_button :permission_level, Collaboration::Access::ReadOnly.model_name.human, label: { text: "View full notification" }, hint: { text: "View full notification details including correspondence." }, link_errors: true %>
+        <%= form.govuk_radio_button :permission_level, Collaboration::Access::Edit.model_name.human, label: { text: "Edit full notification" }, hint: { text: "View and edit all notification details. Cannot add or remove teams or close the notification." } %>
+        <%= form.govuk_radio_divider %>
+        <%= form.govuk_radio_button :permission_level, EditNotificationCollaboratorForm::PERMISSION_LEVEL_DELETE, label: { text: "Remove #{@collaborator.name} from the notification" }, hint: { text: remove_hint } %>
       <% end %>
-
-      <%= govukRadios(
-        form: form,
-        key: :include_message,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Do you want to include more information?"
-          }
-        },
-        items: [
-          {
-            text: "Yes, add a message",
-            id: "include_message",
-            value: "true",
-            conditional: {
-              html: message_html
-            }
-          },
-          {
-            text: "No",
-            value: "false"
-          }
-        ]
-      ) %>
-
-      <%= govukButton(text: "Update team") %>
+      <p class="govuk-body">We’ll email <%= @collaborator.name %> to let them know that their permission level has been changed.</p>
+      <%= form.govuk_radio_buttons_fieldset(:include_message, legend: { text: "Do you want to include more information?" }) do %>
+        <%= form.govuk_radio_button :include_message, "true", label: { text: "Yes, add a message" }, link_errors: true do %>
+          <%= form.govuk_text_area :message, label: { text: "Message to #{@collaborator.name}" }, hint: { text: "Message will also be included on the notification timeline" } %>
+        <% end %>
+        <%= form.govuk_radio_button :include_message, "false", label: { text: "No" } %>
+      <% end %>
+      <%= form.govuk_submit("Update team") %>
     <% end %>
   </div>
 </div>
