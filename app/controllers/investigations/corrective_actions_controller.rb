@@ -17,7 +17,7 @@ module Investigations
       result = AddCorrectiveActionToNotification.call(
         @corrective_action_form
           .serializable_hash(except: :further_corrective_action)
-          .merge(user: current_user, investigation: @investigation)
+          .merge(user: current_user, notification: @investigation)
       )
 
       if result.success?
