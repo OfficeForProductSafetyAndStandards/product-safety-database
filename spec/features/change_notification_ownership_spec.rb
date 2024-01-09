@@ -161,7 +161,7 @@ RSpec.feature "Changing notification ownership", :with_stubbed_mailer, type: :fe
   end
 
   def fill_and_submit_change_owner_reason_form
-    fill_in "change_notification_owner_form_owner_rationale", with: "Test assign"
+    fill_in "change-notification-owner-form-owner-rationale-field", with: "Test assign"
     click_button "Confirm change"
   end
 

@@ -43,7 +43,7 @@ RSpec.feature "Changing a team's permissions on a notification", :with_stubbed_a
     expect(page).to have_selector("a", text: "Enter a message to the team")
 
     within_fieldset "Do you want to include more information?" do
-      fill_in "Message to the #{team.name}", with: "Thanks for collaborating on this notification with us before."
+      fill_in "Message to #{team.name}", with: "Thanks for collaborating on this notification with us before."
     end
 
     click_button "Update team"
@@ -107,7 +107,7 @@ RSpec.feature "Changing a team's permissions on a notification", :with_stubbed_a
     end
 
     within_fieldset "Do you want to include more information?" do
-      fill_in "Message to the #{team.name}", with: "You now have view read only access."
+      fill_in "Message to #{team.name}", with: "You now have view read only access."
     end
 
     click_button "Update team"
