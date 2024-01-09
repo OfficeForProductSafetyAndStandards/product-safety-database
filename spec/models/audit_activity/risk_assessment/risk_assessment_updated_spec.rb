@@ -12,7 +12,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
   let(:file) { fixture_file_upload("risk_assessment.txt") }
   let(:risk_assessment) do
     AddRiskAssessmentToNotification.call!(
-      investigation:,
+      notification: investigation,
       user:,
       assessed_on: date,
       assessed_by_team_id: user.team.id,

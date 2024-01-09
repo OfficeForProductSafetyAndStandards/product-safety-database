@@ -12,7 +12,7 @@ RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queu
   let(:product)               { create(:product, investigations: [notification]) }
   let(:investigation_product) { notification.investigation_products.first }
   let(:notification)          { create(:notification, :with_business, creator:, business_to_add: business) }
-  let(:common_context)        { { user:, investigation: notification } }
+  let(:common_context)        { { user:, notification: } }
   let(:reason)                { Faker::Hipster.sentence }
 
   context "with stubbed opensearch" do

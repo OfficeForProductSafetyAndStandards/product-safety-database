@@ -146,7 +146,7 @@ risk_levels = RiskAssessment.risk_levels.values
     investigation_product_ids: [investigation_product.id]
   }
 
-  AddRiskAssessmentToNotification.call!(risk_assessment_params.merge(investigation: investigation_product.investigation, user:, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
+  AddRiskAssessmentToNotification.call!(risk_assessment_params.merge(notification: investigation_product.investigation, user:, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
   RiskAssessment.first.risk_assessment_file.attach(create_blob(all_seed_files.sample, title: "Fork close up"))
 end
 
