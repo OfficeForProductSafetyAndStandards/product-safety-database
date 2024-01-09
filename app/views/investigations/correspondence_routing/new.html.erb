@@ -2,26 +2,13 @@
 <% page_title(page_heading, errors: @correspondence_type_form.errors.any?) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= error_summary @correspondence_type_form.errors %>
-    <% items = radio_items_from_hash(CorrespondenceTypeForm::AVAILABLE_TYPES).map.with_index do |item, index|
-                 id = index.zero? ? "type" : "type-#{index}"
-                 item[:id] = id
-                 item
-               end
-    %>
-    <%= form_with url: investigation_correspondence_index_path(@investigation) do |form| %>
-      <%= govukRadios(
-        form: form,
-        key: :type,
-        errorMessage: format_errors_for(@correspondence_type_form,
-                                        @correspondence_type_form.errors.full_messages_for(:type)),
-        items: items,
-        fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } }
-      ) %>
-      <%= govukButton(text: "Continue") %>
+    <%= form_with model: @correspondence_type_form, url: investigation_correspondence_index_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <%= form.govuk_collection_radio_buttons :type, CorrespondenceTypeForm::AVAILABLE_TYPES.map { |k, v| OpenStruct.new(id: k, name: v) }, :id, :name, legend: { text: page_heading, size: "l", tag: "h1" } %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Continue") %>
+        <%= link_to "Cancel", investigation_supporting_information_index_path(@investigation), class: "govuk-link" %>
+      </div>
     <% end %>
-    <p class="govuk-body">
-      <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation), class: "govuk-link" %>
-    </p>
   </div>
 </div>

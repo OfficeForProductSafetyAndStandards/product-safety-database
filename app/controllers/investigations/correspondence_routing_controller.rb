@@ -5,13 +5,15 @@ module Investigations
     before_action :set_investigation_breadcrumbs
 
     def new
-      correspondence_type_form
+      @correspondence_type_form = CorrespondenceTypeForm.new
     end
 
     def create
-      return render "new" unless correspondence_type_form.valid?
+      @correspondence_type_form = CorrespondenceTypeForm.new(correspondence_type_form_params)
 
-      case correspondence_type_form.type
+      return render "new" unless @correspondence_type_form.valid?
+
+      case @correspondence_type_form.type
       when "email"
         redirect_to new_investigation_email_path(@investigation)
       when "phone_call"
@@ -21,8 +23,8 @@ module Investigations
 
   private
 
-    def correspondence_type_form
-      @correspondence_type_form ||= CorrespondenceTypeForm.new(type: params[:type])
+    def correspondence_type_form_params
+      params.require(:correspondence_type_form).permit(:type)
     end
   end
 end
