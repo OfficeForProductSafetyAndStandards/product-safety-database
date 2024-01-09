@@ -61,7 +61,7 @@ RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queu
       let(:risk_assessment_params) do
         attributes_for(:risk_assessment, assessed_by_business_id: business.id, investigation_product_ids: [investigation_product.id]).merge(common_context)
       end
-      let(:risk_assessment) { AddRiskAssessmentToCase.call!(risk_assessment_params).risk_assessment }
+      let(:risk_assessment) { AddRiskAssessmentToNotification.call!(risk_assessment_params).risk_assessment }
 
       before { risk_assessment }
 

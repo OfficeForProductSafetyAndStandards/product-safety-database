@@ -19,7 +19,7 @@ module Investigations
 
       if @risk_assessment_form.valid?
 
-        result = AddRiskAssessmentToCase.call!(
+        result = AddRiskAssessmentToNotification.call!(
           @risk_assessment_form.attributes.merge({
             investigation: @investigation_object,
             user: current_user,

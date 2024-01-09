@@ -1,4 +1,4 @@
-class AddRiskAssessmentToCase
+class AddRiskAssessmentToNotification
   include Interactor
   include EntitiesToNotify
 
