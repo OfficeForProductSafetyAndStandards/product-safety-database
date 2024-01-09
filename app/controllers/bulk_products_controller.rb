@@ -232,7 +232,7 @@ class BulkProductsController < ApplicationController
 
       if @bulk_products_create_corrective_action_form.valid?
         @products.each do |product|
-          AddCorrectiveActionToCase.call!(
+          AddCorrectiveActionToNotification.call!(
             @bulk_products_create_corrective_action_form
               .serializable_hash(except: :further_corrective_action)
               .merge(

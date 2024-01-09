@@ -1,4 +1,4 @@
-class AddCorrectiveActionToCase
+class AddCorrectiveActionToNotification
   include Interactor
   include EntitiesToNotify
 

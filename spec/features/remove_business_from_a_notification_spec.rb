@@ -72,7 +72,7 @@ RSpec.feature "Remove a business from a notification", :with_stubbed_mailer do
 
     corrective_action_params = attributes_for(:corrective_action, business_id: business.id, investigation_product_id: investigation_product.id)
       .merge(user:, investigation: notification)
-    supporting_information = AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action.decorate
+    supporting_information = AddCorrectiveActionToNotification.call!(corrective_action_params).corrective_action.decorate
 
     visit "/cases/#{notification.pretty_id}/businesses"
     expect_to_have_notification_breadcrumbs

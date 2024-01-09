@@ -47,7 +47,7 @@ RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queu
 
     context "when a corrective action is attached to the business" do
       let(:corrective_action_params) { attributes_for(:corrective_action, business_id: business.id, investigation_product_id: investigation_product.id).merge(common_context) }
-      let(:corrective_action)        { AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action }
+      let(:corrective_action) { AddCorrectiveActionToNotification.call!(corrective_action_params).corrective_action }
 
       before { corrective_action }
 
