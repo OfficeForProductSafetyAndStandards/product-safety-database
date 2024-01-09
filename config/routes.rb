@@ -173,8 +173,6 @@ Rails.application.routes.draw do
       resources :images, controller: "investigations/images", only: %i[index], path: "images"
       resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index]
 
-      resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
-
       resource :activity, controller: "investigations/activities", only: %i[show create] do
         resource :comment, only: %i[create new]
       end

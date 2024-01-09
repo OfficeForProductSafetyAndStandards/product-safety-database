@@ -465,19 +465,6 @@ en:
       email_address:
         invalid: "Enter an email address in the correct format, like name@example.com"
 
-  forms:
-    investigation_actions:
-      actions:
-        change_case_owner: "Change notification owner"
-        close_case: "Close notification"
-        reopen_case: "Re-open notification"
-        change_case_visibility:
-          restricted: "Unrestrict this notification"
-          unrestricted: "Restrict this notification"
-        change_case_risk_level:
-          not_set: Set risk level
-          set: Change risk level
-
   activemodel:
     errors:
       models:
@@ -646,10 +633,6 @@ en:
               blank: "Select a file"
             title:
               blank: "Enter a document title"
-        investigation_actions_form:
-          attributes:
-            action:
-              blank: "Select an action"
         edit_notification_collaborator_form:
           attributes:
             include_message:
