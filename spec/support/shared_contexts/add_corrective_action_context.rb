@@ -2,9 +2,9 @@ RSpec.shared_context "with add corrective action setup" do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:products) { [product] }
-  let(:investigation) { create(:allegation, :with_business, products:, creator: user, read_only_teams: read_only_team) }
-  let(:investigation_product) { investigation.investigation_products.first }
-  let(:business) { investigation.businesses.first }
+  let(:notification) { create(:notification, :with_business, products:, creator: user, read_only_teams: read_only_team) }
+  let(:investigation_product) { notification.investigation_products.first }
+  let(:business) { notification.businesses.first }
   let(:action_key) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:action) { CorrectiveAction.actions[action_key] }
   let(:date_decided) { Date.parse("2020-05-01") }

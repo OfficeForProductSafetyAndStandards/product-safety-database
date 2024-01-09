@@ -23,7 +23,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_mailer, :with
       other_action:,
       geographic_scope:,
       geographic_scopes:,
-      investigation:,
+      investigation: notification,
       investigation_product:
     )
   end
@@ -63,8 +63,8 @@ ergq perog n
     end
 
     context "when no document was attached" do
-      context "when investigation does not have an audit for an updated corrective action" do
-        context "when investigation as only audit for an added corrective action" do
+      context "when notification does not have an audit for an updated corrective action" do
+        context "when notification as only audit for an added corrective action" do
           it "retrieves the corrective action by the update" do
             expect(described_class.metadata_from_legacy_audit_activity(audit_activity)[:corrective_action][:id])
               .to eq(corrective_action.id)
@@ -225,14 +225,14 @@ ergq perog n
     context "when metadata contains a Product reference" do
       let(:metadata) do
         data = described_class.build_metadata(corrective_action).stringify_keys
-        data["corrective_action"]["product_id"] = investigation.product_ids.first
+        data["corrective_action"]["product_id"] = notification.product_ids.first
         data["corrective_action"].delete("investigation_product_id")
         data
       end
 
       it "translates the Product ID to InvestigationProduct ID" do
         expect(audit_activity.metadata["corrective_action"]["product_id"]).to be_nil
-        expect(audit_activity.metadata["corrective_action"]["investigation_product_id"]).to eq(investigation.investigation_product_ids.first)
+        expect(audit_activity.metadata["corrective_action"]["investigation_product_id"]).to eq(notification.investigation_product_ids.first)
       end
     end
   end

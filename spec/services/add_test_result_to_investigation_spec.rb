@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:user)                                 { create(:user, :activated) }
-  let!(:investigation)                       { create :allegation, creator: user }
+  let!(:notification)                        { create(:notification, creator: user) }
 
   let(:document)                             { ActiveStorage::Blob.create_and_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
   let(:file_description)                     { Faker::Hipster.sentence }
@@ -17,7 +17,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed
 
   let(:params) do
     {
-      investigation:,
+      investigation: notification,
       user:,
       document:,
       date:,
@@ -39,7 +39,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed
     "Notification updated"
   end
 
-  describe "when provided with a user and an investigation" do
+  describe "when provided with a user and an notification" do
     let(:command) { described_class.call(params) }
 
     it "creates the test result", :aggregate_failures do
@@ -55,7 +55,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed
 
     it "creates an audit log", :aggregate_failures do
       test_result = command.test_result
-      audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", investigation_product_id:)
+      audit = notification.activities.find_by!(type: "AuditActivity::Test::Result", investigation_product_id:)
       expect(audit.added_by_user).to eq(user)
       expect(audit.metadata["test_result"]["id"]).to eq(test_result.id)
     end
