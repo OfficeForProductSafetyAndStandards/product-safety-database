@@ -817,6 +817,22 @@ en:
               too_long: The notification description must be %{count} characters or less
             reported_reason:
               blank: Choose why you are creating the notification
+        change_notification_product_safety_compliance_details_form:
+          attributes:
+            unsafe:
+              blank: Choose at least one issue
+            primary_hazard:
+              blank: Choose the primary hazard
+            primary_hazard_description:
+              blank: Enter additional information about the product hazard
+              too_long: Additional information about the product hazard must be %{count} characters or less
+            noncompliance_description:
+              blank: Enter a description of the product non-compliance issues
+              too_long: Description of the product non-compliance issues must be %{count} characters or less
+            add_reference_number:
+              inclusion: Choose whether you want to add your own reference number
+            reference_number:
+              blank: Enter a reference number
 
   activerecord:
     models:
