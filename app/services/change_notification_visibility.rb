@@ -1,4 +1,4 @@
-class ChangeCaseVisibility
+class ChangeNotificationVisibility
   include Interactor
   include EntitiesToNotify
 

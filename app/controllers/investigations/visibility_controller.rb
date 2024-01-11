@@ -32,7 +32,7 @@ module Investigations
       end
 
       ahoy.track "Updated case visibility", { notification_id: @investigation.id }
-      ChangeCaseVisibility.call!(@change_case_visibility_form.serializable_hash.merge(user: current_user, investigation: @investigation))
+      ChangeNotificationVisibility.call!(@change_case_visibility_form.serializable_hash.merge(user: current_user, investigation: @investigation))
 
       redirect_to investigation_path(@investigation), flash: { success: "Notification was #{flash}" }
     end
