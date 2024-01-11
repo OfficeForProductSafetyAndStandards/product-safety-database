@@ -389,7 +389,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
 
     describe "notification type" do
       scenario "filtering for projects" do
-        within_fieldset "Notification type" do
+        within_fieldset "Type" do
           choose "Project"
         end
         click_button "Apply"
@@ -403,7 +403,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       scenario "filtering for enquiries" do
-        within_fieldset "Notification type" do
+        within_fieldset "Type" do
           choose "Enquiry"
         end
         click_button "Apply"
@@ -417,7 +417,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       scenario "filtering for notifications" do
-        within_fieldset "Notification type" do
+        within_fieldset "Type" do
           choose "Notification"
         end
         click_button "Apply"
@@ -431,7 +431,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       scenario "filtering for allegations" do
-        within_fieldset "Notification type" do
+        within_fieldset "Type" do
           choose "Allegation"
         end
         click_button "Apply"
