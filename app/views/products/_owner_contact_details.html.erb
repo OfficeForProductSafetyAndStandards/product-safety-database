@@ -14,7 +14,7 @@
 <%
   date_case_closed = local_assigns[:investigation_closed_at]
   psd_ref = date_case_closed.present? ? product.psd_ref(timestamp: date_case_closed.to_i, investigation_was_closed: true) : product.psd_ref
-  summary_rows = [
+  rows = [
     {
       key: { text: "Product record" },
       value: { text: psd_ref }
@@ -29,10 +29,10 @@
     }
   ]
   if contact_html.present?
-    summary_rows << {
+    rows << {
       key: { text: "Contact details" },
-      value: { html: contact_html }
+      value: { text: contact_html }
     }
   end
 %>
-<%= govukSummaryList rows: summary_rows %>
+<%= govuk_summary_list(rows:) %>

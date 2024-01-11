@@ -5,9 +5,7 @@
     <%= form_with(model: @form,
                   url: investigation_summary_path(@investigation),
                   method: :patch,
-                  html: {novalidate: true},
-                  builder: ApplicationFormBuilder,
-                  local: true) do |form| %>
+                  builder: ApplicationFormBuilder) do |form| %>
 
       <%= form.govuk_text_area(:summary,
                                rows: 11,

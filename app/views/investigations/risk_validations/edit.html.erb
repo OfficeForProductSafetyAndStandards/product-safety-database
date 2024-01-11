@@ -1,6 +1,6 @@
 <% page_heading = "Has the notification risk level been validated?" %>
 <% page_title page_heading, errors: @risk_validation_form.errors.any? %>
-<%= form_with scope: :investigation, model: @risk_validation_form, builder: ApplicationFormBuilder, url: investigation_risk_validations_path(@investigation), html: {novalidate: true}, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @risk_validation_form, builder: ApplicationFormBuilder, url: investigation_risk_validations_path(@investigation), method: :put do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @risk_validation_form.errors %>

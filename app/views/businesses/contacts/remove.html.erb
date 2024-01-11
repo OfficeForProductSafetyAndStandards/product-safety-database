@@ -34,6 +34,6 @@
   </div>
 </div>
 
-<%= form_with url: business_contact_path(@business, @contact), method: :delete, local: true do |form| %>
+<%= form_with url: business_contact_path(@business, @contact), method: :delete do |form| %>
   <%= govukButton text: "Remove contact", classes: "govuk-button govuk-button--warning" %>
 <% end %>

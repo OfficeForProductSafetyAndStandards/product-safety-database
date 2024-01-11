@@ -1,7 +1,7 @@
 <% page_heading = "Why are you creating a notification?" %>
 <%= page_title page_heading, errors: @reason_for_creating_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, builder: ApplicationFormBuilder, html: {novalidate: true}, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, builder: ApplicationFormBuilder, method: :put do |form| %>
     <%= error_summary @reason_for_creating_form.errors %>
     <% error_message = { text: @reason_for_creating_form.errors.full_messages_for("case_is_safe").first } if @reason_for_creating_form.errors.any? %>
     <%= govukRadios(

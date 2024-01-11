@@ -1,4 +1,4 @@
-<%= form_with(model: @remove_business_form, url: investigation_business_path(@investigation, @business), method: :delete, local: true, html: {novalidate: true}, builder: ApplicationFormBuilder) do |form| %>
+<%= form_with(model: @remove_business_form, url: investigation_business_path(@investigation, @business), method: :delete, builder: ApplicationFormBuilder) do |form| %>
   <%= form.govuk_radios :remove,
             legend: t(".remove_business_legend"),
    items: [

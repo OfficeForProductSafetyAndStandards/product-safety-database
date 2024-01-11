@@ -2,7 +2,7 @@
 
 <%= render "investigations/heading/#{@page_name}", answer: @answer %>
 
-<%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true, role: "search" }) do |form| %>
+<%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, id: "cases-search-form", html: { role: "search" }) do |form| %>
   <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters" id="page-content">

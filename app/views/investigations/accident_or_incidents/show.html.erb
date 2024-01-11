@@ -9,7 +9,7 @@
       </p>
     </div>
 
-    <%= govukSummaryList(rows: accident_or_incident_summary_list_rows(@accident_or_incident)) %>
+    <%= govuk_summary_list(rows: accident_or_incident_summary_list_rows(@accident_or_incident)) %>
 
     <% if policy(@investigation).update? %>
       <p class="govuk-body"><%= link_to "Edit #{@accident_or_incident.type.downcase}", edit_investigation_accident_or_incident_path(@investigation, @accident_or_incident), class: "govuk-link" %></p>

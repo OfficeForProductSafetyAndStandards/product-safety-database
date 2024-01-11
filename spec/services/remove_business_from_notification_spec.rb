@@ -12,7 +12,7 @@ RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queu
   let(:product)               { create(:product, investigations: [notification]) }
   let(:investigation_product) { notification.investigation_products.first }
   let(:notification)          { create(:notification, :with_business, creator:, business_to_add: business) }
-  let(:common_context)        { { user:, investigation: notification } }
+  let(:common_context)        { { user:, notification: } }
   let(:reason)                { Faker::Hipster.sentence }
 
   context "with stubbed opensearch" do
@@ -47,7 +47,7 @@ RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queu
 
     context "when a corrective action is attached to the business" do
       let(:corrective_action_params) { attributes_for(:corrective_action, business_id: business.id, investigation_product_id: investigation_product.id).merge(common_context) }
-      let(:corrective_action)        { AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action }
+      let(:corrective_action) { AddCorrectiveActionToNotification.call!(corrective_action_params).corrective_action }
 
       before { corrective_action }
 
@@ -61,7 +61,7 @@ RSpec.describe RemoveBusinessFromNotification, :with_opensearch, :with_test_queu
       let(:risk_assessment_params) do
         attributes_for(:risk_assessment, assessed_by_business_id: business.id, investigation_product_ids: [investigation_product.id]).merge(common_context)
       end
-      let(:risk_assessment) { AddRiskAssessmentToCase.call!(risk_assessment_params).risk_assessment }
+      let(:risk_assessment) { AddRiskAssessmentToNotification.call!(risk_assessment_params).risk_assessment }
 
       before { risk_assessment }
 

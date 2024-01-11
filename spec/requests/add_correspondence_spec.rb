@@ -11,7 +11,7 @@ RSpec.describe "Adding correspondence to a notification", type: :request, with_s
 
   context "when not choosing any option" do
     before do
-      post investigation_correspondence_index_path(notification)
+      post investigation_correspondence_index_path(notification), params: { "correspondence_type_form[type]" => nil }
     end
 
     it "renders the form again" do
@@ -25,8 +25,7 @@ RSpec.describe "Adding correspondence to a notification", type: :request, with_s
 
   context  "when choosing a correspondence type" do
     before do
-      post investigation_correspondence_index_path(notification),
-           params: { type: }
+      post investigation_correspondence_index_path(notification), params: { "correspondence_type_form[type]" => type }
     end
 
     context "when adding an email" do

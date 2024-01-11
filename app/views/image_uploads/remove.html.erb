@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<%= form_with url: associated_image_upload_path(@parent, @image_upload), method: :delete, local: true do |form| %>
+<%= form_with url: associated_image_upload_path(@parent, @image_upload), method: :delete do |form| %>
   <% if params[:multiple] %>
     <input type="hidden" name="multiple" value="true">
     <% (params[:image_upload_id] || []).each do |image_upload_id| %>

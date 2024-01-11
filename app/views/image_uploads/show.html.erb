@@ -32,11 +32,10 @@
           },
           value: {
             text: @image_upload.created_at.to_formatted_s(:govuk)
-
           }
         }
       ] %>
-    <%= govukSummaryList(rows: rows) %>
+    <%= govuk_summary_list(rows:) %>
 
     <% if imageable_policy(@parent).remove? %>
       <p class="govuk-body"><%= link_to "Remove image", remove_associated_image_upload_path(@parent, @image_upload), class: "govuk-link" %></p>

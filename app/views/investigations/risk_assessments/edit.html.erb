@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessment_path(@investigation.pretty_id, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
+    <%= form_with(model: @risk_assessment_form, url: investigation_risk_assessment_path(@investigation.pretty_id, @risk_assessment), method: :patch, builder: ApplicationFormBuilder) do |form| %>
       <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level assessed_by investigation_product_ids risk_assessment_file])%>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>

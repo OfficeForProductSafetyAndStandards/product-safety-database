@@ -2,7 +2,7 @@
 
 <%= render "products/heading/#{@page_name}", count: @count %>
 
-<%= form_with(model: @search, scope: "", url: products_path, method: :get, local: true, html: { novalidate: true, role: "search" }) do |form| %>
+<%= form_with(model: @search, scope: "", url: products_path, method: :get, html: { role: "search" }) do |form| %>
   <div class="govuk-grid-row opss-full-height">
     <%= render 'products/filters', form: form %>
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue_adapter do
+RSpec.describe AddCorrectiveActionToNotification, :with_stubbed_mailer, :with_test_queue_adapter do
   subject(:result) { described_class.call(params) }
 
   include_context "with read only team and user"
@@ -11,7 +11,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
     corrective_action_form
       .serializable_hash
       .merge(
-        investigation:,
+        notification:,
         user:,
         changes: corrective_action_form.changes
       )
@@ -34,7 +34,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
     expect(result.corrective_action).not_to be_new_record
     expect(result.corrective_action)
       .to have_attributes(
-        investigation:, date_decided:, business_id: business.id, details:, legislation:, measure_type:,
+        investigation: notification, date_decided:, business_id: business.id, details:, legislation:, measure_type:,
         duration:, geographic_scopes:, other_action:, action:, investigation_product_id: investigation_product.id,
         online_recall_information:, has_online_recall_information:
       )
@@ -43,7 +43,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
   it "creates and audit activity", :aggregate_failures do
     result
 
-    audit = investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Add")
+    audit = notification.activities.find_by!(type: "AuditActivity::CorrectiveAction::Add")
     expect(audit.added_by_user).to eq(user)
 
     expect(audit.metadata)
@@ -52,22 +52,22 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
   end
 
   it "does not add OPSS IMT with edit permissions as a collaborator" do
-    expect(result.investigation.teams_with_edit_access).to eq([user.team])
+    expect(result.notification.teams_with_edit_access).to eq([user.team])
   end
 
   it_behaves_like "a service which notifies teams with access"
 
-  context "when the investigation risk level is serious" do
+  context "when the notification risk level is serious" do
     let(:opss_imt) { create(:team, name: "OPSS Incident Management") }
 
     before do
       opss_imt
-      investigation.risk_level = "serious"
-      investigation.save!
+      notification.risk_level = "serious"
+      notification.save!
     end
 
     it "adds OPSS IMT with edit permissions as a collaborator" do
-      expect(result.investigation.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
+      expect(result.notification.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
     end
   end
 
@@ -77,12 +77,12 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_mailer, :with_test_queue
 
     before do
       opss_imt
-      investigation.risk_level = "low"
-      investigation.save!
+      notification.risk_level = "low"
+      notification.save!
     end
 
     it "adds OPSS IMT with edit permissions as a collaborator" do
-      expect(result.investigation.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
+      expect(result.notification.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
     end
   end
 end

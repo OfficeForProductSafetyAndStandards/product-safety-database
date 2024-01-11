@@ -1,7 +1,7 @@
 <%= page_title "Is this the product?", errors: @confirm_product_form.errors.any? %>
 <%= error_summary @confirm_product_form.errors %>
 
-<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
+<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), builder: ApplicationFormBuilder do |form| %>
   <%= form.hidden_field :product_id %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -14,11 +14,11 @@
             <section class="govuk-grid-column-three-quarters opss-panels">
               <div class="opss-panels__single">
                 <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
-                <%= govukSummaryList(
-                  classes: "govuk-summary-list--no-border govuk-!-margin-bottom-6",
+                <%= govuk_summary_list(
+                  borders: false,
                   rows: [
                     {
-                      key: { html: "#{psd_abbr title: false} <span title=\"reference\">ref</span>".html_safe },
+                      key: { text: "#{psd_abbr title: false} <span title=\"reference\">ref</span>".html_safe },
                       value: { text: @product.psd_ref }
                     },
                     {
@@ -35,7 +35,7 @@
                     },
                     {
                       key: { text: "Counterfeit" },
-                      value: { html: render("product_authenticity", authenticity: @product.object.authenticity) }
+                      value: { text: render("product_authenticity", authenticity: @product.object.authenticity) }
                     }
                   ]
                 ) %>

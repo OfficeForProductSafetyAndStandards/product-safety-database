@@ -14,10 +14,10 @@ module Investigations
       @file_blob = @corrective_action_form.document
       return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
-      result = AddCorrectiveActionToCase.call(
+      result = AddCorrectiveActionToNotification.call(
         @corrective_action_form
           .serializable_hash(except: :further_corrective_action)
-          .merge(user: current_user, investigation: @investigation)
+          .merge(user: current_user, notification: @investigation)
       )
 
       if result.success?

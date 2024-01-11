@@ -5,10 +5,6 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_mailer do
 
   let(:allegation) { create(:allegation, :reported_unsafe, user_title: "inputted user_title") }
 
-  describe "#display_product_summary_list?" do
-    it { is_expected.to be_display_product_summary_list }
-  end
-
   describe "#title" do
     context "when investigation has a user_title" do
       it "shows user_title" do

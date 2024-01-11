@@ -11,8 +11,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
   let(:new_date) { Time.zone.today - 10.days }
   let(:file) { fixture_file_upload("risk_assessment.txt") }
   let(:risk_assessment) do
-    AddRiskAssessmentToCase.call!(
-      investigation:,
+    AddRiskAssessmentToNotification.call!(
+      notification: investigation,
       user:,
       assessed_on: date,
       assessed_by_team_id: user.team.id,

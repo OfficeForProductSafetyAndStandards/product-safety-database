@@ -3,7 +3,7 @@
   <%= link_to "Back to notifications", investigations_path, class: "govuk-back-link" %>
 <% end %>
 
-<%= form_with(model: @investigation, scope: :investigation, url: wizard_path, method: :put, local: true) do |form| %>
+<%= form_with(model: @investigation, scope: :investigation, url: wizard_path, method: :put) do |form| %>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

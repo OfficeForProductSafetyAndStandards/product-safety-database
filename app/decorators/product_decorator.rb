@@ -143,14 +143,11 @@ class ProductDecorator < ApplicationDecorator
     unless product.retired?
       rows << {
         key: { text: "Product record owner" },
-        value: { html: owning_team_link }
+        value: { text: owning_team_link }
       }
     end
 
-    h.govukSummaryList(
-      classes: "govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact",
-      rows:
-    )
+    h.govuk_summary_list(rows:, borders: false, classes: "govuk-!-margin-bottom-4 opss-summary-list-mixed opss-summary-list-mixed--compact")
   end
 
   def product_name_with_cases
@@ -170,9 +167,6 @@ class ProductDecorator < ApplicationDecorator
       end
     end
 
-    h.govukSummaryList(
-      classes: "govuk-summary-list govuk-summary-list--no-border",
-      rows:
-    )
+    h.govuk_summary_list(rows:, borders: false)
   end
 end

@@ -48,6 +48,13 @@ module Notifications
       ]
     end
 
+    def hazards_options
+      [OpenStruct.new(id: "", name: "")] +
+        Rails.application.config.hazard_constants["hazard_type"].map do |hazard_type|
+          OpenStruct.new(id: hazard_type.parameterize.underscore, name: hazard_type)
+        end
+    end
+
   private
 
     def previous_task(task)

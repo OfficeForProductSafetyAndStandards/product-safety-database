@@ -2,23 +2,19 @@
 <% page_title title %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
     <h1 class="govuk-heading-l"><%= title %></h1>
-
-    <%= govukSummaryList(
+    <%= govuk_summary_list(
       rows: [
         {
           key: { text: "Name" },
           value: { text: current_user.name },
-          actions: {
-            items: [
-              {
-                href: account_name_path,
-                text: "Change",
-                visuallyHiddenText: "name"
-              }
-            ]
-          }
+          actions: [
+            {
+              href: account_name_path,
+              text: "Change",
+              visually_hidden_text: "name"
+            }
+          ]
         },
         {
           key: { text: "Email address" },
@@ -38,7 +34,6 @@
         }
       ]
     ) %>
-
     <div class="govuk-inset-text">
       If you need to change your details, email <%= mail_to t(:enquiries_email), nil, class: "govuk-link" %>
     </div>

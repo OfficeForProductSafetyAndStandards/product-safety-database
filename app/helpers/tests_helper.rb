@@ -18,7 +18,7 @@ module TestsHelper
     if test_result.tso_certificate_issue_date.present?
       rows << {
         key: { text: "Funded" },
-        value: { html: I18n.t("test_results.opss_funded.yes_html").html_safe }
+        value: { text: I18n.t("test_results.opss_funded.yes_html").html_safe }
       }
       rows << {
         key: { text: "Sample number" },

@@ -11,10 +11,6 @@ class Investigation < ApplicationRecord
       title.presence || "Untitled notification"
     end
 
-    def display_product_summary_list?
-      true
-    end
-
   private
 
     def compliance_line

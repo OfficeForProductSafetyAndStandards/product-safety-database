@@ -2,7 +2,7 @@
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= form_with url: investigation_prism_risk_assessments_path, method: :post, builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+    <%= form_with url: investigation_prism_risk_assessments_path, method: :post, builder: ApplicationFormBuilder do |form| %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
       <div class="govuk-inset-text">

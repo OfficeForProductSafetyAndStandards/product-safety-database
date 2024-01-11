@@ -4,8 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @business_form,
           url: investigation_businesses_path(@investigation),
-          local: true,
-          html: { autocomplete: :off, novalidate: true }) do |form| %>
+          html: { autocomplete: :off }) do |form| %>
 
       <%= error_summary @business_form.errors %>
 
