@@ -22,7 +22,7 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize @investigation, :can_unrestrict?
 
-      @change_case_visibility_form = ChangeCaseVisibilityForm.from(@investigation)
+      @change_case_visibility_form = ChangeNotificationVisibilityForm.from(@investigation)
       @change_case_visibility_form.assign_attributes(change_case_visibility_form_params.merge(new_visibility:))
 
       # If not a PATCH request we should escape now and just display the form.

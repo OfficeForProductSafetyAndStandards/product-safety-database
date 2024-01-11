@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe ChangeCaseVisibilityForm, :with_test_queue_adapter do
-  subject(:form) { described_class.from(investigation) }
+RSpec.describe ChangeNotificationVisibilityForm, :with_test_queue_adapter do
+  subject(:form) { described_class.from(notification) }
 
-  let(:investigation) { build(:allegation) }
+  let(:notification) { build(:notification) }
 
   describe ".from" do
     it "sets the case type" do
