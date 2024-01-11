@@ -2,19 +2,19 @@ class ChangeNotificationVisibility
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :new_visibility, :rationale, :user, to: :context
+  delegate :notification, :new_visibility, :rationale, :user, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No visibility supplied") if new_visibility.nil?
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.is_private = private?
+    notification.is_private = private?
 
-    return if investigation.changes.none?
+    return if notification.changes.none?
 
     ActiveRecord::Base.transaction do
-      investigation.save!
+      notification.save!
       create_audit_activity_for_case_visibility_changed
     end
 
@@ -24,11 +24,11 @@ class ChangeNotificationVisibility
 private
 
   def create_audit_activity_for_case_visibility_changed
-    metadata = activity_class.build_metadata(investigation, rationale)
+    metadata = activity_class.build_metadata(notification, rationale)
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       title: nil,
       body: nil,
       metadata:
@@ -40,11 +40,11 @@ private
   end
 
   def send_notification_email
-    return unless investigation.sends_notifications?
+    return unless notification.sends_notifications?
 
-    email_recipients_for_case_owner(investigation).each do |recipient|
+    email_recipients_for_case_owner(notification).each do |recipient|
       NotifyMailer.notification_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         recipient.name,
         recipient.email,
         email_body(recipient),
