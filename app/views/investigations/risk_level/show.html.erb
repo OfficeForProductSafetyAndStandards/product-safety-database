@@ -16,7 +16,7 @@
       ) %>
     </div>
 
-    <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put, local: true do |form| %>
+    <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put do |form| %>
       <%= error_summary @risk_level_form.errors %>
 
       <% radio_items = (Investigation.risk_levels.keys - ["other", "not_conclusive"]).map do |level|

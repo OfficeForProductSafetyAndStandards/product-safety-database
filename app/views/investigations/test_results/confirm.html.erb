@@ -51,7 +51,7 @@
       </tbody>
     </table>
 
-    <%= form_with model: @test_result, scope: :test, url: investigation_test_results_path(@investigation), method: :post, local: true do |form| %>
+    <%= form_with model: @test_result, scope: :test, url: investigation_test_results_path(@investigation), method: :post do |form| %>
       <div class="govuk-button-group">
         <%= form.submit "Continue", class: "govuk-button" %>
         <%= link_to "Edit details", new_investigation_test_result_path(@investigation), class: "govuk-link" %>

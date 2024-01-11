@@ -98,7 +98,17 @@ module Notifications
         @change_notification_details_form = ChangeNotificationDetailsForm.new(
           user_title: @notification.user_title,
           description: @notification.description,
-          reported_reason: notification_reported_reason(@notification)
+          reported_reason: notification_reported_reason_summary(@notification)
+        )
+      when :add_product_safety_and_compliance_details
+        @change_notification_product_safety_compliance_details_form = ChangeNotificationProductSafetyComplianceDetailsForm.new(
+          unsafe: %w[unsafe unsafe_and_non_compliant].include?(@notification.reported_reason),
+          noncompliant: %w[non_compliant unsafe_and_non_compliant].include?(@notification.reported_reason),
+          primary_hazard: @notification.hazard_type,
+          primary_hazard_description: @notification.hazard_description,
+          noncompliance_description: @notification.non_compliant_reason,
+          add_reference_number: @notification.complainant_reference.present? ? true : nil,
+          reference_number: @notification.complainant_reference
         )
       end
 
@@ -114,9 +124,47 @@ module Notifications
         @change_notification_details_form = ChangeNotificationDetailsForm.new(add_notification_details_params.merge(current_user:, notification_id: @notification.id))
 
         if @change_notification_details_form.valid?
-          ChangeNotificationName.call!(notification: @notification, user_title: add_notification_details_params[:user_title], user: current_user, silent: true)
-          ChangeCaseSummary.call!(investigation: @notification, summary: add_notification_details_params[:description], user: current_user, silent: true)
-          ChangeReportedReason.call!(investigation: @notification, reported_reason: add_notification_details_params[:reported_reason], user: current_user, silent: true) if add_notification_details_params[:reported_reason] == "safe_and_compliant"
+          ChangeNotificationName.call!(
+            notification: @notification,
+            user_title: add_notification_details_params[:user_title],
+            user: current_user,
+            silent: true
+          )
+          ChangeCaseSummary.call!(
+            investigation: @notification,
+            summary: add_notification_details_params[:description],
+            user: current_user,
+            silent: true
+          )
+          if add_notification_details_params[:reported_reason] == "safe_and_compliant"
+            ChangeReportedReason.call!(
+              investigation: @notification,
+              reported_reason: add_notification_details_params[:reported_reason],
+              user: current_user,
+              silent: true
+            )
+          end
+        else
+          return render_wizard
+        end
+      when :add_product_safety_and_compliance_details
+        @change_notification_product_safety_compliance_details_form = ChangeNotificationProductSafetyComplianceDetailsForm.new(add_product_safety_and_compliance_details_params.merge(current_user:))
+
+        if @change_notification_product_safety_compliance_details_form.valid?
+          ChangeReportedReason.call!(
+            investigation: @notification,
+            reported_reason: notification_reported_reason_detailed(unsafe: add_product_safety_and_compliance_details_params[:unsafe], noncompliant: add_product_safety_and_compliance_details_params[:noncompliant]),
+            hazard_type: add_product_safety_and_compliance_details_params[:primary_hazard],
+            hazard_description: add_product_safety_and_compliance_details_params[:primary_hazard_description],
+            non_compliant_reason: add_product_safety_and_compliance_details_params[:noncompliance_description],
+            user: current_user,
+            silent: true
+          )
+          ChangeNotificationReferenceNumber.call!(
+            notification: @notification,
+            reference_number: add_product_safety_and_compliance_details_params[:add_reference_number] ? add_product_safety_and_compliance_details_params[:reference_number] : nil,
+            user: current_user
+          )
         else
           return render_wizard
         end
@@ -166,7 +214,7 @@ module Notifications
       notification_create_index_path(@notification)
     end
 
-    def notification_reported_reason(notification)
+    def notification_reported_reason_summary(notification)
       if notification.reported_reason.present?
         if notification.reported_reason == "safe_and_compliant"
           "safe_and_compliant"
@@ -176,8 +224,22 @@ module Notifications
       end
     end
 
+    def notification_reported_reason_detailed(unsafe:, noncompliant:)
+      if unsafe && noncompliant
+        "unsafe_and_non_compliant"
+      elsif unsafe
+        "unsafe"
+      else
+        "non_compliant"
+      end
+    end
+
     def add_notification_details_params
       params.require(:change_notification_details_form).permit(:user_title, :description, :reported_reason, :draft)
+    end
+
+    def add_product_safety_and_compliance_details_params
+      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :add_reference_number, :reference_number, :draft)
     end
   end
 end

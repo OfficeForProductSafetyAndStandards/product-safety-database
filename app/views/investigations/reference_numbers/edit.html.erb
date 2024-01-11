@@ -14,7 +14,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with scope: :investigation, model: @notification, url: investigation_reference_numbers_path, method: :put, local: true do |form| %>
+    <%= form_with scope: :investigation, model: @notification, url: investigation_reference_numbers_path, method: :put do |form| %>
       <%= govukInput(
         key: :complainant_reference,
         id: "complainant_reference",

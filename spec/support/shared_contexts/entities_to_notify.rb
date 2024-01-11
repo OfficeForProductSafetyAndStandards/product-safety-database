@@ -9,13 +9,13 @@ RSpec.shared_examples "a service which notifies teams with access" do
   before do
     AddTeamToNotification.call!(
       user:,
-      notification: investigation,
+      notification:,
       team: team_with_edit_access,
       collaboration_class: Collaboration::Access::Edit
     )
     AddTeamToNotification.call!(
       user:,
-      notification: investigation,
+      notification:,
       team: team_with_readonly_access,
       collaboration_class: Collaboration::Access::ReadOnly
     )
@@ -25,7 +25,7 @@ RSpec.shared_examples "a service which notifies teams with access" do
     context "when the team has team recipient email" do
       let(:expected_edit_notification_args) do
         [
-          investigation.pretty_id,
+          notification.pretty_id,
           team_with_edit_access.name,
           team_with_edit_access.email,
           expected_email_body(user, team_with_edit_access),
@@ -35,7 +35,7 @@ RSpec.shared_examples "a service which notifies teams with access" do
 
       let(:expected_readonly_notification_args) do
         [
-          investigation.pretty_id,
+          notification.pretty_id,
           team_with_readonly_access.name,
           team_with_readonly_access.email,
           expected_email_body(user, team_with_readonly_access),
@@ -57,7 +57,7 @@ RSpec.shared_examples "a service which notifies teams with access" do
       let(:team_with_readonly_access_email) { nil }
       let(:expected_edit_notification_args) do
         [
-          investigation.pretty_id,
+          notification.pretty_id,
           user_with_edit_access.name,
           user_with_edit_access.email,
           expected_email_body(user, user_with_edit_access),
@@ -67,7 +67,7 @@ RSpec.shared_examples "a service which notifies teams with access" do
 
       let(:expected_readonly_notification_args) do
         [
-          investigation.pretty_id,
+          notification.pretty_id,
           user_with_readonly_access.name,
           user_with_readonly_access.email,
           expected_email_body(user, user_with_readonly_access),

@@ -5,7 +5,7 @@
   </div>
 </div>
 
-<%= form_with(model: @business, local: true, html: { autocomplete: :off, novalidate: true }) do |form| %>
+<%= form_with(model: @business, html: { autocomplete: :off }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= govukErrorSummary form: form %>

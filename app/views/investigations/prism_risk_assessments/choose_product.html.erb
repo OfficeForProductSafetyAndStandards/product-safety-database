@@ -2,7 +2,7 @@
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
-    <%= form_with url: new_investigation_prism_risk_assessment_path, method: :get, builder: ApplicationFormBuilder, html: { novalidate: true } do |form| %>
+    <%= form_with url: new_investigation_prism_risk_assessment_path, method: :get, builder: ApplicationFormBuilder do |form| %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <%= govukRadios(
         form: form,

@@ -1,6 +1,6 @@
 <%= page_title "Do you want to remove this product?", errors: @remove_product_form.errors.any? %>
 <%= error_summary @remove_product_form.errors %>
-<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_investigation_product_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
+<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group">

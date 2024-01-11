@@ -1,5 +1,5 @@
 <%= page_title "Record email", errors: @email_correspondence_form.errors.any? %>
-<%= form_with(model: @email_correspondence_form, local: true, url: investigation_emails_path, method: :post, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
+<%= form_with(model: @email_correspondence_form, url: investigation_emails_path, method: :post, builder: ApplicationFormBuilder) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary form.object.errors %>

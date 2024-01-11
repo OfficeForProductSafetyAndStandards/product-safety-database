@@ -135,11 +135,6 @@ module PageExpectations
     end
   end
 
-  def expect_to_be_on_record_corrective_action_for_case_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective-actions/new")
-    expect(page).to have_selector("h1", text: "Record corrective action")
-  end
-
   def expect_to_be_on_corrective_action_summary_page(is_other_action: false)
     if is_other_action
       expect(page).to have_summary_item(key: "Action",              value: new_other_action)

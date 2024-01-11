@@ -44,6 +44,6 @@
   </div>
 </div>
 
-<%= form_with url: associated_document_upload_path(@parent, @document_upload), method: :delete, local: true do |form| %>
+<%= form_with url: associated_document_upload_path(@parent, @document_upload), method: :delete do |form| %>
   <%= form.submit "Delete attachment", class: "govuk-button govuk-button--warning" %>
 <% end %>

@@ -2,7 +2,7 @@
 
 <%= render "businesses/heading/#{@page_name}", count: @count %>
 
-<%= form_with(model: @search, scope: "", url: businesses_path, method: :get, local: true, html: { novalidate: true, role: "search" }) do |form| %>
+<%= form_with(model: @search, scope: "", url: businesses_path, method: :get, html: { role: "search" }) do |form| %>
   <div class="govuk-grid-row opss-full-height">
 
     <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">

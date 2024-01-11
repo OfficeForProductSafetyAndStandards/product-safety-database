@@ -1,6 +1,6 @@
 <%= page_title "Add a product to the notification", errors: @find_product_form.errors.any? %>
 <%= error_summary @find_product_form.errors %>
-<%= form_with model: @find_product_form, url: find_investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
+<%= form_with model: @find_product_form, url: find_investigation_products_path(@investigation), builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-label-wrapper opss-label-wrapper">

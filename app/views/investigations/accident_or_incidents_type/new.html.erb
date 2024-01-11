@@ -1,6 +1,6 @@
 <% page_heading = "Are you recording an accident or incident?" %>
 <% page_title page_heading, errors: @accident_or_incident_type_form.errors.any? %>
-<%= form_with scope: :investigation, model: @accident_or_incident_type_form, url: investigation_accident_or_incidents_type_index_path(@investigation), builder: ApplicationFormBuilder, html: {novalidate: true}, method: :post, local: true do |form| %>
+<%= form_with scope: :investigation, model: @accident_or_incident_type_form, url: investigation_accident_or_incidents_type_index_path(@investigation), builder: ApplicationFormBuilder, method: :post do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @accident_or_incident_type_form.errors %>

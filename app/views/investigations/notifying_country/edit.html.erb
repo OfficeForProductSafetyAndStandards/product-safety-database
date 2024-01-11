@@ -1,6 +1,6 @@
 <% page_heading = "Change the notifying country" %>
 <% page_title page_heading, errors: @notifying_country_form.errors.any? %>
-<%= form_with scope: :investigation, model: @notifying_country_form, url: investigation_notifying_country_path(@investigation), html: {novalidate: true}, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @notifying_country_form, url: investigation_notifying_country_path(@investigation), method: :put do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <%= error_summary @notifying_country_form.errors %>

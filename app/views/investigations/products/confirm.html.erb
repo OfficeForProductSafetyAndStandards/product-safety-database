@@ -1,7 +1,7 @@
 <%= page_title "Is this the product?", errors: @confirm_product_form.errors.any? %>
 <%= error_summary @confirm_product_form.errors %>
 
-<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, local: true do |form| %>
+<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), builder: ApplicationFormBuilder do |form| %>
   <%= form.hidden_field :product_id %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
