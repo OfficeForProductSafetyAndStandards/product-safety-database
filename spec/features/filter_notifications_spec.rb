@@ -388,7 +388,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     end
 
     describe "notification type" do
-      context "as an OPSS user" do
+      context "with an OPSS user" do
         let(:user) { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
 
         scenario "filtering for projects" do
