@@ -3,7 +3,7 @@ require "sidekiq/testing"
 
 RSpec.feature "notification export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user_team) { create :team, name: "User Team" }
-  let(:user) { create :user, :all_data_exporter, :activated, team: user_team, organisation: user_team.organisation }
+  let(:user) { create :user, :all_data_exporter, :opss_user, :activated, team: user_team, organisation: user_team.organisation }
   let(:other_user_same_team) { create :user, :activated, team: user_team, organisation: user_team.organisation }
   let(:other_user_team) { create :team, name: "Other User Team" }
   let(:other_user) { create :user, :activated, team: other_user_team, organisation: other_user_team.organisation }

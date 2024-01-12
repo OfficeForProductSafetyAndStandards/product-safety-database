@@ -388,60 +388,56 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     end
 
     describe "notification type" do
-      scenario "filtering for projects" do
-        within_fieldset "Notification type" do
-          choose "Project"
+      context "with an OPSS user" do
+        let(:user) { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
+
+        scenario "filtering for projects" do
+          within_fieldset "Type" do
+            choose "Project"
+          end
+          click_button "Apply"
+
+          expect(page).not_to have_listed_case(allegation.pretty_id)
+          expect(page).not_to have_listed_case(notification.pretty_id)
+          expect(page).to     have_listed_case(project.pretty_id)
+          expect(page).not_to have_listed_case(enquiry.pretty_id)
         end
-        click_button "Apply"
 
-        expect(page).not_to have_listed_case(allegation.pretty_id)
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).to     have_listed_case(project.pretty_id)
-        expect(page).not_to have_listed_case(enquiry.pretty_id)
+        scenario "filtering for enquiries" do
+          within_fieldset "Type" do
+            choose "Enquiry"
+          end
+          click_button "Apply"
 
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering for enquiries" do
-        within_fieldset "Notification type" do
-          choose "Enquiry"
+          expect(page).not_to have_listed_case(allegation.pretty_id)
+          expect(page).not_to have_listed_case(notification.pretty_id)
+          expect(page).not_to have_listed_case(project.pretty_id)
+          expect(page).to     have_listed_case(enquiry.pretty_id)
         end
-        click_button "Apply"
 
-        expect(page).not_to have_listed_case(allegation.pretty_id)
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(project.pretty_id)
-        expect(page).to     have_listed_case(enquiry.pretty_id)
+        scenario "filtering for notifications" do
+          within_fieldset "Type" do
+            choose "Notification"
+          end
+          click_button "Apply"
 
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering for notifications" do
-        within_fieldset "Notification type" do
-          choose "Notification"
+          expect(page).not_to have_listed_case(allegation.pretty_id)
+          expect(page).to     have_listed_case(notification.pretty_id)
+          expect(page).not_to have_listed_case(project.pretty_id)
+          expect(page).not_to have_listed_case(enquiry.pretty_id)
         end
-        click_button "Apply"
 
-        expect(page).not_to have_listed_case(allegation.pretty_id)
-        expect(page).to     have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(project.pretty_id)
-        expect(page).not_to have_listed_case(enquiry.pretty_id)
+        scenario "filtering for allegations" do
+          within_fieldset "Type" do
+            choose "Allegation"
+          end
+          click_button "Apply"
 
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering for allegations" do
-        within_fieldset "Notification type" do
-          choose "Allegation"
+          expect(page).to     have_listed_case(allegation.pretty_id)
+          expect(page).not_to have_listed_case(notification.pretty_id)
+          expect(page).not_to have_listed_case(project.pretty_id)
+          expect(page).not_to have_listed_case(enquiry.pretty_id)
         end
-        click_button "Apply"
-
-        expect(page).to     have_listed_case(allegation.pretty_id)
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(project.pretty_id)
-        expect(page).not_to have_listed_case(enquiry.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
       end
     end
 
