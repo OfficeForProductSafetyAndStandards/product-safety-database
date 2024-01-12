@@ -4,11 +4,11 @@ class Investigations::SummaryController < Investigations::BaseController
   before_action :set_investigation_breadcrumbs
 
   def edit
-    @form = ChangeCaseSummaryForm.new(summary: @investigation.description)
+    @form = ChangeNotificationSummaryForm.new(summary: @investigation.description)
   end
 
   def update
-    @form = ChangeCaseSummaryForm.new(params.require(:change_case_summary_form).permit(:summary))
+    @form = ChangeNotificationSummaryForm.new(params.require(:change_case_summary_form).permit(:summary))
     return render :edit, status: :unprocessable_entity unless @form.valid?
 
     ahoy.track "Updated notification summary", { notification_id: @investigation.id }

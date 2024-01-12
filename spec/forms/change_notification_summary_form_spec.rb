@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeCaseSummaryForm do
+RSpec.describe ChangeNotificationSummaryForm do
   subject(:form) { described_class.new(summary:) }
 
   let(:summary) { "New summary" }
