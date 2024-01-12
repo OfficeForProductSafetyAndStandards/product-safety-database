@@ -20,7 +20,7 @@ class ChangeSafetyAndComplianceData
 
     context.changes_made = true
 
-    send_notification_email(investigation, user)
+    send_notification_email(investigation, user) unless context.silent
   end
 
 private
@@ -40,6 +40,12 @@ private
 
     if reported_reason.to_s == "non_compliant"
       investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason:, reported_reason:)
+    end
+
+    # Clear everything so the user can re-choose if they chose "unsafe and/or non-compliant" and the previous choice was "safe and compliant"
+    # to avoid clobbering previously-entered data
+    if reported_reason.to_s == "unsafe_or_non_compliant" && investigation.reported_reason == "safe_and_compliant"
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason: nil)
     end
   end
 

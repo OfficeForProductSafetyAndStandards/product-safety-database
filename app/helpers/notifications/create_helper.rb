@@ -11,9 +11,11 @@ module Notifications
     end
 
     def task_status(task)
+      previous_task = previous_task(task)
+
       if %w[in_progress completed].include?(@notification.tasks_status[task.to_s])
         @notification.tasks_status[task.to_s]
-      elsif first_task?(task) || @notification.tasks_status[previous_task(task).to_s] == "completed"
+      elsif previous_task.nil? || @notification.tasks_status[previous_task.to_s] == "completed"
         "not_started"
       else
         "cannot_start_yet"
@@ -55,14 +57,48 @@ module Notifications
         end
     end
 
+    def number_of_affected_units(affected_units_status, number_of_affected_units)
+      case affected_units_status
+      when "exact"
+        number_of_affected_units
+      when "approx"
+        "Approximately #{number_of_affected_units}"
+      when "unknown"
+        "Unknown"
+      when "not_relevant"
+        "Not relevant"
+      else
+        "Not provided"
+      end
+    end
+
   private
 
     def previous_task(task)
-      task_index = wizard_steps.index(task)
+      return if first_task?(task)
 
-      return task if task_index.zero? # The task is the first task
+      all_tasks = wizard_steps
+      optional_tasks = Notifications::CreateController::TASK_LIST_SECTIONS.slice(*Notifications::CreateController::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
+      mandatory_tasks = all_tasks - optional_tasks
 
-      wizard_steps.at(task_index - 1)
+      # Return the previous mandatory task or `nil` if this is the first mandatory task
+      index = mandatory_tasks.index(task)
+      unless index.nil?
+        return if index.zero?
+
+        return mandatory_tasks.at(index - 1)
+      end
+
+      # This is an optional task - find and return the last mandatory task or `nil` if we get to the first task without a match
+      previous_index = all_tasks.index(task) - 1
+
+      loop do
+        previous_task = all_tasks.at(previous_index)
+        return previous_task if mandatory_tasks.include?(previous_task)
+        return if previous_index.zero?
+
+        previous_index -= 1
+      end
     end
 
     def first_task?(task)

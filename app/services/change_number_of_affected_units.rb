@@ -19,7 +19,7 @@ class ChangeNumberOfAffectedUnits
 
     context.changed = true
 
-    send_notification_email
+    send_notification_email unless context.silent
   end
 
 private

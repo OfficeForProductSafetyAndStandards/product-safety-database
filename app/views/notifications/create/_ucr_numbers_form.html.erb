@@ -1,0 +1,14 @@
+<div class="nested-form-wrapper govuk-grid-row govuk-!-margin-bottom-0" data-new-record="<%= f.object.new_record? %>">
+  <div class="govuk-grid-column-three-quarters">
+    <%= f.govuk_text_field :number, label: nil %>
+  </div>
+  <div class="govuk-grid-column-one-quarter">
+    <p class="govuk-body">
+      <a href="#" class="govuk-link govuk-link--no-visited-state opss-nojs-hide" data-action="nested-form#remove">Remove</a>
+      <% if f.object.persisted? %>
+        <a href="<%= delete_ucr_number_notification_create_index_path(ucr_number_id: f.object.id) %>" class="govuk-link govuk-link--no-visited-state opss-js-enabled-hidden" rel="nofollow">Remove</a>
+      <% end %>
+      <%= f.hidden_field :_destroy %>
+    </p>
+  </div>
+</div>

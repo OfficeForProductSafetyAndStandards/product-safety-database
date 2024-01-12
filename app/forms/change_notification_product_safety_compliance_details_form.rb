@@ -10,11 +10,12 @@ class ChangeNotificationProductSafetyComplianceDetailsForm
   attribute :noncompliance_description, :string
   attribute :add_reference_number, :boolean
   attribute :reference_number, :string
+  attribute :safe_and_compliant, :boolean # Whether the notification has already been marked as "safe and compliant"
   attribute :current_user
 
-  validate :at_least_one_of_unsafe_or_noncompliant
-  validates :primary_hazard, :primary_hazard_description, presence: true, if: -> { unsafe }
-  validates :noncompliance_description, presence: true, if: -> { noncompliant }
+  validate :at_least_one_of_unsafe_or_noncompliant, unless: -> { safe_and_compliant }
+  validates :primary_hazard, :primary_hazard_description, presence: true, if: -> { unsafe }, unless: -> { safe_and_compliant }
+  validates :noncompliance_description, presence: true, if: -> { noncompliant }, unless: -> { safe_and_compliant }
   validates :add_reference_number, inclusion: [true, false]
   validates :reference_number, presence: true, if: -> { add_reference_number }
   validates :primary_hazard_description, :noncompliance_description, length: { maximum: 10_000 }
