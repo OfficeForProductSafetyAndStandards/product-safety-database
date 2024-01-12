@@ -7,8 +7,8 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
-        <% @notification.products.decorate.each do |product| %>
-          <li class="govuk-body-l"><%= product.name_with_brand %></li>
+        <% @notification.investigation_products.decorate.each do |investigation_product| %>
+          <li class="govuk-body-l"><%= investigation_product.product.name_with_brand %></li>
         <% end %>
         </ul>
         <p class="govuk-body"><a href="<%= wizard_path(:search_for_or_add_a_product) %>?search" class="govuk-link govuk-link--no-visited-state">Add another product</a></p>

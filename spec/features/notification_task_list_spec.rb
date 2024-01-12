@@ -102,9 +102,15 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       fill_in "Reference number", with: "123456"
     end
 
-    click_button "Save as draft"
+    click_button "Save and continue"
+
+    click_link "Add batch numbers"
+    fill_in "batch_number", with: "1234, 5678"
+    click_button "Save"
+    click_button "Save and complete tasks in this section"
 
     expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-1-status", text: "Completed")
+    expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
   end
 end

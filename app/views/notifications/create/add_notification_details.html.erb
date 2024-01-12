@@ -1,4 +1,4 @@
-<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_notification_details.title"), errors: false) %>
+<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_notification_details.title"), errors: @change_notification_details_form.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

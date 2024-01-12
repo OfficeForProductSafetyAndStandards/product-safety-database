@@ -9,6 +9,7 @@ module Notifications
     before_action :set_steps
     before_action :setup_wizard
     before_action :validate_step, except: %i[index from_product add_product]
+    before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number]
 
     breadcrumb "cases.label", :your_cases_investigations
 
@@ -47,20 +48,19 @@ module Notifications
     end
 
     def add_product
-      # Add a newly-created product to an existing notification
+      # Add a newly-created product to an existing notification, save progress, then redirect to it
       product = Product.find(params[:product_id])
       AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
       @notification.tasks_status["search_for_or_add_a_product"] = "completed"
       @notification.save!(context: :search_for_or_add_a_product)
       ahoy.track "Added product to existing notification", { notification_id: @notification.id, product_id: product.id }
-
       redirect_to notification_create_index_path(@notification)
     end
 
     def show
       case step
       when :search_for_or_add_a_product
-        return redirect_to wizard_path(:search_for_or_add_a_product) if params[:add_another_product] == "true"
+        return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if params[:add_another_product] == "true"
         return redirect_to notification_create_index_path(@notification) if params[:add_another_product] == "false"
 
         @page_name = params[:page_name]
@@ -136,30 +136,30 @@ module Notifications
             user: current_user,
             silent: true
           )
-          if add_notification_details_params[:reported_reason] == "safe_and_compliant"
-            ChangeReportedReason.call!(
-              investigation: @notification,
-              reported_reason: add_notification_details_params[:reported_reason],
-              user: current_user,
-              silent: true
-            )
-          end
+          ChangeSafetyAndComplianceData.call!(
+            investigation: @notification,
+            reported_reason: add_notification_details_params[:reported_reason],
+            user: current_user,
+            silent: true
+          )
         else
           return render_wizard
         end
       when :add_product_safety_and_compliance_details
-        @change_notification_product_safety_compliance_details_form = ChangeNotificationProductSafetyComplianceDetailsForm.new(add_product_safety_and_compliance_details_params.merge(current_user:))
+        @change_notification_product_safety_compliance_details_form = ChangeNotificationProductSafetyComplianceDetailsForm.new(add_product_safety_and_compliance_details_params.merge(safe_and_compliant: @notification.reported_reason&.safe_and_compliant?, current_user:))
 
         if @change_notification_product_safety_compliance_details_form.valid?
-          ChangeReportedReason.call!(
-            investigation: @notification,
-            reported_reason: notification_reported_reason_detailed(unsafe: add_product_safety_and_compliance_details_params[:unsafe], noncompliant: add_product_safety_and_compliance_details_params[:noncompliant]),
-            hazard_type: add_product_safety_and_compliance_details_params[:primary_hazard],
-            hazard_description: add_product_safety_and_compliance_details_params[:primary_hazard_description],
-            non_compliant_reason: add_product_safety_and_compliance_details_params[:noncompliance_description],
-            user: current_user,
-            silent: true
-          )
+          unless @notification.reported_reason&.safe_and_compliant?
+            ChangeSafetyAndComplianceData.call!(
+              investigation: @notification,
+              reported_reason: notification_reported_reason_detailed(unsafe: add_product_safety_and_compliance_details_params[:unsafe], noncompliant: add_product_safety_and_compliance_details_params[:noncompliant]),
+              hazard_type: add_product_safety_and_compliance_details_params[:primary_hazard],
+              hazard_description: add_product_safety_and_compliance_details_params[:primary_hazard_description],
+              non_compliant_reason: add_product_safety_and_compliance_details_params[:noncompliance_description],
+              user: current_user,
+              silent: true
+            )
+          end
           ChangeNotificationReferenceNumber.call!(
             notification: @notification,
             reference_number: add_product_safety_and_compliance_details_params[:add_reference_number] ? add_product_safety_and_compliance_details_params[:reference_number] : nil,
@@ -183,6 +183,61 @@ module Notifications
       else
         render_wizard(@notification, { context: step })
       end
+    end
+
+    def show_batch_numbers
+      render :add_product_identification_details_batch_numbers
+    end
+
+    def show_customs_codes
+      render :add_product_identification_details_customs_codes
+    end
+
+    def show_ucr_numbers
+      render :add_product_identification_details_ucr_numbers
+    end
+
+    def show_number_of_affected_units
+      @number_of_affected_units_form = NumberOfAffectedUnitsForm.from(@investigation_product)
+      render :add_product_identification_details_number_of_affected_units
+    end
+
+    def update_batch_numbers
+      ChangeBatchNumber.call!(investigation_product: @investigation_product, batch_number: params[:batch_number], user: current_user, silent: true)
+      redirect_to wizard_path(:add_product_identification_details)
+    end
+
+    def update_customs_codes
+      ChangeCustomsCode.call!(investigation_product: @investigation_product, customs_code: params[:customs_code], user: current_user, silent: true)
+      redirect_to wizard_path(:add_product_identification_details)
+    end
+
+    def update_ucr_numbers
+      ChangeUcrNumbers.call!(investigation_product: @investigation_product, ucr_numbers: ucr_numbers_params, user: current_user, silent: true)
+      redirect_to wizard_path(:add_product_identification_details)
+    end
+
+    def update_number_of_affected_units
+      @number_of_affected_units_form = NumberOfAffectedUnitsForm.new(number_of_affected_units_params)
+
+      if @number_of_affected_units_form.valid?
+        ChangeNumberOfAffectedUnits.call!(
+          investigation_product: @investigation_product,
+          number_of_affected_units: @number_of_affected_units_form.number_of_affected_units,
+          affected_units_status: @number_of_affected_units_form.affected_units_status,
+          user: current_user,
+          silent: true
+        )
+        redirect_to wizard_path(:add_product_identification_details)
+      else
+        render :add_product_identification_details_number_of_affected_units
+      end
+    end
+
+    def delete_ucr_number
+      ucr_number = @investigation_product.ucr_numbers.find(params[:ucr_number_id])
+      ucr_number.destroy!
+      redirect_to ucr_numbers_notification_create_index_path
     end
 
   private
@@ -210,6 +265,10 @@ module Notifications
       redirect_to notification_create_index_path(@notification) unless step == previous_step || step == :wizard_finish || @notification.tasks_status[previous_step.to_s] == "completed"
     end
 
+    def set_notification_product
+      @investigation_product = @notification.investigation_products.find(params[:investigation_product_id])
+    end
+
     def finish_wizard_path
       notification_create_index_path(@notification)
     end
@@ -221,10 +280,15 @@ module Notifications
         else
           "unsafe_or_non_compliant"
         end
+      elsif notification.tasks_status["add_notification_details"] == "completed"
+        "unsafe_or_non_compliant"
       end
     end
 
     def notification_reported_reason_detailed(unsafe:, noncompliant:)
+      unsafe = ActiveModel::Type::Boolean.new.cast(unsafe)
+      noncompliant = ActiveModel::Type::Boolean.new.cast(noncompliant)
+
       if unsafe && noncompliant
         "unsafe_and_non_compliant"
       elsif unsafe
@@ -240,6 +304,14 @@ module Notifications
 
     def add_product_safety_and_compliance_details_params
       params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :add_reference_number, :reference_number, :draft)
+    end
+
+    def number_of_affected_units_params
+      params.require(:number_of_affected_units_form).permit(:affected_units_status, :exact_units, :approx_units)
+    end
+
+    def ucr_numbers_params
+      params.require(:investigation_product).permit(ucr_numbers_attributes: %i[id number _destroy])
     end
   end
 end

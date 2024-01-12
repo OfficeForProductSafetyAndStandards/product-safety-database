@@ -396,6 +396,14 @@ en:
                 title: Add product safety and compliance details
               add_product_identification_details:
                 title: Add product identification details
+              add_product_identification_details_batch_numbers:
+                title: Add batch numbers
+              add_product_identification_details_customs_codes:
+                title: Add customs codes
+              add_product_identification_details_ucr_numbers:
+                title: Add Unique Consignment Reference (UCR) numbers
+              add_product_identification_details_number_of_affected_units:
+                title: Add the number of units affected
           business_details:
             title: Add the business in the product's supply chain
             tasks:
@@ -833,6 +841,10 @@ en:
               inclusion: Choose whether you want to add your own reference number
             reference_number:
               blank: Enter a reference number
+        number_of_affected_units_form:
+          attributes:
+            affected_units_status:
+              inclusion: Choose how to define the number of units affected
 
   activerecord:
     models:

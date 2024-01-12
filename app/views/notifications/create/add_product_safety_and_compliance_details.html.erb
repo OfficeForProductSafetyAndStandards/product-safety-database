@@ -1,4 +1,4 @@
-<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_product_safety_and_compliance_details.title"), errors: false) %>
+<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_product_safety_and_compliance_details.title"), errors: @change_notification_product_safety_compliance_details_form.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -11,21 +11,23 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
-        <% @notification.products.decorate.each do |product| %>
-          <li class="govuk-body-l"><%= product.name_with_brand %></li>
+        <% @notification.investigation_products.decorate.each do |investigation_product| %>
+          <li class="govuk-body-l"><%= investigation_product.product.name_with_brand %></li>
         <% end %>
         </ul>
       <% end %>
-      <%= f.govuk_check_boxes_fieldset :unsafe, multiple: false, legend: { text: "What specific issues make the #{'product'.pluralize(@notification.products.count)} unsafe or non-compliant?", size: "m" } do %>
-        <%= f.govuk_check_box :unsafe, true, false, multiple: false, link_errors: true, label: { text: "Product hazard" } do %>
-          <%= f.govuk_collection_select :primary_hazard, hazards_options, :id, :name, label: { text: "What is the primary hazard?" } %>
-          <%= f.govuk_text_area :primary_hazard_description, label: { text: "Provide additional information about the product hazard" }, hint: { text: "If the product has been involved in an incident include this additional information." }, max_chars: 10_000 %>
-        <% end %>
-        <%= f.govuk_check_box :noncompliant, true, false, multiple: false, label: { text: "Product incomplete markings, labeling or other issues" } do %>
-          <%= f.govuk_text_area :noncompliance_description, label: { text: "Describe the product non-compliance issues" }, max_chars: 10_000 %>
+      <% unless @notification.reported_reason&.safe_and_compliant? %>
+        <%= f.govuk_check_boxes_fieldset :unsafe, multiple: false, legend: { text: "What specific issues make the #{'product'.pluralize(@notification.products.count)} unsafe or non-compliant?", size: "m" }, hint: { text: "Please select all applicable issues." } do %>
+          <%= f.govuk_check_box :unsafe, true, false, multiple: false, link_errors: true, label: { text: "Product hazard" } do %>
+            <%= f.govuk_collection_select :primary_hazard, hazards_options, :id, :name, label: { text: "What is the primary hazard?" } %>
+            <%= f.govuk_text_area :primary_hazard_description, label: { text: "Provide additional information about the product hazard" }, hint: { text: "If the product has been involved in an incident include this additional information." }, max_chars: 10_000 %>
+          <% end %>
+          <%= f.govuk_check_box :noncompliant, true, false, multiple: false, label: { text: "Product incomplete markings, labeling or other issues" } do %>
+            <%= f.govuk_text_area :noncompliance_description, label: { text: "Describe the product non-compliance issues" }, max_chars: 10_000 %>
+          <% end %>
         <% end %>
       <% end %>
-      <%= f.govuk_radio_buttons_fieldset :add_reference_number, legend: { text: "Do you want to add your own reference number?", size: "m" } do %>
+      <%= f.govuk_radio_buttons_fieldset :add_reference_number, legend: { text: "Do you want to add your own reference number?", size: "m" }, hint: { text: "The reference number might be from a different internal system for your notification or a global identifier for multiple systems. It's searchable on the PSD notification search page and can be added or edited later." } do %>
         <%= f.govuk_radio_button :add_reference_number, true, label: { text: "Yes" }, link_errors: true do %>
           <%= f.govuk_text_field :reference_number, label: { text: "Reference number" } %>
         <% end %>

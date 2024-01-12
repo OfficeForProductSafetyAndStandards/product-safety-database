@@ -1,0 +1,22 @@
+<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_product_identification_details_customs_codes.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: customs_codes_notification_create_index_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.notification_details.title") %></span>
+        <%= t("notifications.create.index.sections.notification_details.tasks.add_product_identification_details_customs_codes.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+        </ul>
+      <% end %>
+      <%= f.govuk_text_field :customs_code, label: nil, hint: { text: "For example, a CN code (8 digits) or a TARIC code (10 digits). Use a comma and a space to separate multiple customs codes." }, value: @investigation_product.customs_code %>
+      <%= f.govuk_submit "Save" do %>
+        <a href="<%= wizard_path(:add_product_identification_details) %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>
