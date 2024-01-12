@@ -44,7 +44,7 @@ RSpec.describe ChangeNotificationSummaryForm do
     context "when summary is too long" do
       let(:summary) { rand(36**20_000).to_s(36) }
 
-      include_examples "invalid form", [:summary, "Summary must be 10,000 characters or fewer"]
+      include_examples "invalid form", [:summary, "Summary is too long (maximum is 10000 characters)"]
     end
   end
 end
