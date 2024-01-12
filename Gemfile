@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-ruby "3.2.1"
+ruby "3.2.2"
+
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.14"
 gem "activerecord-pg_enum", "~> 2.0"
