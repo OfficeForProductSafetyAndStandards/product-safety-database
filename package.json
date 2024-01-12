@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "engines": {
-    "node": "18.15.x",
-    "yarn": "1.22.x"
+    "node": "18.15.0",
+    "yarn": "1.22.19"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
@@ -32,5 +32,6 @@
       "stylelint-config-gds/scss",
       "./css-rules"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }
