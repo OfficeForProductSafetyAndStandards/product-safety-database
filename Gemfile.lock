@@ -332,7 +332,7 @@ GEM
     net-smtp (0.4.0)
       net-protocol
     netrc (0.11.0)
-    nio4r (2.5.9)
+    nio4r (2.7.0)
     nokogiri (1.15.5-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.5-x86_64-darwin)
@@ -377,7 +377,7 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (5.0.3)
-    puma (6.4.0)
+    puma (6.4.2)
       nio4r (~> 2.0)
     pundit (2.3.1)
       activesupport (>= 3.0.0)
