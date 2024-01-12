@@ -18,7 +18,9 @@
       <%= render "investigations/case_owner_radios", form: form %>
       <%= render "investigations/teams_with_access_radios", form: form %>
       <%= render "investigations/case_creator_radios", form: form %>
-      <%= render "investigations/case_type_radios", form: form %>
+      <% if current_user.is_opss? %>
+        <%= render "investigations/case_type_radios", form: form %>
+      <% end %>
       <%= render "investigations/case_hazard_type_filter", form: form %>
       <%= render "investigations/case_change_date_filter", form: form %>
     <% end %>
