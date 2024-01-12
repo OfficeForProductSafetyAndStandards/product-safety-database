@@ -85,6 +85,7 @@ module Notifications
       index = mandatory_tasks.index(task)
       unless index.nil?
         return if index.zero?
+
         return mandatory_tasks.at(index - 1)
       end
 
