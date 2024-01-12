@@ -8,7 +8,7 @@ class Investigations::SummaryController < Investigations::BaseController
   end
 
   def update
-    @form = ChangeNotificationSummaryForm.new(params.require(:change_case_summary_form).permit(:summary))
+    @form = ChangeNotificationSummaryForm.new(params.require(:change_notification_summary_form).permit(:summary))
     return render :edit, status: :unprocessable_entity unless @form.valid?
 
     ahoy.track "Updated notification summary", { notification_id: @investigation.id }
