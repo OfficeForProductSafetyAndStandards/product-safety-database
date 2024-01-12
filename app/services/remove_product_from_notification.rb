@@ -20,7 +20,7 @@ class RemoveProductFromNotification
 
     context.activity = create_audit_activity_for_product_removed
 
-    send_notification_email
+    send_notification_email unless context.silent
   end
 
 private

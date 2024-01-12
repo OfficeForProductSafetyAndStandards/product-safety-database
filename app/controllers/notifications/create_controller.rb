@@ -8,7 +8,7 @@ module Notifications
     before_action :disallow_changing_submitted_notification, except: %i[index from_product]
     before_action :set_steps
     before_action :setup_wizard
-    before_action :validate_step, except: %i[index from_product add_product]
+    before_action :validate_step, except: %i[index from_product add_product remove_product]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number]
 
     breadcrumb "cases.label", :your_cases_investigations
@@ -41,28 +41,36 @@ module Notifications
       notification = Investigation::Notification.new(state: "draft")
       product = Product.find(params[:product_id])
       CreateNotification.call!(notification:, product:, user: current_user, from_task_list: true, silent: true)
-      notification.tasks_status["search_for_or_add_a_product"] = "completed"
+      notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
       notification.save!(context: :search_for_or_add_a_product)
       ahoy.track "Created notification from product", { notification_id: notification.id, product_id: product.id }
-      redirect_to notification_create_index_path(notification)
+      redirect_to notification_create_path(notification, "search_for_or_add_a_product")
     end
 
     def add_product
       # Add a newly-created product to an existing notification, save progress, then redirect to it
       product = Product.find(params[:product_id])
       AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
-      @notification.tasks_status["search_for_or_add_a_product"] = "completed"
+      @notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
       @notification.save!(context: :search_for_or_add_a_product)
       ahoy.track "Added product to existing notification", { notification_id: @notification.id, product_id: product.id }
-      redirect_to notification_create_index_path(@notification)
+      redirect_to notification_create_path(@notification, "search_for_or_add_a_product")
+    end
+
+    def remove_product
+      return redirect_to notification_create_index_path(@notification) if @notification.tasks_status["search_for_or_add_a_product"] == "completed"
+
+      @investigation_product = @notification.investigation_products.find(params[:investigation_product_id])
+
+      if request.delete?
+        RemoveProductFromNotification.call!(notification: @notification, investigation_product: @investigation_product, user: current_user, silent: true)
+        redirect_to notification_create_path(@notification, "search_for_or_add_a_product")
+      end
     end
 
     def show
       case step
       when :search_for_or_add_a_product
-        return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if params[:add_another_product] == "true"
-        return redirect_to notification_create_index_path(@notification) if params[:add_another_product] == "false"
-
         @page_name = params[:page_name]
         @search_query = params[:q].presence
         sort_by = {
@@ -118,8 +126,12 @@ module Notifications
     def update
       case step
       when :search_for_or_add_a_product
-        product = Product.find(params[:product_id])
-        AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
+        return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if params[:add_another_product] == "true"
+
+        if params[:add_another_product].blank?
+          product = Product.find(params[:product_id])
+          AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
+        end
       when :add_notification_details
         @change_notification_details_form = ChangeNotificationDetailsForm.new(add_notification_details_params.merge(current_user:, notification_id: @notification.id))
 

@@ -24,7 +24,15 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
   scenario "Creating a notification from an existing product" do
     visit "/notifications/create/from-product/#{existing_product.id}"
 
-    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
+    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create\/search_for_or_add_a_product/)
+    expect(page).to have_content("Search for or add a product")
+
+    within_fieldset "Do you need to add another product?" do
+      choose "No"
+    end
+
+    click_button "Save and complete tasks in this section"
+
     expect(page).to have_content("Create a product safety notification")
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
   end
@@ -66,7 +74,15 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     click_button "Save"
 
-    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
+    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create\/search_for_or_add_a_product/)
+    expect(page).to have_content("Search for or add a product")
+
+    within_fieldset "Do you need to add another product?" do
+      choose "No"
+    end
+
+    click_button "Save and complete tasks in this section"
+
     expect(page).to have_content("Create a product safety notification")
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
   end

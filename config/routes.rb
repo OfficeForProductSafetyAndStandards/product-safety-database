@@ -126,6 +126,8 @@ Rails.application.routes.draw do
         resources :create, only: %i[index show update] do
           collection do
             get "add-product/:product_id", to: "create#add_product", as: "add_product"
+            get "remove-product/:investigation_product_id", to: "create#remove_product", as: "remove_product"
+            delete "remove-product/:investigation_product_id", to: "create#remove_product"
 
             %w[batch_numbers customs_codes ucr_numbers number_of_affected_units].each do |identifier|
               get "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#show_#{identifier}", as: identifier
@@ -133,7 +135,7 @@ Rails.application.routes.draw do
               put "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#update_#{identifier}"
             end
 
-            get "add_product_identification_details/ucr_numbers/:investigation_product_id/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
+            get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
           end
         end
       end

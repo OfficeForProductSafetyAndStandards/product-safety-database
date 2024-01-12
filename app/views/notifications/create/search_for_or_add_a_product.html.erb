@@ -19,19 +19,24 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <p class="govuk-body">You have added <%= pluralize(@existing_product_ids.length, "product") %>.
+          <% if @notification.tasks_status["search_for_or_add_a_product"] == "completed" %>
+            <p class="govuk-body">You have completed adding products. If removal of any products is necessary, please delete the current notification and create a new one.</p>
+          <% else %>
+            <p class="govuk-body">Once you complete adding products, you will not be able to subsequently remove any products without deleting the current notification and creating a new one.</p>
+          <% end %>
           <%=
             govuk_summary_list do |summary_list|
               @notification.investigation_products.decorate.each do |investigation_product|
                 summary_list.with_row do |row|
                   row.with_key(text: investigation_product.product.name_with_brand)
-                  row.with_action(text: "Remove", href: "#", visually_hidden_text: "product from notification")
+                  row.with_action(text: "Remove", href: remove_product_notification_create_index_path(investigation_product_id: investigation_product.id), visually_hidden_text: "product from notification") unless @notification.tasks_status["search_for_or_add_a_product"] == "completed"
                 end
               end
             end
           %>
-          <%= form_with url: request.fullpath, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+          <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
             <%= f.govuk_collection_radio_buttons :add_another_product, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another product?", size: "m" } %>
-            <%= f.govuk_submit("Save and complete tasks in this section") %>
+            <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
           <% end %>
         </div>
       </div>
