@@ -12,7 +12,7 @@ class Investigations::SummaryController < Investigations::BaseController
     return render :edit, status: :unprocessable_entity unless @form.valid?
 
     ahoy.track "Updated notification summary", { notification_id: @investigation.id }
-    ChangeCaseSummary.call!(investigation: @investigation_object, summary: @form.summary, user: current_user)
+    ChangeNotificationSummary.call!(investigation: @investigation_object, summary: @form.summary, user: current_user)
     redirect_to investigation_path(@investigation), flash: { success: "Notification was successfully updated" }
   end
 end

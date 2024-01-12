@@ -1,4 +1,4 @@
-class ChangeCaseSummary
+class ChangeNotificationSummary
   include Interactor
   include EntitiesToNotify
 
