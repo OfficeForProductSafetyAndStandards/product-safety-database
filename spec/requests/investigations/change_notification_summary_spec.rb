@@ -56,7 +56,7 @@ RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
       sign_in user
       patch investigation_summary_path(notification),
             params: {
-              change_notification_summary_form: { summary: "test" }
+              change_case_summary_form: { summary: "test" }
             }
     end
 
