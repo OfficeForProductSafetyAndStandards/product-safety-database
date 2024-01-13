@@ -7,11 +7,9 @@ default: &default
 development:
   <<: *default
   database: psd_development
-  password: password
 test:
   <<: *default
   database: psd_test<%= ENV['TEST_ENV_NUMBER'] %>
-  password: password
 
 
 production:
