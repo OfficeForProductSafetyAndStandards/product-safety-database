@@ -143,7 +143,7 @@ module Notifications
             silent: true
           )
           ChangeNotificationSummary.call!(
-            investigation: @notification,
+            notification: @notification,
             summary: add_notification_details_params[:description],
             user: current_user,
             silent: true
