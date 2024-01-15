@@ -11,6 +11,7 @@ test:
   <<: *default
   database: psd_test<%= ENV['TEST_ENV_NUMBER'] %>
 
+
 production:
   adapter: postgresql
   url: <%= ENV['RAILS_DATABASE_URL'] %>

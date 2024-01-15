@@ -142,8 +142,8 @@ module Notifications
             user: current_user,
             silent: true
           )
-          ChangeCaseSummary.call!(
-            investigation: @notification,
+          ChangeNotificationSummary.call!(
+            notification: @notification,
             summary: add_notification_details_params[:description],
             user: current_user,
             silent: true

@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
-  let(:investigation) do
+  let(:notification) do
     create(
-      :allegation,
+      :notification,
       description: "old summary",
       is_closed: false,
       creator: user_from_owner_team,
@@ -23,7 +23,7 @@ RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
   describe "Accessing the form" do
     before do
       sign_in user
-      get edit_investigation_summary_path(investigation)
+      get edit_investigation_summary_path(notification)
     end
 
     context "when the user belongs to the case owner’s team" do
@@ -54,9 +54,9 @@ RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
   describe "Updating the summary" do
     before do
       sign_in user
-      patch investigation_summary_path(investigation),
+      patch investigation_summary_path(notification),
             params: {
-              change_case_summary_form: { summary: "test" }
+              change_notification_summary_form: { summary: "test" }
             }
     end
 
@@ -65,8 +65,8 @@ RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
 
       it "updates the investigation and redirects to the investigation page" do
         aggregate_failures do
-          expect(investigation.reload.description).to eq("test")
-          expect(response).to redirect_to(investigation_path(investigation))
+          expect(notification.reload.description).to eq("test")
+          expect(response).to redirect_to(investigation_path(notification))
         end
       end
     end
@@ -76,8 +76,8 @@ RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
 
       it "updates the investigation and redirects to the investigation page" do
         aggregate_failures do
-          expect(investigation.reload.description).to eq("test")
-          expect(response).to redirect_to(investigation_path(investigation))
+          expect(notification.reload.description).to eq("test")
+          expect(response).to redirect_to(investigation_path(notification))
         end
       end
     end
@@ -88,7 +88,7 @@ RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
       it "returns a forbidden status code and doesn’t update the investigation" do
         aggregate_failures do
           expect(response).to have_http_status(:forbidden)
-          expect(investigation.reload.description).to eq("old summary")
+          expect(notification.reload.description).to eq("old summary")
         end
       end
     end
