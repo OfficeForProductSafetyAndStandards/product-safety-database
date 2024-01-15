@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
 ruby "3.2.1"
-gem "tzinfo-data"
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.14"
 gem "activerecord-pg_enum", "~> 2.0"
@@ -61,6 +60,7 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "stimulus-rails"
 gem "strong_migrations", "~> 1.6"
 gem "turbo-rails"
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw]
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
