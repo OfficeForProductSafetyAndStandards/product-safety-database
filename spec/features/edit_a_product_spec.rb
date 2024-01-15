@@ -7,7 +7,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
   let(:other_user)        { create(:user, :activated, has_viewed_introduction: true) }
   let(:brand)             { Faker::Appliance.brand }
   let(:country_of_origin) { "France" }
-  let(:investigation)     { create(:allegation, creator: user) }
+  let(:investigation)     { create(:notification, creator: user) }
   let(:product) do
     create(:product,
            authenticity: "counterfeit",

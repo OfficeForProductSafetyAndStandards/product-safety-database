@@ -22,6 +22,8 @@ module InvestigationsHelper
       wheres[:type] = "Investigation::Enquiry"
     end
 
+    wheres[:type] = "Investigation::Notification" unless user.is_opss?
+
     if @search.priority == "serious_and_high_risk_level_only"
       wheres[:risk_level] = %i[serious high]
     end
@@ -132,7 +134,11 @@ module InvestigationsHelper
 
     wheres = {}
 
-    case_types = CASE_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
+    case_types =  if user.is_opss?
+                    CASE_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
+                  else
+                    ["Investigation::Notification"]
+                  end
     wheres[:type] = case_types unless case_types.empty?
 
     risk_levels = []

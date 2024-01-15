@@ -63,7 +63,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         end
 
         it "restricts the description" do
-          create(:allegation, description: "=A1")
+          create(:notification, description: "=A1")
           Investigation.reindex
 
           get generate_case_exports_path, params: { q: "A1" }
@@ -76,7 +76,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         end
 
         it "restricts risk_validated_at" do
-          create(:allegation, risk_validated_at: Date.current)
+          create(:notification, risk_validated_at: Date.current)
 
           Investigation.reindex
 
