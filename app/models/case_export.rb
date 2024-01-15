@@ -110,31 +110,31 @@ private
   def add_header_row(sheet)
     sheet.add_row %w[ID
                      Status
-                     Title
                      Type
+                     Title
                      Description
                      Product_Category
-                     Hazard_Type
+                     Reported_Reason
                      Risk_Level
-                     Case_Owner_Team
+                     Hazard_Type
+                     Unsafe_Reason
+                     Non_Compliant_Reason
                      Products
                      Businesses
                      Corrective_Actions
                      Tests
                      Risk_Assessments
-                     Date_Created
-                     Last_Updated
-                     Date_Closed
-                     Date_Validated
+                     Case_Owner_Team
                      Case_Creator_Team
-                     Notifying_Country
-                     Reported_Reason
                      Notifiers_Reference
+                     Notifying_Country
                      Trading_Standards_Region
                      Regulator_Name
                      OPSS_Internal_Team
-                     Non_Compliant_Reason
-                     Unsafe_Reason]
+                     Date_Created
+                     Last_Updated
+                     Date_Closed
+                     Date_Validated]
   end
 
   def find_cases(ids)
@@ -153,31 +153,31 @@ private
     [
       investigation.pretty_id,
       investigation.is_closed? ? "Closed" : "Open",
-      investigation.title,
       investigation.type,
+      investigation.title,
       restrict_data_for_non_opss_user(investigation.object.description),
       investigation.categories.join(", "),
-      investigation.hazard_type,
+      investigation.reported_reason,
       investigation.risk_level_description,
-      investigation.owner_team&.name,
+      investigation.hazard_type,
+      investigation.hazard_description,
+      investigation.non_compliant_reason,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,
       corrective_action_counts[investigation.id] || 0,
       test_counts[investigation.id] || 0,
       risk_assessment_counts[investigation.id] || 0,
+      investigation.owner_team&.name,
+      investigation.creator_user&.team&.name,
+      investigation.complainant_reference,
+      country_from_code(investigation.notifying_country, Country.notifying_countries),
+      team_data.ts_region,
+      team_data.regulator_name,
+      restrict_data_for_non_opss_user((team_data.type == "internal")),
       investigation.created_at,
       investigation.updated_at,
       investigation.date_closed,
       restrict_data_for_non_opss_user(investigation.risk_validated_at),
-      investigation.creator_user&.team&.name,
-      country_from_code(investigation.notifying_country, Country.notifying_countries),
-      investigation.reported_reason,
-      investigation.complainant_reference,
-      team_data.ts_region,
-      team_data.regulator_name,
-      restrict_data_for_non_opss_user((team_data.type == "internal")),
-      investigation.non_compliant_reason,
-      investigation.hazard_description
     ]
   end
 
@@ -191,31 +191,31 @@ private
     [
       investigation.pretty_id,
       investigation.is_closed? ? "Closed" : "Open",
-      "Restricted",
       investigation.type,
       "Restricted",
+      "Restricted",
       investigation.categories.join(", "),
-      investigation.hazard_type,
+      investigation.reported_reason,
       investigation.risk_level_description,
-      investigation.owner_team&.name,
+      investigation.hazard_type,
+      investigation.non_compliant_reason,
+      investigation.hazard_description,
       product_counts[investigation.id] || 0,
       business_counts[investigation.id] || 0,
       corrective_action_counts[investigation.id] || 0,
       test_counts[investigation.id] || 0,
       risk_assessment_counts[investigation.id] || 0,
-      investigation.created_at,
-      investigation.updated_at,
-      investigation.date_closed,
-      investigation.risk_validated_at,
+      investigation.owner_team&.name,
       investigation.creator_user&.team&.name,
-      country_from_code(investigation.notifying_country, Country.notifying_countries),
-      investigation.reported_reason,
       "Restricted",
+      country_from_code(investigation.notifying_country, Country.notifying_countries),
       team_data.ts_region,
       team_data.regulator_name,
       (team_data.type == "internal"),
-      investigation.non_compliant_reason,
-      investigation.hazard_description
+      investigation.created_at,
+      investigation.updated_at,
+      investigation.date_closed,
+      investigation.risk_validated_at
     ]
   end
 end
