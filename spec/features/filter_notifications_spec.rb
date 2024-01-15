@@ -401,7 +401,6 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       context "with an OPSS user" do
-
         scenario "filtering for projects" do
           within_fieldset "Type" do
             choose "Project"
