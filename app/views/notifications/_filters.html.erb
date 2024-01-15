@@ -26,9 +26,13 @@
     <%= govuk_details(summary_text: "Created by", classes: "opss-details--plain", id: "cases-created-by") do %>
       <%= render "notifications/case_creator_checkboxes", form: form %>
     <% end %>
-    <%= govuk_details(summary_text: "Notification type", classes: "opss-details--plain", id: "case-type") do %>
-      <%= render "notifications/case_type_checkboxes", form: form %>
+
+    <% if current_user.is_opss? %>
+      <%= govuk_details(summary_text: "Type", classes: "opss-details--plain", id: "case-type") do %>
+        <%= render "notifications/case_type_checkboxes", form: form %>
+      <% end %>
     <% end %>
+
     <%= govuk_details(summary_text: "Notification hazard type", classes: "opss-details--plain", id: "case-hazard-type") do %>
       <%= render "notifications/case_hazard_type_checkboxes", form: form %>
     <% end %>
