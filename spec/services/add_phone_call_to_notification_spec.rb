@@ -6,7 +6,7 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
   include_context "with phone call correspondence setup"
 
   before do
-    params[:notification] = notification
+    params[:notification] = investigation
     params[:user]          = user
   end
 
@@ -41,7 +41,7 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
       result
       activity = result.correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall")
 
-      expect(activity.notification).to eq(notification)
+      expect(activity.investigation).to eq(notification)
       expect(activity.added_by_user).to eq(user)
       expect(activity.correspondence).to eq(result.correspondence)
     end
