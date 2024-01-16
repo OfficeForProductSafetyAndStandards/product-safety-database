@@ -6,7 +6,7 @@ RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_s
   include_context "with phone call correspondence setup"
 
   let(:phone_call) do
-    AddPhoneCallToCase.call!(
+    AddPhoneCallToNotification.call!(
       user:,
       investigation:,
       correspondence_date:,

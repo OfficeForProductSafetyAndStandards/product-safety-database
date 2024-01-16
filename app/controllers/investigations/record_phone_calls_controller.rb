@@ -14,7 +14,7 @@ class Investigations::RecordPhoneCallsController < Investigations::BaseControlle
 
     return render :new unless @correspondence_form.valid?
 
-    AddPhoneCallToCase.call!(
+    AddPhoneCallToNotification.call!(
       @correspondence_form
         .attributes
         .except("existing_transcript_file_id")

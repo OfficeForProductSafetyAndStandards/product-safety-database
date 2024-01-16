@@ -22,7 +22,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   end
 
   let!(:phone_call) do
-    AddPhoneCallToCase.call!(
+    AddPhoneCallToNotification.call!(
       user:,
       investigation:,
       correspondence_date:,

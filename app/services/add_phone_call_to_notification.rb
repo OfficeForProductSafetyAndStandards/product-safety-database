@@ -1,4 +1,4 @@
-class AddPhoneCallToCase
+class AddPhoneCallToNotification
   include Interactor
   include EntitiesToNotify
 
