@@ -22,25 +22,25 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize @investigation, :can_unrestrict?
 
-      @change_case_visibility_form = ChangeNotificationVisibilityForm.from(@investigation)
-      @change_case_visibility_form.assign_attributes(change_case_visibility_form_params.merge(new_visibility:))
+      @change_notification_visibility_form = ChangeNotificationVisibilityForm.from(@investigation)
+      @change_notification_visibility_form.assign_attributes(change_notification_visibility_form_params.merge(new_visibility:))
 
       # If not a PATCH request we should escape now and just display the form.
-      if !@change_case_visibility_form.valid? || !request.patch?
+      if !@change_notification_visibility_form.valid? || !request.patch?
         @investigation = @investigation.decorate
         return render(template)
       end
 
-      ahoy.track "Updated case visibility", { notification_id: @investigation.id }
-      ChangeNotificationVisibility.call!(@change_case_visibility_form.serializable_hash.merge(user: current_user, notification: @investigation))
+      ahoy.track "Updated notification visibility", { notification_id: @investigation.id }
+      ChangeNotificationVisibility.call!(@change_notification_visibility_form.serializable_hash.merge(user: current_user, notification: @investigation))
 
       redirect_to investigation_path(@investigation), flash: { success: "Notification was #{flash}" }
     end
 
-    def change_case_visibility_form_params
+    def change_notification_visibility_form_params
       return {} unless request.patch?
 
-      params.require(:change_case_visibility_form).permit(:rationale)
+      params.require(:change_notification_visibility_form).permit(:rationale)
     end
   end
 end
