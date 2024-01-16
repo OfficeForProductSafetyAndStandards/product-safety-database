@@ -111,7 +111,7 @@ jobs:
 
     - name: Run specs
       run: |
-        bundle exec rspec ${{ matrix.rspec-folder }}
+        bundle exec rspec --require spec_helper ${{ matrix.rspec-folder }}
 
     - name: Dump docker logs
       uses: jwalton/gh-docker-logs@v2
