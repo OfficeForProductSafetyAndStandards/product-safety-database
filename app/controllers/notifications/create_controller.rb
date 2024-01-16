@@ -50,7 +50,7 @@ module Notifications
     def add_product
       # Add a newly-created product to an existing notification, save progress, then redirect to it
       product = Product.find(params[:product_id])
-      AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
+      AddProductToNotification.call!(investigation: @notification, product:, user: current_user, skip_email: true)
       @notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
       @notification.save!(context: :search_for_or_add_a_product)
       ahoy.track "Added product to existing notification", { notification_id: @notification.id, product_id: product.id }
@@ -130,7 +130,7 @@ module Notifications
 
         if params[:add_another_product].blank?
           product = Product.find(params[:product_id])
-          AddProductToCase.call!(investigation: @notification, product:, user: current_user, skip_email: true)
+          AddProductToNotification.call!(investigation: @notification, product:, user: current_user, skip_email: true)
         end
       when :add_notification_details
         @change_notification_details_form = ChangeNotificationDetailsForm.new(add_notification_details_params.merge(current_user:, notification_id: @notification.id))
