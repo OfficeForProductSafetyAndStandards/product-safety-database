@@ -22,7 +22,7 @@ unless ENV["COVERAGE"] == "false"
 end
 
 require "domain_helpers"
-require 'sidekiq/testing'
+require "sidekiq/testing"
 require "super_diff/rspec-rails"
 
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
@@ -50,8 +50,6 @@ RSpec.configure do |config|
 
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-
-
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
