@@ -19,7 +19,7 @@ class CaseExport < ApplicationRecord
     raise "No notifications to export" unless case_ids.length.positive?
 
     spreadsheet = to_spreadsheet.to_stream
-    self.export_file = { io: spreadsheet, filename: "cases_export.xlsx" }
+    self.export_file = { io: spreadsheet, filename: "notifications_export.xlsx" }
 
     raise "No file attached" unless export_file.attached?
 
