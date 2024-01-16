@@ -27,7 +27,7 @@ private
 
     activity_class.create!(
       added_by_user: user,
-      investigation: notification_product,
+      investigation:,
       title: nil,
       body: nil,
       metadata:
