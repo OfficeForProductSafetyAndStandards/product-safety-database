@@ -2,14 +2,14 @@ class AddPhoneCallToNotification
   include Interactor
   include EntitiesToNotify
 
-  delegate :activity, :investigation, :correspondence, :user, :transcript, :correspondence_date, :correspondent_name, :overview, :details, :phone_number, to: :context
+  delegate :activity, :notification, :correspondence, :user, :transcript, :correspondence_date, :correspondent_name, :overview, :details, :phone_number, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     Correspondence.transaction do
-      context.correspondence = investigation.phone_calls.create!(
+      context.correspondence = notification.phone_calls.create!(
         transcript:,
         correspondence_date:,
         phone_number:,
@@ -20,23 +20,23 @@ class AddPhoneCallToNotification
 
       context.activity = AuditActivity::Correspondence::AddPhoneCall.create!(
         added_by_user: user,
-        investigation:,
+        investigation: notification,
         correspondence:,
         metadata: AuditActivity::Correspondence::AddPhoneCall.build_metadata(correspondence)
       )
 
-      send_notification_email(investigation, user)
+      send_notification_email(notification, user)
     end
   end
 
 private
 
-  def send_notification_email(investigation, user)
-    return unless investigation.sends_notifications?
+  def send_notification_email(notification, user)
+    return unless notification.sends_notifications?
 
-    email_recipients_for_team_with_access(investigation, user).each do |entity|
+    email_recipients_for_team_with_access(notification, user).each do |entity|
       NotifyMailer.notification_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         entity.name,
         entity.email,
         email_update_text(entity),

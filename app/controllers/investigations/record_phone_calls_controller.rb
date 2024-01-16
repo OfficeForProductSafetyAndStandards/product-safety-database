@@ -18,7 +18,7 @@ class Investigations::RecordPhoneCallsController < Investigations::BaseControlle
       @correspondence_form
         .attributes
         .except("existing_transcript_file_id")
-        .merge(investigation: @investigation_object, user: current_user)
+        .merge(notification: @investigation_object, user: current_user)
     )
 
     redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
