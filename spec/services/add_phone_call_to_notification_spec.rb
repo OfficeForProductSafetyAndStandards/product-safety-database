@@ -6,7 +6,7 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
   include_context "with phone call correspondence setup"
 
   before do
-    params[:notification] = investigation
+    params[:notification] = notification
     params[:user]          = user
   end
 
