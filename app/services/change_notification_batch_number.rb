@@ -50,7 +50,7 @@ private
     end
   end
 
-  def investigation
+  def notification
     notification_product.investigation
   end
 
