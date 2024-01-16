@@ -1,4 +1,4 @@
-class AddProductToCase
+class AddProductToNotification
   include Interactor
   include EntitiesToNotify
 
