@@ -73,8 +73,6 @@ RSpec.configure do |config|
     end
   end
 
-  config.disable_monkey_patching!
-
   config.example_status_persistence_file_path = "examples.txt"
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
