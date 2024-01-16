@@ -245,6 +245,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
+    foreman (0.87.2)
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
@@ -333,6 +334,8 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.0)
+    nokogiri (1.15.5-aarch64-linux)
+      racc (~> 1.4)
     nokogiri (1.15.5-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.5-x64-mingw-ucrt)
@@ -671,6 +674,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin-22
   arm64-darwin-23
   x64-mingw-ucrt
@@ -702,6 +706,7 @@ DEPENDENCIES
   draper (~> 4.0)
   factory_bot_rails (~> 6.4)
   faker (~> 3.2)
+  foreman (~> 0.87)
   govuk-components (~> 5.0)
   govuk-design-system-rails (~> 0.10.5)!
   govuk_design_system_formbuilder (~> 5.0)
@@ -778,7 +783,7 @@ DEPENDENCIES
   wicked (~> 2.0)
 
 RUBY VERSION
-   ruby 3.2.1p31
+   ruby 3.2.2p53
 
 BUNDLED WITH
    2.4.8

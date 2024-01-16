@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-ruby "3.2.1"
+ruby "3.2.2"
+
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.14"
 gem "activerecord-pg_enum", "~> 2.0"
@@ -16,6 +17,7 @@ gem "cssbundling-rails"
 gem "devise", "~> 4.9"
 gem "devise-encryptable", "~> 0.2"
 gem "draper", "~> 4.0"
+gem "foreman", "~> 0.87"
 gem "govuk-components", "~> 5.0"
 gem "govuk_design_system_formbuilder", "~> 5.0"
 gem "govuk-design-system-rails", "~> 0.10.5", github: "OfficeForProductSafetyAndStandards/govuk-design-system-rails"
@@ -65,10 +67,10 @@ gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
 # PRISM engine
-gem "prism", path: "prism"
+gem "prism", path: "./prism"
 
 # OSU Support Portal engine
-gem "support_portal", path: "support_portal"
+gem "support_portal", path: "./support_portal"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
