@@ -41,17 +41,17 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
       result
       activity = result.correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall")
 
-      expect(activity.investigation).to eq(notification)
+      expect(activity.investigation).to eq(investigation)
       expect(activity.added_by_user).to eq(user)
       expect(activity.correspondence).to eq(result.correspondence)
     end
 
     it "notifies the relevant users", :with_test_queue_adapter do
       expect { described_class.call(params) }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
-        notification.pretty_id,
-        notification.owner_team.name,
-        notification.owner_team.email,
-        notification.owner_team.email,
+        investigation.pretty_id,
+        investigation.owner_team.name,
+        investigation.owner_team.email,
+        investigation.owner_team.email,
         "Phone call details added to the notification by #{user.decorate.display_name(viewer: user)}.",
         "Notification updated"
       )
