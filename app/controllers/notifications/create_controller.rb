@@ -236,7 +236,7 @@ module Notifications
     end
 
     def update_batch_numbers
-      ChangeBatchNumber.call!(investigation_product: @investigation_product, batch_number: params[:batch_number], user: current_user, silent: true)
+      ChangeNotificationBatchNumber.call!(notification_product: @investigation_product, batch_number: params[:batch_number], user: current_user, silent: true)
       redirect_to wizard_path(:add_product_identification_details)
     end
 
