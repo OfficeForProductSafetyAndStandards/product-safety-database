@@ -100,7 +100,7 @@ RSpec.describe Product do
 
       before do
         travel(-6.months) do
-          AddProductToNotification.call!(user:, investigation: notification, product:)
+          AddProductToNotification.call!(user:, notification:, product:)
           RemoveProductFromNotification.call!(user:, investigation_product: product.investigation_products.find_by(investigation: notification), notification:)
         end
       end
@@ -117,7 +117,7 @@ RSpec.describe Product do
 
       before do
         travel(-20.months) do
-          AddProductToNotification.call!(user:, investigation: notification, product:)
+          AddProductToNotification.call!(user:, notification:, product:)
           RemoveProductFromNotification.call!(user:, investigation_product: product.investigation_products.find_by(investigation: notification), notification:)
         end
       end
@@ -143,17 +143,17 @@ RSpec.describe Product do
 
     before do
       travel(-6.months) do
-        AddProductToNotification.call! user:, investigation: older_notification_1, product: product_unlinked_recently
+        AddProductToNotification.call!(user:, notification: older_notification_1, product: product_unlinked_recently)
         RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_notification_1), notification: older_notification_1)
       end
 
       travel(-19.months) do
-        AddProductToNotification.call! user:, investigation: older_notification_1, product: product_unlinked_in_the_past
+        AddProductToNotification.call!(user:, notification: older_notification_1, product: product_unlinked_in_the_past)
         RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_1), notification: older_notification_1)
       end
 
       travel(-20.months) do
-        AddProductToNotification.call! user:, investigation: older_notification_2, product: product_unlinked_in_the_past
+        AddProductToNotification.call!(user:, notification: older_notification_2, product: product_unlinked_in_the_past)
         RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_2), notification: older_notification_2)
       end
     end

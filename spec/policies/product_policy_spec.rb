@@ -39,7 +39,7 @@ RSpec.describe ProductPolicy do
         let(:notification) { create(:notification, creator: user) }
 
         before do
-          AddProductToNotification.call!(investigation: notification, user:, product:)
+          AddProductToNotification.call!(notification:, user:, product:)
           ChangeNotificationStatus.call!(notification:, user:, new_status: "closed")
         end
 
@@ -49,7 +49,7 @@ RSpec.describe ProductPolicy do
       context "when the user's team has open notifications linked to the product" do
         let(:notification) { create(:notification, creator: user) }
 
-        before { AddProductToNotification.call! investigation: notification, user:, product: }
+        before { AddProductToNotification.call!(notification:, user:, product:) }
 
         it { is_expected.to be_update }
       end
