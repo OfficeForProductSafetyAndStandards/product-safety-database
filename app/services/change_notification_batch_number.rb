@@ -39,7 +39,7 @@ private
   end
 
   def send_notification_email
-    email_recipients_for_case_owner(notification).each do |recipient|
+    email_recipients_for_case_owner(investigation).each do |recipient|
       NotifyMailer.notification_updated(
         notification.pretty_id,
         recipient.name,
@@ -50,7 +50,7 @@ private
     end
   end
 
-  def notification
+  def investigation
     notification_product.investigation
   end
 
