@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Team do
   describe ".get_visible_teams" do
     before do

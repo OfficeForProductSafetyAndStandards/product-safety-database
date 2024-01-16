@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DomainExclusionConstraint, type: :constraint do
   subject(:constraint) { described_class.new(*excluded_domain) }
 

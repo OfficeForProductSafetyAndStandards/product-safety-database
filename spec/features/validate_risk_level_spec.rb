@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:notification) { create(:notification, creator: creator_user) }
   let(:user) { create(:user, :activated) }

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RedactedExport do
   describe ".register_model_attributes" do
     let(:table_name) { "test_models" }

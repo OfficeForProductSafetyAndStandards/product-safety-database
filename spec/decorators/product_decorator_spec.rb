@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ProductDecorator, :with_stubbed_opensearch do
   subject(:decorated_product) { product.decorate }
 

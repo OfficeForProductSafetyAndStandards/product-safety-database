@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ResendSecondaryAuthenticationCodeForm, :with_stubbed_mailer do
   subject(:form) { described_class.new(params) }
 

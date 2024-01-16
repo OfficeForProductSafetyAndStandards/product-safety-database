@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Investigation::UpdateStatus, :with_stubbed_mailer do
   let(:notification) { create(:allegation, is_closed: false) }
   let(:metadata) { described_class.build_metadata(notification, rationale) }

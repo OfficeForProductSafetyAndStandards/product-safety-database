@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeUcrNumbers, :with_stubbed_opensearch, :with_test_queue_adapter do
   subject(:result) { described_class.call!(investigation_product:, ucr_numbers:, user:) }
 

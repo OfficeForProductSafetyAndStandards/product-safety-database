@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Visibility of cookie banners", type: :feature do
   let(:cookie_banner_text) do
     "We use some essential cookies to make this service work.

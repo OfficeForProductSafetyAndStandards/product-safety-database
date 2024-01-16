@@ -1,5 +1,3 @@
-require "rails_helper"
-
 describe ApplicationHelper do
   describe "#error_summary" do
     let(:view_class) do

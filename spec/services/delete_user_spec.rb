@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_opensearch do
   describe ".call" do
     context "with no parameters" do

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Investigation::TeamDeletedDecorator, :with_stubbed_mailer do
   subject(:activity) do
     AuditActivity::Investigation::TeamDeleted.create!(

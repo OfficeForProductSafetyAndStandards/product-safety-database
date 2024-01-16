@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UcrNumber do
   describe "validations" do
     subject { build(:ucr_number) }

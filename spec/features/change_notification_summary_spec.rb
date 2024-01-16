@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:notification) { create(:project, creator: user) }
   let(:user) { create(:user, :activated) }

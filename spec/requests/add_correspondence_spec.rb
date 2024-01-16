@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Adding correspondence to a notification", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:notification) { create(:notification, creator: user) }

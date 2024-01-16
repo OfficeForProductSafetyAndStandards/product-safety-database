@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
   # Default set of valid attributes
   let(:investigation) { create(:allegation) }

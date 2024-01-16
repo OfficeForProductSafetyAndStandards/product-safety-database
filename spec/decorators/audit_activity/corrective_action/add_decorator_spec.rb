@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorated_activity) do
     described_class.decorate(

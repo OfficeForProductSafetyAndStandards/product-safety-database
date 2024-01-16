@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe BulkProductsUpload, :with_stubbed_notify, :with_stubbed_mailer do
   subject(:destroy_abandoned_records) { described_class.destroy_abandoned_records! }
 

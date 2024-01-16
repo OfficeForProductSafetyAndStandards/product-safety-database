@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Test::Result, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   describe "validations" do
     context "when missing an investigation" do

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Product do
   describe "#psd_ref", :with_stubbed_opensearch do
     let(:id) { 123 }

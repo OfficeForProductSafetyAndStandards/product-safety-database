@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UrlHelper do
   describe "#path_for_model", :with_stubbed_mailer do
     subject(:path) { helper.path_for_model(object, slug) }

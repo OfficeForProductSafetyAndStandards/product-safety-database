@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SendUserInvitationJob do
   describe "#perform" do
     subject(:job) { described_class.new }

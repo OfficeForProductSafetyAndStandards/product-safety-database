@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe WhyReportingForm do
   subject(:form) { described_class.new(why_reporting_params) }
 

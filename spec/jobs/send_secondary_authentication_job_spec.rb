@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SendSecondaryAuthenticationJob do
   let(:user) { create(:user) }
   let(:code) { 123 }

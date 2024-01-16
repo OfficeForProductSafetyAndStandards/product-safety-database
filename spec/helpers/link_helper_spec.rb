@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe LinkHelper do
   describe "#link_with_hidden_text_to" do
     subject(:link) { helper.link_with_hidden_text_to(title, hidden_text, url, class: class_name) }

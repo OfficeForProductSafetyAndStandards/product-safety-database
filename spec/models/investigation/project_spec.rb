@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigation::Project do
   subject(:project) { build(:project) }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorated_activity) { activity.decorate }
 

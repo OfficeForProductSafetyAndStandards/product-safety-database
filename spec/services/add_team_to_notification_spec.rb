@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AddTeamToNotification, :with_stubbed_mailer, :with_stubbed_opensearch do
   let!(:notification) { create(:notification) }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe PhoneValidator do
   subject(:validator) do
     Class.new {

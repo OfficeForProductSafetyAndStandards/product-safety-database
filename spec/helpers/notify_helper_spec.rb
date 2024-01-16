@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe NotifyHelper do
   describe "#inset_text_for_notify" do
     context "when a single line" do

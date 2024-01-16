@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DocumentUploadDecorator, :with_stubbed_opensearch do
   subject(:decorated_document_upload) { product.document_uploads.first.decorate }
 

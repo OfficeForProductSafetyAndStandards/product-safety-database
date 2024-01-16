@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe CorrectiveActionDecorator, :with_stubbed_mailer do
   subject(:decorated_corrective_action) { corrective_action.decorate }
 

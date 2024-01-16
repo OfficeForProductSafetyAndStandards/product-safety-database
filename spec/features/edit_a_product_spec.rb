@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with_product_form_helper, :with_stubbed_antivirus do
   let(:product_code)      { Faker::Barcode.issn }
   let(:webpage)           { Faker::Internet.url }

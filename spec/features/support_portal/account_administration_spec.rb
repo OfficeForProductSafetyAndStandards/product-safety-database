@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user) { create(:user, roles: %w[support_portal]) }
   let(:user1) { create(:user) }

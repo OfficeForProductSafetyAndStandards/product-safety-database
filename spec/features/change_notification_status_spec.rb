@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Changing the status of a notification", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let!(:notification) { create(:notification, :with_products, creator: creator_user, is_closed: false) }
   let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }

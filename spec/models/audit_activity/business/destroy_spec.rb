@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Business::Destroy, :with_stubbed_mailer do
   subject(:audit_activity) { create(:legacy_audit_business_remove_status) }
 

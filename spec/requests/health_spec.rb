@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Health Check", :with_opensearch, :with_stubbed_mailer, :with_2fa do
   describe "/health/all" do
     let(:sidekiq_latency) { 29 }

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Redirecting after 2fa", :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_opensearch do
   let(:team) { create(:team) }
   let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, team:) }

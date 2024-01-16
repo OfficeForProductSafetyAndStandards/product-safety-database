@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_antivirus do
   subject(:activity) { described_class.last }
 

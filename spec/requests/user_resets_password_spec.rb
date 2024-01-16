@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "User resets password", type: :request, with_stubbed_notify: true, with_2fa: true do
   describe "viewing the form" do
     context "with a valid reset token" do

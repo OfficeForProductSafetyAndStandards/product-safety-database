@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UpdateRiskLevelFromRiskAssessmentForm do
   describe "update case risk level to match risk assessment validation" do
     let(:form) { described_class.new(update_case_risk_level_to_match_investigation: answer) }

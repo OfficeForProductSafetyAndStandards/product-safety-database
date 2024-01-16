@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Business do
   subject(:business) { build(:business, trading_name:) }
 

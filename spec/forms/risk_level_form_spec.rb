@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RiskLevelForm do
   subject(:form) { described_class.new(risk_level:) }
 

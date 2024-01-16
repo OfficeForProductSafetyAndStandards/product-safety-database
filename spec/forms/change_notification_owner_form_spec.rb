@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationOwnerForm do
   subject(:form) { described_class.new(owner_id:, owner_rationale: rationale) }
 

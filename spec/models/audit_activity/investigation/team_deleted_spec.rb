@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Investigation::TeamDeleted, :with_stubbed_mailer do
   let(:team) { create(:team) }
   let(:message) { "This is a message" }

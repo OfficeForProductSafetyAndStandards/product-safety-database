@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Correspondence::EmailDecorator do
   describe "#title" do
     context "when there is a overview" do

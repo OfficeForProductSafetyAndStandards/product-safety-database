@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RiskAssessment, type: :model do
   describe "validations", :aggregate_failures do
     let(:risk_assessment) do

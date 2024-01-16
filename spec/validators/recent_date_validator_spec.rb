@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RecentDateValidator do
   context "with default window" do
     subject(:validator) do

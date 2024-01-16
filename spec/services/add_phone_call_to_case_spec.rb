@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AddPhoneCallToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:result) { described_class.call(params) }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationStatus, :with_test_queue_adapter do
   subject(:result) { described_class.call!(notification:, new_status:, rationale:, user:) }
 

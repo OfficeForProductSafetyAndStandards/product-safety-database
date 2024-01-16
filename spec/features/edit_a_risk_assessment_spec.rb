@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Editing a risk assessment on a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:risk_assessment_file_path) { Rails.root.join "test/fixtures/files/new_risk_assessment.txt" }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new(risk_assessment_file_path) }

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer, :with_product_form_helper do
   let(:user)       { create(:user, :activated) }
   let(:attributes) do

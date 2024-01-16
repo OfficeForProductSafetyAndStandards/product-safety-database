@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Managing documents attached to a case", :with_stubbed_mailer, type: :request do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user) { create(:user) }

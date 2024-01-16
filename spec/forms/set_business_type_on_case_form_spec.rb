@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SetBusinessTypeOnCaseForm, type: :model do
   subject(:form) { described_class.new(params) }
 

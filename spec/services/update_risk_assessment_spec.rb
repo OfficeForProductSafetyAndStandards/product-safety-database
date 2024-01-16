@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:investigation_product1) { create(:investigation_product) }
   let(:investigation_product2) { create(:investigation_product) }

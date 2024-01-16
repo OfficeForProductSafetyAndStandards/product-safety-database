@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RiskAssessmentDecorator, :with_stubbed_opensearch do
   subject(:decorated_risk_assessment) { risk_assessment.decorate }
 

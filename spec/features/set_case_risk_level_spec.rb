@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Setting risk level for an investigation", :with_stubbed_antivirus, :with_stubbed_mailer do
   let!(:investigation) { create(:allegation, edit_access_teams: [team_with_access]) }
 

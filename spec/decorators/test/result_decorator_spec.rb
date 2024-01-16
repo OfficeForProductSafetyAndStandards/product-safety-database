@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Test::ResultDecorator, :with_stubbed_mailer do
   subject(:decorated_corrective_action) { test_result.decorate }
 

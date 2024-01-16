@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_mailer do
   describe "#corrective_action_summary_list_rows" do
     let(:business)                           { create(:business) }

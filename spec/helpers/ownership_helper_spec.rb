@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe OwnershipHelper do
   describe "#add_your_team_values", :with_stubbed_mailer do
     let(:user)           { create(:user) }

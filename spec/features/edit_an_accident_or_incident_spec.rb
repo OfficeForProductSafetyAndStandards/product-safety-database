@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }

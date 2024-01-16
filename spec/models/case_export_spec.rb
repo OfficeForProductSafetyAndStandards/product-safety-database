@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:case_export) do
     described_class.create!(user:, params:)

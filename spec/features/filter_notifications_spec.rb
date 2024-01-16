@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:other_organisation) { create(:organisation) }
 

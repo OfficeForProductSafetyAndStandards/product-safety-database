@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Market Surveillance Authority case creation wizard", type: :request do
   let(:user) { create(:user, :activated) }
 

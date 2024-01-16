@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand washing machine") }

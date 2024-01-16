@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SecondaryAuthentication do
   let(:attempts) { 0 }
   let(:direct_otp) { "11111" }

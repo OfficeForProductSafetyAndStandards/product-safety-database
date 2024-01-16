@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe BusinessSerializer, type: :serializers do
   subject { described_class.new(business) }
 

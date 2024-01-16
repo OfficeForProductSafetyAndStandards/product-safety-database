@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Viewing safe and compliant products", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:user)          { create(:user, :opss_user, :activated) }
   let(:investigation) { create(:enquiry, :with_products, creator: user) }

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RemoveProductForm do
   subject(:form)       { described_class.new(remove_product:, reason:) }
 

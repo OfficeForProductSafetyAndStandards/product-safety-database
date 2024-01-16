@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Add an attachment to a notification", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:notification) { create(:notification, creator: user) }

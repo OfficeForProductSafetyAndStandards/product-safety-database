@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationRiskLevel, :with_test_queue_adapter do
   subject(:result) do
     described_class.call(notification:, user:, risk_level: new_level)

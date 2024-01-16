@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Adding and removing business to a notification", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:city)             { Faker::Address.city }
   let(:trading_name)     { Faker::Company.name }

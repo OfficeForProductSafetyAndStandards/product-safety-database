@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Case specific information spec", :with_stubbed_mailer do
   let(:team) { create :team }
   let(:other_team) { create :team }

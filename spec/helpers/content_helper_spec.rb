@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ContentHelper do
   describe "#format_with_line_breaks" do
     context "when including a single line break" do

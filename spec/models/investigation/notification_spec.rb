@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigation::Notification do
   subject(:notification) { build(:notification) }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UserCollaboratorInterface, :with_stubbed_mailer do
   subject(:user) { create(:user) }
 

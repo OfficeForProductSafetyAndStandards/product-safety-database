@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigation::ProjectDecorator, :with_stubbed_mailer do
   include ActionView::Helpers::DateHelper
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SetTestResultCertificateOnCaseForm, type: :model do
   subject(:form) { described_class.new(params) }
 

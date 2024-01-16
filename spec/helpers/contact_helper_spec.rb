@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ContactHelper do
   describe "#name_and_email" do
     context "when both name and contact details are present" do

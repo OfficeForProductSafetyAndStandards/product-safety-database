@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Home page", type: :request do
   context "when not signed in" do
     it "not signed in visits / stays on /" do

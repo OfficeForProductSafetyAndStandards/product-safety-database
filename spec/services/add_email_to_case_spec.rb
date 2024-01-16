@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }

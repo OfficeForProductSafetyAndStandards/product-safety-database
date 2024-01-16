@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorated_activity) { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update").decorate }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Remove a business from a notification", :with_stubbed_mailer do
   let(:business)     { create(:business) }
   let(:user)         { create(:user, :activated, has_accepted_declaration: true) }

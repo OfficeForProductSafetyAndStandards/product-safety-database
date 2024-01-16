@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::CorrectiveAction::BaseDecorator, :with_stubbed_mailer do
   include ActionDispatch::TestProcess::FixtureFile
 

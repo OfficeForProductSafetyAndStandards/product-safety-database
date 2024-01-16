@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe InvestigationBusinessDecorator, :with_stubbed_mailer do
   subject(:decorated_object) { investigation_business.decorate }
 

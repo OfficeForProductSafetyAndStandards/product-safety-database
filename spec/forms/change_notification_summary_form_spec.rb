@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationSummaryForm do
   subject(:form) { described_class.new(summary:) }
 

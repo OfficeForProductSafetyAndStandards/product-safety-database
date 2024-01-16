@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe CreateProduct, :with_test_queue_adapter do
   let(:attributes) { attributes_for(:product_washing_machine) }
 

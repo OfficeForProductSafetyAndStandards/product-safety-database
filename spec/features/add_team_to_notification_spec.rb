@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Adding a team to a notification", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   include_context "with read only team and user"
   let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }

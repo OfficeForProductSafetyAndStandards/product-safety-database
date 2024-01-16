@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Product::Destroy, :with_stubbed_mailer do
   subject(:activity) do
     described_class.create(

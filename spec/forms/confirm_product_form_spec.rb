@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ConfirmProductForm, :with_stubbed_mailer do
   subject(:form) { described_class.new(product_id:, correct:) }
 

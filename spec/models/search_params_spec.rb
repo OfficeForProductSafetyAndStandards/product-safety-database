@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SearchParams do
   subject(:model_instance) { described_class.new(search_params) }
 

@@ -1,4 +1,3 @@
-require "rails_helper"
 require "support/matchers/capybara_matchers"
 
 RSpec.configure do |config|

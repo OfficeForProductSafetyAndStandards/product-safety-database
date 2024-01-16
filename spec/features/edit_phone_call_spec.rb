@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Edit a phone call correspondence", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   include_context "with phone call correspondence setup"
 

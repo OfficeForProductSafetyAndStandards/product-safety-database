@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Searching notifications", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, team:) }

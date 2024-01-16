@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
   let(:user)             { create :user, :activated, has_viewed_introduction: true }
   let!(:iphone)          { create(:product_iphone,          brand: "Apple", created_at: 1.day.ago, authenticity: "counterfeit") }

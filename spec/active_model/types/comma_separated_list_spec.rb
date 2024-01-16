@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ActiveModel::Types::CommaSeparatedList do
   subject(:type_caster) { described_class.new }
 

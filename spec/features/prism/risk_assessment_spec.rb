@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "PRISM risk assessment", type: :feature do
   let(:user) { create(:user, :activated, roles: %w[prism]) }
 

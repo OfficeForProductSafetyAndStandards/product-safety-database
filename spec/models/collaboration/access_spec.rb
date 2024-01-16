@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Collaboration::Access, :with_stubbed_mailer do
   describe ".changeable" do
     before do

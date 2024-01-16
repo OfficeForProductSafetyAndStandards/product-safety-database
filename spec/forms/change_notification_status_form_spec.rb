@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationStatusForm, :with_test_queue_adapter do
   subject(:form) { described_class.from(notification) }
 

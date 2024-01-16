@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_opensearch do
   subject(:investigation) { create(:allegation) }
 

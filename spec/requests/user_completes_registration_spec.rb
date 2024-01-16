@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "User completes registration", type: :request, with_stubbed_notify: true do
   let(:user) { create(:user, :invited) }
 

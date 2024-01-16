@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe InvestigationPolicy, :with_stubbed_mailer do
   subject(:policy) { described_class.new(user, notification) }
 

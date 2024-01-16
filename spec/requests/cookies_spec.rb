@@ -1,5 +1,3 @@
-require "rails_helper"
-
 describe "cookies", type: :request do
   before do
     cookies["essential"] = "psd"

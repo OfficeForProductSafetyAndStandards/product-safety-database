@@ -1,4 +1,3 @@
-require "rails_helper"
 require "support/feature_helpers"
 
 RSpec.feature "Creating an account from an invitation", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, :with_2fa do

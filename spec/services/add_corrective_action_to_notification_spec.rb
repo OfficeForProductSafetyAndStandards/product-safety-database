@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AddCorrectiveActionToNotification, :with_stubbed_mailer, :with_test_queue_adapter do
   subject(:result) { described_class.call(params) }
 

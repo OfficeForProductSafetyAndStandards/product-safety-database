@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create :user, :opss_user, :activated, roles: %w[prism], has_viewed_introduction: true }
   let(:investigation_1) { create :allegation, creator: user }

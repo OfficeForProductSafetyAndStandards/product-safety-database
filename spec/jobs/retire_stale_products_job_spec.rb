@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RetireStaleProductsJob do
   describe "#perform", :with_stubbed_opensearch do
     subject(:job) { described_class.new }

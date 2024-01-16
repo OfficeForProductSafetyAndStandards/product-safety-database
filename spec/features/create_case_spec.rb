@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:investigation_with_same_user_title) do
     create(:allegation,

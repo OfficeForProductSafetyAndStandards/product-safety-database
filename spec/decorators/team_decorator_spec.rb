@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe TeamDecorator do
   subject(:decorated_team) { team.decorate }
 

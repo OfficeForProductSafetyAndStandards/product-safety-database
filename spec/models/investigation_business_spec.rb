@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe InvestigationBusiness do
   it "has a valid factory" do
     expect(build(:investigation_business)).to be_valid

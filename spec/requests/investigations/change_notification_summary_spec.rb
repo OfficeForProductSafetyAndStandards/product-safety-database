@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Changing case summary", :with_stubbed_mailer, type: :request do
   let(:notification) do
     create(

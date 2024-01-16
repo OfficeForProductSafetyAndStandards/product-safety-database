@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Location do
   subject(:location) { described_class.new(county:, country:) }
 

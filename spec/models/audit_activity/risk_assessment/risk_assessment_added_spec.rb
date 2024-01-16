@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) do
     described_class.create!(

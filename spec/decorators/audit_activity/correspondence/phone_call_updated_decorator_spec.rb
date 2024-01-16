@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:decorator) { phone_call.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated").decorate }
 

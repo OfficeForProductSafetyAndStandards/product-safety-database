@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mailer, :with_opensearch do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[product_bulk_uploader]) }
   let(:online_marketplace) { create(:online_marketplace, name: "My marketplace", approved_by_opss: true) }

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DateParser do
   subject { described_class.new(input).date }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:audit_activity) do
     create(

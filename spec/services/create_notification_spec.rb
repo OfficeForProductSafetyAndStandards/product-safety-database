@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe CreateNotification, :with_test_queue_adapter do
   let(:notification) { build(:notification) }
   let(:user) { create(:user) }

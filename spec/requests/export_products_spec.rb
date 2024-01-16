@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Export products as XLSX file", :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
   let(:params) { {} }
 

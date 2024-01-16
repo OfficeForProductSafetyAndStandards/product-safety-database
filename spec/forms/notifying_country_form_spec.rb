@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe NotifyingCountryForm do
   subject(:form) { described_class.from(investigation) }
 

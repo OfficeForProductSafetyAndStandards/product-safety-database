@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigation::AllegationDecorator, :with_stubbed_mailer do
   subject(:decorated_allegation) { allegation.decorate }
 

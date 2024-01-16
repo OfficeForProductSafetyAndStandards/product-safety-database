@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationReferenceNumber, :with_test_queue_adapter do
   subject(:result) { described_class.call!(notification:, reference_number:, user:) }
 

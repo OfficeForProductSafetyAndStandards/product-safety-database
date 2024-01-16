@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RemoveTeamFromNotification, :with_stubbed_mailer, :with_stubbed_opensearch do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator: user, read_only_teams:) }

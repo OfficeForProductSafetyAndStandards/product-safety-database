@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :request do
   describe "#new" do
     it "cannot be directly accessed" do

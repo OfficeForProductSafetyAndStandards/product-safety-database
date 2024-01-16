@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Edit an notification reference number", :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:team_mate) { create(:user, :activated, has_viewed_introduction: true, team: user.team) }

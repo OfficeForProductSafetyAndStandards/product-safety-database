@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigations::TestResultsController, type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine) }

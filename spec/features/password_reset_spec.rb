@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, :with_2fa, type: :feature do
   let(:user)                              { create(:user) }
   let!(:reset_token)                      { stubbed_devise_generated_token }

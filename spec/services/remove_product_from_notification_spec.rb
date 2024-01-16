@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
   subject(:result) do
     described_class.call(notification:, investigation_product:, user:, reason:)

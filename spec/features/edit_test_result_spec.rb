@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Editing a test result", :with_stubbed_antivirus, :with_stubbed_mailer do
   include ActionDispatch::TestProcess::FixtureFile
 

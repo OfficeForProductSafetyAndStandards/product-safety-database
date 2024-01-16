@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:user)          { create(:user, :opss_user, :activated) }
   let(:notification) { create(:notification, creator: user) }

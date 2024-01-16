@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DeleteNotification, :with_stubbed_mailer, :with_stubbed_opensearch do
   context "with no parameters" do
     subject(:delete_call) { described_class.call }

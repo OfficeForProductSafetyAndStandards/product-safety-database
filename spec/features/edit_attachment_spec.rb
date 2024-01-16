@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Editing an attachment on a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, :with_document, creator: user) }

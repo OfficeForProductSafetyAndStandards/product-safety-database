@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Case source info", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
 

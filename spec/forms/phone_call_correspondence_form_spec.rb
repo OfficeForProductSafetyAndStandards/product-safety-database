@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe PhoneCallCorrespondenceForm do
   subject(:form) { described_class.new(params) }
 

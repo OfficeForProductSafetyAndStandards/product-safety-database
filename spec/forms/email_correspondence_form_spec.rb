@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe EmailCorrespondenceForm, :with_stubbed_mailer do
   subject(:form) do
     described_class.new(

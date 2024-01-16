@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Investigation::RiskLevelChange do
   describe "#change_action" do
     subject(:change_action) do

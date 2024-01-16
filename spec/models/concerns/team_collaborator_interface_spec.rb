@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe TeamCollaboratorInterface, :with_stubbed_mailer do
   subject(:team) { user.team }
 

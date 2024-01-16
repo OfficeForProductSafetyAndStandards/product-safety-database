@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "PRISM risk assessment dashboard", type: :feature do
   context "when the user has access to PRISM" do
     let(:user) { create(:user, :activated, roles: %w[prism]) }

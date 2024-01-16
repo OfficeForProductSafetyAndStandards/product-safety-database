@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Collaboration::Access::Edit do
   describe ".changeable?" do
     it "returns true" do

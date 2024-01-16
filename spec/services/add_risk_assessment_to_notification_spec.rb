@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AddRiskAssessmentToNotification, :with_stubbed_mailer, :with_test_queue_adapter do
   let!(:notification) { create(:notification, creator:, owner_team: team, owner_user: nil) }
   let(:investigation_product) { create(:investigation_product) }

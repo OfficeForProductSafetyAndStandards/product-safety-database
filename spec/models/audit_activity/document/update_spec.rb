@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Document::Update, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:activity) { described_class.new(metadata: activity_metadata, title:, body: description) }
 

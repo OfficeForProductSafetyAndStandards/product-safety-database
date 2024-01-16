@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Changing a team's permissions on a notification", :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   let(:team)         { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
   let(:user)         { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe CorrespondenceDecorator, :with_stubbed_mailer do
   subject { build(:email, investigation: notification).decorate }
 

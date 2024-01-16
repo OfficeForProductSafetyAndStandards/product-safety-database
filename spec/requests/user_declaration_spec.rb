@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "User accepting declaration", type: :request do
   let(:user) { create(:user) }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Privacy notice page", type: :request do
   context "when signed in" do
     before do

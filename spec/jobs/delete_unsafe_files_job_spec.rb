@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DeleteUnsafeFilesJob do
   describe "#perform", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
     subject(:job) { described_class.new }

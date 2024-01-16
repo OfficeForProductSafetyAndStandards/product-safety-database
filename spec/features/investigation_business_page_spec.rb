@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Investigation business page", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)                            { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user)                      { create(:user, :activated, has_viewed_introduction: true) }

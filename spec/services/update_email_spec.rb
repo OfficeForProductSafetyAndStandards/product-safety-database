@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let!(:investigation) { create(:allegation) }
   let(:product) { create(:product_washing_machine) }

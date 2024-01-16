@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }

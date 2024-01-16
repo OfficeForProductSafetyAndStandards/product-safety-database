@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ProductPolicy do
   let(:user) { create(:user) }
 

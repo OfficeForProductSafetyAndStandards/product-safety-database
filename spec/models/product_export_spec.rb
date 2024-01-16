@@ -1,7 +1,5 @@
 # rubocop:disable RSpec/LetSetup
 # rubocop:disable RSpec/ExampleLength
-require "rails_helper"
-
 RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:investigation) do
     create(:allegation,

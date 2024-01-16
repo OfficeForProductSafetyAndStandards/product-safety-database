@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe InvestigationSerializer, :with_stubbed_mailer, :with_test_queue_adapter, type: :serializers do
   subject { described_class.new(investigation) }
 

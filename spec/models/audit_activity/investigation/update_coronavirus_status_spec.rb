@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Investigation::UpdateCoronavirusStatus, :with_stubbed_mailer, :with_stubbed_opensearch do
   subject(:metadata) { described_class.build_metadata(investigation) }
 

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 # This spec tests generic features of the task list.
 # See `risk_assessment_spec.rb` for a full set of tests
 # for the entire workflow.

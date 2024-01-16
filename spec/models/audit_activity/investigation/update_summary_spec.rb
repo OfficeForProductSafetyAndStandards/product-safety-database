@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Investigation::UpdateSummary, :with_stubbed_mailer do
   subject(:activity) { described_class.create(investigation:, metadata:) }
 

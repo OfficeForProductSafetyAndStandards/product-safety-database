@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SignInForm do
   subject(:form) { described_class.new(email:, password:) }
 

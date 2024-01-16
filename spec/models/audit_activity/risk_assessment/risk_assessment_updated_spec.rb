@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 

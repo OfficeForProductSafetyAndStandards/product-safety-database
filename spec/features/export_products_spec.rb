@@ -1,4 +1,3 @@
-require "rails_helper"
 require "sidekiq/testing"
 
 RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Error pages", type: :request do
   describe "/404" do
     before { get "/404" }

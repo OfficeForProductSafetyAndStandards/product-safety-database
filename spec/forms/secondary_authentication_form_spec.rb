@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
   subject(:form) { described_class.new(otp_code:, user_id: user.id) }
 

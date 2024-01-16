@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_mailer do
   describe ".migrate_geographic_scope" do
     let(:audit_activity)       { create(:legacy_audit_update_activity_corrective_action, metadata:) }

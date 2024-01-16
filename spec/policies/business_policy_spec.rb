@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe BusinessPolicy do
   subject(:policy) { described_class.new(user, Business) }
 

@@ -1,5 +1,4 @@
 # rubocop:disable RSpec/DescribeClass
-require "rails_helper"
 Rails.application.load_tasks
 
 describe "redacted_export:generate_sql" do

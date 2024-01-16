@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
   subject(:result) { delete_team }
 

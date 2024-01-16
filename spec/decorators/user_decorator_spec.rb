@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe UserDecorator do
   subject(:decorated_user) { user.decorate }
 

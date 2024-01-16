@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_mailer do
   subject(:owner_team_collaboration) { notification.owner_team_collaboration }
 

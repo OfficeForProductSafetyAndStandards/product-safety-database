@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ChangeNotificationPermissionLevelForTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
   let!(:notification) { create(:notification, creator: user, read_only_teams:) }
 

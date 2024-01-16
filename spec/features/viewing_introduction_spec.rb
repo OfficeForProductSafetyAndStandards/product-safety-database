@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Viewing the introduction", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: false) }
 

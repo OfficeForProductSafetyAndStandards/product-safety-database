@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Locked user", :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated) }
 

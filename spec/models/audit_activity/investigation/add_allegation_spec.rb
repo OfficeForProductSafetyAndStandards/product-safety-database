@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AuditActivity::Investigation::AddAllegation, :with_stubbed_mailer do
   let(:factory) { :allegation_unsafe }
 

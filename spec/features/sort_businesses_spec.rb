@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Business sorting", :with_stubbed_mailer, type: :feature do
   let(:organisation)          { create(:organisation) }
   let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }

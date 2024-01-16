@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe "Deleting a notification", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, :opss_user, name: "Jane Jones") }
 

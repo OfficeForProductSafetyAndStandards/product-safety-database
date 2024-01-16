@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe AddTestResultToInvestigation, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:user)                                 { create(:user, :activated) }
   let!(:notification)                        { create(:notification, creator: user) }

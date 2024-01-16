@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
   let(:user)            { create :user, :activated, has_viewed_introduction: true }
   let!(:business_one)   { create(:business, trading_name: "great value",    created_at: 1.day.ago) }
