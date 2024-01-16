@@ -23,7 +23,6 @@ node_modules/
 *.rbc
 capybara-*.html
 .irb_history
-.rspec
 /log
 /tmp
 /public/system
