@@ -1,4 +1,4 @@
-class ChangeCaseSummaryForm
+class ChangeNotificationSummaryForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 

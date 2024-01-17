@@ -14,7 +14,7 @@
       </p>
       <% if policy(Investigation).export? && @investigations.any? %>
         <p class="govuk-body">
-            When viewing a list of search results you can <%= link_to  "request the list", generate_case_exports_path(params: case_export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
+            When viewing a list of search results you can <%= link_to  "request the list", generate_notification_exports_path(params: notification_export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
         </p>
       <% end %>
     <% end %>

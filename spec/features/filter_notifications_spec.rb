@@ -6,7 +6,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
   let(:organisation)          { create(:organisation) }
   let(:team)                  { create(:team, organisation:) }
   let(:other_team)            { create(:team, organisation:, name: "other team") }
-  let(:user)                  { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
+  let(:user)                  { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
   let(:other_user_same_team)  { create(:user, :activated, name: "other user same team", organisation:, team:) }
   let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation:, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
@@ -388,9 +388,19 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     end
 
     describe "notification type" do
-      context "with an OPSS user" do
-        let(:user) { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
+      context "with a non OPSS user" do
+        let(:user) { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
 
+        scenario "filter should be unavailable" do
+          expect(page).not_to have_listed_case(allegation.pretty_id)
+          expect(page).to have_listed_case(notification.pretty_id)
+          expect(page).not_to have_listed_case(project.pretty_id)
+          expect(page).not_to have_listed_case(enquiry.pretty_id)
+          expect(page).not_to have_css("details#case-type", text: "Type")
+        end
+      end
+
+      context "with an OPSS user" do
         scenario "filtering for projects" do
           within_fieldset "Type" do
             choose "Project"

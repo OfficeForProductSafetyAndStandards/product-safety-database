@@ -335,6 +335,8 @@ GEM
     nio4r (2.7.0)
     nokogiri (1.15.5-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.15.5-x64-mingw-ucrt)
+      racc (~> 1.4)
     nokogiri (1.15.5-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.15.5-x86_64-linux)
@@ -360,6 +362,7 @@ GEM
       optimist (~> 3.0)
     pdf-core (0.9.0)
     pg (1.5.4)
+    pg (1.5.4-x64-mingw-ucrt)
     pghero (3.4.0)
       activerecord (>= 6)
     prawn (2.4.0)
@@ -632,6 +635,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2023.4)
+      tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
@@ -668,6 +673,7 @@ GEM
 PLATFORMS
   arm64-darwin-22
   arm64-darwin-23
+  x64-mingw-ucrt
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
@@ -765,6 +771,7 @@ DEPENDENCIES
   support_portal!
   timecop (~> 0.9)
   turbo-rails
+  tzinfo-data
   validate_email (~> 0.1)
   web-console
   webmock (~> 3.19)
