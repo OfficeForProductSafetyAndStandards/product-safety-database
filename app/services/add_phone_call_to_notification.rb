@@ -29,7 +29,7 @@ class AddPhoneCallToNotification
     end
   end
 
-  private
+private
 
   def send_notification_email(notification, user)
     return unless notification.sends_notifications?
