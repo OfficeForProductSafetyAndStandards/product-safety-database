@@ -40,8 +40,7 @@ private
         entity.name,
         entity.email,
         email_update_text(entity),
-        email_subject
-      ).deliver_later
+        email_subject).deliver_later
     end
   end
 
