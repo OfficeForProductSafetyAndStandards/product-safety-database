@@ -9,7 +9,7 @@ module Notifications
     before_action :set_steps
     before_action :setup_wizard
     before_action :validate_step, except: %i[index from_product add_product remove_product]
-    before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number]
+    before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
     breadcrumb "cases.label", :your_cases_investigations
 
@@ -17,7 +17,7 @@ module Notifications
       "product" => %i[search_for_or_add_a_product],
       "notification_details" => %i[add_notification_details add_product_safety_and_compliance_details add_product_identification_details],
       "business_details" => %i[add_business_details],
-      "evidence" => %i[add_test_reports add_supporting_images add_supporting_documents create_or_add_risk_assessment determine_notification_risk_level],
+      "evidence" => %i[add_test_reports add_supporting_images add_supporting_documents add_risk_assessments determine_notification_risk_level],
       "corrective_actions" => %i[record_a_corrective_action],
       "submit" => %i[check_notification_details_and_submit]
     }.freeze
@@ -118,6 +118,13 @@ module Notifications
           add_reference_number: @notification.complainant_reference.present? ? true : nil,
           reference_number: @notification.complainant_reference
         )
+      when :add_test_reports
+        investigation_products = @notification.investigation_products
+        @existing_test_results = @notification.test_results.includes(investigation_product: :product)
+        @manage = request.query_string != "add" && @existing_test_results.present?
+        return redirect_to with_product_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
+
+        @choose_investigation_product_form = ChooseInvestigationProductForm.new unless @manage
       end
 
       render_wizard
@@ -127,6 +134,7 @@ module Notifications
       case step
       when :search_for_or_add_a_product
         return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if params[:add_another_product] == "true"
+        return redirect_to wizard_path(:search_for_or_add_a_product) if params[:add_another_product].blank? && params[:final].present?
 
         if params[:add_another_product].blank?
           product = Product.find(params[:product_id])
@@ -179,6 +187,19 @@ module Notifications
           )
         else
           return render_wizard
+        end
+      when :add_test_reports
+        return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
+        return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
+
+        if params[:add_another_test_report].blank?
+          @choose_investigation_product_form = ChooseInvestigationProductForm.new(add_test_reports_params)
+
+          if @choose_investigation_product_form.valid?
+            return redirect_to with_product_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: add_test_reports_params[:investigation_product_id])
+          else
+            return render_wizard
+          end
         end
       end
 
@@ -250,6 +271,107 @@ module Notifications
       ucr_number = @investigation_product.ucr_numbers.find(params[:ucr_number_id])
       ucr_number.destroy!
       redirect_to ucr_numbers_notification_create_index_path
+    end
+
+    def show_with_notification_product
+      case params[:step].to_sym
+      when :add_test_reports
+        if params[:test_result_id].present?
+          @test_result = @investigation_product.test_results.find(params[:test_result_id])
+
+          if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
+            @test_result_form = TestResultForm.from(@test_result)
+            render :add_test_reports_details
+          else
+            @set_test_result_certificate_on_case_form = SetTestResultCertificateOnCaseForm.new
+            render :add_test_reports_funding_details
+          end
+        else
+          @set_test_result_funding_on_case_form = SetTestResultFundingOnCaseForm.new
+          render :add_test_reports_opss_funding
+        end
+      when :add_risk_assessments
+        # TODO(ruben)
+      end
+    end
+
+    def update_with_notification_product
+      case params[:step].to_sym
+      when :add_test_reports
+        if params[:test_result_id].present?
+          @test_result = @investigation_product.test_results.find(params[:test_result_id])
+
+          if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
+            @test_result_form = TestResultForm.new(test_details_params)
+            @test_result_form.load_document_file
+
+            if @test_result_form.valid?
+              UpdateTestResult.call!(
+                investigation: @notification,
+                investigation_product_id: @investigation_product.id,
+                test_result: @test_result,
+                legislation: @test_result_form.legislation,
+                standards_product_was_tested_against: @test_result_form.standards_product_was_tested_against,
+                result: @test_result_form.result,
+                failure_details: @test_result_form.failure_details,
+                details: @test_result_form.details,
+                document: @test_result_form.document,
+                date: @test_result_form.date,
+                changes: @test_result_form.changes,
+                user: current_user,
+                silent: true
+              )
+              redirect_to notification_create_path(@notification, id: "add_test_reports")
+            else
+              render :add_test_reports_details
+            end
+          else
+            @set_test_result_certificate_on_case_form = SetTestResultCertificateOnCaseForm.new(opss_funding_details_params)
+
+            if @set_test_result_certificate_on_case_form.valid?
+              UpdateTestResult.call!(
+                investigation: @notification,
+                investigation_product_id: @investigation_product.id,
+                test_result: @test_result,
+                tso_certificate_reference_number: @set_test_result_certificate_on_case_form.tso_certificate_reference_number,
+                tso_certificate_issue_date: @set_test_result_certificate_on_case_form.tso_certificate_issue_date,
+                changes: {},
+                user: current_user,
+                silent: true
+              )
+              redirect_to with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: @test_result.id, opss_funded: params[:opss_funded])
+            else
+              render :add_test_reports_funding_details
+            end
+          end
+        else
+          @set_test_result_funding_on_case_form = SetTestResultFundingOnCaseForm.new(opss_funding_params)
+
+          if @set_test_result_funding_on_case_form.valid?
+            test_result = @notification.test_results.create!(investigation_product: @investigation_product)
+            redirect_to with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: test_result.id, opss_funded: opss_funding_params[:opss_funded])
+          else
+            render :add_test_reports_opss_funding
+          end
+        end
+      when :add_risk_assessments
+        # TODO(ruben)
+      end
+    end
+
+    def remove_with_notification_product
+      case params[:step].to_sym
+      when :add_test_reports
+        @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        if request.delete?
+          @test_result.destroy!
+          redirect_to notification_create_path(@notification, id: "add_test_reports")
+        else
+          render :remove_test_report
+        end
+      when :add_risk_assessments
+        # TODO(ruben)
+      end
     end
 
   private
@@ -324,6 +446,22 @@ module Notifications
 
     def ucr_numbers_params
       params.require(:investigation_product).permit(ucr_numbers_attributes: %i[id number _destroy])
+    end
+
+    def add_test_reports_params
+      params.require(:choose_investigation_product_form).permit(:investigation_product_id, :final)
+    end
+
+    def opss_funding_params
+      params.require(:set_test_result_funding_on_case_form).permit(:opss_funded)
+    end
+
+    def opss_funding_details_params
+      params.require(:set_test_result_certificate_on_case_form).permit(:tso_certificate_reference_number, tso_certificate_issue_date: %i[day month year])
+    end
+
+    def test_details_params
+      params.require(:test_result_form).permit(:legislation, :standards_product_was_tested_against, :result, :failure_details, :details, :existing_document_file_id, :document, date: %i[day month year])
     end
   end
 end

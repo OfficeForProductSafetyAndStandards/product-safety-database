@@ -31,7 +31,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       choose "No"
     end
 
-    click_button "Save and complete tasks in this section"
+    click_button "Continue"
 
     expect(page).to have_content("Create a product safety notification")
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
@@ -81,7 +81,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       choose "No"
     end
 
-    click_button "Save and complete tasks in this section"
+    click_button "Continue"
 
     expect(page).to have_content("Create a product safety notification")
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
