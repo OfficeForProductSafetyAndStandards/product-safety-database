@@ -78,6 +78,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.index ["type"], name: "index_activities_on_type"
   end
 
+  create_table "api_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.datetime "last_used_at"
+    t.jsonb "metadata", default: {}
+    t.string "name"
+    t.string "token"
+    t.boolean "transient", default: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id", null: false
+    t.index ["token"], name: "index_api_tokens_on_token", unique: true
+    t.index ["user_id"], name: "index_api_tokens_on_user_id"
+  end
+
   create_table "bulk_products_uploads", force: :cascade do |t|
     t.bigint "business_id"
     t.datetime "created_at", null: false
