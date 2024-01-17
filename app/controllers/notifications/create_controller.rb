@@ -364,7 +364,7 @@ module Notifications
       when :add_test_reports
         @test_result = @investigation_product.test_results.find(params[:test_result_id])
         if request.delete?
-          @test_result.destroy
+          @test_result.destroy!
           redirect_to notification_create_path(@notification, id: "add_test_reports")
         else
           render :remove_test_report
