@@ -12,7 +12,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
     context "when generating a case export" do
       it "shows a forbidden error", :aggregate_failures do
-        get generate_case_exports_path
+        get generate_notification_exports_path
 
         expect(response).to render_template("errors/forbidden")
         expect(response).to have_http_status(:forbidden)
@@ -21,8 +21,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
     context "when viewing a case export" do
       it "shows a forbidden error", :aggregate_failures do
-        case_export = CaseExport.create!(user:, params:)
-        get case_export_path(case_export)
+        notification_export = NotificationExport.create!(user:, params:)
+        get notification_export_path(notification_export)
 
         expect(response).to render_template("errors/forbidden")
         expect(response).to have_http_status(:forbidden)
@@ -36,7 +36,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       context "when generating a case export" do
         it "allows user to generate a case export and redirects back to cases page" do
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           expect(response).to have_http_status(:found)
         end
@@ -44,8 +44,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       context "when viewing a case export" do
         it "allows user to view a case export download link" do
-          case_export = CaseExport.create!(user:, params:)
-          get case_export_path(case_export)
+          notification_export = NotificationExport.create!(user:, params:)
+          get notification_export_path(notification_export)
 
           expect(response).to have_http_status(:ok)
         end
@@ -54,7 +54,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       context "when downloading the export file" do
         let(:exported_data) do
           perform_enqueued_jobs
-          get rails_storage_proxy_path(CaseExport.last.export_file)
+          get rails_storage_proxy_path(NotificationExport.last.export_file)
 
           Tempfile.create("export_cases_spec", Rails.root.join("tmp"), encoding: "ascii-8bit") do |file|
             file.write response.body
@@ -66,7 +66,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           create(:notification, description: "=A1")
           Investigation.reindex
 
-          get generate_case_exports_path, params: { q: "A1" }
+          get generate_notification_exports_path, params: { q: "A1" }
 
           cell_with_formula_as_description = exported_data.cell(2, 5)
 
@@ -80,7 +80,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 27)).to eq "Date_Validated"
@@ -93,7 +93,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 23)).to eq "OPSS_Internal_Team"
@@ -108,7 +108,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       context "when generating a case export" do
         it "allows user to generate a case export and redirects back to cases page" do
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           expect(response).to have_http_status(:found)
         end
@@ -116,8 +116,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
       context "when viewing a case export" do
         it "allows user to view a case export download link" do
-          case_export = CaseExport.create!(user:, params:)
-          get case_export_path(case_export)
+          notification_export = NotificationExport.create!(user:, params:)
+          get notification_export_path(notification_export)
 
           expect(response).to have_http_status(:ok)
         end
@@ -127,7 +127,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       context "when downloading the export file" do
         let(:exported_data) do
           perform_enqueued_jobs
-          get rails_storage_proxy_path(CaseExport.last.export_file)
+          get rails_storage_proxy_path(NotificationExport.last.export_file)
 
           Tempfile.create("export_cases_spec", Rails.root.join("tmp"), encoding: "ascii-8bit") do |file|
             file.write response.body
@@ -139,7 +139,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           create(:allegation, description: "=A1")
           Investigation.reindex
 
-          get generate_case_exports_path, params: { q: "A1" }
+          get generate_notification_exports_path, params: { q: "A1" }
 
           cell_a1 = exported_data.cell(1, 1)
           cell_with_formula_as_description = exported_data.cell(2, 5)
@@ -157,7 +157,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           create(:allegation, product_category:, products: [create(:product, category:)])
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           categories_cell_title = exported_data.cell(1, 6)
           categories_cell_content = exported_data.cell(2, 6)
@@ -178,7 +178,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           categories_cell_title = exported_data.cell(1, 8)
           categories_cell_content = exported_data.cell(2, 8)
@@ -198,7 +198,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 17)).to eq "Case_Owner_Team"
@@ -213,7 +213,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 16)).to eq "Risk_Assessments"
@@ -226,7 +226,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 24)).to eq "Date_Created"
@@ -241,7 +241,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 27)).to eq "Date_Validated"
@@ -253,7 +253,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           create(:allegation)
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 20)).to eq "Notifying_Country"
@@ -265,7 +265,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           create(:allegation, reported_reason: "unsafe")
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 7)).to eq "Reported_Reason"
@@ -277,7 +277,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           create(:allegation, complainant_reference: "testing")
           Investigation.reindex
 
-          get generate_case_exports_path
+          get generate_notification_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 19)).to eq "Notifiers_Reference"
@@ -292,7 +292,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
             allow(allegation).to receive(:creator_user).and_return(nil)
             Investigation.reindex
 
-            get generate_case_exports_path
+            get generate_notification_exports_path
 
             aggregate_failures do
               expect(exported_data.cell(1, 18)).to eq "Case_Creator_Team"
@@ -308,7 +308,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
             create(:allegation, creator: creator_user)
             Investigation.reindex
 
-            get generate_case_exports_path
+            get generate_notification_exports_path
 
             aggregate_failures do
               expect(exported_data.cell(1, 18)).to eq "Case_Creator_Team"
@@ -322,7 +322,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
             create(:allegation)
             Investigation.reindex
 
-            get generate_case_exports_path
+            get generate_notification_exports_path
 
             aggregate_failures do
               expect(exported_data.cell(1, 26)).to eq "Date_Closed"
@@ -337,7 +337,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
             create(:allegation, is_closed: true, date_closed: closed_at_date)
             Investigation.reindex
 
-            get generate_case_exports_path, params: { case_status: "closed", format: :xlsx }
+            get generate_notification_exports_path, params: { case_status: "closed", format: :xlsx }
 
             aggregate_failures do
               expect(exported_data.cell(1, 26)).to eq "Date_Closed"
@@ -352,7 +352,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
               investigation = create(:allegation, creator: user, is_private: true)
               Investigation.reindex
 
-              get generate_case_exports_path
+              get generate_notification_exports_path
 
               aggregate_failures do
                 expect(exported_data.cell(1, 4)).to eq "Title"
@@ -371,7 +371,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
               create(:allegation, creator: other_user, is_private: true)
               Investigation.reindex
 
-              get generate_case_exports_path
+              get generate_notification_exports_path
 
               aggregate_failures do
                 expect(exported_data.cell(1, 4)).to eq "Title"

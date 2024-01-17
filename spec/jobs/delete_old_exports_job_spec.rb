@@ -23,26 +23,26 @@ RSpec.describe DeleteOldExportsJob, :with_stubbed_antivirus, :with_stubbed_maile
     product_export
   end
 
-  let!(:old_case_export) do
-    case_export = CaseExport.create!(
+  let!(:old_notification_export) do
+    notification_export = NotificationExport.create!(
       created_at: 8.days.ago,
       user_id: user.id
     )
-    case_export.export_file.attach(io: StringIO.new("test content"), filename: "test_old_case_export.xlsx")
-    case_export
+    notification_export.export_file.attach(io: StringIO.new("test content"), filename: "test_old_notification_export.xlsx")
+    notification_export
   end
 
-  let!(:recent_case_export) do
-    case_export = CaseExport.create!(
+  let!(:recent_notification_export) do
+    notification_export = NotificationExport.create!(
       created_at: 1.day.ago,
       user_id: user.id
     )
-    case_export.export_file.attach(io: StringIO.new("test content"), filename: "test_recent_case_export.xlsx")
-    case_export
+    notification_export.export_file.attach(io: StringIO.new("test content"), filename: "test_recent_notification_export.xlsx")
+    notification_export
   end
 
-  let(:old_case_export_file_id) { old_case_export.export_file.attachment.id }
-  let(:recent_case_export_file_id) { recent_case_export.export_file.attachment.id }
+  let(:old_notification_export_file_id) { old_notification_export.export_file.attachment.id }
+  let(:recent_notification_export_file_id) { recent_notification_export.export_file.attachment.id }
   let(:old_product_export_file_id) { old_product_export.export_file.attachment.id }
   let(:recent_product_export_file_id) { recent_product_export.export_file.attachment.id }
 
@@ -56,12 +56,12 @@ RSpec.describe DeleteOldExportsJob, :with_stubbed_antivirus, :with_stubbed_maile
       expect(ActiveStorage::Attachment.exists?(recent_product_export_file_id)).to eq true
     end
 
-    it "deletes old CaseExport instances and their attached files" do
-      expect { job.perform }.to change(CaseExport, :count).by(-1)
-      expect(CaseExport.all).not_to include(old_case_export)
-      expect(CaseExport.all).to include(recent_case_export)
-      expect(ActiveStorage::Attachment.exists?(old_case_export_file_id)).to eq false
-      expect(ActiveStorage::Attachment.exists?(recent_case_export_file_id)).to eq true
+    it "deletes old NotificationExport instances and their attached files" do
+      expect { job.perform }.to change(NotificationExport, :count).by(-1)
+      expect(NotificationExport.all).not_to include(old_notification_export)
+      expect(NotificationExport.all).to include(recent_notification_export)
+      expect(ActiveStorage::Attachment.exists?(old_notification_export_file_id)).to eq false
+      expect(ActiveStorage::Attachment.exists?(recent_notification_export_file_id)).to eq true
     end
   end
   # rubocop:enable RSpec/MultipleExpectations

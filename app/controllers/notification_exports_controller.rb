@@ -1,12 +1,12 @@
-class CaseExportsController < ApplicationController
+class NotificationExportsController < ApplicationController
   include InvestigationsHelper
 
   def generate
     authorize Investigation, :export?
 
-    case_export = CaseExport.create!(params: case_export_params, user: current_user)
-    CaseExportJob.perform_later(case_export)
-    ahoy.track "Generated case export", { case_export_id: case_export.id }
+    notification_export = NotificationExport.create!(params: notification_export_params, user: current_user)
+    NotificationExportJob.perform_later(notification_export)
+    ahoy.track "Generated notification export", { notification_export_id: notification_export.id }
 
     if current_user.can_access_new_search?
       redirect_to notifications_path(q: params[:q]), flash: { success: "Your notification export is being prepared. You will receive an email when your export is ready to download." }
@@ -18,6 +18,6 @@ class CaseExportsController < ApplicationController
   def show
     authorize Investigation, :export?
 
-    @case_export = CaseExport.find_by!(id: params[:id], user: current_user)
+    @notification_export = NotificationExport.find_by!(id: params[:id], user: current_user)
   end
 end

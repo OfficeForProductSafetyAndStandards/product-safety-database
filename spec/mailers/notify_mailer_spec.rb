@@ -49,19 +49,19 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
     end
   end
 
-  describe "#case_export" do
+  describe "#notification_export" do
     let(:user) { create(:user) }
     let(:params) { {} }
-    let(:case_export) { CaseExport.create!(user:, params:) }
+    let(:notification_export) { NotificationExport.create!(user:, params:) }
 
-    let(:mail) { described_class.case_export(email: user.email, name: user.name, case_export:) }
+    let(:mail) { described_class.notification_export(email: user.email, name: user.name, notification_export:) }
 
     it "sets the recipient of the email" do
       expect(mail.to).to eq([user.email])
     end
 
     it "sets the template ID" do
-      expect(mail.govuk_notify_template).to eq(described_class::TEMPLATES[:case_export])
+      expect(mail.govuk_notify_template).to eq(described_class::TEMPLATES[:notification_export])
     end
 
     it "sets the GOV.UK Notify reference" do
@@ -70,7 +70,7 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
 
     it "sets the personalisation attributes" do
       expect(mail.govuk_notify_personalisation)
-        .to eq(name: user.name, download_export_url: case_export_url(case_export))
+        .to eq(name: user.name, download_export_url: notification_export_url(notification_export))
     end
   end
 

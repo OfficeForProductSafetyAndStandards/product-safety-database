@@ -8,7 +8,7 @@ RSpec.feature "notification export", :with_opensearch, :with_stubbed_antivirus, 
   let(:other_user_team) { create :team, name: "Other User Team" }
   let(:other_user) { create :user, :activated, team: other_user_team, organisation: other_user_team.organisation }
   let(:email) { delivered_emails.last }
-  let(:export) { CaseExport.find_by(user:) }
+  let(:export) { NotificationExport.find_by(user:) }
   let(:spreadsheet) do
     export.export_file.blob.open do |file|
       Roo::Excelx.new(file).sheet("Notifications")
@@ -36,9 +36,9 @@ RSpec.feature "notification export", :with_opensearch, :with_stubbed_antivirus, 
     click_link "XLSX (spreadsheet)"
     expect(page).to have_content "Your notification export is being prepared. You will receive an email when your export is ready to download."
 
-    expect(email.action_name).to eq "case_export"
+    expect(email.action_name).to eq "notification_export"
     expect(email.personalization[:name]).to eq user.name
-    expect(email.personalization[:download_export_url]).to eq case_export_url(export)
+    expect(email.personalization[:download_export_url]).to eq notification_export_url(export)
 
     expect(spreadsheet.last_row).to eq(4)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
