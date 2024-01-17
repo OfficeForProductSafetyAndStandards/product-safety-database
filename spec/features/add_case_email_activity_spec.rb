@@ -5,7 +5,7 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
 
-  let(:investigation) { create(:allegation, creator: user) }
+  let(:notification) { create(:allegation, creator: user) }
 
   let(:name) { "Test name" }
   let(:email) { Faker::Internet.email }
@@ -22,7 +22,7 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
   before { sign_in(user) }
 
   scenario "with email file" do
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
@@ -68,16 +68,16 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
 
     click_link "Test summary"
 
-    expect_to_be_on_email_page(case_id: investigation.pretty_id)
+    expect_to_be_on_email_page(case_id: notification.pretty_id)
     expect(page).to have_h1("Test summary")
     expect(page).to have_summary_item(key: "Date of email", value: "1 February 2020")
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
     expect(page).to have_summary_item(key: "Email", value: "email_file.txt (0 Bytes)")
 
-    click_link investigation.pretty_id
+    click_link notification.pretty_id
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, email:, date:, file:)
 
@@ -86,9 +86,9 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
 
     sign_in(other_user_different_org)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{notification.pretty_id}/activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_restricted_information
 
     # Test that another user in the same team can see correspondence
@@ -96,14 +96,14 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
 
     sign_in(other_user_same_team)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{notification.pretty_id}/activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, email:, date:, file:)
   end
 
   scenario "with summary and subject and body and attachment" do
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
@@ -132,14 +132,14 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
 
     click_link "Test summary"
 
-    expect_to_be_on_email_page(case_id: investigation.pretty_id)
+    expect_to_be_on_email_page(case_id: notification.pretty_id)
     expect(page).to have_text("attachment_filename.txt")
     expect(page).to have_text("Test attachment description")
 
-    click_link investigation.pretty_id
+    click_link notification.pretty_id
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, email:, date:, summary:, subject: email_subject, body:)
 
     # Test that another user in a different organisation cannot see correspondence
@@ -147,9 +147,9 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
 
     sign_in(other_user_different_org)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{notification.pretty_id}/activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_restricted_information
   end
 

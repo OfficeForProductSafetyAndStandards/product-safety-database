@@ -56,5 +56,4 @@ class AddPhoneCallToNotification
   def email_update_text(recipient)
     "Phone call details added to the notification by #{user.decorate.display_name(viewer: recipient)}."
   end
-
 end
