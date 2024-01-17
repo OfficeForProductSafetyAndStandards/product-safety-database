@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
-  subject(:case_export) do
+RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+  subject(:notification_export) do
     described_class.create!(user:, params:)
   end
 
@@ -48,16 +48,16 @@ RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed
   end
 
   describe "#export!" do
-    let(:result) { case_export.export! }
+    let(:result) { notification_export.export! }
 
     it "attaches the spreadsheet as a file" do
       result
-      expect(case_export.export_file).to be_attached
+      expect(notification_export.export_file).to be_attached
     end
   end
 
   describe "#to_spreadsheet" do
-    let(:spreadsheet) { case_export.to_spreadsheet.to_stream }
+    let(:spreadsheet) { notification_export.to_spreadsheet.to_stream }
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:sheet) { exported_data.sheet("Notifications") }
 

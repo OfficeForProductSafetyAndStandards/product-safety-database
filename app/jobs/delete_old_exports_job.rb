@@ -1,7 +1,7 @@
 class DeleteOldExportsJob
   def perform
     delete_old_exports(ProductExport)
-    delete_old_exports(CaseExport)
+    delete_old_exports(NotificationExport)
   end
 
 private

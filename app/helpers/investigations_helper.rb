@@ -398,7 +398,7 @@ module InvestigationsHelper
     )
   end
 
-  def case_export_params
+  def notification_export_params
     params.permit(
       :q,
       :case_status,

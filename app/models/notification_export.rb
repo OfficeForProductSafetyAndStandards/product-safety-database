@@ -1,4 +1,5 @@
-class CaseExport < ApplicationRecord
+class NotificationExport < ApplicationRecord
+  self.table_name = "case_exports"
   include CountriesHelper
   include InvestigationsHelper
 
@@ -16,7 +17,7 @@ class CaseExport < ApplicationRecord
   end
 
   def export!
-    raise "No notifications to export" unless case_ids.length.positive?
+    raise "No notifications to export" unless investigation_ids.length.positive?
 
     spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "notifications_export.xlsx" }
@@ -32,9 +33,9 @@ class CaseExport < ApplicationRecord
 
     add_header_row(sheet)
 
-    case_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_case_ids|
-      find_cases(batch_case_ids).each do |investigation|
-        sheet.add_row(serialize_case(investigation.decorate), types: :text)
+    investigation_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_investigation_ids|
+      find_notifications(batch_investigation_ids).each do |notification|
+        sheet.add_row(serialize_notification(notification.decorate), types: :text)
       end
     end
 
@@ -43,8 +44,8 @@ class CaseExport < ApplicationRecord
 
 private
 
-  def case_ids
-    return @case_ids if @case_ids
+  def investigation_ids
+    return @investigation_ids if @investigation_ids
 
     @search = SearchParams.new(params)
 
@@ -137,47 +138,47 @@ private
                      Date_Validated]
   end
 
-  def find_cases(ids)
+  def find_notifications(ids)
     Investigation
         .includes(:complainant, :products, :owner_team, :owner_user, { creator_user: :team })
         .find(ids)
   end
 
-  def serialize_case(investigation)
-    Pundit.policy!(user, investigation).view_protected_details?(user:) || !investigation.is_private? ? non_restricted_data(investigation) : restricted_data(investigation)
+  def serialize_notification(notification)
+    Pundit.policy!(user, notification).view_protected_details?(user:) || !notification.is_private? ? non_restricted_data(notification) : restricted_data(notification)
   end
 
-  def non_restricted_data(investigation)
-    team_data = team_data(investigation.creator_user&.team&.name)
+  def non_restricted_data(notification)
+    team_data = team_data(notification.creator_user&.team&.name)
 
     [
-      investigation.pretty_id,
-      investigation.is_closed? ? "Closed" : "Open",
-      investigation.type,
-      investigation.title,
-      restrict_data_for_non_opss_user(investigation.object.description),
-      investigation.categories.join(", "),
-      investigation.reported_reason,
-      investigation.risk_level_description,
-      investigation.hazard_type,
-      investigation.hazard_description,
-      investigation.non_compliant_reason,
-      product_counts[investigation.id] || 0,
-      business_counts[investigation.id] || 0,
-      corrective_action_counts[investigation.id] || 0,
-      test_counts[investigation.id] || 0,
-      risk_assessment_counts[investigation.id] || 0,
-      investigation.owner_team&.name,
-      investigation.creator_user&.team&.name,
-      investigation.complainant_reference,
-      country_from_code(investigation.notifying_country, Country.notifying_countries),
+      notification.pretty_id,
+      notification.is_closed? ? "Closed" : "Open",
+      notification.type,
+      notification.title,
+      restrict_data_for_non_opss_user(notification.object.description),
+      notification.categories.join(", "),
+      notification.reported_reason,
+      notification.risk_level_description,
+      notification.hazard_type,
+      notification.hazard_description,
+      notification.non_compliant_reason,
+      product_counts[notification.id] || 0,
+      business_counts[notification.id] || 0,
+      corrective_action_counts[notification.id] || 0,
+      test_counts[notification.id] || 0,
+      risk_assessment_counts[notification.id] || 0,
+      notification.owner_team&.name,
+      notification.creator_user&.team&.name,
+      notification.complainant_reference,
+      country_from_code(notification.notifying_country, Country.notifying_countries),
       team_data.ts_region,
       team_data.regulator_name,
       restrict_data_for_non_opss_user((team_data.type == "internal")),
-      investigation.created_at,
-      investigation.updated_at,
-      investigation.date_closed,
-      restrict_data_for_non_opss_user(investigation.risk_validated_at),
+      notification.created_at,
+      notification.updated_at,
+      notification.date_closed,
+      restrict_data_for_non_opss_user(notification.risk_validated_at),
     ]
   end
 
@@ -185,37 +186,37 @@ private
     user.is_opss? ? field : "Restricted"
   end
 
-  def restricted_data(investigation)
-    team_data = team_data(investigation.creator_user&.team&.name)
+  def restricted_data(notification)
+    team_data = team_data(notification.creator_user&.team&.name)
 
     [
-      investigation.pretty_id,
-      investigation.is_closed? ? "Closed" : "Open",
-      investigation.type,
+      notification.pretty_id,
+      notification.is_closed? ? "Closed" : "Open",
+      notification.type,
       "Restricted",
       "Restricted",
-      investigation.categories.join(", "),
-      investigation.reported_reason,
-      investigation.risk_level_description,
-      investigation.hazard_type,
-      investigation.non_compliant_reason,
-      investigation.hazard_description,
-      product_counts[investigation.id] || 0,
-      business_counts[investigation.id] || 0,
-      corrective_action_counts[investigation.id] || 0,
-      test_counts[investigation.id] || 0,
-      risk_assessment_counts[investigation.id] || 0,
-      investigation.owner_team&.name,
-      investigation.creator_user&.team&.name,
+      notification.categories.join(", "),
+      notification.reported_reason,
+      notification.risk_level_description,
+      notification.hazard_type,
+      notification.non_compliant_reason,
+      notification.hazard_description,
+      product_counts[notification.id] || 0,
+      business_counts[notification.id] || 0,
+      corrective_action_counts[notification.id] || 0,
+      test_counts[notification.id] || 0,
+      risk_assessment_counts[notification.id] || 0,
+      notification.owner_team&.name,
+      notification.creator_user&.team&.name,
       "Restricted",
-      country_from_code(investigation.notifying_country, Country.notifying_countries),
+      country_from_code(notification.notifying_country, Country.notifying_countries),
       team_data.ts_region,
       team_data.regulator_name,
       (team_data.type == "internal"),
-      investigation.created_at,
-      investigation.updated_at,
-      investigation.date_closed,
-      investigation.risk_validated_at
+      notification.created_at,
+      notification.updated_at,
+      notification.date_closed,
+      notification.risk_validated_at
     ]
   end
 end

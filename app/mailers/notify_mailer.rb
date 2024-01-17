@@ -17,7 +17,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
       product_export: "1c88c503-638e-4f91-b55f-726900b83f92",
-      case_export: "f6c9a4ad-2050-4f76-bbad-d73bd9747d18",
+      notification_export: "f6c9a4ad-2050-4f76-bbad-d73bd9747d18",
       business_export: "68df2257-07f5-4768-b50a-74ffa3cb7fd3",
       unsafe_file: "3ba1da4f-a6e4-4d29-a03c-8996fe711c26",
       unsafe_attachment: "6960b99c-7c60-4e28-a7ea-d29a0d0f3d0e"
@@ -245,13 +245,13 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-  def case_export(email:, name:, case_export:)
-    set_template(TEMPLATES[:case_export])
+  def notification_export(email:, name:, notification_export:)
+    set_template(TEMPLATES[:notification_export])
     set_reference("Notification Export")
 
     set_personalisation(
       name:,
-      download_export_url: case_export_url(case_export)
+      download_export_url: notification_export_url(notification_export)
     )
 
     mail(to: email)
