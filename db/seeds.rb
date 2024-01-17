@@ -87,7 +87,7 @@ end
   notification = CreateNotification.call!(notification:, user:).notification
 
   product = Product.all.sample
-  AddProductToCase.call!(investigation: notification, product:, user:)
+  AddProductToNotification.call!(notification:, product:, user:)
 
   if rand(100) > 50
     blob = create_blob(all_seed_files.sample, title: Faker::Commerce.product_name, description: Faker::Hipster.sentence(word_count: 10))
