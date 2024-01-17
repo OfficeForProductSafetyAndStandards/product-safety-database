@@ -1,7 +1,7 @@
 class Investigations::RecordPhoneCallsController < Investigations::BaseController
-  before_action :set_investigation
+  before_action :set_notification
   before_action :authorize_investigation_updates
-  before_action :set_investigation_breadcrumbs
+  before_action :set_notification_breadcrumbs
 
   def new
     @correspondence_form = PhoneCallCorrespondenceForm.new

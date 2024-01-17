@@ -7,12 +7,12 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
 
   before do
     params[:notification] = investigation
-    params[:user]          = user
+    params[:user] = user
   end
 
   describe "#call" do
     context "when no notification is provided" do
-      let(:notification) { nil }
+      let(:investigation) {nil}
 
       it { expect(result).to be_a_failure }
       it { expect(result.error).to eq("No notification supplied") }
@@ -34,7 +34,7 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
         correspondent_name:,
         overview:,
         details:
-      )
+                                       )
     end
 
     it "creates an audit log", :aggregate_failures do
@@ -50,7 +50,6 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
       expect { described_class.call(params) }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
         investigation.pretty_id,
         investigation.owner_team.name,
-        investigation.owner_team.email,
         investigation.owner_team.email,
         "Phone call details added to the notification by #{user.decorate.display_name(viewer: user)}.",
         "Notification updated"
