@@ -136,6 +136,17 @@ Rails.application.routes.draw do
             end
 
             get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
+
+            scope ":step", constraints: { step: /add_test_reports/ } do
+              get ":investigation_product_id", to: "create#show_with_notification_product", as: "with_product"
+              patch ":investigation_product_id", to: "create#update_with_notification_product"
+              put ":investigation_product_id", to: "create#update_with_notification_product"
+              get ":investigation_product_id/:test_result_id", to: "create#show_with_notification_product", as: "with_product_and_test_result"
+              patch ":investigation_product_id/:test_result_id", to: "create#update_with_notification_product"
+              put ":investigation_product_id/:test_result_id", to: "create#update_with_notification_product"
+              get ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product", as: "remove_with_product_and_test_result"
+              delete ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product"
+            end
           end
         end
       end

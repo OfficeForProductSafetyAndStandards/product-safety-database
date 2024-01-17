@@ -1,0 +1,55 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_test_reports.opss_funding_details.title"), errors: @set_test_result_certificate_on_case_form.errors.any?) %>
+<% tso_certificate_issue_date_error = @set_test_result_certificate_on_case_form.errors.include?(:tso_certificate_issue_date) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @set_test_result_certificate_on_case_form, url: with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: @test_result.id, opss_funded: params[:opss_funded]), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_test_reports.opss_funding_details.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+        </ul>
+      <% end %>
+      <p class="govuk-body">These details will help the <abbr>OPSS</abbr> match funding to individual tests.</p>
+      <%= f.govuk_text_field :tso_certificate_reference_number, label: { text: "What is the trading standards officer sample reference number?", size: "m" }, hint: { text: "The reference number, for a specific product, that was provided to the test lab for product testing." }, width: "one-third" %>
+      <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
+      <div class="govuk-form-group<%= tso_certificate_issue_date_error ? ' govuk-form-group--error' : '' %>">
+        <fieldset class="govuk-fieldset" aria-describedby="set-test-result-certificate-on-case-form-tso-certificate-issue-date-hint<%= tso_certificate_issue_date_error ? ' set-test-result-certificate-on-case-form-tso-certificate-issue-date-error' : '' %>">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">What date was the test certificate issued?</legend>
+          <div class="govuk-hint" id="set-test-result-certificate-on-case-form-tso-certificate-issue-date-hint">For example, 12 5 2023</div>
+          <% if tso_certificate_issue_date_error %>
+          <p class="govuk-error-message" id="set-test-result-certificate-on-case-form-tso-certificate-issue-date-error">
+            <span class="govuk-visually-hidden">Error: </span><%= @set_test_result_certificate_on_case_form.errors.full_messages_for(:tso_certificate_issue_date).first %>
+          </p>
+          <% end %>
+          <div class="govuk-date-input">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="set_test_result_certificate_on_case_form_tso_certificate_issue_date_day">Day</label>
+                <input id="set_test_result_certificate_on_case_form_tso_certificate_issue_date_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= tso_certificate_issue_date_error ? ' govuk-input--error' : '' %>" name="set_test_result_certificate_on_case_form[tso_certificate_issue_date][day]" type="text" inputmode="numeric" value="<%= @set_test_result_certificate_on_case_form.tso_certificate_issue_date&.day || @test_result.tso_certificate_issue_date&.day %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="set_test_result_certificate_on_case_form_tso_certificate_issue_date_month">Month</label>
+                <input id="set_test_result_certificate_on_case_form_tso_certificate_issue_date_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= tso_certificate_issue_date_error ? ' govuk-input--error' : '' %>" name="set_test_result_certificate_on_case_form[tso_certificate_issue_date][month]" type="text" inputmode="numeric" value="<%= @set_test_result_certificate_on_case_form.tso_certificate_issue_date&.month || @test_result.tso_certificate_issue_date&.month %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="set_test_result_certificate_on_case_form_tso_certificate_issue_date_year">Year</label>
+                <input id="set_test_result_certificate_on_case_form_tso_certificate_issue_date_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= tso_certificate_issue_date_error ? ' govuk-input--error' : '' %>" name="set_test_result_certificate_on_case_form[tso_certificate_issue_date][year]" type="text" inputmode="numeric" value="<%= @set_test_result_certificate_on_case_form.tso_certificate_issue_date&.year || @test_result.tso_certificate_issue_date&.year %>">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>
