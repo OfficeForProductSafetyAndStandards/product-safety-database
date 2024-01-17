@@ -34,7 +34,7 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
         correspondent_name:,
         overview:,
         details:
-                                       )
+            )
     end
 
     it "creates an audit log", :aggregate_failures do

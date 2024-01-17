@@ -47,7 +47,7 @@ RSpec.describe AddEmailToNotification, :with_stubbed_mailer, :with_stubbed_antiv
     context "with the minimum required parameters" do
       let(:result) do
         described_class.call(
-          notification: ,
+          notification:,
           user:,
           correspondence_date: Date.new(2020, 1, 2),
           email_subject: "Re: safety issue",
