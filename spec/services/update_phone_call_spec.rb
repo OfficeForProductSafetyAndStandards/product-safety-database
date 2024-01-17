@@ -10,7 +10,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   let(:params) do
     {
       user: user_same_team,
-      investigation:,
+      notification: investigation,
       correspondence: phone_call,
       correspondence_date: new_correspondence_date,
       correspondent_name: new_correspondent_name,
@@ -24,7 +24,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:phone_call) do
     AddPhoneCallToNotification.call!(
       user:,
-      investigation:,
+      notification: investigation,
       correspondence_date:,
       correspondent_name:,
       overview:,
@@ -58,7 +58,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_mailer, :with_stubbed_antivirus do
       let(:params) do
         {
           user: user_same_team,
-          investigation:,
+          notification: investigation,
           correspondence: phone_call,
           correspondence_date:,
           correspondent_name:,

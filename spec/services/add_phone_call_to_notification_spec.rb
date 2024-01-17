@@ -12,7 +12,7 @@ RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_a
 
   describe "#call" do
     context "when no notification is provided" do
-      let(:investigation) {nil}
+      let(:investigation) { nil }
 
       it { expect(result).to be_a_failure }
       it { expect(result.error).to eq("No notification supplied") }
