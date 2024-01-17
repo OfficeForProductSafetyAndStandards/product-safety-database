@@ -6,7 +6,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
   let(:user) { create :user, :opss_user, :activated, has_viewed_introduction: true, team: }
   let(:team_mate) { create :user, :activated, has_viewed_introduction: true, team: }
   let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team }
-  let(:notification) { create :allegation, creator: user }
+  let(:notification) { create :notification, creator: user }
   let(:product_1) { create :product }
   let(:product_2) { create :product }
   let(:product_3) { create :product }

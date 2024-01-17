@@ -714,7 +714,6 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{case_id}/summary/edit")
   end
 
-  /you may need to revert this to investigaiton back/
   def expect_to_be_on_edit_batch_numbers_page(notification_product_id:)
     expect(page).to have_current_path("/investigation_products/#{notification_product_id}/edit-batch-numbers/edit")
     expect(page).to have_css("h1", text: "Edit the batch numbers")
