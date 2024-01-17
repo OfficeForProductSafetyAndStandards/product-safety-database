@@ -17,7 +17,7 @@ class NotificationExport < ApplicationRecord
   end
 
   def export!
-    raise "No notifications to export" unless investigation_ids.length.positive?
+    raise "No notifications to export" unless notification_ids.length.positive?
 
     spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "notifications_export.xlsx" }
@@ -33,8 +33,8 @@ class NotificationExport < ApplicationRecord
 
     add_header_row(sheet)
 
-    investigation_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_investigation_ids|
-      find_notifications(batch_investigation_ids).each do |notification|
+    notification_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_notification_ids|
+      find_notifications(batch_notification_ids).each do |notification|
         sheet.add_row(serialize_notification(notification.decorate), types: :text)
       end
     end
@@ -44,8 +44,8 @@ class NotificationExport < ApplicationRecord
 
 private
 
-  def investigation_ids
-    return @investigation_ids if @investigation_ids
+  def notification_ids
+    return @notification_ids if @notification_ids
 
     @search = SearchParams.new(params)
 
