@@ -12,14 +12,14 @@ class Investigations::RecordEmailsController < Investigations::BaseController
     @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params)
 
     if @email_correspondence_form.valid?
-      AddEmailToCase.call!(
+      AddEmailToNotification.call!(
         @email_correspondence_form.attributes.except(
           "email_file_id",
           "email_attachment_id"
         ).merge({
           email_file: @email_correspondence_form.email_file || @email_correspondence_form.cached_email_file,
           email_attachment: @email_correspondence_form.email_attachment || @email_correspondence_form.cached_email_attachment,
-          investigation: @investigation_object,
+          notification: @investigation_object,
           user: current_user
         })
       )

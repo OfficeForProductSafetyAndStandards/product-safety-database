@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AddEmailToNotification, :with_stubbed_mailer, :with_stubbed_antivirus do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
+  let!(:notification) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team) }
@@ -35,7 +35,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
     context "with no user parameter" do
       let(:result) do
         described_class.call(
-          investigation:
+          investigation: notification
         )
       end
 
@@ -47,7 +47,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
     context "with the minimum required parameters" do
       let(:result) do
         described_class.call(
-          investigation:,
+          notification: ,
           user:,
           correspondence_date: Date.new(2020, 1, 2),
           email_subject: "Re: safety issue",
@@ -61,7 +61,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
 
       it "adds an email to the case with the details given", :aggregate_failures do
         result
-        email = investigation.emails.first
+        email = notification.emails.first
         expect(email).not_to be_nil
         expect(email.email_subject).to eq "Re: safety issue"
         expect(email.correspondence_date).to eq Date.new(2020, 1, 2)
@@ -70,7 +70,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
 
       it "creates an audit activity", :aggregate_failures do
         result
-        activity = investigation.reload.activities.first
+        activity = notification.reload.activities.first
         expect(activity).to be_a(AuditActivity::Correspondence::AddEmail)
         expect(activity.investigation_product).to be_nil
         expect(activity.title(nil)).to be_nil
@@ -79,8 +79,8 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
 
       it "creates metadata" do
         result
-        activity = investigation.reload.activities.first
-        email = investigation.emails.first
+        activity = notification.reload.activities.first
+        email = notification.emails.first
         expect(activity.metadata).to eq build_metadata_with_no_attached_files(email)
       end
 
@@ -95,7 +95,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
     context "with an email file and an attachment" do
       let(:result) do
         described_class.call(
-          investigation:,
+          notification:,
           user:,
           correspondence_date: Date.new(2020, 1, 2),
           email_subject: "",

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
-  let!(:investigation) { create(:allegation) }
+  let!(:notification) { create(:allegation) }
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team, name: "Team 2") }
@@ -9,7 +9,7 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
 
   let!(:email) do
     create(:email,
-           investigation:,
+           investigation: notification,
            correspondence_date: Date.new(2019, 1, 1),
            correspondent_name: "Mr Jones",
            details: "Please call me.",
@@ -142,7 +142,7 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
           "#{name} edited an email on the notification."
         end
 
-        it_behaves_like "a service which notifies the investigation owner"
+        it_behaves_like "a service which notifies the notification owner"
       end
 
       context "when a new email and attachment files have been uploaded" do
