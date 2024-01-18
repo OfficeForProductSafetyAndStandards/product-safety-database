@@ -115,4 +115,4 @@ group :test do
   gem "webmock", "~> 3.19"
 end
 
-gem 'report_portal', path: 'report_portal'
+gem "report_portal", path: "report_portal"
