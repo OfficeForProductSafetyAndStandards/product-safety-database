@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Edit a phone call correspondence", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   include_context "with phone call correspondence setup"
 
-  let!(:correspondence) { AddPhoneCallToCase.call!(investigation:, user:, **params).correspondence.decorate }
+  let!(:correspondence) { AddPhoneCallToNotification.call!(notification: investigation, user:, **params).correspondence.decorate }
 
   before { sign_in investigation.owner_user }
 

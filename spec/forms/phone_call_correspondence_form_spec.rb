@@ -15,7 +15,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
 
   describe ".from", :with_stubbed_antivirus, :with_stubbed_mailer do
     let(:correspondence_date) { Date.current }
-    let(:phone_call) { AddPhoneCallToCase.call!(investigation:, user:, **params).correspondence }
+    let(:phone_call) { AddPhoneCallToNotification.call!(notification: investigation, user:, **params).correspondence }
 
     it "creates a valid form object" do
       expect(described_class.from(phone_call))

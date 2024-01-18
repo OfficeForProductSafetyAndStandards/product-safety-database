@@ -251,7 +251,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_correspondence_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/correspondence/new")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/correspondence/new")
     expect(page).to have_selector("h1", text: "What type of correspondence are you adding?")
   end
 
