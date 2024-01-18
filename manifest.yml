@@ -9,9 +9,11 @@ applications:
   routes:
     - route: ((psd-host))
     - route: ((psd-host-support))
+    - route: ((psd-host-report))
   env:
     PSD_HOST: ((psd-host))
     PSD_HOST_SUPPORT: ((psd-host-support))
+    PSD_HOST_REPORT: ((psd-host-report))
     STATEMENT_TIMEOUT: 60s
     RAILS_MAX_THREADS: ((web-max-threads))
   timeout: 180
@@ -35,6 +37,7 @@ applications:
     - antivirus-auth-env
     - psd-redacted-export-env
     - psd-support-portal-env
+    - psd-report-portal-env
   processes:
     - type: web
       command: bin/rake cf:on_first_instance db:migrate && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV

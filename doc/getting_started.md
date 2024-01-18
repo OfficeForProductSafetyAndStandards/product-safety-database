@@ -5,10 +5,11 @@
 The recommended setup is to use Docker for running dependencies such as PostgreSQL, Redis and OpenSearch,
 and run the app itself locally. This allows for easier debugging and realtime refreshing on code changes.
 
-Add the required host in `/etc/hosts`:
+Add the required hosts in `/etc/hosts`:
 
 ```
 127.0.0.1       psd-support
+127.0.0.1       psd-report
 ```
 
 To start all the required dependencies, run `docker compose up antivirus db redis opensearch`.
@@ -39,10 +40,11 @@ environment manager such as `nvm` or `asdf`, then install the Node.js version in
 It is also possible to run everything in Docker for a cleaner setup, but it will make debugging
 (such as using `binding.pry`) more difficult due to the level of indirection.
 
-Add the required host in `/etc/hosts`:
+Add the required hosts in `/etc/hosts`:
 
 ```
 127.0.0.1       psd-support
+127.0.0.1       psd-report
 ```
 
 Run Docker Compose: `docker compose up`.

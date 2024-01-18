@@ -15,7 +15,7 @@ cp -a ./infrastructure/env/. ./env/
 export CF_STARTUP_TIMEOUT=15
 
 # Deploy the app
-cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var app-name=$APP_NAME --var psd-host=$DOMAIN --var psd-host-support=$DOMAIN_SUPPORT --var web-disk-quota=$WEB_DISK_QUOTA --var worker-disk-quota=$WORKER_DISK_QUOTA --var web-memory=$WEB_MEMORY --var worker-memory=$WORKER_MEMORY --var web-instances=$WEB_INSTANCES --var worker-instances=$WORKER_INSTANCES --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --var sentry-service-name=$SENTRY_SERVICE_NAME --strategy rolling
+cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var app-name=$APP_NAME --var psd-host=$DOMAIN --var psd-host-support=$DOMAIN_SUPPORT --var psd-host-report=$DOMAIN_REPORT --var web-disk-quota=$WEB_DISK_QUOTA --var worker-disk-quota=$WORKER_DISK_QUOTA --var web-memory=$WEB_MEMORY --var worker-memory=$WORKER_MEMORY --var web-instances=$WEB_INSTANCES --var worker-instances=$WORKER_INSTANCES --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --var sentry-service-name=$SENTRY_SERVICE_NAME --strategy rolling
 
 # Remove the copied infrastructure env files to clean up
 rm -R env/

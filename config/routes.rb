@@ -377,6 +377,11 @@ Rails.application.routes.draw do
     mount SupportPortal::Engine => "/"
   end
 
+  # Report portal
+  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_REPORT")) do
+    mount ReportPortal::Engine => "/"
+  end
+
   resources :teams, only: %i[index show] do
     resources :invitations, only: %i[new create] do
       member do
