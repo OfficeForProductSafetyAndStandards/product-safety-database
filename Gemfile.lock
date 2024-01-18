@@ -43,7 +43,7 @@ PATH
       pagy (~> 6.0)
       paper_trail (~> 15.0)
       pg (~> 1.5)
-      rails (>= 7.0.8)
+      rails (>= 7.0.4)
 
 GEM
   remote: https://rubygems.org/

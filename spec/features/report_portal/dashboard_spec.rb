@@ -22,6 +22,5 @@ RSpec.feature "Reporting dashboard", type: :feature do
 
   scenario "Searching for an account that exists" do
     expect(page).to have_h1("Dashboard")
-
   end
 end
