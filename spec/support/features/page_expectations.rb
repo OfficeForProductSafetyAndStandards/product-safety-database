@@ -714,23 +714,23 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{case_id}/summary/edit")
   end
 
-  def expect_to_be_on_edit_batch_numbers_page(investigation_product_id:)
-    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-batch-numbers/edit")
+  def expect_to_be_on_edit_batch_numbers_page(notification_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{notification_product_id}/edit-batch-numbers/edit")
     expect(page).to have_css("h1", text: "Edit the batch numbers")
   end
 
-  def expect_to_be_on_edit_ucr_numbers_page(investigation_product_id:)
-    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-ucr-numbers/edit")
+  def expect_to_be_on_edit_ucr_numbers_page(notification_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{notification_product_id}/edit-ucr-numbers/edit")
     expect(page).to have_css("h1", text: "Edit the Unique Consignment Reference (UCR) numbers")
   end
 
-  def expect_to_be_on_edit_customs_code_page(investigation_product_id:)
-    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-customs-code/edit")
+  def expect_to_be_on_edit_customs_code_page(notification_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{notification_product_id}/edit-customs-code/edit")
     expect(page).to have_css("h1", text: "Edit the customs code")
   end
 
-  def expect_to_be_on_edit_units_affected_page(investigation_product_id:)
-    expect(page).to have_current_path("/investigation_products/#{investigation_product_id}/edit-number-of-affected-units/edit")
+  def expect_to_be_on_edit_units_affected_page(notification_product_id:)
+    expect(page).to have_current_path("/investigation_products/#{notification_product_id}/edit-number-of-affected-units/edit")
     expect(page).to have_css("h1", text: "Edit how many units are affected")
   end
 end

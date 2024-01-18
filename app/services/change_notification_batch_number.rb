@@ -1,19 +1,19 @@
-class ChangeBatchNumber
+class ChangeNotificationBatchNumber
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation_product, :batch_number, :user, to: :context
+  delegate :notification_product, :batch_number, :user, to: :context
 
   def call
-    context.fail!(error: "No investigation product supplied") unless investigation_product.is_a?(InvestigationProduct)
+    context.fail!(error: "No investigation product supplied") unless notification_product.is_a?(InvestigationProduct)
     context.fail!(error: "No batch number supplied") unless batch_number.is_a?(String)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation_product.assign_attributes(batch_number:)
-    return if investigation_product.changes.none?
+    notification_product.assign_attributes(batch_number:)
+    return if notification_product.changes.none?
 
     ActiveRecord::Base.transaction do
-      investigation_product.save!
+      notification_product.save!
       create_audit_activity_for_batch_number_changed
     end
 
@@ -23,7 +23,7 @@ class ChangeBatchNumber
 private
 
   def create_audit_activity_for_batch_number_changed
-    metadata = activity_class.build_metadata(investigation_product)
+    metadata = activity_class.build_metadata(notification_product)
 
     activity_class.create!(
       added_by_user: user,
@@ -51,7 +51,7 @@ private
   end
 
   def investigation
-    investigation_product.investigation
+    notification_product.investigation
   end
 
   def email_body(viewer = nil)
