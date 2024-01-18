@@ -12,9 +12,9 @@ module Investigations
       @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
       return render(:new) if @accident_or_incident_form.invalid?
 
-      AddAccidentOrIncidentToCase.call!(
+      AddAccidentOrIncidentToNotification.call!(
         @accident_or_incident_form.attributes.merge({
-          investigation: @investigation,
+          notification: @investigation,
           user: current_user,
         })
       )
@@ -45,7 +45,7 @@ module Investigations
         UpdateAccidentOrIncident.call!(
           @accident_or_incident_form.serializable_hash.merge({
             accident_or_incident: @accident_or_incident,
-            investigation: @investigation,
+            notification: @investigation,
             user: current_user
           })
         )
@@ -64,7 +64,7 @@ module Investigations
     end
 
     def accident_or_incident_params
-      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :investigation_product_id, :type, date: %i[day month year])
+      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :notification_product_id, :type, date: %i[day month year])
     end
   end
 end

@@ -11,7 +11,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
   let(:usage) { "during_normal_use" }
   let(:new_usage) { "during_misuse" }
   let(:accident_or_incident) do
-    AddAccidentOrIncidentToCase.call!(
+    AddAccidentOrIncidentToNotification.call!(
       investigation:,
       user:,
       date: nil,
