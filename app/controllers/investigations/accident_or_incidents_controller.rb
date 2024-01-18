@@ -64,7 +64,7 @@ module Investigations
     end
 
     def accident_or_incident_params
-      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :notification_product_id, :type, date: %i[day month year])
+      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :investigation_product_id, :type, date: %i[day month year])
     end
   end
 end

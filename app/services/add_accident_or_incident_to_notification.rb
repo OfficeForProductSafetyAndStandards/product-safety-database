@@ -7,7 +7,7 @@ class AddAccidentOrIncidentToNotification
   def call
     context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-    params = { date:, is_date_known:, notification_product_id:, severity:, severity_other:, usage:, additional_info:, type: }
+    params = { date:, is_date_known:, investigation_product_id:, severity:, severity_other:, usage:, additional_info:, type: }
 
     ActiveRecord::Base.transaction do
       context.accident_or_incident = notification.unexpected_events.create!(params)

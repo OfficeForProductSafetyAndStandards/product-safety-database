@@ -5,21 +5,21 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product1) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:product2) { create(:product_iphone, name: "iPhone 23") }
-  let(:investigation) { create(:allegation, products: [product1, product2], creator: user, read_only_teams: read_only_team) }
+  let(:notification) { create(:notification, products: [product1, product2], creator: user, read_only_teams: read_only_team) }
 
   let(:date) { Date.parse("2020-05-01") }
 
   context "when the viewing user only has read only access" do
     scenario "cannot add supporting information" do
       sign_in(read_only_user)
-      visit "/cases/#{investigation.pretty_id}"
+      visit "/cases/#{notification.pretty_id}"
       expect(page).not_to have_link("Add an incident or accident")
     end
   end
 
   scenario "Adding an accident or incident with date unknown, no custom severity and no additional info" do
     sign_in(user)
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     click_link "Add an accident or incident"
 
     expect_to_be_on_accident_or_incident_type_page
@@ -61,11 +61,11 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     expect(page).to have_content "Supporting information"
     expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: notification.pretty_id)
 
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
 
     expect_case_activity_page_to_show_entered_data("Unknown", "MyBrand Washing Machine", "Serious", "Normal use")
@@ -79,7 +79,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
     sign_in(user)
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     click_link "Add an accident or incident"
 
     expect_to_be_on_accident_or_incident_type_page
@@ -125,11 +125,11 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
 
     expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
 
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page(case_id: notification.pretty_id)
 
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
     expect_case_activity_page_to_show_entered_data(date.to_formatted_s(:govuk), product1.name, "Test", "Normal use")
 
