@@ -125,6 +125,10 @@ module Notifications
         return redirect_to with_product_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
 
         @choose_investigation_product_form = ChooseInvestigationProductForm.new unless @manage
+      when :add_supporting_images
+        @image_upload = ImageUpload.new(upload_model: @notification)
+      when :add_supporting_documents
+        @document_form = DocumentForm.new
       end
 
       render_wizard
@@ -200,6 +204,45 @@ module Notifications
           else
             return render_wizard
           end
+        end
+      when :add_supporting_images
+        if params[:final].blank?
+          flash[:success] = nil
+
+          @image_upload = ImageUpload.new(upload_model: @notification)
+
+          if image_upload_params[:file_upload].present?
+            file = ActiveStorage::Blob.create_and_upload!(
+              io: image_upload_params[:file_upload],
+              filename: image_upload_params[:file_upload].original_filename,
+              content_type: image_upload_params[:file_upload].content_type
+            )
+            file.analyze_later
+            @image_upload = ImageUpload.new(file_upload: file, upload_model: @notification, created_by: current_user.id)
+
+            if @image_upload.valid?
+              @image_upload.save!
+              @notification.image_upload_ids.push(@image_upload.id)
+              @notification.save!
+              flash[:success] = "Supporting image uploaded successfully"
+            end
+          end
+
+          return render_wizard
+        end
+      when :add_supporting_documents
+        if params[:final].blank?
+          flash[:success] = nil
+
+          @document_form = DocumentForm.new(document_upload_params)
+          @document_form.cache_file!(current_user)
+
+          if @document_form.valid?
+            @notification.documents.attach(@document_form.document)
+            flash[:success] = "Supporting document uploaded successfully"
+          end
+
+          return render_wizard
         end
       end
 
@@ -374,6 +417,22 @@ module Notifications
       end
     end
 
+    def remove_upload
+      case params[:step].to_sym
+      when :add_supporting_images
+        @upload = @notification.image_uploads.find(params[:upload_id])
+        @type = "supporting image"
+      when :add_supporting_documents
+        @upload = @notification.documents.find(params[:upload_id])
+        @type = "supporting document"
+      end
+
+      if request.delete?
+        @upload.destroy!
+        redirect_to notification_create_path(@notification, id: params[:step])
+      end
+    end
+
   private
 
     def disallow_non_role_users
@@ -462,6 +521,14 @@ module Notifications
 
     def test_details_params
       params.require(:test_result_form).permit(:legislation, :standards_product_was_tested_against, :result, :failure_details, :details, :existing_document_file_id, :document, date: %i[day month year])
+    end
+
+    def image_upload_params
+      params.require(:image_upload).permit(:file_upload, :final)
+    end
+
+    def document_upload_params
+      params.require(:document_form).permit(:document, :title, :final)
     end
   end
 end

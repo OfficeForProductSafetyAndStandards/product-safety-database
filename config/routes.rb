@@ -147,6 +147,11 @@ Rails.application.routes.draw do
               get ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product", as: "remove_with_product_and_test_result"
               delete ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product"
             end
+
+            scope ":step", constraints: { step: /add_supporting_images|add_supporting_documents/ } do
+              get ":upload_id/remove", to: "create#remove_upload", as: "remove_upload"
+              delete ":upload_id/remove", to: "create#remove_upload"
+            end
           end
         end
       end
