@@ -7,11 +7,11 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
   let(:date) { Date.current }
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
 
-  let!(:doll_investigation_product)       { create(:investigation_product, investigation:, product: doll) }
-  let!(:teddy_bear_investigation_product) { create(:investigation_product, investigation:, product: teddy_bear) }
+  let!(:doll_investigation_product)       { create(:investigation_product, investigation: notification, product: doll) }
+  let!(:teddy_bear_investigation_product) { create(:investigation_product, investigation: notification, product: teddy_bear) }
 
-  let(:investigation) do
-    create(:allegation,
+  let(:notification) do
+    create(:notification,
            creator: user,
            risk_level: :serious)
   end
@@ -22,7 +22,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
            investigation_product: doll_investigation_product,
            severity: "serious",
            usage: "during_normal_use",
-           investigation:)
+           investigation: notification)
   end
 
   let!(:accident) do
@@ -33,23 +33,23 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
            severity: "other",
            severity_other: "very extreme",
            usage: "during_normal_use",
-           investigation:)
+           investigation: notification)
   end
 
   scenario "Editing an incident, setting date to known, (with validation errors)" do
     sign_in(user)
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
 
     click_link "Supporting information (2)"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/supporting-information")
     expect_to_have_notification_breadcrumbs
 
     click_link "Doll #{doll.psd_ref}: Normal use"
 
     click_link "Edit incident"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{incident.id}/edit")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/accident_or_incidents/#{incident.id}/edit")
     expect_to_have_notification_breadcrumbs
 
     within_fieldset("Do you know when the incident happened?") do
@@ -89,10 +89,10 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
 
     expect(page).to have_content "Incident involving Teddy Bear"
 
-    click_link investigation.pretty_id
+    click_link notification.pretty_id
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
     expect(page).to have_selector("h1", text: "Activity")
 
@@ -105,18 +105,18 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
 
   scenario "Editing an accident, setting date to unknown, changing severity other" do
     sign_in(user)
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
 
     click_link "Supporting information (2)"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/supporting-information")
     expect_to_have_notification_breadcrumbs
 
     click_link "Teddy Bear #{teddy_bear.psd_ref}: Normal use"
 
     click_link "Edit accident"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{accident.id}/edit")
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/accident_or_incidents/#{accident.id}/edit")
 
     within_fieldset("Do you know when the accident happened?") do
       expect(page).to have_checked_field("Yes")
@@ -151,11 +151,11 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_antivir
     expect(page).to have_content "Accident involving Doll"
     expect_to_have_notification_breadcrumbs
 
-    click_link investigation.pretty_id
+    click_link notification.pretty_id
 
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
     expect(page).to have_selector("h1", text: "Activity")
 
