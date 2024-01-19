@@ -36,7 +36,7 @@ class Test < ApplicationRecord
     end
 
     def date_of_activity
-      date.to_formatted_s(:govuk)
+      date&.to_formatted_s(:govuk)
     end
 
     def date_of_activity_for_sorting

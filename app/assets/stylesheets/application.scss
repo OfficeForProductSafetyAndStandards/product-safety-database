@@ -115,6 +115,13 @@ $govuk-global-styles: true;
   margin-left: govuk-spacing(2);
 }
 
+// Make sure the action column of a summary list used for lists of files
+// containing both file names and titles is wide enough to accommodate
+// both view and delete links
+.opss-file-list .govuk-summary-list__actions {
+  width: 25%;
+}
+
 // TODO: get rid of these
 .right {
   float: right;
