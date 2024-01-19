@@ -1,14 +1,14 @@
-class AddEmailToCase
+class AddEmailToNotification
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, :attachment_description, to: :context
+  delegate :notification, :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, :attachment_description, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    context.email = investigation.emails.create!(
+    context.email = notification.emails.create!(
       correspondent_name:,
       correspondence_date:,
       email_address:,
@@ -24,9 +24,9 @@ class AddEmailToCase
       update_attachment_description!
     end
 
-    create_audit_activity(email, investigation)
+    create_audit_activity(email, notification)
 
-    send_notification_email(investigation, user)
+    send_notification_email(notification, user)
   end
 
 private
@@ -35,11 +35,11 @@ private
     AuditActivity::Correspondence::AddEmail.build_metadata(email)
   end
 
-  def create_audit_activity(correspondence, investigation)
+  def create_audit_activity(correspondence, notification)
     activity = AuditActivity::Correspondence::AddEmail.create!(
       metadata: audit_activity_metadata,
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       title: nil,
       correspondence:
     )
@@ -53,12 +53,12 @@ private
     context.email.email_attachment.blob.save!
   end
 
-  def send_notification_email(investigation, _user)
-    return unless investigation.sends_notifications?
+  def send_notification_email(notification, _user)
+    return unless notification.sends_notifications?
 
-    email_recipients_for_case_owner(investigation).each do |recipient|
+    email_recipients_for_case_owner(notification).each do |recipient|
       NotifyMailer.notification_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         recipient.name,
         recipient.email,
         email_update_text(recipient),

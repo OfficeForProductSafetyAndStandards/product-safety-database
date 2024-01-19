@@ -1,21 +1,21 @@
 require "rails_helper"
 
-RSpec.describe AddPhoneCallToCase, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:result) { described_class.call(params) }
 
   include_context "with phone call correspondence setup"
 
   before do
-    params[:investigation] = investigation
-    params[:user]          = user
+    params[:notification] = investigation
+    params[:user] = user
   end
 
   describe "#call" do
-    context "when no investigation is provided" do
+    context "when no notification is provided" do
       let(:investigation) { nil }
 
       it { expect(result).to be_a_failure }
-      it { expect(result.error).to eq("No investigation supplied") }
+      it { expect(result.error).to eq("No notification supplied") }
     end
 
     context "when no user is provided" do

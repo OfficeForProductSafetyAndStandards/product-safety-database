@@ -1,4 +1,4 @@
-class ChangeCaseVisibilityForm
+class ChangeNotificationVisibilityForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
