@@ -38,7 +38,7 @@ then
 fi
 
 # Deploy the app
-cf push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var route-support=$APP_NAME-support.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var psd-host-support=$APP_NAME-support.$DOMAIN --var psd-host-report=$APP_NAME-report.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS
+cf push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var route-support=$APP_NAME-support.$DOMAIN --var route-report=$APP_NAME-report.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var psd-host-support=$APP_NAME-support.$DOMAIN --var psd-host-report=$APP_NAME-report.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS
 
 # Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/env/
