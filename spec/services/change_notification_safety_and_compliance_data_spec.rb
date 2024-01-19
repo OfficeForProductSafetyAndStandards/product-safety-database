@@ -1,7 +1,12 @@
 require "rails_helper"
 
 RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
-  let!(:notification) do create(:notification, reported_reason: :unsafe_and_non_compliant, hazard_type: "Burns", hazard_description: "Too hot", non_compliant_reason: "Breaks all the rules")
+  let!(:notification) do
+    create(:notification,
+           reported_reason: :unsafe_and_non_compliant,
+           hazard_type: "Burns",
+           hazard_description: "Too hot",
+           non_compliant_reason: "Breaks all the rules")
   end
 
   let(:hazard_type) { nil }
