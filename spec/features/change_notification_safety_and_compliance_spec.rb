@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Change safety and compliance details for a case", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:user) { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
-  let(:notification){ create(:notification, creator: user, reported_reason: "unsafe_and_non_compliant", hazard_type: "Burns", hazard_description: "FIRE FIRE FIRE", non_compliant_reason: "Covered in petrol") }
+  let(:notification) { create(:notification, creator: user, reported_reason: "unsafe_and_non_compliant", hazard_type: "Burns", hazard_description: "FIRE FIRE FIRE", non_compliant_reason: "Covered in petrol") }
 
   context "when user is allowed to edit the case" do
     before do
@@ -100,7 +100,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
   context "when the case safety and compliance data is not set" do
     context "when user does not fill in the appropriate fields" do
-      let(:notification)  { create(:notification, creator: user) }
+      let(:notification) { create(:notification, creator: user) }
 
       it "raises error and does not allow user to change safety and compliance details until they are correctly filled in" do
         sign_in user
