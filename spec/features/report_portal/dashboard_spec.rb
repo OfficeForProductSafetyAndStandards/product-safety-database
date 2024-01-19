@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting dashboard", type: :feature do
+RSpec.feature "Reporting dashboard", :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user) { create(:user, roles: %w[opss]) }
   let(:user1) { create(:user) }
   let(:user2) { create(:user) }
