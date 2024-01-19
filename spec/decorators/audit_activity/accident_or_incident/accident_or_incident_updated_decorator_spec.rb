@@ -12,8 +12,8 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
   let(:product) { build(:product) }
   let(:additional_info) { "something extra" }
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) do
-    create(:allegation,
+  let(:notification) do
+    create(:notification,
            creator: user,
            products: [product])
   end
@@ -41,7 +41,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
   before do
     UpdateAccidentOrIncident.call!(
       accident_or_incident_attributes
-        .merge(accident_or_incident: accident, user:, changes:, investigation: accident.investigation)
+        .merge(accident_or_incident: accident, user:, changes:, notification: accident.investigation)
     )
   end
 
