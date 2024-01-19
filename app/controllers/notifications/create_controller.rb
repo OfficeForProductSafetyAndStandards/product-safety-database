@@ -160,8 +160,8 @@ module Notifications
             user: current_user,
             silent: true
           )
-          ChangeSafetyAndComplianceData.call!(
-            investigation: @notification,
+          ChangeNotificationSafetyAndComplianceData.call!(
+            notification: @notification,
             reported_reason: add_notification_details_params[:reported_reason],
             user: current_user,
             silent: true
@@ -174,8 +174,8 @@ module Notifications
 
         if @change_notification_product_safety_compliance_details_form.valid?
           unless @notification.reported_reason&.safe_and_compliant?
-            ChangeSafetyAndComplianceData.call!(
-              investigation: @notification,
+            ChangeNotificationSafetyAndComplianceData.call!(
+              notification: @notification,
               reported_reason: notification_reported_reason_detailed(unsafe: add_product_safety_and_compliance_details_params[:unsafe], noncompliant: add_product_safety_and_compliance_details_params[:noncompliant]),
               hazard_type: add_product_safety_and_compliance_details_params[:primary_hazard],
               hazard_description: add_product_safety_and_compliance_details_params[:primary_hazard_description],

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let!(:investigation) do
     create(:allegation, reported_reason: :unsafe_and_non_compliant,
                         hazard_type: "Burns",
