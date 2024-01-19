@@ -11,7 +11,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
   let(:usage) { "during_normal_use" }
   let(:product) { build(:product) }
   let(:additional_info) { "something extra" }
-  let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:notification) do
     create(:notification,
            creator: user,
