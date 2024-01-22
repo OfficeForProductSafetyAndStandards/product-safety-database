@@ -1,1 +1,113 @@
-<% content_for :page_title, "Dashboard" %>
+<% content_for :page_title, "Summary statistics" %>
+
+<% content_for :aside do %>
+  <%= @current_month %>
+<% end %>
+
+<nav class="govuk-pagination" role="navigation" aria-label="Pagination">
+  <ul class="govuk-pagination__list">
+    <li class="govuk-pagination__item">
+      <a class="govuk-link govuk-pagination__link" href="#" aria-label="November 2023">
+        Nov
+      </a>
+    </li>
+    <li class="govuk-pagination__item">
+      <a class="govuk-link govuk-pagination__link" href="#" aria-label="December 2023">
+        Dec
+      </a>
+    </li>
+    <li class="govuk-pagination__item govuk-pagination__item--current">
+      <a class="govuk-link govuk-pagination__link" href="#" aria-label="January 2024" aria-current="page">
+        Jan
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-l">
+      <span class="govuk-caption-l">Monthly active users</span>
+      69 users
+    </h2>
+    <p class="govuk-body">
+      <span class="govuk-caption-m">Last 30 days</span>
+      <span class="govuk-caption-m">+25% from last month</span>
+    </p>
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          How we measure active users
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        An active user is one that has logged in to the service in the last 30 days
+      </div>
+    </details>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-l">
+      <span class="govuk-caption-l">Total notifications</span>
+      69 notifications
+    </h2>
+    <p class="govuk-body">
+      <span class="govuk-caption-m">Last 30 days</span>
+      <span class="govuk-caption-m">+25% from last month</span>
+    </p>
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          What is a notification?
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        A notification is made on <abbr title="Product Safety Database">PSD</abbr> to notify a product safety issue to <abbr title="Office for Product Safety and Standards">OPSS</abbr>.
+      </div>
+    </details>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-l">
+      <span class="govuk-caption-l">Submission rate</span>
+      69% submitted
+    </h2>
+    <p class="govuk-body">
+      <span class="govuk-caption-m">Last 30 days</span>
+      <span class="govuk-caption-m">+25% from last month</span>
+    </p>
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          How do we measure submission rate?
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        A completed notification is one that has been submitted to <abbr title="Office for Product Safety and Standards">OPSS</abbr> for review, and is not a draft.
+      </div>
+    </details>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-l">
+      <span class="govuk-caption-l">Cost per notification</span>
+      £69,234.32
+    </h2>
+    <p class="govuk-body">
+      <span class="govuk-caption-m">Last 30 days</span>
+      <span class="govuk-caption-m">+25% from last month</span>
+    </p>
+    <details class="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          How do we calculate cost per notification?
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        We calculate cost per notification by using the <abbr title="Office for Product Safety and Standards">OPSS</abbr> costs divided by the number of notifications submitted.
+      </div>
+    </details>
+  </div>
+</div>
