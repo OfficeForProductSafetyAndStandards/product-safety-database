@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_22_143016) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -553,6 +553,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
     t.index ["entity_id"], name: "index_roles_on_entity_id"
     t.index ["name", "entity_type", "entity_id"], name: "index_roles_on_name_and_entity_type_and_entity_id", unique: true
+  end
+
+  create_table "rollups", force: :cascade do |t|
+    t.jsonb "dimensions", default: {}, null: false
+    t.string "interval", null: false
+    t.string "name", null: false
+    t.datetime "time", null: false
+    t.float "value"
+    t.index ["name", "interval", "time", "dimensions"], name: "index_rollups_on_name_and_interval_and_time_and_dimensions", unique: true
   end
 
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
