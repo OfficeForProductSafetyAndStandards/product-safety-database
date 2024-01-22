@@ -1,32 +1,32 @@
-class ChangeOverseasRegulator
+class ChangeNotificationOverseasRegulator
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :is_from_overseas_regulator, :overseas_regulator_country, :user, to: :context
+  delegate :notification, :is_from_overseas_regulator, :overseas_regulator_country, :user, to: :context
 
   def call
-    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     assign_overseas_regulator
-    return if investigation.changes.none?
+    return if notification.changes.none?
 
     ActiveRecord::Base.transaction do
-      investigation.save!
+      notification.save!
       create_audit_activity_for_overseas_regulator_changed
     end
 
-    send_notification_email(investigation, user)
+    send_notification_email(notification, user)
   end
 
 private
 
   def create_audit_activity_for_overseas_regulator_changed
-    metadata = activity_class.build_metadata(investigation)
+    metadata = activity_class.build_metadata(notification)
 
     activity_class.create!(
       added_by_user: user,
-      investigation:,
+      investigation: notification,
       metadata:
     )
   end
@@ -37,16 +37,16 @@ private
 
   def assign_overseas_regulator
     country = is_from_overseas_regulator ? overseas_regulator_country : nil
-    investigation.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country)
+    notification.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country)
   end
 
-  def send_notification_email(investigation, user)
-    return unless investigation.sends_notifications?
+  def send_notification_email(notification, user)
+    return unless notification.sends_notifications?
 
-    email_recipients_for_team_with_access(investigation, user).each do |entity|
+    email_recipients_for_team_with_access(notification, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.notification_updated(
-        investigation.pretty_id,
+        notification.pretty_id,
         entity.name,
         email,
         "#{user.name} (#{user.team.name}) edited overseas regulator on the notification.",
