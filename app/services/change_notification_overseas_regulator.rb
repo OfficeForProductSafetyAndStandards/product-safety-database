@@ -26,7 +26,7 @@ private
 
     activity_class.create!(
       added_by_user: user,
-      notification: investigation,
+      investigation: notification,
       metadata:
     )
   end
