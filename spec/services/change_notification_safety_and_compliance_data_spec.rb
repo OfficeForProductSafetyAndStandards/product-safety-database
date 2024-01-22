@@ -1,11 +1,12 @@
 require "rails_helper"
 
-RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
-  let!(:investigation) do
-    create(:allegation, reported_reason: :unsafe_and_non_compliant,
-                        hazard_type: "Burns",
-                        hazard_description: "Too hot",
-                        non_compliant_reason: "Breaks all the rules")
+RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+  let!(:notification) do
+    create(:notification,
+           reported_reason: :unsafe_and_non_compliant,
+           hazard_type: "Burns",
+           hazard_description: "Too hot",
+           non_compliant_reason: "Breaks all the rules")
   end
 
   let(:hazard_type) { nil }
@@ -23,7 +24,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
       end
     end
 
-    context "with no investigation parameter" do
+    context "with no notification parameter" do
       let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
@@ -32,7 +33,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation:) }
+      let(:result) { described_class.call(notification:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -43,7 +44,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
       let(:result) do
         described_class.call(
           user:,
-          investigation:,
+          notification:,
           hazard_type:,
           hazard_description:,
           non_compliant_reason:,
@@ -51,7 +52,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
         )
       end
 
-      let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::ChangeSafetyAndComplianceData.to_s).order(:created_at).last }
+      let(:activity_entry) { notification.activities.where(type: AuditActivity::Investigation::ChangeSafetyAndComplianceData.to_s).order(:created_at).last }
 
       context "when reported_reason is `safe_and_compliant`" do
         let(:reported_reason) { :safe_and_compliant }
@@ -62,19 +63,19 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
           end
 
           it "updates reported_reason" do
-            expect(investigation.reported_reason).to eq("safe_and_compliant")
+            expect(notification.reported_reason).to eq("safe_and_compliant")
           end
 
           it "makes hazard_type nil" do
-            expect(investigation.hazard_type).to eq(nil)
+            expect(notification.hazard_type).to eq(nil)
           end
 
           it "makes hazard_description nil" do
-            expect(investigation.hazard_description).to eq(nil)
+            expect(notification.hazard_description).to eq(nil)
           end
 
           it "makes non_compliant_reason nil" do
-            expect(investigation.non_compliant_reason).to eq(nil)
+            expect(notification.non_compliant_reason).to eq(nil)
           end
 
           it "creates an activity entry" do
@@ -89,9 +90,9 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
 
         it "sends an email to notify of the change" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
-            investigation.pretty_id,
-            investigation.owner_team.name,
-            investigation.owner_team.email,
+            notification.pretty_id,
+            notification.owner_team.name,
+            notification.owner_team.email,
             "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
             "Safety and compliance data edited for notification"
           )
@@ -110,19 +111,19 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
           end
 
           it "updates reported_reason" do
-            expect(investigation.reported_reason).to eq("unsafe_and_non_compliant")
+            expect(notification.reported_reason).to eq("unsafe_and_non_compliant")
           end
 
           it "updates hazard_type" do
-            expect(investigation.hazard_type).to eq(hazard_type)
+            expect(notification.hazard_type).to eq(hazard_type)
           end
 
           it "updates hazard_description" do
-            expect(investigation.hazard_description).to eq(hazard_description)
+            expect(notification.hazard_description).to eq(hazard_description)
           end
 
           it "updates non_compliant_reason" do
-            expect(investigation.non_compliant_reason).to eq(non_compliant_reason)
+            expect(notification.non_compliant_reason).to eq(non_compliant_reason)
           end
 
           it "creates an activity entry" do
@@ -138,9 +139,9 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
 
         it "sends an email to notify of the change" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
-            investigation.pretty_id,
-            investigation.owner_team.name,
-            investigation.owner_team.email,
+            notification.pretty_id,
+            notification.owner_team.name,
+            notification.owner_team.email,
             "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
             "Safety and compliance data edited for notification"
           )
@@ -158,19 +159,19 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
           end
 
           it "updates reported_reason" do
-            expect(investigation.reported_reason).to eq("unsafe")
+            expect(notification.reported_reason).to eq("unsafe")
           end
 
           it "updates hazard_type" do
-            expect(investigation.hazard_type).to eq(hazard_type)
+            expect(notification.hazard_type).to eq(hazard_type)
           end
 
           it "updates hazard_description" do
-            expect(investigation.hazard_description).to eq(hazard_description)
+            expect(notification.hazard_description).to eq(hazard_description)
           end
 
           it "makes non_compliant_reason nil" do
-            expect(investigation.non_compliant_reason).to eq(nil)
+            expect(notification.non_compliant_reason).to eq(nil)
           end
 
           it "creates an activity entry" do
@@ -185,9 +186,9 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
 
         it "sends an email to notify of the change" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
-            investigation.pretty_id,
-            investigation.owner_team.name,
-            investigation.owner_team.email,
+            notification.pretty_id,
+            notification.owner_team.name,
+            notification.owner_team.email,
             "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
             "Safety and compliance data edited for notification"
           )
@@ -204,19 +205,19 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
           end
 
           it "updates reported_reason" do
-            expect(investigation.reported_reason).to eq("non_compliant")
+            expect(notification.reported_reason).to eq("non_compliant")
           end
 
           it "makes hazard_type nil" do
-            expect(investigation.hazard_type).to eq(nil)
+            expect(notification.hazard_type).to eq(nil)
           end
 
           it "makes hazard_description nil" do
-            expect(investigation.hazard_description).to eq(nil)
+            expect(notification.hazard_description).to eq(nil)
           end
 
           it "updates non_compliant_reason" do
-            expect(investigation.non_compliant_reason).to eq(non_compliant_reason)
+            expect(notification.non_compliant_reason).to eq(non_compliant_reason)
           end
 
           it "creates an activity entry" do
@@ -231,9 +232,9 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbe
 
         it "sends an email to notify of the change" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :notification_updated).with(
-            investigation.pretty_id,
-            investigation.owner_team.name,
-            investigation.owner_team.email,
+            notification.pretty_id,
+            notification.owner_team.name,
+            notification.owner_team.email,
             "#{user.name} (#{user.team.name}) edited safety and compliance data on the notification.",
             "Safety and compliance data edited for notification"
           )

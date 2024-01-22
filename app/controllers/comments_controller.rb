@@ -16,9 +16,9 @@ class CommentsController < Investigations::BaseController
       return render(:new)
     end
 
-    AddCommentToCase.call!(
+    AddCommentToNotification.call!(
       @comment_form.attributes.merge({
-        investigation: @investigation,
+        notification: @investigation,
         user: current_user
       })
     )
