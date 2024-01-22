@@ -1,7 +1,7 @@
 <% content_for :page_title, "Summary statistics" %>
 
 <% content_for :aside do %>
-  <%= @current_month %>
+  <%= @current_month.strftime("%B %Y") %>
 <% end %>
 
 <nav class="govuk-pagination" role="navigation" aria-label="Pagination">
@@ -28,11 +28,22 @@
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-l">
       <span class="govuk-caption-l">Monthly active users</span>
-      69 users
+      <%= pluralize @active_users_this_month, 'user' %>
     </h2>
     <p class="govuk-body">
       <span class="govuk-caption-m">Last 30 days</span>
-      <span class="govuk-caption-m">+25% from last month</span>
+      <span class="govuk-caption-m">
+        <% if @active_users_change_pc.positive? %>
+          <span class="govuk-visually-hidden">Increase of</span>
+          +<%= number_to_percentage @active_users_change_pc, precision: 0 %>
+        <% elsif @active_users_change_pc.zero? %>
+          No change
+        <% else %>
+          <span class="govuk-visually-hidden">Decrease of</span>
+          -<%= number_to_percentage @active_users_change_pc, precision: 0 %>
+        <% end %>
+        from last month
+      </span>
     </p>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
@@ -49,11 +60,22 @@
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-l">
       <span class="govuk-caption-l">Total notifications</span>
-      69 notifications
+      <%= pluralize @notifications_this_month, 'notification' %>
     </h2>
     <p class="govuk-body">
       <span class="govuk-caption-m">Last 30 days</span>
-      <span class="govuk-caption-m">+25% from last month</span>
+      <span class="govuk-caption-m">
+        <% if @notifications_change_pc.positive? %>
+          <span class="govuk-visually-hidden">Increase of</span>
+          +<%= number_to_percentage @notifications_change_pc, precision: 0 %>
+        <% elsif @notifications_change_pc.zero? %>
+          No change
+        <% else %>
+          <span class="govuk-visually-hidden">Decrease of</span>
+          -<%= number_to_percentage @notifications_change_pc, precision: 0 %>
+        <% end %>
+        from last month
+      </span>
     </p>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
@@ -72,11 +94,11 @@
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-l">
       <span class="govuk-caption-l">Submission rate</span>
-      69% submitted
+      x% submitted
     </h2>
     <p class="govuk-body">
       <span class="govuk-caption-m">Last 30 days</span>
-      <span class="govuk-caption-m">+25% from last month</span>
+      <span class="govuk-caption-m">+x% from last month</span>
     </p>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
@@ -93,11 +115,23 @@
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-l">
       <span class="govuk-caption-l">Cost per notification</span>
-      £69,234.32
+      <%= number_to_currency @cost_per_notification_this_month, unit: "£" %>
     </h2>
     <p class="govuk-body">
       <span class="govuk-caption-m">Last 30 days</span>
-      <span class="govuk-caption-m">+25% from last month</span>
+      <span class="govuk-caption-m">
+
+        <% if @cost_per_notification_change_pc.positive? %>
+          <span class="govuk-visually-hidden">Increase of</span>
+          +<%= number_to_percentage @cost_per_notification_change_pc, precision: 0 %>
+        <% elsif @cost_per_notification_change_pc.zero? %>
+          No change
+        <% else %>
+          <span class="govuk-visually-hidden">Decrease of</span>
+          -<%= number_to_percentage @cost_per_notification_change_pc, precision: 0 %>
+        <% end %>
+        from last month
+      </span>
     </p>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
