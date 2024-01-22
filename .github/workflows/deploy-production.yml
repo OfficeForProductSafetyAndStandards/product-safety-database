@@ -153,7 +153,7 @@ jobs:
       if: success()
       uses: ruby/setup-ruby@v1
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
