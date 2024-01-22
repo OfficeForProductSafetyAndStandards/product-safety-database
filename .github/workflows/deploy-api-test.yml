@@ -55,9 +55,9 @@ jobs:
         WORKER_INSTANCES: 1
         WEB_MAX_THREADS: 5
         WORKER_MAX_THREADS: 10
-        CF_USERNAME: ${{ secrets.PaaSUsernameSandbox }}
-        CF_PASSWORD: ${{ secrets.PaaSPasswordSandbox }}
-        SENTRY_SERVICE_NAME: psd-staging-sentry-env
+        CF_USERNAME: ${{ secrets.PaaSUsernameInt }}
+        CF_PASSWORD: ${{ secrets.PaaSPasswordInt }}
+        SENTRY_SERVICE_NAME: psd-api-test-sentry-env
       run: |
         cf api api.london.cloud.service.gov.uk
         cf auth
