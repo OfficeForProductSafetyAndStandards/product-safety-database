@@ -20,7 +20,7 @@ module ReportPortal
       @cost_per_notification_change_pc = get_change_pc(@cost_per_notification_this_month, @cost_per_notification_last_month)
     end
 
-    private
+  private
 
     def cost_per_period(cost, count)
       return cost if count.zero?
@@ -28,16 +28,15 @@ module ReportPortal
       cost / count
     end
 
-
     def get_change_pc(current, last)
       percent = (current - last) / last.to_f * 100
 
       if percent == Float::INFINITY
-        return 100
+        100
       elsif percent.nan?
-        return 0
+        0
       else
-        return percent.round(0)
+        percent.round(0)
       end
     end
   end

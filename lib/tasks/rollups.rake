@@ -1,7 +1,6 @@
 namespace :rollups do
   desc "Generate rollups for daily/weekly/monthly PSD aggregate stats"
   task generate: :environment do
-
     # Users
     User.rollup("New users", interval: :day)
     User.rollup("New users", interval: :month)
@@ -46,11 +45,10 @@ namespace :rollups do
     ahoy_rollups(name: "Added test result")
     ahoy_rollups(name: "Updated test result")
   end
+end
 
-  def ahoy_rollups(name:)
-    Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :day)
-    Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :month)
-    Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :year)
-  end
-
+def ahoy_rollups(name:)
+  Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :day)
+  Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :month)
+  Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :year)
 end
