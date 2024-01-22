@@ -26,7 +26,7 @@ class ApiToken < ApplicationRecord
   def generate_token
     loop do
       self.token = SecureRandom.hex(16)
-      break unless ApiToken.where(token: token).exists?
+      break unless ApiToken.where(token:).exists?
     end
   end
 end

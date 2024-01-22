@@ -11,7 +11,7 @@ class Api::V1::ProductsController < Api::BaseController
 
   def show; end
 
-  private
+private
 
   def product
     @product ||= Product.find(params[:id]).decorate

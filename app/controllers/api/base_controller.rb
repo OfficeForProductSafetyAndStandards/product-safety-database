@@ -1,10 +1,12 @@
-class Api::BaseController < ActionController::Base
-  skip_before_action :verify_authenticity_token
-  skip_before_action
+class Api::BaseController < ApplicationController
+  include SentryConfigurationConcern
+  protect_from_forgery with: :exception
+  before_action :set_sentry_context
   prepend_before_action :authenticate_api_token!
+  skip_before_action :verify_authenticity_token
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
-  private
+private
 
   def authenticate_api_token!
     if (user = user_from_token)

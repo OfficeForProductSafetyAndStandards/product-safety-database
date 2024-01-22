@@ -16,6 +16,3 @@ end
 json.product_images product.virus_free_images.each do |image|
   json.url url_for(image)
 end
-
-
-
