@@ -114,3 +114,5 @@ group :test do
   gem "timecop", "~> 0.9"
   gem "webmock", "~> 3.19"
 end
+
+gem "report_portal", path: "report_portal"
