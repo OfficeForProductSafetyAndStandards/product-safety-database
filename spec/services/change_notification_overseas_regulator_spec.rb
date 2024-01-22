@@ -67,7 +67,7 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_mailer, :with_
         it "creates an activity entry" do
           result
 
-          expect(activity_entry.metadata).to eql({
+          expect(activity_entry.metadata).to eq({
             "updates" => {
               "overseas_regulator_country" => ["country:AM", "country:US"]
             }
