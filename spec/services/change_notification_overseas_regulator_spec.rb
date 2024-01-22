@@ -22,7 +22,7 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_mailer, :with_
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(notification: investigation) }
+      let(:result) { described_class.call(notification:) }
 
       it "returns a failure" do
         expect(result).to be_failure
