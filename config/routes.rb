@@ -138,6 +138,22 @@ Rails.application.routes.draw do
             end
 
             get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
+
+            scope ":step", constraints: { step: /add_test_reports/ } do
+              get ":investigation_product_id", to: "create#show_with_notification_product", as: "with_product"
+              patch ":investigation_product_id", to: "create#update_with_notification_product"
+              put ":investigation_product_id", to: "create#update_with_notification_product"
+              get ":investigation_product_id/:test_result_id", to: "create#show_with_notification_product", as: "with_product_and_test_result"
+              patch ":investigation_product_id/:test_result_id", to: "create#update_with_notification_product"
+              put ":investigation_product_id/:test_result_id", to: "create#update_with_notification_product"
+              get ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product", as: "remove_with_product_and_test_result"
+              delete ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product"
+            end
+
+            scope ":step", constraints: { step: /add_supporting_images|add_supporting_documents/ } do
+              get ":upload_id/remove", to: "create#remove_upload", as: "remove_upload"
+              delete ":upload_id/remove", to: "create#remove_upload"
+            end
           end
         end
       end
@@ -246,7 +262,7 @@ Rails.application.routes.draw do
       resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[new show create edit update], path: "corrective-actions"
     end
 
-    resources :case_exports, only: :show do
+    resources :notification_exports, only: :show do
       collection do
         get :generate
       end
@@ -366,6 +382,11 @@ Rails.application.routes.draw do
   # Support portal
   constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
     mount SupportPortal::Engine => "/"
+  end
+
+  # Report portal
+  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_REPORT")) do
+    mount ReportPortal::Engine => "/"
   end
 
   resources :teams, only: %i[index show] do

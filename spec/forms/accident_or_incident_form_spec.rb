@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AccidentOrIncidentForm, :with_test_queue_adapter do
-  let(:investigation) { create(:allegation) }
+  let(:notification) { create(:notification) }
   let(:user) { create(:user) }
 
   let(:date) { { day: "1", month: "2", year: "2020" } }

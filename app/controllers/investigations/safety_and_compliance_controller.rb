@@ -12,9 +12,9 @@ module Investigations
     def update
       @edit_why_reporting_form = EditWhyReportingForm.new(why_reporting_form_params)
       if @edit_why_reporting_form.valid?
-        result = ChangeSafetyAndComplianceData.call!(
+        result = ChangeNotificationSafetyAndComplianceData.call!(
           @edit_why_reporting_form.serializable_hash.merge({
-            investigation: @investigation,
+            notification: @investigation,
             user: current_user
           })
         )

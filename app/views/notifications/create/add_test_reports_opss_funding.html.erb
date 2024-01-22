@@ -1,0 +1,21 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_test_reports.opss_funding.title"), errors: @set_test_result_funding_on_case_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @set_test_result_funding_on_case_form, url: with_product_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_test_reports.opss_funding.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+        </ul>
+      <% end %>
+      <%= f.govuk_collection_radio_buttons :opss_funded, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, legend: nil, bold_labels: false %>
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>

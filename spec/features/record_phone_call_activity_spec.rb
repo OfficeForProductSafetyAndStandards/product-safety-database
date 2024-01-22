@@ -5,7 +5,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
 
-  let(:investigation) { create(:allegation, creator: user) }
+  let(:notification) { create(:allegation, creator: user) }
 
   let(:name) { "Test name" }
   let(:phone) { "07000 000000" }
@@ -17,7 +17,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
   before { sign_in(user) }
 
   scenario "with transcript file" do
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
@@ -67,19 +67,19 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
 
     click_link "Phone call on 5 May 2020"
 
-    expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
+    expect_to_be_on_phone_call_page(case_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
 
-    click_on investigation.pretty_id
+    click_on notification.pretty_id
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
 
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, phone:, date:, file:)
 
     click_link "View phone call"
 
-    expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
+    expect_to_be_on_phone_call_page(case_id: notification.pretty_id)
 
     expect(page).to have_summary_item(key: "Date of call", value: "5 May 2020")
     expect(page).to have_summary_item(key: "Call with", value: "#{name} (#{phone})")
@@ -90,9 +90,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
 
     sign_in(other_user_different_org)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{notification.pretty_id}/activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_restricted_information
 
     # Test that another user in the same team can see correspondence
@@ -100,14 +100,14 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
 
     sign_in(other_user_same_team)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{notification.pretty_id}/activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, phone:, date:, file:)
   end
 
   scenario "with summary and notes" do
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     click_link "Add a correspondence"
 
     expect_to_be_on_add_correspondence_page
@@ -125,10 +125,10 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
     click_link "Test summary"
     expect_to_have_notification_breadcrumbs
 
-    click_on investigation.pretty_id
+    click_on notification.pretty_id
     click_on "Activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, phone:, date:, summary:, notes:)
 
     # Test that another user in a different organisation cannot see correspondence info
@@ -136,9 +136,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
 
     sign_in(other_user_different_org)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{notification.pretty_id}/activity"
 
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_case_activity_page_to_show_restricted_information
   end
 

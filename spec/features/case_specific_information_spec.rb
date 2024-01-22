@@ -6,7 +6,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
   let(:user) { create :user, :opss_user, :activated, has_viewed_introduction: true, team: }
   let(:team_mate) { create :user, :activated, has_viewed_introduction: true, team: }
   let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team }
-  let(:investigation) { create :allegation, creator: user }
+  let(:notification) { create :notification, creator: user }
   let(:product_1) { create :product }
   let(:product_2) { create :product }
   let(:product_3) { create :product }
@@ -16,15 +16,15 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
 
   context "when investigation has multiple linked products" do
     before do
-      InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_1.id, customs_code: "ABC123", batch_number: "1", affected_units_status: "unknown")
-      InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_2.id, customs_code: "XYZ987", batch_number: "2", affected_units_status: "exact", number_of_affected_units: "91")
-      InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_3.id, customs_code: "ZZZ999", batch_number: "3", affected_units_status: "approx", number_of_affected_units: "10000")
-      InvestigationProduct.create!(investigation_id: investigation.id, product_id: product_4.id, customs_code: "BBB222", batch_number: "1000", affected_units_status: "not_relevant")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_1.id, customs_code: "ABC123", batch_number: "1", affected_units_status: "unknown")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_2.id, customs_code: "XYZ987", batch_number: "2", affected_units_status: "exact", number_of_affected_units: "91")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_3.id, customs_code: "ZZZ999", batch_number: "3", affected_units_status: "approx", number_of_affected_units: "10000")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_4.id, customs_code: "BBB222", batch_number: "1000", affected_units_status: "not_relevant")
     end
 
     it "shows all info on notification specific info section of notification page" do
       sign_in user
-      visit investigation_path(investigation)
+      visit investigation_path(notification)
       expect_investigation_products_to_be_listed_with_oldest_first
 
       within("dl#product-0") do
@@ -57,23 +57,21 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
     context "when user has permission to update the investigation" do
       before do
         sign_in team_mate
-        visit investigation_path(investigation)
+        visit investigation_path(notification)
       end
 
       it "allows editing of batch numbers" do
         within("dl#product-0") do
           click_link "Edit the batch numbers for #{InvestigationProduct.first.product.name}"
         end
-
-        expect_to_be_on_edit_batch_numbers_page(investigation_product_id: InvestigationProduct.first.id)
+        expect_to_be_on_edit_batch_numbers_page(notification_product_id: InvestigationProduct.first.id)
 
         expect(page).to have_field("batch_number", with: InvestigationProduct.first.batch_number)
 
         fill_in "batch_number", with: new_batch_numbers
 
         click_button "Save"
-
-        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_page(case_id: notification.pretty_id)
 
         expect(page).to have_content("The notification information was updated")
 
@@ -83,8 +81,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         end
 
         click_link "Activity"
-
-        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
         expect(page).to have_css("h3", text: "Notification specific product information updated")
         expect(page).to have_content("Batch number: #{new_batch_numbers}")
 
@@ -95,16 +92,14 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         within("dl#product-0") do
           click_link "Edit the customs codes for #{InvestigationProduct.first.product.name}"
         end
-
-        expect_to_be_on_edit_customs_code_page(investigation_product_id: InvestigationProduct.first.id)
+        expect_to_be_on_edit_customs_code_page(notification_product_id: InvestigationProduct.first.id)
 
         expect(page).to have_field("customs_code", with: InvestigationProduct.first.customs_code)
 
         fill_in "customs_code", with: new_customs_code
 
         click_button "Save"
-
-        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_page(case_id: notification.pretty_id)
 
         expect(page).to have_content("The notification information was updated")
 
@@ -114,8 +109,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         end
 
         click_link "Activity"
-
-        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
         expect(page).to have_css("h3", text: "Notification specific product information updated")
         expect(page).to have_content("Customs code: #{new_customs_code}")
 
@@ -126,8 +120,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         within("dl#product-0") do
           click_link "Edit the units affected for #{InvestigationProduct.first.product.name}"
         end
-
-        expect_to_be_on_edit_units_affected_page(investigation_product_id: InvestigationProduct.first.id)
+        expect_to_be_on_edit_units_affected_page(notification_product_id: InvestigationProduct.first.id)
 
         expect(page).to have_checked_field("Unknown")
 
@@ -145,8 +138,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         fill_in "exact_units", with: "100"
 
         click_button "Save"
-
-        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_page(case_id: notification.pretty_id)
 
         expect(page).to have_content("The notification information was updated")
 
@@ -156,8 +148,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         end
 
         click_link "Activity"
-
-        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
         expect(page).to have_css("h3", text: "Notification specific product information updated")
         expect(page).to have_content("Affected units status: exact")
         expect(page).to have_content("Number of affected units: 100")
@@ -169,14 +160,12 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         within("dl#product-0") do
           click_link "Edit the UCR numbers for #{InvestigationProduct.first.product.name}"
         end
-
-        expect_to_be_on_edit_ucr_numbers_page(investigation_product_id: InvestigationProduct.first.id)
+        expect_to_be_on_edit_ucr_numbers_page(notification_product_id: InvestigationProduct.first.id)
 
         fill_in "investigation_product_ucr_numbers_attributes_0_number", with: "ucr-123"
 
         click_button "Save"
-
-        expect_to_be_on_case_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_page(case_id: notification.pretty_id)
 
         expect(page).to have_content("The UCR numbers were updated")
 
@@ -186,8 +175,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         end
 
         click_link "Activity"
-
-        expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+        expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
         expect(page).to have_css("h3", text: "Notification specific product information updated")
         expect(page).to have_content("UCR numbers: ucr-123")
 
@@ -198,7 +186,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
     context "when user does not have permissions to update the investigation" do
       before do
         sign_in other_user
-        visit investigation_path(investigation)
+        visit investigation_path(notification)
       end
 
       it "does not allow editing of the notification specific information" do
@@ -211,7 +199,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
   context "when investigation has no linked products" do
     it "shows empty notification specific info section of notification page" do
       sign_in user
-      visit investigation_path(investigation)
+      visit investigation_path(notification)
       expect(page).to have_css("h4", text: "You can add this information after a product has been added to the notification.")
     end
   end

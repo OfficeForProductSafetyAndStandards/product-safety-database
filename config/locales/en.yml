@@ -414,12 +414,20 @@ en:
             tasks:
               add_test_reports:
                 title: Add test reports
+                select_product:
+                  title: Select a product to attach a test report
+                opss_funding:
+                  title: Was the test funded under the OPSS sampling protocol?
+                opss_funding_details:
+                  title: Add the test certificate details
+                report_details:
+                  title: Add test report
               add_supporting_images:
                 title: Add supporting images
               add_supporting_documents:
                 title: Add supporting documents
-              create_or_add_risk_assessment:
-                title: Create or add risk assessment
+              add_risk_assessments:
+                title: Add risk assessments
               determine_notification_risk_level:
                 title: Determine notification risk level
           corrective_actions:
@@ -769,6 +777,7 @@ en:
           attributes:
             tso_certificate_issue_date:
               blank: Enter the date the test certificate was issued
+              incomplete: Enter the date the test certificate was issued
         bulk_products_triage_form:
           attributes:
             compliance_and_safety:
@@ -845,6 +854,10 @@ en:
           attributes:
             affected_units_status:
               inclusion: Choose how to define the number of units affected
+        choose_investigation_product_form:
+          attributes:
+            investigation_product_id:
+              blank: Choose a product
 
   activerecord:
     models:

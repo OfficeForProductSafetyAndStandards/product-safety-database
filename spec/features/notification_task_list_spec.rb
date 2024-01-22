@@ -6,6 +6,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
   let(:new_product_attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
+  let(:image_file) { Rails.root.join "test/fixtures/files/testImage.png" }
+  let(:text_file) { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
 
   before do
     sign_in(user)
@@ -31,7 +33,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       choose "No"
     end
 
-    click_button "Save and complete tasks in this section"
+    click_button "Continue"
 
     expect(page).to have_content("Create a product safety notification")
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
@@ -81,7 +83,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       choose "No"
     end
 
-    click_button "Save and complete tasks in this section"
+    click_button "Continue"
 
     expect(page).to have_content("Create a product safety notification")
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
@@ -128,5 +130,74 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-1-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
+
+    # TODO(ruben): add to this once the pages are complete
+    click_link "Add the type and details of the business"
+    click_button "Save and complete tasks in this section"
+
+    expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
+
+    # Ensure that all of section 4 and the first task of section are enabled once section 3 is completed
+    expect(page).to have_selector(:id, "task-list-3-0-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-1-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-2-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Not yet started")
+
+    click_link "Add test reports"
+    choose "Yes"
+    click_button "Save and continue"
+
+    fill_in "What is the trading standards officer sample reference number?", with: "12345678"
+    fill_in "Day", with: "12"
+    fill_in "Month", with: "5"
+    fill_in "Year", with: "2023"
+    click_button "Save and continue"
+
+    select "ATEX 2016", from: "Under which legislation?"
+    fill_in "Which standard was the product tested against?", with: "EN71"
+    fill_in "Day", with: "12"
+    fill_in "Month", with: "5"
+    fill_in "Year", with: "2023"
+
+    within_fieldset "What was the result?" do
+      choose "Fail"
+      fill_in "How the product failed", with: "Because it did"
+    end
+
+    attach_file "Test report attachment", image_file
+    click_button "Add test report"
+
+    within_fieldset "Do you need to add another test report?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
+    expect(page).to have_selector(:id, "task-list-3-0-status", text: "Completed")
+
+    click_link "Add supporting images"
+
+    attach_file "image_upload[file_upload]", image_file
+    click_button "Upload image"
+
+    expect(page).to have_content("Supporting image uploaded successfully")
+
+    click_button "Finish uploading images"
+
+    expect(page).to have_selector(:id, "task-list-3-1-status", text: "Completed")
+
+    click_link "Add supporting documents"
+
+    fill_in "Document title", with: "Fake title"
+    attach_file "document_form[document]", text_file
+    click_button "Upload document"
+
+    expect(page).to have_content("Supporting document uploaded successfully")
+
+    click_button "Finish uploading documents"
+
+    expect(page).to have_selector(:id, "task-list-3-2-status", text: "Completed")
   end
 end

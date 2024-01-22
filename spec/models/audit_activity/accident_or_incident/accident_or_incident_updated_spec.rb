@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 
-  let(:investigation) { create(:allegation, :with_products, creator: user) }
+  let(:notification) { create(:notification, :with_products, creator: user) }
   let(:user) { create(:user) }
   let(:date) { Time.zone.today }
   let(:severity) { "high" }
@@ -11,14 +11,14 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
   let(:usage) { "during_normal_use" }
   let(:new_usage) { "during_misuse" }
   let(:accident_or_incident) do
-    AddAccidentOrIncidentToCase.call!(
-      investigation:,
+    AddAccidentOrIncidentToNotification.call!(
+      notification:,
       user:,
       date: nil,
       is_date_known: "false",
       severity:,
       usage:,
-      investigation_product_id: investigation.investigation_product_ids.first,
+      investigation_product_id: notification.investigation_product_ids.first,
       type: "Accident",
       additional_info: nil
     ).accident_or_incident
@@ -53,10 +53,10 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
   describe "#metadata" do
     # TODO: remove once migrated
     context "when metadata contains a Product reference" do
-      let(:investigation) { create(:allegation, :with_products) }
-      let(:investigation_product) { investigation.investigation_products.first }
-      let(:new_investigation_product) { create(:investigation_product, investigation:) }
-      let(:activity) { described_class.new(investigation:, metadata: { updates: { product_id: [investigation_product.product_id, new_investigation_product.product_id] } }.deep_stringify_keys) }
+      let(:notification) { create(:notification, :with_products) }
+      let(:investigation_product) { notification.investigation_products.first }
+      let(:new_investigation_product) { create(:investigation_product, investigation: notification) }
+      let(:activity) { described_class.new(investigation: notification, metadata: { updates: { product_id: [investigation_product.product_id, new_investigation_product.product_id] } }.deep_stringify_keys) }
 
       it "translates the Product ID to InvestigationProduct ID" do
         expect(activity.metadata["updates"]["product_id"]).to be_nil

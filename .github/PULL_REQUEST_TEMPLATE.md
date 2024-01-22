@@ -26,6 +26,7 @@
 <!-- Edit the following links after the PR is created to replace "xxxx" with the PR number -->
 https://psd-pr-xxxx.london.cloudapps.digital/
 https://psd-pr-xxxx-support.london.cloudapps.digital/
+https://psd-pr-xxxx-report.london.cloudapps.digital/
 
 <!--- Put an `x` in all the boxes that apply. Delete items which are not relevant. -->
 ## Checklist:

@@ -9,9 +9,11 @@ applications:
   routes:
     - route: ((route))
     - route: ((route-support))
+    - route: ((route-report))
   env:
     PSD_HOST: ((psd-host))
     PSD_HOST_SUPPORT: ((psd-host-support))
+    PSD_HOST_REPORT: ((psd-host-report))
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
     LOCK_MAXIMUM_ATTEMPTS: 3
@@ -39,6 +41,7 @@ applications:
     - psd-seeds-v2
     - psd-redacted-export-env
     - psd-support-portal-env
+    - psd-report-portal-env
   processes:
     - type: web
       command: bin/rake cf:on_first_instance db:prepare && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV

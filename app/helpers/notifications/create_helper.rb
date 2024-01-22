@@ -72,6 +72,19 @@ module Notifications
       end
     end
 
+    def investigation_products_options
+      @notification.investigation_products.decorate.map do |investigation_product|
+        OpenStruct.new(id: investigation_product.id, name: investigation_product.product.name_with_brand)
+      end
+    end
+
+    def legislation_options
+      [OpenStruct.new(id: "", name: "")] +
+        Rails.application.config.legislation_constants["legislation"].map do |legislation|
+          OpenStruct.new(id: legislation, name: legislation)
+        end
+    end
+
   private
 
     def previous_task(task)

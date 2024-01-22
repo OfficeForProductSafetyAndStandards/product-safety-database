@@ -1,5 +1,0 @@
-<% if @case_export.export_file.attached? %>
-<p class="govuk-body govuk-!-font-size-19 govuk-!-margin-top-6 govuk-!-margin-bottom-6" download>
-  <%= link_to "Download", rails_storage_proxy_path(@case_export.export_file, disposition: 'attachment'), { class: "govuk-link govuk-link--no-visited-state" } %> your case export from <%= @case_export.created_at.strftime("%-l:%M%P %d %B %Y") %>.
-</p>
-<% end %>

@@ -87,7 +87,7 @@ end
   notification = CreateNotification.call!(notification:, user:).notification
 
   product = Product.all.sample
-  AddProductToCase.call!(investigation: notification, product:, user:)
+  AddProductToNotification.call!(notification:, product:, user:)
 
   if rand(100) > 50
     blob = create_blob(all_seed_files.sample, title: Faker::Commerce.product_name, description: Faker::Hipster.sentence(word_count: 10))
@@ -118,7 +118,7 @@ usages = UnexpectedEvent.usages.values
     is_date_known: true
   }
 
-  AddAccidentOrIncidentToCase.call!(accident_params.merge(investigation: investigation_product.investigation, user:))
+  AddAccidentOrIncidentToNotification.call!(accident_params.merge(investigation: investigation_product.investigation, user:))
 end
 
 10.times do
@@ -132,7 +132,7 @@ end
     is_date_known: false
   }
 
-  AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation: investigation_product.investigation, user:))
+  AddAccidentOrIncidentToNotification.call!(incident_params.merge(investigation: investigation_product.investigation, user:))
 end
 
 # Risk assessments

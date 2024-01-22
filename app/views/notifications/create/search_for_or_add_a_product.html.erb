@@ -36,7 +36,7 @@
           %>
           <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
             <%= f.govuk_collection_radio_buttons :add_another_product, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another product?", size: "m" } %>
-            <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+            <%= f.govuk_submit "Continue", name: "final", value: "true" %>
           <% end %>
         </div>
       </div>
@@ -111,7 +111,7 @@
                     DETAILS
 
                     select_button = form_with url: "#{wizard_path}?product_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
-                      f.govuk_submit "Select", name: "final", value: true, secondary: true
+                      f.govuk_submit "Select", name: "draft", value: true, secondary: true
                     end
 
                     body.with_row do |row|

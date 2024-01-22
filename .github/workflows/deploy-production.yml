@@ -50,6 +50,7 @@ jobs:
         APP_NAME: psd-web
         DOMAIN: pre-prod.product-safety-database.service.gov.uk
         DOMAIN_SUPPORT: pre-prod-support.product-safety-database.service.gov.uk
+        DOMAIN_REPORT: pre-prod-report.product-safety-database.service.gov.uk
         WEB_DISK_QUOTA: 2.5G
         WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 4G
@@ -112,6 +113,7 @@ jobs:
         APP_NAME: psd-web
         DOMAIN: www.product-safety-database.service.gov.uk
         DOMAIN_SUPPORT: support.product-safety-database.service.gov.uk
+        DOMAIN_REPORT: report.product-safety-database.service.gov.uk
         WEB_DISK_QUOTA: 2.5G
         WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 4G

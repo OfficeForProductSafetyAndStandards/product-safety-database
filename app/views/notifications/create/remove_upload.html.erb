@@ -1,0 +1,15 @@
+<%= page_title("Remove #{@type}", errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: remove_upload_notification_create_index_path(@notification, step: params[:step], upload_id: @upload.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        Are you sure you want to remove this <%= @type %> from your notification?
+      </h1>
+      <p class="govuk-body">This action will remove <strong><%= @upload.try(:file_upload) ? @upload.file_upload.filename : @upload.filename %></strong> from your notification. Please confirm if you wish to proceed.</p>
+      <%= f.govuk_submit "Remove #{@type}", warning: true do %>
+        <a href="<%= notification_create_path(@notification, params[:step]) %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -15,6 +15,7 @@ env:
   ANTIVIRUS_PASSWORD: password
   PSD_HOST: example.com
   PSD_HOST_SUPPORT: example.com
+  PSD_HOST_REPORT: example.com
   EMAIL_WHITELIST_ENABLED: false
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
   CI: true

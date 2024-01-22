@@ -24,6 +24,15 @@ PATH
       wicked (~> 2.0)
 
 PATH
+  remote: report_portal
+  specs:
+    report_portal (0.1.0)
+      devise (~> 4.9)
+      govuk-components (~> 5.0)
+      govuk_design_system_formbuilder (~> 5.0)
+      rails (>= 7.0.8)
+
+PATH
   remote: support_portal
   specs:
     support_portal (0.1.0)
@@ -755,6 +764,7 @@ DEPENDENCIES
   rails-erd
   redcarpet (~> 3.5)
   redis-rails (~> 5.0)
+  report_portal!
   rest-client (~> 2.1)
   roo (~> 2.9)
   rspec
