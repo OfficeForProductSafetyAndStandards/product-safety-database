@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe AddCommentToCase, :with_test_queue_adapter do
+RSpec.describe AddCommentToNotification, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
+  let!(:notification) { create(:notification, creator:, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team) }
@@ -24,14 +24,14 @@ RSpec.describe AddCommentToCase, :with_test_queue_adapter do
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation:) }
+      let(:result) { described_class.call(notification:) }
 
       it "returns a failure" do
         expect(result).to be_failure
       end
     end
 
-    context "with no investigation parameter" do
+    context "with no notification parameter" do
       let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
@@ -53,7 +53,7 @@ RSpec.describe AddCommentToCase, :with_test_queue_adapter do
       let(:result) do
         described_class.call(
           user:,
-          investigation:,
+          notification:,
           body:
         )
       end
@@ -64,12 +64,12 @@ RSpec.describe AddCommentToCase, :with_test_queue_adapter do
 
       it "adds an audit activity record", :aggregate_failures do
         result
-        last_added_activity = investigation.activities.order(:id).first
+        last_added_activity = notification.activities.order(:id).first
         expect(last_added_activity).to be_a(AuditActivity::Investigation::AddComment)
         expect(last_added_activity.metadata["comment_text"]).to eql(body)
       end
 
-      it_behaves_like "a service which notifies the investigation owner"
+      it_behaves_like "a service which notifies the notification owner"
     end
   end
 end

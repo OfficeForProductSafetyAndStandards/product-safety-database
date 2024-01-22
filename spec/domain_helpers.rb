@@ -4,6 +4,10 @@ module DomainHelpers
     configure_request_for_domain("PSD_HOST_SUPPORT")
   end
 
+  def configure_requests_for_report_domain
+    configure_request_for_domain("PSD_HOST_REPORT")
+  end
+
   def configure_request_for_domain(domain_env_reference)
     Capybara.app_host = "http://#{ENV.fetch(domain_env_reference)}" # For feature specs
     if defined? host!
