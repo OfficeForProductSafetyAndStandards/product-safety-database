@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Changing a notification's notifying country", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
-  let(:investigation)  { create(:allegation, creator: user) }
+  let(:notification)  { create(:notification, creator: user) }
 
   context "when user is a notifying_country_editor" do
     before do
@@ -10,13 +10,13 @@ RSpec.feature "Changing a notification's notifying country", :with_stubbed_maile
     end
 
     it "can succesfully change pre-populated notifying country" do
-      investigation.update!(notifying_country: "country:GB-ENG")
+      notification.update!(notifying_country: "country:GB-ENG")
 
       sign_in_and_visit_change_notifying_country_page("England")
 
       select "Scotland", from: "Select which country or collection of countries"
       click_button "Save"
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
+      expect(page).to have_current_path("/cases/#{notification.pretty_id}")
       expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Scotland")
 
       click_link "Activity"
@@ -28,7 +28,7 @@ RSpec.feature "Changing a notification's notifying country", :with_stubbed_maile
   context "when user is not a notifying_country_editor" do
     it "does not allow user to change notifying country" do
       sign_in user
-      visit "/cases/#{investigation.pretty_id}"
+      visit "/cases/#{notification.pretty_id}"
       expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
 
       expect(page).not_to have_css("h1", text: "Change the notifying country")
@@ -37,7 +37,7 @@ RSpec.feature "Changing a notification's notifying country", :with_stubbed_maile
 
   def sign_in_and_visit_change_notifying_country_page(country)
     sign_in user
-    visit "/cases/#{investigation.pretty_id}"
+    visit "/cases/#{notification.pretty_id}"
     expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: country)
     click_link "Change notifying country"
     expect(page).to have_css("h1", text: "Change the notifying country")
