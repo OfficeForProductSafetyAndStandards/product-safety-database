@@ -75,7 +75,7 @@ class PrismRiskAssessmentsController < ApplicationController
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       product = Product.find(@prism_risk_assessment.product_id)
 
-      if AddPrismRiskAssessmentToCase.call(investigation:, product:, prism_risk_assessment: @prism_risk_assessment)
+      if AddPrismRiskAssessmentToNotification.call(notification: investigation, product:, prism_risk_assessment: @prism_risk_assessment)
         redirect_to investigation_path(params[:investigation_pretty_id]), flash: { success: "The #{@prism_risk_assessment.name} risk assessment has been added to the notification." }
       else
         render :add_to_case

@@ -129,6 +129,14 @@ module Notifications
         @image_upload = ImageUpload.new(upload_model: @notification)
       when :add_supporting_documents
         @document_form = DocumentForm.new
+      when :add_risk_assessments
+        investigation_products = @notification.investigation_products
+        @existing_prism_associated_investigations = @notification.prism_associated_investigations.includes(:prism_risk_assessment)
+        @existing_risk_assessments = @notification.risk_assessments.includes(investigation_products: :product)
+        @manage = request.query_string != "add" && (@existing_prism_associated_investigations.present? || @existing_risk_assessments.present?)
+        return redirect_to with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
+
+        @choose_investigation_product_form = ChooseInvestigationProductForm.new unless @manage
       end
 
       render_wizard
@@ -244,6 +252,19 @@ module Notifications
 
           return render_wizard
         end
+      when :add_risk_assessments
+        return redirect_to "#{wizard_path(:add_risk_assessments)}?add" if params[:add_another_risk_assessment] == "true"
+        return redirect_to wizard_path(:add_risk_assessments) if params[:add_another_risk_assessment].blank? && params[:final].present?
+
+        if params[:add_another_risk_assessment].blank?
+          @choose_investigation_product_form = ChooseInvestigationProductForm.new(add_risk_assessments_params)
+
+          if @choose_investigation_product_form.valid?
+            return redirect_to with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: add_risk_assessments_params[:investigation_product_id])
+          else
+            return render_wizard
+          end
+        end
       end
 
       @notification.tasks_status[step.to_s] = "completed"
@@ -319,8 +340,8 @@ module Notifications
     def show_with_notification_product
       case params[:step].to_sym
       when :add_test_reports
-        if params[:test_result_id].present?
-          @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        if params[:entity_id].present?
+          @test_result = @investigation_product.test_results.find(params[:entity_id])
 
           if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
             @test_result_form = TestResultForm.from(@test_result)
@@ -334,15 +355,34 @@ module Notifications
           render :add_test_reports_opss_funding
         end
       when :add_risk_assessments
-        # TODO(ruben)
+        if params[:entity_id] == "new"
+          @risk_assessment_form = RiskAssessmentForm.new
+          render :add_risk_assessments_legacy
+        else
+          # Find all submitted PRISM risk assessments that are associated with the chosen product
+          # either directly or via a notification that is not the current notification.
+          @related_prism_risk_assessments = PrismRiskAssessment
+            .left_joins(:prism_associated_products, prism_associated_investigations: :prism_associated_investigation_products)
+            .where(prism_associated_products: { product_id: @investigation_product.product.id })
+            .or(PrismRiskAssessment.where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } }))
+            .where.not(id:
+              PrismRiskAssessment
+                .left_joins(prism_associated_investigations: :prism_associated_investigation_products)
+                .where(prism_associated_investigations: { investigation_id: @notification.id }).where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } })
+                .submitted
+                .distinct)
+            .submitted
+            .order(updated_at: :desc)
+          render :add_risk_assessments_prism_or_legacy
+        end
       end
     end
 
     def update_with_notification_product
       case params[:step].to_sym
       when :add_test_reports
-        if params[:test_result_id].present?
-          @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        if params[:entity_id].present?
+          @test_result = @investigation_product.test_results.find(params[:entity_id])
 
           if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
             @test_result_form = TestResultForm.new(test_details_params)
@@ -382,7 +422,7 @@ module Notifications
                 user: current_user,
                 silent: true
               )
-              redirect_to with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: @test_result.id, opss_funded: params[:opss_funded])
+              redirect_to with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, entity_id: @test_result.id, opss_funded: params[:opss_funded])
             else
               render :add_test_reports_funding_details
             end
@@ -392,20 +432,52 @@ module Notifications
 
           if @set_test_result_funding_on_case_form.valid?
             test_result = @notification.test_results.create!(investigation_product: @investigation_product)
-            redirect_to with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: test_result.id, opss_funded: opss_funding_params[:opss_funded])
+            redirect_to with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, entity_id: test_result.id, opss_funded: opss_funding_params[:opss_funded])
           else
             render :add_test_reports_opss_funding
           end
         end
       when :add_risk_assessments
-        # TODO(ruben)
+        if params[:entity_id] == "new"
+          # Create a legacy risk assessment
+          @risk_assessment_form = RiskAssessmentForm.new(risk_assessments_params.merge(investigation_product_ids: [@investigation_product.id], current_user:))
+          @risk_assessment_form.cache_file!
+          @risk_assessment_form.load_risk_assessment_file
+
+          if @risk_assessment_form.valid?
+            AddRiskAssessmentToNotification.call!(
+              notification: @notification,
+              investigation_product_ids: [@investigation_product.id],
+              assessed_on: @risk_assessment_form.assessed_on,
+              risk_level: @risk_assessment_form.risk_level,
+              assessed_by_team_id: @risk_assessment_form.assessed_by_team_id,
+              assessed_by_other: @risk_assessment_form.assessed_by_other,
+              details: @risk_assessment_form.details,
+              risk_assessment_file: @risk_assessment_form.risk_assessment_file,
+              user: current_user,
+              silent: true
+            )
+            redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+          else
+            render :add_risk_assessments_legacy
+          end
+        elsif params[:entity_id].present?
+          # Attach an existing PRISM risk assessment
+          prism_risk_assessment = PrismRiskAssessment.find(params[:entity_id])
+          AddPrismRiskAssessmentToNotification.call!(
+            notification: @notification,
+            product: @investigation_product.product,
+            prism_risk_assessment:
+          )
+          redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+        end
       end
     end
 
     def remove_with_notification_product
       case params[:step].to_sym
       when :add_test_reports
-        @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        @test_result = @investigation_product.test_results.find(params[:entity_id])
         if request.delete?
           @test_result.destroy!
           redirect_to notification_create_path(@notification, id: "add_test_reports")
@@ -413,7 +485,27 @@ module Notifications
           render :remove_test_report
         end
       when :add_risk_assessments
-        # TODO(ruben)
+        @risk_assessment = @investigation_product.risk_assessments.find(params[:entity_id])
+        if request.delete?
+          @risk_assessment.risk_assessed_products.destroy_all
+          @risk_assessment.destroy!
+          redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+        else
+          render :remove_risk_assessment
+        end
+      end
+    end
+
+    def remove_with_entity
+      @prism_associated_investigation = @notification.prism_associated_investigations.find(params[:entity_id])
+      if request.delete?
+        RemovePrismRiskAssessmentFromNotification.call!(
+          notification: @notification,
+          prism_risk_assessment: @prism_associated_investigation.prism_risk_assessment
+        )
+        redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+      else
+        render :remove_prism_risk_assessment
       end
     end
 
@@ -529,6 +621,14 @@ module Notifications
 
     def document_upload_params
       params.require(:document_form).permit(:document, :title, :final)
+    end
+
+    def add_risk_assessments_params
+      params.require(:choose_investigation_product_form).permit(:investigation_product_id, :final)
+    end
+
+    def risk_assessments_params
+      params.require(:risk_assessment_form).permit(:risk_level, :assessed_by, :assessed_by_team_id, :assessed_by_other, :existing_risk_assessment_file_file_id, :risk_assessment_file, :details, assessed_on: %i[day month year])
     end
   end
 end

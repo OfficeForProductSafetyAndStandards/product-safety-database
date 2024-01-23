@@ -85,6 +85,13 @@ module Notifications
         end
     end
 
+    def team_options
+      [OpenStruct.new(id: "", name: "")] +
+        Team.all.order(:name).map do |team|
+          OpenStruct.new(id: team.id, name: team.name)
+        end
+    end
+
   private
 
     def previous_task(task)
