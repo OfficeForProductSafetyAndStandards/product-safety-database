@@ -12,9 +12,9 @@ module Investigations
       @reported_reason_form = ReportedReasonForm.new(reported_reason:)
 
       if @reported_reason_form.valid?
-        result = ChangeReportedReason.call!(
+        result = ChangeNotificationReportedReason.call!(
           @reported_reason_form.serializable_hash.merge({
-            investigation: @investigation,
+            notification: @investigation,
             user: current_user
           })
         )

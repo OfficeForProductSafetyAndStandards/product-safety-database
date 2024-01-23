@@ -12,9 +12,9 @@ module Investigations
       @overseas_regulator_form = OverseasRegulatorForm.new(overseas_regulator_params)
 
       if @overseas_regulator_form.valid?
-        ChangeOverseasRegulator.call!(
+        ChangeNotificationOverseasRegulator.call!(
           @overseas_regulator_form.serializable_hash.merge({
-            investigation: @investigation,
+            notification: @investigation,
             user: current_user
           })
         )
