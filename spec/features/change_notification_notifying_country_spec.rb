@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Changing a notification's notifying country", :with_stubbed_mailer, :with_stubbed_opensearch do
-  let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
-  let(:notification)  { create(:notification, creator: user) }
+  let(:user) { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
+  let(:notification) { create(:notification, creator: user) }
 
   context "when user is a notifying_country_editor" do
     before do
