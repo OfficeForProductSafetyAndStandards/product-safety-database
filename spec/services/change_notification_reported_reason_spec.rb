@@ -2,12 +2,13 @@ require "rails_helper"
 
 RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
   subject(:result) do
-    described_class.call(notification:, user:, hazard_type: type, hazard_description: description, non_compliant_reason: cReason, reported_reason: reReason)
+    described_class.call(notification:, user:, hazard_type: type, hazard_description: description, non_compliant_reason: c_reason, reported_reason: re_reason)
   end
+
   let(:type) { "liquid" }
   let(:description) { "bioluminescent green liquid" }
-  let(:reReason) { "corrosive" }
-  let(:cReason) { "health and safety risk" }
+  let(:re_reason) { "corrosive" }
+  let(:c_reason) { "health and safety risk" }
   let(:creator_team) { notification.creator_user.team }
   let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
@@ -36,7 +37,6 @@ RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
   end
 
   context "when it has a notification and user param but the reported reason is not ' safe and compliant ' " do
-
     it "succeeds" do
       expect(result).to be_success
     end
@@ -55,16 +55,25 @@ RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
 
     it "other fields should not be empty" do
       expect(:type).not_to be_nil
-      expect(:description).not_to be_nil
-      expect(:reReason).not_to be_nil
     end
+
+    it "other fields should not be empty" do
+      expect(:description).not_to be_nil
+    end
+
+    it "other fields should not be empty" do
+      expect(:re_reason).not_to be_nil
+    end
+
   end
 
+  let(:re_reason) { "safe_and_compliant" }
+
   xcontext "when it has a notification and user param but the reported reason is ' safe and compliant ' " do
-    let(:reReason) {"safe_and_compliant"}
     subject(:result) do
-      result.call(notification:, user:, hazard_type: type, hazard_description: description, non_compliant_reason: cReason, reported_reason: reReason)
+      result.call(notification:, user:, hazard_type: type, hazard_description: description, non_compliant_reason: cReason, reported_reason: re_reason)
     end
+
     it "succeeds" do
       expect(result).to be_success
     end
@@ -78,20 +87,19 @@ RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
     end
 
     it "testing" do
-       expect {:result}.to receive(:assign_attributes)
+      expect {:result}.to receive(:assign_attributes)
     end
 
     it "should make other fields nils" do
-      result
-      expect(result.reported_reason).to be_nil
       expect(result.hazard_type).to be_nil
-      expect(result.hazard_description).to be_nil
-      expect(result.reported_reason).to be_nil
     end
 
+    it "should make other fields nils" do
+      expect(result.hazard_description).to be_nil
+    end
 
+    it "should make other fields nils" do
+      expect(result.reported_reason).to be_nil
+    end
   end
-
-
-
 end
