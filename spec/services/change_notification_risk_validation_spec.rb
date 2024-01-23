@@ -2,12 +2,12 @@ require "rails_helper"
 
 RSpec.describe ChangeNotificationRiskValidation, :with_test_queue_adapter do
   subject(:result) do
-    described_class.call(notification:, user:, risk_validated_at: risk_validate, risk_validated_by: risk_validatetwo, is_risk_validated: riskValidated)
+    described_class.call(notification:, user:, risk_validated_at: risk_validate, risk_validated_by: risk_validatetwo, is_risk_validated: risk_validated)
   end
 
   let(:risk_validate) { nil }
   let(:risk_validatetwo) { nil }
-  let(:riskValidated) {false}
+  let(:risk_validated) { false }
   let(:creator_team) { notification.creator_user.team }
   let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
@@ -67,7 +67,7 @@ RSpec.describe ChangeNotificationRiskValidation, :with_test_queue_adapter do
   end
 
   context "when the risk is validated" do
-    let (:riskValidated) { true }
+    let (:risk_validated) { true }
     it "does set a change action in the result context" do
       expect(result.change_action).to eq("has been validated")
     end
