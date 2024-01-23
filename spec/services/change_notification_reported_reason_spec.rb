@@ -66,7 +66,6 @@ RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
     end
   end
 
-
   xcontext "when it has a notification and user param but the reported reason is ' safe and compliant ' " do
     it "succeeds" do
       expect(result).to be_success
