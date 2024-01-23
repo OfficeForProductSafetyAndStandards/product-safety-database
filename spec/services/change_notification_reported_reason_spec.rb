@@ -53,15 +53,15 @@ RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
       expect(result.change_action).to be_nil
     end
 
-    it "other fields should not be empty" do
+    it "type should not be empty" do
       expect(:type).not_to be_nil
     end
 
-    it "other fields should not be empty" do
+    it "description should not be empty" do
       expect(:description).not_to be_nil
     end
 
-    it "other fields should not be empty" do
+    it "reported reason should not be empty" do
       expect(:re_reason).not_to be_nil
     end
 
@@ -90,16 +90,16 @@ RSpec.describe ChangeNotificationReportedReason, :with_test_queue_adapter do
       expect {:result}.to receive(:assign_attributes)
     end
 
-    it "should make other fields nils" do
+    it "makes type nils" do
       expect(result.hazard_type).to be_nil
     end
 
-    it "should make other fields nils" do
+    it "makes decription nils" do
       expect(result.hazard_description).to be_nil
     end
 
-    it "should make other fields nils" do
-      expect(result.reported_reason).to be_nil
+    it "makes non compliant reason nils" do
+      expect(result.non_compliant_reason).to be_nil
     end
   end
 end
