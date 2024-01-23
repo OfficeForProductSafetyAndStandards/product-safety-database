@@ -52,7 +52,7 @@ RSpec.describe ChangeNotificationRiskValidation, :with_test_queue_adapter do
   context "when both the risk validated at and risk validated by are filled" do
     let(:risk_validate) { "20/07/2021" }
     let(:risk_validatetwo) { "Test User" }
-    
+
     it "succeeds" do
       expect(result).to be_success
     end
