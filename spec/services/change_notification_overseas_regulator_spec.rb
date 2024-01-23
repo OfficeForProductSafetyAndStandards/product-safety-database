@@ -39,7 +39,7 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_mailer, :with_
         )
       end
 
-      let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::ChangeOverseasRegulator.to_s).order(:created_at).last }
+      let(:activity_entry) { notification.activities.where(type: AuditActivity::Investigation::ChangeOverseasRegulator.to_s).order(:created_at).last }
 
       context "when no changes have been made" do
         let(:overseas_regulator_country) { "country:AM" }
