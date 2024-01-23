@@ -6,7 +6,7 @@
       <h1 class="govuk-heading-l">
         Are you sure you want to remove this <%= @type %> from your notification?
       </h1>
-      <p class="govuk-body">This action will remove <strong><%= @upload.try(:file_upload) ? @upload.file_upload.filename : @upload.filename %></strong> from your notification. Please confirm if you wish to proceed.</p>
+      <p class="govuk-body">This action will permanently delete <strong><%= @upload.try(:file_upload) ? @upload.file_upload.filename : @upload.filename %></strong>. Please confirm if you wish to proceed.</p>
       <%= f.govuk_submit "Remove #{@type}", warning: true do %>
         <a href="<%= notification_create_path(@notification, params[:step]) %>" class="govuk-link">Cancel</a>
       <% end %>

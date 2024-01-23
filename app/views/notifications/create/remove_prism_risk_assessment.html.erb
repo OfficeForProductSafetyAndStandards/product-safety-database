@@ -1,0 +1,15 @@
+<%= page_title("Remove PRISM risk assessment", errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: remove_with_entity_notification_create_index_path(@notification, entity_id: @prism_associated_investigation.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        Are you sure you want to remove this PRISM risk assessment from your notification?
+      </h1>
+      <p class="govuk-body">This action will remove the PRISM risk assessment <strong><%= @prism_associated_investigation.prism_risk_assessment.name %></strong> from your notification. The risk assessment itself will not be deleted. Please confirm if you wish to proceed.</p>
+      <%= f.govuk_submit "Remove PRISM risk assessment", warning: true do %>
+        <a href="<%= notification_create_path(@notification, "add_risk_assessments") %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

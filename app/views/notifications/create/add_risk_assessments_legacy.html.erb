@@ -1,0 +1,83 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.legacy.title"), errors: @risk_assessment_form.errors.any?) %>
+<% assessed_on_error = @risk_assessment_form.errors.include?(:assessed_on) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @risk_assessment_form, url: with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id, entity_id: "new"), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.legacy.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+        </ul>
+      <% end %>
+      <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
+      <div class="govuk-form-group<%= assessed_on_error ? ' govuk-form-group--error' : '' %>">
+        <fieldset class="govuk-fieldset" aria-describedby="risk-assessment-form-assessed-on-hint<%= assessed_on_error ? ' isk-assessment-form-assessed-on-error' : '' %>">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of assessment</legend>
+          <div class="govuk-hint" id="risk-assessment-form-assessed-on-hint">For example, 31 1 2020</div>
+          <% if assessed_on_error %>
+          <p class="govuk-error-message" id="risk-assessment-form-assessed-on-error">
+            <span class="govuk-visually-hidden">Error: </span><%= @risk_assessment_form.errors.full_messages_for(:assessed_on).first %>
+          </p>
+          <% end %>
+          <div class="govuk-date-input">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="risk_assessment_form_assessed_on_day">Day</label>
+                <input id="risk_assessment_form_assessed_on_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= assessed_on_error ? ' govuk-input--error' : '' %>" name="risk_assessment_form[assessed_on][day]" type="text" inputmode="numeric" value="<%= @risk_assessment_form.assessed_on&.day %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="risk_assessment_form_assessed_on_month">Month</label>
+                <input id="risk_assessment_form_assessed_on_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= assessed_on_error ? ' govuk-input--error' : '' %>" name="risk_assessment_form[assessed_on][month]" type="text" inputmode="numeric" value="<%= @risk_assessment_form.assessed_on&.month %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="risk_assessment_form_assessed_on_year">Year</label>
+                <input id="trisk_assessment_form_assessed_on_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= assessed_on_error ? ' govuk-input--error' : '' %>" name="risk_assessment_form[assessed_on][year]" type="text" inputmode="numeric" value="<%= @risk_assessment_form.assessed_on&.year %>">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <%= f.govuk_radio_buttons_fieldset :risk_level, legend: { text: "What was the risk level?", size: "m" } do %>
+        <%= f.govuk_radio_button :risk_level, "serious", label: { text: "Serious risk" }, link_errors: true %>
+        <%= f.govuk_radio_button :risk_level, "high", label: { text: "High risk" } %>
+        <%= f.govuk_radio_button :risk_level, "medium", label: { text: "Medium risk" } %>
+        <%= f.govuk_radio_button :risk_level, "low", label: { text: "Low risk" } %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :risk_level, "not_conclusive", label: { text: "Not conclusive" } %>
+      <% end %>
+      <%= f.govuk_radio_buttons_fieldset :assessed_by, legend: { text: "Who completed the assessment?", size: "m" } do %>
+        <%= f.govuk_radio_button :assessed_by, "my_team", label: { text: current_user.team.name }, link_errors: true %>
+        <%= f.govuk_radio_button :assessed_by, "another_team", label: { text: "Another team or market surveillance authority" } do %>
+          <%= f.govuk_collection_select :assessed_by_team_id, team_options, :id, :name, label: { text: "Choose team" } %>
+        <% end %>
+        <%= f.govuk_radio_button :assessed_by, "other", label: { text: "Someone else" } do %>
+          <%= f.govuk_text_field :assessed_by_other, label: { text: "Organisation name" } %>
+        <% end %>
+      <% end %>
+      <%= f.hidden_field :existing_risk_assessment_file_file_id %>
+      <% if @risk_assessment_form.risk_assessment_file.present? %>
+        <p id="current-attachment-details">
+          Currently selected file:
+          <%= link_to "#{@risk_assessment_form.risk_assessment_file.filename} (opens in new tab)", @risk_assessment_form.risk_assessment_file, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+        </p>
+        <%= govuk_details(summary_text: "Replace this file") do %>
+          <%= f.govuk_file_field :risk_assessment_file, label: { text: "Upload the risk assessment", size: "m" } %>
+        <% end %>
+      <% else %>
+        <%= f.govuk_file_field :risk_assessment_file, label: { text: "Upload the risk assessment", size: "m" } %>
+      <% end %>
+      <%= f.govuk_text_area :details, label: { text: "Further details (optional)", size: "m" }, max_chars: 32_767 %>
+      <%= f.govuk_submit "Add risk assessment" %>
+    <% end %>
+  </div>
+</div>

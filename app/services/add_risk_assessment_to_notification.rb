@@ -25,7 +25,7 @@ class AddRiskAssessmentToNotification
       context.risk_assessment.risk_assessment_file.attach(risk_assessment_file)
       create_audit_activity
     end
-    send_notification_email
+    send_notification_email unless context.silent
   end
 
 private

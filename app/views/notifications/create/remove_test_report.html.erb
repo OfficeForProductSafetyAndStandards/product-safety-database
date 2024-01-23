@@ -2,11 +2,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with url: remove_with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: @test_result.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= form_with url: remove_with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, entity_id: @test_result.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <h1 class="govuk-heading-l">
         Are you sure you want to remove this test report from your notification?
       </h1>
-      <p class="govuk-body">This action will remove the test report for <strong><%= @investigation_product.decorate.product.name_with_brand %></strong> from your notification. Please confirm if you wish to proceed.</p>
+      <p class="govuk-body">This action will permanently delete the test report for <strong><%= @investigation_product.decorate.product.name_with_brand %></strong>. Please confirm if you wish to proceed.</p>
       <%= f.govuk_submit "Remove test report", warning: true do %>
         <a href="<%= notification_create_path(@notification, "add_test_reports") %>" class="govuk-link">Cancel</a>
       <% end %>

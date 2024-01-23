@@ -428,6 +428,12 @@ en:
                 title: Add supporting documents
               add_risk_assessments:
                 title: Add risk assessments
+                select_product:
+                  title: Select a product to attach a risk assessment
+                prism_or_legacy:
+                  title: Add risk assessment
+                legacy:
+                  title: Add legacy risk assessment
               determine_notification_risk_level:
                 title: Determine notification risk level
           corrective_actions:

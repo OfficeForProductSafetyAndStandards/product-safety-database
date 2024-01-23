@@ -15,6 +15,10 @@ class RiskAssessmentDecorator < ApplicationDecorator
     "#{risk_level_description}: #{products_description}"
   end
 
+  def supporting_information_full_title
+    "#{risk_level_description}: #{products_with_brand_description}"
+  end
+
   def show_path
     h.investigation_risk_assessment_path(investigation, object)
   end
@@ -66,6 +70,16 @@ private
       h.pluralize(products.size, "product")
     else
       products.first.name
+    end
+  end
+
+  def products_with_brand_description
+    products = object.investigation_products.map(&:product)
+
+    if products.size > 1
+      h.pluralize(products.size, "product")
+    else
+      products.first.decorate.name_with_brand
     end
   end
 end

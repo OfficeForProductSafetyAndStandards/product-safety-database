@@ -27,7 +27,7 @@ class CreateNotification
 
       AddProductToNotification.call!(notification:, product:, user:, skip_email: true) if product
 
-      AddPrismRiskAssessmentToCase.call!(investigation: notification, product:, prism_risk_assessment:, user:) if prism_risk_assessment
+      AddPrismRiskAssessmentToNotification.call!(notification:, product:, prism_risk_assessment:, user:) if prism_risk_assessment
 
       create_audit_activity_for_case_added
     end
