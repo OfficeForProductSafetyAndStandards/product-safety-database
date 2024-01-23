@@ -33,7 +33,7 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_mailer, :with_
       let(:result) do
         described_class.call(
           user:,
-          notification: notification,
+          notification:,
           is_from_overseas_regulator: true,
           overseas_regulator_country:
         )
