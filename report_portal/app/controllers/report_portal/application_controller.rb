@@ -11,6 +11,7 @@ module ReportPortal
     before_action :ensure_secondary_authentication
     before_action :require_secondary_authentication
     before_action :set_sentry_context
+    before_action :set_default_back_link
 
     add_flash_types :confirmation
 
@@ -29,6 +30,10 @@ module ReportPortal
         sign_out current_user
         redirect_to "/"
       end
+    end
+
+    def set_default_back_link
+      @back_link_href = report_root_path
     end
   end
 end
