@@ -27,3 +27,6 @@
     delete_abandoned_bulk_products_uploads_job:
       cron: "0 4 * * *"
       class: "DeleteAbandonedBulkProductsUploadsJob"
+    generate_rollups_job:
+      cron: "0 5 * * *"
+      class: "GenerateRollupsJob"
