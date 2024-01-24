@@ -4,7 +4,7 @@
 # in such controller
 #
 # Only one action in controller can be protected by secondary authentication.
-module SupportPortal
+module ReportPortal
   module SecondaryAuthenticationConcern
     extend ActiveSupport::Concern
 
