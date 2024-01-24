@@ -137,6 +137,9 @@ module Notifications
         return redirect_to with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
 
         @choose_investigation_product_form = ChooseInvestigationProductForm.new unless @manage
+      when :determine_notification_risk_level
+        @risk_level_form = RiskLevelForm.new(risk_level: @notification.risk_level)
+        highest_risk_level
       end
 
       render_wizard
@@ -264,6 +267,20 @@ module Notifications
           else
             return render_wizard
           end
+        end
+      when :determine_notification_risk_level
+        @risk_level_form = RiskLevelForm.new(risk_level: determine_notification_risk_level_params[:risk_level])
+
+        if @risk_level_form.valid?
+          ChangeNotificationRiskLevel.call!(
+            notification: @notification,
+            risk_level: @risk_level_form.risk_level,
+            user: current_user,
+            silent: true
+          )
+        else
+          highest_risk_level
+          return render_wizard
         end
       end
 
@@ -629,6 +646,27 @@ module Notifications
 
     def risk_assessments_params
       params.require(:risk_assessment_form).permit(:risk_level, :assessed_by, :assessed_by_team_id, :assessed_by_other, :existing_risk_assessment_file_file_id, :risk_assessment_file, :details, assessed_on: %i[day month year])
+    end
+
+    def determine_notification_risk_level_params
+      params.require(:risk_level_form).permit(:risk_level, :final)
+    end
+
+    def highest_risk_level
+      all_risk_levels = @notification.risk_assessments.map(&:risk_level) + @notification.prism_risk_assessments.map(&:overall_product_risk_level)
+      @number_of_risk_assessments = all_risk_levels.size
+      @highest_risk_level = case all_risk_levels
+                            in [*, "serious", *]
+                              "serious"
+                            in [*, "high", *]
+                              "high"
+                            in [*, "medium", *]
+                              "medium"
+                            in [*, "low", *]
+                              "low"
+                            else
+                              "unknown"
+                            end
     end
   end
 end

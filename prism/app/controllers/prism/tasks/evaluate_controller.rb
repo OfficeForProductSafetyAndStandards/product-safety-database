@@ -22,7 +22,11 @@ module Prism
       end
 
       @prism_risk_assessment.tasks_status[step.to_s] = "completed"
-      @prism_risk_assessment.submit! if step == wizard_steps.last
+
+      if step == wizard_steps.last
+        @prism_risk_assessment.overall_product_risk_level = helpers.overall_product_risk_level.risk_level
+        @prism_risk_assessment.submit!
+      end
 
       if params[:draft] == "true" || params[:final] == "true"
         # "Save as draft" or final save button of the section clicked.

@@ -23,7 +23,7 @@ class ChangeNotificationRiskLevel
     end
 
     context.updated_risk_level = notification.decorate.risk_level_description
-    send_email(notification, user)
+    send_email(notification, user) unless context.silent
   end
 
 private

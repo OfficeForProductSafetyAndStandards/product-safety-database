@@ -676,6 +676,7 @@ en:
         risk_level_form:
           attributes:
             risk_level:
+              inclusion: "Select the risk level"
               not_allowed: "Invalid option"
         supporting_information_type_form:
           attributes:
