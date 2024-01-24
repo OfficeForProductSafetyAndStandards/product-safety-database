@@ -100,6 +100,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Select", match: :first
 
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 1 of 6 sections.")
 
     click_link "Add notification details"
     fill_in "Notification title", with: "Fake name"
@@ -130,12 +131,14 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-1-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
+    expect(page).to have_content("You have completed 2 of 6 sections.")
 
     # TODO(ruben): add to this once the pages are complete
     click_link "Add the type and details of the business"
     click_button "Save and complete tasks in this section"
 
     expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 3 of 6 sections.")
 
     # Ensure that all of section 4 and the first task of section are enabled once section 3 is completed
     expect(page).to have_selector(:id, "task-list-3-0-status", text: "Not yet started")
@@ -169,6 +172,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     attach_file "Test report attachment", image_file
     click_button "Add test report"
 
+    expect(page).to have_content("You have added 1 test report.")
+
     within_fieldset "Do you need to add another test report?" do
       choose "No"
     end
@@ -199,5 +204,48 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Finish uploading documents"
 
     expect(page).to have_selector(:id, "task-list-3-2-status", text: "Completed")
+
+    click_link "Add risk assessments"
+    click_link "Add legacy risk assessment"
+
+    within_fieldset "Date of assessment" do
+      fill_in "Day", with: "12"
+      fill_in "Month", with: "5"
+      fill_in "Year", with: "2023"
+    end
+
+    within_fieldset "What was the risk level?" do
+      choose "High risk"
+    end
+
+    within_fieldset "Who completed the assessment?" do
+      choose "Someone else"
+      fill_in "Organisation name", with: "Fake org"
+    end
+
+    attach_file "risk_assessment_form[risk_assessment_file]", text_file
+
+    click_button "Add risk assessment"
+
+    expect(page).to have_content("You have added 1 risk assessment.")
+
+    within_fieldset "Do you need to add another risk assessment?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
+    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Completed")
+
+    click_link "Determine notification risk level"
+
+    expect(page).to have_content("This notification has 1 risk assessment added, assessing the risk as high.")
+
+    choose "Medium risk"
+
+    click_button "Save and complete tasks in this section"
+
+    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Completed")
+    expect(page).to have_content("You have completed 4 of 6 sections.")
   end
 end
