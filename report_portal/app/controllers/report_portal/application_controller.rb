@@ -30,7 +30,5 @@ module ReportPortal
         redirect_to "/"
       end
     end
-
-
   end
 end
