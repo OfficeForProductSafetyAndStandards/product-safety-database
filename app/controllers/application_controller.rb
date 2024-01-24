@@ -36,12 +36,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_user_last_activity_time
-    return unless user_signed_in?
-
-    current_user.update_last_activity_time!
-  end
-
   def has_accepted_declaration
     return unless user_signed_in?
 
