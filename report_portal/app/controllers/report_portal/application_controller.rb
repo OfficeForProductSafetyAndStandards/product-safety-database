@@ -32,10 +32,6 @@ module ReportPortal
       end
     end
 
-    def set_user_last_activity_time
-      return unless user_signed_in?
 
-      current_user.update_last_activity_time!
-    end
   end
 end
