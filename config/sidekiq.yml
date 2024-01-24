@@ -28,5 +28,5 @@
       cron: "0 4 * * *"
       class: "DeleteAbandonedBulkProductsUploadsJob"
     generate_rollups_job:
-      cron: "0 5 * * *"
+      cron: "45 23 * * *"
       class: "GenerateRollupsJob"
