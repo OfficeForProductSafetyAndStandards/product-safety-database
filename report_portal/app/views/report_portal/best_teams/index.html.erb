@@ -9,10 +9,10 @@
     <%=
       govuk_tabs(title: "Team reports") do |t|
         t.with_tab(label: "By notifications") do
-          render partial: "top_teams_notifications"
+          render partial: "notifications"
         end
         t.with_tab(label: "By platform activity") do
-          render partial: "top_teams_notifications"
+          render partial: "activity"
         end
       end
     %>
