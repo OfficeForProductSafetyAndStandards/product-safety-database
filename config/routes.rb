@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   end
 
   # Main PSD app
-  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
+  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT"), ENV.fetch("PSD_HOST_REPORT")) do
     mount Prism::Engine => "/prism"
 
     concern :document_attachable do
