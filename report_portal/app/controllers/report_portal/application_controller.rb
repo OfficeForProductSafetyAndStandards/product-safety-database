@@ -8,7 +8,6 @@ module ReportPortal
     before_action :authenticate_user!
     before_action :set_paper_trail_whodunnit
     before_action :check_current_user_status
-    before_action :set_user_last_activity_time
     before_action :ensure_secondary_authentication
     before_action :require_secondary_authentication
     before_action :set_sentry_context
@@ -30,12 +29,6 @@ module ReportPortal
         sign_out current_user
         redirect_to "/"
       end
-    end
-
-    def set_user_last_activity_time
-      return unless user_signed_in?
-
-      current_user.update_last_activity_time!
     end
   end
 end
