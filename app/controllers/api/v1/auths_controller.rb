@@ -4,7 +4,7 @@ class Api::V1::AuthsController < Api::BaseController
   # Requires email and password params
   # Returns an API token for the user if valid
   def create
-    if authenticate_user_password
+    if user&.valid_password?(params[:password])
       render json: { token: token_by_name(ApiToken::DEFAULT_NAME) }
     else
       render_unauthorized
@@ -33,9 +33,5 @@ private
 
   def token_by_name(name)
     user.api_tokens.find_or_create_by!(name:).token
-  end
-
-  def authenticate_user_password
-    user&.valid_password?(params[:password])
   end
 end

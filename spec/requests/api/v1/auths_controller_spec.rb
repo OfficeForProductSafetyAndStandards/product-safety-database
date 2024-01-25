@@ -31,5 +31,32 @@ RSpec.describe "API auth controller", type: :request do
       end
     end
 
+    delete "Delete an API token" do
+      description "Delete a users API tokens using a valid PSD account email and password"
+      tags "Authentication"
+      consumes "application/json"
+      parameter name: :email, in: :query, type: :string
+      parameter name: :password, in: :query, type: :string
+
+      response "200", "User API tokens destroyed" do
+        let(:email) { user.email }
+        let(:password) { user.password }
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+          expect(user.api_tokens.count).to eq(0)
+        end
+      end
+
+      response "401", "Unauthorised user" do
+        let(:email) { "invalid@email.com" }
+        let(:password) { "invalid_password" }
+        run_test! do |response|
+          expect(response).to have_http_status(:unauthorized)
+          expect(JSON.parse(response.body)["error"]).to eq("Invalid Login")
+        end
+      end
+
+    end
+
   end
 end

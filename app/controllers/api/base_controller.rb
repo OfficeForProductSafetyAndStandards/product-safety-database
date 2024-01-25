@@ -1,4 +1,4 @@
-class Api::BaseController < ApplicationController
+class Api::BaseController < ActionController::Base
   include SentryConfigurationConcern
   protect_from_forgery with: :exception
   before_action :set_sentry_context
