@@ -24,6 +24,7 @@ module ReportPortal
 
     def check_current_user_status
       return unless user_signed_in?
+
       if current_user.access_locked? || current_user.deleted? || !current_user.has_role?("opss")
         sign_out current_user
         redirect_to "/"
