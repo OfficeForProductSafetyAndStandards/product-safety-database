@@ -47,7 +47,7 @@ jobs:
         APP_NAME: psd-web
         DOMAIN: api-test.product-safety-database.service.gov.uk
         DOMAIN_SUPPORT: api-test.product-safety-database.service.gov.uk
-        DOMAIN_REPORT: staging-report.product-safety-database.service.gov.uk
+        DOMAIN_REPORT: api-test-report.product-safety-database.service.gov.uk
         WEB_DISK_QUOTA: 2.5G
         WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 2G
