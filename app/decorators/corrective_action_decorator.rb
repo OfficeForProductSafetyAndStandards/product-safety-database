@@ -26,6 +26,12 @@ class CorrectiveActionDecorator < ApplicationDecorator
     "#{action_name}: #{investigation_product.name}"
   end
 
+  def supporting_information_full_title
+    action_name = other? ? other_action : I18n.t(action, scope: %i[corrective_action attributes actions])
+
+    "#{action_name}: #{investigation_product.product.decorate.name_with_brand}"
+  end
+
   def date_of_activity
     date_decided.to_formatted_s(:govuk)
   end

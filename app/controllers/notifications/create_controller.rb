@@ -140,6 +140,27 @@ module Notifications
       when :determine_notification_risk_level
         @risk_level_form = RiskLevelForm.new(risk_level: @notification.risk_level)
         highest_risk_level
+      when :record_a_corrective_action
+        if @notification.corrective_action_taken.blank?
+          @corrective_action_taken_form = CorrectiveActionTakenForm.new
+          return render :record_a_corrective_action_taken
+        elsif params[:investigation_product_ids].present?
+          @corrective_action_form = CorrectiveActionForm.new
+          @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
+
+          return redirect_to wizard_path(:record_a_corrective_action) if @investigation_products.blank?
+
+          return render :record_a_corrective_action_details
+        elsif @notification.corrective_action_taken == "yes"
+          investigation_products = @notification.investigation_products
+          @existing_corrective_actions = @notification.corrective_actions.includes(investigation_product: :product)
+          @manage = request.query_string != "add" && @existing_corrective_actions.present?
+          return redirect_to wizard_path(:record_a_corrective_action, investigation_product_ids: [investigation_products.first.id]) if investigation_products.count == 1 && !@manage
+
+          @choose_investigation_products_form = ChooseInvestigationProductsForm.new unless @manage
+        else
+          return render :record_a_corrective_action_later
+        end
       end
 
       render_wizard
@@ -281,6 +302,70 @@ module Notifications
         else
           highest_risk_level
           return render_wizard
+        end
+      when :record_a_corrective_action
+        if @notification.corrective_action_taken.blank?
+          @corrective_action_taken_form = CorrectiveActionTakenForm.new(corrective_action_taken_params)
+
+          if @corrective_action_taken_form.valid?
+            ChangeNotificationCorrectiveActionTaken.call!(
+              notification: @notification,
+              corrective_action_taken: @corrective_action_taken_form.corrective_action_taken,
+              corrective_action_not_taken_reason: @corrective_action_taken_form.corrective_action_not_taken_reason,
+              user: current_user,
+              silent: true
+            )
+
+            if @corrective_action_taken_form.corrective_action_taken == "yes"
+              return redirect_to wizard_path(:record_a_corrective_action)
+            else
+              return render :record_a_corrective_action_later
+            end
+          else
+            return render :record_a_corrective_action_taken
+          end
+        elsif params[:investigation_product_ids].present?
+          @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
+          @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
+
+          if @corrective_action_form.valid?
+            @investigation_products.each do |investigation_product|
+              AddCorrectiveActionToNotification.call!(
+                notification: @notification,
+                investigation_product_id: investigation_product.id,
+                action: @corrective_action_form.action,
+                has_online_recall_information: @corrective_action_form.has_online_recall_information,
+                online_recall_information: @corrective_action_form.online_recall_information,
+                date_decided: @corrective_action_form.date_decided,
+                legislation: @corrective_action_form.legislation,
+                business_id: @corrective_action_form.business_id,
+                measure_type: @corrective_action_form.measure_type,
+                duration: @corrective_action_form.duration,
+                geographic_scopes: @corrective_action_form.geographic_scopes,
+                details: @corrective_action_form.details,
+                document: @corrective_action_form.document,
+                user: current_user,
+                silent: true
+              )
+            end
+
+            return redirect_to wizard_path(:record_a_corrective_action)
+          else
+            return render :record_a_corrective_action_details
+          end
+        elsif @notification.corrective_action_taken == "yes"
+          return redirect_to "#{wizard_path(:record_a_corrective_action)}?add" if params[:add_another_corrective_action] == "true"
+          return redirect_to wizard_path(:record_a_corrective_action) if params[:add_another_corrective_action].blank? && params[:final].present?
+
+          if params[:add_another_corrective_action].blank?
+            @choose_investigation_products_form = ChooseInvestigationProductsForm.new(record_a_corrective_action_params)
+
+            if @choose_investigation_products_form.valid?
+              return redirect_to wizard_path(:record_a_corrective_action, investigation_product_ids: @choose_investigation_products_form.investigation_product_ids)
+            else
+              return render_wizard
+            end
+          end
         end
       end
 
@@ -513,16 +598,62 @@ module Notifications
       end
     end
 
-    def remove_with_entity
-      @prism_associated_investigation = @notification.prism_associated_investigations.find(params[:entity_id])
-      if request.delete?
-        RemovePrismRiskAssessmentFromNotification.call!(
-          notification: @notification,
-          prism_risk_assessment: @prism_associated_investigation.prism_risk_assessment
-        )
-        redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+    def update_with_entity
+      @corrective_action = @notification.corrective_actions.find(params[:entity_id])
+      if request.patch? || request.put?
+        @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
+
+        if @corrective_action_form.valid?
+          UpdateCorrectiveAction.call!(
+            corrective_action: @corrective_action,
+            investigation_product_id: @corrective_action.investigation_product_id,
+            action: @corrective_action_form.action,
+            has_online_recall_information: @corrective_action_form.has_online_recall_information,
+            online_recall_information: @corrective_action_form.online_recall_information,
+            date_decided: @corrective_action_form.date_decided,
+            legislation: @corrective_action_form.legislation,
+            business_id: @corrective_action_form.business_id,
+            measure_type: @corrective_action_form.measure_type,
+            duration: @corrective_action_form.duration,
+            geographic_scopes: @corrective_action_form.geographic_scopes,
+            details: @corrective_action_form.details,
+            document: @corrective_action_form.document,
+            changes: @corrective_action_form.changes,
+            user: current_user,
+            silent: true
+          )
+
+          return redirect_to notification_create_path(@notification, id: "record_a_corrective_action")
+        else
+          return render :record_a_corrective_action_details
+        end
       else
-        render :remove_prism_risk_assessment
+        @corrective_action_form = CorrectiveActionForm.from(@corrective_action)
+        render :record_a_corrective_action_details
+      end
+    end
+
+    def remove_with_entity
+      case params[:step].to_sym
+      when :add_risk_assessments
+        @prism_associated_investigation = @notification.prism_associated_investigations.find(params[:entity_id])
+        if request.delete?
+          RemovePrismRiskAssessmentFromNotification.call!(
+            notification: @notification,
+            prism_risk_assessment: @prism_associated_investigation.prism_risk_assessment
+          )
+          redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+        else
+          render :remove_prism_risk_assessment
+        end
+      when :record_a_corrective_action
+        @corrective_action = @notification.corrective_actions.find(params[:entity_id])
+        if request.delete?
+          @corrective_action.destroy!
+          redirect_to notification_create_path(@notification, id: "record_a_corrective_action")
+        else
+          render :remove_corrective_action
+        end
       end
     end
 
@@ -650,6 +781,24 @@ module Notifications
 
     def determine_notification_risk_level_params
       params.require(:risk_level_form).permit(:risk_level, :final)
+    end
+
+    def corrective_action_taken_params
+      params.require(:corrective_action_taken_form).permit(:corrective_action_taken_yes_no, :corrective_action_taken_no_specific, :corrective_action_not_taken_reason)
+    end
+
+    def record_a_corrective_action_params
+      allowed_params = params.require(:choose_investigation_products_form).permit(investigation_product_ids: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:investigation_product_ids].reject!(&:blank?)
+      allowed_params
+    end
+
+    def record_a_corrective_action_details_params
+      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :legislation, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, date_decided: %i[day month year], geographic_scopes: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:geographic_scopes].reject!(&:blank?)
+      allowed_params
     end
 
     def highest_risk_level

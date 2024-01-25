@@ -26,7 +26,14 @@ class Investigation < ApplicationRecord
     other: "other"
   }
 
-  before_validation { trim_line_endings(:user_title, :non_compliant_reason, :hazard_description) }
+  enum corrective_action_taken: {
+    yes: "yes",
+    referred_to_another_authority: "referred_to_another_authority",
+    not_enough_information: "not_enough_information",
+    other: "other"
+  }, _prefix: true
+
+  before_validation { trim_line_endings(:user_title, :non_compliant_reason, :hazard_description, :corrective_action_not_taken_reason) }
 
   validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
 
@@ -34,6 +41,7 @@ class Investigation < ApplicationRecord
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
+  validates :corrective_action_not_taken_reason, length: { maximum: 100 }
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products

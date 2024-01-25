@@ -137,10 +137,16 @@ Rails.application.routes.draw do
 
             get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
 
-            # These routes need to appear before the `step` scope below to avoid clashing with the
+            # These routes need to appear before the next scope block to avoid clashing with the
             # `:investigation_product_id/:entity_id` routes.
-            get "add_risk_assessments/:entity_id/remove", to: "create#remove_with_entity", as: "remove_with_entity"
-            delete "add_risk_assessments/:entity_id/remove", to: "create#remove_with_entity"
+            scope ":step", constraints: { step: /add_risk_assessments|record_a_corrective_action/ } do
+              get ":entity_id/remove", to: "create#remove_with_entity", as: "remove_with_entity"
+              delete ":entity_id/remove", to: "create#remove_with_entity"
+            end
+
+            get "record_a_corrective_action/:entity_id", to: "create#update_with_entity", as: "with_entity"
+            patch "record_a_corrective_action/:entity_id", to: "create#update_with_entity"
+            put "record_a_corrective_action/:entity_id", to: "create#update_with_entity"
 
             scope ":step", constraints: { step: /add_test_reports|add_risk_assessments/ } do
               get ":investigation_product_id", to: "create#show_with_notification_product", as: "with_product"

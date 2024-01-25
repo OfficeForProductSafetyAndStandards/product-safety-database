@@ -1,0 +1,14 @@
+<%= page_title(t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.later.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.corrective_actions.title") %></span>
+        <%= t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.later.title") %>
+      </h1>
+      <p class="govuk-body">You have the option to add the corrective action after your initial notification submission.</p>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>
