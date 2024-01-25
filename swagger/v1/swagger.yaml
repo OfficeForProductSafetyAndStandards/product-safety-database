@@ -23,6 +23,25 @@ paths:
           description: User authenticated and API token returned
         '401':
           description: Unauthorized
+    delete:
+      summary: Delete an API token
+      description: Delete a users API tokens using a valid PSD account email and password
+      tags:
+      - Authentication
+      consumes:
+      - application/json
+      parameters:
+      - name: email
+        in: query
+        type: string
+      - name: password
+        in: query
+        type: string
+      responses:
+        '200':
+          description: User API tokens destroyed
+        '401':
+          description: Unauthorised user
 servers:
 - url: https://staging.product-safety-database.service.gov.uk
 - url: http://localhost:3000
