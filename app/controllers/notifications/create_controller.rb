@@ -623,9 +623,9 @@ module Notifications
             silent: true
           )
 
-          return redirect_to notification_create_path(@notification, id: "record_a_corrective_action")
+          redirect_to notification_create_path(@notification, id: "record_a_corrective_action")
         else
-          return render :record_a_corrective_action_details
+          render :record_a_corrective_action_details
         end
       else
         @corrective_action_form = CorrectiveActionForm.from(@corrective_action)
