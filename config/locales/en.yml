@@ -442,7 +442,7 @@ en:
               record_a_corrective_action:
                 title: Record a corrective action
                 corrective_action_taken:
-                  title: Have you already taken a corrective action for the unsafe product(s)?
+                  title: Have you taken a corrective action for the unsafe product(s)?
                 later:
                   title: You can record the corrective action later
                 select_products:

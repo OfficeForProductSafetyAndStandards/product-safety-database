@@ -247,5 +247,61 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     expect(page).to have_selector(:id, "task-list-3-4-status", text: "Completed")
     expect(page).to have_content("You have completed 4 of 6 sections.")
+
+    click_link "Record a corrective action"
+
+    within_fieldset "Have you taken a corrective action for the unsafe product(s)?" do
+      choose "Yes"
+    end
+
+    click_button "Save and continue"
+
+    within_fieldset "What action is being taken?" do
+      choose "Recall of the product from end users"
+    end
+
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+      fill_in "Location of recall information", with: "https://www.example.com"
+    end
+
+    within_fieldset "What date did the action come in to effect?" do
+      fill_in "Day", with: "9"
+      fill_in "Month", with: "2"
+      fill_in "Year", with: "2024"
+    end
+
+    select "Consumer Protection Act 1987", from: "Under which legislation?"
+
+    within_fieldset "Which business is responsible?" do
+      # TODO(ruben): add test here once business selection is possible
+    end
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose "Yes"
+    end
+
+    within_fieldset "In which geographic regions has this corrective action been taken?" do
+      check "Great Britain"
+      check "European Economic Area (EEA)"
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "corrective_action_form[document]", text_file
+    end
+
+    click_button "Add corrective action"
+
+    expect(page).to have_content("You have added 1 corrective action.")
+
+    within_fieldset "Do you need to add another corrective action?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
+    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 5 of 6 sections.")
   end
 end
