@@ -28,9 +28,15 @@
   <%= page_title(t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.select_products.title"), errors: @choose_investigation_products_form.errors.any?) %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <%= form_with model: @choose_investigation_products_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= form_with model: @choose_investigation_products_form, url: wizard_path, method: :patch, data: { controller: "checkbox-select-all" }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
         <%= f.govuk_error_summary %>
-        <%= f.govuk_collection_check_boxes :investigation_product_ids, @notification.investigation_products.decorate.map { |ip| OpenStruct.new(id: ip.id, name: ip.product.name_with_brand) }, :id, :name, legend: { text: "<span class=\"govuk-caption-l\">#{t('notifications.create.index.sections.corrective_actions.title')}</span>#{t('notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.select_products.title')}".html_safe, size: "l" }, hint: { text: "Select all that apply." } %>
+        <%= f.govuk_check_boxes_fieldset :investigation_product_ids, legend: { text: "<span class=\"govuk-caption-l\">#{t('notifications.create.index.sections.corrective_actions.title')}</span>#{t('notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.select_products.title')}".html_safe, size: "l" }, hint: { text: "Select all that apply." } do %>
+          <%= f.govuk_check_box :investigation_product_ids, "select_all", label: { text: "Select all" }, "data-checkbox-select-all-target": "checkboxAll" %>
+          <%= f.govuk_check_box_divider %>
+          <% @notification.investigation_products.decorate.each_with_index do |investigation_product, index| %>
+            <%= f.govuk_check_box :investigation_product_ids, investigation_product.id, label: { text: investigation_product.product.name_with_brand }, "data-checkbox-select-all-target": "checkbox", link_errors: index.zero? %>
+          <% end %>
+        <% end %>
         <%= f.govuk_submit "Save and continue" %>
       <% end %>
     </div>
