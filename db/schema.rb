@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_24_145754) do
     t.string "name"
     t.jsonb "properties"
     t.datetime "time"
-    t.bigint "user_id"
+    t.uuid "user_id"
     t.bigint "visit_id"
     t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
     t.index ["properties"], name: "index_ahoy_events_on_properties", opclass: :jsonb_path_ops, using: :gin
@@ -98,7 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_24_145754) do
     t.string "referring_domain"
     t.datetime "started_at"
     t.text "user_agent"
-    t.bigint "user_id"
+    t.uuid "user_id"
     t.string "visit_token"
     t.string "visitor_token"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
