@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with url: remove_with_entity_notification_create_index_path(@notification, entity_id: @prism_associated_investigation.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= form_with url: remove_with_entity_notification_create_index_path(@notification, step: "add_risk_assessments", entity_id: @prism_associated_investigation.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <h1 class="govuk-heading-l">
         Are you sure you want to remove this PRISM risk assessment from your notification?
       </h1>

@@ -17,7 +17,7 @@
       <% end %>
       <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
       <div class="govuk-form-group<%= assessed_on_error ? ' govuk-form-group--error' : '' %>">
-        <fieldset class="govuk-fieldset" aria-describedby="risk-assessment-form-assessed-on-hint<%= assessed_on_error ? ' isk-assessment-form-assessed-on-error' : '' %>">
+        <fieldset class="govuk-fieldset" aria-describedby="risk-assessment-form-assessed-on-hint<%= assessed_on_error ? ' risk-assessment-form-assessed-on-error' : '' %>">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of assessment</legend>
           <div class="govuk-hint" id="risk-assessment-form-assessed-on-hint">For example, 31 1 2020</div>
           <% if assessed_on_error %>

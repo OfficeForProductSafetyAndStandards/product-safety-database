@@ -441,6 +441,12 @@ en:
             tasks:
               record_a_corrective_action:
                 title: Record a corrective action
+                corrective_action_taken:
+                  title: Have you taken a corrective action for the unsafe product(s)?
+                later:
+                  title: You can record the corrective action later
+                select_products:
+                  title: Select products to record a corrective action
           submit:
             title: Submit notification
             tasks:
@@ -865,6 +871,19 @@ en:
           attributes:
             investigation_product_id:
               blank: Choose a product
+        choose_investigation_products_form:
+          attributes:
+            investigation_product_ids:
+              blank: Choose one or more products
+        corrective_action_taken_form:
+          attributes:
+            corrective_action_taken_yes_no:
+              inclusion: Choose whether a corrective action has been taken
+            corrective_action_taken_no_specific:
+              inclusion: Choose whether a corrective action has been taken
+            corrective_action_not_taken_reason:
+              blank: Enter the reason for not taking a corrective action
+              too_long: The reason for not taking a corrective action must be %{count} characters or less
 
   activerecord:
     models:
@@ -1007,6 +1026,7 @@ en:
         seizure_of_goods: "Seizure of goods"
         modification_programme: "Modification programme"
         referred_to_overseas_regulator: "Referred to an overseas regulator"
+        product_no_longer_available_for_sale: "Product is no longer available for sale"
         other: "Other"
   enter_email_address: "Enter your email address"
   file_added: "The file was added"

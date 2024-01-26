@@ -14,7 +14,7 @@
             summary_list.with_row do |row|
               row.with_key(text: risk_assessment.supporting_information_full_title)
               row.with_value(text: risk_assessment.supporting_information_type)
-              row.with_action(text: "Remove", href: remove_with_entity_notification_create_index_path(@notification, entity_id: prism_associated_investigation.id), visually_hidden_text: "risk assessment")
+              row.with_action(text: "Remove", href: remove_with_entity_notification_create_index_path(@notification, step: "add_risk_assessments", entity_id: prism_associated_investigation.id), visually_hidden_text: "risk assessment")
             end
           end
           @existing_risk_assessments.decorate.each do |risk_assessment|

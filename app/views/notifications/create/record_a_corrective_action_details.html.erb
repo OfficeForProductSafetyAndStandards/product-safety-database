@@ -1,0 +1,111 @@
+<%= page_title(t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.title"), errors: @corrective_action_form.errors.any?) %>
+<% date_decided_error = @corrective_action_form.errors.include?(:date_decided) %>
+<% two_weeks_from_now =  2.weeks.from_now.to_date %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @corrective_action_form, url: @corrective_action&.id.present? ? with_entity_notification_create_index_path(@notification, entity_id: @corrective_action.id) : wizard_path(:record_a_corrective_action, investigation_product_ids: params[:investigation_product_ids]), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.corrective_actions.title") %></span>
+        <%= t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+        <% (@investigation_products&.decorate || [@corrective_action.investigation_product.decorate]).each do |investigation_product| %>
+          <li class="govuk-body-l"><%= investigation_product.product.name_with_brand %></li>
+        <% end %>
+        </ul>
+      <% end %>
+      <%= f.hidden_field :has_online_recall_information, value: "has_online_recall_information_not_relevant" %>
+      <%= f.govuk_radio_buttons_fieldset :action, legend: { text: "What action is being taken?", size: "m" } do %>
+        <%= f.govuk_radio_button :action, "removal_of_the_listing_by_the_online_marketplace", label: { text: "Removal of the listing by the online marketplace" }, link_errors: true %>
+        <%= f.govuk_radio_button :action, "import_rejected_at_border", label: { text: "Import rejected at border" } %>
+        <%= f.govuk_radio_button :action, "destruction_of_the_product", label: { text: "Destruction of the product" } %>
+        <%= f.govuk_radio_button :action, "recall_of_the_product_from_end_users", label: { text: "Recall of the product from end users" } do %>
+          <%= f.govuk_radio_buttons_fieldset :has_online_recall_information, legend: { text: "Has the business responsible published product recall information online?" } do %>
+            <%= f.govuk_radio_button :has_online_recall_information, "has_online_recall_information_yes", label: { text: "Yes" }, link_errors: true do %>
+              <%= f.govuk_text_field :online_recall_information, label: { text: "Location of recall information" }, hint: { text: "For example http://www.example.com or https://www.example.com" } %>
+            <% end %>
+            <%= f.govuk_radio_button :has_online_recall_information, "has_online_recall_information_no", label: { text: "No" } %>
+          <% end %>
+        <% end %>
+        <%= f.govuk_radio_button :action, "withdrawal_of_the_product_from_the_market", label: { text: "Withdrawal of the product from the market" }, hint: { text: "For example, removal of the product from sales and distribution channels" } %>
+        <%= f.govuk_radio_button :action, "temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product", label: { text: "Temporary ban on the supply, offer to supply and display of the product" }, hint: { text: "For example, suspension of the product distribution, sales and display" } %>
+        <%= f.govuk_radio_button :action, "referred_to_overseas_regulator", label: { text: "Referred to an overseas regulator" } %>
+        <%= f.govuk_radio_button :action, "making_the_marketing_of_the_product_subject_to_prior_conditions", label: { text: "Making the marketing of the product subject to prior conditions" } %>
+        <%= f.govuk_radio_button :action, "product_back_into_compliance", label: { text: "Product brought back into compliance" } %>
+        <%= f.govuk_radio_button :action, "warning_consumers_of_the_risks", label: { text: "Warning consumers of the risks" } %>
+        <%= f.govuk_radio_button :action, "ban_on_the_marketing_of_the_product_and_any_accompanying_measures", label: { text: "Ban on the marketing of the product and any accompanying measures" } %>
+        <%= f.govuk_radio_button :action, "marking_the_product_with_appropriate_warnings_on_the_risks", label: { text: "Marking the product with appropriate warnings on the risks" } %>
+        <%= f.govuk_radio_button :action, "seizure_of_goods", label: { text: "Seizure of goods" } %>
+        <%= f.govuk_radio_button :action, "modification_programme", label: { text: "Modification programme" } %>
+        <%= f.govuk_radio_button :action, "product_no_longer_available_for_sale", label: { text: "Product is no longer available for sale" } %>
+      <% end %>
+      <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
+      <div class="govuk-form-group<%= date_decided_error ? ' govuk-form-group--error' : '' %>">
+        <fieldset class="govuk-fieldset" aria-describedby="corrective-action-form-date-decided-hint<%= date_decided_error ? ' corrective-action-form-date-decided-error' : '' %>">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">What date did the action come in to effect?</legend>
+          <div class="govuk-hint" id="corrective-action-form-date-decided-hint">This may be in the future. For example, <%= "#{two_weeks_from_now.day} #{two_weeks_from_now.month} #{two_weeks_from_now.year}" %>.</div>
+          <% if date_decided_error %>
+          <p class="govuk-error-message" id="corrective-action-form-date-decided-error">
+            <span class="govuk-visually-hidden">Error: </span><%= @corrective_action_form.errors.full_messages_for(:date_decided).first %>
+          </p>
+          <% end %>
+          <div class="govuk-date-input">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="corrective_action_form_date_decided_day">Day</label>
+                <input id="corrective_action_form_date_decided_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_decided_error ? ' govuk-input--error' : '' %>" name="corrective_action_form[date_decided][day]" type="text" inputmode="numeric" value="<%= @corrective_action_form.date_decided&.day %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="corrective_action_form_date_decided_month">Month</label>
+                <input id="corrective_action_form_date_decided_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_decided_error ? ' govuk-input--error' : '' %>" name="corrective_action_form[date_decided][month]" type="text" inputmode="numeric" value="<%= @corrective_action_form.date_decided&.month %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="corrective_action_form_date_decided_year">Year</label>
+                <input id="corrective_action_form_date_decided_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= date_decided_error ? ' govuk-input--error' : '' %>" name="corrective_action_form[date_decided][year]" type="text" inputmode="numeric" value="<%= @corrective_action_form.date_decided&.year %>">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <%= f.govuk_collection_select :legislation, legislation_options, :id, :name, label: { text: "Under which legislation?", size: "m" }, hint: { text: "Select the relevant legislation from the list." } %>
+      <%= f.govuk_collection_radio_buttons :business_id, @notification.investigation_businesses.decorate.map { |ib| OpenStruct.new(id: ib.business.id, name: "#{ib.business.trading_name} (#{ib.pretty_relationship})") }, :id, :name, legend: { text: "Which business is responsible?", size: "m" }, hint: { text: "Only businesses already added to the notification are listed." } %>
+      <%= f.govuk_collection_radio_buttons :measure_type, [OpenStruct.new(id: "mandatory", name: "Yes"), OpenStruct.new(id: "voluntary", name: "No, it's voluntary")], :id, :name, legend: { text: "Is the corrective action mandatory?", size: "m" } %>
+      <%= f.govuk_check_boxes_fieldset :geographic_scopes, legend: { text: "In which geographic regions has this corrective action been taken?" } do %>
+        <%= f.govuk_check_box :geographic_scopes, "local", label: { text: "Local" }, hint: { text: "Covers specific areas and nearby border checkpoints." }, link_errors: true %>
+        <%= f.govuk_check_box :geographic_scopes, "great_britain", label: { text: "Great Britain" }, hint: { text: "Covers England, Scotland and Wales." } %>
+        <%= f.govuk_check_box :geographic_scopes, "northern_ireland", label: { text: "Northern Ireland" } %>
+        <%= f.govuk_check_box :geographic_scopes, "eea_wide", label: { text: "European Economic Area (EEA)" }, hint: { text: "Covers EU countries and also Iceland, Liechtenstein and Norway." } %>
+        <%= f.govuk_check_box :geographic_scopes, "eu_wide", label: { text: "European Union (EU)" } %>
+        <%= f.govuk_check_box :geographic_scopes, "worldwide", label: { text: "Worldwide" } %>
+        <%= f.govuk_check_box :geographic_scopes, "unknown", label: { text: "Unknown" } %>
+      <% end %>
+      <%= f.govuk_text_area :details, label: { text: "Further details (optional)", size: "m" }, max_chars: 32_767 %>
+      <%= f.hidden_field :existing_document_file_id %>
+      <%= f.govuk_radio_buttons_fieldset :related_file, legend: { text: "Are there any files related to the action?", size: "m" } do %>
+        <%= f.govuk_radio_button :related_file, true, label: { text: "Yes" }, link_errors: true do %>
+          <% if @corrective_action_form.document.present? %>
+            <p id="current-attachment-details">
+              Currently selected file:
+              <%= link_to "#{@corrective_action_form.document.filename} (opens in new tab)", @corrective_action_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+            </p>
+            <%= govuk_details(summary_text: "Replace this file") do %>
+              <%= f.govuk_file_field :document, label: nil, hint: { text: "If you have multiple files, compress them in a zip file." } %>
+            <% end %>
+          <% else %>
+            <%= f.govuk_file_field :document, label: nil, hint: { text: "If you have multiple files, compress them in a zip file." } %>
+          <% end %>
+        <% end %>
+        <%= f.govuk_radio_button :related_file, false, label: { text: "No" } %>
+      <% end %>
+      <%= f.govuk_submit @corrective_action&.id.present? ? "Update corrective action" : "Add corrective action" %>
+    <% end %>
+  </div>
+</div>
