@@ -7,61 +7,61 @@ module Prism
       "minor" => "minor",
       "no" => "no",
       "unknown" => "unknown",
-    }, _prefix: true
+    }, prefix: true
 
     enum :other_hazards, {
       "yes" => "yes",
       "no" => "no",
       "unknown" => "unknown",
-    }, _prefix: true
+    }, prefix: true
 
     enum :level_of_uncertainty, {
       "low" => "low",
       "medium" => "medium",
       "high" => "high",
-    }, _prefix: true
+    }, prefix: true
 
     enum :number_of_products_expected_to_change, {
       "no_changes" => "no_changes",
       "increase" => "increase",
       "fall" => "fall",
       "unknown" => "unknown",
-    }, _prefix: true
+    }, prefix: true
 
     enum :comparable_risk_level, {
       "lower" => "lower",
       "similar" => "similar",
       "higher" => "higher",
       "unknown" => "unknown",
-    }, _prefix: true
+    }, prefix: true
 
     enum :significant_risk_differential, {
       "yes" => "yes",
       "no" => "no",
       "not_applicable" => "not_applicable",
-    }, _prefix: true
+    }, prefix: true
 
     enum :relevant_action_by_others, {
       "yes" => "yes",
       "no" => "no",
       "unknown" => "unknown",
-    }, _prefix: true
+    }, prefix: true
 
     enum :low_likelihood_high_severity, {
       "yes" => "yes",
       "no" => "no",
-    }, _prefix: true
+    }, prefix: true
 
     enum :aimed_at_vulnerable_users, {
       "yes" => "yes",
       "no" => "no",
       "unknown" => "unknown",
-    }, _prefix: true
+    }, prefix: true
 
     enum :designed_to_provide_protective_function, {
       "yes" => "yes",
       "no" => "no",
-    }, _prefix: true
+    }, prefix: true
 
     enum risk_tolerability: {
       "tolerable" => "tolerable",
