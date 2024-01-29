@@ -4,11 +4,9 @@
         items: hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
         key: :hazard_type,
         form: form,
-        show_all_values: true,
         aria_describedby: "hazard-type-category-hint", label: { text: "What is the primary hazard?" },
         id: "hazard_type",
-        include_blank: true,
-        is_autocomplete: false
+        include_blank: true
   ) %>
 </div>
 <%= govukTextarea(
