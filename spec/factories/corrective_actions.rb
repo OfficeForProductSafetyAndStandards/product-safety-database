@@ -4,7 +4,7 @@ FactoryBot.define do
     investigation_product
     action { (CorrectiveAction.actions.keys - %w[other]).sample }
     date_decided { Faker::Date.backward(days: 14) }
-    legislation { Rails.application.config.legislation_constants["legislation"].sample }
+    legislation { [Rails.application.config.legislation_constants["legislation"].sample] }
     measure_type { CorrectiveAction::MEASURE_TYPES.sample }
     duration { CorrectiveAction::DURATION_TYPES.sample }
     geographic_scopes { CorrectiveAction::GEOGRAPHIC_SCOPES[0..-2] }

@@ -8,7 +8,7 @@ RSpec.shared_context "with add corrective action setup" do
   let(:action_key) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:action) { CorrectiveAction.actions[action_key] }
   let(:date_decided) { Date.parse("2020-05-01") }
-  let(:legislation) { "General Product Safety Regulations 2005" }
+  let(:legislation) { ["General Product Safety Regulations 2005"] }
   let(:has_online_recall_information) { "has_online_recall_information_yes" }
   let(:online_recall_information) { Faker::Internet.url(host: "example.com") }
   let(:details) { "Urgent action following consumer reports" }
