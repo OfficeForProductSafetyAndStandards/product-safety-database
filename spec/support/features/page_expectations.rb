@@ -144,7 +144,7 @@ module PageExpectations
 
     expect(page).to have_summary_item(key: "Event date", value: new_date_decided.to_formatted_s(:govuk))
     expect(page).to have_summary_item(key: "Product",             value: "#{product_two.name} (#{product_two.psd_ref})")
-    expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
+    expect(page).to have_summary_item(key: "Legislation",         value: [existing_legislation, new_legislation].sort.to_sentence)
     expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
     expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
     expected_geographic_scopes_text =

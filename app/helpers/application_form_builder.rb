@@ -119,7 +119,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_select(attribute, label:, items:, label_classes: "", hint: nil)
+  def govuk_select(attribute, label:, items:, label_classes: "", hint: nil, include_blank: false, multiple: false)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -132,16 +132,18 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     # Set item as selected if the value matches the method from the model
     @items.each_with_index do |item, _index|
-      item[:selected] = true if object.public_send(attribute).to_s == item[:value].to_s
+      item[:selected] = true if (multiple && object.public_send(attribute).include?(item[:value].to_s)) || object.public_send(attribute).to_s == item[:value].to_s
     end
 
     @template.govukSelect(
       id: attribute.to_s,
-      name: input_name(attribute),
+      name: input_name(attribute, multiple:),
       label: { text: label, classes: label_classes.to_s },
       hint:,
       items: @items,
-      errorMessage: error_message
+      errorMessage: error_message,
+      include_blank:,
+      attributes: { multiple: }
     )
   end
 
@@ -260,7 +262,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
 private
 
-  def input_name(attribute)
-    "#{@object_name}[#{attribute}]"
+  def input_name(attribute, multiple: false)
+    "#{@object_name}[#{attribute}]#{multiple ? '[]' : ''}"
   end
 end

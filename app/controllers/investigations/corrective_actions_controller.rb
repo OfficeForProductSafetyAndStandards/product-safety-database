@@ -11,6 +11,7 @@ module Investigations
 
     def create
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
+      @corrective_action_form.legislation.reject!(&:blank?)
       @file_blob = @corrective_action_form.document
       return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
@@ -46,6 +47,7 @@ module Investigations
       @file_blob              = corrective_action.document_blob
 
       @corrective_action_form.assign_attributes(corrective_action_params)
+      @corrective_action_form.legislation.reject!(&:blank?)
       return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
       UpdateCorrectiveAction.call!(

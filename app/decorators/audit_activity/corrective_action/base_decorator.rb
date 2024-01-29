@@ -2,7 +2,7 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
   include Investigations::CorrectiveActionsHelper
 
   decorates_association :business, with: BusinessDecorator
-  delegate :details, :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
+  delegate :details, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
 
   delegate :trading_name, to: :business
 

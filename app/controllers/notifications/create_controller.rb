@@ -797,8 +797,9 @@ module Notifications
     end
 
     def record_a_corrective_action_details_params
-      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :legislation, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, date_decided: %i[day month year], geographic_scopes: [])
+      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, date_decided: %i[day month year], legislation: [], geographic_scopes: [])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:legislation].reject!(&:blank?)
       allowed_params[:geographic_scopes].reject!(&:blank?)
       allowed_params
     end

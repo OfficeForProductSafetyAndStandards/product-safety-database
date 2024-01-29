@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_24_145754) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_29_110857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -202,7 +202,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_24_145754) do
     t.enum "has_online_recall_information", enum_type: "has_online_recall_information"
     t.integer "investigation_id"
     t.bigint "investigation_product_id"
-    t.string "legislation"
+    t.string "legislation", default: [], array: true
     t.string "measure_type"
     t.string "online_recall_information"
     t.text "other_action"
