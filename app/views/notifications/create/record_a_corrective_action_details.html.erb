@@ -75,7 +75,7 @@
           </div>
         </fieldset>
       </div>
-      <%= f.govuk_select :legislation, options_for_select([""] + Rails.application.config.legislation_constants["legislation"], @corrective_action_form.legislation), label: { text: "Under which legislation?", size: "m" }, hint: { text: "Search applicable legislation and choose the ones you feel are relevant." }, multiple: true %>
+      <%= f.govuk_select :legislation, options_for_select([""] + Rails.application.config.legislation_constants["legislation"].sort, @corrective_action_form.legislation), label: { text: "Under which legislation?", size: "m" }, hint: { text: "Search applicable legislation and choose the ones you feel are relevant." }, multiple: true %>
       <%= f.govuk_collection_radio_buttons :business_id, @notification.investigation_businesses.decorate.map { |ib| OpenStruct.new(id: ib.business.id, name: "#{ib.business.trading_name} (#{ib.pretty_relationship})") }, :id, :name, legend: { text: "Which business is responsible?", size: "m" }, hint: { text: "Only businesses already added to the notification are listed." } %>
       <%= f.govuk_collection_radio_buttons :measure_type, [OpenStruct.new(id: "mandatory", name: "Yes"), OpenStruct.new(id: "voluntary", name: "No, it's voluntary")], :id, :name, legend: { text: "Is the corrective action mandatory?", size: "m" } %>
       <%= f.govuk_check_boxes_fieldset :geographic_scopes, legend: { text: "In which geographic regions has this corrective action been taken?" }, data: { controller: "dynamic-checkbox-states" } do %>
