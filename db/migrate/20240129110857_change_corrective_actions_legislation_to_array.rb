@@ -1,4 +1,5 @@
 class ChangeCorrectiveActionsLegislationToArray < ActiveRecord::Migration[7.0]
+  # rubocop:disable Rails/BulkChangeTable
   def up
     change_column :corrective_actions, :legislation, :string, array: true, using: "(string_to_array(legislation, ''))"
     change_column_default :corrective_actions, :legislation, []
@@ -8,4 +9,5 @@ class ChangeCorrectiveActionsLegislationToArray < ActiveRecord::Migration[7.0]
     change_column :corrective_actions, :legislation, :string, using: "(array_to_string(legislation, ','))"
     change_column_default :corrective_actions, :legislation, nil
   end
+  # rubocop:enable Rails/BulkChangeTable
 end
