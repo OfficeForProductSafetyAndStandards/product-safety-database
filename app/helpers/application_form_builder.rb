@@ -147,35 +147,6 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_autocomplete(attribute, label:, label_classes: "", items: nil, choices: nil, hint: nil)
-    if object.errors.include?(attribute)
-      error_message = {
-        text: object.errors.full_messages_for(attribute).first
-      }
-    end
-
-    hint = { text: hint } if hint
-
-    @items = items || choices.map { |choice| { value: choice, text: choice } }
-    @items.unshift(value: nil, text: "")
-
-    # Set item as selected if the value matches the method from the model
-    @items.each_with_index do |item, _index|
-      item[:selected] = true if object.public_send(attribute).to_s == item[:value].to_s
-    end
-
-    @template.govukSelect(
-      id: attribute.to_s,
-      name: input_name(attribute),
-      label: { text: label, classes: label_classes.to_s },
-      hint:,
-      items: @items,
-      errorMessage: error_message,
-      show_all_values: true,
-      is_autocomplete: true
-    )
-  end
-
   def govuk_checkboxes(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", hint: nil)
     if object.errors.include?(attribute)
       error_message = {
