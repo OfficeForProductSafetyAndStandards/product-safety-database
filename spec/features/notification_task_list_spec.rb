@@ -271,6 +271,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       fill_in "Year", with: "2024"
     end
 
+    select "ATEX 2016", from: "Under which legislation?"
     select "Consumer Protection Act 1987", from: "Under which legislation?"
 
     within_fieldset "Which business is responsible?" do

@@ -4,6 +4,10 @@ class CorrectiveActionDecorator < ApplicationDecorator
 
   MEDIUM_TITLE_TEXT_SIZE_THRESHOLD = 62
 
+  def legislation
+    object.legislation.to_sentence
+  end
+
   def geographic_scopes
     object.geographic_scopes.map { |geographic_scope|
       I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
