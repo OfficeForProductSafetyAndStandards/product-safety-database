@@ -1,4 +1,4 @@
-<% content_for :page_title, "Best ranking teams" %>
+<% content_for :page_title, "Worst ranking teams" %>
 
 <% content_for :aside do %>
   Last 12 months
@@ -11,11 +11,11 @@
         t.with_tab(label: "By notifications") do
           render partial: "notifications"
         end
-        t.with_tab(label: "By active users") do
-          render partial: "users"
-        end
         t.with_tab(label: "By products") do
           render partial: "products"
+        end
+        t.with_tab(label: "By users") do
+          render partial: "users"
         end
       end
     %>
