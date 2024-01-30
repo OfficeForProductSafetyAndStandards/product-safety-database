@@ -45,7 +45,7 @@ class GenerateRollupsJob < ApplicationJob
     ahoy_rollups(name: "Updated test result")
   end
 
-  private
+private
 
   def ahoy_rollups(name:)
     Ahoy::Event.where(name:).joins(:visit).rollup(name, column: :started_at, interval: :day)

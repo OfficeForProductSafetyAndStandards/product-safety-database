@@ -19,7 +19,6 @@ module ReportPortal
                          .select("teams.name, count(products.*) as products_count")
                          .group("teams.name")
                          .order("products_count DESC")
-
     end
   end
 end

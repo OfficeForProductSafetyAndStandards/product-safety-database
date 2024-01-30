@@ -10,7 +10,7 @@ module ReportPortal
       @by_products = @all_teams.left_outer_joins(:owned_products).where(products: { id: nil })
 
       # Teams with no active users
-      @by_users = @all_teams.left_outer_joins(:users).where('users.last_sign_in_at < ?', 3.months.ago).select('teams.*, count(users.*) as users_count').group('teams.id')
+      @by_users = @all_teams.left_outer_joins(:users).where("users.last_sign_in_at < ?", 3.months.ago).select("teams.*, count(users.*) as users_count").group("teams.id")
     end
   end
 end
