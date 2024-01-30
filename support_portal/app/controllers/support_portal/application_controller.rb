@@ -4,7 +4,7 @@ module SupportPortal
 
     include CacheConcern
     include HttpAuthConcern
-    include SecondaryAuthenticationConcern
+    include SupportPortal::SecondaryAuthenticationConcern
     include SentryConfigurationConcern
 
     protect_from_forgery with: :exception
