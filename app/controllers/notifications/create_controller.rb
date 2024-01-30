@@ -216,10 +216,18 @@ module Notifications
               silent: true
             )
           end
+          ChangeNotificationOverseasRegulator.call!(
+            notification: @notification,
+            is_from_overseas_regulator: add_product_safety_and_compliance_details_params[:is_from_overseas_regulator],
+            overseas_regulator_country: add_product_safety_and_compliance_details_params[:overseas_regulator_country],
+            user: current_user,
+            silent: true
+          )
           ChangeNotificationReferenceNumber.call!(
             notification: @notification,
             reference_number: add_product_safety_and_compliance_details_params[:add_reference_number] ? add_product_safety_and_compliance_details_params[:reference_number] : nil,
-            user: current_user
+            user: current_user,
+            silent: true
           )
         else
           return render_wizard
@@ -738,7 +746,7 @@ module Notifications
     end
 
     def add_product_safety_and_compliance_details_params
-      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :add_reference_number, :reference_number, :draft)
+      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :is_from_overseas_regulator, :overseas_regulator_country, :add_reference_number, :reference_number, :draft)
     end
 
     def number_of_affected_units_params

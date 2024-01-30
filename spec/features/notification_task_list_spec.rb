@@ -116,6 +116,11 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       fill_in "Provide additional information about the product hazard", with: "Fake description"
     end
 
+    within_fieldset "Was the safety issue reported by an overseas regulator?" do
+      choose "Yes"
+      select "France", from: "Country"
+    end
+
     within_fieldset "Do you want to add your own reference number?" do
       choose "Yes"
       fill_in "Reference number", with: "123456"

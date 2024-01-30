@@ -58,6 +58,13 @@ module Notifications
         end
     end
 
+    def countries_options
+      [OpenStruct.new(id: "", name: "")] +
+        Country.overseas_countries.map do |country|
+          OpenStruct.new(id: country[1], name: country[0])
+        end
+    end
+
     def number_of_affected_units(affected_units_status, number_of_affected_units)
       case affected_units_status
       when "exact"
