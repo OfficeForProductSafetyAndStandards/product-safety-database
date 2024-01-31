@@ -52,6 +52,9 @@ class SearchParams
   Rails.application.config.hazard_constants["hazard_type"].each do |type|
     attribute type.parameterize.underscore.to_sym, :boolean
   end
+  Business::BUSINESS_TYPES.each do |business_type|
+    attribute business_type.parameterize.underscore.to_sym, :boolean
+  end
 
   def selected_sort_by
     if sort_by.blank?

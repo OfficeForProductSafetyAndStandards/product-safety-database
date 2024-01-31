@@ -90,7 +90,16 @@ private
   end
 
   def query_params
-    params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
+    params.permit(
+      :q,
+      :sort_by,
+      :sort_dir,
+      :direction,
+      :category,
+      :retired_status,
+      *Business::BUSINESS_TYPES.map(&:to_sym),
+      :page_name
+    )
   end
 
   def update_business

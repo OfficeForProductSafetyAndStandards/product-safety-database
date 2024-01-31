@@ -17,6 +17,14 @@ module BusinessesHelper
 
     query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
 
+    business_types = []
+
+    Business::BUSINESS_TYPES.each do |business_type|
+      business_types << business_type if @search.send(business_type)
+    end
+
+    query = query.where(investigation_businesses: { relationship: business_types }) unless business_types.empty?
+
     case @search.case_owner
     when "me"
       query = query.where(users: { id: user.id })
