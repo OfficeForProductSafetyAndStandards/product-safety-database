@@ -119,10 +119,7 @@ module Notifications
     end
 
     def formatted_risk_assessments(prism_risk_assessments, risk_assessments)
-      [
-        prism_risk_assessments.decorate.map { |risk_assessment| risk_assessment.supporting_information_full_title },
-        risk_assessments.decorate.map { |risk_assessment| risk_assessment.supporting_information_full_title }
-      ].flatten.compact.join("<br>")
+      (prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact.join("<br>")
     end
 
     def formatted_uploads(uploads)
@@ -132,7 +129,7 @@ module Notifications
     def risk_level_tag
       case @notification.risk_level
       when "low"
-       govuk_tag(text: "Low risk", colour: "green")
+        govuk_tag(text: "Low risk", colour: "green")
       when "medium"
         govuk_tag(text: "Medium risk", colour: "yellow")
       when "high"
