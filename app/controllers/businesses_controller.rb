@@ -98,6 +98,7 @@ private
       :category,
       :retired_status,
       *Business::BUSINESS_TYPES.map(&:to_sym),
+      *Country.all.map { |country| country[0].parameterize.underscore.to_sym },
       :page_name
     )
   end
