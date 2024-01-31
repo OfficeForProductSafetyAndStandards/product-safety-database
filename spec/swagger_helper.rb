@@ -21,15 +21,7 @@ RSpec.configure do |config|
         title: "PSD API",
         version: "v1"
       },
-      paths: {},
-      servers: [
-        {
-          url: "https://staging.product-safety-database.service.gov.uk",
-        },
-        {
-          url: "http://localhost:3000",
-        }
-      ]
+      paths: {}
     }
   }
 

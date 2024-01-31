@@ -132,6 +132,3 @@ paths:
       responses:
         '200':
           description: Search results returned
-servers:
-- url: https://staging.product-safety-database.service.gov.uk
-- url: http://localhost:3000
