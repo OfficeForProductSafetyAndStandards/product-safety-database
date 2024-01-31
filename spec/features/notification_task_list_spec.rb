@@ -309,5 +309,12 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
     expect(page).to have_content("You have completed 5 of 6 sections.")
+
+    click_link "Check the notification details and submit"
+    click_button "Submit notification"
+
+    # TODO(ruben): change this once the confirmation page is ready
+    expect(page).to have_selector(:id, "task-list-5-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 6 of 6 sections.")
   end
 end

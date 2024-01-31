@@ -99,5 +99,51 @@ module Notifications
           OpenStruct.new(id: team.id, name: team.name)
         end
     end
+
+    def specific_product_safety_issues
+      unsafe = "<p class=\"govuk-body\">Product hazard: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
+      non_compliant = "<p class=\"govuk-body\">Product incomplete markings, labeling or other issues</p><p class=\"govuk-body-s\">#{@notification.non_compliant_reason}</p>" if @notification.non_compliant? || @notification.unsafe_and_non_compliant?
+      [unsafe, non_compliant].join
+    end
+
+    def formatted_business_address(location)
+      [location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].map(&:presence).compact.join("<br>")
+    end
+
+    def formatted_business_contact(contact)
+      [contact.name, contact.job_title, contact.email, contact.phone_number].map(&:presence).compact.join("<br>")
+    end
+
+    def formatted_test_results(test_results)
+      test_results.map { |test_result| link_to "#{test_result.document.blob.filename} (opens in new tab)", test_result.document.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if test_result.document.blob.present? }.join("<br>")
+    end
+
+    def formatted_risk_assessments(prism_risk_assessments, risk_assessments)
+      [
+        prism_risk_assessments.decorate.map { |risk_assessment| risk_assessment.supporting_information_full_title },
+        risk_assessments.decorate.map { |risk_assessment| risk_assessment.supporting_information_full_title }
+      ].flatten.compact.join("<br>")
+    end
+
+    def formatted_uploads(uploads)
+      uploads.map { |upload| link_to "#{upload.blob.filename} (opens in new tab)", upload.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if upload.blob.present? }.join("<br>")
+    end
+
+    def risk_level_tag
+      case @notification.risk_level
+      when "low"
+       govuk_tag(text: "Low risk", colour: "green")
+      when "medium"
+        govuk_tag(text: "Medium risk", colour: "yellow")
+      when "high"
+        govuk_tag(text: "High risk", colour: "orange")
+      when "serious"
+        govuk_tag(text: "Serious risk", colour: "red")
+      when "not_conclusive"
+        govuk_tag(text: "Not conclusive", colour: "grey")
+      else
+        govuk_tag(text: "Unknown risk", colour: "grey")
+      end
+    end
   end
 end
