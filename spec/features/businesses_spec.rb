@@ -1,13 +1,20 @@
 require "rails_helper"
 
 RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
-  let(:user)            { create :user, :activated, has_viewed_introduction: true }
-  let!(:business_one)   { create(:business, trading_name: "great value",    created_at: 1.day.ago) }
-  let!(:business_two)   { create(:business, trading_name: "mediocre stuff", created_at: 2.days.ago) }
-  let!(:business_three) { create(:business, trading_name: "pretty bad",     created_at: 3.days.ago) }
+  let(:user)            { create :user, :opss_user, :activated, has_viewed_introduction: true }
+  let(:non_opss_user)            { create :user, :activated, has_viewed_introduction: true }
+  let!(:business_one)   { create(:business, :online_marketplace, trading_name: "great value", created_at: 1.day.ago) }
+  let!(:business_two)   { create(:business, :retailer, trading_name: "mediocre stuff", created_at: 2.days.ago) }
+  let!(:business_three) { create(:business, :manufacturer, trading_name: "pretty bad", created_at: 3.days.ago) }
 
   before do
     create_list :business, 18, created_at: 4.days.ago
+    create(:location, country: "country:GB", business: business_one)
+    create(:location, country: "country:FR", business: business_two)
+    create(:location, country: "country:AU", business: business_three)
+    business_one
+    business_two
+    business_three
     sign_in(user)
     visit all_businesses_path
   end
@@ -52,7 +59,7 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
   end
 
   scenario "displays cases for business" do
-    investigation = create(:allegation, :with_business, business_to_add: business_one)
+    investigation = business_one.investigations.first
     visit "/businesses/#{business_one.id}"
 
     within ".psd-case-card" do
@@ -63,5 +70,89 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
     within ".psd-case-card" do
       expect(page).to have_css("span", text: "Notification restricted")
     end
+  end
+
+  scenario "search by business type" do
+    visit all_businesses_path
+    find("details#business-type").click
+    check "Online marketplace"
+    check "Retailer"
+    check "Manufacturer"
+    click_button "Apply"
+
+    expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+
+    find("details#business-type").click
+    uncheck "Online marketplace"
+    click_button "Apply"
+
+    expect(page).not_to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+
+    find("details#business-type").click
+    uncheck "Retailer"
+    click_button "Apply"
+
+    expect(page).not_to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).not_to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+
+    find("details#business-type").click
+    uncheck "Manufacturer"
+    click_button "Apply"
+
+    expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+  end
+
+  scenario "search by primary location" do
+    visit all_businesses_path
+    expect(page).to have_css("h2", text: "Filters")
+
+    find("details#business-location").click
+    check "United Kingdom"
+    check "France"
+    check "Australia"
+    click_button "Apply"
+
+    expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+
+    find("details#business-location").click
+    uncheck "Australia"
+    click_button "Apply"
+
+    expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).not_to have_link(business_three.trading_name, href: business_path(business_three))
+
+    find("details#business-location").click
+    uncheck "France"
+    click_button "Apply"
+
+    expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).not_to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).not_to have_link(business_three.trading_name, href: business_path(business_three))
+
+    find("details#business-location").click
+    uncheck "United Kingdom"
+    click_button "Apply"
+
+    expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
+    expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
+    expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+  end
+
+  scenario "non-opss user should not be able to see filters" do
+    sign_out
+    sign_in(non_opss_user)
+    visit all_businesses_path
+
+    expect(page).not_to have_css("h2", text: "Filters")
   end
 end
