@@ -42,6 +42,96 @@ paths:
           description: User API tokens destroyed
         '401':
           description: Unauthorised user
+  "/api/v1/products/{id}":
+    get:
+      summary: Retrieves a Product
+      description: Retrieves a Product's detail by ID
+      tags:
+      - Products
+      produces:
+      - application/json
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        type: string
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: Product found
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              brand:
+                type: string
+              product_code:
+                type: string
+                nullable: true
+              barcode:
+                type: string
+                nullable: true
+              category:
+                type: string
+              subcategory:
+                type: string
+                nullable: true
+              description:
+                type: string
+              country_of_origin:
+                type: string
+              webpage:
+                type: string
+                nullable: true
+              owning_team:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    nullable: true
+                  email:
+                    type: string
+                    nullable: true
+              product_images:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+            required:
+            - name
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorised user
+  "/api/v1/products":
+    get:
+      summary: Search for a Product
+      description: Search for a Product
+      tags:
+      - Products
+      produces:
+      - application/json
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        type: string
+      - name: q
+        in: query
+        type: string
+      responses:
+        '200':
+          description: Search results returned
 servers:
 - url: https://staging.product-safety-database.service.gov.uk
 - url: http://localhost:3000

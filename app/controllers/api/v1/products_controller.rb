@@ -1,10 +1,11 @@
 class Api::V1::ProductsController < Api::BaseController
+  include Pagy::Backend
   include ProductsHelper
   before_action :product, only: :show
   before_action :set_search_params, only: %i[index]
 
   def index
-    @results = search_for_products(20)
+    @pagy, @results = search_for_products
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)
   end
@@ -26,6 +27,6 @@ private
   end
 
   def count_to_display
-    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @results.total_count
+    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @pagy.count
   end
 end
