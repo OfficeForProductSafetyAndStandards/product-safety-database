@@ -452,6 +452,8 @@ en:
             tasks:
               check_notification_details_and_submit:
                 title: Check the notification details and submit
+              confirmation:
+                title: Notification submitted
 
   errors:
     format: "%{message}"
