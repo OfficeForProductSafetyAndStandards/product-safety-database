@@ -2,6 +2,17 @@ class Investigation < ApplicationRecord
   class Notification < Investigation
     include AASM
 
+    TASK_LIST_SECTIONS = {
+      "product" => %i[search_for_or_add_a_product],
+      "notification_details" => %i[add_notification_details add_product_safety_and_compliance_details add_product_identification_details],
+      "business_details" => %i[add_business_details],
+      "evidence" => %i[add_test_reports add_supporting_images add_supporting_documents add_risk_assessments determine_notification_risk_level],
+      "corrective_actions" => %i[record_a_corrective_action],
+      "submit" => %i[check_notification_details_and_submit]
+    }.freeze
+
+    TASK_LIST_SECTIONS_OPTIONAL = %w[evidence].freeze
+
     has_one :add_audit_activity,
             class_name: "AuditActivity::Investigation::AddCase",
             foreign_key: :investigation_id,
@@ -13,8 +24,19 @@ class Investigation < ApplicationRecord
       state :submitted
 
       event :submit do
-        transitions from: :draft, to: :submitted
+        transitions from: :draft, to: :submitted, guard: :ready_to_submit?
       end
+    end
+
+    def all_products_have_affected_units?
+      investigation_products.map { |investigation_product| investigation_product.affected_units_status.present? }.all?(true)
+    end
+
+    def ready_to_submit?
+      # Ensure all mandatory sections have been completed *and* every product has a value for "number of units affected"
+      draft? &&
+        TASK_LIST_SECTIONS.except(*TASK_LIST_SECTIONS_OPTIONAL, "submit").values.flatten.map { |task| tasks_status[task.to_s] == "completed" }.all?(true) &&
+        all_products_have_affected_units?
     end
 
     def case_type

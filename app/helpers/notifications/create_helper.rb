@@ -2,7 +2,7 @@ module Notifications
   module CreateHelper
     def sections_complete
       tasks_status = @notification.tasks_status
-      Notifications::CreateController::TASK_LIST_SECTIONS.map { |_section, tasks|
+      Investigation::Notification::TASK_LIST_SECTIONS.map { |_section, tasks|
         complete = tasks.map { |task|
           tasks_status[task.to_s] == "completed" ? 1 : 0
         }.exclude?(0)
@@ -11,7 +11,7 @@ module Notifications
     end
 
     def task_status(task)
-      optional_tasks = Notifications::CreateController::TASK_LIST_SECTIONS.slice(*Notifications::CreateController::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
+      optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
       previous_task = TaskListService.previous_task(task:, all_tasks: wizard_steps, optional_tasks:)
 
       if %w[in_progress completed].include?(@notification.tasks_status[task.to_s])
