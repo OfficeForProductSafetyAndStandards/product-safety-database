@@ -132,6 +132,6 @@ private
   end
 
   def count_to_display
-    params[:q].blank? ? Business.without_online_marketplaces.count : @pagy.count
+    params.empty? ? Business.without_online_marketplaces.count : @pagy.count
   end
 end
