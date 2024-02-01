@@ -1,4 +1,4 @@
-module SupportPortal
+module ReportPortal
   module SentryConfigurationConcern
     extend ActiveSupport::Concern
 
