@@ -1,5 +1,5 @@
-module SupportPortal
-  module SentryConfigurationConcern
+module ReportPortal
+  module ReportingSentryConfigurationConcern
     extend ActiveSupport::Concern
 
     def set_sentry_context

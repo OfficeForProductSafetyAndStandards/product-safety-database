@@ -1,5 +1,5 @@
-module SupportPortal
-  module HttpAuthConcern
+module ReportPortal
+  module ReportingHttpAuthConcern
     extend ActiveSupport::Concern
 
     included do

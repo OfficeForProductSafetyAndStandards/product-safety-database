@@ -5,7 +5,7 @@
 #
 # Only one action in controller can be protected by secondary authentication.
 module ReportPortal
-  module SecondaryAuthenticationConcern
+  module ReportingSecondaryAuthenticationConcern
     extend ActiveSupport::Concern
 
     def require_secondary_authentication(redirect_to: request.fullpath)

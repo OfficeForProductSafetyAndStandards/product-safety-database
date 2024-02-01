@@ -1,8 +1,8 @@
 module ReportPortal
   class ApplicationController < ActionController::Base
-    include HttpAuthConcern
-    include SecondaryAuthenticationConcern
-    include SentryConfigurationConcern
+    include ReportingHttpAuthConcern
+    include ReportingSecondaryAuthenticationConcern
+    include ReportingSentryConfigurationConcern
 
     protect_from_forgery with: :exception
     before_action :authenticate_user!
