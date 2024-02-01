@@ -311,10 +311,20 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_content("You have completed 5 of 6 sections.")
 
     click_link "Check the notification details and submit"
+
+    expect(page).to have_content("You cannot submit this notification because some products don't have a value for \"number of units affected\".")
+
+    click_link "Change number of units affected"
+
+    choose "Exact number"
+    fill_in "number-of-affected-units-form-exact-units-field", with: "1000"
+    click_button "Save"
+    click_button "Save and complete tasks in this section"
+
+    click_link "Check the notification details and submit"
+
     click_button "Submit notification"
 
-    # TODO(ruben): change this once the confirmation page is ready
-    expect(page).to have_selector(:id, "task-list-5-0-status", text: "Completed")
-    expect(page).to have_content("You have completed 6 of 6 sections.")
+    expect(page).to have_content("Notification submitted")
   end
 end
