@@ -115,6 +115,8 @@ module Notifications
           primary_hazard: @notification.hazard_type,
           primary_hazard_description: @notification.hazard_description,
           noncompliance_description: @notification.non_compliant_reason,
+          is_from_overseas_regulator: @notification.is_from_overseas_regulator,
+          overseas_regulator_country: @notification.overseas_regulator_country,
           add_reference_number: @notification.complainant_reference.present? ? true : nil,
           reference_number: @notification.complainant_reference
         )
@@ -216,10 +218,18 @@ module Notifications
               silent: true
             )
           end
+          ChangeNotificationOverseasRegulator.call!(
+            notification: @notification,
+            is_from_overseas_regulator: add_product_safety_and_compliance_details_params[:is_from_overseas_regulator],
+            overseas_regulator_country: add_product_safety_and_compliance_details_params[:overseas_regulator_country],
+            user: current_user,
+            silent: true
+          )
           ChangeNotificationReferenceNumber.call!(
             notification: @notification,
             reference_number: add_product_safety_and_compliance_details_params[:add_reference_number] ? add_product_safety_and_compliance_details_params[:reference_number] : nil,
-            user: current_user
+            user: current_user,
+            silent: true
           )
         else
           return render_wizard
@@ -566,11 +576,7 @@ module Notifications
         elsif params[:entity_id].present?
           # Attach an existing PRISM risk assessment
           prism_risk_assessment = PrismRiskAssessment.find(params[:entity_id])
-          AddPrismRiskAssessmentToNotification.call!(
-            notification: @notification,
-            product: @investigation_product.product,
-            prism_risk_assessment:
-          )
+          AddPrismRiskAssessmentToNotification.call!(notification: @notification, product: @investigation_product.product, prism_risk_assessment:)
           redirect_to notification_create_path(@notification, id: "add_risk_assessments")
         end
       end
@@ -617,6 +623,7 @@ module Notifications
             duration: @corrective_action_form.duration,
             geographic_scopes: @corrective_action_form.geographic_scopes,
             details: @corrective_action_form.details,
+            related_file: @corrective_action_form.related_file,
             document: @corrective_action_form.document,
             changes: @corrective_action_form.changes,
             user: current_user,
@@ -638,10 +645,7 @@ module Notifications
       when :add_risk_assessments
         @prism_associated_investigation = @notification.prism_associated_investigations.find(params[:entity_id])
         if request.delete?
-          RemovePrismRiskAssessmentFromNotification.call!(
-            notification: @notification,
-            prism_risk_assessment: @prism_associated_investigation.prism_risk_assessment
-          )
+          RemovePrismRiskAssessmentFromNotification.call!(notification: @notification, prism_risk_assessment: @prism_associated_investigation.prism_risk_assessment)
           redirect_to notification_create_path(@notification, id: "add_risk_assessments")
         else
           render :remove_prism_risk_assessment
@@ -738,7 +742,7 @@ module Notifications
     end
 
     def add_product_safety_and_compliance_details_params
-      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :add_reference_number, :reference_number, :draft)
+      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :is_from_overseas_regulator, :overseas_regulator_country, :add_reference_number, :reference_number, :draft)
     end
 
     def number_of_affected_units_params

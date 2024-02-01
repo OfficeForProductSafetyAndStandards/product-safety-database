@@ -16,7 +16,7 @@ class ChangeNotificationOverseasRegulator
       create_audit_activity_for_overseas_regulator_changed
     end
 
-    send_notification_email(notification, user)
+    send_notification_email(notification, user) unless context.silent
   end
 
 private

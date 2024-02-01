@@ -3,6 +3,10 @@ class Business < ApplicationRecord
   include Documentable
   include AttachmentConcern
 
+  BUSINESS_TYPES = %w[
+    retailer online_seller online_marketplace manufacturer exporter importer fulfillment_house distributor authorised_representative responsible_person
+  ].freeze
+
   validates :trading_name, presence: true
 
   has_many_attached :documents

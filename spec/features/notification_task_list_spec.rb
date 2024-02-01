@@ -116,6 +116,11 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       fill_in "Provide additional information about the product hazard", with: "Fake description"
     end
 
+    within_fieldset "Was the safety issue reported by an overseas regulator?" do
+      choose "Yes"
+      select "France", from: "Country"
+    end
+
     within_fieldset "Do you want to add your own reference number?" do
       choose "Yes"
       fill_in "Reference number", with: "123456"
@@ -304,5 +309,12 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
     expect(page).to have_content("You have completed 5 of 6 sections.")
+
+    click_link "Check the notification details and submit"
+    click_button "Submit notification"
+
+    # TODO(ruben): change this once the confirmation page is ready
+    expect(page).to have_selector(:id, "task-list-5-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 6 of 6 sections.")
   end
 end

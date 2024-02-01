@@ -1,0 +1,5 @@
+<%= govukCheckboxes(
+  key: "",
+  form: form,
+  items: all_countries_with_uk_first.map { |country| { key: country[0].parameterize.underscore.to_sym, text: country[0], value: true } }
+) %>

@@ -27,6 +27,12 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= f.govuk_radio_buttons_fieldset :is_from_overseas_regulator, legend: { text: "Was the safety issue reported by an overseas regulator?", size: "m" } do %>
+        <%= f.govuk_radio_button :is_from_overseas_regulator, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_collection_select :overseas_regulator_country, countries_options, :id, :name, label: { text: "Country" } %>
+        <% end %>
+        <%= f.govuk_radio_button :is_from_overseas_regulator, false, label: { text: "No" } %>
+      <% end %>
       <%= f.govuk_radio_buttons_fieldset :add_reference_number, legend: { text: "Do you want to add your own reference number?", size: "m" }, hint: { text: "The reference number might be from a different internal system for your notification or a global identifier for multiple systems. It's searchable on the PSD notification search page and can be added or edited later." } do %>
         <%= f.govuk_radio_button :add_reference_number, true, label: { text: "Yes" }, link_errors: true do %>
           <%= f.govuk_text_field :reference_number, label: { text: "Reference number" } %>

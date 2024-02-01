@@ -17,6 +17,25 @@ module BusinessesHelper
 
     query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
 
+    business_types = []
+
+    Business::BUSINESS_TYPES.each do |business_type|
+      business_types << business_type if @search.send(business_type)
+    end
+
+    query = query.where(investigation_businesses: { relationship: business_types }) unless business_types.empty?
+
+    selected_countries = []
+
+    Country.all.each do |country|
+      selected_countries << country[1] if @search.send(country[0].parameterize.underscore)
+    end
+
+    unless selected_countries.empty?
+      primary_location_ids = Business.all.map(&:primary_location).compact.pluck(:id)
+      query = query.where(locations: { id: primary_location_ids, country: selected_countries })
+    end
+
     case @search.case_owner
     when "me"
       query = query.where(users: { id: user.id })
@@ -33,11 +52,11 @@ module BusinessesHelper
   def child_records(for_export)
     return %i[investigations locations contacts] if for_export
 
-    [:online_marketplace, { investigations: %i[owner_user owner_team] }]
+    [:online_marketplace, :locations, { investigations: %i[owner_user owner_team] }]
   end
 
   def business_export_params
-    params.permit(:q)
+    params.permit(:q, *Business::BUSINESS_TYPES.map(&:to_sym), *Country.all.map { |country| country[0].parameterize.underscore.to_sym })
   end
 
   def sorting_params
