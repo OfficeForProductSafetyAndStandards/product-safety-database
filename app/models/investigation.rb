@@ -121,7 +121,7 @@ class Investigation < ApplicationRecord
   end
 
   def non_owner_teams_with_access
-    (teams_with_read_only_access.or(teams_with_edit_access)).order(:name) - [owner.team]
+    teams_with_read_only_access.or(teams_with_edit_access).order(:name) - [owner.team]
   end
 
   def non_owner_collaborators_with_access
