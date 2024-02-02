@@ -121,7 +121,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :notifications, param: :pretty_id, only: %i[index] do
+    resources :notifications, param: :pretty_id, only: %i[index show] do
+      member do
+        get :access, to: "notifications#access"
+      end
       scope module: :notifications do
         resources :create, only: %i[index show update] do
           collection do
