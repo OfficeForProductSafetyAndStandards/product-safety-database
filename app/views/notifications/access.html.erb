@@ -1,0 +1,43 @@
+<%= page_title("Manage notification and team access") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @notification.user_title %></span>
+      Manage notification and team access
+    </h1>
+    <p class="govuk-body">Reassign the notification to a specific team or individual and adjust their editing permissions. Notification owners have the exclusive ability to add or remove teams, manage team permissions, and reassign the notification owner.</p>
+    <%=
+      govuk_table do |table|
+        table.with_head do |head|
+          head.with_row do |row|
+            row.with_cell(text: "Team")
+            row.with_cell(text: "Individual")
+            row.with_cell(text: "Permission level")
+            row.with_cell(text: "Actions")
+          end
+        end
+        table.with_body do |body|
+          body.with_row do |row|
+            row.with_cell(text: @notification.owner_team.name)
+            row.with_cell(text: @notification.owner_user&.name)
+            row.with_cell(text: govuk_tag(text: "Notification owner", colour: "green").html_safe)
+            row.with_cell(text: "<a href=\"#{new_investigation_ownership_path(@notification)}\" class=\"govuk-link\">Change</a>".html_safe)
+          end
+          @notification.non_owner_collaborators_with_access.each do |collaborator|
+            body.with_row do |row|
+              row.with_cell(text: collaborator.collaborator.name)
+              row.with_cell(text: "")
+              row.with_cell(text: collaborator_access(collaborator))
+              row.with_cell(text: "<a href=\"#{edit_investigation_collaborator_path(@notification, collaborator.id)}\" class=\"govuk-link\">Change</a>".html_safe)
+            end
+          end
+        end
+      end
+    %>
+    <div class="govuk-button-group">
+      <%= govuk_button_link_to "Add team", new_investigation_collaborator_path(@notification) %>
+      <p class="govuk-body"><a href="<%= notification_path(@notification) %>" class="govuk-link">Return to notification overview</a></p>
+    </div>
+  </div>
+</div>

@@ -690,8 +690,7 @@ module Notifications
     end
 
     def disallow_changing_submitted_notification
-      # TODO(ruben): redirect to view notification page once ready
-      redirect_to notifications_path unless @notification.draft?
+      redirect_to notification_path(@notification) unless @notification.draft?
     end
 
     def set_steps

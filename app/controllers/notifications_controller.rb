@@ -4,6 +4,7 @@ class NotificationsController < ApplicationController
 
   before_action :set_search_params, only: %i[index]
   before_action :set_last_case_view_cookie, only: %i[index]
+  before_action :set_notification, except: %i[index]
 
   breadcrumb "cases.label", :your_cases_investigations
 
@@ -22,6 +23,12 @@ class NotificationsController < ApplicationController
     end
   end
 
+  # GET /notifications/:pretty_id
+  def show; end
+
+  # GET /notifications/:pretty_id/access
+  def access; end
+
 private
 
   def set_last_case_view_cookie
@@ -38,5 +45,9 @@ private
 
   def default_params
     params["case_statuses"] == %w[open closed] && params[:q].blank?
+  end
+
+  def set_notification
+    @notification = Investigation::Notification.includes(:creator_user, :creator_team, :owner_user, :owner_team).find_by!(pretty_id: params[:pretty_id])
   end
 end
