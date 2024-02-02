@@ -15,6 +15,11 @@
           <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
         </ul>
       <% end %>
+      <% if @test_result.date.present? %>
+        <%= govuk_inset_text do %>
+          This test report is marked as <strong><%= "not" if @test_result.tso_certificate_issue_date.blank? %> being funded under the <abbr>OPSS</abbr> sampling protocol</strong>. If this is incorrect, <a href="<%= remove_with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @test_result.investigation_product.id, entity_id: @test_result.id) %>" class="govuk-link">remove this test report</a> and create a new one.
+        <% end %>
+      <% end %>
       <%= f.govuk_collection_select :legislation, legislation_options, :id, :name, label: { text: "Under which legislation?", size: "m" }, hint: { text: "Select the relevant legislation from the list." } %>
       <%= f.govuk_text_field :standards_product_was_tested_against, label: { text: "Which standard was the product tested against?", size: "m" }, hint: { text: "For example, EN71. Use a comma to separate multiple standards." } %>
       <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>

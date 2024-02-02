@@ -12,7 +12,7 @@
           @existing_test_results.each do |test_result|
             summary_list.with_row do |row|
               row.with_key(text: "#{test_result.document.blob&.filename || 'No document'}<br>#{test_result.investigation_product.product.decorate.name_with_brand}".html_safe)
-              row.with_action(text: "Change", href: with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: test_result.investigation_product.id, entity_id: test_result.id), visually_hidden_text: "test report")
+              row.with_action(text: "Change", href: with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: test_result.investigation_product.id, entity_id: test_result.id, opss_funded: false), visually_hidden_text: "test report")
               row.with_action(text: "Remove", href: remove_with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: test_result.investigation_product.id, entity_id: test_result.id), visually_hidden_text: "test report")
             end
           end
