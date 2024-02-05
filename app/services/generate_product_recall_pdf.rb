@@ -111,6 +111,6 @@ private
     return "N/A" if params["online_marketplace"].nil?
     return "No" unless params["online_marketplace"]
 
-    "The listing has been removed by the online marketplace - #{params['other_marketplace_name'].presence || params['online_marketplace_id']}"
+    params['other_marketplace_name'].presence || params['online_marketplace_id']
   end
 end
