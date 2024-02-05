@@ -1,4 +1,4 @@
-<%= page_title @product.retired? ? "Retired product record" : "Product - #{@product.name}" %>
+<%= page_title @product.retired? ? "Retired product record" : "Product - #{@product.name_with_brand}" %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
     <span class="govuk-caption-m">&nbsp;</span>
@@ -48,7 +48,7 @@
     <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The product record</h2>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h3 class="govuk-heading-m" data-cy="product-name"><%= @product.name %></h3>
+        <h3 class="govuk-heading-m" data-cy="product-name"><%= @product.name_with_brand %></h3>
       </div>
     </div>
     <div class="govuk-grid-row">
