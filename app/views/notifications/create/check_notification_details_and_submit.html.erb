@@ -35,7 +35,7 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Notification summary")
-          row.with_value(text: @notification.description || "Not provided")
+          row.with_value(text: @notification.description || "Not provided", classes: "opss-text-limit-scroll-s")
           row.with_action(text: "Change", href: wizard_path(:add_notification_details), visually_hidden_text: "notification summary")
         end
         summary_list.with_row do |row|

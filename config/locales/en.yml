@@ -1063,6 +1063,8 @@ en:
   business:
     type:
       retailer: "Retailer"
+      online_seller: "Online seller"
+      online_marketplace: "Online marketplace"
       manufacturer: "Manufacturer"
       exporter: "Exporter"
       importer: "Importer"
