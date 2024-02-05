@@ -242,14 +242,12 @@ RSpec.feature "notification export", :with_opensearch, :with_stubbed_antivirus, 
     it "does not show the export link" do
       expand_help_details
       expect(page).to have_link("XLSX (spreadsheet)")
-      expect(page).to have_link("request the list")
 
       fill_in "Search", with: "unsuccesfulsearchquery"
       click_button "Submit search"
 
       expand_help_details
       expect(page).not_to have_link("XLSX (spreadsheet)")
-      expect(page).not_to have_link("request the list")
     end
   end
 

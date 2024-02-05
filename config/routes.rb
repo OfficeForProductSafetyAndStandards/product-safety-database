@@ -112,6 +112,10 @@ Rails.application.routes.draw do
     resource :notifications, only: [] do
       resource :search, only: :show
 
+      get "your-notifications", to: "notifications#your_notifications", as: "your"
+      get "team-notifications", to: "notifications#team_notifications", as: "team"
+      get "assigned-notifications", to: "notifications#assigned_notifications", as: "assigned"
+
       scope module: :notifications do
         resources :create, only: %i[index] do
           collection do
@@ -121,10 +125,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :notifications, param: :pretty_id, only: %i[index show] do
+    resources :notifications, param: :pretty_id, only: %i[index show destroy] do
       member do
         get :access, to: "notifications#access"
+        get :delete, to: "notifications#delete"
       end
+
       scope module: :notifications do
         resources :create, only: %i[index show update] do
           collection do

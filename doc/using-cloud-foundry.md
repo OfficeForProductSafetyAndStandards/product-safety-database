@@ -34,7 +34,7 @@ cf conduit NEW_DB_NAME -- psql < psd-staging.sql
 cf unbind-service PR_APP_NAME OLD_DB_NAME
 cf bind-service PR_APP_NAME NEW_DB_NAME
 cf restage PR_APP_NAME
-cf ssh PR_APP_NAME -> cd app -> bin/tll bin/rake opensearch:index
+cf ssh PR_APP_NAME -> cd app -> bin/tll bin/rake notifications:index
 ```
 
 #### List apps
