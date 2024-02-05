@@ -38,7 +38,7 @@ class GenerateProductRecallPdf
       [{ content: "Aspect", font_style: :bold }, { content: "Details", font_style: :bold }],
       [
         { content: "Images", font_style: :bold },
-        pdf.make_cell(image_rows, width: pdf.bounds.width - 80)
+        pdf.make_cell(image_rows, width: pdf.bounds.width - 120)
       ],
       [{ content: "Alert Number", font_style: :bold }, params["alert_number"]],
       [{ content: "Product Type", font_style: :bold }, params["product_type"]],
@@ -52,7 +52,7 @@ class GenerateProductRecallPdf
       [{ content: "Corrective Measures", font_style: :bold }, params["corrective_actions"]],
       [{ content: "Online Marketplace", font_style: :bold }, online_marketplace],
       [{ content: "Notifier", font_style: :bold }, params["notified_by"]],
-    ].compact, width: pdf.bounds.width, column_widths: { 0 => 80 })
+    ].compact, width: pdf.bounds.width, column_widths: { 0 => 120 })
     pdf.repeat :all do
       pdf.bounding_box [pdf.bounds.left, pdf.bounds.bottom + 25], width: pdf.bounds.width do
         pdf.text_box 'The OPSS Product Safety Alerts, Reports and Recalls Site can be accessed at the following link: <color rgb="#0000FF"><u><link href="https://www.gov.uk/guidance/product-recalls-and-alerts">https://www.gov.uk/guidance/product-recalls-and-alerts</link></u></color>', inline_format: true
