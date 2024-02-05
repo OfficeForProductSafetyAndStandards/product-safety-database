@@ -36,7 +36,10 @@ class GenerateProductRecallPdf
     pdf.table([
       [{ content: params["pdf_title"], colspan: 2, font_style: :bold, size: 14 }],
       [{ content: "Aspect", font_style: :bold }, { content: "Details", font_style: :bold }],
-      *image_rows,
+      [
+        { content: "Images", font_style: :bold },
+        pdf.make_cell(image_rows, width: pdf.bounds.width - 80)
+      ],
       [{ content: "Alert Number", font_style: :bold }, params["alert_number"]],
       [{ content: "Product Type", font_style: :bold }, params["product_type"]],
       [{ content: "Product Identifiers", font_style: :bold }, params["product_identifiers"]],
@@ -70,9 +73,11 @@ private
 
   def image_rows
     if params["product_image_ids"].present?
-      rows = [[{ content: "Images", font_style: :bold, rowspan: params["product_image_ids"].length }, image_cell(params["product_image_ids"].shift)]]
-      params["product_image_ids"].each do |image|
-        rows << [image_cell(image)]
+
+      rows = []
+      image_ids = params["product_image_ids"].reject(&:blank?)
+      image_ids.each do |image_id|
+        rows << [image_cell(image_id)]
       end
       rows
     end
@@ -80,11 +85,10 @@ private
 
   def image_cell(id)
     image_upload = ImageUpload.find_by(id:, upload_model: product)
-
     return if image_upload.blank?
 
     image_upload.file_upload.blob.open do |file|
-      { image: File.open(file.path), fit: [200, 200] }
+      { image: File.open(file.path), fit: [200, 200], borders: [] }
     end
   end
 
