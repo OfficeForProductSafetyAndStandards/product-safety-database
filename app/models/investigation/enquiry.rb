@@ -23,5 +23,9 @@ class Investigation < ApplicationRecord
     def case_created_audit_activity_class
       AuditActivity::Investigation::AddEnquiry
     end
+
+    def submitted?
+      true
+    end
   end
 end

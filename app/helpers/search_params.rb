@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class SearchParams
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -46,6 +44,7 @@ class SearchParams
   attribute :hazard_type
   attribute :category
   attribute :page_name
+  attribute :state
   attribute :retired_status
   attribute :created_from_date, :govuk_date
   attribute :created_to_date, :govuk_date

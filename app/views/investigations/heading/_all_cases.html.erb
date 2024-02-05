@@ -1,24 +1,9 @@
 <%= render "incomplete_bulk_products_upload_notification" %>
-
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
       All notifications &ndash; Search
     </h1>
-    <p class="govuk-body opss-secondary-text">
-      Search all notifications in the Product Safety Database (<%= psd_abbr title: false %>).
-    </p>
-    <%= govuk_details(summary_text: "Help with the notifications search") do %>
-      <p class="govuk-body">
-          <span id="search-hint">You can search for a notification using a notification number or the keywords that describe it and by filtering the results.</span> You can also filter all notification records without a notification number or a keyword search.
-      </p>
-      <% if policy(Investigation).export? && @investigations.any? %>
-        <p class="govuk-body">
-            When viewing a list of search results you can <%= link_to  "request the list", generate_notification_exports_path(params: notification_export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
-        </p>
-      <% end %>
-    <% end %>
   </div>
-
   <%= render "investigations/create_a_notification_link" %>
 </div>

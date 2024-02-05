@@ -351,6 +351,8 @@ module InvestigationsHelper
       query = query.where("investigations.created_at <= ?", @search.created_to_date.at_end_of_day)
     end
 
+    query = query.where(state: @search.state) if @search.state.present?
+
     if ids_only
       query.distinct.pluck(:id)
     else

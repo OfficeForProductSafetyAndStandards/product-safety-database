@@ -14,6 +14,10 @@ class InvestigationPolicy < ApplicationPolicy
     record.teams_with_edit_access.include?(user.team) || user.has_role?(:super_user)
   end
 
+  def delete?(user: @user)
+    record.draft? && (record.owner == user || user.has_role?(:super_user))
+  end
+
   # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),
   # and whether or not it is 'restricted'.
   def change_owner_or_status?(user: @user)

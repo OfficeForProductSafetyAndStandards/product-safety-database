@@ -57,7 +57,7 @@ jobs:
           cf bind-service psd-web psd-database
 
           cf restage psd-web
-          cf run-task psd-web --command 'bin/rails db:migrate opensearch:index' -k 2G --wait
+          cf run-task psd-web --command 'bin/rails db:migrate notifications:index' -k 2G --wait
 
           cf delete-service -f psd-database-old
 
