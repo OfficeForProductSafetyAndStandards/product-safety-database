@@ -216,7 +216,7 @@
         end
       end
     %>
-    <%= govuk_button_link_to "Add evidence", investigation_supporting_information_index_path(@notification), secondary: true %>
+    <%= govuk_button_link_to "Add evidence", investigation_supporting_information_index_path(@notification, anchor: "risk-assessments"), secondary: true %>
     <h2 class="govuk-heading-m">Corrective actions</h2>
     <% @notification.corrective_actions.includes(investigation_product: :product).decorate.each do |corrective_action| %>
       <%=
@@ -268,5 +268,6 @@
         )
       %>
     <% end %>
+    <%= govuk_button_link_to "Add corrective action", new_investigation_corrective_action_path(@notification), secondary: true %>
   </div>
 </div>
