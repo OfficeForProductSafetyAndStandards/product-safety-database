@@ -268,7 +268,7 @@ module InvestigationsHelper
     end
   end
 
-  def search_for_investigations(user = current_user, ids_only: false)
+  def search_for_investigations(user = current_user, ids_only: false, page_param: :page)
     query = Investigation.not_deleted.includes(:owner_user, :owner_team, :creator_user, :creator_team, :collaboration_accesses, :activities)
 
     if @search.q.present?
@@ -356,7 +356,7 @@ module InvestigationsHelper
     if ids_only
       query.distinct.pluck(:id)
     else
-      pagy(query.order(@search.sorting_params))
+      pagy(query.order(@search.sorting_params), page_param:)
     end
   end
 

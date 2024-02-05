@@ -36,7 +36,7 @@ class NotificationsController < ApplicationController
         "page_name" => "your_cases"
       }
     )
-    @submitted_pagy, @submitted_answer = search_for_investigations
+    @submitted_pagy, @submitted_answer = search_for_investigations(page_param: :submitted_page)
     @submitted_count = @submitted_pagy.count
     @submitted_notifications = InvestigationDecorator
                                  .decorate_collection(@submitted_answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
@@ -49,7 +49,7 @@ class NotificationsController < ApplicationController
         "page_name" => "your_cases"
       }
     )
-    @draft_pagy, @draft_answer = search_for_investigations
+    @draft_pagy, @draft_answer = search_for_investigations(page_param: :draft_page)
     @draft_count = @draft_pagy.count
     @draft_notifications = InvestigationDecorator
                              .decorate_collection(@draft_answer.includes({ owner_user: :organisation, owner_team: :organisation }, :products))
