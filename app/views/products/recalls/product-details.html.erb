@@ -26,6 +26,7 @@
           label: { text: "Product type", size: "s" },
           options: { selected: @product.category }
       %>
+      <%= form.govuk_text_field :subcategory, label: { text: "Subcategory", size: "s" }, value: @product&.subcategory %>
       <%= form.govuk_text_area :product_identifiers, label: { text: "Product identifiers", size: "s" }, hint: { text: "This can include barcodes, model names, SKU numbers, article numbers and various serial numbers such as Amazon ID (ASIN) and eBay ID numbers." }, value: @product.product_code, rows: 10, max_chars: 10_000 %>
       <%= form.govuk_text_area :product_description, label: { text: "Product description", size: "s" }, value: @product.unformatted_description, rows: 10, max_chars: 10_000 %>
       <%= form.govuk_collection_select :country_of_origin,

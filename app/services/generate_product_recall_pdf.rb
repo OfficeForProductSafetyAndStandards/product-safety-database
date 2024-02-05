@@ -41,7 +41,7 @@ class GenerateProductRecallPdf
         pdf.make_cell(image_rows, width: pdf.bounds.width - 120)
       ],
       [{ content: "Alert Number", font_style: :bold }, params["alert_number"]],
-      [{ content: "Product Type", font_style: :bold }, params["product_type"]],
+      [{ content: "Product Type", font_style: :bold }, [params["product_type"], params["subcategory"]].compact.join(' - ') ],
       [{ content: "Product Identifiers", font_style: :bold }, params["product_identifiers"]],
       [{ content: "Product Description", font_style: :bold }, params["product_description"]],
       [{ content: "Country of Origin", font_style: :bold }, country_from_code(params["country_of_origin"])],
