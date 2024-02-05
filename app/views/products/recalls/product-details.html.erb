@@ -94,7 +94,17 @@
         <% end %>
         <%= form.govuk_radio_button :online_marketplace, false, label: { text: "No" } %>
       <% end %>
-      <%= form.govuk_text_field :notified_by, label: { text: "Notified by", size: "s" } %>
+      <%= form.govuk_collection_radio_buttons :notified_by,
+          [
+            OpenStruct.new(id: "OPSS Enforcement", name: "OPSS Enforcement"),
+            OpenStruct.new(id: "Local authority trading standards", name: "Local authority trading standards"),
+            OpenStruct.new(id: "HSE", name: "HSE")
+          ],
+          :id,
+          :name,
+          legend: { text: "Notified by", size: "s" },
+          small: true
+      %>
       <div class="govuk-button-group">
         <%= form.govuk_submit("Continue") %>
       </div>
