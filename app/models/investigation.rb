@@ -86,7 +86,7 @@ class Investigation < ApplicationRecord
   has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
   has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
-  has_many :risk_assessments
+  has_many :risk_assessments, dependent: :destroy
   has_many :prism_associated_investigations
   has_many :prism_risk_assessments, through: :prism_associated_investigations
   has_many :accidents
