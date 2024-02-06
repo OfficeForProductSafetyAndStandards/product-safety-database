@@ -52,5 +52,5 @@ applications:
       command: RAILS_MAX_THREADS=((worker-max-threads)) bin/sidekiq -C config/sidekiq.yml
       health-check-type: process
       instances: 1
-      memory: 500M
+      memory: 1G
       disk_quota: 1.5G
