@@ -82,18 +82,18 @@
     <% unless @product.retired? %>
       <% if @product.owning_team.nil? %>
         <% if policy(@product).update? %>
-          <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+          <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
             This product record currently has no owner.
           </p>
         <% end %>
       <% elsif @product.owning_team == current_user.team %>
         <% if policy(@product).update? %>
-          <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+          <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
             This product record is currently owned by your team.
           </p>
         <% end %>
       <% else %>
-        <p class="govuk-!-font-size-14 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+        <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
           This product record is currently owned by <%= @product.owning_team.name %>. You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries. You can still add this product record to your notification.
         </p>
       <% end %>

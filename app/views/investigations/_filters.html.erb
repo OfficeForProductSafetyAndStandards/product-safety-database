@@ -32,7 +32,7 @@
 
     <% if policy(Investigation).export? && @investigations.any? %>
       <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
-        <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
+        <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-16">
             Request this list as a downloadable <br class="opss-br-desktop"><%= link_to generate_notification_exports_path(params: notification_export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
         </p>
       </div>

@@ -66,6 +66,22 @@ RSpec.describe ProductDecorator, :with_stubbed_opensearch do
     include_examples "with a blank description", :product, :decorated_product
   end
 
+  describe "#unformatted_description" do
+    include_examples "with a blank description", :product, :decorated_product
+
+    context "when the product has a description" do
+      let(:product) { build(:product, description: "A description") }
+
+      it "returns the unformatted description" do
+        expect(decorated_product.unformatted_description).to eq("A description")
+      end
+
+      it "returns the formatted description as HTML" do
+        expect(decorated_product.description).to eq("<p>A description</p>")
+      end
+    end
+  end
+
   describe "#subcategory_and_category_label" do
     context "when both the Product sub-category and and category are present" do
       it "combines Product sub-category and product category" do
