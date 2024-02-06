@@ -80,7 +80,7 @@ module Prism
     end
 
     def consider_the_nature_of_the_risk_params
-      allowed_params = params.require(:evaluation).permit(:number_of_products_expected_to_change, :uncertainty_level_implications_for_risk_management, :comparable_risk_level, :multiple_casualties, :significant_risk_differential, :people_at_increased_risk, :people_at_increased_risk_details, :relevant_action_by_others, :factors_to_take_into_account, :factors_to_take_into_account_details, :draft, other_types_of_harm: [])
+      allowed_params = params.require(:evaluation).permit(:number_of_products_expected_to_change, :uncertainty_level_implications_for_risk_management, :comparable_risk_level, :significant_risk_differential, :people_at_increased_risk, :people_at_increased_risk_details, :relevant_action_by_others, :factors_to_take_into_account, :factors_to_take_into_account_details, :draft, other_types_of_harm: [])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
       allowed_params[:other_types_of_harm].reject!(&:blank?)
       allowed_params

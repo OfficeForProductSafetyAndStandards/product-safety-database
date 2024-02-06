@@ -16,7 +16,7 @@
         <p class="govuk-body">Overall product risk recorded in the assessment</p>
         <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
       <% end %>
-      <%= f.govuk_check_boxes_fieldset :other_types_of_harm, legend: { text: "What other types of harm could the hazard cause?", size: "m" }, hint: { text: "Select all that are applicable." } do %>
+      <%= f.govuk_check_boxes_fieldset :other_types_of_harm, legend: { text: "Could the hazard cause other types of harm?", size: "m" }, hint: { text: "Select all that are applicable." } do %>
         <%= f.govuk_check_box :other_types_of_harm, :psychological_harm, label: { text: "Psychological harm" }, link_errors: true, checked: @evaluation.other_types_of_harm.include?("psychological_harm") %>
         <%= f.govuk_check_box :other_types_of_harm, :damage_to_property, label: { text: "Damage to property" }, checked: @evaluation.other_types_of_harm.include?("damage_to_property") %>
         <%= f.govuk_check_box :other_types_of_harm, :harm_to_animals, label: { text: "Harm to animals" }, checked: @evaluation.other_types_of_harm.include?("harm_to_animals") %>
@@ -59,18 +59,6 @@
         :id,
         :name,
         legend: { text: "How does the risk level compare to that of comparable products?" },
-        bold_labels: false
-      %>
-      <%=
-        f.govuk_collection_radio_buttons :multiple_casualties,
-        [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
-        ],
-        :id,
-        :name,
-        legend: { text: "Is there potential for multiple casualties in a single incident?" },
-        hint: { text: question_hint_panel(multiple_casualties).html_safe },
         bold_labels: false
       %>
       <%=
