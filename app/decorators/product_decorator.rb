@@ -16,9 +16,8 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def unformatted_description
-    # Bypasses `FormattedDescription` for situations where
-    # we want the raw value of the field.
-    description
+    # Bypasses `FormattedDescription` for situations where we want the raw value of the field.
+    object.description
   end
 
   def details_list(date_case_closed: nil)
