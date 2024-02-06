@@ -41,7 +41,7 @@ class GenerateProductRecallPdf
         pdf.make_cell(image_rows, width: pdf.bounds.width - 120)
       ],
       [{ content: "Alert Number", font_style: :bold }, params["alert_number"]],
-      [{ content: "Product Type", font_style: :bold }, [params["product_type"], params["subcategory"]].compact.join(' - ') ],
+      [{ content: "Product Type", font_style: :bold }, [params["product_type"], params["subcategory"]].compact.join(" - ")],
       [{ content: "Product Identifiers", font_style: :bold }, params["product_identifiers"]],
       [{ content: "Product Description", font_style: :bold }, params["product_description"]],
       [{ content: "Country of Origin", font_style: :bold }, country_from_code(params["country_of_origin"])],
@@ -111,6 +111,6 @@ private
     return "N/A" if params["online_marketplace"].nil?
     return "No" unless params["online_marketplace"]
 
-    params['other_marketplace_name'].presence || params['online_marketplace_id']
+    params["other_marketplace_name"].presence || params["online_marketplace_id"]
   end
 end
