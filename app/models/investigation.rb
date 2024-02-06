@@ -55,7 +55,6 @@ class Investigation < ApplicationRecord
   has_many :correspondences, dependent: :destroy
   has_many :emails, dependent: :destroy, class_name: "Correspondence::Email"
   has_many :phone_calls, dependent: :destroy, class_name: "Correspondence::PhoneCall"
-  has_many :meetings, dependent: :destroy, class_name: "Correspondence::Meeting"
 
   has_many :tests, dependent: :destroy
   has_many :test_results, class_name: "Test::Result", dependent: :destroy
