@@ -79,7 +79,7 @@
       <%=
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
-            row.with_key(text: "What other types of harm could the hazard cause?")
+            row.with_key(text: "Could the hazard cause other types of harm?")
             row.with_value(text: other_types_of_harm(@prism_risk_assessment.evaluation.other_types_of_harm))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "what other types of harm the hazard could cause")
           end
@@ -97,11 +97,6 @@
             row.with_key(text: "How does the risk level compare to that of comparable products?")
             row.with_value(text: evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "how the risk level compares to that of comparable products")
-          end
-          summary_list.with_row do |row|
-            row.with_key(text: "Is there potential for multiple casualties in a single incident?")
-            row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.multiple_casualties))
-            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there is potential for multiple casualties in a single incident")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Is there a significant risk differential?")
