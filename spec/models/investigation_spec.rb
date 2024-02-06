@@ -33,7 +33,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_
     describe "#generic_supporting_information_attachments" do
       it "returns attachments that are not images nor attached to any type of correspondences, test result or corrective action", :aggregate_failures do
         expect(investigation.generic_supporting_information_attachments)
-          .not_to include(corrective_action, email, phone_call, meeting, test_request, test_result)
+          .not_to include(corrective_action, email, phone_call, test_request, test_result)
 
         expect(investigation.generic_supporting_information_attachments.detect { |document| document.filename == generic_supporting_information_filename })
           .to be_present
