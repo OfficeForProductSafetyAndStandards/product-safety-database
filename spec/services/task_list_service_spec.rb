@@ -3,6 +3,7 @@ require "rails_helper"
 describe TaskListService do
   describe ".previous_task" do
     subject(:result) { described_class.previous_task(task:, all_tasks:, optional_tasks:) }
+
     let(:all_tasks) { %w[read_manual setup tweak adjust frobnicate percussive_maintenance submission evaluation] }
 
     context "when there are no optional tasks" do
