@@ -121,7 +121,7 @@ jobs:
         images: 'opensearchproject/opensearch'
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
 
     - uses: actions/upload-artifact@v4
       if: failure()
