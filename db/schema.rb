@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_29_110857) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_06_141129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -393,7 +393,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_29_110857) do
     t.string "featured_in_media"
     t.string "level_of_uncertainty"
     t.string "low_likelihood_high_severity"
-    t.boolean "multiple_casualties"
     t.string "number_of_products_expected_to_change"
     t.string "other_hazards"
     t.text "other_risk_perception_matters"

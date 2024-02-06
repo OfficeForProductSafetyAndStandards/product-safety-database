@@ -209,18 +209,6 @@ module Investigations::DisplayTextHelper
     govuk_summary_list(rows:)
   end
 
-  def correspondence_summary_list(correspondence, attachments: nil)
-    rows = [
-      { key: { text: "Call with" }, value: { text: get_call_with_field(correspondence) } },
-      { key: { text: "Summary" }, value: { text: correspondence.overview } },
-      { key: { text: "Date" }, value: { text: correspondence.correspondence_date&.strftime("%d/%m/%Y") } },
-      { key: { text: "Content" }, value: { text: correspondence.details } },
-      { key: { text: "Attachments" }, value: { text: attachments } }
-    ]
-
-    govuk_summary_list(rows:)
-  end
-
   def report_summary_list(investigation)
     rows = [
       { key: { text: "Date recorded" }, value: { text: investigation.created_at.strftime("%d/%m/%Y") } },

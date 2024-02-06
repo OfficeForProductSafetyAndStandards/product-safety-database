@@ -257,8 +257,6 @@ Rails.application.routes.draw do
 
       resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
       resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }
-      resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
-
       resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
 
       resources :accident_or_incidents_type, controller: "investigations/accident_or_incidents_type", only: %i[new create]
