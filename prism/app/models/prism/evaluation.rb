@@ -74,7 +74,6 @@ module Prism
     validates :number_of_products_expected_to_change, inclusion: %w[no_changes increase fall unknown], on: :consider_the_nature_of_the_risk
     validates :uncertainty_level_implications_for_risk_management, inclusion: [true, false], on: :consider_the_nature_of_the_risk
     validates :comparable_risk_level, inclusion: %w[lower similar higher unknown], on: :consider_the_nature_of_the_risk
-    validates :multiple_casualties, inclusion: [true, false], on: :consider_the_nature_of_the_risk
     validates :significant_risk_differential, inclusion: %w[yes no not_applicable], on: :consider_the_nature_of_the_risk
     validates :people_at_increased_risk, inclusion: [true, false], on: :consider_the_nature_of_the_risk
     validates :relevant_action_by_others, inclusion: %w[yes no unknown], on: :consider_the_nature_of_the_risk

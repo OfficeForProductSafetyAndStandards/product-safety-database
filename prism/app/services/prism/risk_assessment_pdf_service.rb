@@ -113,11 +113,10 @@ module Prism
       pdf.text "Nature of risk", color: "000000", style: :bold, size: 15
       pdf.move_down 10
       pdf.table([
-        [{ content: "What other types of harm could the hazard cause?", font_style: :bold }, other_types_of_harm(prism_risk_assessment.evaluation.other_types_of_harm)],
+        [{ content: "Could the hazard cause other types of harm?", font_style: :bold }, other_types_of_harm(prism_risk_assessment.evaluation.other_types_of_harm)],
         [{ content: "Is the number of products estimated to be in use expected to change?", font_style: :bold }, evaluation_translate_simple("number_of_products_expected_to_change", @prism_risk_assessment.evaluation.number_of_products_expected_to_change)],
         [{ content: "Does the uncertainty level have implications for risk management decisions?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.uncertainty_level_implications_for_risk_management)],
         [{ content: "How does the risk level compare to that of comparable products?", font_style: :bold }, evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level)],
-        [{ content: "Is there potential for multiple casualties in a single incident?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.multiple_casualties)],
         [{ content: "Is there a significant risk differential?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.significant_risk_differential)],
         [{ content: "Are there people at increased risk?", font_style: :bold }, people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details)],
         [{ content: "Is relevant risk management action planned or underway by another MSA or other organisation?", font_style: :bold }, evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.relevant_action_by_others)],
