@@ -103,15 +103,6 @@ Start by setting up the following credentials:
     }'
 ```
 
-* To set pgHero http auth username and password for (see confluence for values):
-
-```
-    cf cups psd-pghero-env -p '{
-        "PGHERO_USERNAME": "XXX",
-        "PGHERO_PASSWORD": "XXX"
-    }'
-```
-
 * To configure Sentry (see the Sentry account section in [the root README](../README.md#sentry) to get these values):
 
 ```

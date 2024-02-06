@@ -430,8 +430,6 @@ Rails.application.routes.draw do
   # This is the page that will show for timeouts, currently showing the same as an internal error
   match "/503", to: "errors#timeout", via: :all
 
-  mount PgHero::Engine, at: "pghero"
-
   authenticated :user do
     root to: "homepage#authenticated", as: "authenticated_root"
   end
