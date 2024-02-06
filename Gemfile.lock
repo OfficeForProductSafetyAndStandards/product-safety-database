@@ -374,8 +374,6 @@ GEM
     pdf-core (0.9.0)
     pg (1.5.4)
     pg (1.5.4-x64-mingw-ucrt)
-    pghero (3.4.0)
-      activerecord (>= 6)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
@@ -737,7 +735,6 @@ DEPENDENCIES
   paper_trail
   parallel_tests (~> 4.3.0)
   pg (~> 1.5)
-  pghero (~> 3.4)
   prawn (~> 2.4)
   prawn-table (~> 0.2)
   prism!
