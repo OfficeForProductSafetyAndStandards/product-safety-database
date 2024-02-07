@@ -5,7 +5,15 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
 
   def metadata
     download_blob_to_tempfile do |file|
-      response = RestClient::Request.execute method: :post, url: Rails.application.config.antivirus_url, user: ENV["ANTIVIRUS_USERNAME"], password: ENV["ANTIVIRUS_PASSWORD"], payload: { file: }
+      uri = URI(Rails.application.config.antivirus_url)
+      req = Net::HTTP::Post.new(uri)
+      req.basic_auth(ENV["ANTIVIRUS_USERNAME"], ENV["ANTIVIRUS_PASSWORD"])
+      req.set_form([["file", File.open(file)]], "multipart/form-data")
+
+      response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+        http.request(req)
+      end
+
       body = JSON.parse(response.body)
       { safe: body["safe"] }
     end

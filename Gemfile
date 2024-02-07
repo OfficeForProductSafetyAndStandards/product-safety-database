@@ -45,7 +45,6 @@ gem "rack", "~> 2.2.8"
 gem "rails", "~> 7.0.4"
 gem "redcarpet", "~> 3.5"
 gem "redis-rails", "~> 5.0"
-gem "rest-client", "~> 2.1"
 gem "rollups"
 gem "rubyXL", "~> 3.4.25"
 gem "sassc-rails"
@@ -69,6 +68,9 @@ gem "prism", path: "prism"
 
 # OSU Support Portal engine
 gem "support_portal", path: "support_portal"
+
+# Report Portal engine
+gem "report_portal", path: "report_portal"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
@@ -114,5 +116,3 @@ group :test do
   gem "timecop", "~> 0.9"
   gem "webmock", "~> 3.19"
 end
-
-gem "report_portal", path: "report_portal"
