@@ -10,7 +10,7 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       req.basic_auth(ENV["ANTIVIRUS_USERNAME"], ENV["ANTIVIRUS_PASSWORD"])
       req.set_form([["file", File.open(file)]], "multipart/form-data")
 
-      response = Net::HTTP.start(uri.hostname, uri.port) do |http|
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: Rails.env.production?) do |http|
         http.request(req)
       end
 
