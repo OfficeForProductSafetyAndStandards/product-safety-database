@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_06_141129) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_07_112516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -571,7 +571,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_06_141129) do
     t.datetime "deleted_at", precision: nil
     t.string "name"
     t.uuid "organisation_id"
+    t.string "regulator_name"
     t.string "team_recipient_email"
+    t.string "team_type"
+    t.string "ts_acronym"
+    t.string "ts_area"
+    t.string "ts_region"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
     t.index ["name"], name: "index_teams_on_name"
