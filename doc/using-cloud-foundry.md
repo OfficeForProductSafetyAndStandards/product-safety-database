@@ -1,16 +1,16 @@
-### Cloud Foundry reference
+# Cloud Foundry reference
 
-#### Useful examples
+## Useful examples
 
 Please take a look into GitHub actions in `.github/workflows` to see how deployments are done.
 
-#### Login to CF Api
+### Login to CF Api
 
 ```
 cf login -a api.london.cloud.service.gov.uk -u some@email.com
 ```
 
-#### SSH to service and run rails console
+### SSH to service and run rails console
 
 ```
 cf ssh APP-NAME
@@ -21,7 +21,7 @@ cd app
 bin/tll bin/rails c
 ```
 
-#### Copying data from staging to review apps
+### Copying data from staging to review apps
 
 ```
 cf login -a api.london.cloud.service.gov.uk -u EMAIL
@@ -37,26 +37,26 @@ cf restage PR_APP_NAME
 cf ssh PR_APP_NAME -> cd app -> bin/tll bin/rake notifications:index
 ```
 
-#### List apps
+### List apps
 
 ```
 cf apps
 ```
 
-#### Show app details
+### Show app details
 
 ```
 cf app APP-NAME
 ```
 
-#### Show app env
+### Show app env
 
 ```
 cf env APP-NAME
 ```
 
-#### List services
+### List services
 
 ```
-cf apps
+cf services
 ```
