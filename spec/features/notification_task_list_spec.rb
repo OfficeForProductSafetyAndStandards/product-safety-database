@@ -143,8 +143,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-2-2-status", text: "Cannot start yet")
 
     click_link "Add the type and details of the business"
-    fill_in "Trading name (mandatory)", with: "Trading name"
-    fill_in "Registered or legal name", with: "Legal name"
+    fill_in "Trading name", with: "Trading name"
+    fill_in "Registered or legal name (optional)", with: "Legal name"
     click_button "Save and continue"
 
     fill_in "Address line 1", with: "123 Fake St"
