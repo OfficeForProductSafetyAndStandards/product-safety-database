@@ -16,6 +16,8 @@ class ActiveStorage::Representations::ProxyController < ActiveStorage::Represent
     http_cache_forever public: true do
       send_blob_stream @representation.image, disposition: params[:disposition]
     end
+  rescue ActiveStorage::FileNotFoundError
+    redirect_to "/404"
   end
 
 private

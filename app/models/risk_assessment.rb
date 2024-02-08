@@ -7,7 +7,7 @@ class RiskAssessment < ApplicationRecord
   belongs_to :added_by_user, class_name: :User
   belongs_to :added_by_team, class_name: :Team
 
-  has_many :risk_assessed_products
+  has_many :risk_assessed_products, dependent: :destroy
   has_many :investigation_products, through: :risk_assessed_products
 
   has_one_attached :risk_assessment_file
