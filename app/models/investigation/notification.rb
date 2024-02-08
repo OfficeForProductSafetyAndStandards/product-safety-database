@@ -5,7 +5,7 @@ class Investigation < ApplicationRecord
     TASK_LIST_SECTIONS = {
       "product" => %i[search_for_or_add_a_product],
       "notification_details" => %i[add_notification_details add_product_safety_and_compliance_details add_product_identification_details],
-      "business_details" => %i[add_business_details],
+      "business_details" => %i[add_business_details add_location add_contact],
       "evidence" => %i[add_test_reports add_supporting_images add_supporting_documents add_risk_assessments determine_notification_risk_level],
       "corrective_actions" => %i[record_a_corrective_action],
       "submit" => %i[check_notification_details_and_submit]
