@@ -17,7 +17,7 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
   def legislation
     return [] unless (legislation = metadata.dig("corrective_action", "legislation"))
 
-    legislation.to_sentence
+    legislation.is_a?(Array) ? legislation.to_sentence : legislation
   end
 
   def details
