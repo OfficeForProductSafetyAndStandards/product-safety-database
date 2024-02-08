@@ -405,10 +405,14 @@ en:
               add_product_identification_details_number_of_affected_units:
                 title: Add the number of units affected
           business_details:
-            title: Add the business in the product's supply chain
+            title: Add businesses and their roles in the supply chain
             tasks:
               add_business_details:
                 title: Add the type and details of the business
+              add_location:
+                title: Add addresses
+              add_contact:
+                title: Add contact details
           evidence:
             title: Add evidence
             tasks:

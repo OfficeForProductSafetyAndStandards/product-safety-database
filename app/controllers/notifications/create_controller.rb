@@ -109,6 +109,12 @@ module Notifications
           add_reference_number: @notification.complainant_reference.present? ? true : nil,
           reference_number: @notification.complainant_reference
         )
+      when :add_business_details
+        @add_business_details_form = AddBusinessDetailsForm.new
+      when :add_location
+        @add_location_form = AddLocationForm.new(business_id: params[:business_id])
+      when :add_contact
+        @add_contact_form = AddContactForm.new(business_id: params[:business_id])
       when :add_test_reports
         investigation_products = @notification.investigation_products
         @existing_test_results = @notification.test_results.includes(investigation_product: :product)
@@ -223,6 +229,41 @@ module Notifications
         else
           return render_wizard
         end
+      when :add_business_details
+        @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
+
+        return render_wizard unless @add_business_details_form.valid?
+
+        business = Business.new
+
+        ChangeBusinessNames.call!(
+          trading_name: @add_business_details_form.trading_name,
+          legal_name: @add_business_details_form.legal_name,
+          notification: @notification,
+          user: current_user,
+          business:
+        )
+
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user)
+
+        additional_params = { business_id: business.id }
+      when :add_location
+        @add_location_form = AddLocationForm.new(add_location_params)
+
+        return render_wizard unless @add_location_form.valid?
+
+        Location.create!(
+          name: "Registered office address",
+          address_line_1: @add_location_form.address_line_1,
+          address_line_2: @add_location_form.address_line_2,
+          city: @add_location_form.city,
+          county: @add_location_form.county,
+          country: @add_location_form.country,
+          postal_code: @add_location_form.postal_code,
+          business_id: @add_location_form.business_id
+        )
+
+        additional_params = { business_id: @add_location_form.business_id }
       when :add_test_reports
         return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
         return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
@@ -385,6 +426,9 @@ module Notifications
         else
           render_wizard
         end
+      elsif additional_params
+        @notification.save(context: step)
+        redirect_to wizard_path(@next_step, additional_params)
       else
         render_wizard(@notification, { context: step })
       end
@@ -792,6 +836,14 @@ module Notifications
 
     def corrective_action_taken_params
       params.require(:corrective_action_taken_form).permit(:corrective_action_taken_yes_no, :corrective_action_taken_no_specific, :corrective_action_not_taken_reason)
+    end
+
+    def add_business_details_params
+      params.require(:add_business_details_form).permit(:trading_name, :legal_name)
+    end
+
+    def add_location_params
+      params.require(:add_location_form).permit(:address_line_1, :address_line_2, :city, :county, :postal_code, :country, :business_id)
     end
 
     def record_a_corrective_action_params

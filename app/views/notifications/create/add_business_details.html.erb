@@ -2,13 +2,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= form_with model: @add_business_details_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
         <%= t("notifications.create.index.sections.business_details.tasks.add_business_details.title") %>
       </h1>
-      <p class="govuk-body">This page intentionally left blank.</p>
-      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+      <%= f.govuk_text_field :trading_name, label: { text: "Trading name (mandatory)" }, hint: { text: "The name the business is known as." }, width: "two-thirds"  %>
+      <%= f.govuk_text_field :legal_name, label: { text: "Registered or legal name" }, hint: { text: "As it appears on Companies House for UK businesses (usually ends in 'Ltd' or 'Limited')." }, width: "two-thirds"  %>
+      <%= f.govuk_submit "Save and continue" %>
     <% end %>
   </div>
 </div>
