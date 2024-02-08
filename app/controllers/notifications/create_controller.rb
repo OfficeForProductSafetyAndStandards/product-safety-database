@@ -427,7 +427,7 @@ module Notifications
           render_wizard
         end
       elsif additional_params
-        @notification.save(context: step)
+        @notification.save!(context: step)
         redirect_to wizard_path(@next_step, additional_params)
       else
         render_wizard(@notification, { context: step })
