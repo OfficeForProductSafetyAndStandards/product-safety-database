@@ -1,0 +1,16 @@
+json.id notification.pretty_id
+json.state notification.state
+json.product_category notification.product_category
+json.description notification.description
+json.user_title notification.user_title
+json.risk_level notification.risk_level
+json.reported_reason notification.reported_reason
+json.non_compliant_reason notification.non_compliant_reason
+json.hazard_type notification.hazard_type
+json.hazard_description notification.hazard_description
+json.notifying_country notification.notifying_country
+json.overseas_regulator_country notification.overseas_regulator_country
+json.is_from_overseas_regulator notification.is_from_overseas_regulator?
+json.is_closed notification.is_closed?
+json.created_at notification.created_at.xmlschema
+json.updated_at notification.updated_at.xmlschema
