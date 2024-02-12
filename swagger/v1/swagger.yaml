@@ -103,7 +103,7 @@ paths:
     post:
       summary: Request an API token
       tags:
-      - Request an API token
+      - Authentication
       parameters:
       - name: email
         in: query
