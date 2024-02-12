@@ -6,6 +6,11 @@ class Api::V1::NotificationsController < Api::BaseController
 
   def create
     @notification = Investigation::Notification.new(notification_create_params)
+
+    unless @notification.valid_api_dataset?
+      return render json: { error: "Notification parameters are not valid" }, status: :not_acceptable
+    end
+
     @notification.state = "draft"
     CreateNotification.call!(notification: @notification, user: current_user, from_task_list: true, silent: true)
 

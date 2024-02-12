@@ -84,6 +84,16 @@ RSpec.describe "API Notifications Controller", type: :request do
         end
       end
 
+      response "406", "Notification not valid" do
+        let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+        let(:notification) do
+          {
+            reported_reason: 'safe_and_compliant',
+          }
+        end
+        run_test!
+      end
+
       response "401", "Unauthorised user" do
         let(:Authorization) { "Authorization 0000" }
         let(:id) { "invalid" }
