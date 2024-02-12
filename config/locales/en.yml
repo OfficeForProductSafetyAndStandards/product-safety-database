@@ -797,6 +797,7 @@ en:
             tso_certificate_issue_date:
               blank: Enter the date the test certificate was issued
               incomplete: Enter the date the test certificate was issued
+              in_future: The date the test certificate was issued must be today or in the past
         bulk_products_triage_form:
           attributes:
             compliance_and_safety:
