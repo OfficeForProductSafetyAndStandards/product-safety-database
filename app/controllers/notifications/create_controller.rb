@@ -408,7 +408,7 @@ module Notifications
           end
         end
       when :check_notification_details_and_submit
-        return render_wizard unless @notification.ready_to_submit?
+        return render_wizard unless @notification.ready_to_submit? || params[:draft] == "true"
       end
 
       @notification.tasks_status[step.to_s] = "completed"
@@ -417,7 +417,7 @@ module Notifications
         # "Save as draft" or final save button of the section clicked.
         # Manually save, then finish the wizard.
         if @notification.save(context: step)
-          if step == :check_notification_details_and_submit
+          if step == :check_notification_details_and_submit && params[:final] == "true"
             @notification.submit!
             return redirect_to confirmation_notification_create_index_path(@notification)
           end
