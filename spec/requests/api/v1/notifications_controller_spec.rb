@@ -54,14 +54,13 @@ RSpec.describe "API Notifications Controller", type: :request do
 
       consumes 'application/json'
 
-      parameter name: :notification, in: :body, schema: {
-        type: :object,
-        properties: {
-          title: { type: :string },
-          content: { type: :string }
-        },
-        required: [ 'title', 'content' ]
-      }
+      request_body_example value: {
+        notification: {
+          user_title: 'Turbo vac 3000',
+          reported_reason: 'non_compliant',
+          non_compliant_reason: "No earth pin on mains plug",
+        }
+      }, name: 'notification', summary: "An non-compliant notification"
 
       parameter name: :notification, in: :body, schema: { '$ref' => '#/components/schemas/new_notification' }
 
