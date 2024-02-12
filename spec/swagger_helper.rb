@@ -23,6 +23,18 @@ RSpec.configure do |config|
       },
       components: {
         schemas: {
+          new_notification: {
+            title: "New Notification",
+            type: :object,
+            properties: {
+              user_title: { type: :string },
+              complainant_reference: { type: :string, nullable: true },
+              reported_reason: { type: :string, nullable: true },
+              hazard_type: { type: :string, nullable: true },
+              hazard_description: { type: :string, nullable: true },
+              non_compliant_reason: { type: :string, nullable: true }
+            }
+          },
           notification_object: {
             title: "Notification",
             type: :object,
@@ -32,6 +44,7 @@ RSpec.configure do |config|
               product_category: { type: :string, nullable: true },
               description: { type: :string, nullable: true },
               user_title: { type: :string },
+              complainant_reference: { type: :string, nullable: true },
               risk_level: { type: :string, nullable: true },
               reported_reason: { type: :string, nullable: true },
               non_compliant_reason: { type: :string, nullable: true },

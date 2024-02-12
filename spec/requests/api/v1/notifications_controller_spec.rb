@@ -43,4 +43,52 @@ RSpec.describe "API Notifications Controller", type: :request do
       end
     end
   end
+
+  path "/api/v1/notifications" do
+    post "Creates a draft Notification" do
+      description "Creates a draft Notification in PSD"
+      tags "Notifications"
+      security [bearer: []]
+      parameter name: :Authorization, in: :header, type: :string
+      let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+
+      consumes 'application/json'
+
+      parameter name: :notification, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string },
+          content: { type: :string }
+        },
+        required: [ 'title', 'content' ]
+      }
+
+      parameter name: :notification, in: :body, schema: { '$ref' => '#/components/schemas/new_notification' }
+
+      response "200", "Notification created" do
+        schema '$ref' => '#/components/schemas/notification_object'
+        let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+        let(:notification) do
+          {
+            user_title: 'foo',
+            reported_reason: 'safe_and_compliant'
+          }
+        end
+
+        run_test! do |response|
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          expect(json[:id]).to be_present
+          expect(json[:user_title]).to eq('foo')
+          expect(json[:reported_reason]).to eq('safe_and_compliant')
+        end
+      end
+
+      response "401", "Unauthorised user" do
+        let(:Authorization) { "Authorization 0000" }
+        let(:id) { "invalid" }
+        run_test!
+      end
+    end
+  end
 end
