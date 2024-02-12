@@ -7,7 +7,7 @@ RSpec.describe "API auth controller", type: :request do
 
   path "/api/v1/auth" do
     post "Request an API token" do
-      tags "Request an API token"
+      tags "Authentication"
       consumes "application/json"
       parameter name: :email, in: :query, type: :string
       parameter name: :password, in: :query, type: :string
