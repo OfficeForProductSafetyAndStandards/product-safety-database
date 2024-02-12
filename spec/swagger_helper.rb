@@ -21,6 +21,56 @@ RSpec.configure do |config|
         title: "PSD API",
         version: "v1"
       },
+      components: {
+        schemas: {
+          notification_object: {
+            title: "Notification",
+            type: :object,
+            properties: {
+              id: { type: :string },
+              state: { type: :string, nullable: true },
+              product_category: { type: :string, nullable: true },
+              description: { type: :string, nullable: true },
+              user_title: { type: :string },
+              risk_level: { type: :string, nullable: true },
+              reported_reason: { type: :string, nullable: true },
+              non_compliant_reason: { type: :string, nullable: true },
+              hazard_type: { type: :string, nullable: true },
+              hazard_description: { type: :string, nullable: true },
+              notifying_country: { type: :string },
+              overseas_regulator_country: { type: :string, nullable: true },
+              is_from_overseas_regulator: { type: :boolean },
+              is_closed: { type: :boolean },
+              created_at: { type: :string },
+              updated_at: { type: :string }
+            },
+            required: %w[id]
+          },
+          product_object: {
+            title: "Product",
+            type: :object,
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              brand: { type: :string },
+              product_code: { type: :string, nullable: true },
+              barcode: { type: :string, nullable: true },
+              category: { type: :string },
+              subcategory: { type: :string, nullable: true },
+              description: { type: :string },
+              country_of_origin: { type: :string },
+              webpage: { type: :string, nullable: true },
+              owning_team: { type: :object,
+                             properties: {
+                               name: { type: :string, nullable: true },
+                               email: { type: :string, nullable: true },
+                             } },
+              product_images: { type: :array, items: { type: :object, properties: { url: { type: :string } } } },
+            },
+            required: %w[name]
+          }
+        }
+      },
       paths: {}
     }
   }

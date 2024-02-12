@@ -16,27 +16,7 @@ RSpec.describe "API Products Controller", type: :request do
       parameter name: :id, in: :path, type: :string
 
       response "200", "Product found" do
-        schema type: :object,
-               properties: {
-                 id: { type: :integer },
-                 name: { type: :string },
-                 brand: { type: :string },
-                 product_code: { type: :string, nullable: true },
-                 barcode: { type: :string, nullable: true },
-                 category: { type: :string },
-                 subcategory: { type: :string, nullable: true },
-                 description: { type: :string },
-                 country_of_origin: { type: :string },
-                 webpage: { type: :string, nullable: true },
-                 owning_team: { type: :object,
-                                properties: {
-                                  name: { type: :string, nullable: true },
-                                  email: { type: :string, nullable: true },
-                                } },
-                 product_images: { type: :array, items: { type: :object, properties: { url: { type: :string } } } },
-               },
-               required: %w[name]
-
+        schema '$ref' => '#/components/schemas/product_object'
 
         let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
 
@@ -79,7 +59,6 @@ RSpec.describe "API Products Controller", type: :request do
           #expect(JSON.parse(response.body)["token"]).to eq(user.api_tokens.find_or_create_by(name: ApiToken::DEFAULT_NAME).token)
         end
       end
-
     end
   end
 
@@ -91,8 +70,4 @@ RSpec.describe "API Products Controller", type: :request do
       security [bearer: []]
     end
   end
-
 end
-
-
-

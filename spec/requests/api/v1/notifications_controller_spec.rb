@@ -16,27 +16,7 @@ RSpec.describe "API Notifications Controller", type: :request do
       parameter name: :id, in: :path, type: :string
 
       response "200", "Notification found" do
-        schema type: :object,
-               properties: {
-                  id: { type: :string },
-                  state: { type: :string, nullable: true },
-                  product_category: { type: :string, nullable: true },
-                  description: { type: :string, nullable: true },
-                  user_title: { type: :string },
-                  risk_level: { type: :string, nullable: true },
-                  reported_reason: { type: :string, nullable: true },
-                  non_compliant_reason: { type: :string, nullable: true },
-                  hazard_type: { type: :string, nullable: true },
-                  hazard_description: { type: :string, nullable: true },
-                  notifying_country: { type: :string },
-                  overseas_regulator_country: { type: :string, nullable: true },
-                  is_from_overseas_regulator: { type: :boolean },
-                  is_closed: { type: :boolean },
-                  created_at: { type: :string },
-                  updated_at: { type: :string }
-               },
-               required: %w[id]
-
+        schema '$ref' => '#/components/schemas/notification_object'
 
         let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
 
