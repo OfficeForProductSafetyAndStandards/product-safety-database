@@ -47,7 +47,8 @@ module Notifications
     end
 
     def remove_product
-      return redirect_to notification_create_index_path(@notification) if @notification.tasks_status["search_for_or_add_a_product"] == "completed"
+      # Don't allows products to be removed once the "add notification details" task has been completed
+      return redirect_to notification_create_index_path(@notification) if @notification.tasks_status["add_notification_details"] == "completed"
 
       @investigation_product = @notification.investigation_products.find(params[:investigation_product_id])
 
