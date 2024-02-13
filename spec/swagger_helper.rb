@@ -117,7 +117,7 @@ RSpec.configure do |config|
               category: { '$ref': "#/components/schemas/product_category" },
               subcategory: { type: :string, nullable: true },
               description: { type: :string, nullable: true },
-              country_of_origin: { '$ref': "#/components/schemas/country_code"  },
+              country_of_origin: { '$ref': "#/components/schemas/country_code" },
               authenticity: { '$ref': "#/components/schemas/product_authenticity" },
               when_placed_on_market: { '$ref': "#/components/schemas/product_when_placed_on_market" },
               webpage: { type: :string, nullable: true },
