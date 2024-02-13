@@ -17,6 +17,10 @@ class Investigation < ApplicationRecord
       end
     end
 
+    def valid_api_dataset?
+      user_title.present?
+    end
+
     def case_type
       "notification"
     end
