@@ -125,7 +125,7 @@
           rows: [
             {
               key: { text: "Business role in the supply chain" },
-              value: { text: investigation_business.pretty_relationship },
+              value: { text: investigation_business.relationship.present? ? investigation_business.pretty_relationship : "Not provided" },
               actions: []
             },
             {
