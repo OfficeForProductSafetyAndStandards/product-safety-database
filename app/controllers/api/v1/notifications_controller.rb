@@ -17,7 +17,7 @@ class Api::V1::NotificationsController < Api::BaseController
     @notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
     @notification.save!(context: :search_for_or_add_a_product)
 
-    render action: :show
+    render action: :show, status: :created
   end
 
 private

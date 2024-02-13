@@ -64,7 +64,7 @@ RSpec.describe "API Notifications Controller", type: :request do
 
       parameter name: :notification, in: :body, schema: { '$ref' => '#/components/schemas/new_notification' }
 
-      response "200", "Notification created" do
+      response "201", "Notification created" do
         schema '$ref' => '#/components/schemas/notification_object'
         let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
         let(:notification) do
