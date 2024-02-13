@@ -14,6 +14,6 @@ private
   end
 
   def authorised_representative_relationship
-    I18n.t("business.type.authorised_reprsentative.#{authorised_representative_choice}")
+    I18n.t("business.type.authorised_representative.#{authorised_representative_choice}")
   end
 end
