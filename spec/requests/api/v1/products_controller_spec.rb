@@ -20,7 +20,7 @@ RSpec.describe "API Products Controller", type: :request do
 
         let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
 
-        let(:id) { create(:product).id }
+        let(:id) { create(:product, country_of_origin: 'country:GB').id }
         run_test! do |response|
 
         end
@@ -64,10 +64,75 @@ RSpec.describe "API Products Controller", type: :request do
 
   path "/api/v1/products" do
     post "Creates a Product" do
-      description "Creates a Product"
+      description "Creates a Product in PSD"
       tags "Products"
-      produces "application/json"
       security [bearer: []]
+      parameter name: :Authorization, in: :header, type: :string
+      let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+
+      consumes 'application/json'
+
+      request_body_example value: {
+        product: {
+          name: 'Super Vac 2020',
+          category: 'Electrical appliances and equipment',
+          subcategory: 'Vacuum cleaners',
+          country_of_origin: 'country:GB',
+          when_placed_on_market: 'on_or_after_2021',
+          authenticity: 'genuine',
+          has_markings: 'markings_no'
+        }
+      }, name: 'product', summary: "An sample product"
+
+      parameter name: :product, in: :body, schema: { '$ref' => '#/components/schemas/new_product' }
+
+      response "201", "Product created" do
+        schema '$ref' => '#/components/schemas/product_object'
+        let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+        let(:product) do
+          {
+            name: 'Super Vac 2020',
+            brand: 'SuperDuper',
+            category: 'Electrical appliances and equipment',
+            subcategory: 'Vacuum cleaners',
+            country_of_origin: 'country:GB',
+            when_placed_on_market: 'on_or_after_2021',
+            authenticity: 'genuine',
+            has_markings: 'markings_no'
+          }
+        end
+
+        run_test! do |response|
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          expect(json[:id]).to be_present
+          expect(json[:name]).to eq('Super Vac 2020')
+          expect(json[:category]).to eq('Electrical appliances and equipment')
+          expect(json[:subcategory]).to eq('Vacuum cleaners')
+          expect(json[:country_of_origin]).to eq('country:GB')
+        end
+      end
+
+      response "406", "Product not valid" do
+        let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+        let(:product) do
+          {
+            subcategory: 'Vacuum cleaners',
+          }
+        end
+        run_test! do |response|
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          expect(json[:errors]).to be_present
+        end
+      end
+
+      response "401", "Unauthorised user" do
+        let(:Authorization) { "Authorization 0000" }
+        let(:id) { "invalid" }
+        run_test!
+      end
     end
   end
+
 end
