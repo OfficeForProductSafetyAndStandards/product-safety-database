@@ -24,6 +24,8 @@ class InvestigationsController < ApplicationController
 
   # GET /cases/1
   def show
+    return redirect_to notification_path(@investigation) if current_user.can_use_notification_task_list?
+
     authorize @investigation, :view_non_protected_details?
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
     @complainant = @investigation.complainant&.decorate
@@ -37,7 +39,7 @@ class InvestigationsController < ApplicationController
   end
 
   def your_cases
-    return redirect_to your_notifications_path if current_user.can_access_new_search?
+    return redirect_to your_notifications_path if current_user.can_use_notification_task_list?
 
     @page_name = "your_cases"
     @search = SearchParams.new(
@@ -57,7 +59,7 @@ class InvestigationsController < ApplicationController
   end
 
   def assigned_cases
-    return redirect_to assigned_notifications_path if current_user.can_access_new_search?
+    return redirect_to assigned_notifications_path if current_user.can_use_notification_task_list?
 
     @page_name = "assigned_cases"
     @search = SearchParams.new(
@@ -80,7 +82,7 @@ class InvestigationsController < ApplicationController
   end
 
   def team_cases
-    return redirect_to team_notifications_path if current_user.can_access_new_search?
+    return redirect_to team_notifications_path if current_user.can_use_notification_task_list?
 
     @page_name = "team_cases"
     @search = SearchParams.new(

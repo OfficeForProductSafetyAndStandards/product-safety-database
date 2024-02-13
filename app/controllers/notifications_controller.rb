@@ -24,7 +24,7 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/your-notifications
   def your_notifications
-    return redirect_to your_cases_investigations_path unless current_user.can_access_new_search?
+    return redirect_to your_cases_investigations_path unless current_user.can_use_notification_task_list?
 
     @page_name = "your_cases"
     @search = SearchParams.new(
@@ -57,7 +57,7 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/team-notifications
   def team_notifications
-    return redirect_to team_cases_investigations_path unless current_user.can_access_new_search?
+    return redirect_to team_cases_investigations_path unless current_user.can_use_notification_task_list?
 
     @page_name = "team_cases"
     @search = SearchParams.new(
@@ -79,7 +79,7 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/assigned-notifications
   def assigned_notifications
-    return redirect_to assigned_cases_investigations_path unless current_user.can_access_new_search?
+    return redirect_to assigned_cases_investigations_path unless current_user.can_use_notification_task_list?
 
     @page_name = "assigned_cases"
     @search = SearchParams.new(
@@ -103,6 +103,8 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/:pretty_id
   def show
+    return redirect_to investigation_path(@notification) unless current_user.can_use_notification_task_list?
+
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
 
     # Find the most recent incomplete bulk products upload for the current user and case, if any
