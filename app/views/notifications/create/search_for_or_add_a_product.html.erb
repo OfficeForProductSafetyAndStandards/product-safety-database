@@ -106,8 +106,19 @@
 
                     details = <<~DETAILS.strip
                       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><a href="#{product_path(record)}" class="govuk-link" target="_blank" rel="noreferrer noopener">#{record.name_with_brand}</a></p>
-                      <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.subcategory_with_brand}</p>
-                      <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.psd_ref}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{record.category}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>Sub-category:</strong> #{record.subcategory}</p>
+                      #{
+                        if record.barcode.present? || record.product_code.present? || record.unformatted_description.present?
+                          govuk_details(summary_text: "More details", classes: "govuk-!-font-size-16 govuk-!-margin-bottom-0") do
+                            details = []
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Barcode:</strong> #{record.barcode}</p>" if record.barcode.present?
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Other product identifiers:</strong> #{record.product_code}</p>" if record.product_code.present?
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Product description:</strong> #{record.unformatted_description}</p>" if record.unformatted_description.present?
+                            details.join.html_safe
+                          end
+                        end
+                      }
                     DETAILS
 
                     select_button = form_with url: "#{wizard_path}?product_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
