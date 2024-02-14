@@ -35,6 +35,52 @@ RSpec.configure do |config|
               non_compliant_reason: { type: :string, nullable: true }
             }
           },
+          new_product: {
+            title: "New Product",
+            type: :object,
+            properties: {
+              name: { type: :string },
+              brand: { type: :string },
+              product_code: { type: :string, nullable: true },
+              barcode: { type: :string, nullable: true },
+              category: { '$ref': "#/components/schemas/product_category" },
+              subcategory: { type: :string, nullable: true },
+              description: { type: :string, nullable: true },
+              country_of_origin: { '$ref': "#/components/schemas/country_code" },
+              authenticity: { '$ref': "#/components/schemas/product_authenticity" },
+              when_placed_on_market: { '$ref': "#/components/schemas/product_when_placed_on_market" },
+              has_markings: { '$ref': "#/components/schemas/product_has_markings" },
+              markings: { type: :array, items: { '$ref': "#/components/schemas/product_has_markings" } },
+              webpage: { type: :string, nullable: true },
+            }
+          },
+          product_category: {
+            title: "Product (category)",
+            type: :string,
+            enum: Rails.application.config.product_constants["product_category"]
+          },
+          product_when_placed_on_market: {
+            title: "Product (when_placed_on_market)",
+            type: :string,
+            enum: %w[on_or_after_2021 before_2021 unknown_date]
+          },
+          product_authenticity: {
+            title: "Product (authenticity)",
+            type: :string,
+            enum: %w[genuine counterfeit unsure]
+          },
+          product_markings: {
+            title: "Product (markings)",
+            type: :array,
+            items: { type: :string },
+            enum: Product::MARKINGS
+          },
+          product_has_markings: {
+            title: "Product (markings)",
+            type: :array,
+            items: { type: :string },
+            enum: Product.has_markings.keys
+          },
           notification_object: {
             title: "Notification",
             type: :object,
@@ -68,10 +114,12 @@ RSpec.configure do |config|
               brand: { type: :string },
               product_code: { type: :string, nullable: true },
               barcode: { type: :string, nullable: true },
-              category: { type: :string },
+              category: { '$ref': "#/components/schemas/product_category" },
               subcategory: { type: :string, nullable: true },
-              description: { type: :string },
-              country_of_origin: { type: :string },
+              description: { type: :string, nullable: true },
+              country_of_origin: { '$ref': "#/components/schemas/country_code" },
+              authenticity: { '$ref': "#/components/schemas/product_authenticity" },
+              when_placed_on_market: { '$ref': "#/components/schemas/product_when_placed_on_market" },
               webpage: { type: :string, nullable: true },
               owning_team: { type: :object,
                              properties: {
@@ -81,6 +129,11 @@ RSpec.configure do |config|
               product_images: { type: :array, items: { type: :object, properties: { url: { type: :string } } } },
             },
             required: %w[name]
+          },
+          country_code: {
+            title: "Country",
+            type: :string,
+            enum: Country.notifying_countries.map { |c| c[1] }.sort
           }
         }
       },

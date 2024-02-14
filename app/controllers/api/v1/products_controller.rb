@@ -10,6 +10,21 @@ class Api::V1::ProductsController < Api::BaseController
     @products = ProductDecorator.decorate_collection(@results)
   end
 
+  def create
+    @product_form = ProductForm.new(product_create_params)
+
+    if @product_form.valid?
+      context = CreateProduct.call!(
+        @product_form.serializable_hash.merge(ushaser: current_user)
+      )
+
+      @product = context.product.decorate
+      render action: :show, status: :created, location: api_v1_product_path(context.product)
+    else
+      render json: { error: "Product parameters are not valid", errors: @product_form.errors }, status: :not_acceptable
+    end
+  end
+
   def show; end
 
 private
@@ -20,6 +35,14 @@ private
 
   def set_search_params
     @search = SearchParams.new(query_params.except(:page_name))
+  end
+
+  def product_create_params
+    params.require(:product).permit(
+      :name, :brand, :category, :subcategory, :product_code,
+      :webpage, :description, :country_of_origin, :barcode,
+      :authenticity, :when_placed_on_market, :has_markings, markings: []
+    )
   end
 
   def query_params

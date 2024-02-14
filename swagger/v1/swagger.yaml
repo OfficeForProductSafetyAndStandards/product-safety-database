@@ -26,6 +26,113 @@ components:
         non_compliant_reason:
           type: string
           nullable: true
+    new_product:
+      title: New Product
+      type: object
+      properties:
+        name:
+          type: string
+        brand:
+          type: string
+        product_code:
+          type: string
+          nullable: true
+        barcode:
+          type: string
+          nullable: true
+        category:
+          "$ref": "#/components/schemas/product_category"
+        subcategory:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        country_of_origin:
+          "$ref": "#/components/schemas/country_code"
+        authenticity:
+          "$ref": "#/components/schemas/product_authenticity"
+        when_placed_on_market:
+          "$ref": "#/components/schemas/product_when_placed_on_market"
+        has_markings:
+          "$ref": "#/components/schemas/product_has_markings"
+        markings:
+          type: array
+          items:
+            "$ref": "#/components/schemas/product_has_markings"
+        webpage:
+          type: string
+          nullable: true
+    product_category:
+      title: Product (category)
+      type: string
+      enum:
+      - Personal protective equipment (PPE)
+      - Chemical products
+      - Childcare articles and children's equipment
+      - Clothing, textiles and fashion items
+      - Communication and media equipment
+      - Construction products
+      - Cosmetics
+      - Decorative articles
+      - Eco-design
+      - Electrical appliances and equipment
+      - Explosive atmospheres equipment
+      - Food-imitating products
+      - Furniture
+      - Gadgets
+      - Gas appliances and components
+      - Hand tools
+      - Hobby / sports equipment
+      - Jewellery
+      - Kitchen / cooking accessories
+      - Laser pointers
+      - Lifts
+      - Lighters
+      - Lighting chains
+      - Lighting equipment
+      - Machinery
+      - Measuring instruments
+      - Motor vehicles (including spare parts)
+      - Pressure equipment / vessels
+      - Pyrotechnic articles
+      - Rail and guided transport
+      - Recreational crafts
+      - Stationery
+      - Toys
+      - Waste
+    product_when_placed_on_market:
+      title: Product (when_placed_on_market)
+      type: string
+      enum:
+      - on_or_after_2021
+      - before_2021
+      - unknown_date
+    product_authenticity:
+      title: Product (authenticity)
+      type: string
+      enum:
+      - genuine
+      - counterfeit
+      - unsure
+    product_markings:
+      title: Product (markings)
+      type: array
+      items:
+        type: string
+      enum:
+      - UKCA
+      - UKNI
+      - CE
+    product_has_markings:
+      title: Product (markings)
+      type: array
+      items:
+        type: string
+      enum:
+      - markings_yes
+      - markings_no
+      - markings_unknown
     notification_object:
       title: Notification
       type: object
@@ -93,14 +200,19 @@ components:
           type: string
           nullable: true
         category:
-          type: string
+          "$ref": "#/components/schemas/product_category"
         subcategory:
           type: string
           nullable: true
         description:
           type: string
+          nullable: true
         country_of_origin:
-          type: string
+          "$ref": "#/components/schemas/country_code"
+        authenticity:
+          "$ref": "#/components/schemas/product_authenticity"
+        when_placed_on_market:
+          "$ref": "#/components/schemas/product_when_placed_on_market"
         webpage:
           type: string
           nullable: true
@@ -122,6 +234,293 @@ components:
                 type: string
       required:
       - name
+    country_code:
+      title: Country
+      type: string
+      enum:
+      - country:AD
+      - country:AE
+      - country:AF
+      - country:AG
+      - country:AL
+      - country:AM
+      - country:AO
+      - country:AR
+      - country:AT
+      - country:AU
+      - country:AZ
+      - country:BA
+      - country:BB
+      - country:BD
+      - country:BE
+      - country:BF
+      - country:BG
+      - country:BH
+      - country:BI
+      - country:BJ
+      - country:BN
+      - country:BO
+      - country:BR
+      - country:BS
+      - country:BT
+      - country:BW
+      - country:BY
+      - country:BZ
+      - country:CA
+      - country:CD
+      - country:CF
+      - country:CG
+      - country:CH
+      - country:CI
+      - country:CL
+      - country:CM
+      - country:CN
+      - country:CO
+      - country:CR
+      - country:CS
+      - country:CU
+      - country:CV
+      - country:CY
+      - country:CZ
+      - country:DD
+      - country:DE
+      - country:DJ
+      - country:DK
+      - country:DM
+      - country:DO
+      - country:DZ
+      - country:EC
+      - country:EE
+      - country:EG
+      - country:ER
+      - country:ES
+      - country:ET
+      - country:FI
+      - country:FJ
+      - country:FM
+      - country:FR
+      - country:GA
+      - country:GB
+      - country:GB-ENG
+      - country:GB-GBN
+      - country:GB-NIR
+      - country:GB-SCT
+      - country:GB-WLS
+      - country:GD
+      - country:GE
+      - country:GH
+      - country:GM
+      - country:GN
+      - country:GQ
+      - country:GR
+      - country:GT
+      - country:GW
+      - country:GY
+      - country:HN
+      - country:HR
+      - country:HT
+      - country:HU
+      - country:ID
+      - country:IE
+      - country:IL
+      - country:IN
+      - country:IQ
+      - country:IR
+      - country:IS
+      - country:IT
+      - country:JM
+      - country:JO
+      - country:JP
+      - country:KE
+      - country:KG
+      - country:KH
+      - country:KI
+      - country:KM
+      - country:KN
+      - country:KP
+      - country:KR
+      - country:KW
+      - country:KZ
+      - country:LA
+      - country:LB
+      - country:LC
+      - country:LI
+      - country:LK
+      - country:LR
+      - country:LS
+      - country:LT
+      - country:LU
+      - country:LV
+      - country:LY
+      - country:MA
+      - country:MC
+      - country:MD
+      - country:ME
+      - country:MG
+      - country:MH
+      - country:MK
+      - country:ML
+      - country:MM
+      - country:MN
+      - country:MR
+      - country:MT
+      - country:MU
+      - country:MV
+      - country:MW
+      - country:MX
+      - country:MY
+      - country:MZ
+      - country:NA
+      - country:NE
+      - country:NG
+      - country:NI
+      - country:NL
+      - country:NO
+      - country:NP
+      - country:NR
+      - country:NZ
+      - country:OM
+      - country:PA
+      - country:PE
+      - country:PG
+      - country:PH
+      - country:PK
+      - country:PL
+      - country:PT
+      - country:PW
+      - country:PY
+      - country:QA
+      - country:RO
+      - country:RS
+      - country:RU
+      - country:RW
+      - country:SA
+      - country:SB
+      - country:SC
+      - country:SD
+      - country:SE
+      - country:SG
+      - country:SI
+      - country:SK
+      - country:SL
+      - country:SM
+      - country:SN
+      - country:SO
+      - country:SR
+      - country:SS
+      - country:ST
+      - country:SU
+      - country:SV
+      - country:SY
+      - country:SZ
+      - country:TD
+      - country:TG
+      - country:TH
+      - country:TJ
+      - country:TL
+      - country:TM
+      - country:TN
+      - country:TO
+      - country:TR
+      - country:TT
+      - country:TV
+      - country:TZ
+      - country:UA
+      - country:UG
+      - country:US
+      - country:UY
+      - country:UZ
+      - country:VA
+      - country:VC
+      - country:VE
+      - country:VN
+      - country:VU
+      - country:WS
+      - country:XK
+      - country:YE
+      - country:YU
+      - country:ZA
+      - country:ZM
+      - country:ZW
+      - territory:AE-AJ
+      - territory:AE-AZ
+      - territory:AE-DU
+      - territory:AE-FU
+      - territory:AE-RK
+      - territory:AE-SH
+      - territory:AE-UQ
+      - territory:AI
+      - territory:AQ
+      - territory:AS
+      - territory:AW
+      - territory:AX
+      - territory:BAT
+      - territory:BL
+      - territory:BM
+      - territory:BQ-BO
+      - territory:BQ-SA
+      - territory:BQ-SE
+      - territory:BV
+      - territory:CC
+      - territory:CK
+      - territory:CW
+      - territory:CX
+      - territory:EH
+      - territory:ES-CE
+      - territory:ES-ML
+      - territory:FK
+      - territory:FO
+      - territory:GF
+      - territory:GG
+      - territory:GI
+      - territory:GL
+      - territory:GP
+      - territory:GS
+      - territory:GU
+      - territory:HK
+      - territory:HM
+      - territory:IM
+      - territory:IO
+      - territory:JE
+      - territory:KY
+      - territory:MF
+      - territory:MO
+      - territory:MP
+      - territory:MQ
+      - territory:MS
+      - territory:NC
+      - territory:NF
+      - territory:NU
+      - territory:PF
+      - territory:PM
+      - territory:PN
+      - territory:PR
+      - territory:PS
+      - territory:RE
+      - territory:SH-AC
+      - territory:SH-HL
+      - territory:SH-TA
+      - territory:SJ
+      - territory:SX
+      - territory:TC
+      - territory:TF
+      - territory:TK
+      - territory:TW
+      - territory:UM-67
+      - territory:UM-71
+      - territory:UM-76
+      - territory:UM-79
+      - territory:UM-81
+      - territory:UM-84
+      - territory:UM-86
+      - territory:UM-89
+      - territory:UM-95
+      - territory:VG
+      - territory:VI
+      - territory:WF
+      - territory:XQZ
+      - territory:XXD
+      - territory:YT
 paths:
   "/api/v1/auth":
     post:
@@ -204,7 +603,7 @@ paths:
         schema:
           type: string
       responses:
-        '200':
+        '201':
           description: Notification created
         '406':
           description: Notification not valid
@@ -272,3 +671,39 @@ paths:
       responses:
         '200':
           description: Search results returned
+    post:
+      summary: Creates a Product
+      description: Creates a Product in PSD
+      tags:
+      - Products
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Product created
+        '406':
+          description: Product not valid
+        '401':
+          description: Unauthorised user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/new_product"
+            examples:
+              product:
+                summary: An sample product
+                value:
+                  product:
+                    name: Super Vac 2020
+                    category: Electrical appliances and equipment
+                    subcategory: Vacuum cleaners
+                    country_of_origin: country:GB
+                    when_placed_on_market: on_or_after_2021
+                    authenticity: genuine
+                    has_markings: markings_no
