@@ -4,7 +4,8 @@ require "swagger_helper"
 RSpec.describe "API Products Controller", type: :request do
   let(:user) { create(:user, :activated, :with_api_token, has_viewed_introduction: true, team: user_team) }
   let(:user_team) { create(:team) }
-  let(:product) { create(:product) }
+  let(:product) { create(:product, product_code: product_code_asin) }
+  let(:product_code_asin) { 'B07K1RZWMC' }
 
   path "/api/v1/products/{id}" do
     get "Retrieves a Product" do
@@ -42,21 +43,31 @@ RSpec.describe "API Products Controller", type: :request do
 
   path "/api/v1/products" do
     get "Search for a Product" do
-      description "Search for a Product"
+      description %{
+Search for a Product
+
+* The search `q` query searches based on name, description, brand, PSD ID, and product_code. It uses the same code as the search bar in the UI within PSD.
+* The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending or descending order. The default is descending.
+* The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+* The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
+}
       tags "Products"
       produces "application/json"
       security [bearer: []]
       parameter name: :Authorization, in: :header, type: :string
-      parameter name: :q, in: :query, type: :string
+      parameter name: :q, in: :query, type: :string, description: "Search query. Searches based on name, description, brand, PSD ID, and product_code"
+      parameter name: :sort_by, in: :query, required: false, type: :string, description: "Sort by parameter. Choose name, created_at, updated_at, or relevant. Default is relevant"
+      parameter name: :sort_dir, in: :query, required: false, type: :string, description: "Sort direction. Choose asc or desc. Default is desc"
+      parameter name: :category, in: :query, required: false, type: :string, description: "Category of the product. If given, only products in this category will be returned"
+
+      parameter name: :page, required: false, in: :query, type: :integer, description: "Page number"
 
       response "200", "Search results returned" do
         let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
-        let(:q) { product.name }
+        let(:q) { product_code_asin }
 
         run_test! do |response|
           expect(response).to have_http_status(:ok)
-          #binding.pry
-          #expect(JSON.parse(response.body)["token"]).to eq(user.api_tokens.find_or_create_by(name: ApiToken::DEFAULT_NAME).token)
         end
       end
     end

@@ -654,7 +654,14 @@ paths:
   "/api/v1/products":
     get:
       summary: Search for a Product
-      description: Search for a Product
+      description: |2
+
+        Search for a Product
+
+        * The search `q` query searches based on name, description, brand, PSD ID, and product_code. It uses the same code as the search bar in the UI within PSD.
+        * The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending or descending order. The default is descending.
+        * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+        * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
       tags:
       - Products
       security:
@@ -666,8 +673,36 @@ paths:
           type: string
       - name: q
         in: query
+        description: Search query. Searches based on name, description, brand, PSD
+          ID, and product_code
         schema:
           type: string
+      - name: sort_by
+        in: query
+        required: false
+        description: Sort by parameter. Choose name, created_at, updated_at, or relevant.
+          Default is relevant
+        schema:
+          type: string
+      - name: sort_dir
+        in: query
+        required: false
+        description: Sort direction. Choose asc or desc. Default is desc
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        description: Category of the product. If given, only products in this category
+          will be returned
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: integer
       responses:
         '200':
           description: Search results returned
