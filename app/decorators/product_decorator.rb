@@ -7,10 +7,6 @@ class ProductDecorator < ApplicationDecorator
     [brand, name].compact.join(" ")
   end
 
-  def subcategory_with_brand
-    [subcategory, brand].compact.join(" by ")
-  end
-
   def pretty_description
     "Product: #{name}"
   end
