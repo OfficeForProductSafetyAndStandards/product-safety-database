@@ -6,7 +6,7 @@ class Api::V1::NotificationsController < Api::BaseController
   before_action :notification, only: %i[show]
 
   def index
-    @pagy, @answer  = pagy_searchkick(new_opensearch_for_investigations(20, paginate: true))
+    @pagy, @answer = pagy_searchkick(new_opensearch_for_investigations(20, paginate: true))
     @notifications = InvestigationDecorator
                         .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
   end
