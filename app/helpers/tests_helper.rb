@@ -70,12 +70,4 @@ module TestsHelper
 
     rows
   end
-
-  def result_items(form)
-    [
-      { text: Test::Result.results["passed"], value: "passed" },
-      { text: Test::Result.results["failed"], value: "failed", conditional: { html: form.govuk_text_area(:failure_details, label: "How the product failed", hint: "Describe how the product was tested and how it failed to meet the requirements", label_classes: "govuk-label") } },
-      { text: Test::Result.results["other"], value: "other" }
-    ]
-  end
 end

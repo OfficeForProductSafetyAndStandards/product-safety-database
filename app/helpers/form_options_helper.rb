@@ -12,24 +12,4 @@ module FormOptionsHelper
   def product_categories
     Rails.application.config.product_constants["product_category"]
   end
-
-  def corrective_action_geographic_scopes
-    CorrectiveAction::GEOGRAPHIC_SCOPES.map do |geographic_scope|
-      { text: I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]), value: geographic_scope, disable_ghost: true }
-    end
-  end
-
-  def corrective_action_summary_radio_items(form)
-    CorrectiveAction.actions.map do |value, text|
-      item = { text:, value: }
-
-      if value == "other"
-        item[:conditional] = {
-          html: form.govuk_input(:other_action, label: "Other action", label_classes: "govuk-visually-hidden")
-        }
-      end
-
-      item
-    end
-  end
 end
