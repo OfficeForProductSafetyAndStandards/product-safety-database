@@ -68,6 +68,10 @@ Search for a Product
 
         run_test! do |response|
           expect(response).to have_http_status(:ok)
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          expect(json[:products].size).to eq(1)
+          expect(json[:products].first[:product_code]).to eq(product_code_asin)
         end
       end
     end

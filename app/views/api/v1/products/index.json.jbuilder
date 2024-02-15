@@ -1,1 +1,1 @@
-json.partial! "api/v1/products/product", collection: @products, as: @product
+json.products @products, partial: 'api/v1/products/product', as: :product
