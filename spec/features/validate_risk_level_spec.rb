@@ -100,7 +100,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
 
       within_fieldset("Has the notification risk level been validated?") do
         choose "No"
-        fill_in "Further details", with: "Mistake made by team member"
+        fill_in "Provide a brief explanation", with: "Mistake made by team member"
       end
 
       click_on "Continue"

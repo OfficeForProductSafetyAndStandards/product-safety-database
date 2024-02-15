@@ -14,6 +14,6 @@ module CountriesHelper
   end
 
   def all_countries_with_uk_first
-    Country::UNITED_KINGDOM + all_countries
+    Country::UNITED_KINGDOM + (all_countries - Country::UNITED_KINGDOM)
   end
 end

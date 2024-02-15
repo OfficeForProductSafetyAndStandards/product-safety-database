@@ -26,7 +26,14 @@ class Investigation < ApplicationRecord
     other: "other"
   }
 
-  before_validation { trim_line_endings(:user_title, :non_compliant_reason, :hazard_description) }
+  enum corrective_action_taken: {
+    yes: "yes",
+    referred_to_another_authority: "referred_to_another_authority",
+    not_enough_information: "not_enough_information",
+    other: "other"
+  }, _prefix: true
+
+  before_validation { trim_line_endings(:user_title, :non_compliant_reason, :hazard_description, :corrective_action_not_taken_reason) }
 
   validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
 
@@ -34,6 +41,7 @@ class Investigation < ApplicationRecord
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
+  validates :corrective_action_not_taken_reason, length: { maximum: 100 }
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products
@@ -47,7 +55,6 @@ class Investigation < ApplicationRecord
   has_many :correspondences, dependent: :destroy
   has_many :emails, dependent: :destroy, class_name: "Correspondence::Email"
   has_many :phone_calls, dependent: :destroy, class_name: "Correspondence::PhoneCall"
-  has_many :meetings, dependent: :destroy, class_name: "Correspondence::Meeting"
 
   has_many :tests, dependent: :destroy
   has_many :test_results, class_name: "Test::Result", dependent: :destroy
@@ -78,7 +85,7 @@ class Investigation < ApplicationRecord
   has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
   has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
-  has_many :risk_assessments
+  has_many :risk_assessments, dependent: :destroy
   has_many :prism_associated_investigations
   has_many :prism_risk_assessments, through: :prism_associated_investigations
   has_many :accidents
@@ -113,7 +120,11 @@ class Investigation < ApplicationRecord
   end
 
   def non_owner_teams_with_access
-    teams_with_read_only_access.or(teams_with_edit_access) - [owner.team]
+    teams_with_read_only_access.or(teams_with_edit_access).order(:name) - [owner.team]
+  end
+
+  def non_owner_collaborators_with_access
+    collaboration_accesses.sorted_by_team_name - [owner_team_collaboration]
   end
 
   def build_owner_collaborations_from(user)

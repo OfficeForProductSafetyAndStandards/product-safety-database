@@ -1,3 +1,5 @@
+# Be sure to restart your server when you modify this file.
+
 # govuk_domains = [
 #   "*.london.cloudapps.digital", # For preview apps
 #   "*.service.gov.uk",
@@ -57,9 +59,9 @@
 #     policy.report_uri ENV.fetch("SENTRY_CSP_REPORT_URI") if ENV["SENTRY_CSP_REPORT_URI"].present?
 #   end
 
-#   # Generate session nonces for permitted importmap and inline scripts
+#   # Generate session nonces for permitted importmap, inline scripts and inline styles
 #   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-#   config.content_security_policy_nonce_directives = %w[script-src]
+#   config.content_security_policy_nonce_directives = %w[script-src style-src]
 
 #   # For now, only report to any reports to Sentry in production
 #   config.content_security_policy_report_only = true

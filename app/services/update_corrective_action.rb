@@ -19,7 +19,7 @@ class UpdateCorrectiveAction
         corrective_action.save!
         update_document_description!
         create_audit_activity_for_corrective_action_updated!
-        send_notification_email
+        send_notification_email unless context.silent
 
         investigation.reindex
       end

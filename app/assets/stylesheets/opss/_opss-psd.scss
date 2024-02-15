@@ -248,7 +248,7 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50%);
   }
 
   &.opss-tag--plain {
-    @include opss-font-size($s: 14px, $l: 1.3);
+    @include opss-font-size($s: 16px, $l: 1.3);
     text-transform: none;
     font-weight: normal;
     color: $govuk-text-colour;
@@ -268,7 +268,7 @@ $opss-retired-bg: govuk-tint(govuk-colour("light-grey"), 50%);
   }
 
   &.opss-tag--std {
-    @include opss-font-size($s: 14px, $l: 1.3);
+    @include opss-font-size($s: 16px, $l: 1.3);
     text-transform: none;
     font-weight: normal;
     color: $govuk-text-colour;
@@ -441,7 +441,7 @@ select:disabled {
 .opss-accordion--sm-all > div:first-child button {
   // 'Show all sections': right + sm font*/
   float: right;
-  @include opss-font-size($s: 14px, $l: 1.3);
+  @include opss-font-size($s: 16px, $l: 1.3);
 }
 
 @include govuk-media-query($from: desktop) {

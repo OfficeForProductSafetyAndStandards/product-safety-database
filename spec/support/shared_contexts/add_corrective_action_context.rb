@@ -30,7 +30,7 @@ RSpec.shared_context "with add corrective action setup" do
       action: action_key,
       other_action:,
       date_decided:,
-      legislation:,
+      legislation: [legislation],
       has_online_recall_information:,
       online_recall_information:,
       details:,

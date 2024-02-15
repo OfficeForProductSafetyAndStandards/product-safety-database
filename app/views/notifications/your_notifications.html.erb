@@ -1,0 +1,80 @@
+<%= page_title I18n.t(".investigations.titles.#{@page_name}") %>
+
+<%= render "investigations/heading/#{@page_name}" %>
+
+<%= form_with(model: @search, scope: "", url: notifications_search_path, method: :get, id: "cases-search-form", html: { role: "search" }) do |form| %>
+  <div class="govuk-grid-row opss-full-height">
+    <%= render "notifications/filters", search: @search, form: form %>
+    <section class="govuk-grid-column-three-quarters" id="page-content">
+      <div class="govuk-grid-row">
+        <%= render_sort_by(form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by, @search.selected_sort_dir, "govuk-grid-column-one-third opss-float-right-desktop") if @submitted_count > 11 %>
+      </div>
+
+      <% if @draft_notifications.any? %>
+        <%=
+          govuk_table do |table|
+            table.with_caption(size: "m", text: "Draft notifications")
+
+            table.with_head do |head|
+              head.with_row do |row|
+                row.with_cell(text: "Product name(s)")
+                row.with_cell(text: "Notification title")
+                row.with_cell(text: "Last updated")
+                row.with_cell(text: "Status")
+                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Make changes/delete notification</span>".html_safe)
+              end
+            end
+
+            @draft_notifications.each do |notification|
+              table.with_body do |body|
+                body.with_row do |row|
+                  row.with_cell(header: true, text: notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>").html_safe)
+                  row.with_cell(text: notification.user_title)
+                  row.with_cell(text: notification.updated_at.to_formatted_s(:govuk))
+                  row.with_cell(text: govuk_tag(text: "Draft", colour: "grey").html_safe)
+                  row.with_cell(text: "<a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\">Make changes</a><hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\"><a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\">Delete</a>".html_safe)
+                end
+              end
+            end
+          end
+        %>
+        <%= govuk_pagination(pagy: @draft_pagy) %>
+      <% end %>
+
+      <% if @submitted_notifications.any? %>
+        <%=
+          govuk_table do |table|
+            table.with_caption(size: "m", text: "Submitted notifications")
+
+            table.with_head do |head|
+              head.with_row do |row|
+                row.with_cell(text: "Product name(s)")
+                row.with_cell(text: "Notification title")
+                row.with_cell(text: "Last updated")
+                row.with_cell(text: "Status")
+                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Update notification</span>".html_safe)
+              end
+            end
+
+            @submitted_notifications.each do |notification|
+              table.with_body do |body|
+                body.with_row do |row|
+                  row.with_cell(header: true, text: notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>").html_safe)
+                  row.with_cell(text: notification.user_title)
+                  row.with_cell(text: notification.updated_at.to_formatted_s(:govuk))
+                  row.with_cell(text: govuk_tag(text: "Submitted", colour: "green").html_safe)
+                  row.with_cell(text: "<a href=\"#{notification_path(notification)}\" class=\"govuk-link\">Update notification</a>".html_safe)
+                end
+              end
+            end
+          end
+        %>
+        <%= govuk_pagination(pagy: @submitted_pagy) %>
+      <% end %>
+
+      <% unless @draft_notifications.any? || @submitted_notifications.any? %>
+        <%= render "investigations/no_cases" %>
+      <% end %>
+    </section>
+  </div>
+<% end %>

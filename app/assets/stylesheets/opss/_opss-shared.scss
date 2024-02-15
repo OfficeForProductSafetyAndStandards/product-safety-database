@@ -123,24 +123,6 @@ p.opss-max-width {
   max-width: none !important;
 }
 
-.opss-font-size-14,
-.govuk-\!-font-size-14 {
-  // future proof the 14px which is required for legacy dashboard designs
-  font-size: 12px !important;
-  font-size: .75rem !important;
-  line-height: 1.25 !important;
-}
-
-@media (min-width: 40.0625em) {
-  // future proof the 14px which is required for legacy dashboard designs
-  .opss-font-size-14,
-  .govuk-\!-font-size-14 {
-    font-size: 14px !important;
-    font-size: .875rem !important;
-    line-height: 1.4286 !important;
-  }
-}
-
 .opss-nojs-hide {
   display: none;
 }
@@ -431,7 +413,7 @@ input.opss-download-link-m {
         @include word-wrap;
 
         span {
-          @include opss-font-size($s: 14px, $l: 1.2);
+          @include opss-font-size($s: 16px, $l: 1.2);
           // position: relative; top: -1px;
         }
       }
@@ -547,12 +529,12 @@ ul.opss-left-nav {
 .opss-secondary-text {
   color: $govuk-secondary-text-colour;
 
-  a[class*="link--no-underline"] sup[class$="font-size-14"] {
+  a[class*="link--no-underline"] sup[class$="font-size-16"] {
     color: $govuk-secondary-text-colour;
   }
 }
 
-a.opss-secondary-text sup[class$="font-size-14"] {
+a.opss-secondary-text sup[class$="font-size-16"] {
   color: $govuk-secondary-text-colour;
 }
 
@@ -612,7 +594,7 @@ div[class$="inset-text"] > ol li:last-child {
     border-width: 1px;
   }
 
-  a[class*="font-size-14"].opss-border-all {
+  a[class*="font-size-16"].opss-border-all {
     line-height: 1.2 !important;
   }
 }
@@ -653,7 +635,7 @@ section.govuk-grid-column-three-quarters div.govuk-grid-column-one-third > figur
 
 .opss-img-caption {
   font-family: $std-font-family;
-  @include opss-font-size($s: 14px, $l: 1.25);
+  @include opss-font-size($s: 16px, $l: 1.25);
 }
 
 dl.opss-summary-list-aside {

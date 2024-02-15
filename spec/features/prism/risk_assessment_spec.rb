@@ -149,9 +149,6 @@ RSpec.feature "PRISM risk assessment", type: :feature do
 
       choose "Similar" # How does the risk level compare to that of comparable products?
 
-      expect(page).to have_text("Is there potential for multiple casualties in a single incident?\nAs recorded in the assessment\nYes")
-      choose "evaluation-multiple-casualties-true-field" # Is there potential for multiple casualties in a single incident? (Yes)
-
       choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
 
       expect(page).to have_text("Are there people at increased risk?")
@@ -226,9 +223,6 @@ RSpec.feature "PRISM risk assessment", type: :feature do
       choose "evaluation-uncertainty-level-implications-for-risk-management-field" # Does the uncertainty level have implications for risk management decisions? (No)
 
       choose "Similar" # How does the risk level compare to that of comparable products?
-
-      expect(page).to have_text("Is there potential for multiple casualties in a single incident?\nAs recorded in the assessment\nNo multiple casualties")
-      choose "evaluation-multiple-casualties-true-field" # Is there potential for multiple casualties in a single incident? (Yes)
 
       choose "evaluation-significant-risk-differential-no-field" # Is there a significant risk differential? (No)
 

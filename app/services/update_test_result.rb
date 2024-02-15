@@ -12,26 +12,26 @@ class UpdateTestResult
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
-    test_result.assign_attributes(
-      date:,
-      details:,
-      legislation:,
-      result:,
-      failure_details: updated_failure_details,
-      standards_product_was_tested_against:,
-      investigation_product_id:,
-    )
-
-    if tso_certificate_reference_number.present? || tso_certificate_issue_date.present?
-      test_result.assign_attributes(
-        tso_certificate_reference_number:,
-        tso_certificate_issue_date:,
-      )
-    end
-
     test_result.transaction do
-      test_result.document.detach
-      test_result.document.attach(document)
+      if tso_certificate_reference_number.present? || tso_certificate_issue_date.present?
+        test_result.assign_attributes(
+          tso_certificate_reference_number:,
+          tso_certificate_issue_date:,
+        )
+      else
+        test_result.assign_attributes(
+          date:,
+          details:,
+          legislation:,
+          result:,
+          failure_details: updated_failure_details,
+          standards_product_was_tested_against:,
+          investigation_product_id:,
+        )
+
+        test_result.document.detach
+        test_result.document.attach(document)
+      end
 
       if test_result.save
         create_audit_activity_for_test_result_updated if any_changes?

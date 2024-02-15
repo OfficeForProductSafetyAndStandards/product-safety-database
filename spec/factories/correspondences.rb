@@ -14,23 +14,6 @@ FactoryBot.define do
     end
   end
 
-  factory :correspondence_meeting, class: "Correspondence::Meeting", parent: :correspondence do
-    correspondence_date_day { correspondence_date.day }
-    correspondence_date_month { correspondence_date.month }
-    correspondence_date_year { correspondence_date.year }
-
-    transient do
-      correspondence_date { Faker::Date.backward(days: 14) }
-    end
-
-    after(:build) do |correspondence, evaluator|
-      correspondence.transcript.attach(
-        io: File.open(evaluator.correspondence_file),
-        filename: "meeting correspondence"
-      )
-    end
-  end
-
   factory :correspondence_phone_call, class: "Correspondence::PhoneCall", parent: :correspondence do
     correspondence_date { Faker::Date.backward(days: 14) }
 

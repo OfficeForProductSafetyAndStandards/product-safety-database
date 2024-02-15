@@ -1,0 +1,32 @@
+<%=
+  govuk_table do |table|
+    table.with_head do |head|
+      head.with_row do |row|
+        row.with_cell(text: "Team name")
+        row.with_cell(text: "Products")
+      end
+    end
+
+    table.with_body do |body|
+      @by_products.decorate.each do |team|
+        body.with_row do |row|
+          row.with_cell(text: team.name)
+          row.with_cell(text: 0)
+        end
+      end
+    end
+  end
+%>
+
+<details class="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      How we measure worst teams (products)
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    <p>
+      We look for all team that have failed to make a product record in the last 12 months. The list is ordered alphabetically by team name.
+    </p>
+  </div>
+</details>

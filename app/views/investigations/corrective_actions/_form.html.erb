@@ -32,15 +32,16 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
   <% end %>
 <% end %>
 
-<%= govukSelect(
-  choices: relevant_legislation,
-  key: :legislation,
-  id: "legislation",
-  form: form,
-  is_autocomplete: true,
-  show_all_values: true,
-  label: { text: "Under which legislation?", classes: "govuk-label--m" }
-) %>
+<%= form.govuk_select :legislation,
+  label: "Under which legislation?",
+  label_classes: "govuk-label--m",
+  items: [{ text: "", value: "" }] + Rails.application.config.legislation_constants["legislation"].sort.map { |legislation| { text: legislation, value: legislation }},
+  include_blank: true,
+  multiple: true
+%>
+<%= javascript_tag type: "module", nonce: true do -%>
+  window.callAutocompleteWhenReady("legislation", { showAllValues: true })
+<% end -%>
 <% if allow_business_linking %>
   <%= govukFieldset(legend: { text: "Which business is responsible?", classes: "govuk-fieldset__legend--m" }) do %>
     <div class="govuk-form-group <%= "govuk-form-group--error" if corrective_action.errors[:business].any? %>">

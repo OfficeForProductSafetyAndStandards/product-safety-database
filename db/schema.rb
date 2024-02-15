@@ -10,23 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_07_144317) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
-
-  # Custom types defined in this database.
-  # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "account_locked_reasons", ["failed_attempts", "inactivity"]
-  create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
-  create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
-  create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
-  create_enum "has_online_recall_information", ["has_online_recall_information_yes", "has_online_recall_information_no", "has_online_recall_information_not_relevant"]
-  create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
-  create_enum "risk_levels", ["serious", "high", "medium", "low", "other", "not_conclusive"]
-  create_enum "severities", ["serious", "high", "medium", "low", "unknown_severity", "other"]
-  create_enum "usages", ["during_normal_use", "during_misuse", "with_adult_supervision", "without_adult_supervision", "unknown_usage"]
-  create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -40,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
 
   create_table "active_storage_blobs", id: :serial, force: :cascade do |t|
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+    t.string "checksum"
     t.string "content_type"
     t.datetime "created_at", precision: nil, null: false
     t.string "filename", null: false
@@ -80,7 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.string "name"
     t.jsonb "properties"
     t.datetime "time"
-    t.bigint "user_id"
+    t.uuid "user_id"
     t.bigint "visit_id"
     t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
     t.index ["properties"], name: "index_ahoy_events_on_properties", opclass: :jsonb_path_ops, using: :gin
@@ -98,7 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.string "referring_domain"
     t.datetime "started_at"
     t.text "user_agent"
-    t.bigint "user_id"
+    t.uuid "user_id"
     t.string "visit_token"
     t.string "visitor_token"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
@@ -213,10 +200,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.string "duration"
     t.string "geographic_scope"
     t.string "geographic_scopes", default: [], array: true
-    t.enum "has_online_recall_information", enum_type: "has_online_recall_information"
+    t.string "has_online_recall_information"
     t.integer "investigation_id"
     t.bigint "investigation_product_id"
-    t.string "legislation"
+    t.string "legislation", default: [], array: true
     t.string "measure_type"
     t.string "online_recall_information"
     t.text "other_action"
@@ -285,7 +272,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
   end
 
   create_table "investigation_products", id: :serial, force: :cascade do |t|
-    t.enum "affected_units_status", enum_type: "affected_units_statuses"
+    t.string "affected_units_status"
     t.string "batch_number"
     t.datetime "created_at", precision: nil, null: false
     t.text "customs_code"
@@ -303,6 +290,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.bigint "ahoy_visit_id"
     t.string "complainant_reference"
     t.boolean "coronavirus_related", default: false
+    t.string "corrective_action_not_taken_reason"
+    t.string "corrective_action_taken"
     t.datetime "created_at", precision: nil, null: false
     t.string "custom_risk_level"
     t.datetime "date_closed", precision: nil
@@ -322,8 +311,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
-    t.enum "reported_reason", enum_type: "reported_reasons"
-    t.enum "risk_level", enum_type: "risk_levels"
+    t.string "reported_reason"
+    t.string "risk_level"
     t.datetime "risk_validated_at", precision: nil
     t.string "risk_validated_by"
     t.string "state"
@@ -405,7 +394,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.string "featured_in_media"
     t.string "level_of_uncertainty"
     t.string "low_likelihood_high_severity"
-    t.boolean "multiple_casualties"
     t.string "number_of_products_expected_to_change"
     t.string "other_hazards"
     t.text "other_risk_perception_matters"
@@ -509,7 +497,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
   create_table "products", id: :serial, force: :cascade do |t|
     t.uuid "added_by_user_id"
     t.bigint "ahoy_visit_id"
-    t.enum "authenticity", enum_type: "authenticities"
+    t.string "authenticity"
     t.string "barcode", limit: 15
     t.text "brand"
     t.string "category"
@@ -517,7 +505,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.datetime "created_at", precision: nil, null: false
     t.text "description"
     t.bigint "document_upload_ids", default: [], array: true
-    t.enum "has_markings", enum_type: "has_markings_values"
+    t.string "has_markings"
     t.bigint "image_upload_ids", default: [], array: true
     t.text "markings", array: true
     t.string "name"
@@ -527,7 +515,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.string "subcategory"
     t.datetime "updated_at", precision: nil, null: false
     t.string "webpage"
-    t.enum "when_placed_on_market", enum_type: "when_placed_on_markets"
+    t.string "when_placed_on_market"
     t.index ["ahoy_visit_id"], name: "index_products_on_ahoy_visit_id"
     t.index ["owning_team_id"], name: "index_products_on_owning_team_id"
     t.index ["retired_at"], name: "index_products_on_retired_at"
@@ -553,7 +541,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.text "custom_risk_level"
     t.text "details"
     t.integer "investigation_id", null: false
-    t.enum "risk_level", enum_type: "risk_levels"
+    t.string "risk_level"
     t.datetime "updated_at", precision: nil, null: false
   end
 
@@ -569,13 +557,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.index ["name", "entity_type", "entity_id"], name: "index_roles_on_name_and_entity_type_and_entity_id", unique: true
   end
 
+  create_table "rollups", force: :cascade do |t|
+    t.jsonb "dimensions", default: {}, null: false
+    t.string "interval", null: false
+    t.string "name", null: false
+    t.datetime "time", null: false
+    t.float "value"
+    t.index ["name", "interval", "time", "dimensions"], name: "index_rollups_on_name_and_interval_and_time_and_dimensions", unique: true
+  end
+
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "country"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "deleted_at", precision: nil
     t.string "name"
     t.uuid "organisation_id"
+    t.string "regulator_name"
     t.string "team_recipient_email"
+    t.string "team_type"
+    t.string "ts_acronym"
+    t.string "ts_area"
+    t.string "ts_region"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["deleted_at"], name: "index_teams_on_deleted_at"
     t.index ["name"], name: "index_teams_on_name"
@@ -615,11 +617,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.integer "investigation_id", null: false
     t.bigint "investigation_product_id"
     t.boolean "is_date_known"
-    t.enum "severity", enum_type: "severities"
+    t.string "severity"
     t.string "severity_other"
     t.string "type", null: false
     t.datetime "updated_at", null: false
-    t.enum "usage", enum_type: "usages"
+    t.string "usage"
     t.index ["investigation_product_id"], name: "index_unexpected_events_on_investigation_product_id"
   end
 
@@ -650,7 +652,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_113621) do
     t.datetime "last_sign_in_at", precision: nil
     t.inet "last_sign_in_ip"
     t.datetime "locked_at", precision: nil
-    t.enum "locked_reason", enum_type: "account_locked_reasons"
+    t.string "locked_reason"
     t.text "mobile_number"
     t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"

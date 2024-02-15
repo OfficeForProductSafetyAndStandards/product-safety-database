@@ -1,0 +1,34 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.determine_notification_risk_level.title"), errors: @risk_level_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @risk_level_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.determine_notification_risk_level.title") %>
+      </h1>
+      <p class="govuk-body">The notification risk level will usually match the risk assessment.</p>
+      <p class="govuk-body">It can differ from risk assessments if necessary - such as when there are conflicting assessments, or where the assessment was provided by a third party.</p>
+      <%= govuk_inset_text do %>
+        <% if @number_of_risk_assessments.zero? %>
+          <p class="govuk-body">This notification does not have a risk assessment. You may want to <a href="<%= wizard_path(:add_risk_assessments) %>" class="govuk-link">add a risk assessment</a> before setting the notification risk level.</p>
+        <% elsif @number_of_risk_assessments == 1 %>
+          <p class="govuk-body">This notification has 1 risk assessment added, assessing the risk as <strong><%= @highest_risk_level %></strong>.</p>
+        <% else %>
+          <p class="govuk-body">This notification has <%= @number_of_risk_assessments %> risk assessments added, assessing the highest risk as <strong><%= @highest_risk_level %></strong>.</p>
+        <% end %>
+      <% end %>
+      <%= f.hidden_field :risk_level, value: "other" %>
+      <%= f.govuk_radio_buttons_fieldset :risk_level, legend: nil do %>
+        <%= f.govuk_radio_button :risk_level, "serious", label: { text: "Serious risk" }, link_errors: true %>
+        <%= f.govuk_radio_button :risk_level, "high", label: { text: "High risk" } %>
+        <%= f.govuk_radio_button :risk_level, "medium", label: { text: "Medium risk" } %>
+        <%= f.govuk_radio_button :risk_level, "low", label: { text: "Low risk" } %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :risk_level, "not_conclusive", label: { text: "Not conclusive" } %>
+      <% end %>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

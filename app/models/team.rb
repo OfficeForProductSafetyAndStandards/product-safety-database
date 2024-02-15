@@ -10,6 +10,9 @@ class Team < ApplicationRecord
 
   has_many :owner_collaborations, class_name: "Collaboration::Access::OwnerTeam", as: :collaborator
 
+  has_many :notifications, through: :collaboration_accesses, source: :investigation
+  has_many :owned_notifications, through: :owner_collaborations, source: :investigation
+
   has_many :roles, dependent: :destroy, as: :entity
 
   has_many :owned_products, class_name: "Product", foreign_key: "owning_team_id", inverse_of: :owning_team, dependent: :nullify

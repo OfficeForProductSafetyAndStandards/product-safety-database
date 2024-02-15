@@ -1,9 +1,13 @@
 <p class="govuk-body">
-  <% if keywords.blank? %>
-    There are currently <%= pluralize count, "business" %>.
+  <% if keywords.blank? && filters.empty? %>
+    There <%= count == 1 ? "is" : "are" %> currently <%= pluralize count, "business" %>.
   <% else %>
+    <%= pluralize count, "business" %>
     <% if keywords.present? %>
-      <%= pluralize count, "business" %> matching keyword(s) <span class="govuk-!-font-weight-bold"><%= sanitize keywords %></span>, <%= count == 1 ? "was" : "were" %> found.
+      matching keyword(s) <span class="govuk-!-font-weight-bold"> <%= sanitize keywords %></span>,
     <% end %>
+    <%= " and" if keywords.present? && !filters.empty? %>
+    <%= "matching selected filters " unless filters.empty? %>
+    <%= count == 1 ? "was" : "were" %> found.
   <% end %>
 </p>

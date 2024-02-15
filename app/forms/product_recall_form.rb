@@ -9,6 +9,7 @@ class ProductRecallForm
   attribute :pdf_title, :string
   attribute :alert_number, :string
   attribute :product_type, :string
+  attribute :subcategory, :string
   attribute :product_identifiers, :string
   attribute :product_description, :string
   attribute :country_of_origin, :string

@@ -5,24 +5,13 @@ module Notifications
 
     before_action :disallow_non_role_users
     before_action :set_notification, except: %i[index from_product]
-    before_action :disallow_changing_submitted_notification, except: %i[index from_product]
+    before_action :disallow_changing_submitted_notification, except: %i[index from_product confirmation]
     before_action :set_steps
     before_action :setup_wizard
     before_action :validate_step, except: %i[index from_product add_product remove_product]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
     breadcrumb "cases.label", :your_cases_investigations
-
-    TASK_LIST_SECTIONS = {
-      "product" => %i[search_for_or_add_a_product],
-      "notification_details" => %i[add_notification_details add_product_safety_and_compliance_details add_product_identification_details],
-      "business_details" => %i[add_business_details],
-      "evidence" => %i[add_test_reports add_supporting_images add_supporting_documents add_risk_assessments determine_notification_risk_level],
-      "corrective_actions" => %i[record_a_corrective_action],
-      "submit" => %i[check_notification_details_and_submit]
-    }.freeze
-
-    TASK_LIST_SECTIONS_OPTIONAL = %w[evidence].freeze
 
     def index
       if params[:notification_pretty_id].present?
@@ -58,7 +47,8 @@ module Notifications
     end
 
     def remove_product
-      return redirect_to notification_create_index_path(@notification) if @notification.tasks_status["search_for_or_add_a_product"] == "completed"
+      # Don't allows products to be removed once the "add notification details" task has been completed
+      return redirect_to notification_create_index_path(@notification) if @notification.tasks_status["add_notification_details"] == "completed"
 
       @investigation_product = @notification.investigation_products.find(params[:investigation_product_id])
 
@@ -115,9 +105,17 @@ module Notifications
           primary_hazard: @notification.hazard_type,
           primary_hazard_description: @notification.hazard_description,
           noncompliance_description: @notification.non_compliant_reason,
+          is_from_overseas_regulator: @notification.is_from_overseas_regulator,
+          overseas_regulator_country: @notification.overseas_regulator_country,
           add_reference_number: @notification.complainant_reference.present? ? true : nil,
           reference_number: @notification.complainant_reference
         )
+      when :add_business_details
+        @add_business_details_form = AddBusinessDetailsForm.new
+      when :add_location
+        @add_location_form = AddLocationForm.new(business_id: params[:business_id])
+      when :add_contact
+        @add_contact_form = AddContactForm.new(business_id: params[:business_id])
       when :add_test_reports
         investigation_products = @notification.investigation_products
         @existing_test_results = @notification.test_results.includes(investigation_product: :product)
@@ -129,6 +127,42 @@ module Notifications
         @image_upload = ImageUpload.new(upload_model: @notification)
       when :add_supporting_documents
         @document_form = DocumentForm.new
+      when :add_risk_assessments
+        investigation_products = @notification.investigation_products
+        @existing_prism_associated_investigations = @notification.prism_associated_investigations.includes(:prism_risk_assessment)
+        @existing_risk_assessments = @notification.risk_assessments.includes(investigation_products: :product)
+        @manage = request.query_string != "add" && (@existing_prism_associated_investigations.present? || @existing_risk_assessments.present?)
+        return redirect_to with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
+
+        @choose_investigation_product_form = ChooseInvestigationProductForm.new unless @manage
+      when :determine_notification_risk_level
+        @risk_level_form = RiskLevelForm.new(risk_level: @notification.risk_level)
+        highest_risk_level
+      when :record_a_corrective_action
+        if @notification.corrective_action_taken.blank? || @notification.corrective_action_taken != "yes"
+          @corrective_action_taken_form = CorrectiveActionTakenForm.new(
+            corrective_action_taken_yes_no: @notification.corrective_action_taken.present? ? @notification.corrective_action_taken_yes? : nil,
+            corrective_action_taken_no_specific: @notification.corrective_action_taken_yes? ? nil : @notification.corrective_action_taken,
+            corrective_action_not_taken_reason: @notification.corrective_action_not_taken_reason
+          )
+          return render :record_a_corrective_action_taken
+        elsif params[:investigation_product_ids].present?
+          @corrective_action_form = CorrectiveActionForm.new
+          @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
+
+          return redirect_to wizard_path(:record_a_corrective_action) if @investigation_products.blank?
+
+          return render :record_a_corrective_action_details
+        elsif @notification.corrective_action_taken == "yes"
+          investigation_products = @notification.investigation_products
+          @existing_corrective_actions = @notification.corrective_actions.includes(investigation_product: :product)
+          @manage = request.query_string != "add" && @existing_corrective_actions.present?
+          return redirect_to wizard_path(:record_a_corrective_action, investigation_product_ids: [investigation_products.first.id]) if investigation_products.count == 1 && !@manage
+
+          @choose_investigation_products_form = ChooseInvestigationProductsForm.new unless @manage
+        else
+          return render :record_a_corrective_action_later
+        end
       end
 
       render_wizard
@@ -184,14 +218,57 @@ module Notifications
               silent: true
             )
           end
+          ChangeNotificationOverseasRegulator.call!(
+            notification: @notification,
+            is_from_overseas_regulator: add_product_safety_and_compliance_details_params[:is_from_overseas_regulator],
+            overseas_regulator_country: add_product_safety_and_compliance_details_params[:overseas_regulator_country],
+            user: current_user,
+            silent: true
+          )
           ChangeNotificationReferenceNumber.call!(
             notification: @notification,
             reference_number: add_product_safety_and_compliance_details_params[:add_reference_number] ? add_product_safety_and_compliance_details_params[:reference_number] : nil,
-            user: current_user
+            user: current_user,
+            silent: true
           )
         else
           return render_wizard
         end
+      when :add_business_details
+        @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
+
+        return render_wizard unless @add_business_details_form.valid?
+
+        business = Business.new
+
+        ChangeBusinessNames.call!(
+          trading_name: @add_business_details_form.trading_name,
+          legal_name: @add_business_details_form.legal_name,
+          notification: @notification,
+          user: current_user,
+          business:
+        )
+
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user)
+
+        additional_params = { business_id: business.id }
+      when :add_location
+        @add_location_form = AddLocationForm.new(add_location_params)
+
+        return render_wizard unless @add_location_form.valid?
+
+        Location.create!(
+          name: "Registered office address",
+          address_line_1: @add_location_form.address_line_1,
+          address_line_2: @add_location_form.address_line_2,
+          city: @add_location_form.city,
+          county: @add_location_form.county,
+          country: @add_location_form.country,
+          postal_code: @add_location_form.postal_code,
+          business_id: @add_location_form.business_id
+        )
+
+        additional_params = { business_id: @add_location_form.business_id }
       when :add_test_reports
         return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
         return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
@@ -244,6 +321,99 @@ module Notifications
 
           return render_wizard
         end
+      when :add_risk_assessments
+        return redirect_to "#{wizard_path(:add_risk_assessments)}?add" if params[:add_another_risk_assessment] == "true"
+        return redirect_to wizard_path(:add_risk_assessments) if params[:add_another_risk_assessment].blank? && params[:final].present?
+
+        if params[:add_another_risk_assessment].blank?
+          @choose_investigation_product_form = ChooseInvestigationProductForm.new(add_risk_assessments_params)
+
+          if @choose_investigation_product_form.valid?
+            return redirect_to with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: add_risk_assessments_params[:investigation_product_id])
+          else
+            return render_wizard
+          end
+        end
+      when :determine_notification_risk_level
+        @risk_level_form = RiskLevelForm.new(risk_level: determine_notification_risk_level_params[:risk_level])
+
+        if @risk_level_form.valid?
+          ChangeNotificationRiskLevel.call!(
+            notification: @notification,
+            risk_level: @risk_level_form.risk_level,
+            user: current_user,
+            silent: true
+          )
+        else
+          highest_risk_level
+          return render_wizard
+        end
+      when :record_a_corrective_action
+        if params[:corrective_action_taken_form].present?
+          @corrective_action_taken_form = CorrectiveActionTakenForm.new(corrective_action_taken_params)
+
+          if @corrective_action_taken_form.valid?
+            ChangeNotificationCorrectiveActionTaken.call!(
+              notification: @notification,
+              corrective_action_taken: @corrective_action_taken_form.corrective_action_taken,
+              corrective_action_not_taken_reason: @corrective_action_taken_form.corrective_action_not_taken_reason,
+              user: current_user,
+              silent: true
+            )
+
+            if @corrective_action_taken_form.corrective_action_taken == "yes"
+              return redirect_to wizard_path(:record_a_corrective_action)
+            else
+              return render :record_a_corrective_action_later
+            end
+          else
+            return render :record_a_corrective_action_taken
+          end
+        elsif params[:investigation_product_ids].present?
+          @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
+          @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
+
+          if @corrective_action_form.valid?
+            @investigation_products.each do |investigation_product|
+              AddCorrectiveActionToNotification.call!(
+                notification: @notification,
+                investigation_product_id: investigation_product.id,
+                action: @corrective_action_form.action,
+                has_online_recall_information: @corrective_action_form.has_online_recall_information,
+                online_recall_information: @corrective_action_form.online_recall_information,
+                date_decided: @corrective_action_form.date_decided,
+                legislation: @corrective_action_form.legislation,
+                business_id: @corrective_action_form.business_id,
+                measure_type: @corrective_action_form.measure_type,
+                duration: @corrective_action_form.duration,
+                geographic_scopes: @corrective_action_form.geographic_scopes,
+                details: @corrective_action_form.details,
+                document: @corrective_action_form.document,
+                user: current_user,
+                silent: true
+              )
+            end
+
+            return redirect_to wizard_path(:record_a_corrective_action)
+          else
+            return render :record_a_corrective_action_details
+          end
+        elsif @notification.corrective_action_taken == "yes"
+          return redirect_to "#{wizard_path(:record_a_corrective_action)}?add" if params[:add_another_corrective_action] == "true"
+          return redirect_to wizard_path(:record_a_corrective_action) if params[:add_another_corrective_action].blank? && params[:final].present?
+
+          if params[:add_another_corrective_action].blank?
+            @choose_investigation_products_form = ChooseInvestigationProductsForm.new(record_a_corrective_action_params)
+
+            if @choose_investigation_products_form.valid?
+              return redirect_to wizard_path(:record_a_corrective_action, investigation_product_ids: @choose_investigation_products_form.investigation_product_ids)
+            else
+              return render_wizard
+            end
+          end
+        end
+      when :check_notification_details_and_submit
+        return render_wizard unless @notification.ready_to_submit? || params[:draft] == "true"
       end
 
       @notification.tasks_status[step.to_s] = "completed"
@@ -252,10 +422,18 @@ module Notifications
         # "Save as draft" or final save button of the section clicked.
         # Manually save, then finish the wizard.
         if @notification.save(context: step)
+          if step == :check_notification_details_and_submit && params[:final] == "true"
+            @notification.submit!
+            return redirect_to confirmation_notification_create_index_path(@notification)
+          end
+
           redirect_to notification_create_index_path(@notification)
         else
           render_wizard
         end
+      elsif additional_params
+        @notification.save!(context: step)
+        redirect_to wizard_path(@next_step, additional_params)
       else
         render_wizard(@notification, { context: step })
       end
@@ -319,8 +497,8 @@ module Notifications
     def show_with_notification_product
       case params[:step].to_sym
       when :add_test_reports
-        if params[:test_result_id].present?
-          @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        if params[:entity_id].present?
+          @test_result = @investigation_product.test_results.find(params[:entity_id])
 
           if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
             @test_result_form = TestResultForm.from(@test_result)
@@ -334,15 +512,34 @@ module Notifications
           render :add_test_reports_opss_funding
         end
       when :add_risk_assessments
-        # TODO(ruben)
+        if params[:entity_id] == "new"
+          @risk_assessment_form = RiskAssessmentForm.new
+          render :add_risk_assessments_legacy
+        else
+          # Find all submitted PRISM risk assessments that are associated with the chosen product
+          # either directly or via a notification that is not the current notification.
+          @related_prism_risk_assessments = PrismRiskAssessment
+            .left_joins(:prism_associated_products, prism_associated_investigations: :prism_associated_investigation_products)
+            .where(prism_associated_products: { product_id: @investigation_product.product.id })
+            .or(PrismRiskAssessment.where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } }))
+            .where.not(id:
+              PrismRiskAssessment
+                .left_joins(prism_associated_investigations: :prism_associated_investigation_products)
+                .where(prism_associated_investigations: { investigation_id: @notification.id }).where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } })
+                .submitted
+                .distinct)
+            .submitted
+            .order(updated_at: :desc)
+          render :add_risk_assessments_prism_or_legacy
+        end
       end
     end
 
     def update_with_notification_product
       case params[:step].to_sym
       when :add_test_reports
-        if params[:test_result_id].present?
-          @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        if params[:entity_id].present?
+          @test_result = @investigation_product.test_results.find(params[:entity_id])
 
           if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
             @test_result_form = TestResultForm.new(test_details_params)
@@ -382,7 +579,7 @@ module Notifications
                 user: current_user,
                 silent: true
               )
-              redirect_to with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: @test_result.id, opss_funded: params[:opss_funded])
+              redirect_to with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, entity_id: @test_result.id, opss_funded: params[:opss_funded])
             else
               render :add_test_reports_funding_details
             end
@@ -392,20 +589,48 @@ module Notifications
 
           if @set_test_result_funding_on_case_form.valid?
             test_result = @notification.test_results.create!(investigation_product: @investigation_product)
-            redirect_to with_product_and_test_result_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, test_result_id: test_result.id, opss_funded: opss_funding_params[:opss_funded])
+            redirect_to with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @investigation_product.id, entity_id: test_result.id, opss_funded: opss_funding_params[:opss_funded])
           else
             render :add_test_reports_opss_funding
           end
         end
       when :add_risk_assessments
-        # TODO(ruben)
+        if params[:entity_id] == "new"
+          # Create a legacy risk assessment
+          @risk_assessment_form = RiskAssessmentForm.new(risk_assessments_params.merge(investigation_product_ids: [@investigation_product.id], current_user:))
+          @risk_assessment_form.cache_file!
+          @risk_assessment_form.load_risk_assessment_file
+
+          if @risk_assessment_form.valid?
+            AddRiskAssessmentToNotification.call!(
+              notification: @notification,
+              investigation_product_ids: [@investigation_product.id],
+              assessed_on: @risk_assessment_form.assessed_on,
+              risk_level: @risk_assessment_form.risk_level,
+              assessed_by_team_id: @risk_assessment_form.assessed_by_team_id,
+              assessed_by_other: @risk_assessment_form.assessed_by_other,
+              details: @risk_assessment_form.details,
+              risk_assessment_file: @risk_assessment_form.risk_assessment_file,
+              user: current_user,
+              silent: true
+            )
+            redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+          else
+            render :add_risk_assessments_legacy
+          end
+        elsif params[:entity_id].present?
+          # Attach an existing PRISM risk assessment
+          prism_risk_assessment = PrismRiskAssessment.find(params[:entity_id])
+          AddPrismRiskAssessmentToNotification.call!(notification: @notification, product: @investigation_product.product, prism_risk_assessment:)
+          redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+        end
       end
     end
 
     def remove_with_notification_product
       case params[:step].to_sym
       when :add_test_reports
-        @test_result = @investigation_product.test_results.find(params[:test_result_id])
+        @test_result = @investigation_product.test_results.find(params[:entity_id])
         if request.delete?
           @test_result.destroy!
           redirect_to notification_create_path(@notification, id: "add_test_reports")
@@ -413,7 +638,71 @@ module Notifications
           render :remove_test_report
         end
       when :add_risk_assessments
-        # TODO(ruben)
+        @risk_assessment = @investigation_product.risk_assessments.find(params[:entity_id])
+        if request.delete?
+          @risk_assessment.risk_assessed_products.destroy_all
+          @risk_assessment.destroy!
+          redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+        else
+          render :remove_risk_assessment
+        end
+      end
+    end
+
+    def update_with_entity
+      @corrective_action = @notification.corrective_actions.find(params[:entity_id])
+      if request.patch? || request.put?
+        @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
+
+        if @corrective_action_form.valid?
+          UpdateCorrectiveAction.call!(
+            corrective_action: @corrective_action,
+            investigation_product_id: @corrective_action.investigation_product_id,
+            action: @corrective_action_form.action,
+            has_online_recall_information: @corrective_action_form.has_online_recall_information,
+            online_recall_information: @corrective_action_form.online_recall_information,
+            date_decided: @corrective_action_form.date_decided,
+            legislation: @corrective_action_form.legislation,
+            business_id: @corrective_action_form.business_id,
+            measure_type: @corrective_action_form.measure_type,
+            duration: @corrective_action_form.duration,
+            geographic_scopes: @corrective_action_form.geographic_scopes,
+            details: @corrective_action_form.details,
+            related_file: @corrective_action_form.related_file,
+            document: @corrective_action_form.document,
+            changes: @corrective_action_form.changes,
+            user: current_user,
+            silent: true
+          )
+
+          redirect_to notification_create_path(@notification, id: "record_a_corrective_action")
+        else
+          render :record_a_corrective_action_details
+        end
+      else
+        @corrective_action_form = CorrectiveActionForm.from(@corrective_action)
+        render :record_a_corrective_action_details
+      end
+    end
+
+    def remove_with_entity
+      case params[:step].to_sym
+      when :add_risk_assessments
+        @prism_associated_investigation = @notification.prism_associated_investigations.find(params[:entity_id])
+        if request.delete?
+          RemovePrismRiskAssessmentFromNotification.call!(notification: @notification, prism_risk_assessment: @prism_associated_investigation.prism_risk_assessment)
+          redirect_to notification_create_path(@notification, id: "add_risk_assessments")
+        else
+          render :remove_prism_risk_assessment
+        end
+      when :record_a_corrective_action
+        @corrective_action = @notification.corrective_actions.find(params[:entity_id])
+        if request.delete?
+          @corrective_action.destroy!
+          redirect_to notification_create_path(@notification, id: "record_a_corrective_action")
+        else
+          render :remove_corrective_action
+        end
       end
     end
 
@@ -433,6 +722,12 @@ module Notifications
       end
     end
 
+    def confirmation
+      redirect_to notification_create_index_path(@notification) unless @notification.submitted?
+
+      @products = @notification.investigation_products.includes(:product).decorate.map(&:product).map(&:name_with_brand).to_sentence
+    end
+
   private
 
     def disallow_non_role_users
@@ -440,22 +735,23 @@ module Notifications
     end
 
     def set_notification
-      @notification = Investigation::Notification.includes(:creator_user).where(pretty_id: params[:notification_pretty_id], creator_user: { id: current_user.id }).where.not(state: "submitted").first!
+      @notification = Investigation::Notification.includes(:creator_user).where(pretty_id: params[:notification_pretty_id], creator_user: { id: current_user.id }).first!
     end
 
     def disallow_changing_submitted_notification
-      # TODO(ruben): redirect to view notification page once ready
-      redirect_to notifications_path if @notification.submitted?
+      redirect_to notification_path(@notification) unless @notification.draft?
     end
 
     def set_steps
-      self.steps = TASK_LIST_SECTIONS.values.flatten
+      self.steps = Investigation::Notification::TASK_LIST_SECTIONS.values.flatten
     end
 
     def validate_step
-      # Don't allow access to a step if the step before has not yet been completed.
+      # Don't allow access to a step if the step before has not yet been completed (taking into account optional steps).
       # Checks if the step is the first step or the autogenerated "finish" step.
-      redirect_to notification_create_index_path(@notification) unless step == previous_step || step == :wizard_finish || @notification.tasks_status[previous_step.to_s] == "completed"
+      optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
+      previous_task = TaskListService.previous_task(task: step, all_tasks: wizard_steps, optional_tasks:)
+      redirect_to notification_create_index_path(@notification) unless step == previous_step || step == :wizard_finish || @notification.tasks_status[previous_task.to_s] == "completed"
     end
 
     def set_notification_product
@@ -496,7 +792,7 @@ module Notifications
     end
 
     def add_product_safety_and_compliance_details_params
-      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :add_reference_number, :reference_number, :draft)
+      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :is_from_overseas_regulator, :overseas_regulator_country, :add_reference_number, :reference_number, :draft)
     end
 
     def number_of_affected_units_params
@@ -529,6 +825,62 @@ module Notifications
 
     def document_upload_params
       params.require(:document_form).permit(:document, :title, :final)
+    end
+
+    def add_risk_assessments_params
+      params.require(:choose_investigation_product_form).permit(:investigation_product_id, :final)
+    end
+
+    def risk_assessments_params
+      params.require(:risk_assessment_form).permit(:risk_level, :assessed_by, :assessed_by_team_id, :assessed_by_other, :existing_risk_assessment_file_file_id, :risk_assessment_file, :details, assessed_on: %i[day month year])
+    end
+
+    def determine_notification_risk_level_params
+      params.require(:risk_level_form).permit(:risk_level, :final)
+    end
+
+    def corrective_action_taken_params
+      params.require(:corrective_action_taken_form).permit(:corrective_action_taken_yes_no, :corrective_action_taken_no_specific, :corrective_action_not_taken_reason)
+    end
+
+    def add_business_details_params
+      params.require(:add_business_details_form).permit(:trading_name, :legal_name)
+    end
+
+    def add_location_params
+      params.require(:add_location_form).permit(:address_line_1, :address_line_2, :city, :county, :postal_code, :country, :business_id)
+    end
+
+    def record_a_corrective_action_params
+      allowed_params = params.require(:choose_investigation_products_form).permit(investigation_product_ids: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:investigation_product_ids].reject!(&:blank?)
+      allowed_params
+    end
+
+    def record_a_corrective_action_details_params
+      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, date_decided: %i[day month year], legislation: [], geographic_scopes: [])
+      # The form builder inserts an empty hidden field that needs to be removed before validation and saving
+      allowed_params[:legislation].reject!(&:blank?)
+      allowed_params[:geographic_scopes].reject!(&:blank?)
+      allowed_params
+    end
+
+    def highest_risk_level
+      all_risk_levels = @notification.risk_assessments.map(&:risk_level) + @notification.prism_risk_assessments.map(&:overall_product_risk_level)
+      @number_of_risk_assessments = all_risk_levels.size
+      @highest_risk_level = case all_risk_levels
+                            in [*, "serious", *]
+                              "serious"
+                            in [*, "high", *]
+                              "high"
+                            in [*, "medium", *]
+                              "medium"
+                            in [*, "low", *]
+                              "low"
+                            else
+                              "unknown"
+                            end
     end
   end
 end

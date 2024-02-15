@@ -76,7 +76,7 @@ jobs:
         cf auth
         cf target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
-        cf run-task $APP_NAME -c "bin/rails opensearch:index" --name add-opensearch-indexes -k 2G
+        cf run-task $APP_NAME -c "bin/rails notifications:index" --name add-opensearch-indexes -k 2G
         task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-$PR_NUMBER | grep add-opensearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
 
     - name: Update deployment status (success)
@@ -102,7 +102,7 @@ jobs:
       if: success()
       uses: ruby/setup-ruby@v1
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}

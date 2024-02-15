@@ -4,6 +4,10 @@ class CorrectiveActionDecorator < ApplicationDecorator
 
   MEDIUM_TITLE_TEXT_SIZE_THRESHOLD = 62
 
+  def legislation
+    object.legislation.to_sentence
+  end
+
   def geographic_scopes
     object.geographic_scopes.map { |geographic_scope|
       I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
@@ -24,6 +28,12 @@ class CorrectiveActionDecorator < ApplicationDecorator
     action_name = other? ? other_action : I18n.t(action, scope: %i[corrective_action attributes actions])
 
     "#{action_name}: #{investigation_product.name}"
+  end
+
+  def supporting_information_full_title
+    action_name = other? ? other_action : I18n.t(action, scope: %i[corrective_action attributes actions])
+
+    "#{action_name}: #{investigation_product.product.decorate.name_with_brand}"
   end
 
   def date_of_activity

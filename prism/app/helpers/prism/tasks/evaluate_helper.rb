@@ -34,12 +34,6 @@ module Prism
       I18n.t("prism.evaluation.level_of_uncertainty.#{@evaluation.level_of_uncertainty}")
     end
 
-    def multiple_casualties
-      return unless @harm_scenarios
-
-      I18n.t("prism.evaluation.multiple_casualties.#{@harm_scenarios.map(&:multiple_casualties).include?(true)}")
-    end
-
     def risk_to_non_users
       return unless @harm_scenarios
 

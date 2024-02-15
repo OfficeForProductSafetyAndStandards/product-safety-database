@@ -149,11 +149,24 @@ jobs:
         source deploy-github-functions.sh
         gh_deploy_failure production $LOG_URL
 
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref_name }}
+    - name: Create Sentry release
+      if: success()
+      uses: getsentry/action-release@v1
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: opss
+        SENTRY_PROJECT: beis-psd
+      with:
+        environment: prod
+
     - name: Set up Ruby
       if: success()
       uses: ruby/setup-ruby@v1
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}

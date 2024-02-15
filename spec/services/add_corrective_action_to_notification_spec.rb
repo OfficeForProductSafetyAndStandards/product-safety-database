@@ -34,7 +34,7 @@ RSpec.describe AddCorrectiveActionToNotification, :with_stubbed_mailer, :with_te
     expect(result.corrective_action).not_to be_new_record
     expect(result.corrective_action)
       .to have_attributes(
-        investigation: notification, date_decided:, business_id: business.id, details:, legislation:, measure_type:,
+        investigation: notification, date_decided:, business_id: business.id, details:, legislation: [legislation], measure_type:,
         duration:, geographic_scopes:, other_action:, action:, investigation_product_id: investigation_product.id,
         online_recall_information:, has_online_recall_information:
       )

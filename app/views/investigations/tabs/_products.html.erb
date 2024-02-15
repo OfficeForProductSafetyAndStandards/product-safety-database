@@ -18,7 +18,7 @@
     <section>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-          <%= tag.h3 @product.name, class: "govuk-heading-m", id: dom_id(@investigation_product) %>
+          <%= tag.h3 @product.name_with_brand, class: "govuk-heading-m", id: dom_id(@investigation_product) %>
         </div>
         <% if policy(@investigation_product).edit_product? %>
           <div class="govuk-grid-column-one-quarter">

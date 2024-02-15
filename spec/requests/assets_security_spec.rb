@@ -290,7 +290,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
 
         context "when the activity is a correspondence" do
           let(:product) { create(:product, investigations: [investigation]) }
-          let(:correspondence) { create(:correspondence_meeting, investigation:) }
+          let(:correspondence) { create(:correspondence, investigation:) }
           let(:investigation_product) { investigation.investigation_products.first }
 
           let!(:activity) { AuditActivity::Correspondence::Base.create(investigation:, investigation_product:, correspondence:) }

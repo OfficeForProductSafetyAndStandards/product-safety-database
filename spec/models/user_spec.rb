@@ -390,27 +390,27 @@ RSpec.describe User do
   describe ".inactive" do
     subject(:users) { described_class.inactive }
 
-    let!(:user) { create(:user, trait, last_activity_at_approx:) }
+    let!(:user) { create(:user, trait, last_sign_in_at:) }
     let(:trait) { :activated }
 
-    context "when last_activity_at_approx is nil" do
-      let(:last_activity_at_approx) { nil }
+    context "when last_sign_in_at is nil" do
+      let(:last_sign_in_at) { nil }
 
       it "is not included in the results" do
         expect(users).not_to include(user)
       end
     end
 
-    context "when last_activity_at_approx is within 3 months" do
-      let(:last_activity_at_approx) { 2.months.ago }
+    context "when last_sign_in_at is within 3 months" do
+      let(:last_sign_in_at) { 2.months.ago }
 
       it "is not included in the results" do
         expect(users).not_to include(user)
       end
     end
 
-    context "when last_activity_at_approx is more than 3 months ago" do
-      let(:last_activity_at_approx) { 4.months.ago }
+    context "when last_sign_in_at is more than 3 months ago" do
+      let(:last_sign_in_at) { 4.months.ago }
 
       context "when user is activated" do
         it "is included in the results" do
@@ -437,8 +437,8 @@ RSpec.describe User do
   end
 
   describe ".lock_inactive_users!", :with_stubbed_mailer do
-    let!(:inactive_user) { create(:user, :activated, last_activity_at_approx: 5.months.ago) }
-    let!(:active_user) { create(:user, :activated, last_activity_at_approx: 1.day.ago) }
+    let!(:inactive_user) { create(:user, :activated, last_sign_in_at: 5.months.ago) }
+    let!(:active_user) { create(:user, :activated, last_sign_in_at: 1.day.ago) }
     let!(:invited_user) { create(:user, :invited) }
 
     before { described_class.lock_inactive_users! }
@@ -461,40 +461,6 @@ RSpec.describe User do
 
     it "does not send emails with unlock instructions immediately" do
       expect(delivered_emails).to be_empty
-    end
-  end
-
-  describe "#update_last_activity_time!" do
-    subject(:user) { create(:user, last_activity_at_approx:) }
-
-    context "when last_activity_at_approx is nil" do
-      let(:last_activity_at_approx) { nil }
-
-      it "updates last_activity_at_approx" do
-        freeze_time do
-          expect { user.update_last_activity_time! }.to change(user, :last_activity_at_approx).from(nil).to(Time.zone.now)
-        end
-      end
-    end
-
-    context "when last_activity_at_approx is within 5 minutes" do
-      let(:last_activity_at_approx) { 3.minutes.ago }
-
-      it "does not update last_activity_at_approx" do
-        freeze_time do
-          expect { user.update_last_activity_time! }.not_to change(user, :last_activity_at_approx)
-        end
-      end
-    end
-
-    context "when last_activity_at_approx is more than 5 minutes ago" do
-      let(:last_activity_at_approx) { 10.minutes.ago }
-
-      it "updates last_activity_at_approx" do
-        freeze_time do
-          expect { user.update_last_activity_time! }.to change(user, :last_activity_at_approx).from(last_activity_at_approx).to(Time.zone.now)
-        end
-      end
     end
   end
 

@@ -10,6 +10,11 @@ class InvestigationDecorator < ApplicationDecorator
     user_title || complainant_reference || pretty_id
   end
 
+  def unformatted_description
+    # Bypasses `FormattedDescription` for situations where we want the raw value of the field.
+    object.description
+  end
+
   def risk_assessment_risk_levels
     risk_assessments.collect(&:risk_level_description).uniq
   end

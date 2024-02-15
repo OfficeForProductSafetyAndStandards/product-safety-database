@@ -1,23 +1,13 @@
 <%= page_title "Update summary", errors: @form.errors.any? %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= error_summary @form.errors %>
-    <%= form_with(model: @form,
-                  url: investigation_summary_path(@investigation),
-                  method: :patch,
-                  builder: ApplicationFormBuilder) do |form| %>
-
-      <%= form.govuk_text_area(:summary,
-                               rows: 11,
-                               label: "Edit the summary",
-                               label_classes: "govuk-label--l govuk-!-margin-bottom-2",
-                               hint: "You can add and edit a general summary about the notification.",
-                               hint_classes: "govuk-!-margin-bottom-6") %>
-
-      <div class="govuk-button-group">
-        <%= form.submit "Save", class: "govuk-button govuk-link--no-visited-state" %>
-        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
-      </div>
+    <%= form_with model: @form, url: investigation_summary_path(@investigation), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_text_area :summary, label: { text: "Edit the summary", size: "l", tag: "h1" }, hint: { text: "You can add and edit a general summary about the notification." }, rows: 11, value: @investigation.unformatted_description %>
+      <%= f.govuk_submit "Save" do %>
+        <a href="<%= investigation_path(@investigation) %>" class="govuk-link">Cancel</a>
+      <% end %>
     <% end %>
   </div>
 </div>

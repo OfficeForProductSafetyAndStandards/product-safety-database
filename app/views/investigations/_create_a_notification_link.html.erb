@@ -1,7 +1,7 @@
 <div class="govuk-grid-column-one-third">
   <div class="opss-text-align-right govuk-!-margin-bottom-8">
     <% if current_user.can_use_notification_task_list? %>
-      <p class="govuk-body"><a href="<%= notifications_create_index_path %>" class="govuk-link govuk-link--no-visited-state" data-cy="create-new-notification">Create a notification</a></p>
+      <%= govuk_button_link_to "Create a new product safety notification", notifications_create_index_path, data: { cy: "create-new-notification" } %>
     <% else %>
       <p class="govuk-body"><a href="<%= create_a_case_page_index_path %>" class="govuk-link govuk-link--no-visited-state" data-cy="create-case">Create a notification</a></p>
     <% end %>

@@ -1,0 +1,6 @@
+
+<%= govukCheckboxes(
+  key: "",
+  form: form,
+  items: Business::BUSINESS_TYPES.map { |business_type| { key: business_type.to_s, text: t("investigations.business_types.new.types.#{business_type}.label") , value: true } }
+) %>

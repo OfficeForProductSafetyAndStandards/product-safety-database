@@ -2,7 +2,7 @@ module Notifications
   module CreateHelper
     def sections_complete
       tasks_status = @notification.tasks_status
-      Notifications::CreateController::TASK_LIST_SECTIONS.map { |_section, tasks|
+      Investigation::Notification::TASK_LIST_SECTIONS.map { |_section, tasks|
         complete = tasks.map { |task|
           tasks_status[task.to_s] == "completed" ? 1 : 0
         }.exclude?(0)
@@ -11,7 +11,8 @@ module Notifications
     end
 
     def task_status(task)
-      previous_task = previous_task(task)
+      optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
+      previous_task = TaskListService.previous_task(task:, all_tasks: wizard_steps, optional_tasks:)
 
       if %w[in_progress completed].include?(@notification.tasks_status[task.to_s])
         @notification.tasks_status[task.to_s]
@@ -53,7 +54,14 @@ module Notifications
     def hazards_options
       [OpenStruct.new(id: "", name: "")] +
         Rails.application.config.hazard_constants["hazard_type"].map do |hazard_type|
-          OpenStruct.new(id: hazard_type.parameterize.underscore, name: hazard_type)
+          OpenStruct.new(id: hazard_type, name: hazard_type)
+        end
+    end
+
+    def countries_options
+      [OpenStruct.new(id: "", name: "")] +
+        Country.overseas_countries.map do |country|
+          OpenStruct.new(id: country[1], name: country[0])
         end
     end
 
@@ -85,37 +93,58 @@ module Notifications
         end
     end
 
-  private
+    def team_options
+      [OpenStruct.new(id: "", name: "")] +
+        Team.all.order(:name).map do |team|
+          OpenStruct.new(id: team.id, name: team.name)
+        end
+    end
 
-    def previous_task(task)
-      return if first_task?(task)
+    def specific_product_safety_issues
+      unsafe = "<p class=\"govuk-body\">Product hazard: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
+      non_compliant = "<p class=\"govuk-body\">Product incomplete markings, labeling or other issues</p><p class=\"govuk-body-s\">#{@notification.non_compliant_reason}</p>" if @notification.non_compliant? || @notification.unsafe_and_non_compliant?
+      [unsafe, non_compliant].join
+    end
 
-      all_tasks = wizard_steps
-      optional_tasks = Notifications::CreateController::TASK_LIST_SECTIONS.slice(*Notifications::CreateController::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
-      mandatory_tasks = all_tasks - optional_tasks
+    def formatted_business_address(location)
+      [location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].map(&:presence).compact.join("<br>")
+    end
 
-      # Return the previous mandatory task or `nil` if this is the first mandatory task
-      index = mandatory_tasks.index(task)
-      unless index.nil?
-        return if index.zero?
+    def formatted_business_contact(contact)
+      [contact.name, contact.job_title, contact.email, contact.phone_number].map(&:presence).compact.join("<br>")
+    end
 
-        return mandatory_tasks.at(index - 1)
-      end
+    def formatted_test_results(test_results)
+      test_results.map { |test_result| link_to "#{test_result.document.blob.filename} (opens in new tab)", test_result.document.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if test_result.document.blob.present? }.join("<br>")
+    end
 
-      # This is an optional task - find and return the last mandatory task or `nil` if we get to the first task without a match
-      previous_index = all_tasks.index(task) - 1
+    def formatted_risk_assessments(prism_risk_assessments, risk_assessments)
+      (prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact.join("<br>")
+    end
 
-      loop do
-        previous_task = all_tasks.at(previous_index)
-        return previous_task if mandatory_tasks.include?(previous_task)
-        return if previous_index.zero?
+    def formatted_uploads(uploads)
+      uploads.map { |upload| link_to "#{upload.blob.filename} (opens in new tab)", upload.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if upload.blob.present? }.join("<br>")
+    end
 
-        previous_index -= 1
+    def risk_level_tag
+      case @notification.risk_level
+      when "low"
+        govuk_tag(text: "Low risk", colour: "green")
+      when "medium"
+        govuk_tag(text: "Medium risk", colour: "yellow")
+      when "high"
+        govuk_tag(text: "High risk", colour: "orange")
+      when "serious"
+        govuk_tag(text: "Serious risk", colour: "red")
+      when "not_conclusive"
+        govuk_tag(text: "Not conclusive", colour: "grey")
+      else
+        govuk_tag(text: "Unknown risk", colour: "grey")
       end
     end
 
-    def first_task?(task)
-      wizard_steps.index(task).zero?
+    def corrective_action_not_taken_reasons
+      @notification.corrective_action_taken_other? ? @notification.corrective_action_not_taken_reason : I18n.t("corrective_action.not_taken_reason.#{@notification.corrective_action_taken}")
     end
   end
 end

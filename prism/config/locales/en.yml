@@ -142,8 +142,6 @@ en:
               inclusion: Select whether the uncertainty level has implications for risk management decisions
             comparable_risk_level:
               inclusion: Select how the risk level compares to that of comparable products
-            multiple_casualties:
-              inclusion: Select whether there is potential for multiple casualties in a single incident
             significant_risk_differential:
               inclusion: Select whether there is a significant risk differential
             people_at_increased_risk:
@@ -257,9 +255,6 @@ en:
         low: Low level of uncertainty
         medium: Medium level of uncertainty
         high: High level of uncertainty
-      multiple_casualties:
-        "true": "Yes"
-        "false": No multiple casualties
       risk_to_non_users:
         "true": Non-users of the product are at risk
         "false": Non-users of the product are not at risk
@@ -282,9 +277,6 @@ en:
         sole_judgement_or_estimation: Sole judgement or estimation
         some_limited_empirical_evidence: Some limited empirical evidence
         strong_empirical_evidence: Strong empirical evidence
-      multiple_casualties_verbose:
-        "true": Multiple casualties
-        "false": No multiple casualties
       other_types_of_harm:
         psychological_harm: Psychological harm
         damage_to_property: Damage to property

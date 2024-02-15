@@ -26,7 +26,6 @@ applications:
     - psd-email-whitelist-env
     - psd-health-env
     - psd-notify-env
-    - psd-pghero-env
     - psd-queue-6
     - psd-rails-env
     - ((sentry-service-name))

@@ -22,16 +22,16 @@
       <% end %>
       <%= f.govuk_select(
         :safety_legislation_standards,
-        options_for_select([""] + Rails.application.config.legislation_constants["legislation"] + ["Not yet determined"], @product_market_detail.safety_legislation_standards),
+        options_for_select([""] + Rails.application.config.legislation_constants["legislation"].sort + ["Not yet determined"], @product_market_detail.safety_legislation_standards),
         label: { text: "Product safety legislation", size: "m" },
         hint: { text: "Search applicable safety legislation and choose the ones you feel are relevant to your product." },
         multiple: true
       ) %>
       <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
       <% content_for :extra_javascript do %>
-        <%= javascript_tag nonce: true do -%>
-          window.callAutocompleteWhenReady("product-market-detail-safety-legislation-standards-field")
-          window.callAutocompleteWhenReady("product-market-detail-safety-legislation-standards-field-error")
+        <%= javascript_tag type: "module", nonce: true do -%>
+          window.callAutocompleteWhenReady("product-market-detail-safety-legislation-standards-field", { showAllValues: true })
+          window.callAutocompleteWhenReady("product-market-detail-safety-legislation-standards-field-error", { showAllValues: true })
         <% end -%>
       <% end %>
     <% end %>

@@ -10,11 +10,10 @@
   <div class="govuk-grid-column-two-thirds">
     <%= govukSelect(
       key: key,
-      show_all_values: local_assigns[:show_all_values],
       items: actual_items,
       form: form,
       label: { text: label, classes: "govuk-visually-hidden" },
-      is_autocomplete: true
+      include_blank: true
     ) %>
   </div>
 </div>

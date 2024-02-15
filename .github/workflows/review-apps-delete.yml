@@ -35,8 +35,7 @@ jobs:
         cf api api.london.cloud.service.gov.uk
         cf auth
         cf target -o 'beis-opss' -s $SPACE
-        app_exists="$(cf apps | grep psd-pr-$PR_NUMBER)"
-        if [ -z "$app_exists" ]; then
+        if [[ $(cf apps | grep psd-pr-$PR_NUMBER) ]]; then
           cf stop psd-pr-$PR_NUMBER
           cf run-task psd-pr-$PR_NUMBER --command "./env/delete-opensearch-indexes.sh" --name delete-opensearch-indexes
           task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-$PR_NUMBER | grep delete-opensearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;

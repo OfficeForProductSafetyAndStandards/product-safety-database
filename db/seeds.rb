@@ -118,7 +118,7 @@ usages = UnexpectedEvent.usages.values
     is_date_known: true
   }
 
-  AddAccidentOrIncidentToNotification.call!(accident_params.merge(investigation: investigation_product.investigation, user:))
+  AddAccidentOrIncidentToNotification.call!(accident_params.merge(notification: investigation_product.investigation, user:))
 end
 
 10.times do
@@ -132,7 +132,7 @@ end
     is_date_known: false
   }
 
-  AddAccidentOrIncidentToNotification.call!(incident_params.merge(investigation: investigation_product.investigation, user:))
+  AddAccidentOrIncidentToNotification.call!(incident_params.merge(notification: investigation_product.investigation, user:))
 end
 
 # Risk assessments

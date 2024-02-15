@@ -18,6 +18,7 @@ class CorrectiveAction < ApplicationRecord
     seizure_of_goods: "Seizure of goods",
     modification_programme: "Modification programme",
     referred_to_overseas_regulator: "Referred to overseas regulator",
+    product_no_longer_available_for_sale: "Product no longer available for sale"
   }.freeze
 
   belongs_to :investigation
@@ -72,6 +73,8 @@ class CorrectiveAction < ApplicationRecord
         i18n.t(:modification_programme),
       referred_to_overseas_regulator:
         i18n.t(:referred_to_overseas_regulator),
+      product_no_longer_available_for_sale:
+        i18n.t(:product_no_longer_available_for_sale),
       other:
         i18n.t(:other)
     }

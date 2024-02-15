@@ -13,7 +13,7 @@
         <p class="govuk-body">Overall product risk recorded in the assessment</p>
         <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
       <% end %>
-      <p class="govuk-body">The PRISM <a href="https://www.gov.uk/guidance/product-safety-risk-assessment-methodology-prism" class="govuk-link" rel="noreferrer noopener" target="_blank">guide</a> contains information to help you in deciding on the tolerability of the risk.</p>
+      <p class="govuk-body">The <abbr>PRISM</abbr> <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=28" class="govuk-link" rel="noreferrer noopener" target="_blank">guide</a> contains information to help you in deciding on the tolerability of the risk.</p>
       <%=
         f.govuk_collection_radio_buttons :risk_tolerability,
         [

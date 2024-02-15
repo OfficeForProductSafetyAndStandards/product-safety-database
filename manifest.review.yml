@@ -32,7 +32,6 @@ applications:
     - psd-email-whitelist-env
     - psd-health-env
     - psd-notify-env
-    - psd-pghero-env
     - psd-rails-env
     - psd-review-apps-sentry-env
     - psd-sidekiq-env

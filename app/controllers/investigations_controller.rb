@@ -10,22 +10,22 @@ class InvestigationsController < ApplicationController
 
   # GET /cases
   def index
-    respond_to do |format|
-      format.html do
-        # Find the most recent incomplete bulk products upload for the current user, if any
-        @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
+    return redirect_to notifications_path if current_user.can_access_new_search?
 
-        @pagy, @answer  = pagy_searchkick(opensearch_for_investigations(20, paginate: true))
-        @count          = count_to_display
-        @investigations = InvestigationDecorator
-                            .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
-        @page_name = "all_cases"
-      end
-    end
+    # Find the most recent incomplete bulk products upload for the current user, if any
+    @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
+
+    @pagy, @answer  = pagy_searchkick(opensearch_for_investigations(20, paginate: true))
+    @count          = count_to_display
+    @investigations = InvestigationDecorator
+                        .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
+    @page_name = "all_cases"
   end
 
   # GET /cases/1
   def show
+    return redirect_to notification_path(@investigation) if current_user.can_use_notification_task_list?
+
     authorize @investigation, :view_non_protected_details?
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
     @complainant = @investigation.complainant&.decorate
@@ -39,11 +39,17 @@ class InvestigationsController < ApplicationController
   end
 
   def your_cases
+    return redirect_to your_notifications_path if current_user.can_use_notification_task_list?
+
     @page_name = "your_cases"
-    @search = SearchParams.new({ "case_owner" => "me",
-                                 "sort_by" => params["sort_by"],
-                                 "sort_dir" => params["sort_dir"],
-                                 "page_name" => "team_cases" })
+    @search = SearchParams.new(
+      {
+        "case_owner" => "me",
+        "sort_by" => params["sort_by"],
+        "sort_dir" => params["sort_dir"],
+        "page_name" => "your_cases"
+      }
+    )
     @pagy, @answer = search_for_investigations
     @count = @pagy.count
     @investigations = InvestigationDecorator
@@ -53,6 +59,8 @@ class InvestigationsController < ApplicationController
   end
 
   def assigned_cases
+    return redirect_to assigned_notifications_path if current_user.can_use_notification_task_list?
+
     @page_name = "assigned_cases"
     @search = SearchParams.new(
       {
@@ -61,7 +69,8 @@ class InvestigationsController < ApplicationController
         "created_by" => "others",
         "sort_by" => params["sort_by"],
         "sort_dir" => params["sort_dir"],
-        "page_name" => "team_cases"
+        "state" => "submitted",
+        "page_name" => "assigned_cases"
       }
     )
     @pagy, @answer = search_for_investigations
@@ -73,11 +82,18 @@ class InvestigationsController < ApplicationController
   end
 
   def team_cases
+    return redirect_to team_notifications_path if current_user.can_use_notification_task_list?
+
     @page_name = "team_cases"
-    @search = SearchParams.new({ "case_owner" => "my_team",
-                                 "sort_by" => params["sort_by"],
-                                 "sort_dir" => params["sort_dir"],
-                                 "page_name" => @page_name })
+    @search = SearchParams.new(
+      {
+        "case_owner" => "my_team",
+        "sort_by" => params["sort_by"],
+        "sort_dir" => params["sort_dir"],
+        "state" => "submitted",
+        "page_name" => "team_cases"
+      }
+    )
     @pagy, @answer = search_for_investigations
     @count = @pagy.count
     @investigations = InvestigationDecorator

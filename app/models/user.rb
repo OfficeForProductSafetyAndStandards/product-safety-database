@@ -65,7 +65,7 @@ class User < ApplicationRecord
                        :invited_at, :keycloak_created_at, :last_sign_in_at, :locked_at, :mobile_number_verified,
                        :organisation_id, :remember_created_at, :second_factor_attempts_locked_at,
                        :secondary_authentication_operation, :sign_in_count, :team_id, :updated_at,
-                       :last_activity_at_approx, :locked_reason
+                       :last_sign_in_at, :locked_reason
 
   # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
   # and who have accepted the user declaration
@@ -74,7 +74,7 @@ class User < ApplicationRecord
   end
 
   def self.inactive
-    active.where(arel_table[:last_activity_at_approx].lt(INACTIVE_THRESHOLD.ago))
+    active.where(arel_table[:last_sign_in_at].lt(INACTIVE_THRESHOLD.ago))
   end
 
   def self.lock_inactive_users!
@@ -239,8 +239,8 @@ class User < ApplicationRecord
   end
 
   def update_last_activity_time!
-    if !last_activity_at_approx || (last_activity_at_approx < LAST_ACTIVITY_TIME_UPDATE_THRESHOLD.ago)
-      self.last_activity_at_approx = Time.zone.now
+    if !last_sign_in_at || (last_sign_in_at < LAST_ACTIVITY_TIME_UPDATE_THRESHOLD.ago)
+      self.last_sign_in_at = Time.zone.now
       save!(validate: false)
     end
   end

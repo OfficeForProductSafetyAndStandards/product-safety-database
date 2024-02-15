@@ -7,8 +7,7 @@
   form: form,
   key: :select_team_member,
   items: @team_members,
-  label: "Select team member",
-  show_all_values: true
+  label: "Select team member"
   %>
   <% end %>
 
@@ -36,8 +35,7 @@
       form: form,
       key: :select_other_team,
       items: @other_teams,
-      label: "Select other team name",
-      show_all_values: true
+      label: "Select other team name"
     %>
   <% end %>
   <% items.push text: "Other team", value: "other_team", conditional: { html: other_teams } %>
