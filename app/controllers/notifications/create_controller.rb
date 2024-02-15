@@ -139,8 +139,12 @@ module Notifications
         @risk_level_form = RiskLevelForm.new(risk_level: @notification.risk_level)
         highest_risk_level
       when :record_a_corrective_action
-        if @notification.corrective_action_taken.blank?
-          @corrective_action_taken_form = CorrectiveActionTakenForm.new
+        if @notification.corrective_action_taken.blank? || @notification.corrective_action_taken != "yes"
+          @corrective_action_taken_form = CorrectiveActionTakenForm.new(
+            corrective_action_taken_yes_no: @notification.corrective_action_taken.present? ? @notification.corrective_action_taken_yes? : nil,
+            corrective_action_taken_no_specific: @notification.corrective_action_taken_yes? ? nil : @notification.corrective_action_taken,
+            corrective_action_not_taken_reason: @notification.corrective_action_not_taken_reason
+          )
           return render :record_a_corrective_action_taken
         elsif params[:investigation_product_ids].present?
           @corrective_action_form = CorrectiveActionForm.new
@@ -345,7 +349,7 @@ module Notifications
           return render_wizard
         end
       when :record_a_corrective_action
-        if @notification.corrective_action_taken.blank?
+        if params[:corrective_action_taken_form].present?
           @corrective_action_taken_form = CorrectiveActionTakenForm.new(corrective_action_taken_params)
 
           if @corrective_action_taken_form.valid?

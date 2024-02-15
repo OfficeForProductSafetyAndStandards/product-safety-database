@@ -142,5 +142,9 @@ module Notifications
         govuk_tag(text: "Unknown risk", colour: "grey")
       end
     end
+
+    def corrective_action_not_taken_reasons
+      @notification.corrective_action_taken_other? ? @notification.corrective_action_not_taken_reason : I18n.t("corrective_action.not_taken_reason.#{@notification.corrective_action_taken}")
+    end
   end
 end

@@ -1011,7 +1011,6 @@ en:
       unknown_severity: "Unknown"
     date:
       unknown: "Unknown"
-
   corrective_action:
     attributes:
       geographic_scopes:
@@ -1039,6 +1038,9 @@ en:
         referred_to_overseas_regulator: "Referred to an overseas regulator"
         product_no_longer_available_for_sale: "Product is no longer available for sale"
         other: "Other"
+    not_taken_reason:
+      referred_to_another_authority: I need to refer the issue to another authority
+      not_enough_information: I don't have enough information to take a corrective action
   enter_email_address: "Enter your email address"
   file_added: "The file was added"
   file_updated: "File has been updated"
