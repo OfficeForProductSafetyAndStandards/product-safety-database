@@ -1,7 +1,7 @@
 require "rails_helper"
 require "swagger_helper"
 
-RSpec.describe "API Notifications Controller",  :with_opensearch, type: :request do
+RSpec.describe "API Notifications Controller", :with_opensearch, type: :request do
   let(:user) { create(:user, :activated, :with_api_token, has_viewed_introduction: true, team: user_team) }
   let(:user_team) { create(:team) }
   let!(:notification) { create(:notification, :with_products, :with_business, user_title: notification_title) }

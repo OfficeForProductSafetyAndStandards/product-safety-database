@@ -33,6 +33,41 @@ module ProductsHelper
     pagy(query.order(sorting_params))
   end
 
+  # API searches on barcode instead of free text fields like description
+  def api_search_for_products(user = current_user, for_export: false)
+    query = Product.includes(child_records(for_export))
+
+    if @search.q.present?
+      @search.q.strip!
+      query = query.where("products.name ILIKE ?", "%#{@search.q}%")
+        .or(Product.where("products.barcode ILIKE ?", "%#{@search.q}%"))
+        .or(Product.where("products.brand ILIKE ?", "%#{@search.q}%"))
+        .or(Product.where("products.product_code ILIKE ?", "%#{@search.q}%"))
+        .or(Product.where("CONCAT('psd-', products.id) = LOWER(?)", @search.q))
+        .or(Product.where(id: @search.q))
+    end
+
+    query = query.where(category: @search.category) if @search.category.present?
+
+    query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
+
+    query = query.where(retired_at: nil) if @search.retired_status == "active" || @search.retired_status.blank?
+
+    query = query.where.not(retired_at: nil) if @search.retired_status == "retired"
+
+    case @search.case_owner
+    when "me"
+      query = query.where(users: { id: user.id })
+    when "my_team"
+      team = user.team
+      query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+    end
+
+    return query if for_export
+
+    pagy(query.order(sorting_params))
+  end
+
   def product_export_params
     params.permit(:q, :category)
   end
