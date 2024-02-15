@@ -22,6 +22,21 @@ RSpec.describe "API Products Controller", type: :request do
         let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
 
         let(:id) { create(:product, country_of_origin: 'country:GB').id }
+
+        after do |example|
+          content = example.metadata[:response][:content] || {}
+          example_spec = {
+            "application/json"=>{
+              examples: {
+                test_example: {
+                  value: JSON.parse(response.body, symbolize_names: true)
+                }
+              }
+            }
+          }
+          example.metadata[:response][:content] = content.deep_merge(example_spec)
+        end
+
         run_test! do |response|
 
         end
@@ -68,6 +83,10 @@ Search for a Product
 
         run_test! do |response|
           expect(response).to have_http_status(:ok)
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          expect(json[:products].size).to eq(1)
+          expect(json[:products].first[:product_code]).to eq(product_code_asin)
         end
       end
     end

@@ -590,6 +590,54 @@ paths:
         '401':
           description: Unauthorised user
   "/api/v1/notifications":
+    get:
+      summary: Search for Notifications
+      description: |2
+
+        Search for a Product
+
+        * The search `q` query performs a full text search on the notificaiton title and product name. It uses the same code as the search bar in the UI within PSD.
+
+        * The `sort_by` parameter can be used to sort the results. The default is `updated_at` which returns the most recent updated notification first. The `sort_dir` parameter can be used to sort the results in ascending or descending order. The default is descending.
+        * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+        * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
+      tags:
+      - Notifications
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: Search query. Searches based on name, description, brand, PSD
+          ID, and product_code
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        required: false
+        description: Sort by parameter. Choose name, updated_at, or relevant. Default
+          is updated_at
+        schema:
+          type: string
+      - name: sort_dir
+        in: query
+        required: false
+        description: Sort direction. Choose asc or desc. Default is desc
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Search results returned
     post:
       summary: Creates a draft Notification
       description: Creates a draft Notification in PSD

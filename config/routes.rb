@@ -410,7 +410,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :auth, only: %i[create destroy]
       resources :products, only: %i[index create show]
-      resources :notifications, only: %i[create show]
+      resources :notifications, only: %i[index create show]
     end
   end
 

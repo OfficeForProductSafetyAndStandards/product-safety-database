@@ -1,6 +1,15 @@
 class Api::V1::NotificationsController < Api::BaseController
   include Pagy::Backend
-  before_action :notification, only: :show
+  include InvestigationsHelper
+
+  before_action :set_search_params, only: %i[index]
+  before_action :notification, only: %i[show]
+
+  def index
+    @pagy, @answer = pagy_searchkick(new_opensearch_for_investigations(20, paginate: true))
+    @notifications = InvestigationDecorator
+                        .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
+  end
 
   def show; end
 
@@ -21,6 +30,14 @@ class Api::V1::NotificationsController < Api::BaseController
   end
 
 private
+
+  def default_params
+    params["case_statuses"] == %w[open closed] && params[:q].blank?
+  end
+
+  def set_search_params
+    @search = SearchParams.new(query_params.except(:page_name))
+  end
 
   def notification_create_params
     params.require(:notification).permit(
