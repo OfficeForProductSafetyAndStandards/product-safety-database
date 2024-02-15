@@ -5,7 +5,7 @@ json.product_code product.product_code
 json.barcode product.barcode
 json.category product.category
 json.subcategory product.subcategory
-json.description product.description
+json.description product.unformatted_description
 json.country_of_origin product.country_of_origin
 json.webpage product.webpage
 json.owning_team do
