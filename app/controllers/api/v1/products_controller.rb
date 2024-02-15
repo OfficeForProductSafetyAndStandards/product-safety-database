@@ -5,7 +5,7 @@ class Api::V1::ProductsController < Api::BaseController
   before_action :set_search_params, only: %i[index]
 
   def index
-    @pagy, @results = search_for_products
+    @pagy, @results = api_search_for_products
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)
   end
