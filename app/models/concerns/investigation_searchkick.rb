@@ -9,7 +9,7 @@ module InvestigationSearchkick
     end
 
     def should_index?
-      deleted_at.nil?
+      submitted? && deleted_at.nil?
     end
   end
 end

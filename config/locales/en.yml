@@ -405,10 +405,14 @@ en:
               add_product_identification_details_number_of_affected_units:
                 title: Add the number of units affected
           business_details:
-            title: Add the business in the product's supply chain
+            title: Add businesses and their roles in the supply chain
             tasks:
               add_business_details:
                 title: Add the type and details of the business
+              add_location:
+                title: Add addresses
+              add_contact:
+                title: Add contact details
           evidence:
             title: Add evidence
             tasks:
@@ -428,6 +432,12 @@ en:
                 title: Add supporting documents
               add_risk_assessments:
                 title: Add risk assessments
+                select_product:
+                  title: Select a product to attach a risk assessment
+                prism_or_legacy:
+                  title: Add risk assessment
+                legacy:
+                  title: Add legacy risk assessment
               determine_notification_risk_level:
                 title: Determine notification risk level
           corrective_actions:
@@ -435,11 +445,19 @@ en:
             tasks:
               record_a_corrective_action:
                 title: Record a corrective action
+                corrective_action_taken:
+                  title: Have you taken a corrective action for the unsafe product(s)?
+                later:
+                  title: You can record the corrective action later
+                select_products:
+                  title: Select products to record a corrective action
           submit:
             title: Submit notification
             tasks:
               check_notification_details_and_submit:
                 title: Check the notification details and submit
+              confirmation:
+                title: Notification submitted
 
   errors:
     format: "%{message}"
@@ -670,6 +688,7 @@ en:
         risk_level_form:
           attributes:
             risk_level:
+              inclusion: "Select the risk level"
               not_allowed: "Invalid option"
         supporting_information_type_form:
           attributes:
@@ -778,6 +797,7 @@ en:
             tso_certificate_issue_date:
               blank: Enter the date the test certificate was issued
               incomplete: Enter the date the test certificate was issued
+              in_future: The date the test certificate was issued must be today or in the past
         bulk_products_triage_form:
           attributes:
             compliance_and_safety:
@@ -846,6 +866,10 @@ en:
             noncompliance_description:
               blank: Enter a description of the product non-compliance issues
               too_long: Description of the product non-compliance issues must be %{count} characters or less
+            is_from_overseas_regulator:
+              inclusion: Choose whether the safety issue was reported by an overseas regulator
+            overseas_regulator_country:
+              inclusion: Choose the country of the overseas regulator
             add_reference_number:
               inclusion: Choose whether you want to add your own reference number
             reference_number:
@@ -858,6 +882,19 @@ en:
           attributes:
             investigation_product_id:
               blank: Choose a product
+        choose_investigation_products_form:
+          attributes:
+            investigation_product_ids:
+              blank: Choose one or more products
+        corrective_action_taken_form:
+          attributes:
+            corrective_action_taken_yes_no:
+              inclusion: Choose whether a corrective action has been taken
+            corrective_action_taken_no_specific:
+              inclusion: Choose whether a corrective action has been taken
+            corrective_action_not_taken_reason:
+              blank: Enter the reason for not taking a corrective action
+              too_long: The reason for not taking a corrective action must be %{count} characters or less
 
   activerecord:
     models:
@@ -974,7 +1011,6 @@ en:
       unknown_severity: "Unknown"
     date:
       unknown: "Unknown"
-
   corrective_action:
     attributes:
       geographic_scopes:
@@ -1000,7 +1036,11 @@ en:
         seizure_of_goods: "Seizure of goods"
         modification_programme: "Modification programme"
         referred_to_overseas_regulator: "Referred to an overseas regulator"
+        product_no_longer_available_for_sale: "Product is no longer available for sale"
         other: "Other"
+    not_taken_reason:
+      referred_to_another_authority: I need to refer the issue to another authority
+      not_enough_information: I don't have enough information to take a corrective action
   enter_email_address: "Enter your email address"
   file_added: "The file was added"
   file_updated: "File has been updated"
@@ -1030,6 +1070,8 @@ en:
   business:
     type:
       retailer: "Retailer"
+      online_seller: "Online seller"
+      online_marketplace: "Online marketplace"
       manufacturer: "Manufacturer"
       exporter: "Exporter"
       importer: "Importer"
@@ -1037,6 +1079,6 @@ en:
       distributor: "Distributor"
       responsible_person: "Responsible person"
       other: "Other"
-      authorised_reprsentative:
+      authorised_representative:
         uk_authorised_representative: "UK Authorised representative"
         eu_authorised_representative: "EU Authorised representative"

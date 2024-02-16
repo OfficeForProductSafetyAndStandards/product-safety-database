@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class SearchParams
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -46,11 +44,18 @@ class SearchParams
   attribute :hazard_type
   attribute :category
   attribute :page_name
+  attribute :state
   attribute :retired_status
   attribute :created_from_date, :govuk_date
   attribute :created_to_date, :govuk_date
   Rails.application.config.hazard_constants["hazard_type"].each do |type|
     attribute type.parameterize.underscore.to_sym, :boolean
+  end
+  Business::BUSINESS_TYPES.each do |business_type|
+    attribute business_type.parameterize.underscore.to_sym, :boolean
+  end
+  Country.all.each do |country|
+    attribute country[0].parameterize.underscore.to_sym, :boolean
   end
 
   def selected_sort_by

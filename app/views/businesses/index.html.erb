@@ -4,19 +4,7 @@
 
 <%= form_with(model: @search, scope: "", url: businesses_path, method: :get, html: { role: "search" }) do |form| %>
   <div class="govuk-grid-row opss-full-height">
-
-    <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
-      <%= render 'businesses/secondary_nav' %>
-
-      <% if @businesses.any? && policy(Business).export? && ["team_businesses", "your_businesses"].exclude?(@page_name) %>
-        <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
-          <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
-            Request this list as a downloadable <br class="opss-br-desktop">
-            <%= link_to(generate_business_exports_path(params: business_export_params), class: "govuk-link govuk-link--no-visited-state") do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
-          </p>
-        </div>
-      <% end %>
-    </section>
+    <%= render 'businesses/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters" id="page-content">
       <% if ["team_businesses", "your_businesses"].exclude?(@page_name) %>
         <div class="govuk-grid-row">
@@ -37,7 +25,7 @@
         </div>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
-            <%= render "search_statement", count: @count, keywords: params[:q] %>
+            <%= render "search_statement", count: @count, keywords: params[:q], filters: params.except(:controller, :action, :q).select { |k,v| v == "true" } %>
           </div>
         </div>
       <% elsif (@count > 11) %>

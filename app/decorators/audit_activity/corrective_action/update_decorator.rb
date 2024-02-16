@@ -15,7 +15,9 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def new_legislation
-    metadata.dig("updates", "legislation", 1)
+    return unless (legislation = metadata.dig("updates", "legislation", 1))
+
+    legislation.is_a?(Array) ? legislation.to_sentence : legislation
   end
 
   def new_online_recall_information

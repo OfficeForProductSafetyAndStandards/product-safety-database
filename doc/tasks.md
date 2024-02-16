@@ -16,7 +16,7 @@ Where `ORG_NAME` is the name of the organisation and team to be created, `ADMIN_
 
 ## Deleting a User
 
-Use the OSU support portal
+Use the OSU Support Portal.
 
 ## Deleting a Team
 
@@ -50,7 +50,7 @@ psql < create_redacted_schema.sql
 pg_dump --table='redacted.*' --file=psd_redacted_export.sql --no-acl --no-owner --quote-all-identifiers --format=p --inserts --encoding=UTF8
 ```
 
-The way to do this on the deployed service is a little different and it's best done by [triggering the workflow manually](https://github.com/UKGovernmentBEIS/beis-opss-psd/actions/workflows/publish-staging-redacted-export.yml), or by following [the steps inside it](/.github/workflows/publish-staging-redacted-export.yml). These perform steps two and three of the above by deploying [a separate CF app](/redex) which has secured access to the database and to S3.
+The way to do this on the deployed service is a little different and it's best done by [triggering the workflow manually](https://github.com/OfficeForProductSafetyAndStandards/product-safety-database/actions/workflows/publish-staging-redacted-export.yml), or by following [the steps inside it](/.github/workflows/publish-staging-redacted-export.yml). These perform steps two and three of the above by deploying [a separate CF app](/redex) which has secured access to the database and to S3.
 
 ### Copying the user uploaded files
 

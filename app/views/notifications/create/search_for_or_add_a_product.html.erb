@@ -19,7 +19,7 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <p class="govuk-body">You have added <%= pluralize(@existing_product_ids.length, "product") %>.
-          <% if @notification.tasks_status["search_for_or_add_a_product"] == "completed" %>
+          <% if @notification.tasks_status["add_notification_details"] == "completed" %>
             <p class="govuk-body">You have completed adding products. If removal of any products is necessary, please delete the current notification and create a new one.</p>
           <% else %>
             <p class="govuk-body">Once you complete adding products, you will not be able to subsequently remove any products without deleting the current notification and creating a new one.</p>
@@ -29,7 +29,7 @@
               @notification.investigation_products.decorate.each do |investigation_product|
                 summary_list.with_row do |row|
                   row.with_key(text: investigation_product.product.name_with_brand)
-                  row.with_action(text: "Remove", href: remove_product_notification_create_index_path(investigation_product_id: investigation_product.id), visually_hidden_text: "product from notification") unless @notification.tasks_status["search_for_or_add_a_product"] == "completed"
+                  row.with_action(text: "Remove", href: remove_product_notification_create_index_path(investigation_product_id: investigation_product.id), visually_hidden_text: "product from notification") unless @notification.tasks_status["add_notification_details"] == "completed"
                 end
               end
             end
@@ -106,8 +106,19 @@
 
                     details = <<~DETAILS.strip
                       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><a href="#{product_path(record)}" class="govuk-link" target="_blank" rel="noreferrer noopener">#{record.name_with_brand}</a></p>
-                      <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.subcategory_with_brand}</p>
-                      <p class="govuk-body-s govuk-!-margin-bottom-0">#{record.psd_ref}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{record.category}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>Sub-category:</strong> #{record.subcategory}</p>
+                      #{
+                        if record.barcode.present? || record.product_code.present? || record.unformatted_description.present?
+                          govuk_details(summary_text: "More details", classes: "govuk-!-font-size-16 govuk-!-margin-bottom-0") do
+                            details = []
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Barcode:</strong> #{record.barcode}</p>" if record.barcode.present?
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Other product identifiers:</strong> #{record.product_code}</p>" if record.product_code.present?
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Product description:</strong> #{record.unformatted_description}</p>" if record.unformatted_description.present?
+                            details.join.html_safe
+                          end
+                        end
+                      }
                     DETAILS
 
                     select_button = form_with url: "#{wizard_path}?product_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|

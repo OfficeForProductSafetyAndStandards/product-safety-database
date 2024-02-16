@@ -1,0 +1,50 @@
+<% if @manage %>
+  <%= page_title(t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.title"), errors: false) %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.title") %>
+      </h1>
+      <p class="govuk-body">You have added <%= pluralize(@existing_prism_associated_investigations.length + @existing_risk_assessments.length, "risk assessment") %>.
+      <%=
+        govuk_summary_list do |summary_list|
+          @existing_prism_associated_investigations.each do |prism_associated_investigation|
+            risk_assessment = prism_associated_investigation.prism_risk_assessment.decorate
+            summary_list.with_row do |row|
+              row.with_key(text: risk_assessment.supporting_information_full_title)
+              row.with_value(text: risk_assessment.supporting_information_type)
+              row.with_action(text: "Remove", href: remove_with_entity_notification_create_index_path(@notification, step: "add_risk_assessments", entity_id: prism_associated_investigation.id), visually_hidden_text: "risk assessment")
+            end
+          end
+          @existing_risk_assessments.decorate.each do |risk_assessment|
+            summary_list.with_row do |row|
+              row.with_key(text: risk_assessment.supporting_information_full_title)
+              row.with_value(text: risk_assessment.supporting_information_type)
+              row.with_action(text: "Remove", href: remove_with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: risk_assessment.investigation_products.first.id, entity_id: risk_assessment.id), visually_hidden_text: "risk assessment")
+            end
+          end
+        end
+      %>
+      <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <%= f.govuk_collection_radio_buttons :add_another_risk_assessment, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another risk assessment?", size: "m" } %>
+        <%= f.govuk_submit "Continue", name: "final", value: "true" %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <%= page_title(t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.select_product.title"), errors: @choose_investigation_product_form.errors.any?) %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= form_with model: @choose_investigation_product_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <%= f.govuk_error_summary %>
+        <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+          <%= t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.select_product.title") %>
+        </h1>
+        <%= f.govuk_collection_radio_buttons :investigation_product_id, investigation_products_options, :id, :name, legend: nil, bold_labels: false %>
+        <%= f.govuk_submit "Save and continue" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

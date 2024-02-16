@@ -1,0 +1,44 @@
+<% if @manage %>
+  <%= page_title(t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.title"), errors: false) %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.corrective_actions.title") %></span>
+        <%= t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.title") %>
+      </h1>
+      <p class="govuk-body">You have added <%= pluralize(@existing_corrective_actions.length, "corrective action") %>.
+      <%=
+        govuk_summary_list do |summary_list|
+          @existing_corrective_actions.decorate.each do |corrective_action|
+            summary_list.with_row do |row|
+              row.with_key(text: corrective_action.supporting_information_full_title)
+              row.with_action(text: "Change", href: with_entity_notification_create_index_path(@notification, entity_id: corrective_action.id), visually_hidden_text: "corrective action")
+              row.with_action(text: "Remove", href: remove_with_entity_notification_create_index_path(@notification, step: "record_a_corrective_action", entity_id: corrective_action.id), visually_hidden_text: "corrective action")
+            end
+          end
+        end
+      %>
+      <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <%= f.govuk_collection_radio_buttons :add_another_corrective_action, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another corrective action?", size: "m" } %>
+        <%= f.govuk_submit "Continue", name: "final", value: "true" %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <%= page_title(t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.select_products.title"), errors: @choose_investigation_products_form.errors.any?) %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= form_with model: @choose_investigation_products_form, url: wizard_path, method: :patch, data: { controller: "checkbox-select-all" }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <%= f.govuk_error_summary %>
+        <%= f.govuk_check_boxes_fieldset :investigation_product_ids, legend: { text: "<span class=\"govuk-caption-l\">#{t('notifications.create.index.sections.corrective_actions.title')}</span>#{t('notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.select_products.title')}".html_safe, size: "l" }, hint: { text: "Select all that apply." } do %>
+          <%= f.govuk_check_box :investigation_product_ids, "select_all", label: { text: "Select all" }, "data-checkbox-select-all-target": "checkboxAll" %>
+          <%= f.govuk_check_box_divider %>
+          <% @notification.investigation_products.decorate.each_with_index do |investigation_product, index| %>
+            <%= f.govuk_check_box :investigation_product_ids, investigation_product.id, label: { text: investigation_product.product.name_with_brand }, "data-checkbox-select-all-target": "checkbox", link_errors: index.zero? %>
+          <% end %>
+        <% end %>
+        <%= f.govuk_submit "Save and continue" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

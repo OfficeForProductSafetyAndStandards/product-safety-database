@@ -53,7 +53,7 @@ RSpec.describe RiskLevelForm do
     context "when risk level is set to a non allowed value" do
       let(:risk_level) { "random risk" }
 
-      include_examples "invalid form", [:risk_level, "Risk level is not included in the list"]
+      include_examples "invalid form", [:risk_level, "Select the risk level"]
     end
   end
 end

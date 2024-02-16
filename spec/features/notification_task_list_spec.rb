@@ -100,6 +100,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Select", match: :first
 
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 1 of 6 sections.")
 
     click_link "Add notification details"
     fill_in "Notification title", with: "Fake name"
@@ -113,6 +114,11 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
       check "Product hazard"
       select "Chemical", from: "What is the primary hazard?"
       fill_in "Provide additional information about the product hazard", with: "Fake description"
+    end
+
+    within_fieldset "Was the safety issue reported by an overseas regulator?" do
+      choose "Yes"
+      select "France", from: "Country"
     end
 
     within_fieldset "Do you want to add your own reference number?" do
@@ -130,12 +136,35 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-1-status", text: "Completed")
     expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
+    expect(page).to have_content("You have completed 2 of 6 sections.")
 
-    # TODO(ruben): add to this once the pages are complete
+    expect(page).to have_selector(:id, "task-list-2-0-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-2-1-status", text: "Cannot start yet")
+    expect(page).to have_selector(:id, "task-list-2-2-status", text: "Cannot start yet")
+
     click_link "Add the type and details of the business"
+    fill_in "Trading name", with: "Trading name"
+    fill_in "Registered or legal name (optional)", with: "Legal name"
+    click_button "Save and continue"
+
+    fill_in "Address line 1", with: "123 Fake St"
+    fill_in "Address line 2", with: "Fake Heath"
+    fill_in "Town or city", with: "Faketon"
+    fill_in "County", with: "Fake County"
+    fill_in "Post code", with: "FA1 2KE"
+    select "United Kingdom", from: "Country"
+    click_button "Save and continue"
+
+    fill_in "Full name", with: "Max Mustermann"
+    fill_in "Job title or role description", with: "Manager"
+    fill_in "Email", with: "max@example.com"
+    fill_in "Phone", with: "+441121121212"
     click_button "Save and complete tasks in this section"
 
     expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
+    expect(page).to have_selector(:id, "task-list-2-1-status", text: "Completed")
+    expect(page).to have_selector(:id, "task-list-2-2-status", text: "Completed")
+    expect(page).to have_content("You have completed 3 of 6 sections.")
 
     # Ensure that all of section 4 and the first task of section are enabled once section 3 is completed
     expect(page).to have_selector(:id, "task-list-3-0-status", text: "Not yet started")
@@ -169,6 +198,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     attach_file "Test report attachment", image_file
     click_button "Add test report"
 
+    expect(page).to have_content("You have added 1 test report.")
+
     within_fieldset "Do you need to add another test report?" do
       choose "No"
     end
@@ -199,5 +230,122 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Finish uploading documents"
 
     expect(page).to have_selector(:id, "task-list-3-2-status", text: "Completed")
+
+    click_link "Add risk assessments"
+    click_link "Add legacy risk assessment"
+
+    within_fieldset "Date of assessment" do
+      fill_in "Day", with: "12"
+      fill_in "Month", with: "5"
+      fill_in "Year", with: "2023"
+    end
+
+    within_fieldset "What was the risk level?" do
+      choose "High risk"
+    end
+
+    within_fieldset "Who completed the assessment?" do
+      choose "Someone else"
+      fill_in "Organisation name", with: "Fake org"
+    end
+
+    attach_file "risk_assessment_form[risk_assessment_file]", text_file
+
+    click_button "Add risk assessment"
+
+    expect(page).to have_content("You have added 1 risk assessment.")
+
+    within_fieldset "Do you need to add another risk assessment?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
+    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Completed")
+
+    click_link "Determine notification risk level"
+
+    expect(page).to have_content("This notification has 1 risk assessment added, assessing the risk as high.")
+
+    choose "Medium risk"
+
+    click_button "Save and complete tasks in this section"
+
+    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Completed")
+    expect(page).to have_content("You have completed 4 of 6 sections.")
+
+    click_link "Record a corrective action"
+
+    within_fieldset "Have you taken a corrective action for the unsafe product(s)?" do
+      choose "Yes"
+    end
+
+    click_button "Save and continue"
+
+    within_fieldset "What action is being taken?" do
+      choose "Recall of the product from end users"
+    end
+
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+      fill_in "Location of recall information", with: "https://www.example.com"
+    end
+
+    within_fieldset "What date did the action come in to effect?" do
+      fill_in "Day", with: "9"
+      fill_in "Month", with: "2"
+      fill_in "Year", with: "2024"
+    end
+
+    select "ATEX 2016", from: "Under which legislation?"
+    select "Consumer Protection Act 1987", from: "Under which legislation?"
+
+    within_fieldset "Which business is responsible?" do
+      # TODO(ruben): add test here once business selection is possible
+    end
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose "Yes"
+    end
+
+    within_fieldset "In which geographic regions has this corrective action been taken?" do
+      check "Great Britain"
+      check "European Economic Area (EEA)"
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "corrective_action_form[document]", text_file
+    end
+
+    click_button "Add corrective action"
+
+    expect(page).to have_content("You have added 1 corrective action.")
+
+    within_fieldset "Do you need to add another corrective action?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
+    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 5 of 6 sections.")
+
+    click_link "Check the notification details and submit"
+
+    expect(page).to have_content("You cannot submit this notification because some products don't have a value for \"number of units affected\".")
+
+    click_link "Change number of units affected"
+
+    choose "Exact number"
+    fill_in "number-of-affected-units-form-exact-units-field", with: "1000"
+    click_button "Save"
+    click_button "Save and complete tasks in this section"
+
+    click_link "Check the notification details and submit"
+
+    click_button "Submit notification"
+
+    expect(page).to have_content("Notification submitted")
   end
 end

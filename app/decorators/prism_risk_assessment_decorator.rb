@@ -13,6 +13,10 @@ class PrismRiskAssessmentDecorator < ApplicationDecorator
     name
   end
 
+  def supporting_information_full_title
+    "#{name}: #{products_with_brand_description}"
+  end
+
   def show_path
     Prism::Engine.routes.url_helpers.view_submitted_assessment_risk_assessment_tasks_path(object)
   end
@@ -47,5 +51,17 @@ class PrismRiskAssessmentDecorator < ApplicationDecorator
 
   def case_id
     ""
+  end
+
+private
+
+  def products_with_brand_description
+    products = object.prism_associated_investigation_products.map(&:product)
+
+    if products.size > 1
+      h.pluralize(products.size, "product")
+    else
+      products.first.decorate.name_with_brand
+    end
   end
 end

@@ -90,7 +90,17 @@ private
   end
 
   def query_params
-    params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
+    params.permit(
+      :q,
+      :sort_by,
+      :sort_dir,
+      :direction,
+      :category,
+      :retired_status,
+      *Business::BUSINESS_TYPES.map(&:to_sym),
+      *Country.all.map { |country| country[0].parameterize.underscore.to_sym },
+      :page_name
+    )
   end
 
   def update_business
@@ -122,6 +132,6 @@ private
   end
 
   def count_to_display
-    params[:q].blank? ? Business.without_online_marketplaces.count : @pagy.count
+    params.empty? ? Business.without_online_marketplaces.count : @pagy.count
   end
 end

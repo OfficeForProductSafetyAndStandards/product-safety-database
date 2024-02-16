@@ -26,7 +26,7 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_mail
 
   describe "#legislation" do
     it "returns the legislation" do
-      expect(decorated_activity.legislation).to eq(corrective_action.legislation)
+      expect(decorated_activity.legislation).to eq(corrective_action.legislation.to_sentence)
     end
   end
 

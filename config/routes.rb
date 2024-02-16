@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   end
 
   # Main PSD app
-  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
+  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT"), ENV.fetch("PSD_HOST_REPORT")) do
     mount Prism::Engine => "/prism"
 
     concern :document_attachable do
@@ -114,6 +114,10 @@ Rails.application.routes.draw do
     resource :notifications, only: [] do
       resource :search, only: :show
 
+      get "your-notifications", to: "notifications#your_notifications", as: "your"
+      get "team-notifications", to: "notifications#team_notifications", as: "team"
+      get "assigned-notifications", to: "notifications#assigned_notifications", as: "assigned"
+
       scope module: :notifications do
         resources :create, only: %i[index] do
           collection do
@@ -123,13 +127,19 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :notifications, param: :pretty_id, only: %i[index] do
+    resources :notifications, param: :pretty_id, only: %i[index show destroy] do
+      member do
+        get :access, to: "notifications#access"
+        get :delete, to: "notifications#delete"
+      end
+
       scope module: :notifications do
         resources :create, only: %i[index show update] do
           collection do
             get "add-product/:product_id", to: "create#add_product", as: "add_product"
             get "remove-product/:investigation_product_id", to: "create#remove_product", as: "remove_product"
             delete "remove-product/:investigation_product_id", to: "create#remove_product"
+            get "confirmation", to: "create#confirmation"
 
             %w[batch_numbers customs_codes ucr_numbers number_of_affected_units].each do |identifier|
               get "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#show_#{identifier}", as: identifier
@@ -139,15 +149,26 @@ Rails.application.routes.draw do
 
             get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
 
-            scope ":step", constraints: { step: /add_test_reports/ } do
+            # These routes need to appear before the next scope block to avoid clashing with the
+            # `:investigation_product_id/:entity_id` routes.
+            scope ":step", constraints: { step: /add_risk_assessments|record_a_corrective_action/ } do
+              get ":entity_id/remove", to: "create#remove_with_entity", as: "remove_with_entity"
+              delete ":entity_id/remove", to: "create#remove_with_entity"
+            end
+
+            get "record_a_corrective_action/:entity_id", to: "create#update_with_entity", as: "with_entity"
+            patch "record_a_corrective_action/:entity_id", to: "create#update_with_entity"
+            put "record_a_corrective_action/:entity_id", to: "create#update_with_entity"
+
+            scope ":step", constraints: { step: /add_test_reports|add_risk_assessments/ } do
               get ":investigation_product_id", to: "create#show_with_notification_product", as: "with_product"
               patch ":investigation_product_id", to: "create#update_with_notification_product"
               put ":investigation_product_id", to: "create#update_with_notification_product"
-              get ":investigation_product_id/:test_result_id", to: "create#show_with_notification_product", as: "with_product_and_test_result"
-              patch ":investigation_product_id/:test_result_id", to: "create#update_with_notification_product"
-              put ":investigation_product_id/:test_result_id", to: "create#update_with_notification_product"
-              get ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product", as: "remove_with_product_and_test_result"
-              delete ":investigation_product_id/:test_result_id/remove", to: "create#remove_with_notification_product"
+              get ":investigation_product_id/:entity_id", to: "create#show_with_notification_product", as: "with_product_and_entity"
+              patch ":investigation_product_id/:entity_id", to: "create#update_with_notification_product"
+              put ":investigation_product_id/:entity_id", to: "create#update_with_notification_product"
+              get ":investigation_product_id/:entity_id/remove", to: "create#remove_with_notification_product", as: "remove_with_product_and_entity"
+              delete ":investigation_product_id/:entity_id/remove", to: "create#remove_with_notification_product"
             end
 
             scope ":step", constraints: { step: /add_supporting_images|add_supporting_documents/ } do
@@ -238,8 +259,6 @@ Rails.application.routes.draw do
 
       resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
       resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }
-      resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
-
       resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
 
       resources :accident_or_incidents_type, controller: "investigations/accident_or_incidents_type", only: %i[new create]
@@ -421,8 +440,6 @@ Rails.application.routes.draw do
   match "/500", to: "errors#internal_server_error", via: :all
   # This is the page that will show for timeouts, currently showing the same as an internal error
   match "/503", to: "errors#timeout", via: :all
-
-  mount PgHero::Engine, at: "pghero"
 
   authenticated :user do
     root to: "homepage#authenticated", as: "authenticated_root"

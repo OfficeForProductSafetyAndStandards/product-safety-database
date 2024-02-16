@@ -11,7 +11,7 @@ class CorrectiveActionForm
   attribute :date_decided, :govuk_date
   attribute :investigation_product_id, :integer
   attribute :business_id, :integer
-  attribute :legislation
+  attribute :legislation, default: []
   attribute :action
   attribute :details
   attribute :related_file

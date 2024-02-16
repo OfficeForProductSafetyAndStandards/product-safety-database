@@ -326,7 +326,6 @@ private
 
   def bulk_products_create_corrective_action_params
     params.require(:corrective_action_form).permit(
-      :legislation,
       :action,
       :has_online_recall_information,
       :online_recall_information,
@@ -337,9 +336,10 @@ private
       :other_action,
       :further_corrective_action,
       :existing_document_file_id,
+      legislation: [],
       geographic_scopes: [],
       file: %i[file description],
       date_decided: %i[day month year]
-    ).with_defaults(geographic_scopes: [])
+    ).with_defaults(legislation: [], geographic_scopes: [])
   end
 end
