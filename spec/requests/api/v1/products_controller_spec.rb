@@ -4,7 +4,7 @@ require "swagger_helper"
 RSpec.describe "API Products Controller", type: :request do
   let(:user) { create(:user, :activated, :with_api_token, has_viewed_introduction: true, team: user_team) }
   let(:user_team) { create(:team) }
-  let(:product) { create(:product, product_code: product_code_asin) }
+  let!(:product) { create(:product, product_code: product_code_asin) }
   let(:product_code_asin) { 'B07K1RZWMC' }
 
   path "/api/v1/products/{id}" do
