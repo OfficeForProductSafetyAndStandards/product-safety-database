@@ -706,8 +706,9 @@ paths:
 
         Search for a Product
 
-        * The search `q` query searches based on name, description, brand, PSD ID, and product_code. It uses the same code as the search bar in the UI within PSD.
-        * The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending or descending order. The default is descending.
+        * The search `q` query searches based on `name`, `brand`, `ID`, `barcode`, and `product_code`.
+        * `product_code` can contain the ASIN, EAN, or UPC codes for a given product.
+        * The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending `asc` or descending `desc` order. The default is descending.
         * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
         * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
       tags:
