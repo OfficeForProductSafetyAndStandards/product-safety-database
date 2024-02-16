@@ -110,7 +110,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     check duplicate_product.name
     click_button "Continue"
 
-    expect(page).to have_content("Record corrective action")
+    expect(page).to have_content("Record a corrective action")
 
     choose corrective_action
     fill_in "Day", with: 1

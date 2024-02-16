@@ -84,7 +84,7 @@
   <% end %>
 <% end %>
 
-<%= f.govuk_collection_radio_buttons :measure_type, [OpenStruct.new(id: "mandatory", name: "Yes"), OpenStruct.new(id: "voluntary", name: "No, it's voluntary")], :id, :name, legend: { text: "Is the corrective action mandatory?", size: "m" } %>
+<%= f.govuk_collection_radio_buttons :measure_type, [OpenStruct.new(id: "mandatory", name: "Yes"), OpenStruct.new(id: "voluntary", name: "No, it’s voluntary")], :id, :name, legend: { text: "Is the corrective action mandatory?", size: "m" } %>
 
 <%= f.govuk_check_boxes_fieldset :geographic_scopes, legend: { text: "In which geographic regions has this corrective action been taken?" }, data: { controller: "dynamic-checkbox-states" } do %>
   <%= f.govuk_check_box :geographic_scopes, "local", label: { text: "Local" }, hint: { text: "Covers specific areas and nearby border checkpoints." }, link_errors: true, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "unknown" } %>

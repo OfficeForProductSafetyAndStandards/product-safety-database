@@ -136,7 +136,7 @@ module PageExpectations
     expect(page).to have_summary_item(key: "Product",             value: "#{product_two.name} (#{product_two.psd_ref})")
     expect(page).to have_summary_item(key: "Legislation",         value: [existing_legislation, new_legislation].sort.to_sentence)
     expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
-    expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
+    expect(page).to have_summary_item(key: "Duration of measure", value: "Unknown")
     expected_geographic_scopes_text =
       new_geographic_scopes
         .map { |new_geographic_scope| I18n.t(new_geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }
@@ -440,7 +440,7 @@ module PageExpectations
 
   def expect_to_be_on_record_corrective_action_page
     expect(page).to have_current_path("/ts_investigation/corrective_action")
-    expect(page).to have_selector("h1", text: "Record corrective action")
+    expect(page).to have_selector("h1", text: "Record a corrective action")
   end
 
   def expect_to_be_on_other_information_page

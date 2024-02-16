@@ -41,7 +41,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     click_link "Add a corrective action"
 
     expect(page).to have_current_path("/cases/#{notification.pretty_id}/corrective-actions/new")
-    expect(page).to have_selector("h1", text: "Record corrective action")
+    expect(page).to have_selector("h1", text: "Record a corrective action")
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 

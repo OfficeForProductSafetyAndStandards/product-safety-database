@@ -181,8 +181,8 @@ en:
           local: "Local"
           great_britain: "Great Britain"
           northern_ireland: "Northern Ireland"
-          eea_wide: "EEA Wide"
-          eu_wide: "EU Wide"
+          eea_wide: "European Economic Area (EEA)"
+          eu_wide: "European Union (EU)"
           worldwide: "Worldwide"
           unknown: "Unknown"
       helper:
@@ -1017,8 +1017,8 @@ en:
         local: "Local"
         great_britain: "Great Britain"
         northern_ireland: "Northern Ireland"
-        eea_wide: "EEA Wide"
-        eu_wide: "EU Wide"
+        eea_wide: "European Economic Area (EEA)"
+        eu_wide: "European Union (EU)"
         worldwide: "Worldwide"
         unknown: "Unknown"
       actions:
