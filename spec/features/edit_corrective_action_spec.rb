@@ -92,7 +92,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
         choose "#{product_two.decorate.name_with_brand} (#{product_two.psd_ref})"
       end
 
-      select new_legislation,               from: "Under which legislation?"
+      select new_legislation, from: "Under which legislation?"
 
       within_fieldset("Which business is responsible?") do
         choose business_two.trading_name

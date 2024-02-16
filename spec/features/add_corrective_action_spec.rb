@@ -26,9 +26,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
 
       visit "/cases/#{notification.pretty_id}/corrective-actions/new"
 
-      expect(page).to have_text("There are no products on this notification.")
+      expect(page).to have_text("There are no products associated with this notification.")
 
-      click_button "Continue"
+      click_button "Add corrective action"
 
       expect(page).to have_error_messages
       expect(page).to have_error_summary "Select the product the corrective action relates to"
@@ -45,17 +45,15 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 
-    click_button "Continue"
+    click_button "Add corrective action"
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Select type of corrective action"
-    expect(errors_list[1].text).to eq "Enter the date the corrective action came into effect"
-    expect(errors_list[2].text).to eq "Select the legislation relevant to the corrective action"
-    expect(errors_list[3].text).to eq "Select yes if the business responsible has published recall information online"
-    expect(errors_list[4].text).to eq "You must state whether the action is mandatory or voluntary"
-    expect(errors_list[5].text).to eq "You must state how long the action will be in place"
-    expect(errors_list[6].text).to eq "Select the geographic scope of the action"
-    expect(errors_list[7].text).to eq "Select whether you want to upload a related file"
+    expect(errors_list[0].text).to eq "Enter the date the corrective action came into effect"
+    expect(errors_list[1].text).to eq "Select the legislation relevant to the corrective action"
+    expect(errors_list[2].text).to eq "Select whether you want to upload a related file"
+    expect(errors_list[3].text).to eq "You must state whether the action is mandatory or voluntary"
+    expect(errors_list[4].text).to eq "Select the geographic scope of the action"
+    expect(errors_list[5].text).to eq "Select type of corrective action"
 
     enter_non_numeric_date_and_expect_correct_error_message
 
@@ -64,9 +62,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
       choose "Yes"
     end
 
-    attach_file "Upload a file", file
+    attach_file "corrective_action[file][file]", file
     fill_in "Attachment description", with: file_description
-    click_button "Continue"
+    click_button "Add corrective action"
 
     expect(page).to have_text("Currently selected file: #{File.basename(file)}")
     expect(page).to have_text("Replace this file")
@@ -85,7 +83,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Recall information",  value: "#{online_recall_information} (opens in new tab)")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
-    expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
     expect(page).to have_summary_item(key: "Geographic scopes",   value: geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence)
     expect(page).to have_summary_item(key: "Other details",       value: "Urgent action following consumer reports")
 
@@ -112,7 +109,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine (#{product.psd_ref})")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
-    expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
     expect(page).to have_summary_item(key: "Geographic scopes",   value: geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence)
     expect(page).to have_summary_item(key: "Other details",       value: "Urgent action following consumer reports")
 
@@ -127,7 +123,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
     expect(page).to have_summary_item(key: "Attachment description", value: file_description)
     expect(page).to have_summary_item(key: "Type of measure", value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
-    expect(page).to have_summary_item(key: "Duration of action", value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
     expect(page).to have_summary_item(key: "Geographic scopes", value: geographic_scopes.to_sentence)
   end
 
@@ -143,10 +138,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
 
     within_fieldset "Is the corrective action mandatory?" do
       expect(page).to have_checked_field("Yes")
-    end
-
-    within_fieldset "How long will the corrective action be in place?" do
-      expect(page).to have_checked_field(duration)
     end
 
     within_fieldset "What is the geographic scope of the action?" do
@@ -166,7 +157,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(item).to have_text("Legislation: #{legislation}")
     expect(item).to have_text("Date came into effect: #{date_decided.to_formatted_s(:govuk)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
-    expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
     expect(item).to have_text("Geographic scopes: #{geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence}")
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text(details)
@@ -186,12 +176,12 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     select legislation, from: "Under which legislation?"
 
     within_fieldset "Which business is responsible?" do
-      select business.trading_name, from: "Business"
+      choose business.trading_name
     end
 
     within_fieldset "Has the business responsible published product recall information online?" do
       choose "Yes"
-      fill_in "Online recall information", with: online_recall_information, visible: false
+      fill_in "Location of recall information", with: online_recall_information, visible: false
     end
 
     fill_in "Further details (optional)", with: details
@@ -200,18 +190,14 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
       choose "Yes"
     end
 
-    within_fieldset "How long will the corrective action be in place?" do
-      choose duration
-    end
-
-    within_fieldset "What is the geographic scope of the action?" do
+    within_fieldset "In which geographic regions has this corrective action been taken?" do
       geographic_scopes.each do |geographic_scope|
         check I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
       end
     end
 
     fill_in "Further details (optional)", with: "Urgent action following consumer reports"
-    click_button "Continue"
+    click_button "Add corrective action"
   end
 
   def enter_non_numeric_date_and_expect_correct_error_message
@@ -219,7 +205,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     fill_in "Month",   with: "xyz" if date_decided
     fill_in "Year",    with: "xxxxxx" if date_decided
 
-    click_button "Continue"
+    click_button "Add corrective action"
 
     expect(page).to have_error_summary("Enter the date the corrective action came into effect")
   end
