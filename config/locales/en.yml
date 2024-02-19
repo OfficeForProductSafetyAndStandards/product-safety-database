@@ -407,12 +407,14 @@ en:
           business_details:
             title: Add businesses and their roles in the supply chain
             tasks:
+              search_for_or_add_a_business:
+                title: Search for or add a business
               add_business_details:
                 title: Add the type and details of the business
-              add_location:
-                title: Add addresses
-              add_contact:
-                title: Add contact details
+              add_business_location:
+                title: Add business addresses
+              add_business_contact:
+                title: Add business contact details
           evidence:
             title: Add evidence
             tasks:
@@ -895,6 +897,14 @@ en:
             corrective_action_not_taken_reason:
               blank: Enter the reason for not taking a corrective action
               too_long: The reason for not taking a corrective action must be %{count} characters or less
+        add_business_details_form:
+          attributes:
+            trading_name:
+              blank: Enter a trading name
+        add_location_form:
+          attributes:
+            country:
+              blank: Choose a country
 
   activerecord:
     models:
