@@ -64,7 +64,7 @@ describe TaskListService do
     end
 
     context "when there are hidden tasks" do
-      let(:hidden_tasks) { [ { adjust: :setup }, { frobnicate: :tweak } ] }
+      let(:hidden_tasks) { [{ adjust: :setup }, { frobnicate: :tweak }] }
       let(:optional_tasks) { [] }
 
       context "when the supplied task is a hidden task" do
