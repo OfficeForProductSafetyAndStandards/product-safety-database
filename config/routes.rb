@@ -428,8 +428,12 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resource :auth, only: %i[create destroy]
-      resources :products, only: %i[index create show]
       resources :notifications, only: %i[index create show]
+      resources :products, only: %i[index create show] do
+        collection do
+          get :named_parameter_search
+        end
+      end
     end
   end
 
