@@ -34,18 +34,12 @@ module ProductsHelper
   end
 
   # API searches on barcode instead of free text fields like description
-  def api_search_for_products(user = current_user, for_export: false)
-    query = Product.includes(child_records(for_export))
-
-    if @search.q.present?
-      @search.q.strip!
-      query = query.where("products.name ILIKE ?", "%#{@search.q}%")
-        .or(Product.where("products.barcode ILIKE ?", "%#{@search.q}%"))
-        .or(Product.where("products.brand ILIKE ?", "%#{@search.q}%"))
-        .or(Product.where("products.product_code ILIKE ?", "%#{@search.q}%"))
-        .or(Product.where("CONCAT('psd-', products.id) = LOWER(?)", @search.q))
-        .or(Product.where(id: @search.q))
-    end
+  def api_search_for_products(user = current_user)
+    query = Product.includes(child_records(false))
+    query = query.where("products.name ILIKE ?", "%#{@search.name}%") if @search.name
+    query = query.where("products.barcode = ?", @search.barcode) if @search.barcode
+    query = query.where("products.product_code = ?", @search.product_code) if @search.product_code
+    query = query.where(id: @search.id) if @search.id
 
     query = query.where(category: @search.category) if @search.category.present?
 
@@ -62,8 +56,6 @@ module ProductsHelper
       team = user.team
       query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
     end
-
-    return query if for_export
 
     pagy(query.order(sorting_params))
   end

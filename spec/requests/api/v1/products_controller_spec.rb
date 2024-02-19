@@ -61,8 +61,7 @@ RSpec.describe "API Products Controller", type: :request do
       description %{
 Search for a Product
 
-* The search `q` query searches based on `name`, `brand`, `ID`, `barcode`, and `product_code`.
-* `product_code` can contain the ASIN, EAN, or UPC codes for a given product.
+* The search `q` query searches for Products in PSD with the same code as is used in the application. It fuzzy matches based on name, description, brand, PSD ID, and product_code.
 * The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending `asc` or descending `desc` order. The default is descending.
 * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
 * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
@@ -88,6 +87,52 @@ Search for a Product
           json = JSON.parse(response.body, symbolize_names: true)
           expect(json[:products].size).to eq(1)
           expect(json[:products].first[:product_code]).to eq(product_code_asin)
+        end
+      end
+    end
+  end
+
+  path "/api/v1/products/named_parameter_search" do
+    get "Named parameter search for a Product" do
+      description %{
+Search for a Product using named parameters.
+
+* The `name` parameter fuzzy searches based on `name`
+* The `ID`, `barcode`, and `product_code` parameters search based on exact matches
+* Providing each parameter will perform an AND search, i.e. all parameters must match
+* For PSD ID, please issue without `psd-` (e.g. for `psd-1234` use `1234`).
+* `product_code` can contain the ASIN, EAN, or UPC codes for a given product.
+* The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending `asc` or descending `desc` order. The default is descending.
+* The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+* The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
+}
+      tags "Products"
+      produces "application/json"
+      security [bearer: []]
+      parameter name: :Authorization, in: :header, type: :string
+      parameter name: :name, in: :query, type: :string, description: "Fuzzy searches based on product name", required: false
+      parameter name: :id, in: :query, type: :string, description: "Search based on exact match of PSD ID. Please issue without `psd-` (e.g. for `psd-1234` use `1234`)", required: false
+      parameter name: :barcode, in: :query, type: :string, description: "Search based on exact match of barcode", required: false
+      parameter name: :product_code, in: :query, type: :string, description: "Search based on exact match of product_code. Can contain the ASIN, EAN, or UPC codes for a given product", required: false
+
+      parameter name: :sort_by, in: :query, required: false, type: :string, description: "Sort by parameter. Choose name, created_at, updated_at, or relevant. Default is relevant"
+      parameter name: :sort_dir, in: :query, required: false, type: :string, description: "Sort direction. Choose asc or desc. Default is desc"
+      parameter name: :category, in: :query, required: false, type: :string, description: "Category of the product. If given, only products in this category will be returned"
+
+      parameter name: :page, required: false, in: :query, type: :integer, description: "Page number"
+
+      response "200", "Search results returned" do
+        let(:Authorization) { "Authorization #{user.api_tokens.first&.token}" }
+
+        let!(:product) { create(:product, barcode: barcode) }
+        let(:barcode) { '12345678' }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          expect(json[:products].size).to eq(1)
+          expect(json[:products].first[:name]).to eq(product.name)
         end
       end
     end

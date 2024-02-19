@@ -3,11 +3,19 @@ class Api::V1::ProductsController < Api::BaseController
   include ProductsHelper
   before_action :product, only: :show
   before_action :set_search_params, only: %i[index]
+  before_action :set_named_search_params, only: %i[named_parameter_search]
 
   def index
+    @pagy, @results = search_for_products
+    @count = count_to_display
+    @products = ProductDecorator.decorate_collection(@results)
+  end
+
+  def named_parameter_search
     @pagy, @results = api_search_for_products
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)
+    render :index
   end
 
   def create
@@ -34,7 +42,11 @@ private
   end
 
   def set_search_params
-    @search = SearchParams.new(query_params.except(:page_name))
+    @search = SearchParams.new(query_params)
+  end
+
+  def set_named_search_params
+    @search = SearchParams.new(named_search_query_params)
   end
 
   def product_create_params
@@ -47,6 +59,10 @@ private
 
   def query_params
     params.permit(:q, :sort_by, :sort_dir, :category)
+  end
+
+  def named_search_query_params
+    params.permit(:name, :id, :barcode, :product_code, :sort_by, :sort_dir, :category)
   end
 
   def count_to_display
