@@ -1,49 +1,28 @@
-<% multiple ||= false %>
 <% error_field ||= :base %>
 <% id ||= "document" %>
+
 <fieldset class="govuk-fieldset">
   <% if local_variables.include?(:title) %>
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
       <%= title %>
     </legend>
   <% end %>
-
-  <div class="govuk-body govuk-hint">
-    If you have multiple files, compress them in a zip
-  </div>
-
-
   <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: error_field) %>" id="<%= id %>">
-
     <%= form.fields_for attachment_name do |subform| %>
-
       <% file_upload_field = capture do %>
-        <div class="govuk-form-group">
-          <%= subform.label :file, "Upload a file", class: "govuk-label", for: "attachment-file-input" %>
-        </div>
-
-        <%= subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input", multiple: multiple %>
+        <%= subform.govuk_file_field :file, label: nil, hint: { text: "If you have multiple files, compress them in a zip file." } %>
       <% end %>
-
       <% if file_blob.present? %>
         <p id="current-attachment-details">
           Currently selected file:
           <%= link_to "#{file_blob.filename} (opens in new tab)", file_blob, target: "_blank", rel: "noreferrer noopener" %>
         </p>
-
         <%= govuk_details(summary_text: "Replace this file", text: file_upload_field) %>
       <% else %>
         <%= file_upload_field %>
       <% end %>
-
       <div id="attachment-description">
-        <%= govukTextarea(
-          key: :description,
-          value: file_blob&.metadata&.dig(:description),
-          form: subform,
-          label: { text: "Attachment description" },
-          attributes: { maxlength: 10_000 }
-        ) %>
+        <%= subform.govuk_text_area :description, label: { text: "Attachment description" }, max_chars: 10_000, value: file_blob&.metadata&.dig(:description) %>
       </div>
     <% end %>
   </div>

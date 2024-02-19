@@ -1,24 +1,20 @@
-<% page_title = "Record test result" %>
-<%= page_title page_title, errors: @test_result_form.errors.any? %>
-<%= form_with model: @test_result_form, scope: :test_result, url: investigation_test_result_path(@investigation, @test_result_form.id), method: :patch, builder: ApplicationFormBuilder do |form| %>
+<% page_heading = "Record test result" %>
+<%= page_title page_heading, errors: @test_result_form.errors.any? %>
+
+<%= form_with model: @test_result_form, scope: :test_result, url: investigation_test_result_path(@investigation, @test_result_form.id), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-
-      <%= error_summary(@test_result_form.errors, %i[legislation standards_product_was_tested_against date result base])%>
-
-      <h1 class="govuk-heading-l"><%= page_title %></h1>
-
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
       <% unless @test_result_form.tso_certificate_issue_date.nil? %>
-        <p class="govuk-body govuk-!-margin-bottom-9">
+        <p class="govuk-body">
           <%= sanitize(t(".result_date", date: date_or_recent_time_ago(@test_result_form.tso_certificate_issue_date))) %>
           <%= sanitize(t(".result_certificate_reference", reference_number: @test_result_form.tso_certificate_reference_number)) unless @test_result_form.tso_certificate_reference_number.blank? %>
           <%= sanitize(t(".result_certificate_no_reference")) if @test_result_form.tso_certificate_reference_number.blank? %>
         </p>
       <% end %>
-
-      <%= render "investigations/test_results/form", form: form, test_result_form: @test_result_form, investigation: @investigation, allow_product_linking: true %>
-
-      <%= govukButton text: "Update test result" %>
+      <%= render "form", f: f, test_result_form: @test_result_form, investigation: @investigation, allow_product_linking: true %>
+      <%= f.govuk_submit("Update test result") %>
     </div>
   </div>
 <% end %>
