@@ -227,7 +227,9 @@ class BulkProductsController < ApplicationController
     @products = @bulk_products_upload.investigation.products.where(id: params[:product_ids])
 
     if request.put?
-      @bulk_products_create_corrective_action_form = CorrectiveActionForm.new(bulk_products_create_corrective_action_params)
+      @bulk_products_create_corrective_action_form = CorrectiveActionForm.new(bulk_products_create_corrective_action_params.merge(duration: "unknown"))
+      @bulk_products_create_corrective_action_form.legislation.reject!(&:blank?)
+      @bulk_products_create_corrective_action_form.geographic_scopes.reject!(&:blank?)
       @file_blob = @bulk_products_create_corrective_action_form.document
 
       if @bulk_products_create_corrective_action_form.valid?
@@ -325,7 +327,7 @@ private
   end
 
   def bulk_products_create_corrective_action_params
-    params.require(:corrective_action_form).permit(
+    params.require(:corrective_action).permit(
       :action,
       :has_online_recall_information,
       :online_recall_information,

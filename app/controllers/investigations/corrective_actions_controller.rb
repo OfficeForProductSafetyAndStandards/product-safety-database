@@ -10,8 +10,9 @@ module Investigations
     end
 
     def create
-      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
+      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params.merge(duration: "unknown"))
       @corrective_action_form.legislation.reject!(&:blank?)
+      @corrective_action_form.geographic_scopes.reject!(&:blank?)
       @file_blob = @corrective_action_form.document
       return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
@@ -46,8 +47,9 @@ module Investigations
       @corrective_action_form = CorrectiveActionForm.from(corrective_action)
       @file_blob              = corrective_action.document_blob
 
-      @corrective_action_form.assign_attributes(corrective_action_params)
+      @corrective_action_form.assign_attributes(corrective_action_params.merge(duration: "unknown"))
       @corrective_action_form.legislation.reject!(&:blank?)
+      @corrective_action_form.geographic_scopes.reject!(&:blank?)
       return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
       UpdateCorrectiveAction.call!(

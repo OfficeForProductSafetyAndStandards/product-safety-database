@@ -110,7 +110,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     check duplicate_product.name
     click_button "Continue"
 
-    expect(page).to have_content("Record corrective action")
+    expect(page).to have_content("Record a corrective action")
 
     choose corrective_action
     fill_in "Day", with: 1
@@ -120,21 +120,16 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
 
     within_fieldset "Has the business responsible published product recall information online?" do
       choose "Yes"
-      fill_in "Online recall information", with: Faker::Internet.url(host: "example.com"), visible: false
+      fill_in "Location of recall information", with: Faker::Internet.url(host: "example.com"), visible: false
     end
 
     within_fieldset "Is the corrective action mandatory?" do
       choose "Yes"
     end
 
-    within_fieldset "How long will the corrective action be in place?" do
-      choose "Permanent"
-    end
-
-    within_fieldset "What is the geographic scope of the action?" do
-      CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)].each do |geographic_scope|
-        check I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
-      end
+    within_fieldset "In which geographic regions has this corrective action been taken?" do
+      check "Great Britain"
+      check "Northern Ireland"
     end
 
     within_fieldset "Are there any files related to the action?" do
