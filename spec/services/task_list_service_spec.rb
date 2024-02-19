@@ -64,40 +64,22 @@ describe TaskListService do
     end
 
     context "when there are hidden tasks" do
-      let(:hidden_tasks) { %i[read_manual adjust frobnicate] }
+      let(:hidden_tasks) { [ { adjust: :setup }, { frobnicate: :tweak } ] }
       let(:optional_tasks) { [] }
 
-      context "when the supplied task is a mandatory one" do
-        let(:task) { :percussive_maintenance }
-
-        it "returns the previous mandatory task" do
-          expect(result).to eq(:tweak)
-        end
-      end
-
-      context "when the supplied task is the first mandatory one" do
-        let(:task) { :setup }
-
-        it "returns nil" do
-          expect(result).to be_nil
-        end
-      end
-
-      context "when the supplied task is an optional one" do
-        let(:task) { :frobnicate }
-
-        it "returns the previous mandatory task" do
-          expect(result).to eq(:tweak)
-        end
-      end
-
-      context "when there are no mandatory tasks before the supplied task" do
-        let(:hidden_tasks) { %i[read_manual setup tweak] }
-        let(:optional_tasks) { [] }
+      context "when the supplied task is a hidden task" do
         let(:task) { :adjust }
 
-        it "returns nil" do
-          expect(result).to be_nil
+        it "returns the supplied previous task" do
+          expect(result).to eq(:setup)
+        end
+      end
+
+      context "when the supplied task is not a hidden task" do
+        let(:task) { :setup }
+
+        it "returns the previous task" do
+          expect(result).to eq(:read_manual)
         end
       end
     end

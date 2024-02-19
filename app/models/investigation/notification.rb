@@ -13,6 +13,8 @@ class Investigation < ApplicationRecord
 
     TASK_LIST_SECTIONS_OPTIONAL = %w[evidence].freeze
 
+    # Each hidden task is the key to a hash, the value of which is the task whose completion
+    # should unlock the hidden task in question.
     TASK_LIST_TASKS_HIDDEN = [
       { add_business_details: :add_product_identification_details },
       { add_business_location: :add_product_identification_details },
