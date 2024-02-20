@@ -23,6 +23,14 @@ RSpec.configure do |config|
       },
       components: {
         schemas: {
+          add_product_to_notification: {
+            title: "Add Product to Notification",
+            type: :object,
+            properties: {
+              product: { type: :object, properties: { id: { type: :string } } }
+            },
+            required: %w[product]
+          },
           new_notification: {
             title: "New Notification",
             type: :object,

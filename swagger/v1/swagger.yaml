@@ -5,6 +5,17 @@ info:
   version: v1
 components:
   schemas:
+    add_product_to_notification:
+      title: Add Product to Notification
+      type: object
+      properties:
+        product:
+          type: object
+          properties:
+            id:
+              type: string
+      required:
+      - product
     new_notification:
       title: New Notification
       type: object
@@ -560,6 +571,56 @@ paths:
           description: User API tokens destroyed
         '401':
           description: Unauthorised user
+  "/api/v1/notifications/{notification_id}/products":
+    post:
+      summary: Adds a Product to a Notification
+      description: "\n        Adds a Product to a Notification\n\n        This endpoint
+        allows you to add a product to a notification.\n        An email will be sent
+        to the notification owner if the `send_email` parameter is set to `true`,
+        otherwise no email will be sent.\n    "
+      tags:
+      - - Products
+        - Notifications
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: notification_id
+        in: path
+        required: true
+        description: Notification ID
+        example: 1232-434
+        schema:
+          type: string
+      - name: send_email
+        in: path
+        description: Send a PSD email notification to the owner of Notification
+        default: 'false'
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Product added to Notification
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorised user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/add_product_to_notification"
+            examples:
+              add_product:
+                summary: An sample product
+                value:
+                  product:
+                    id: '123'
   "/api/v1/notifications/{id}":
     get:
       summary: Retrieves a Notification
