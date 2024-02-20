@@ -43,7 +43,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     visit "/notifications/create"
 
     click_link "Search for or add a product"
-    click_link "Add a product"
+    click_link "Add a new product"
 
     select new_product_attributes[:category], from: "Product category"
 
@@ -138,11 +138,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
     expect(page).to have_content("You have completed 2 of 6 sections.")
 
-    expect(page).to have_selector(:id, "task-list-2-0-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-2-1-status", text: "Cannot start yet")
-    expect(page).to have_selector(:id, "task-list-2-2-status", text: "Cannot start yet")
-
-    click_link "Add the type and details of the business"
+    click_link "Search for or add a business"
+    click_link "Add a new business"
     fill_in "Trading name", with: "Trading name"
     fill_in "Registered or legal name (optional)", with: "Legal name"
     click_button "Save and continue"
@@ -162,8 +159,6 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Save and complete tasks in this section"
 
     expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
-    expect(page).to have_selector(:id, "task-list-2-1-status", text: "Completed")
-    expect(page).to have_selector(:id, "task-list-2-2-status", text: "Completed")
     expect(page).to have_content("You have completed 3 of 6 sections.")
 
     # Ensure that all of section 4 and the first task of section are enabled once section 3 is completed

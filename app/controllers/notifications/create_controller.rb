@@ -8,7 +8,7 @@ module Notifications
     before_action :disallow_changing_submitted_notification, except: %i[index from_product confirmation]
     before_action :set_steps
     before_action :setup_wizard
-    before_action :validate_step, except: %i[index from_product add_product remove_product]
+    before_action :validate_step, except: %i[index from_product add_product remove_product remove_business]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
     breadcrumb "cases.label", :your_cases_investigations
@@ -54,7 +54,30 @@ module Notifications
 
       if request.delete?
         RemoveProductFromNotification.call!(notification: @notification, investigation_product: @investigation_product, user: current_user, silent: true)
+
+        # If the last product has been removed, mark the task as in progress to prevent progression
+        if @notification.investigation_products.blank?
+          @notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
+          @notification.save!
+        end
+
         redirect_to notification_create_path(@notification, "search_for_or_add_a_product")
+      end
+    end
+
+    def remove_business
+      @investigation_business = @notification.investigation_businesses.find(params[:investigation_business_id])
+
+      if request.delete?
+        RemoveBusinessFromNotification.call!(notification: @notification, business: @investigation_business.business, user: current_user, silent: true)
+
+        # If the last business has been removed, mark the task as in progress to prevent progression
+        if @notification.investigation_businesses.blank?
+          @notification.tasks_status["search_for_or_add_a_business"] = "in_progress"
+          @notification.save!
+        end
+
+        redirect_to notification_create_path(@notification, "search_for_or_add_a_business")
       end
     end
 
@@ -91,7 +114,7 @@ module Notifications
         @records_count = products.size
         @pagy, @records = pagy(products)
         @existing_product_ids = InvestigationProduct.where(investigation: @notification).pluck(:product_id)
-        @manage = request.query_string != "search" && @existing_product_ids.present?
+        @manage = request.query_string.split("&").first != "search" && @existing_product_ids.present?
       when :add_notification_details
         @change_notification_details_form = ChangeNotificationDetailsForm.new(
           user_title: @notification.user_title,
@@ -110,11 +133,37 @@ module Notifications
           add_reference_number: @notification.complainant_reference.present? ? true : nil,
           reference_number: @notification.complainant_reference
         )
+      when :search_for_or_add_a_business
+        @search_query = params[:q].presence
+
+        return redirect_to "#{request.path}?search&#{request.query_string}" if !request.query_string.start_with?("search") && @search_query.present?
+
+        sort_by = {
+          "name_a_z" => { trading_name: :asc },
+          "name_z_a" => { trading_name: :desc }
+        }[params[:sort_by]] || { created_at: :desc }
+
+        businesses = if @search_query
+                       @search_query.strip!
+                       Business.joins(:locations).where("businesses.trading_name ILIKE ?", "%#{@search_query}%")
+                         .or(Business.where("businesses.legal_name ILIKE ?", "%#{@search_query}%"))
+                         .or(Business.where("CONCAT(locations.address_line_1, ' ', locations.address_line_2, ' ', locations.city, ' ', locations.county, ' ', locations.country, ' ', locations.postal_code) ILIKE ?", "%#{@search_query}%"))
+                         .or(Business.where(company_number: @search_query))
+                         .distinct
+                         .order(sort_by)
+                     else
+                       Business.all.order(sort_by)
+                     end
+
+        @records_count = businesses.size
+        @pagy, @records = pagy(businesses)
+        @existing_business_ids = InvestigationBusiness.where(investigation: @notification).pluck(:business_id)
+        @manage = request.query_string.split("&").first != "search" && @existing_business_ids.present?
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new
-      when :add_location
+      when :add_business_location
         @add_location_form = AddLocationForm.new(business_id: params[:business_id])
-      when :add_contact
+      when :add_business_contact
         @add_contact_form = AddContactForm.new(business_id: params[:business_id])
       when :add_test_reports
         investigation_products = @notification.investigation_products
@@ -234,6 +283,14 @@ module Notifications
         else
           return render_wizard
         end
+      when :search_for_or_add_a_business
+        return redirect_to "#{wizard_path(:search_for_or_add_a_business)}?search" if params[:add_another_business] == "true"
+        return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
+
+        if params[:add_another_business].blank?
+          business = Business.find(params[:business_id])
+          AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+        end
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
 
@@ -249,10 +306,10 @@ module Notifications
           business:
         )
 
-        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user)
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, silent: true)
 
         additional_params = { business_id: business.id }
-      when :add_location
+      when :add_business_location
         @add_location_form = AddLocationForm.new(add_location_params)
 
         return render_wizard unless @add_location_form.valid?
@@ -265,10 +322,27 @@ module Notifications
           county: @add_location_form.county,
           country: @add_location_form.country,
           postal_code: @add_location_form.postal_code,
-          business_id: @add_location_form.business_id
+          business_id: @add_location_form.business_id,
+          added_by_user_id: current_user.id
         )
 
         additional_params = { business_id: @add_location_form.business_id }
+      when :add_business_contact
+        @add_contact_form = AddContactForm.new(add_contact_params)
+
+        return render_wizard unless @add_contact_form.valid?
+
+        Contact.create!(
+          name: @add_contact_form.name,
+          job_title: @add_contact_form.job_title,
+          email: @add_contact_form.email,
+          phone_number: @add_contact_form.phone_number,
+          business_id: @add_contact_form.business_id,
+          added_by_user_id: current_user.id
+        )
+
+        # Mark the task that's shown on the task list as complete to unlock the next task
+        @notification.tasks_status["search_for_or_add_a_business"] = "completed"
       when :add_test_reports
         return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
         return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
@@ -747,10 +821,10 @@ module Notifications
     end
 
     def validate_step
-      # Don't allow access to a step if the step before has not yet been completed (taking into account optional steps).
+      # Don't allow access to a step if the step before has not yet been completed (taking into account optional and hidden steps).
       # Checks if the step is the first step or the autogenerated "finish" step.
       optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
-      previous_task = TaskListService.previous_task(task: step, all_tasks: wizard_steps, optional_tasks:)
+      previous_task = TaskListService.previous_task(task: step, all_tasks: wizard_steps, optional_tasks:, hidden_tasks: Investigation::Notification::TASK_LIST_TASKS_HIDDEN)
       redirect_to notification_create_index_path(@notification) unless step == previous_step || step == :wizard_finish || @notification.tasks_status[previous_task.to_s] == "completed"
     end
 
@@ -807,6 +881,18 @@ module Notifications
       params.require(:choose_investigation_product_form).permit(:investigation_product_id, :final)
     end
 
+    def add_business_details_params
+      params.require(:add_business_details_form).permit(:trading_name, :legal_name)
+    end
+
+    def add_location_params
+      params.require(:add_location_form).permit(:address_line_1, :address_line_2, :city, :county, :postal_code, :country, :business_id)
+    end
+
+    def add_contact_params
+      params.require(:add_contact_form).permit(:name, :job_title, :email, :phone_number, :business_id, :final)
+    end
+
     def opss_funding_params
       params.require(:set_test_result_funding_on_case_form).permit(:opss_funded)
     end
@@ -841,14 +927,6 @@ module Notifications
 
     def corrective_action_taken_params
       params.require(:corrective_action_taken_form).permit(:corrective_action_taken_yes_no, :corrective_action_taken_no_specific, :corrective_action_not_taken_reason)
-    end
-
-    def add_business_details_params
-      params.require(:add_business_details_form).permit(:trading_name, :legal_name)
-    end
-
-    def add_location_params
-      params.require(:add_location_form).permit(:address_line_1, :address_line_2, :city, :county, :postal_code, :country, :business_id)
     end
 
     def record_a_corrective_action_params

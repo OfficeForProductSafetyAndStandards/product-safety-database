@@ -1,6 +1,11 @@
 class TaskListService
-  def self.previous_task(task:, all_tasks:, optional_tasks:)
+  def self.previous_task(task:, all_tasks:, optional_tasks:, hidden_tasks:)
     return if task.blank? || all_tasks.index(task).zero?
+
+    hidden_task_parent = hidden_tasks.select { |h| h[task].present? }
+    if hidden_task_parent.present?
+      return hidden_task_parent.first[task]
+    end
 
     mandatory_tasks = all_tasks - optional_tasks
 

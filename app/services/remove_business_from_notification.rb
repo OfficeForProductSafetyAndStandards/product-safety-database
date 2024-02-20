@@ -16,7 +16,7 @@ class RemoveBusinessFromNotification
     notification.businesses.delete(business)
     notification.reindex
 
-    send_notification_email(create_audit_activity_for_business_removed)
+    send_notification_email(create_audit_activity_for_business_removed) unless context.silent
   end
 
 private

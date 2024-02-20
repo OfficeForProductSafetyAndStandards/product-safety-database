@@ -3,7 +3,7 @@ module Notifications
     def sections_complete
       tasks_status = @notification.tasks_status
       Investigation::Notification::TASK_LIST_SECTIONS.map { |_section, tasks|
-        complete = tasks.map { |task|
+        complete = tasks.excluding(*Investigation::Notification::TASK_LIST_TASKS_HIDDEN.map(&:keys).flatten).map { |task|
           tasks_status[task.to_s] == "completed" ? 1 : 0
         }.exclude?(0)
         complete ? 1 : 0
@@ -12,7 +12,7 @@ module Notifications
 
     def task_status(task)
       optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
-      previous_task = TaskListService.previous_task(task:, all_tasks: wizard_steps, optional_tasks:)
+      previous_task = TaskListService.previous_task(task:, all_tasks: wizard_steps, optional_tasks:, hidden_tasks: Investigation::Notification::TASK_LIST_TASKS_HIDDEN)
 
       if %w[in_progress completed].include?(@notification.tasks_status[task.to_s])
         @notification.tasks_status[task.to_s]

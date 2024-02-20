@@ -5,8 +5,9 @@ class ChangeBusinessNames
 
   def call
     context.fail!(error: "No trading name supplied") unless trading_name.is_a?(String)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    business.assign_attributes(legal_name:, trading_name:)
+    business.assign_attributes(legal_name:, trading_name:, added_by_user_id: user.id)
 
     business.save!
   end
