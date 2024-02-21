@@ -294,6 +294,19 @@ module Notifications
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
 
+        # Find potential duplicate businesses by looking for the same trading name
+        # and preferring results with the same legal name too.
+        duplicate_business = Business.where("LOWER(legal_name) = ?", @add_business_details_form.legal_name.downcase)
+          .or(Business.where(legal_name: nil))
+          .or(Business.where(legal_name: ""))
+          .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
+          .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
+          .order(created_at: :desc)
+          .limit(1)
+          .first
+
+        return redirect_to duplicate_business_notification_create_index_path(@notification, business_id: duplicate_business.id, trading_name:  @add_business_details_form.trading_name, legal_name: @add_business_details_form.legal_name) if duplicate_business.present?
+
         return render_wizard unless @add_business_details_form.valid?
 
         business = Business.new
@@ -306,7 +319,7 @@ module Notifications
           business:
         )
 
-        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, silent: true)
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
 
         additional_params = { business_id: business.id }
       when :add_business_location
@@ -566,6 +579,50 @@ module Notifications
       ucr_number = @investigation_product.ucr_numbers.find(params[:ucr_number_id])
       ucr_number.destroy!
       redirect_to ucr_numbers_notification_create_index_path
+    end
+
+    def show_duplicate_business
+      return redirect_to notification_create_path(@notification, id: "search_for_or_add_a_business") unless params[:trading_name].present?
+
+      @add_business_details_duplicate_form = AddBusinessDetailsDuplicateForm.new(
+        trading_name: params[:trading_name],
+        legal_name: params[:legal_name]
+      )
+
+      @duplicate_business = Business.find(params[:business_id])
+
+      render :add_business_details_duplicate
+    end
+
+    def update_duplicate_business
+      @add_business_details_duplicate_form = AddBusinessDetailsDuplicateForm.new(add_business_details_duplicate_params)
+
+      unless @add_business_details_duplicate_form.valid?
+        @duplicate_business = Business.find(params[:business_id])
+        return render :add_business_details_duplicate
+      end
+
+      if @add_business_details_duplicate_form.resolution == "existing_record"
+        business = Business.find(params[:business_id])
+
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+
+        redirect_to notification_create_path(@notification, id: "search_for_or_add_a_business")
+      else
+        business = Business.new
+
+        ChangeBusinessNames.call!(
+          trading_name: @add_business_details_duplicate_form.trading_name,
+          legal_name: @add_business_details_duplicate_form.legal_name,
+          notification: @notification,
+          user: current_user,
+          business:
+        )
+
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+
+        redirect_to notification_create_path(@notification, id: "add_business_location", business_id: business.id)
+      end
     end
 
     def show_with_notification_product
@@ -883,6 +940,10 @@ module Notifications
 
     def add_business_details_params
       params.require(:add_business_details_form).permit(:trading_name, :legal_name)
+    end
+
+    def add_business_details_duplicate_params
+      params.require(:add_business_details_duplicate_form).permit(:resolution, :trading_name, :legal_name)
     end
 
     def add_location_params

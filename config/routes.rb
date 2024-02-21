@@ -148,6 +148,9 @@ Rails.application.routes.draw do
             end
 
             get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
+            get "search_for_or_add_a_business/duplicate/:business_id", to: "create#show_duplicate_business", as: "duplicate_business"
+            patch "search_for_or_add_a_business/duplicate/:business_id", to: "create#update_duplicate_business"
+            put "search_for_or_add_a_business/duplicate/:business_id", to: "create#update_duplicate_business"
 
             # These routes need to appear before the next scope block to avoid clashing with the
             # `:investigation_product_id/:entity_id` routes.

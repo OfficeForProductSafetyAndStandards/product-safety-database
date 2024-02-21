@@ -411,6 +411,8 @@ en:
                 title: Search for or add a business
               add_business_details:
                 title: Add the type and details of the business
+              add_business_details_duplicate:
+                title: We found a similar business
               add_business_location:
                 title: Add business addresses
               add_business_contact:
@@ -905,6 +907,10 @@ en:
           attributes:
             country:
               blank: Choose a country
+        add_business_details_duplicate_form:
+          attributes:
+            resolution:
+              blank: Choose either the existing PSD record or your manual entry
 
   activerecord:
     models:
