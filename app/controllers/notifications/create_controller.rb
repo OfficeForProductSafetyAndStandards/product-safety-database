@@ -305,7 +305,7 @@ module Notifications
           .limit(1)
           .first
 
-        return redirect_to duplicate_business_notification_create_index_path(@notification, business_id: duplicate_business.id, trading_name:  @add_business_details_form.trading_name, legal_name: @add_business_details_form.legal_name) if duplicate_business.present?
+        return redirect_to duplicate_business_notification_create_index_path(@notification, business_id: duplicate_business.id, trading_name: @add_business_details_form.trading_name, legal_name: @add_business_details_form.legal_name) if duplicate_business.present?
 
         return render_wizard unless @add_business_details_form.valid?
 
@@ -582,7 +582,7 @@ module Notifications
     end
 
     def show_duplicate_business
-      return redirect_to notification_create_path(@notification, id: "search_for_or_add_a_business") unless params[:trading_name].present?
+      return redirect_to notification_create_path(@notification, id: "search_for_or_add_a_business") if params[:trading_name].blank?
 
       @add_business_details_duplicate_form = AddBusinessDetailsDuplicateForm.new(
         trading_name: params[:trading_name],
