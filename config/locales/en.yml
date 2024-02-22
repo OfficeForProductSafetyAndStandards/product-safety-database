@@ -865,10 +865,10 @@ en:
             unsafe:
               blank: Choose at least one issue
             primary_hazard:
-              blank: Choose the primary hazard
+              blank: Choose the primary harm
             primary_hazard_description:
-              blank: Enter additional information about the product hazard
-              too_long: Additional information about the product hazard must be %{count} characters or less
+              blank: Enter additional information about the product harm
+              too_long: Additional information about the product harm must be %{count} characters or less
             noncompliance_description:
               blank: Enter a description of the product non-compliance issues
               too_long: Description of the product non-compliance issues must be %{count} characters or less
