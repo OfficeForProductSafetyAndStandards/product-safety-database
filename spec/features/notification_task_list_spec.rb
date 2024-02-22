@@ -144,6 +144,9 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     fill_in "Registered or legal name (optional)", with: "Legal name"
     click_button "Save and continue"
 
+    check "Retailer"
+    click_button "Save and continue"
+
     fill_in "Address line 1", with: "123 Fake St"
     fill_in "Address line 2", with: "Fake Heath"
     fill_in "Town or city", with: "Faketon"

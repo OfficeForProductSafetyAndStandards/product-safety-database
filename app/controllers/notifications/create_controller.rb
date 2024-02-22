@@ -161,6 +161,8 @@ module Notifications
         @manage = request.query_string.split("&").first != "search" && @existing_business_ids.present?
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new
+      when :add_business_roles
+        @add_business_roles_form = AddBusinessRolesForm.new(business_id: params[:business_id])
       when :add_business_location
         @add_location_form = AddLocationForm.new(business_id: params[:business_id])
       when :add_business_contact
@@ -322,6 +324,24 @@ module Notifications
         AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
 
         additional_params = { business_id: business.id }
+      when :add_business_roles
+        @add_business_roles_form = AddBusinessRolesForm.new(add_business_roles_params)
+
+        return render_wizard unless @add_business_roles_form.valid?
+
+        business = Business.find(@add_business_roles_form.business_id)
+
+        ChangeBusinessRoles.call!(
+          notification: @notification,
+          business:,
+          user: current_user,
+          roles: @add_business_roles_form.roles,
+          online_marketplace_id: @add_business_roles_form.online_marketplace_id,
+          new_online_marketplace_name: @add_business_roles_form.new_online_marketplace_name,
+          authorised_representative_choice: @add_business_roles_form.authorised_representative_choice
+        )
+
+        additional_params = { business_id: @add_business_roles_form.business_id }
       when :add_business_location
         @add_location_form = AddLocationForm.new(add_location_params)
 
@@ -940,6 +960,10 @@ module Notifications
 
     def add_business_details_params
       params.require(:add_business_details_form).permit(:trading_name, :legal_name)
+    end
+
+    def add_business_roles_params
+      params.require(:add_business_roles_form).permit(:online_marketplace_id, :new_online_marketplace_name, :authorised_representative_choice, :business_id, roles: [])
     end
 
     def add_business_details_duplicate_params
