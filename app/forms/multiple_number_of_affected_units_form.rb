@@ -27,7 +27,7 @@ class MultipleNumberOfAffectedUnitsForm
     children_valid = number_of_affected_units_forms.map(&:valid?).all?
     number_of_affected_units_forms.each_with_index do |number_of_affected_units_form, i|
       number_of_affected_units_form.errors.each do |error|
-        errors.import(error, { attribute: "number_of_affected_units_forms_attributes[#{i}].#{error.attribute.to_s}".to_sym })
+        errors.import(error, { attribute: "number_of_affected_units_forms_attributes[#{i}].#{error.attribute}".to_sym })
       end
     end
     children_valid

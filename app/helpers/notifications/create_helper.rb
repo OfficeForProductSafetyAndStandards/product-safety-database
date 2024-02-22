@@ -66,7 +66,7 @@ module Notifications
     end
 
     def number_of_affected_units(investigation_products)
-      investigation_products.map do |investigation_product|
+      investigation_products.map { |investigation_product|
         units = case investigation_product.affected_units_status
                 when "exact"
                   investigation_product.number_of_affected_units
@@ -80,7 +80,7 @@ module Notifications
                   "Not provided"
                 end
         "#{investigation_product.product.decorate.name_with_brand}: #{units}"
-      end.join("<br>")
+      }.join("<br>")
     end
 
     def investigation_products_options
