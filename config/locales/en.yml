@@ -388,22 +388,14 @@ en:
               search_for_or_add_a_product:
                 title: Search for or add a product
           notification_details:
-            title: Add notification and additional product details
+            title: Add notification and product safety details
             tasks:
               add_notification_details:
                 title: Add notification details
               add_product_safety_and_compliance_details:
                 title: Add product safety and compliance details
-              add_product_identification_details:
-                title: Add product identification details
-              add_product_identification_details_batch_numbers:
-                title: Add batch numbers
-              add_product_identification_details_customs_codes:
-                title: Add customs codes
-              add_product_identification_details_ucr_numbers:
-                title: Add Unique Consignment Reference (UCR) numbers
-              add_product_identification_details_number_of_affected_units:
-                title: Add the number of units affected
+              add_number_of_affected_units:
+                title: Add the number of affected products
           business_details:
             title: Add businesses and their roles in the supply chain
             tasks:
@@ -420,8 +412,16 @@ en:
               add_business_contact:
                 title: Add business contact details
           evidence:
-            title: Add evidence
+            title: Add product identification and evidence details
             tasks:
+              add_product_identification_details:
+                title: Add product identification details
+              add_product_identification_details_batch_numbers:
+                title: Add batch numbers
+              add_product_identification_details_customs_codes:
+                title: Add customs codes
+              add_product_identification_details_ucr_numbers:
+                title: Add Unique Consignment Reference (UCR) numbers
               add_test_reports:
                 title: Add test reports
                 select_product:

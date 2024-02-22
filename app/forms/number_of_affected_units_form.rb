@@ -3,6 +3,7 @@ class NumberOfAffectedUnitsForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
+  attribute :investigation_product_id # When used in conjunction with `MultipleNumberOfAffectedUnitsForm`
   attribute :exact_units
   attribute :approx_units
   attribute :affected_units_status
@@ -19,6 +20,7 @@ class NumberOfAffectedUnitsForm
       elsif investigation_product.affected_units_status == InvestigationProduct.affected_units_statuses["exact"]
         investigation_product_form.exact_units = investigation_product.number_of_affected_units
       end
+      investigation_product_form.investigation_product_id = investigation_product.id
     end
   end
 

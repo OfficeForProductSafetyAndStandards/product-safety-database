@@ -128,9 +128,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     click_button "Save and continue"
 
-    click_link "Add batch numbers"
-    fill_in "batch_number", with: "1234, 5678"
-    click_button "Save"
+    choose "Unknown"
     click_button "Save and complete tasks in this section"
 
     expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
@@ -170,7 +168,14 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_selector(:id, "task-list-3-2-status", text: "Not yet started")
     expect(page).to have_selector(:id, "task-list-3-3-status", text: "Not yet started")
     expect(page).to have_selector(:id, "task-list-3-4-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-5-status", text: "Not yet started")
     expect(page).to have_selector(:id, "task-list-4-0-status", text: "Not yet started")
+
+    click_link "Add product identification details"
+    click_link "Add batch numbers"
+    fill_in "batch_number", with: "1234, 5678"
+    click_button "Save"
+    click_button "Continue"
 
     click_link "Add test reports"
     choose "Yes"
@@ -330,18 +335,6 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_content("You have completed 5 of 6 sections.")
 
     click_link "Check the notification details and submit"
-
-    expect(page).to have_content("You cannot submit this notification because some products don't have a value for \"number of units affected\".")
-
-    click_link "Change number of units affected"
-
-    choose "Exact number"
-    fill_in "number-of-affected-units-form-exact-units-field", with: "1000"
-    click_button "Save"
-    click_button "Save and complete tasks in this section"
-
-    click_link "Check the notification details and submit"
-
     click_button "Submit notification"
 
     expect(page).to have_content("Notification submitted")

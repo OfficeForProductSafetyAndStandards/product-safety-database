@@ -65,19 +65,22 @@ module Notifications
         end
     end
 
-    def number_of_affected_units(affected_units_status, number_of_affected_units)
-      case affected_units_status
-      when "exact"
-        number_of_affected_units
-      when "approx"
-        "Approximately #{number_of_affected_units}"
-      when "unknown"
-        "Unknown"
-      when "not_relevant"
-        "Not relevant"
-      else
-        "Not provided"
-      end
+    def number_of_affected_units(investigation_products)
+      investigation_products.map do |investigation_product|
+        units = case investigation_product.affected_units_status
+                when "exact"
+                  investigation_product.number_of_affected_units
+                when "approx"
+                  "Approximately #{investigation_product.number_of_affected_units}"
+                when "unknown"
+                  "Unknown"
+                when "not_relevant"
+                  "Not relevant"
+                else
+                  "Not provided"
+                end
+        "#{investigation_product.product.decorate.name_with_brand}: #{units}"
+      end.join("<br>")
     end
 
     def investigation_products_options

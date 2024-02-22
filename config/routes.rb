@@ -141,7 +141,7 @@ Rails.application.routes.draw do
             delete "remove-business/:investigation_business_id", to: "create#remove_business"
             get "confirmation", to: "create#confirmation"
 
-            %w[batch_numbers customs_codes ucr_numbers number_of_affected_units].each do |identifier|
+            %w[batch_numbers customs_codes ucr_numbers].each do |identifier|
               get "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#show_#{identifier}", as: identifier
               patch "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#update_#{identifier}"
               put "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#update_#{identifier}"
