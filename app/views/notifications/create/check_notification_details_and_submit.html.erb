@@ -2,13 +2,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% unless @notification.all_products_have_affected_units? %>
-    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-      <h2 id="error-summary-title" class="govuk-error-summary__title govuk-!-margin-bottom-1">
-        You cannot submit this notification because some products don't have a value for "number of units affected".
-      </h2>
-    </div>
-    <% end %>
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= t("notifications.create.index.sections.submit.title") %></span>
       <%= t("notifications.create.index.sections.submit.tasks.check_notification_details_and_submit.title") %>
@@ -60,6 +53,11 @@
           row.with_value(text: @notification.complainant_reference.presence || "Not provided")
           row.with_action(text: "Change", href: wizard_path(:add_product_safety_and_compliance_details), visually_hidden_text: "internal reference number")
         end
+        summary_list.with_row do |row|
+          row.with_key(text: "Number of affected products")
+          row.with_value(text: number_of_affected_units(@notification.investigation_products).html_safe)
+          row.with_action(text: "Change", href: wizard_path(:add_number_of_affected_units), visually_hidden_text: "number of affected products")
+        end
       end
     %>
     <h2 class="govuk-heading-m">Product identification details</h2>
@@ -98,17 +96,6 @@
                   text: "Change",
                   href: ucr_numbers_notification_create_index_path(@notification, investigation_product.id),
                   visually_hidden_text: "unique consignment reference numbers"
-                }
-              ]
-            },
-            {
-              key: { text: "Number of units affected" },
-              value: { text: number_of_affected_units(investigation_product.affected_units_status, investigation_product.number_of_affected_units) },
-              actions: [
-                {
-                  text: "Change",
-                  href: number_of_affected_units_notification_create_index_path(@notification, investigation_product.id),
-                  visually_hidden_text: "number of units affected"
                 }
               ]
             }
@@ -279,7 +266,7 @@
       %>
     <% end %>
     <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <%= f.govuk_submit "Submit notification", name: "final", value: "true", disabled: !@notification.all_products_have_affected_units? do %>
+      <%= f.govuk_submit "Submit notification", name: "final", value: "true" do %>
         <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
       <% end %>
     <% end %>

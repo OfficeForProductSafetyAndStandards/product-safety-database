@@ -9,7 +9,7 @@ module Notifications
     before_action :set_steps
     before_action :setup_wizard
     before_action :validate_step, except: %i[index from_product add_product remove_product remove_business]
-    before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers show_number_of_affected_units update_batch_numbers update_customs_codes update_ucr_numbers update_number_of_affected_units delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
+    before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers update_batch_numbers update_customs_codes update_ucr_numbers delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
     breadcrumb "cases.label", :your_cases_investigations
 
@@ -133,6 +133,8 @@ module Notifications
           add_reference_number: @notification.complainant_reference.present? ? true : nil,
           reference_number: @notification.complainant_reference
         )
+      when :add_number_of_affected_units
+        @multiple_number_of_affected_units_form = MultipleNumberOfAffectedUnitsForm.from(@notification.investigation_products)
       when :search_for_or_add_a_business
         @search_query = params[:q].presence
 
@@ -282,6 +284,22 @@ module Notifications
             user: current_user,
             silent: true
           )
+        else
+          return render_wizard
+        end
+      when :add_number_of_affected_units
+        @multiple_number_of_affected_units_form = MultipleNumberOfAffectedUnitsForm.new(add_number_of_affected_units_params)
+
+        if @multiple_number_of_affected_units_form.valid?
+          @multiple_number_of_affected_units_form.number_of_affected_units_forms.each do |f|
+            ChangeNumberOfAffectedUnits.call!(
+              investigation_product: @notification.investigation_products.find(f.investigation_product_id),
+              number_of_affected_units: f.number_of_affected_units,
+              affected_units_status: f.affected_units_status,
+              user: current_user,
+              silent: true
+            )
+          end
         else
           return render_wizard
         end
@@ -558,11 +576,6 @@ module Notifications
       render :add_product_identification_details_ucr_numbers
     end
 
-    def show_number_of_affected_units
-      @number_of_affected_units_form = NumberOfAffectedUnitsForm.from(@investigation_product)
-      render :add_product_identification_details_number_of_affected_units
-    end
-
     def update_batch_numbers
       ChangeNotificationBatchNumber.call!(notification_product: @investigation_product, batch_number: params[:batch_number], user: current_user, silent: true)
       redirect_to wizard_path(:add_product_identification_details)
@@ -576,23 +589,6 @@ module Notifications
     def update_ucr_numbers
       ChangeUcrNumbers.call!(investigation_product: @investigation_product, ucr_numbers: ucr_numbers_params, user: current_user, silent: true)
       redirect_to wizard_path(:add_product_identification_details)
-    end
-
-    def update_number_of_affected_units
-      @number_of_affected_units_form = NumberOfAffectedUnitsForm.new(number_of_affected_units_params)
-
-      if @number_of_affected_units_form.valid?
-        ChangeNumberOfAffectedUnits.call!(
-          investigation_product: @investigation_product,
-          number_of_affected_units: @number_of_affected_units_form.number_of_affected_units,
-          affected_units_status: @number_of_affected_units_form.affected_units_status,
-          user: current_user,
-          silent: true
-        )
-        redirect_to wizard_path(:add_product_identification_details)
-      else
-        render :add_product_identification_details_number_of_affected_units
-      end
     end
 
     def delete_ucr_number
@@ -946,16 +942,8 @@ module Notifications
       params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :is_from_overseas_regulator, :overseas_regulator_country, :add_reference_number, :reference_number, :draft)
     end
 
-    def number_of_affected_units_params
-      params.require(:number_of_affected_units_form).permit(:affected_units_status, :exact_units, :approx_units)
-    end
-
-    def ucr_numbers_params
-      params.require(:investigation_product).permit(ucr_numbers_attributes: %i[id number _destroy])
-    end
-
-    def add_test_reports_params
-      params.require(:choose_investigation_product_form).permit(:investigation_product_id, :final)
+    def add_number_of_affected_units_params
+      params.require(:multiple_number_of_affected_units_form).permit(number_of_affected_units_forms_attributes: {})
     end
 
     def add_business_details_params
@@ -976,6 +964,14 @@ module Notifications
 
     def add_contact_params
       params.require(:add_contact_form).permit(:name, :job_title, :email, :phone_number, :business_id, :final)
+    end
+
+    def ucr_numbers_params
+      params.require(:investigation_product).permit(ucr_numbers_attributes: %i[id number _destroy])
+    end
+
+    def add_test_reports_params
+      params.require(:choose_investigation_product_form).permit(:investigation_product_id, :final)
     end
 
     def opss_funding_params
