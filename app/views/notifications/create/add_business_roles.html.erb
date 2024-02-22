@@ -1,0 +1,42 @@
+<%= page_title(t("notifications.create.index.sections.business_details.tasks.add_business_roles.title"), errors: @add_business_roles_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @add_business_roles_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
+        <%= t("notifications.create.index.sections.business_details.tasks.add_business_roles.title") %>
+      </h1>
+      <div class="govuk-hint" id="add-business-roles-form-roles-hint">You can select more than one option except for online marketplace.</div>
+      <%= f.govuk_check_boxes_fieldset :roles, legend: nil, hint: { text: "You can select more than one option except for online marketplace." } do %>
+        <%= f.govuk_check_box :roles, :retailer, label: { text: t("investigations.business_types.new.types.retailer.label") }, hint:{ text: "This includes traditional retailers and retailers selling directly to customers via their own online presence." } %>
+        <%= f.govuk_check_box :roles, :online_seller, label: { text: t("investigations.business_types.new.types.online_seller.label") }, hint:{ text: "This includes businesses primarily selling products to end users via an online marketplace such as Amazon." }%>
+        <% (Business::BUSINESS_TYPES - ["retailer", "online_seller", "online_marketplace", "authorised_representative", "responsible_person"]).each do |role| %>
+          <%= f.govuk_check_box :roles, role.to_sym, label: { text: t("investigations.business_types.new.types.#{role}.label") } %>
+        <% end %>
+        <%= f.govuk_check_box :roles, :authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.label") } do %>
+          <%= f.govuk_radio_button :authorised_representative, :uk_authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.uk.label") } %>
+          <%= f.govuk_radio_button :authorised_representative, :eu_authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.eu.label") } %>
+        <% end %>
+        <%= f.govuk_check_box :roles, :responsible_person, label: { text: t("investigations.business_types.new.types.responsible_person.label") } %>
+        <div class="govuk-checkboxes__divider">or</div>
+        <%= f.govuk_check_box :roles, :online_marketplace, label: { text: t("investigations.business_types.new.types.online_marketplace.label") } do %>
+          <% OnlineMarketplace.approved.each_slice(2) do |slice| %>
+            <div class="govuk-grid-row">
+              <% slice.each do |online_marketplace| %>
+                <div class="govuk-grid-column-one-half">
+                  <%= f.govuk_radio_button :online_marketplace_id, online_marketplace.id, label: { text: online_marketplace.name } %>
+                </div>
+              <% end %>
+            </div>
+            <div class="govuk-checkboxes__divider"></div>
+            <% end %>
+          <%= f.govuk_text_field :new_marketplace_name, label: { text: "Other online platform" }, width: "two-thirds" %>
+        <% end %>
+        <%= f.hidden_field :business_id %>
+        <%= f.govuk_submit "Save and continue" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
