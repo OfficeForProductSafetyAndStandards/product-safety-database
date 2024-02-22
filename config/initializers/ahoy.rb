@@ -1,12 +1,6 @@
 class Ahoy::Store < Ahoy::DatabaseStore
 end
 
-# GDPR compliance - no cookies & use anonymity sets instead of IPs
-Ahoy.mask_ips = true
-Ahoy.cookies = :none
-
-Ahoy.visit_duration = 4.hours
-
 # set to true for JavaScript tracking
 Ahoy.api = false
 
