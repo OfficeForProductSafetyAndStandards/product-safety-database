@@ -104,7 +104,7 @@ module Notifications
     end
 
     def specific_product_safety_issues
-      unsafe = "<p class=\"govuk-body\">Product hazard: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
+      unsafe = "<p class=\"govuk-body\">Product harm: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
       non_compliant = "<p class=\"govuk-body\">Product incomplete markings, labeling or other issues</p><p class=\"govuk-body-s\">#{@notification.non_compliant_reason}</p>" if @notification.non_compliant? || @notification.unsafe_and_non_compliant?
       [unsafe, non_compliant].join
     end

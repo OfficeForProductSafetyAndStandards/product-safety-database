@@ -111,9 +111,9 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Save and continue"
 
     within_fieldset "What specific issues make the product unsafe or non-compliant?" do
-      check "Product hazard"
-      select "Chemical", from: "What is the primary hazard?"
-      fill_in "Provide additional information about the product hazard", with: "Fake description"
+      check "Product harm"
+      select "Chemical", from: "What is the primary harm?"
+      fill_in "Provide additional information about the product harm", with: "Fake description"
     end
 
     within_fieldset "Was the safety issue reported by an overseas regulator?" do

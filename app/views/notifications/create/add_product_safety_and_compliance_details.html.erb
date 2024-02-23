@@ -18,9 +18,9 @@
       <% end %>
       <% unless @notification.reported_reason&.safe_and_compliant? %>
         <%= f.govuk_check_boxes_fieldset :unsafe, multiple: false, legend: { text: "What specific issues make the #{'product'.pluralize(@notification.products.count)} unsafe or non-compliant?", size: "m" }, hint: { text: "Please select all applicable issues." } do %>
-          <%= f.govuk_check_box :unsafe, true, false, multiple: false, link_errors: true, label: { text: "Product hazard" } do %>
-            <%= f.govuk_collection_select :primary_hazard, hazards_options, :id, :name, label: { text: "What is the primary hazard?" } %>
-            <%= f.govuk_text_area :primary_hazard_description, label: { text: "Provide additional information about the product hazard" }, hint: { text: "If the product has been involved in an incident include this additional information." }, max_chars: 10_000 %>
+          <%= f.govuk_check_box :unsafe, true, false, multiple: false, link_errors: true, label: { text: "Product harm" } do %>
+            <%= f.govuk_collection_select :primary_hazard, hazards_options, :id, :name, label: { text: "What is the primary harm?" } %>
+            <%= f.govuk_text_area :primary_hazard_description, label: { text: "Provide additional information about the product harm" }, hint: { text: "If the product has been involved in an incident include this additional information." }, max_chars: 10_000 %>
           <% end %>
           <%= f.govuk_check_box :noncompliant, true, false, multiple: false, label: { text: "Product incomplete markings, labeling or other issues" } do %>
             <%= f.govuk_text_area :noncompliance_description, label: { text: "Describe the product non-compliance issues" }, max_chars: 10_000 %>
