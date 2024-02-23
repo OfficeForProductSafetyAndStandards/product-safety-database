@@ -445,7 +445,7 @@ en:
                 legacy:
                   title: Add legacy risk assessment
               determine_notification_risk_level:
-                title: Determine notification risk level
+                title: Evaluate notification risk level
           corrective_actions:
             title: Add corrective actions
             tasks:
