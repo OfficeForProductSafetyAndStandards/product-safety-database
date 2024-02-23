@@ -541,7 +541,7 @@ module Notifications
         return render_wizard unless @notification.ready_to_submit? || params[:draft] == "true"
       end
 
-      @notification.tasks_status[step.to_s] = "completed"
+      @notification.tasks_status[step.to_s] = params[:draft] == "true" ?  "in_progress" : "completed"
 
       if params[:draft] == "true" || params[:final] == "true"
         # "Save as draft" or final save button of the section clicked.
