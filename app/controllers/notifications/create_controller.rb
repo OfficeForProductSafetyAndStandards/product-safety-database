@@ -130,7 +130,7 @@ module Notifications
           noncompliance_description: @notification.non_compliant_reason,
           is_from_overseas_regulator: @notification.is_from_overseas_regulator,
           overseas_regulator_country: @notification.overseas_regulator_country,
-          add_reference_number: @notification.complainant_reference.present? ? true : nil,
+          add_reference_number: @notification.complainant_reference.nil? ? nil : @notification.complainant_reference.present?,
           reference_number: @notification.complainant_reference
         )
       when :add_number_of_affected_units
