@@ -230,6 +230,7 @@ module Notifications
         if params[:add_another_product].blank?
           product = Product.find(params[:product_id])
           AddProductToNotification.call!(notification: @notification, product:, user: current_user, skip_email: true)
+          return redirect_to wizard_path(:search_for_or_add_a_product)
         end
       when :add_notification_details
         @change_notification_details_form = ChangeNotificationDetailsForm.new(add_notification_details_params.merge(current_user:, notification_id: @notification.id))
@@ -310,6 +311,7 @@ module Notifications
         if params[:add_another_business].blank?
           business = Business.find(params[:business_id])
           AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+          return redirect_to wizard_path(:search_for_or_add_a_business)
         end
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
@@ -541,7 +543,7 @@ module Notifications
         return render_wizard unless @notification.ready_to_submit? || params[:draft] == "true"
       end
 
-      @notification.tasks_status[step.to_s] = "completed"
+      @notification.tasks_status[step.to_s] = params[:draft] == "true" ? "in_progress" : "completed"
 
       if params[:draft] == "true" || params[:final] == "true"
         # "Save as draft" or final save button of the section clicked.

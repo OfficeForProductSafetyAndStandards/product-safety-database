@@ -99,6 +99,12 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_link "Search for or add a product"
     click_button "Select", match: :first
 
+    within_fieldset "Do you need to add another product?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
     expect(page).to have_content("You have completed 1 of 6 sections.")
 
