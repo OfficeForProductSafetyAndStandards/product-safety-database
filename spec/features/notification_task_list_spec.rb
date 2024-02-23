@@ -279,7 +279,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     click_link "Record a corrective action"
 
-    within_fieldset "Have you taken a corrective action for the unsafe product(s)?" do
+    within_fieldset "Have you taken a corrective action for the unsafe or non-compliant product(s)?" do
       choose "Yes"
     end
 
