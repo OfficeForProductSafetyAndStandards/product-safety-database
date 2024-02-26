@@ -272,7 +272,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
     expect(page).to have_selector(:id, "task-list-3-3-status", text: "Completed")
 
-    click_link "Determine notification risk level"
+    click_link "Evaluate notification risk level"
 
     expect(page).to have_content("This notification has 1 risk assessment added, assessing the risk as high.")
 
