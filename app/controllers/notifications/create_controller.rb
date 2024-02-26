@@ -164,6 +164,7 @@ module Notifications
         @records_count = businesses.size
         @pagy, @records = pagy(businesses)
         @existing_business_ids = InvestigationBusiness.where(investigation: @notification).pluck(:business_id)
+        @existing_attached_business_ids = @notification.corrective_actions.pluck(:business_id) + @notification.risk_assessments.pluck(:assessed_by_business_id)
         @manage = request.query_string.split("&").first != "search" && @existing_business_ids.present?
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new
