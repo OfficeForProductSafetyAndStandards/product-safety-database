@@ -86,6 +86,9 @@ module Notifications
       when :search_for_or_add_a_product
         @page_name = params[:page_name]
         @search_query = params[:q].presence
+
+        return redirect_to "#{request.path}?search&#{request.query_string}" if !request.query_string.start_with?("search") && @search_query.present?
+
         sort_by = {
           "name_a_z" => { name: :asc },
           "name_z_a" => { name: :desc }
