@@ -20,5 +20,8 @@
     tabs.with_tab(label: "Notifications (#{@business.investigations.count})") do
       render("businesses/tabs/notifications")
     end
+    tabs.with_tab(label: "Products (#{@business.investigation_products.count})") do
+      render("businesses/tabs/products")
+    end
   end
 %>
