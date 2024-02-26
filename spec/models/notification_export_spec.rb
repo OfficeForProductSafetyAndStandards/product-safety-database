@@ -6,8 +6,12 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
   end
 
   let!(:organisation) { create(:organisation) }
-  let!(:team) { create(:team, organisation:) }
-  let!(:other_team) { create(:team, organisation:) }
+  let!(:team) do
+    create(:team, organisation:, team_type: "local_authority", regulator_name: nil, ts_region: "Scotland", ts_acronym: "SCOTSS", ts_area: "Aberdeenshire")
+  end
+  let!(:other_team) do
+    create(:team, organisation:, team_type: "external", regulator_name: "Department of Agriculture, Environment and Rural Affairs (DAERA)", ts_region: nil, ts_acronym: nil, ts_area: nil)
+  end
   let!(:user) { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
   let!(:other_user_other_team) { create(:user, :activated, :opss_user, name: "other user same team", organisation:, team: other_team) }
   let!(:investigation) do
@@ -21,30 +25,9 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
   end
   let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
   let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all" } }
-  let(:team_mappings) do
-    [
-      {
-        "team_name": team.name,
-        "type": "local_authority",
-        "regulator_name": nil,
-        "ts_region": "Scotland",
-        "ts_acronym": "SCOTSS",
-        "ts_area": "Aberdeenshire"
-      },
-      {
-        "team_name": other_team.name,
-        "type": "external",
-        "regulator_name": "Department of Agriculture, Environment and Rural Affairs (DAERA)",
-        "ts_region": nil,
-        "ts_acronym": nil,
-        "ts_area": nil
-      }
-    ].to_json
-  end
 
   before do
     Investigation.search_index.refresh
-    allow(JSON).to receive(:load_file!).and_return(JSON.parse(team_mappings, object_class: OpenStruct))
   end
 
   describe "#export!" do
