@@ -14,7 +14,7 @@ To add a new subdomain:
    the service including a section named "Showing status of last operation"
    that has a list of already-configured subdomains for the current
    environment
-1. Run `cf update-service opss-cdn-route -c '{"domain": "<domains>", "headers": ["Accept", "Authorization", "Referer", "Host"]}'`
+1. Run `cf update-service opss-cdn-route -c '{"domain": "<domains>", "headers": ["Accept", "Authorization", "Referer", "Host", "User-Agent"]}'`
    where `<domains>` is a comma-separated list of the domains from the
    previous step plus the new subdomain you want to add
 1. Run `cf service opss-cdn-route` again - the "Showing status of last operation"
