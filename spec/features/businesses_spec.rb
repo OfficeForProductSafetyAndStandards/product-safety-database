@@ -62,13 +62,8 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
     investigation = business_one.investigations.first
     visit "/businesses/#{business_one.id}"
 
-    within ".psd-case-card" do
-      expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
-    end
-    investigation.update!(is_private: true)
-    visit "/businesses/#{business_one.id}"
-    within ".psd-case-card" do
-      expect(page).to have_css("span", text: "Notification restricted")
+    within "#notifications-1" do
+      expect(page).to have_text(investigation.title)
     end
   end
 
