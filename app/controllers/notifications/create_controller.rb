@@ -89,6 +89,9 @@ module Notifications
       when :search_for_or_add_a_product
         @page_name = params[:page_name]
         @search_query = params[:q].presence
+
+        return redirect_to "#{request.path}?search&#{request.query_string}" if !request.query_string.start_with?("search") && @search_query.present?
+
         sort_by = {
           "name_a_z" => { name: :asc },
           "name_z_a" => { name: :desc }
@@ -154,10 +157,11 @@ module Notifications
                          .or(Business.where("businesses.legal_name ILIKE ?", "%#{@search_query}%"))
                          .or(Business.where("CONCAT(locations.address_line_1, ' ', locations.address_line_2, ' ', locations.city, ' ', locations.county, ' ', locations.country, ' ', locations.postal_code) ILIKE ?", "%#{@search_query}%"))
                          .or(Business.where(company_number: @search_query))
+                         .without_online_marketplaces
                          .distinct
                          .order(sort_by)
                      else
-                       Business.all.order(sort_by)
+                       Business.without_online_marketplaces.order(sort_by)
                      end
 
         @records_count = businesses.size
@@ -314,7 +318,7 @@ module Notifications
         return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
 
         if params[:add_another_business].blank?
-          business = Business.find(params[:business_id])
+          business = Business.without_online_marketplaces.find(params[:business_id])
           AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
           return redirect_to wizard_path(:search_for_or_add_a_business)
         end
@@ -327,6 +331,7 @@ module Notifications
           .or(Business.where(legal_name: nil))
           .or(Business.where(legal_name: ""))
           .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
+          .without_online_marketplaces
           .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
           .order(created_at: :desc)
           .limit(1)
@@ -354,7 +359,7 @@ module Notifications
 
         return render_wizard unless @add_business_roles_form.valid?
 
-        business = Business.find(@add_business_roles_form.business_id)
+        business = Business.without_online_marketplaces.find(@add_business_roles_form.business_id)
 
         ChangeBusinessRoles.call!(
           notification: @notification,
@@ -617,7 +622,7 @@ module Notifications
       )
 
       track_notification_event(name: "Show duplicate businesses")
-      @duplicate_business = Business.find(params[:business_id])
+      @duplicate_business = Business.without_online_marketplaces.find(params[:business_id])
 
       render :add_business_details_duplicate
     end
@@ -626,12 +631,12 @@ module Notifications
       @add_business_details_duplicate_form = AddBusinessDetailsDuplicateForm.new(add_business_details_duplicate_params)
 
       unless @add_business_details_duplicate_form.valid?
-        @duplicate_business = Business.find(params[:business_id])
+        @duplicate_business = Business.without_online_marketplaces.find(params[:business_id])
         return render :add_business_details_duplicate
       end
 
       if @add_business_details_duplicate_form.resolution == "existing_record"
-        business = Business.find(params[:business_id])
+        business = Business.without_online_marketplaces.find(params[:business_id])
 
         AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
         track_notification_event(name: "Add existing business to notification")
