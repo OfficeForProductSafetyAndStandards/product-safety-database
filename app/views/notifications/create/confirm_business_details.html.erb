@@ -12,10 +12,12 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "Trading name")
+            row.with_value(text: @business.trading_name)
             row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Registered or legal name")
+            row.with_value(text: @business.legal_name)
             row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}")
           end
         end
@@ -39,18 +41,29 @@
           <%=
             govuk_summary_list do |summary_list|
               summary_list.with_row do |row|
-                row.with_key(text: contact.name)
+                row.with_key(text: "Name")
+                row.with_value(text: contact.name)
+                row.with_action(text: "Change", href: "#{wizard_path(:add_business_contact, business_id: @business.id, contact_id: contact.id)}")
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Job title")
+                row.with_value(text: contact.job_title)
+                row.with_action(text: "Change", href: "#{wizard_path(:add_business_contact, business_id: @business.id, contact_id: contact.id)}")
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Email")
                 row.with_value(text: contact.email)
                 row.with_action(text: "Change", href: "#{wizard_path(:add_business_contact, business_id: @business.id, contact_id: contact.id)}")
               end
               summary_list.with_row do |row|
-                row.with_value(text: contact.job_title)
+                row.with_key(text: "Phone number")
                 row.with_value(text: contact.phone_number)
+                row.with_action(text: "Change", href: "#{wizard_path(:add_business_contact, business_id: @business.id, contact_id: contact.id)}")
               end
             end
           %>
-          <p><%= govuk_link_to "Add another contact", wizard_path(:add_business_contact, business_id: @business.id) %></p>
         <% end %>
+        <p><%= govuk_link_to "Add another contact", wizard_path(:add_business_contact, business_id: @business.id) %></p>
       <% else %>
         <p><%= govuk_link_to "Add a contact", wizard_path(:add_business_contact, business_id: @business.id) %></p>
       <% end %>
