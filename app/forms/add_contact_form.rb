@@ -8,4 +8,5 @@ class AddContactForm
   attribute :phone_number, :string
   attribute :email, :string
   attribute :business_id
+  attribute :contact_id
 end
