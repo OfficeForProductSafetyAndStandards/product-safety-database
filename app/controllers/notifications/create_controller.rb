@@ -362,7 +362,7 @@ module Notifications
         return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
 
         if params[:add_another_business].blank?
-          business = Business.without_online_marketplaces.where(id: params[:business_id])
+          business = Business.without_online_marketplaces.find(id: params[:business_id])
           AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
           return redirect_to wizard_path(:search_for_or_add_a_business)
         end
