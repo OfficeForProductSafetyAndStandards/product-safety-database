@@ -12,8 +12,9 @@
       <%= f.govuk_text_field :job_title, label: { text: "Job title or role description (optional)" }, width: "two-thirds" %>
       <%= f.govuk_text_field :email, label: { text: "Email (optional)" }, width: "two-thirds" %>
       <%= f.govuk_text_field :phone_number, label: { text: "Phone (optional)" }, hint: { text: "For international numbers include the country code." }, width: "two-thirds" %>
+      <%= f.hidden_field :contact_id %>
       <%= f.hidden_field :business_id %>
-      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+      <%= f.govuk_submit "Save and continue" %>
     <% end %>
   </div>
 </div>

@@ -5,7 +5,7 @@ class Investigation < ApplicationRecord
     TASK_LIST_SECTIONS = {
       "product" => %i[search_for_or_add_a_product],
       "notification_details" => %i[add_notification_details add_product_safety_and_compliance_details add_number_of_affected_units],
-      "business_details" => %i[search_for_or_add_a_business add_business_details add_business_roles add_business_location add_business_contact],
+      "business_details" => %i[search_for_or_add_a_business add_business_details add_business_location add_business_contact confirm_business_details add_business_roles],
       "evidence" => %i[add_product_identification_details add_test_reports add_supporting_images add_supporting_documents add_risk_assessments determine_notification_risk_level],
       "corrective_actions" => %i[record_a_corrective_action],
       "submit" => %i[check_notification_details_and_submit]
@@ -18,7 +18,9 @@ class Investigation < ApplicationRecord
     TASK_LIST_TASKS_HIDDEN = [
       { add_business_details: :add_number_of_affected_units },
       { add_business_location: :add_number_of_affected_units },
-      { add_business_contact: :add_number_of_affected_units }
+      { add_business_contact: :add_number_of_affected_units },
+      { add_business_roles: :add_number_of_affected_units },
+      { confirm_business_details: :add_number_of_affected_units },
     ].freeze
 
     has_one :add_audit_activity,

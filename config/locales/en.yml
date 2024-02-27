@@ -411,6 +411,8 @@ en:
                 title: Add business addresses
               add_business_contact:
                 title: Add business contact details
+              confirm_business_details:
+                title: Business details
           evidence:
             title: Add product identification and evidence details
             tasks:
