@@ -165,7 +165,12 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Use business details"
 
     check "Retailer"
-    click_button "Save and complete tasks in this section"
+    click_button "Save and continue"
+
+    within_fieldset "Do you need to add another business?" do
+      choose "No"
+    end
+    click_button "Continue"
 
     expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
     expect(page).to have_content("You have completed 3 of 6 sections.")

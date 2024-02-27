@@ -362,7 +362,7 @@ module Notifications
         return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
 
         if params[:add_another_business].blank?
-          business = Business.without_online_marketplaces.find(id: params[:business_id])
+          business = Business.without_online_marketplaces.find(params[:business_id])
           AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
           return redirect_to wizard_path(:search_for_or_add_a_business)
         end
@@ -436,7 +436,7 @@ module Notifications
 
         if @add_contact_form.contact_id.present?
           Contact.find(@add_contact_form.contact_id).update!(add_contact_params.except(:contact_id))
-        else
+        elsif !add_contact_params.except(:business_id).compact_blank.empty?
           Contact.create!(
             name: @add_contact_form.name,
             job_title: @add_contact_form.job_title,
@@ -471,8 +471,7 @@ module Notifications
           authorised_representative_choice: @add_business_roles_form.authorised_representative_choice
         )
 
-        # Mark the task that's shown on the task list as complete to unlock the next task
-        @notification.tasks_status["search_for_or_add_a_business"] = "completed"
+        return redirect_to wizard_path(:search_for_or_add_a_business)
       when :add_test_reports
         return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
         return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
@@ -629,6 +628,11 @@ module Notifications
           if step == :check_notification_details_and_submit && params[:final] == "true"
             @notification.submit!
             return redirect_to confirmation_notification_create_index_path(@notification)
+          end
+
+          if @step == :search_for_or_add_a_business && params[:final] == "true"
+            @notification.tasks_status["add_business_roles"] = "completed"
+            @notification.save!
           end
 
           redirect_to notification_create_index_path(@notification)
