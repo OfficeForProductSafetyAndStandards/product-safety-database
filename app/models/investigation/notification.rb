@@ -41,7 +41,7 @@ class Investigation < ApplicationRecord
     def valid_api_dataset?
       user_title.present?
     end
-    
+
     def ready_to_submit?
       # Ensure all mandatory sections have been completed
       draft? &&
