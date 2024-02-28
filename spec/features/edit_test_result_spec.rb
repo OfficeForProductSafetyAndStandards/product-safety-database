@@ -216,7 +216,7 @@ RSpec.feature "Editing a test result", :with_stubbed_antivirus, :with_stubbed_ma
 
     find("details > summary", text: "Replace this file").click
 
-    attach_file "Upload a file", Rails.root + file_path
+    attach_file "test_result[document_form][file]", Rails.root + file_path
     fill_in "Attachment description", with: "Final test result certificate"
 
     click_button "Update test result"

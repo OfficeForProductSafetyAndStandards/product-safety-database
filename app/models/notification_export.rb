@@ -98,16 +98,6 @@ private
     @risk_assessment_counts ||= RiskAssessment.group(:investigation_id).count
   end
 
-  def team_mappings
-    @team_mappings ||= JSON.load_file!(Rails.root.join("app/assets/team-mappings.json"), object_class: OpenStruct)
-  end
-
-  def team_data(team_name)
-    # Returns an `OpenStruct` with all nils to avoid having presence checks later
-    team_mappings.find { |team| team.team_name == team_name } ||
-      OpenStruct.new(team_name: nil, type: nil, regulator_name: nil, ts_region: nil, ts_acronym: nil, ts_area: nil)
-  end
-
   def add_header_row(sheet)
     sheet.add_row %w[ID
                      Status
@@ -149,7 +139,7 @@ private
   end
 
   def non_restricted_data(notification)
-    team_data = team_data(notification.creator_user&.team&.name)
+    team = notification.creator_user&.team
 
     [
       notification.pretty_id,
@@ -169,12 +159,12 @@ private
       test_counts[notification.id] || 0,
       risk_assessment_counts[notification.id] || 0,
       notification.owner_team&.name,
-      notification.creator_user&.team&.name,
+      team&.name,
       notification.complainant_reference,
       country_from_code(notification.notifying_country, Country.notifying_countries),
-      team_data.ts_region,
-      team_data.regulator_name,
-      restrict_data_for_non_opss_user((team_data.type == "internal")),
+      team&.ts_region,
+      team&.regulator_name,
+      restrict_data_for_non_opss_user(team&.team_type == "internal"),
       notification.created_at,
       notification.updated_at,
       notification.date_closed,
@@ -187,7 +177,7 @@ private
   end
 
   def restricted_data(notification)
-    team_data = team_data(notification.creator_user&.team&.name)
+    team = notification.creator_user&.team
 
     [
       notification.pretty_id,
@@ -210,9 +200,9 @@ private
       notification.creator_user&.team&.name,
       "Restricted",
       country_from_code(notification.notifying_country, Country.notifying_countries),
-      team_data.ts_region,
-      team_data.regulator_name,
-      (team_data.type == "internal"),
+      team&.ts_region,
+      team&.regulator_name,
+      (team&.team_type == "internal"),
       notification.created_at,
       notification.updated_at,
       notification.date_closed,

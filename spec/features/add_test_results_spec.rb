@@ -70,7 +70,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_opss_funding_form_page(case_id: investigation.pretty_id)
       expect_to_have_notification_breadcrumbs
-      fill_in "What is the TSO Sample Reference Number?", with: "TSO123"
+      fill_in "What is the trading standards officer sample reference number?", with: "TSO123"
       click_button "Continue"
       expect_certificate_date_error
 
@@ -140,7 +140,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
       click_button "Add test result"
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[3].text).to eq "Enter details about how the product failed to meet the requirements"
+      expect(errors_list[4].text).to eq "Enter details about how the product failed to meet the requirements"
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Fail", failure_details:, file:, standards: "EN71, EN73")
@@ -204,7 +204,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
       expect(page).not_to have_checked_field("Other")
     end
     within_fieldset "Test report attachment" do
-      expect(page.find_field("Upload a file").value).to be_blank
+      expect(page.find_field("test_result[document_form][file]").value).to be_blank
       expect(page.find_field("Attachment description").text).to be_blank
     end
   end
@@ -231,9 +231,9 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the legislation that relates to this test"
     expect(errors_list[1].text).to eq "Enter the standard the product was tested against"
-    expect(errors_list[2].text).to eq "Enter date of the test"
-    expect(errors_list[3].text).to eq "Select result of the test"
-    expect(errors_list[4].text).to eq "Provide the test results file"
+    expect(errors_list[2].text).to eq "Select result of the test"
+    expect(errors_list[3].text).to eq "Provide the test results file"
+    expect(errors_list[4].text).to eq "Enter date of the test"
   end
 
   def expect_summary_to_reflect_values(result:, funded: false)

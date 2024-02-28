@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_07_144317) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_21_161301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -267,7 +267,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_07_144317) do
     t.string "relationship"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["business_id"], name: "index_investigation_businesses_on_business_id"
-    t.index ["investigation_id", "business_id"], name: "index_on_investigation_id_and_business_id", unique: true
+    t.index ["investigation_id", "business_id"], name: "idx_on_investigation_id_business_id_8346809cb6"
     t.index ["investigation_id"], name: "index_investigation_businesses_on_investigation_id"
   end
 

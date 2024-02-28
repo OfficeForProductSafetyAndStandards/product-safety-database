@@ -139,15 +139,20 @@ Rails.application.routes.draw do
             get "add-product/:product_id", to: "create#add_product", as: "add_product"
             get "remove-product/:investigation_product_id", to: "create#remove_product", as: "remove_product"
             delete "remove-product/:investigation_product_id", to: "create#remove_product"
+            get "remove-business/:investigation_business_id", to: "create#remove_business", as: "remove_business"
+            delete "remove-business/:investigation_business_id", to: "create#remove_business"
             get "confirmation", to: "create#confirmation"
 
-            %w[batch_numbers customs_codes ucr_numbers number_of_affected_units].each do |identifier|
+            %w[batch_numbers customs_codes ucr_numbers].each do |identifier|
               get "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#show_#{identifier}", as: identifier
               patch "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#update_#{identifier}"
               put "add_product_identification_details/#{identifier}/:investigation_product_id", to: "create#update_#{identifier}"
             end
 
             get "add_product_identification_details/ucr_numbers/:investigation_product_id/delete/:ucr_number_id", to: "create#delete_ucr_number", as: "delete_ucr_number"
+            get "search_for_or_add_a_business/duplicate/:business_id", to: "create#show_duplicate_business", as: "duplicate_business"
+            patch "search_for_or_add_a_business/duplicate/:business_id", to: "create#update_duplicate_business"
+            put "search_for_or_add_a_business/duplicate/:business_id", to: "create#update_duplicate_business"
 
             # These routes need to appear before the next scope block to avoid clashing with the
             # `:investigation_product_id/:entity_id` routes.

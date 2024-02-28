@@ -80,6 +80,11 @@
           row.with_value(text: @notification.complainant_reference.presence || "Not provided")
           row.with_action(text: "Change", href: edit_investigation_reference_numbers_path(@notification), visually_hidden_text: "internal reference number") if show_edit_link?
         end
+        # TODO(ruben): implement change link that leads to a single page for all investigation products
+        summary_list.with_row do |row|
+          row.with_key(text: "Number of affected products")
+          row.with_value(text: number_of_affected_units(@notification.investigation_products).html_safe)
+        end
       end
     %>
     <h2 class="govuk-heading-m">Product identification details</h2>
@@ -118,17 +123,6 @@
                   text: "Change",
                   href: edit_investigation_product_ucr_numbers_path(investigation_product),
                   visually_hidden_text: "unique consignment reference numbers"
-                }
-              ] : []
-            },
-            {
-              key: { text: "Number of units affected" },
-              value: { text: number_of_affected_units(investigation_product.affected_units_status, investigation_product.number_of_affected_units) },
-              actions: show_edit_link? ? [
-                {
-                  text: "Change",
-                  href: edit_investigation_product_number_of_affected_units_path(investigation_product),
-                  visually_hidden_text: "number of units affected"
                 }
               ] : []
             }

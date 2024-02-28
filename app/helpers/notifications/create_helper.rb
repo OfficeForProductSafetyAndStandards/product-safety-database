@@ -3,7 +3,7 @@ module Notifications
     def sections_complete
       tasks_status = @notification.tasks_status
       Investigation::Notification::TASK_LIST_SECTIONS.map { |_section, tasks|
-        complete = tasks.map { |task|
+        complete = tasks.excluding(*Investigation::Notification::TASK_LIST_TASKS_HIDDEN.map(&:keys).flatten).map { |task|
           tasks_status[task.to_s] == "completed" ? 1 : 0
         }.exclude?(0)
         complete ? 1 : 0
@@ -12,7 +12,7 @@ module Notifications
 
     def task_status(task)
       optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
-      previous_task = TaskListService.previous_task(task:, all_tasks: wizard_steps, optional_tasks:)
+      previous_task = TaskListService.previous_task(task:, all_tasks: wizard_steps, optional_tasks:, hidden_tasks: Investigation::Notification::TASK_LIST_TASKS_HIDDEN)
 
       if %w[in_progress completed].include?(@notification.tasks_status[task.to_s])
         @notification.tasks_status[task.to_s]
@@ -65,19 +65,22 @@ module Notifications
         end
     end
 
-    def number_of_affected_units(affected_units_status, number_of_affected_units)
-      case affected_units_status
-      when "exact"
-        number_of_affected_units
-      when "approx"
-        "Approximately #{number_of_affected_units}"
-      when "unknown"
-        "Unknown"
-      when "not_relevant"
-        "Not relevant"
-      else
-        "Not provided"
-      end
+    def number_of_affected_units(investigation_products)
+      investigation_products.map { |investigation_product|
+        units = case investigation_product.affected_units_status
+                when "exact"
+                  investigation_product.number_of_affected_units
+                when "approx"
+                  "Approximately #{investigation_product.number_of_affected_units}"
+                when "unknown"
+                  "Unknown"
+                when "not_relevant"
+                  "Not relevant"
+                else
+                  "Not provided"
+                end
+        "#{investigation_product.product.decorate.name_with_brand}: #{units}"
+      }.join("<br>")
     end
 
     def investigation_products_options
@@ -101,7 +104,7 @@ module Notifications
     end
 
     def specific_product_safety_issues
-      unsafe = "<p class=\"govuk-body\">Product hazard: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
+      unsafe = "<p class=\"govuk-body\">Product harm: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
       non_compliant = "<p class=\"govuk-body\">Product incomplete markings, labeling or other issues</p><p class=\"govuk-body-s\">#{@notification.non_compliant_reason}</p>" if @notification.non_compliant? || @notification.unsafe_and_non_compliant?
       [unsafe, non_compliant].join
     end

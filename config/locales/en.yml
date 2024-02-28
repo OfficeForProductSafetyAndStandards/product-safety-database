@@ -181,8 +181,8 @@ en:
           local: "Local"
           great_britain: "Great Britain"
           northern_ireland: "Northern Ireland"
-          eea_wide: "EEA Wide"
-          eu_wide: "EU Wide"
+          eea_wide: "European Economic Area (EEA)"
+          eu_wide: "European Union (EU)"
           worldwide: "Worldwide"
           unknown: "Unknown"
       helper:
@@ -388,12 +388,34 @@ en:
               search_for_or_add_a_product:
                 title: Search for or add a product
           notification_details:
-            title: Add notification and additional product details
+            title: Add notification and product safety details
             tasks:
               add_notification_details:
                 title: Add notification details
               add_product_safety_and_compliance_details:
                 title: Add product safety and compliance details
+              add_number_of_affected_units:
+                title: Add the number of affected products
+          business_details:
+            title: Add businesses and their roles in the supply chain
+            tasks:
+              search_for_or_add_a_business:
+                title: Search for or add a business
+              add_business_details:
+                title: Add business details
+              add_business_roles:
+                title: Add the business's role
+              add_business_details_duplicate:
+                title: We found a similar business
+              add_business_location:
+                title: Add business addresses
+              add_business_contact:
+                title: Add business contact details
+              confirm_business_details:
+                title: Business details
+          evidence:
+            title: Add product identification and evidence details
+            tasks:
               add_product_identification_details:
                 title: Add product identification details
               add_product_identification_details_batch_numbers:
@@ -402,20 +424,6 @@ en:
                 title: Add customs codes
               add_product_identification_details_ucr_numbers:
                 title: Add Unique Consignment Reference (UCR) numbers
-              add_product_identification_details_number_of_affected_units:
-                title: Add the number of units affected
-          business_details:
-            title: Add businesses and their roles in the supply chain
-            tasks:
-              add_business_details:
-                title: Add the type and details of the business
-              add_location:
-                title: Add addresses
-              add_contact:
-                title: Add contact details
-          evidence:
-            title: Add evidence
-            tasks:
               add_test_reports:
                 title: Add test reports
                 select_product:
@@ -439,14 +447,14 @@ en:
                 legacy:
                   title: Add legacy risk assessment
               determine_notification_risk_level:
-                title: Determine notification risk level
+                title: Evaluate notification risk level
           corrective_actions:
             title: Add corrective actions
             tasks:
               record_a_corrective_action:
                 title: Record a corrective action
                 corrective_action_taken:
-                  title: Have you taken a corrective action for the unsafe product(s)?
+                  title: Have you taken a corrective action for the unsafe or non-compliant product(s)?
                 later:
                   title: You can record the corrective action later
                 select_products:
@@ -859,10 +867,10 @@ en:
             unsafe:
               blank: Choose at least one issue
             primary_hazard:
-              blank: Choose the primary hazard
+              blank: Choose the primary harm
             primary_hazard_description:
-              blank: Enter additional information about the product hazard
-              too_long: Additional information about the product hazard must be %{count} characters or less
+              blank: Enter additional information about the product harm
+              too_long: Additional information about the product harm must be %{count} characters or less
             noncompliance_description:
               blank: Enter a description of the product non-compliance issues
               too_long: Description of the product non-compliance issues must be %{count} characters or less
@@ -895,6 +903,18 @@ en:
             corrective_action_not_taken_reason:
               blank: Enter the reason for not taking a corrective action
               too_long: The reason for not taking a corrective action must be %{count} characters or less
+        add_business_details_form:
+          attributes:
+            trading_name:
+              blank: Enter a trading name
+        add_location_form:
+          attributes:
+            country:
+              blank: Choose a country
+        add_business_details_duplicate_form:
+          attributes:
+            resolution:
+              blank: Choose either the existing PSD record or your manual entry
 
   activerecord:
     models:
@@ -1017,8 +1037,8 @@ en:
         local: "Local"
         great_britain: "Great Britain"
         northern_ireland: "Northern Ireland"
-        eea_wide: "EEA Wide"
-        eu_wide: "EU Wide"
+        eea_wide: "European Economic Area (EEA)"
+        eu_wide: "European Union (EU)"
         worldwide: "Worldwide"
         unknown: "Unknown"
       actions:

@@ -1,11 +1,11 @@
-<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_product_identification_details.title"), errors: false) %>
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_product_identification_details.title"), errors: false) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.notification_details.title") %></span>
-        <%= t("notifications.create.index.sections.notification_details.tasks.add_product_identification_details.title") %>
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_product_identification_details.title") %>
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
@@ -52,23 +52,12 @@
                     visually_hidden_text: "unique consignment reference numbers"
                   }
                 ]
-              },
-              {
-                key: { text: "Number of units affected (mandatory)" },
-                value: { text: number_of_affected_units(investigation_product.affected_units_status, investigation_product.number_of_affected_units) },
-                actions: [
-                  {
-                    text: "Add",
-                    href: number_of_affected_units_notification_create_index_path(@notification, investigation_product.id),
-                    visually_hidden_text: "number of units affected"
-                  }
-                ]
               }
             ]
           )
         %>
       <% end %>
-      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+      <%= f.govuk_submit "Continue", name: "final", value: "true" %>
     <% end %>
   </div>
 </div>

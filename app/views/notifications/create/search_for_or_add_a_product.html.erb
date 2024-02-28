@@ -11,7 +11,7 @@
       </div>
       <% unless @manage %>
         <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-          <%= govuk_button_link_to "Add a product", new_product_path(notification_pretty_id: @notification.pretty_id), secondary: true %>
+          <%= govuk_button_link_to "Add a new product", new_product_path(notification_pretty_id: @notification.pretty_id), secondary: true %>
         </div>
       <% end %>
     </div>
@@ -76,7 +76,7 @@
                 <div class="govuk-grid-column-two-thirds">
                   <div class="moj-search">
                     <div class="govuk-form-group">
-                      <label for="q-field" class="govuk-label moj-search__label">Search</label>
+                      <label for="q-field" class="govuk-label moj-search__label">Search by product name, description or PSD reference</label>
                       <input id="q-field" class="govuk-input moj-search__input" aria-describedby="q-hint" type="search" name="q" value="<%= params[:q] %>">
                     </div>
                     <button type="submit" formnovalidate="formnovalidate" class="govuk-button moj-search__button" data-module="govuk-button" data-prevent-double-click="true">
@@ -107,7 +107,8 @@
                     details = <<~DETAILS.strip
                       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><a href="#{product_path(record)}" class="govuk-link" target="_blank" rel="noreferrer noopener">#{record.name_with_brand}</a></p>
                       <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{record.category}</p>
-                      <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>Sub-category:</strong> #{record.subcategory}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Sub-category:</strong> #{record.subcategory}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>PSD reference:</strong> #{record.psd_ref}</p>
                       #{
                         if record.barcode.present? || record.product_code.present? || record.unformatted_description.present?
                           govuk_details(summary_text: "More details", classes: "govuk-!-font-size-16 govuk-!-margin-bottom-0") do
