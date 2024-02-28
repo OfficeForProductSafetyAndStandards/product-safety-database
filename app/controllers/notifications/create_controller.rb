@@ -707,7 +707,7 @@ module Notifications
         AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
         track_notification_event(name: "Add existing business to notification")
 
-        redirect_to notification_create_path(@notification, id: "search_for_or_add_a_business")
+        redirect_to notification_create_path(@notification, id: "confirm_business_details", business_id: business.id)
       else
         business = Business.new
 
