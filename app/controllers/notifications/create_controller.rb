@@ -177,7 +177,7 @@ module Notifications
                      Business.new
                    end
 
-        @add_business_details_form = AddBusinessDetailsForm.new(trading_name: business.trading_name, legal_name: business.legal_name, business_id: business.id)
+        @add_business_details_form = AddBusinessDetailsForm.new(trading_name: business.trading_name, legal_name: business.legal_name, company_number: business.company_number, business_id: business.id)
 
         if business.persisted?
           track_notification_event(name: "Edit new business for notification")
@@ -360,12 +360,7 @@ module Notifications
       when :search_for_or_add_a_business
         return redirect_to "#{wizard_path(:search_for_or_add_a_business)}?search" if params[:add_another_business] == "true"
         return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
-
-        if params[:add_another_business].blank?
-          business = Business.without_online_marketplaces.find(params[:business_id])
-          AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
-          return redirect_to wizard_path(:search_for_or_add_a_business)
-        end
+        return redirect_to wizard_path(:confirm_business_details, business_id: params[:business_id]) if params[:add_another_business].blank?
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
 
@@ -397,7 +392,7 @@ module Notifications
         ChangeBusinessNames.call!(
           trading_name: @add_business_details_form.trading_name,
           legal_name: @add_business_details_form.legal_name,
-          notification: @notification,
+          company_number: @add_business_details_form.company_number,
           user: current_user,
           business:
         )
@@ -1061,7 +1056,7 @@ module Notifications
     end
 
     def add_business_details_params
-      params.require(:add_business_details_form).permit(:trading_name, :legal_name, :business_id)
+      params.require(:add_business_details_form).permit(:trading_name, :legal_name, :company_number, :business_id)
     end
 
     def confirm_business_details_params

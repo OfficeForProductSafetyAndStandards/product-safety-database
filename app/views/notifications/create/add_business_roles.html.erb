@@ -16,8 +16,8 @@
           <%= f.govuk_check_box :roles, role.to_sym, label: { text: t("investigations.business_types.new.types.#{role}.label") } %>
         <% end %>
         <%= f.govuk_check_box :roles, :authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.label") } do %>
-          <%= f.govuk_radio_button :authorised_representative, :uk_authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.uk.label") } %>
-          <%= f.govuk_radio_button :authorised_representative, :eu_authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.eu.label") } %>
+          <%= f.govuk_radio_button :authorised_representative_choice, :uk_authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.uk.label") } %>
+          <%= f.govuk_radio_button :authorised_representative_choice, :eu_authorised_representative, label: { text: t("investigations.business_types.new.types.authorised_representative.eu.label") } %>
         <% end %>
         <%= f.govuk_check_box :roles, :responsible_person, label: { text: t("investigations.business_types.new.types.responsible_person.label") } %>
         <div class="govuk-checkboxes__divider">or</div>
