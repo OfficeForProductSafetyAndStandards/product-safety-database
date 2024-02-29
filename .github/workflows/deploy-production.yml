@@ -117,7 +117,7 @@ jobs:
         WEB_DISK_QUOTA: 2.5G
         WORKER_DISK_QUOTA: 2.5G
         WEB_MEMORY: 4G
-        WORKER_MEMORY: 2G
+        WORKER_MEMORY: 4G
         WEB_INSTANCES: 4
         WORKER_INSTANCES: 2
         WEB_MAX_THREADS: 5
