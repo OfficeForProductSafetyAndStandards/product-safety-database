@@ -46,6 +46,10 @@ class SearchParams
   attribute :page_name
   attribute :state
   attribute :retired_status
+  attribute :id
+  attribute :name
+  attribute :product_code
+  attribute :barcode
   attribute :created_from_date, :govuk_date
   attribute :created_to_date, :govuk_date
   Rails.application.config.hazard_constants["hazard_type"].each do |type|
