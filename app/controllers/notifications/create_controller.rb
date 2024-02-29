@@ -171,14 +171,57 @@ module Notifications
         @manage = request.query_string.split("&").first != "search" && @existing_business_ids.present?
         track_notification_event(name: "Show search for or add a business page")
       when :add_business_details
-        @add_business_details_form = AddBusinessDetailsForm.new
-        track_notification_event(name: "Create new business for notification")
+        business = if params[:business_id].present?
+                     Business.find(params[:business_id])
+                   else
+                     Business.new
+                   end
+
+        @add_business_details_form = AddBusinessDetailsForm.new(trading_name: business.trading_name, legal_name: business.legal_name, company_number: business.company_number, business_id: business.id)
+
+        if business.persisted?
+          track_notification_event(name: "Edit new business for notification")
+        else
+          track_notification_event(name: "Create new business for notification")
+        end
       when :add_business_roles
         @add_business_roles_form = AddBusinessRolesForm.new(business_id: params[:business_id])
       when :add_business_location
-        @add_location_form = AddLocationForm.new(business_id: params[:business_id])
+        location = if params[:location_id].present?
+                     Location.find(params[:location_id])
+                   else
+                     Location.new
+                   end
+
+        @add_location_form = AddLocationForm.new(
+          business_id: params[:business_id],
+          location_id: location.id,
+          address_line_1: location.address_line_1,
+          address_line_2: location.address_line_2,
+          city: location.city,
+          county: location.county,
+          country: location.country,
+          postal_code: location.postal_code
+        )
       when :add_business_contact
-        @add_contact_form = AddContactForm.new(business_id: params[:business_id])
+        contact = if params[:contact_id].present?
+                    Contact.find(params[:contact_id])
+                  else
+                    Contact.new
+                  end
+
+        @add_contact_form = AddContactForm.new(
+          business_id: params[:business_id],
+          contact_id: params[:contact_id],
+          name: contact.name,
+          email: contact.email,
+          job_title: contact.job_title,
+          phone_number: contact.phone_number
+        )
+      when :confirm_business_details
+        @business = Business.find(params[:business_id])
+        @locations = @business.locations
+        @contacts = @business.contacts
       when :add_test_reports
         investigation_products = @notification.investigation_products
         @existing_test_results = @notification.test_results.includes(investigation_product: :product)
@@ -317,50 +360,101 @@ module Notifications
       when :search_for_or_add_a_business
         return redirect_to "#{wizard_path(:search_for_or_add_a_business)}?search" if params[:add_another_business] == "true"
         return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
-
-        if params[:add_another_business].blank?
-          business = Business.without_online_marketplaces.find(params[:business_id])
-          AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
-          return redirect_to wizard_path(:search_for_or_add_a_business)
-        end
+        return redirect_to wizard_path(:confirm_business_details, business_id: params[:business_id]) if params[:add_another_business].blank?
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
 
-        # Find potential duplicate businesses by looking for the same trading name
-        # and preferring results with the same legal name too.
-        duplicate_business = Business.where("LOWER(legal_name) = ?", @add_business_details_form.legal_name.downcase)
-          .or(Business.where(legal_name: nil))
-          .or(Business.where(legal_name: ""))
-          .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
-          .without_online_marketplaces
-          .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
-          .order(created_at: :desc)
-          .limit(1)
-          .first
+        if add_business_details_params[:business_id].blank?
+          # Find potential duplicate businesses by looking for the same trading name
+          # and preferring results with the same legal name too.
+          duplicate_business = Business.where("LOWER(legal_name) = ?", @add_business_details_form.legal_name.downcase)
+            .or(Business.where(legal_name: nil))
+            .or(Business.where(legal_name: ""))
+            .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
+            .without_online_marketplaces
+            .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
+            .order(created_at: :desc)
+            .limit(1)
+            .first
 
-        return redirect_to duplicate_business_notification_create_index_path(@notification, business_id: duplicate_business.id, trading_name: @add_business_details_form.trading_name, legal_name: @add_business_details_form.legal_name) if duplicate_business.present?
+          return redirect_to duplicate_business_notification_create_index_path(@notification, business_id: duplicate_business.id, trading_name: @add_business_details_form.trading_name, legal_name: @add_business_details_form.legal_name) if duplicate_business.present?
+
+        end
 
         return render_wizard unless @add_business_details_form.valid?
 
-        business = Business.new
+        business = if add_business_details_params[:business_id].present?
+                     Business.find(add_business_details_params[:business_id])
+                   else
+                     Business.new
+                   end
 
         ChangeBusinessNames.call!(
           trading_name: @add_business_details_form.trading_name,
           legal_name: @add_business_details_form.legal_name,
-          notification: @notification,
+          company_number: @add_business_details_form.company_number,
           user: current_user,
           business:
         )
 
-        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+        return redirect_to wizard_path(:confirm_business_details, business_id: add_business_details_params[:business_id]) if add_business_details_params[:business_id].present?
 
         additional_params = { business_id: business.id }
+      when :add_business_location
+        @add_location_form = AddLocationForm.new(add_location_params)
+
+        return render_wizard unless @add_location_form.valid?
+
+        if @add_location_form.location_id.present?
+          Location.find(@add_location_form.location_id).update!(add_location_params.except(:location_id))
+        else
+          Location.create!(
+            name: "Registered office address",
+            address_line_1: @add_location_form.address_line_1,
+            address_line_2: @add_location_form.address_line_2,
+            city: @add_location_form.city,
+            county: @add_location_form.county,
+            country: @add_location_form.country,
+            postal_code: @add_location_form.postal_code,
+            business_id: @add_location_form.business_id,
+            added_by_user_id: current_user.id
+          )
+        end
+
+        return redirect_to wizard_path(:confirm_business_details, business_id: @add_location_form.business_id) if @add_location_form.location_id.present?
+
+        additional_params = { business_id: @add_location_form.business_id }
+      when :add_business_contact
+        @add_contact_form = AddContactForm.new(add_contact_params)
+
+        return render_wizard unless @add_contact_form.valid?
+
+        if @add_contact_form.contact_id.present?
+          Contact.find(@add_contact_form.contact_id).update!(add_contact_params.except(:contact_id))
+        elsif !add_contact_params.except(:business_id).compact_blank.empty?
+          Contact.create!(
+            name: @add_contact_form.name,
+            job_title: @add_contact_form.job_title,
+            email: @add_contact_form.email,
+            phone_number: @add_contact_form.phone_number,
+            business_id: @add_contact_form.business_id,
+            added_by_user_id: current_user.id
+          )
+        end
+
+        return redirect_to wizard_path(:confirm_business_details, business_id: @add_contact_form.business_id) if @add_contact_form.contact_id.present?
+
+        additional_params = { business_id: @add_contact_form.business_id }
+      when :confirm_business_details
+        business = Business.find(confirm_business_details_params)
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+        additional_params = { business_id: confirm_business_details_params }
       when :add_business_roles
         @add_business_roles_form = AddBusinessRolesForm.new(add_business_roles_params)
 
         return render_wizard unless @add_business_roles_form.valid?
 
-        business = Business.without_online_marketplaces.find(@add_business_roles_form.business_id)
+        business = Business.without_online_marketplaces.where(id: @add_business_roles_form.business_id).first
 
         ChangeBusinessRoles.call!(
           notification: @notification,
@@ -372,41 +466,7 @@ module Notifications
           authorised_representative_choice: @add_business_roles_form.authorised_representative_choice
         )
 
-        additional_params = { business_id: @add_business_roles_form.business_id }
-      when :add_business_location
-        @add_location_form = AddLocationForm.new(add_location_params)
-
-        return render_wizard unless @add_location_form.valid?
-
-        Location.create!(
-          name: "Registered office address",
-          address_line_1: @add_location_form.address_line_1,
-          address_line_2: @add_location_form.address_line_2,
-          city: @add_location_form.city,
-          county: @add_location_form.county,
-          country: @add_location_form.country,
-          postal_code: @add_location_form.postal_code,
-          business_id: @add_location_form.business_id,
-          added_by_user_id: current_user.id
-        )
-
-        additional_params = { business_id: @add_location_form.business_id }
-      when :add_business_contact
-        @add_contact_form = AddContactForm.new(add_contact_params)
-
-        return render_wizard unless @add_contact_form.valid?
-
-        Contact.create!(
-          name: @add_contact_form.name,
-          job_title: @add_contact_form.job_title,
-          email: @add_contact_form.email,
-          phone_number: @add_contact_form.phone_number,
-          business_id: @add_contact_form.business_id,
-          added_by_user_id: current_user.id
-        )
-
-        # Mark the task that's shown on the task list as complete to unlock the next task
-        @notification.tasks_status["search_for_or_add_a_business"] = "completed"
+        return redirect_to wizard_path(:search_for_or_add_a_business)
       when :add_test_reports
         return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
         return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
@@ -565,6 +625,11 @@ module Notifications
             return redirect_to confirmation_notification_create_index_path(@notification)
           end
 
+          if @step == :search_for_or_add_a_business && params[:final] == "true"
+            @notification.tasks_status["add_business_roles"] = "completed"
+            @notification.save!
+          end
+
           redirect_to notification_create_index_path(@notification)
         else
           render_wizard
@@ -642,7 +707,7 @@ module Notifications
         AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
         track_notification_event(name: "Add existing business to notification")
 
-        redirect_to notification_create_path(@notification, id: "search_for_or_add_a_business")
+        redirect_to notification_create_path(@notification, id: "confirm_business_details", business_id: business.id)
       else
         business = Business.new
 
@@ -991,11 +1056,15 @@ module Notifications
     end
 
     def add_business_details_params
-      params.require(:add_business_details_form).permit(:trading_name, :legal_name)
+      params.require(:add_business_details_form).permit(:trading_name, :legal_name, :company_number, :business_id)
+    end
+
+    def confirm_business_details_params
+      params.require(:business_id)
     end
 
     def add_business_roles_params
-      params.require(:add_business_roles_form).permit(:online_marketplace_id, :new_online_marketplace_name, :authorised_representative_choice, :business_id, roles: [])
+      params.require(:add_business_roles_form).permit(:online_marketplace_id, :new_online_marketplace_name, :authorised_representative_choice, :business_id, :final, roles: [])
     end
 
     def add_business_details_duplicate_params
@@ -1003,11 +1072,11 @@ module Notifications
     end
 
     def add_location_params
-      params.require(:add_location_form).permit(:address_line_1, :address_line_2, :city, :county, :postal_code, :country, :business_id)
+      params.require(:add_location_form).permit(:address_line_1, :address_line_2, :city, :county, :postal_code, :country, :business_id, :location_id)
     end
 
     def add_contact_params
-      params.require(:add_contact_form).permit(:name, :job_title, :email, :phone_number, :business_id, :final)
+      params.require(:add_contact_form).permit(:name, :job_title, :email, :phone_number, :business_id, :contact_id)
     end
 
     def ucr_numbers_params

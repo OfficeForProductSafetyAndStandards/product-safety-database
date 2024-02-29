@@ -402,7 +402,7 @@ en:
               search_for_or_add_a_business:
                 title: Search for or add a business
               add_business_details:
-                title: Add the type and details of the business
+                title: Add business details
               add_business_roles:
                 title: Add the business's role
               add_business_details_duplicate:
@@ -411,6 +411,8 @@ en:
                 title: Add business addresses
               add_business_contact:
                 title: Add business contact details
+              confirm_business_details:
+                title: Business details
           evidence:
             title: Add product identification and evidence details
             tasks:

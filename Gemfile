@@ -21,6 +21,7 @@ gem "govuk-design-system-rails", "~> 0.10.5", github: "OfficeForProductSafetyAnd
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
+gem "jbuilder"
 gem "jsbundling-rails"
 gem "lograge", "~> 0.14"
 gem "mini_magick", "~> 4.12"
@@ -45,6 +46,8 @@ gem "rails", "~> 7.1.3"
 gem "redcarpet", "~> 3.5"
 gem "redis-rails", "~> 5.0"
 gem "rollups"
+gem "rswag-api"
+gem "rswag-ui"
 gem "rubyXL", "~> 3.4.25"
 gem "sassc-rails"
 gem "scout_apm", "~> 5.3"
@@ -80,6 +83,8 @@ group :development, :test do
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.4"
+  gem "rspec-rails"
+  gem "rswag-specs"
 end
 
 group :development do
@@ -101,7 +106,6 @@ group :test do
   gem "roo", "~> 2.9"
   gem "rspec"
   gem "rspec-mocks", "~> 3.12"
-  gem "rspec-rails"
   gem "rubocop", "~> 1.55"
   gem "rubocop-govuk", "~> 4.12"
   gem "rubocop-performance", "~> 1.19"

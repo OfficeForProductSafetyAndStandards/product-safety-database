@@ -10,6 +10,8 @@
       </h1>
       <%= f.govuk_text_field :trading_name, label: { text: "Trading name" }, hint: { text: "The name the business is known as." }, width: "two-thirds" %>
       <%= f.govuk_text_field :legal_name, label: { text: "Registered or legal name (optional)" }, hint: { text: "As it appears on Companies House for UK businesses (usually ends in 'Ltd' or 'Limited')." }, width: "two-thirds" %>
+      <%= f.govuk_text_field :company_number, label: { text: "Companies house number (optional)" }, width: "two-thirds" %>
+      <%= f.hidden_field :business_id %>
       <%= f.govuk_submit "Save and continue" %>
     <% end %>
   </div>

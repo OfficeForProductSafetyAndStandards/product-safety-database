@@ -148,9 +148,6 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     fill_in "Registered or legal name (optional)", with: "Legal name"
     click_button "Save and continue"
 
-    check "Retailer"
-    click_button "Save and continue"
-
     fill_in "Address line 1", with: "123 Fake St"
     fill_in "Address line 2", with: "Fake Heath"
     fill_in "Town or city", with: "Faketon"
@@ -163,7 +160,17 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     fill_in "Job title or role description", with: "Manager"
     fill_in "Email", with: "max@example.com"
     fill_in "Phone", with: "+441121121212"
-    click_button "Save and complete tasks in this section"
+    click_button "Save and continue"
+
+    click_button "Use business details"
+
+    check "Retailer"
+    click_button "Save and continue"
+
+    within_fieldset "Do you need to add another business?" do
+      choose "No"
+    end
+    click_button "Continue"
 
     expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
     expect(page).to have_content("You have completed 3 of 6 sections.")

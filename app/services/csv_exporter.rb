@@ -6,7 +6,7 @@ class CsvExporter
     @started_at = now.strftime("%FT%T%:z")
     @started_at_safe = now.strftime("%FT%H%M%S%z")
     @output_directory = Rails.root.join("tmp/csv_export/#{@started_at_safe}")
-    @tables_and_attributes = all_active_record_tables_and_attributes
+    @tables_and_attributes = selected_tables_and_attributes
     @clean_tables = []
   end
 
@@ -54,22 +54,157 @@ private
 
   attr_accessor :started_at, :started_at_safe, :output_directory, :tables_and_attributes, :clean_tables
 
-  # Exclude sensitive attributes
-  EXCLUDED_ATTRIBUTES = %w[
-    encrypted_password
-    reset_password_token
-    invitation_token
-    password_salt
-    encrypted_otp_secret_key
-    encrypted_otp_secret_key_iv
-    encrypted_otp_secret_key_salt
-    direct_otp
-    unlock_token
-  ].freeze
+  ATTRIBUTES_TO_EXPORT = {
+    "activities" => %w[id added_by_user_id business_id correspondence_id created_at investigation_id investigation_product_id type updated_at],
+    "businesses" => %w[id added_by_user_id company_number created_at legal_name trading_name updated_at online_marketplace_id],
+    "collaborations" => %w[id added_by_user_id collaborator_id collaborator_type created_at investigation_id type updated_at],
+    "complainants" => %w[id complainant_type created_at investigation_id updated_at],
+    "contacts" => %w[id added_by_user_id business_id created_at updated_at],
+    "corrective_actions" => %w[id
+                               action
+                               business_id
+                               created_at
+                               date_decided
+                               details
+                               duration
+                               geographic_scope
+                               geographic_scopes
+                               has_online_recall_information
+                               investigation_id
+                               investigation_product_id
+                               legislation
+                               measure_type
+                               online_recall_information
+                               other_action
+                               updated_at],
+    "correspondences" => %w[id contact_method correspondence_date correspondent_type created_at investigation_id type updated_at],
+    "investigation_businesses" => %w[id authorised_representative_choice business_id created_at investigation_id online_marketplace_id relationship updated_at],
+    "investigation_products" => %w[id
+                                   affected_units_status
+                                   batch_number
+                                   created_at
+                                   customs_code
+                                   investigation_closed_at
+                                   investigation_id
+                                   number_of_affected_units
+                                   product_id
+                                   updated_at],
+    "investigations" => %w[id
+                           complainant_reference
+                           coronavirus_related
+                           created_at
+                           custom_risk_level
+                           date_closed
+                           date_received
+                           deleted_at
+                           deleted_by
+                           description
+                           hazard_description
+                           hazard_type
+                           is_closed
+                           is_from_overseas_regulator
+                           is_private
+                           non_compliant_reason
+                           notifying_country
+                           overseas_regulator_country
+                           pretty_id
+                           product_category
+                           received_type
+                           reported_reason
+                           risk_level
+                           risk_validated_at
+                           risk_validated_by
+                           type
+                           updated_at
+                           user_title
+                           state
+                           tasks_status],
+    "locations" => %w[id added_by_user_id address_line_1 address_line_2 business_id city country county created_at name phone_number postal_code updated_at],
+    "online_marketplaces" => %w[id approved_by_opss created_at name updated_at],
+    "organisations" => %w[id created_at name updated_at],
+    "products" => %w[id
+                     added_by_user_id
+                     authenticity
+                     barcode
+                     brand
+                     category
+                     country_of_origin
+                     created_at
+                     description
+                     has_markings
+                     markings
+                     name
+                     owning_team_id
+                     product_code
+                     retired_at
+                     subcategory
+                     updated_at
+                     webpage
+                     when_placed_on_market],
+    "risk_assessed_products" => %w[id created_at investigation_product_id risk_assessment_id updated_at],
+    "risk_assessments" => %w[id
+                             added_by_team_id
+                             added_by_user_id
+                             assessed_by_business_id
+                             assessed_by_other
+                             assessed_by_team_id
+                             assessed_on
+                             created_at
+                             custom_risk_level
+                             details
+                             investigation_id
+                             risk_level
+                             updated_at],
+    "teams" => %w[id country created_at deleted_at name organisation_id updated_at],
+    "tests" => %w[id
+                  created_at
+                  date
+                  details
+                  failure_details
+                  investigation_id
+                  investigation_product_id
+                  legislation
+                  result
+                  standards_product_was_tested_against
+                  tso_certificate_issue_date
+                  tso_certificate_reference_number
+                  type
+                  updated_at],
+    "ucr_numbers" => %w[id created_at investigation_product_id number updated_at],
+    "unexpected_events" => %w[id additional_info created_at date investigation_id investigation_product_id is_date_known severity severity_other type updated_at usage],
+    "users" => %w[id
+                  created_at
+                  deleted_at
+                  deleted_by
+                  has_accepted_declaration
+                  has_been_sent_welcome_email
+                  has_viewed_introduction
+                  invited_at
+                  mobile_number_verified
+                  organisation_id
+                  team_id
+                  updated_at],
+    "versions" => %w[id created_at event item_id item_type whodunnit entity_type entity_id]
+  }.freeze
+
+  def all_active_record_tables_and_attributes
+    tables = {}
+    ActiveRecord::Base.connection.tables.map do |table|
+      tables[table] = ActiveRecord::Base.connection.columns(table).map do |t|
+        { t.name => t.type }
+      end
+    end
+    tables
+  end
+
+  def selected_tables_and_attributes
+    selected_tables = all_active_record_tables_and_attributes.select { |table, _attributes| ATTRIBUTES_TO_EXPORT[table].present? }
+    selected_tables.each { |table, attributes| selected_tables[table] = attributes.select { |attribute| ATTRIBUTES_TO_EXPORT[table].include?(attribute.keys.first) } }
+  end
 
   def export_table(table:, attributes:)
     filename = "#{output_directory}/#{table}.csv"
-    attributes = attributes.map(&:keys).flatten - EXCLUDED_ATTRIBUTES
+    attributes = attributes.map(&:keys).flatten
 
     # Correctly classify namespaced model names
     table_name = table.classify.gsub(/^Prism(.+)/, "Prism::\\1").gsub(/^ActiveStorage(.+)/, "ActiveStorage::\\1").gsub(/^Version$/, "PaperTrail::Version").constantize
@@ -115,15 +250,5 @@ private
     }.to_json
 
     File.write(filename, data)
-  end
-
-  def all_active_record_tables_and_attributes
-    tables = {}
-    ActiveRecord::Base.connection.tables.map do |table|
-      tables[table] = ActiveRecord::Base.connection.columns(table).map do |t|
-        { t.name => t.type }
-      end
-    end
-    tables
   end
 end

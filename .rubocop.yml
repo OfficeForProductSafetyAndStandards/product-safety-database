@@ -23,6 +23,8 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'config/initializers/devise.rb'
     - 'smoke_test/**/*'
+    - 'app/controllers/api/base_controller.rb'
+    - 'spec/requests/api/**/*'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
