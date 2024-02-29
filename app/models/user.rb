@@ -33,6 +33,7 @@ class User < ApplicationRecord
   has_many :notification_exports
   has_many :business_exports
   has_many :product_exports
+  has_many :api_tokens, dependent: :destroy
 
   has_many :visits, class_name: "Ahoy::Visit", dependent: :nullify
 

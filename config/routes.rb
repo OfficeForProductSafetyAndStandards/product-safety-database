@@ -11,6 +11,8 @@ if Rails.env.production?
 end
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
   unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
@@ -425,6 +427,23 @@ Rails.application.routes.draw do
     get :about
     get :accessibility
     get :cookies_policy, path: "cookies"
+  end
+
+  # API routes
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resource :auth, only: %i[create destroy]
+
+      resources :notifications, only: %i[index create show] do
+        resources :products, only: %i[create], controller: "notification_products"
+      end
+
+      resources :products, only: %i[index create show] do
+        collection do
+          get :named_parameter_search
+        end
+      end
+    end
   end
 
   resource :cookie_form, only: [:create]

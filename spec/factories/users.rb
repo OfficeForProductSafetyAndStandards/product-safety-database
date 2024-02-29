@@ -93,9 +93,21 @@ FactoryBot.define do
       end
     end
 
+    trait :with_api_token do
+      after(:create) do |user|
+        user.api_tokens.find_or_create_by(name: ApiToken::DEFAULT_NAME)
+      end
+    end
+
     trait :can_access_new_search do
       transient do
         roles { %i[use_new_search] }
+      end
+    end
+
+    trait :with_api_token do
+      after(:create) do |user|
+        user.api_tokens.find_or_create_by(name: ApiToken::DEFAULT_NAME)
       end
     end
 
