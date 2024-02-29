@@ -60,32 +60,130 @@ private
     "collaborations" => %w[id added_by_user_id collaborator_id collaborator_type created_at investigation_id type updated_at],
     "complainants" => %w[id complainant_type created_at investigation_id updated_at],
     "contacts" => %w[id added_by_user_id business_id created_at updated_at],
-    "corrective_actions" => %w[id action business_id created_at date_decided details duration geographic_scope geographic_scopes
-      has_online_recall_information investigation_id investigation_product_id legislation measure_type online_recall_information
-      other_action updated_at],
+    "corrective_actions" => %w[id
+                               action
+                               business_id
+                               created_at
+                               date_decided
+                               details
+                               duration
+                               geographic_scope
+                               geographic_scopes
+                               has_online_recall_information
+                               investigation_id
+                               investigation_product_id
+                               legislation
+                               measure_type
+                               online_recall_information
+                               other_action
+                               updated_at],
     "correspondences" => %w[id contact_method correspondence_date correspondent_type created_at investigation_id type updated_at],
     "investigation_businesses" => %w[id authorised_representative_choice business_id created_at investigation_id online_marketplace_id relationship updated_at],
-    "investigation_products" => %w[id affected_units_status batch_number created_at customs_code investigation_closed_at investigation_id
-      number_of_affected_units product_id updated_at],
-    "investigations" => %w[id complainant_reference coronavirus_related created_at custom_risk_level date_closed date_received deleted_at
-      deleted_by description hazard_description hazard_type is_closed is_from_overseas_regulator is_private non_compliant_reason notifying_country
-      overseas_regulator_country pretty_id product_category received_type reported_reason risk_level risk_validated_at risk_validated_by type
-      updated_at user_title state tasks_status],
+    "investigation_products" => %w[id
+                                   affected_units_status
+                                   batch_number
+                                   created_at
+                                   customs_code
+                                   investigation_closed_at
+                                   investigation_id
+                                   number_of_affected_units
+                                   product_id
+                                   updated_at],
+    "investigations" => %w[id
+                           complainant_reference
+                           coronavirus_related
+                           created_at
+                           custom_risk_level
+                           date_closed
+                           date_received
+                           deleted_at
+                           deleted_by
+                           description
+                           hazard_description
+                           hazard_type
+                           is_closed
+                           is_from_overseas_regulator
+                           is_private
+                           non_compliant_reason
+                           notifying_country
+                           overseas_regulator_country
+                           pretty_id
+                           product_category
+                           received_type
+                           reported_reason
+                           risk_level
+                           risk_validated_at
+                           risk_validated_by
+                           type
+                           updated_at
+                           user_title
+                           state
+                           tasks_status],
     "locations" => %w[id added_by_user_id address_line_1 address_line_2 business_id city country county created_at name phone_number postal_code updated_at],
     "online_marketplaces" => %w[id approved_by_opss created_at name updated_at],
     "organisations" => %w[id created_at name updated_at],
-    "products" => %w[id added_by_user_id authenticity barcode brand category country_of_origin created_at description has_markings markings
-      name owning_team_id product_code retired_at subcategory updated_at webpage when_placed_on_market],
+    "products" => %w[id
+                     added_by_user_id
+                     authenticity
+                     barcode
+                     brand
+                     category
+                     country_of_origin
+                     created_at
+                     description
+                     has_markings
+                     markings
+                     name
+                     owning_team_id
+                     product_code
+                     retired_at
+                     subcategory
+                     updated_at
+                     webpage
+                     when_placed_on_market],
     "risk_assessed_products" => %w[id created_at investigation_product_id risk_assessment_id updated_at],
-    "risk_assessments" => %w[id added_by_team_id added_by_user_id assessed_by_business_id assessed_by_other assessed_by_team_id assessed_on
-      created_at custom_risk_level details investigation_id risk_level updated_at],
+    "risk_assessments" => %w[id
+                             added_by_team_id
+                             added_by_user_id
+                             assessed_by_business_id
+                             assessed_by_other
+                             assessed_by_team_id
+                             assessed_on
+                             created_at
+                             custom_risk_level
+                             details
+                             investigation_id
+                             risk_level
+                             updated_at],
     "teams" => %w[id country created_at deleted_at name organisation_id updated_at],
-    "tests" => %w[id created_at date details failure_details investigation_id investigation_product_id legislation result
-      standards_product_was_tested_against tso_certificate_issue_date tso_certificate_reference_number type updated_at],
+    "tests" => %w[id
+                  created_at
+                  date
+                  details
+                  failure_details
+                  investigation_id
+                  investigation_product_id
+                  legislation
+                  result
+                  standards_product_was_tested_against
+                  tso_certificate_issue_date
+                  tso_certificate_reference_number
+                  type
+                  updated_at],
     "ucr_numbers" => %w[id created_at investigation_product_id number updated_at],
     "unexpected_events" => %w[id additional_info created_at date investigation_id investigation_product_id is_date_known severity severity_other type updated_at usage],
-    "users" => %w[id created_at deleted_at deleted_by has_accepted_declaration has_been_sent_welcome_email has_viewed_introduction invited_at
-      mobile_number_verified organisation_id team_id updated_at],
+    "users" => %w[id
+                  created_at
+                  deleted_at
+                  deleted_by
+                  has_accepted_declaration
+                  has_been_sent_welcome_email
+                  has_viewed_introduction
+                  invited_at
+                  mobile_number_verified
+                  organisation_id
+                  team_id
+                  updated_at],
     "versions" => %w[id created_at event item_id item_type whodunnit entity_type entity_id]
   }.freeze
 
