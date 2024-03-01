@@ -17,7 +17,7 @@ class AddBusinessRolesForm
 private
 
   def online_marketplace_or_other
-    errors.add(:roles, "Choose either online marketplace or another role") if roles.include?("online_marketplace") && roles.count > 1
+    errors.add(:roles, "Choose either online marketplace or another role") if roles.include?("online_marketplace") && roles.compact_blank.count > 1
   end
 
   def only_allowed_business_types
