@@ -9,9 +9,11 @@ class Team < ApplicationRecord
   has_many :collaboration_accesses, class_name: "Collaboration::Access", as: :collaborator
 
   has_many :owner_collaborations, class_name: "Collaboration::Access::OwnerTeam", as: :collaborator
+  has_many :creator_collaborations, class_name: "Collaboration::CreatorTeam", as: :collaborator
 
   has_many :notifications, through: :collaboration_accesses, source: :investigation
   has_many :owned_notifications, through: :owner_collaborations, source: :investigation
+  has_many :created_notifications, through: :creator_collaborations, source: :investigation
 
   has_many :roles, dependent: :destroy, as: :entity
 

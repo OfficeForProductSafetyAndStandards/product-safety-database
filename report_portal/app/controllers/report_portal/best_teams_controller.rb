@@ -2,7 +2,7 @@ module ReportPortal
   class BestTeamsController < ApplicationController
     def index
       @by_notifications = Team.not_deleted
-                              .joins(:owned_notifications)
+                              .joins(:created_notifications)
                               .where("collaborations.created_at > ?", 1.year.ago)
                               .select("teams.name, count(collaborations.*) as notifications_count")
                               .group("teams.name")
