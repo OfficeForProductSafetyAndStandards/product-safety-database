@@ -14,6 +14,9 @@ class Business < ApplicationRecord
   has_many :investigation_businesses, dependent: :destroy
   has_many :investigations, through: :investigation_businesses
 
+  has_many :investigation_products, through: :investigations
+  has_many :products, through: :investigation_products
+
   has_many :locations, dependent: :destroy
   has_many :contacts, dependent: :destroy
   has_many :corrective_actions, dependent: :destroy

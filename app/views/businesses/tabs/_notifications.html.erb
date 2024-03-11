@@ -1,0 +1,38 @@
+<h2 class="govuk-heading-m">Notifications</h2>
+
+<% if @business.investigation_businesses.any? %>
+  <% @business.investigation_businesses.each do |investigation_business| %>
+    <%=
+      govuk_summary_list do |summary_list|
+        investigation = investigation_business.investigation.decorate
+
+        summary_list.with_row do |row|
+          row.with_key(text: "Notification ID")
+          row.with_value(text: investigation.pretty_id)
+        end
+
+        summary_list.with_row do |row|
+          row.with_key(text: "Title")
+          row.with_value(text: investigation.title)
+        end
+
+        summary_list.with_row do |row|
+          row.with_key(text: "Owner")
+          row.with_value(text: investigation.owner_display_name_for(viewer: current_user))
+        end
+
+        summary_list.with_row do |row|
+          row.with_key(text: "Relationship")
+          row.with_value(text: investigation_business.relationship&.humanize || "-")
+        end
+
+        summary_list.with_row do |row|
+          row.with_key(text: "Last updated at")
+          row.with_value(text: investigation.updated_at.to_formatted_s(:govuk))
+        end
+      end
+    %>
+  <% end %>
+<% else %>
+  <p class="govuk-!-margin-top-6">No notifications</p>
+<% end %>
