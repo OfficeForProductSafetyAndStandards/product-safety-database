@@ -4,6 +4,7 @@
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
   - searchkick
+  - active_storage_purge
 :scheduler:
   :schedule:
     delete_unsafe_files_job:
