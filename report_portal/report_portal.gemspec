@@ -28,5 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "devise", "~> 4.9"
   spec.add_runtime_dependency "govuk-components", "~> 5.0"
   spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 5.0"
-  spec.add_runtime_dependency "rails", ">= 7.0.8"
+  spec.add_runtime_dependency "rails", ">= 7.1.3.2"
 end
