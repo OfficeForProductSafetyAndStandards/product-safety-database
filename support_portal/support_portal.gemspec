@@ -34,5 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "pagy", ">= 6", "< 8"
   spec.add_runtime_dependency "paper_trail", "~> 15.0"
   spec.add_runtime_dependency "pg", "~> 1.5"
-  spec.add_runtime_dependency "rails", ">= 7.0.4"
+  spec.add_runtime_dependency "rails", ">= 7.1.3.2"
 end
