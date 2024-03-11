@@ -15,7 +15,7 @@ PATH
       govuk-components (~> 5.0)
       govuk_design_system_formbuilder (~> 5.0)
       listen (~> 3.8)
-      pagy (~> 6.0)
+      pagy (>= 6, < 8)
       pg (~> 1.5)
       prawn (~> 2.4)
       prawn-table (~> 0.2)
@@ -40,7 +40,7 @@ PATH
       devise (~> 4.9)
       govuk-components (~> 5.0)
       govuk_design_system_formbuilder (~> 5.0)
-      pagy (~> 6.0)
+      pagy (>= 6, < 8)
       paper_trail (~> 15.0)
       pg (~> 1.5)
       rails (>= 7.0.4)
@@ -368,7 +368,7 @@ GEM
       multi_json (>= 1.0)
     optimist (3.0.1)
     orm_adapter (0.5.0)
-    pagy (6.2.0)
+    pagy (6.5.0)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -757,7 +757,7 @@ DEPENDENCIES
   net-pop
   net-smtp
   opensearch-ruby
-  pagy (~> 6.2.0)
+  pagy (~> 6.5.0)
   paper_trail
   parallel_tests (~> 4.3.0)
   pg (~> 1.5)
