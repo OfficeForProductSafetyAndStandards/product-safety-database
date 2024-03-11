@@ -33,7 +33,7 @@
       <%= pluralize @active_users_this_month, 'user' %>
     </h2>
     <p class="govuk-body">
-      <span class="govuk-caption-m">Last 30 days</span>
+      <span class="govuk-caption-m"><%= pluralize @total_users, 'user' %> in total</span>
       <span class="govuk-caption-m">
         <% if @active_users_change_pc.positive? %>
           <span class="govuk-visually-hidden">Increase of</span>
@@ -54,7 +54,7 @@
         </span>
       </summary>
       <div class="govuk-details__text">
-        An active user is one that has logged in to the service in the last 30 days
+        An active user is one that has logged in to the service in the last month
       </div>
     </details>
   </div>
@@ -65,7 +65,7 @@
       <%= pluralize @notifications_this_month, 'notification' %>
     </h2>
     <p class="govuk-body">
-      <span class="govuk-caption-m">Last 30 days</span>
+      <span class="govuk-caption-m"><%= pluralize @total_notifications, 'notification' %> in total</span>
       <span class="govuk-caption-m">
         <% if @notifications_change_pc.positive? %>
           <span class="govuk-visually-hidden">Increase of</span>
@@ -96,11 +96,24 @@
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-l">
       <span class="govuk-caption-l">Submission rate</span>
-      x% submitted
+      <%= @submission_rate_this_month.round(0) %>% submitted
     </h2>
     <p class="govuk-body">
-      <span class="govuk-caption-m">Last 30 days</span>
-      <span class="govuk-caption-m">+x% from last month</span>
+      <span class="govuk-caption-m">
+        <%= @submitted_notifications_this_month %> of <%= @draft_notifications_this_month + @submitted_notifications_this_month %> submitted
+      </span>
+      <span class="govuk-caption-m">
+        <% if @submission_rate_change_pc.positive? %>
+          <span class="govuk-visually-hidden">Increase of</span>
+          +<%= number_to_percentage @submission_rate_change_pc, precision: 0 %>
+        <% elsif @submission_rate_change_pc.zero? %>
+          No change
+        <% else %>
+          <span class="govuk-visually-hidden">Decrease of</span>
+          -<%= number_to_percentage @submission_rate_change_pc, precision: 0 %>
+        <% end %>
+        from last month
+      </span>
     </p>
     <details class="govuk-details">
       <summary class="govuk-details__summary">
