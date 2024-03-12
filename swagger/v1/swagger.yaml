@@ -606,6 +606,8 @@ paths:
       responses:
         '201':
           description: Product added to Notification
+        '422':
+          description: Notification not found
         '404':
           description: Product not found
         '401':
@@ -896,7 +898,7 @@ paths:
           type: string
       - name: product_code
         in: query
-        description: Search based on exact match of product_code. Can contain the
+        description: Search based on fuzzy match of product_code. Can contain the
           ASIN, EAN, or UPC codes for a given product
         required: false
         schema:

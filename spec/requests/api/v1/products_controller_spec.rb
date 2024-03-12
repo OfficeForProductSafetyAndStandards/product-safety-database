@@ -113,7 +113,7 @@ Search for a Product using named parameters.
       parameter name: :name, in: :query, type: :string, description: "Fuzzy searches based on product name", required: false
       parameter name: :id, in: :query, type: :string, description: "Search based on exact match of PSD ID. Please issue without `psd-` (e.g. for `psd-1234` use `1234`)", required: false
       parameter name: :barcode, in: :query, type: :string, description: "Search based on exact match of barcode", required: false
-      parameter name: :product_code, in: :query, type: :string, description: "Search based on exact match of product_code. Can contain the ASIN, EAN, or UPC codes for a given product", required: false
+      parameter name: :product_code, in: :query, type: :string, description: "Search based on fuzzy match of product_code. Can contain the ASIN, EAN, or UPC codes for a given product", required: false
 
       parameter name: :sort_by, in: :query, required: false, type: :string, description: "Sort by parameter. Choose name, created_at, updated_at, or relevant. Default is relevant"
       parameter name: :sort_dir, in: :query, required: false, type: :string, description: "Sort direction. Choose asc or desc. Default is desc"

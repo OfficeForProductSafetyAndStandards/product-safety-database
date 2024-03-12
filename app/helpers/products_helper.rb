@@ -38,7 +38,7 @@ module ProductsHelper
     query = Product.includes(child_records(false))
     query = query.where("products.name ILIKE ?", "%#{@search.name}%") if @search.name
     query = query.where("products.barcode = ?", @search.barcode) if @search.barcode
-    query = query.where("products.product_code = ?", @search.product_code) if @search.product_code
+    query = query.where("products.product_code ILIKE ?", "%#{@search.product_code}%") if @search.product_code
     query = query.where(id: @search.id) if @search.id
 
     query = query.where(category: @search.category) if @search.category.present?
