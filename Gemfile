@@ -101,7 +101,7 @@ group :test do
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.4"
-  gem "launchy", "~> 2.5"
+  gem "launchy", "~> 3.0"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.9"
   gem "rspec"
