@@ -61,6 +61,7 @@ class SearchParams
   Country.all.each do |country|
     attribute country[0].parameterize.underscore.to_sym, :boolean
   end
+  attribute :countries, array: true, default: []
 
   def selected_sort_by
     if sort_by.blank?
