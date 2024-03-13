@@ -239,7 +239,7 @@
             if corrective_action.recall_of_the_product_from_end_users?
               {
                 key: { text: "Recall information" },
-                value: { text: corrective_action.has_online_recall_information ? "Yes: #{corrective_action.online_recall_information}" : "No" }
+                value: { text: corrective_action.has_online_recall_information == "has_online_recall_information_yes" ? "Yes: #{corrective_action.online_recall_information}" : "No" }
               }
             end,
             {
