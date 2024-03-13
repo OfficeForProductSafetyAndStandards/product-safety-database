@@ -5,11 +5,11 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }
   let(:opss_user)             { create(:user, :opss_user, :activated, organisation:, has_viewed_introduction: true) }
 
-  let!(:chemical_investigation)              { create(:allegation, hazard_type: "Chemical") }
+  let!(:chemical_investigation)              { create(:notification, hazard_type: "Chemical") }
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
   let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
 
-  let!(:lift_product_1)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Clothing, textiles and fashion items") }
+  let!(:lift_product_1)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Clothing, textiles and fashion items", country_of_origin: "territory:AE-AZ") }
   let!(:lift_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation], category: "Clothing, textiles and fashion items") }
   let!(:furniture_product) { create(:product, name: "Hot product1", investigations: [chemical_investigation], category: "Furniture") }
   let!(:sanitiser_product) { create(:product, name: "SoapForHandz", investigations: [drowning_investigation], category: "Communication and media equipment") }
@@ -165,6 +165,32 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       expect(page).to have_content(sanitiser_product.name)
       expect(page).to have_content("#{retired_sanitiser_product.name} (Retired product record)")
       expect(page).to have_content("5 products using the current filters, were found.")
+    end
+
+    scenario "filtering by country" do
+      find("details#products-countries").click
+      check "Abu Dhabi"
+      click_button "Apply"
+
+      expect(page).to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).not_to have_content("#{retired_sanitiser_product.name} (Retired product record)")
+      expect(page).to have_content("1 product using the current filters, was found.")
+    end
+
+    scenario "filtering by notification type" do
+      find("details#products-notification-type").click
+      check "Notification"
+      click_button "Apply"
+
+      expect(page).not_to have_content(lift_product_1.name)
+      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).to have_content(furniture_product.name)
+      expect(page).not_to have_content(sanitiser_product.name)
+      expect(page).not_to have_content("#{retired_sanitiser_product.name} (Retired product record)")
+      expect(page).to have_content("1 product using the current filters, was found.")
     end
   end
 end

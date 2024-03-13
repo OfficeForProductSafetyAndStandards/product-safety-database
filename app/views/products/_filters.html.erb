@@ -51,8 +51,48 @@
       ) %>
     <% end %>
 
+    <% if current_user.is_opss? %>
+      <%= govuk_details(summary_text: "Country of origin", classes: "opss-details--plain", id: "products-countries") do %>
+        <% Country.all.each do |country| %>
+          <div class="govuk-checkboxes__item">
+            <%= form.check_box :countries, { multiple: true, checked: params.dig(:search_params, :countries)&.include?(country[1]), class: "govuk-checkboxes__input" }, country[1], false %>
+            <%= form.label "countries_#{country[1].downcase.remove(':')}", country[0], { class: "govuk-label govuk-checkboxes__label" } %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <%= govuk_details(summary_text: "Notification type", classes: "opss-details--plain", id: "products-notification-type") do %>
+        <%= govukCheckboxes(
+          key: "",
+          form: form,
+          items: [
+            {
+              key: "notification",
+              text: "Notification",
+              value: true
+            },
+            {
+              key: "allegation",
+              text: "Allegation",
+              value: true
+            },
+            {
+              key: "enquiry",
+              text: "Enquiry",
+              value: true
+            },
+            {
+              key: "project",
+              text: "Project",
+              value: true
+            }
+          ]
+        ) %>
+      <% end %>
+    <% end %>
+
     <div class="govuk-button-group">
-      <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
+      <%= form.submit "Apply", name: nil, type: "submit", class: "govuk-button" %>
       <a href="<%= all_products_path %>" class="govuk-link govuk-link--no-visited-state">Reset</a>
     </div>
 

@@ -137,7 +137,7 @@ private
   end
 
   def query_params
-    params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name)
+    params.permit(:q, :sort_by, :sort_dir, :direction, :category, :retired_status, :page_name, :notification, :allegation, :enquiry, :project, countries: [])
   end
 
   def set_last_product_view_cookie
@@ -164,6 +164,17 @@ private
   end
 
   def count_to_display
-    params[:category].blank? && params[:q].blank? && [nil, "active"].include?(params[:retired_status]) ? Product.not_retired.count : @pagy.count
+    filters_empty? ? Product.not_retired.count : @pagy.count
+  end
+
+  def filters_empty?
+    params[:category].blank? &&
+      params[:q].blank? &&
+      [nil, "active"].include?(params[:retired_status]) &&
+      params[:countries].blank? &&
+      params[:notification].blank? &&
+      params[:allegation].blank? &&
+      params[:enquiry].blank? &&
+      params[:project].blank?
   end
 end

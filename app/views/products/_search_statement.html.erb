@@ -1,5 +1,5 @@
 <p class="govuk-body">
-  <% filters_are_blank = filter[:category].blank? && filter[:retired_status].blank? %>
+  <% filters_are_blank = filter[:category].blank? && filter[:retired_status].blank? && filter[:countries].blank? && filter[:notification_types].blank? %>
   <% if keywords.blank? && filters_are_blank %>
     There are currently <%= pluralize count, "product" %>.
   <% else %>

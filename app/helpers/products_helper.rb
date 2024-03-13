@@ -1,4 +1,6 @@
 module ProductsHelper
+  NOTIFICATION_TYPES = %i[allegation enquiry project notification].freeze
+
   def search_for_products(user = current_user, for_export: false)
     query = Product.includes(child_records(for_export))
 
@@ -19,6 +21,12 @@ module ProductsHelper
     query = query.where(retired_at: nil) if @search.retired_status == "active" || @search.retired_status.blank?
 
     query = query.where.not(retired_at: nil) if @search.retired_status == "retired"
+
+    query = query.where(country_of_origin: @search.countries&.compact_blank) if @search.countries && !@search.countries.compact_blank.empty?
+
+    notification_types = NOTIFICATION_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
+
+    query = query.where(investigations: { type: notification_types }) unless notification_types.empty?
 
     case @search.case_owner
     when "me"
@@ -61,7 +69,7 @@ module ProductsHelper
   end
 
   def product_export_params
-    params.permit(:q, :category)
+    params.permit(:q, :category, :notification, :allegation, :enquiry, :project, countries: [])
   end
 
   def child_records(for_export)
@@ -79,7 +87,7 @@ module ProductsHelper
   end
 
   def sort_direction
-    SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
+    SortByHelper::SORT_DIRECTIONS.include?(sort_direction_param) ? sort_direction_param : :desc
   end
 
   def set_product
