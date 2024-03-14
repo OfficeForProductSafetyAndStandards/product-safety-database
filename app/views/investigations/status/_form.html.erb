@@ -1,18 +1,11 @@
-<%= form_with(model: @change_notification_status_form, url: form_path, method: :patch) do |form| %>
+<%= form_with(model: @change_notification_status_form, url: form_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= govukErrorSummary form: form %>
-
-      <%= govukTextarea(
-        key: :rationale,
-        form: form,
-        attributes: { maxlength: 10_000 },
-        label: { text: t("label", scope: i18n_scope), classes: "govuk-label--l", isPageHeading: true },
-        hint: { text: t("hint", scope: i18n_scope) }
-      ) %>
-      <%= form.submit t("action", scope: i18n_scope), class: "govuk-button" %>
-
-      <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      <%= form.govuk_error_summary %>
+      <%= form.govuk_text_area :rationale, label: { text: t("label", scope: i18n_scope), size: "l" }, hint: { text: t("hint", scope: i18n_scope) }, max_chars: 10_000 %>
+      <%= form.govuk_submit(t("action", scope: i18n_scope)) do %>
+        <a href="<%= investigation_path(@investigation) %>" class="govuk-link">Cancel</a>
+      <% end %>
     </div>
   </div>
 <% end %>
