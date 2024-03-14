@@ -102,10 +102,6 @@ private
                      further_details
                      product_name
                      case_id
-                     reported_reason
-                     hazard_type
-                     non_compliant_reason
-                     risk_level
                      case_type]
 
     @test_results_sheet = sheet
@@ -125,8 +121,6 @@ private
                      case_id
                      reported_reason
                      hazard_type
-                     non_compliant_reason
-                     risk_level
                      case_type]
 
     @risk_assessments_sheet = sheet
@@ -151,7 +145,6 @@ private
                      case_id
                      reported_reason
                      hazard_type
-                     non_compliant_reason
                      risk_level
                      case_type]
 
@@ -201,10 +194,6 @@ private
       restricted_field(test_result.details),
       product.name,
       test_result.case_id,
-      investigation.reported_reason,
-      investigation.hazard_type,
-      investigation.non_compliant_reason,
-      investigation.risk_level_description,
       investigation.case_type || "case"
     ]
   end
@@ -222,8 +211,6 @@ private
       risk_assessment.case_id,
       investigation.reported_reason,
       investigation.hazard_type,
-      investigation.non_compliant_reason,
-      investigation.risk_level_description,
       investigation.case_type || "case"
     ]
   end
@@ -246,7 +233,6 @@ private
       corrective_action.case_id,
       investigation.reported_reason,
       investigation.hazard_type,
-      investigation.non_compliant_reason,
       investigation.risk_level_description,
       investigation.case_type || "case"
     ]
