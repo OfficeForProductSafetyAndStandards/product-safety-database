@@ -2,7 +2,7 @@ require "rails_helper"
 require "sidekiq/testing"
 
 RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
-  let(:user) { create :user, :all_data_exporter, :activated }
+  let(:user) { create :user, :activated }
   let(:email) { delivered_emails.last }
   let(:export) { ProductExport.find_by(user:) }
   let(:spreadsheet) do

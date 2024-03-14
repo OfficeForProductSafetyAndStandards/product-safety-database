@@ -198,7 +198,7 @@ private
       test_result.date_of_activity,
       test_result.result,
       test_result.failure_details,
-      test_result.details,
+      restricted_field(test_result.details),
       product.name,
       test_result.case_id,
       investigation.reported_reason,
@@ -217,7 +217,7 @@ private
       risk_assessment.assessed_on.to_formatted_s(:xmlschema),
       risk_assessment.risk_level,
       risk_assessment.decorate.assessed_by,
-      risk_assessment.details,
+      restricted_field(risk_assessment.details),
       product.name,
       risk_assessment.case_id,
       investigation.reported_reason,
@@ -241,7 +241,7 @@ private
       corrective_action.measure_type,
       corrective_action.duration,
       corrective_action.geographic_scopes,
-      corrective_action.details,
+      restricted_field(corrective_action.details),
       product.name,
       corrective_action.case_id,
       investigation.reported_reason,
@@ -294,5 +294,11 @@ private
     if @search.retired_status == "retired"
       { term: { "retired?" => true } }
     end
+  end
+
+  def restricted_field(text)
+    return text if user.is_opss?
+
+    "Restricted"
   end
 end
