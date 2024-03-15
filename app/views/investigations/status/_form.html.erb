@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= form.govuk_error_summary %>
-      <%= form.govuk_text_area :rationale, label: { text: t("label", scope: i18n_scope), size: "l" }, hint: { text: t("hint", scope: i18n_scope) }, max_chars: 10_000 %>
+      <%= form.govuk_text_area :rationale, label: { text: t("label", scope: i18n_scope), size: "l", tag: "h1" }, hint: { text: t("hint", scope: i18n_scope) }, max_chars: 10_000 %>
       <%= form.govuk_submit(t("action", scope: i18n_scope)) do %>
         <a href="<%= investigation_path(@investigation) %>" class="govuk-link">Cancel</a>
       <% end %>
