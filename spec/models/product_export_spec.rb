@@ -4,14 +4,14 @@ require "rails_helper"
 
 RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:investigation) do
-    create(:allegation,
+    create(:notification,
            reported_reason: "unsafe",
            hazard_type: "Electromagnetic disturbance",
            hazard_description: "Much fire",
            non_compliant_reason: "On fire, lots of fire",
            risk_level: "serious").decorate
   end
-  let!(:other_investigation) { create(:allegation).decorate }
+  let!(:other_investigation) { create(:notification).decorate }
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   # Create a new product version to ensure only the current version is rendered
@@ -26,7 +26,7 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
   let!(:test_2)                 { create(:test_result, investigation:, investigation_product:, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]).decorate }
   let!(:corrective_action)      { create(:corrective_action, investigation:, investigation_product:).decorate }
   let!(:corrective_action_2)    { create(:corrective_action, investigation:, investigation_product:, geographic_scopes: %w[great_britain eea_wide worldwide]).decorate }
-  let!(:user)                   { create(:user, :activated, has_viewed_introduction: true) }
+  let!(:user)                   { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
   let(:params)                  { {} }
   let(:product_export)          { described_class.create!(user:, params:) }
 
@@ -180,25 +180,9 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(test_result_sheet.cell(2, 10)).to eq test.investigation.pretty_id
       expect(test_result_sheet.cell(3, 10)).to eq test_2.investigation.pretty_id
 
-      expect(test_result_sheet.cell(1, 11)).to eq "reported_reason"
-      expect(test_result_sheet.cell(2, 11)).to eq test.investigation.reported_reason
-      expect(test_result_sheet.cell(3, 11)).to eq test_2.investigation.reported_reason
-
-      expect(test_result_sheet.cell(1, 12)).to eq "hazard_type"
-      expect(test_result_sheet.cell(2, 12)).to eq test.investigation.hazard_type
-      expect(test_result_sheet.cell(3, 12)).to eq test_2.investigation.hazard_type
-
-      expect(test_result_sheet.cell(1, 13)).to eq "non_compliant_reason"
-      expect(test_result_sheet.cell(2, 13)).to eq test.investigation.non_compliant_reason
-      expect(test_result_sheet.cell(3, 13)).to eq test_2.investigation.non_compliant_reason
-
-      expect(test_result_sheet.cell(1, 14)).to eq "risk_level"
-      expect(test_result_sheet.cell(2, 14)).to eq test.investigation.risk_level_description
-      expect(test_result_sheet.cell(3, 14)).to eq test_2.investigation.risk_level_description
-
-      expect(test_result_sheet.cell(1, 15)).to eq "case_type"
-      expect(test_result_sheet.cell(2, 15)).to eq test.investigation.case_type
-      expect(test_result_sheet.cell(3, 15)).to eq test_2.investigation.case_type
+      expect(test_result_sheet.cell(1, 11)).to eq "case_type"
+      expect(test_result_sheet.cell(2, 11)).to eq test.investigation.case_type
+      expect(test_result_sheet.cell(3, 11)).to eq test_2.investigation.case_type
 
       expect(risk_assessments_sheet.cell(1, 1)).to eq "psd_ref"
       expect(risk_assessments_sheet.cell(2, 1)).to eq product.psd_ref
@@ -240,17 +224,9 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(risk_assessments_sheet.cell(2, 10)).to eq risk_assessment.investigation.hazard_type
       expect(risk_assessments_sheet.cell(3, 10)).to eq risk_assessment_2.investigation.hazard_type
 
-      expect(risk_assessments_sheet.cell(1, 11)).to eq "non_compliant_reason"
-      expect(risk_assessments_sheet.cell(2, 11)).to eq risk_assessment.investigation.non_compliant_reason
-      expect(risk_assessments_sheet.cell(3, 11)).to eq risk_assessment_2.investigation.non_compliant_reason
-
-      expect(risk_assessments_sheet.cell(1, 12)).to eq "risk_level"
-      expect(risk_assessments_sheet.cell(2, 12)).to eq risk_assessment.investigation.risk_level_description
-      expect(risk_assessments_sheet.cell(3, 12)).to eq risk_assessment_2.investigation.risk_level_description
-
-      expect(risk_assessments_sheet.cell(1, 13)).to eq "case_type"
-      expect(risk_assessments_sheet.cell(2, 13)).to eq risk_assessment.investigation.case_type
-      expect(risk_assessments_sheet.cell(3, 13)).to eq risk_assessment_2.investigation.case_type
+      expect(risk_assessments_sheet.cell(1, 11)).to eq "case_type"
+      expect(risk_assessments_sheet.cell(2, 11)).to eq risk_assessment.investigation.case_type
+      expect(risk_assessments_sheet.cell(3, 11)).to eq risk_assessment_2.investigation.case_type
 
       expect(corrective_actions_sheet.cell(1, 1)).to eq "psd_ref"
       expect(corrective_actions_sheet.cell(2, 1)).to eq product.psd_ref
@@ -312,17 +288,13 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
       expect(corrective_actions_sheet.cell(2, 15)).to eq corrective_action.investigation.hazard_type
       expect(corrective_actions_sheet.cell(3, 15)).to eq corrective_action_2.investigation.hazard_type
 
-      expect(corrective_actions_sheet.cell(1, 16)).to eq "non_compliant_reason"
-      expect(corrective_actions_sheet.cell(2, 16)).to eq corrective_action.investigation.non_compliant_reason
-      expect(corrective_actions_sheet.cell(3, 16)).to eq corrective_action_2.investigation.non_compliant_reason
+      expect(corrective_actions_sheet.cell(1, 16)).to eq "risk_level"
+      expect(corrective_actions_sheet.cell(2, 16)).to eq corrective_action.investigation.risk_level_description
+      expect(corrective_actions_sheet.cell(3, 16)).to eq corrective_action_2.investigation.risk_level_description
 
-      expect(corrective_actions_sheet.cell(1, 17)).to eq "risk_level"
-      expect(corrective_actions_sheet.cell(2, 17)).to eq corrective_action.investigation.risk_level_description
-      expect(corrective_actions_sheet.cell(3, 17)).to eq corrective_action_2.investigation.risk_level_description
-
-      expect(corrective_actions_sheet.cell(1, 18)).to eq "case_type"
-      expect(corrective_actions_sheet.cell(2, 18)).to eq corrective_action.investigation.case_type
-      expect(corrective_actions_sheet.cell(3, 18)).to eq corrective_action_2.investigation.case_type
+      expect(corrective_actions_sheet.cell(1, 17)).to eq "case_type"
+      expect(corrective_actions_sheet.cell(2, 17)).to eq corrective_action.investigation.case_type
+      expect(corrective_actions_sheet.cell(3, 17)).to eq corrective_action_2.investigation.case_type
     end
   end
 

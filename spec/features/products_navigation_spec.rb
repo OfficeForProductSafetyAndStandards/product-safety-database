@@ -11,10 +11,10 @@ RSpec.feature "Searching products", :with_stubbed_mailer, type: :feature do
   let!(:closed_product) { create(:product) }
 
   def create_four_products!
-    create(:allegation, creator: user, products: [user_product])
-    create(:allegation, products: [other_product])
-    create(:allegation, creator: other_user_same_team, products: [team_product])
-    create(:allegation, creator: user, products: [closed_product], is_closed: true)
+    create(:notification, creator: user, products: [user_product])
+    create(:notification, products: [other_product])
+    create(:notification, creator: other_user_same_team, products: [team_product])
+    create(:notification, creator: user, products: [closed_product], is_closed: true)
     Investigation.reindex
   end
 
@@ -65,7 +65,7 @@ RSpec.feature "Searching products", :with_stubbed_mailer, type: :feature do
     expect(page).not_to have_css("form dl.opss-dl-select dd") # sort filter drop down
 
     # Add more products and reload page
-    10.times { create(:allegation, creator: other_user_same_team, products: [create(:product)]) }
+    10.times { create(:notification, creator: other_user_same_team, products: [create(:product)]) }
 
     visit "/products"
 

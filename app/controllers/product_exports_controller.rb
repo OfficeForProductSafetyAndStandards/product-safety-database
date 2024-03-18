@@ -2,8 +2,6 @@ class ProductExportsController < ApplicationController
   include ProductsHelper
 
   def generate
-    authorize Product, :export?
-
     product_export = ProductExport.create!(params: product_export_params, user: current_user)
     ProductExportJob.perform_later(product_export)
     ahoy.track "Generated product export", { product_export_id: product_export.id }
@@ -11,8 +9,6 @@ class ProductExportsController < ApplicationController
   end
 
   def show
-    authorize Product, :export?
-
     @product_export = ProductExport.find_by!(id: params[:id], user: current_user)
   end
 end

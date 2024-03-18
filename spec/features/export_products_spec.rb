@@ -2,7 +2,7 @@ require "rails_helper"
 require "sidekiq/testing"
 
 RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
-  let(:user) { create :user, :all_data_exporter, :activated }
+  let(:user) { create :user, :activated }
   let(:email) { delivered_emails.last }
   let(:export) { ProductExport.find_by(user:) }
   let(:spreadsheet) do
@@ -11,7 +11,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     end
   end
 
-  let!(:investigation) { create(:allegation).decorate }
+  let!(:investigation) { create(:notification).decorate }
   let!(:product_1) { create(:product, name: "ABC", category: "Lifts", investigations: [investigation]) }
   let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser", investigations: [investigation]) }
   let!(:hazardous_product) { create(:product, name: "STU", category: "Waste", investigations: [investigation]) }

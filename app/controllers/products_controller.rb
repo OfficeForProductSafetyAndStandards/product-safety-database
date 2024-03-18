@@ -164,7 +164,10 @@ private
   end
 
   def count_to_display
-    filters_empty? ? Product.not_retired.count : @pagy.count
+    return @pagy.count unless filters_empty?
+    return Product.not_retired.count if current_user.is_opss?
+
+    Product.not_retired.joins(:investigations).where(investigations: { type: ["Investigation::Notification", nil] }).count
   end
 
   def filters_empty?
