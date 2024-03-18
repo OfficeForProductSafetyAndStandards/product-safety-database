@@ -6,8 +6,8 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
   let(:new_product_description) { "Sausage" }
   let(:creation_time) { 1.day.ago }
   let(:product) { create(:product, :with_antivirus_checked_image_upload, description: initial_product_description, owning_team: user.team) }
-  let(:first_investigation) { create(:allegation, creator: user, products: [product]) }
-  let(:second_investigation) { create(:allegation, creator: user) }
+  let(:first_investigation) { create(:notification, creator: user, products: [product]) }
+  let(:second_investigation) { create(:notification, creator: user) }
 
   before do
     sign_in(user)

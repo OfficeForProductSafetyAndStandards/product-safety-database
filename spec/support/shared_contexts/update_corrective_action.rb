@@ -7,7 +7,7 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_m
   let(:business_one)  { create(:business) }
   let(:business_two)  { create(:business) }
   let(:investigation) do
-    create(:allegation,
+    create(:notification,
            creator: user,
            products: [product_one, product_two])
   end

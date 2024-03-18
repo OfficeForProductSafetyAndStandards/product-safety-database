@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
-  let(:user)             { create :user, :activated, has_viewed_introduction: true }
+  let(:user)             { create :user, :opss_user, :activated, has_viewed_introduction: true }
   let!(:iphone)          { create(:product_iphone,          brand: "Apple", created_at: 1.day.ago, authenticity: "counterfeit") }
   let!(:iphone_3g)       { create(:product_iphone_3g,       brand: "Apple", created_at: 2.days.ago, authenticity: "genuine") }
   let!(:product_samsung) { create(:product_samsung,         brand: "Samsung", created_at: 2.days.ago, authenticity: "genuine") }
   let!(:washing_machine) { create(:product_washing_machine, brand: "Whirlpool", created_at: 3.days.ago, authenticity: "unsure") }
-  let!(:investigation)    { create(:allegation, products: [iphone], hazard_type: "Cuts") }
+  let!(:investigation)    { create(:notification, products: [iphone], hazard_type: "Cuts") }
 
   context "with less than 12 products" do
     before do

@@ -11,7 +11,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     end
   end
 
-  let!(:investigation) { create(:allegation).decorate }
+  let!(:investigation) { create(:notification).decorate }
   let!(:product_1) { create(:product, name: "ABC", category: "Lifts", investigations: [investigation]) }
   let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser", investigations: [investigation]) }
   let!(:hazardous_product) { create(:product, name: "STU", category: "Waste", investigations: [investigation]) }

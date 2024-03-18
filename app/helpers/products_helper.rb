@@ -24,9 +24,7 @@ module ProductsHelper
 
     query = query.where(country_of_origin: @search.countries&.compact_blank) if @search.countries && !@search.countries.compact_blank.empty?
 
-    notification_types = NOTIFICATION_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
-
-    query = query.where(investigations: { type: notification_types }) unless notification_types.empty?
+    query = query.where(investigations: { type: notification_types(user) }) unless notification_types(user).empty?
 
     case @search.case_owner
     when "me"
@@ -163,5 +161,11 @@ private
 
   def skip_selected_item_for_selected_option?(item, product_form)
     item[:divider] || item[:value].inquiry.missing? && product_form.id.nil?
+  end
+
+  def notification_types(user)
+    return ["Investigation::Notification", nil] unless user.is_opss?
+
+    NOTIFICATION_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
   end
 end

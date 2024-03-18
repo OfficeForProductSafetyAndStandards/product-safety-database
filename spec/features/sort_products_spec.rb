@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:organisation)          { create(:organisation) }
-  let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }
+  let(:user)                  { create(:user, :opss_user, :activated, organisation:, has_viewed_introduction: true) }
 
   # rubocop:disable RSpec/LetSetup
   let!(:fire_product_1)   { create(:product, name: "Hot product", category: "Lifts") }
