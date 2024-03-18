@@ -62,28 +62,28 @@ private
     sheet = package.workbook.add_worksheet name: "product_info"
     sheet.add_row %w[psd_ref
                      ID
-                     authenticity
+                     case_id
+                     case_type
+                     category
+                     subcategory
                      barcode
                      brand
-                     case_id
-                     category
-                     country_of_origin
-                     created_at
+                     authenticity
+                     name
+                     product_code
                      description
                      has_markings
                      markings
-                     name
-                     product_code
-                     subcategory
-                     updated_at
+                     country_of_origin
                      webpage
                      when_placed_on_market
-                     owning_team
                      affected_units_status
                      number_of_affected_units
                      batch_number
                      customs_code
-                     case_type]
+                     created_at
+                     updated_at
+                     owning_team]
 
     @product_info_sheet = sheet
   end
@@ -94,15 +94,19 @@ private
     sheet = package.workbook.add_worksheet name: "test_results"
     sheet.add_row %w[psd_ref
                      product_id
+                     case_id
+                     case_type
+                     product_name
+                     date_of_test
                      legislation
                      standards
-                     date_of_test
                      result
                      how_product_failed
                      further_details
-                     product_name
-                     case_id
-                     case_type]
+                     date_added
+                     funded_under_opss_sampling_protocol
+                     tso_sample_reference_number
+                     date_issued]
 
     @test_results_sheet = sheet
   end
@@ -113,15 +117,16 @@ private
     sheet = package.workbook.add_worksheet name: "risk_assessments"
     sheet.add_row %w[psd_ref
                      product_id
+                     case_id
+                     case_type
+                     product_name
                      date_of_assessment
                      risk_level
                      assessed_by
                      further_details
-                     product_name
-                     case_id
                      reported_reason
                      hazard_type
-                     case_type]
+                     date_added]
 
     @risk_assessments_sheet = sheet
   end
@@ -132,21 +137,22 @@ private
     sheet = package.workbook.add_worksheet name: "corrective_actions"
     sheet.add_row %w[psd_ref
                      product_id
+                     case_id
+                     case_type
+                     product_name
                      action_taken
                      date_of_action
                      legislation
                      business_responsible
-                     recall_information_online
                      mandatory_or_voluntary
                      how_long
                      geographic_scope
+                     recall_information_online
                      further_details
-                     product_name
-                     case_id
                      reported_reason
-                     hazard_type
                      risk_level
-                     case_type]
+                     hazard_type
+                     date_added]
 
     @corrective_actions_sheet = sheet
   end
@@ -156,28 +162,28 @@ private
     [
       product.psd_ref,
       product.id,
-      product.authenticity,
+      investigation.pretty_id,
+      investigation.case_type || "case",
+      product.category,
+      product.subcategory,
       product.barcode,
       product.brand,
-      investigation.pretty_id,
-      product.category,
-      format_country_code(code: product.country_of_origin),
-      product.created_at.to_formatted_s(:xmlschema),
+      product.authenticity,
+      product.name,
+      product.product_code,
       product.description,
       product.has_markings,
       product.markings,
-      product.name,
-      product.product_code,
-      product.subcategory,
-      product.updated_at.to_formatted_s(:xmlschema),
+      format_country_code(code: product.country_of_origin),
       product.webpage,
       product.when_placed_on_market,
-      product.owning_team.try(:name),
       investigation_product.affected_units_status,
       investigation_product.number_of_affected_units,
       investigation_product.batch_number,
       investigation_product.customs_code,
-      investigation.case_type || "case"
+      product.created_at.to_formatted_s(:xmlschema),
+      product.updated_at.to_formatted_s(:xmlschema),
+      product.owning_team.try(:name)
     ]
   end
 
@@ -186,15 +192,19 @@ private
     [
       product.psd_ref,
       product.id,
+      test_result.case_id,
+      investigation.case_type || "case",
+      product.name,
+      test_result.date_of_activity,
       test_result.legislation,
       test_result.standards_product_was_tested_against,
-      test_result.date_of_activity,
       test_result.result,
       test_result.failure_details,
       restricted_field(test_result.details),
-      product.name,
-      test_result.case_id,
-      investigation.case_type || "case"
+      test_result.created_at.to_formatted_s(:xmlschema),
+      test_result.tso_certificate_issue_date.present?,
+      test_result.tso_certificate_reference_number,
+      test_result.tso_certificate_issue_date&.to_formatted_s(:xmlschema),
     ]
   end
 
@@ -203,15 +213,16 @@ private
     [
       product.psd_ref,
       product.id,
+      risk_assessment.case_id,
+      investigation.case_type || "case",
+      product.name,
       risk_assessment.assessed_on.to_formatted_s(:xmlschema),
       risk_assessment.risk_level,
       risk_assessment.decorate.assessed_by,
       restricted_field(risk_assessment.details),
-      product.name,
-      risk_assessment.case_id,
       investigation.reported_reason,
       investigation.hazard_type,
-      investigation.case_type || "case"
+      risk_assessment.created_at.to_formatted_s(:xmlschema)
     ]
   end
 
@@ -220,21 +231,22 @@ private
     [
       product.psd_ref,
       product.id,
+      corrective_action.case_id,
+      investigation.case_type || "case",
+      product.name,
       corrective_action.decorate.page_title,
       corrective_action.date_of_activity,
       corrective_action.legislation,
       corrective_action.business.try(:legal_name),
-      corrective_action.online_recall_information,
       corrective_action.measure_type,
       corrective_action.duration,
       corrective_action.geographic_scopes,
+      corrective_action.online_recall_information,
       restricted_field(corrective_action.details),
-      product.name,
-      corrective_action.case_id,
       investigation.reported_reason,
-      investigation.hazard_type,
       investigation.risk_level_description,
-      investigation.case_type || "case"
+      investigation.hazard_type,
+      corrective_action.created_at.to_formatted_s(:xmlschema)
     ]
   end
 
