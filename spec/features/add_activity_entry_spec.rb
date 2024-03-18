@@ -71,7 +71,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_antivirus, :with_stu
   def add_comment
     expect(page).to have_css("h1", text: "Add comment")
 
-    fill_in "body", with: Faker::Lorem.sentence
+    fill_in "comment_form[body]", with: Faker::Lorem.sentence
     click_button "Continue"
   end
 end
