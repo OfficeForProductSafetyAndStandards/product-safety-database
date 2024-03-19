@@ -37,8 +37,8 @@ RSpec.configure do |config|
             properties: {
               user_title: { type: :string },
               complainant_reference: { type: :string, nullable: true },
-              reported_reason: { '$ref': "#/components/schemas/notification_reported_reason" , nullable: true },
-              hazard_type: { '$ref': "#/components/schemas/notification_hazard_type" , nullable: true },
+              reported_reason: { '$ref': "#/components/schemas/notification_reported_reason", nullable: true },
+              hazard_type: { '$ref': "#/components/schemas/notification_hazard_type", nullable: true },
               hazard_description: { type: :string, nullable: true },
               non_compliant_reason: { type: :string, nullable: true }
             }
