@@ -37,8 +37,8 @@ RSpec.configure do |config|
             properties: {
               user_title: { type: :string },
               complainant_reference: { type: :string, nullable: true },
-              reported_reason: { type: :string, nullable: true },
-              hazard_type: { type: :string, nullable: true },
+              reported_reason: { '$ref': "#/components/schemas/notification_reported_reason" , nullable: true },
+              hazard_type: { '$ref': "#/components/schemas/notification_hazard_type" , nullable: true },
               hazard_description: { type: :string, nullable: true },
               non_compliant_reason: { type: :string, nullable: true }
             }
@@ -88,6 +88,16 @@ RSpec.configure do |config|
             type: :array,
             items: { type: :string },
             enum: Product.has_markings.keys
+          },
+          notification_reported_reason: {
+            title: "Notification (reported_reason)",
+            type: :string,
+            enum: Investigation.reported_reasons.keys
+          },
+          notification_hazard_type: {
+            title: "Notification (hazard_type)",
+            type: :string,
+            enum: Rails.application.config.hazard_constants["hazard_type"]
           },
           notification_object: {
             title: "Notification",
