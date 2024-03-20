@@ -58,7 +58,7 @@ RSpec.configure do |config|
               authenticity: { '$ref': "#/components/schemas/product_authenticity" },
               when_placed_on_market: { '$ref': "#/components/schemas/product_when_placed_on_market" },
               has_markings: { '$ref': "#/components/schemas/product_has_markings" },
-              markings: { type: :array, items: { '$ref': "#/components/schemas/product_has_markings" } },
+              markings: { type: :array, items: { '$ref': "#/components/schemas/product_markings" } },
               webpage: { type: :string, nullable: true },
             }
           },
@@ -84,7 +84,7 @@ RSpec.configure do |config|
             enum: Product::MARKINGS
           },
           product_has_markings: {
-            title: "Product (markings)",
+            title: "Product (has_markings)",
             type: :array,
             items: { type: :string },
             enum: Product.has_markings.keys
