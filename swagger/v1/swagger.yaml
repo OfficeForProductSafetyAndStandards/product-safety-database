@@ -26,10 +26,10 @@ components:
           type: string
           nullable: true
         reported_reason:
-          type: string
+          "$ref": "#/components/schemas/notification_reported_reason"
           nullable: true
         hazard_type:
-          type: string
+          "$ref": "#/components/schemas/notification_hazard_type"
           nullable: true
         hazard_description:
           type: string
@@ -144,6 +144,39 @@ components:
       - markings_yes
       - markings_no
       - markings_unknown
+    notification_reported_reason:
+      title: Notification (reported_reason)
+      type: string
+      enum:
+      - unsafe
+      - non_compliant
+      - unsafe_and_non_compliant
+      - safe_and_compliant
+    notification_hazard_type:
+      title: Notification (hazard_type)
+      type: string
+      enum:
+      - Asphyxiation
+      - Burns
+      - Chemical
+      - Choking
+      - Cuts
+      - Damage to hearing
+      - Damage to sight
+      - Drowning
+      - Electric shock
+      - Electromagnetic disturbance
+      - Energy consumption
+      - Entrapment
+      - Environment
+      - Fire
+      - Health risk
+      - Incorrect measurement
+      - Injuries
+      - Microbiological
+      - Security
+      - Strangulation
+      - Suffocation
     notification_object:
       title: Notification
       type: object
