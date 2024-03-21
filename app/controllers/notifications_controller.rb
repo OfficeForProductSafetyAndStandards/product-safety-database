@@ -146,6 +146,6 @@ private
   end
 
   def set_notification
-    @notification = Investigation::Notification.includes(:creator_user, :creator_team, :owner_user, :owner_team).find_by!(pretty_id: params[:pretty_id])
+    @notification = Investigation::Notification.includes(:creator_user, :creator_team, :owner_user, :owner_team, :comments).find_by!(pretty_id: params[:pretty_id])
   end
 end
