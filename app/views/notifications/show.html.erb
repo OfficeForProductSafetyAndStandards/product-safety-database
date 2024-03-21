@@ -263,5 +263,18 @@
       %>
     <% end %>
     <%= govuk_button_link_to "Add corrective action", new_investigation_corrective_action_path(@notification), secondary: true %>
+    <% if @notification.comments.present? %>
+      <h2 class="govuk-heading-m">Comments</h2>
+      <div class="timeline opss-timeline">
+        <ul class="govuk-list">
+        <% @notification.comments.each do |comment| %>
+          <li>
+            <p class="govuk-body-s opss-secondary-text">Comment added by <%= comment.added_by_user&.name %>, <%= comment.created_at.to_formatted_s(:govuk) %></p>
+            <p class="govuk-body"><%= comment.metadata["comment_text"] %></p>
+          </li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
   </div>
 </div>

@@ -29,6 +29,12 @@ class Investigation < ApplicationRecord
             inverse_of: :investigation,
             dependent: :destroy
 
+    has_many :comments,
+             class_name: "AuditActivity::Investigation::AddComment",
+             foreign_key: :investigation_id,
+             inverse_of: :investigation,
+             dependent: :destroy
+
     aasm column: :state, whiny_transitions: false do
       state :draft, initial: true
       state :submitted
