@@ -80,7 +80,7 @@
           row.with_value(text: @notification.complainant_reference.presence || "Not provided")
           row.with_action(text: "Change", href: edit_investigation_reference_numbers_path(@notification), visually_hidden_text: "internal reference number") if show_edit_link?
         end
-        # TODO(ruben): implement change link that leads to a single page for all investigation products
+        # TODO: implement change link that leads to a single page for all investigation products
         summary_list.with_row do |row|
           row.with_key(text: "Number of affected products")
           row.with_value(text: number_of_affected_units(@notification.investigation_products).html_safe)
@@ -263,9 +263,9 @@
       %>
     <% end %>
     <%= govuk_button_link_to "Add corrective action", new_investigation_corrective_action_path(@notification), secondary: true %>
-    <% if @notification.comments.present? %>
-      <h2 class="govuk-heading-m">Comments</h2>
-      <div class="timeline opss-timeline">
+    <h2 class="govuk-heading-m">Comments</h2>
+    <div class="timeline opss-timeline">
+      <% if @notification.comments.present? %>
         <ul class="govuk-list">
         <% @notification.comments.each do |comment| %>
           <li>
@@ -274,7 +274,8 @@
           </li>
         <% end %>
         </ul>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
+    <%= govuk_button_link_to "Add comment", new_investigation_activity_comment_path(@notification), secondary: true %>
   </div>
 </div>
