@@ -23,7 +23,11 @@ class CommentsController < Investigations::BaseController
       })
     )
 
-    redirect_to investigation_activity_path(@investigation), flash: { success: "The comment was successfully added" }
+    if current_user.can_use_notification_task_list?
+      redirect_to notification_path(@investigation)
+    else
+      redirect_to investigation_activity_path(@investigation), flash: { success: "The comment was successfully added" }
+    end
   end
 
 private
