@@ -105,7 +105,7 @@
                     end
 
                     details = <<~DETAILS.strip
-                      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><a href="#{product_path(record)}" class="govuk-link" target="_blank" rel="noreferrer noopener">#{record.name_with_brand}</a></p>
+                      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">#{record.name_with_brand}</p>
                       <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{record.category}</p>
                       <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Sub-category:</strong> #{record.subcategory}</p>
                       <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>PSD reference:</strong> #{record.psd_ref}</p>
