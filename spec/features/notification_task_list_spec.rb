@@ -317,7 +317,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     select "Consumer Protection Act 1987", from: "Under which legislation?"
 
     within_fieldset "Which business is responsible?" do
-      # TODO(ruben): add test here once business selection is possible
+      # TODO: add test here once business selection is possible
     end
 
     within_fieldset "Is the corrective action mandatory?" do
