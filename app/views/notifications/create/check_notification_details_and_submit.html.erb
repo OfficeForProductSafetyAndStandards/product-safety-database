@@ -105,7 +105,7 @@
     <% end %>
     <h2 class="govuk-heading-m">Businesses and their role in the supply chain</h2>
     <% @notification.investigation_businesses.decorate.each do |investigation_business| %>
-      <%# TODO(ruben): add change links once pages are ready %>
+      <%# TODO: add change links once pages are ready %>
       <%=
         govuk_summary_list(
           card: { title: investigation_business.business.trading_name },
