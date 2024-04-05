@@ -166,12 +166,12 @@
     <%= govuk_button_link_to "Add business", new_investigation_business_types_path(@notification), secondary: true %>
     <h2 class="govuk-heading-m">Evidence</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
-      <% risk_assessment_id = Product.find(investigation_product.product_id).risk_assessments.find_by(investigation_id: investigation_product.id) %>
+      <% risk_assessment = Product.find(investigation_product.product_id).risk_assessments %>
       <% risk_text = "" %>
-      <% if risk_assessment_id.nil? %>
+      <% if risk_assessment.nil? %>
         <% risk_text = "Not provided" %>
       <% else %>
-        <% risk_text = formatted_risk_assessments_hyperlink(investigation_product.prism_risk_assessments, investigation_product.risk_assessments, @notification.pretty_id, risk_assessment_id.id || 0).html_safe.presence %>
+        <% risk_text = formatted_risk_assessments_hyperlink(investigation_product.prism_risk_assessments, investigation_product.risk_assessments, @notification.pretty_id, risk_assessment).html_safe.presence %>
       <% end %>
       <%=
         govuk_summary_list(
