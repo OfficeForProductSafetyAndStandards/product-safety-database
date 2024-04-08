@@ -121,16 +121,16 @@ module Notifications
       test_results.map { |test_result| link_to "#{test_result.document.blob.filename} (opens in new tab)", test_result.document.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if test_result.document.blob.present? }.join("<br>")
     end
 
-    def formatted_risk_assessments(prism_risk_assessments, risk_assessments)
-      (prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact.join("<br>")
-    end
-
-    def formatted_risk_assessments_hyperlink(prism_risk_assessments, risk_assessments, notification_id, risk_assessment_list)
-      hyperlinks = ""
-      risk_assessment_list.each_with_index do |risk, index|
-        hyperlinks += "<div><a class='govuk-link' href='/cases/#{notification_id}/risk-assessments/#{risk.id}'>#{(prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact[index]}<br></a></div>"
+    def formatted_risk_assessments(prism_risk_assessments, risk_assessments, notification_id, risk_assessment_list)
+      if notification_id == nil and risk_assessment_list == nil
+        (prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact.join("<br>")
+      else
+        hyperlinks = ""
+        risk_assessment_list.each_with_index do |risk, index|
+          hyperlinks += "<div><a class='govuk-link' href='/cases/#{notification_id}/risk-assessments/#{risk.id}'>#{(prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact[index]}<br></a></div>"
+        end
+        hyperlinks
       end
-      hyperlinks
     end
 
     def formatted_uploads(uploads)
