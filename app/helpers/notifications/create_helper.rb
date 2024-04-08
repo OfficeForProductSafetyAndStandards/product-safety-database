@@ -122,7 +122,7 @@ module Notifications
     end
 
     def formatted_risk_assessments(prism_risk_assessments, risk_assessments, notification_id, risk_assessment_list)
-      if notification_id == nil and risk_assessment_list == nil
+      if notification_id.nil?  && risk_assessment_list.nil?
         (prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact.join("<br>")
       else
         hyperlinks = ""
