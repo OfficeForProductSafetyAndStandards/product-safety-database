@@ -24,7 +24,7 @@
               <%= ip_f.govuk_radio_button :affected_units_status, "exact", label: { text: "Exact number" }, link_errors: true do %>
                 <%= ip_f.govuk_number_field :exact_units, label: { text: "How many units are affected?" } %>
               <% end %>
-              <%= ip_f.govuk_radio_button :affected_units_status, "approx", label: { text: "Approxmate number" } do %>
+              <%= ip_f.govuk_radio_button :affected_units_status, "approx", label: { text: "Approximate number" } do %>
                 <%= ip_f.govuk_number_field :approx_units, label: { text: "How many units are affected?" } %>
               <% end %>
               <%= ip_f.govuk_radio_button :affected_units_status, "unknown", label: { text: "Unknown" } %>
