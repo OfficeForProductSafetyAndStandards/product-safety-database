@@ -12,7 +12,7 @@
     "esbuild": "^0.20.2",
     "govuk-frontend": "5.3.0",
     "postcss": "^8.4.38",
-    "sass": "^1.72.0",
+    "sass": "^1.74.1",
     "standard": "^17.1.0",
     "stimulus-checkbox-select-all": "^5.3.0",
     "stimulus-clipboard": "^4.0.1",
