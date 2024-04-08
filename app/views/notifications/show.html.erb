@@ -153,7 +153,7 @@
             },
             {
               key: { text: "Address" },
-              value: { text: formatted_business_address(investigation_business.business.locations.find_by(name: "Registered office address")).html_safe.presence || "Not provided" }
+              value: { text: "Not provided" || "Not provided" }
             },
             {
               key: { text: "Contact details" },
@@ -167,11 +167,12 @@
     <h2 class="govuk-heading-m">Evidence</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
       <% risk_assessment = Product.find(investigation_product.product_id).risk_assessments %>
+      <%= risk_assessment.first.id %>
       <% risk_text = "" %>
       <% if risk_assessment.nil? %>
         <% risk_text = "Not provided" %>
       <% else %>
-        <% risk_text = formatted_risk_assessments_hyperlink(investigation_product.prism_risk_assessments, investigation_product.risk_assessments, @notification.pretty_id, risk_assessment).html_safe.presence %>
+        <% risk_text = formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id, risk_assessment).html_safe.presence %>
       <% end %>
       <%=
         govuk_summary_list(
