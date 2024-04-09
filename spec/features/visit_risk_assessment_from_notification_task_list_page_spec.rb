@@ -283,5 +283,4 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_link "High risk: #{existing_product.brand} #{existing_product.name}"
     expect(page).to have_current_path(/\/cases\/\d{4}-\d{4}\/risk-assessments\/\d/)
   end
-
 end
