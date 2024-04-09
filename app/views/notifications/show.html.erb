@@ -166,7 +166,7 @@
     <%= govuk_button_link_to "Add business", new_investigation_business_types_path(@notification), secondary: true %>
     <h2 class="govuk-heading-m">Evidence</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
-      <% risk_assessment = Product.find(investigation_product.product_id).risk_assessments %>
+      <% risk_assessment = Investigation.find_by(pretty_id: @notification.pretty_id).risk_assessments %>
       <%= risk_assessment.first.id %>
       <% risk_text = "" %>
       <% if risk_assessment.nil? %>
