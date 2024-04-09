@@ -166,14 +166,6 @@
     <%= govuk_button_link_to "Add business", new_investigation_business_types_path(@notification), secondary: true %>
     <h2 class="govuk-heading-m">Evidence</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
-      <% risk_assessment = Investigation.find_by(pretty_id: @notification.pretty_id).risk_assessments %>
-      <%= risk_assessment.first.id %>
-      <% risk_text = "" %>
-      <% if risk_assessment.nil? %>
-        <% risk_text = "Not provided" %>
-      <% else %>
-        <% risk_text = formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id, risk_assessment).html_safe.presence %>
-      <% end %>
       <%=
         govuk_summary_list(
           card: { title: investigation_product.product.name_with_brand },
@@ -191,7 +183,7 @@
             },
             {
               key: { text: "Risk assessments" },
-              value: { text: risk_text.html_safe.presence,
+              value: { text: formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id).html_safe.presence,
               },
               actions: show_edit_link? ? [
                 {
