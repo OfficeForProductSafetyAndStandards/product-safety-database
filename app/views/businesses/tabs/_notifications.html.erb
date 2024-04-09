@@ -1,5 +1,5 @@
 <h2 class="govuk-heading-m">Notifications</h2>
-
+<div style="text-align: left">
 <% if @business.investigation_businesses.any? %>
   <% @business.investigation_businesses.each do |investigation_business| %>
     <%=
@@ -8,9 +8,9 @@
 
         summary_list.with_row do |row|
           row.with_key(text: "Notification ID")
-          row.with_value(text: investigation.pretty_id)
-        end
+          row.with_action(text: investigation.pretty_id, href: formatted_notification_pretty_id(investigation.pretty_id))
 
+        end
         summary_list.with_row do |row|
           row.with_key(text: "Title")
           row.with_value(text: investigation.title)
@@ -36,3 +36,4 @@
 <% else %>
   <p class="govuk-!-margin-top-6">No notifications</p>
 <% end %>
+</div>
