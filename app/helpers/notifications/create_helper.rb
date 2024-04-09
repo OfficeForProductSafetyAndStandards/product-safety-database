@@ -122,7 +122,6 @@ module Notifications
     end
 
     def formatted_risk_assessments(prism_risk_assessments, risk_assessments, notification_id)
-
       if notification_id.nil?
         (prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact.join("<br>")
       else
@@ -130,11 +129,11 @@ module Notifications
         if risk_assessment_list.nil?
           "Not Provided"
         else
-        hyperlinks = ""
-        risk_assessment_list.each_with_index do |risk, index|
-          hyperlinks += "<div><a class='govuk-link' href='/cases/#{notification_id}/risk-assessments/#{risk.id}'>#{(prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact[index]}<br></a></div>"
-        end
-        hyperlinks
+          hyperlinks = ""
+          risk_assessment_list.each_with_index do |risk, index|
+            hyperlinks += "<div><a class='govuk-link' href='/cases/#{notification_id}/risk-assessments/#{risk.id}'>#{(prism_risk_assessments.decorate + risk_assessments.decorate).map(&:supporting_information_full_title).compact[index]}<br></a></div>"
+          end
+          hyperlinks
         end
       end
     end
