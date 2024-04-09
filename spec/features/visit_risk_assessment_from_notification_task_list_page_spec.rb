@@ -12,7 +12,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
   before do
     sign_in(user)
 
-    @current_product = existing_product
+    existing_product
   end
 
 
@@ -281,7 +281,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_link "Edit submitted notification"
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}/)
     #the risk link is displayed as risk level: (brand of product) + (product name)
-    click_link "High risk: #{@current_product.brand} #{@current_product.name}"
+    click_link "High risk: #{existing_product.brand} #{existing_product.name}"
     expect(page).to have_current_path(/\/cases\/\d{4}-\d{4}\/risk-assessments\/\d/)
   end
 
