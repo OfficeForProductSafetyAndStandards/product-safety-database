@@ -15,7 +15,6 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     existing_product
   end
 
-
   scenario "Creating a notification with the normal flow" do
     visit "/notifications/create"
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
@@ -280,7 +279,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     expect(page).to have_content("Notification submitted")
     click_link "Edit submitted notification"
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}/)
-    #the risk link is displayed as risk level: (brand of product) + (product name)
+    # the risk link is displayed as risk level: (brand of product) + (product name)
     click_link "High risk: #{existing_product.brand} #{existing_product.name}"
     expect(page).to have_current_path(/\/cases\/\d{4}-\d{4}\/risk-assessments\/\d/)
   end
