@@ -8,7 +8,7 @@
 
         summary_list.with_row do |row|
           row.with_key(text: "Notification ID")
-          row.with_action(text: investigation.pretty_id, href: formatted_notification_pretty_id(investigation.pretty_id))
+          row.with_value(text: formatted_notification_pretty_id(investigation.pretty_id).html_safe.presence)
 
         end
         summary_list.with_row do |row|
