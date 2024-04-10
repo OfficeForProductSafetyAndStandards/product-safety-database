@@ -277,7 +277,7 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
     click_button "Submit notification"
 
     expect(page).to have_content("Notification submitted")
-    visit '/businesses/your-businesses'
+    visit "/businesses/your-businesses"
     click_link "Trading name"
     expect(page).to have_current_path(/\/businesses\/\d/)
     click_link "Notifications (#{existing_product.investigations.size})"
