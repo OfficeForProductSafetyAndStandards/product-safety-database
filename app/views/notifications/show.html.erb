@@ -183,7 +183,8 @@
             },
             {
               key: { text: "Risk assessments" },
-              value: { text: formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments).html_safe.presence || "Not provided" },
+              value: { text: formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id).html_safe.presence,
+              },
               actions: show_edit_link? ? [
                 {
                   text: "Change",
