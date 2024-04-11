@@ -151,7 +151,7 @@ module Notifications
     end
 
     def formatted_product(product_id)
-      link_to("psd-#{product_id.to_s}", product_path(product_id))
+      link_to("psd-#{product_id}", product_path(product_id))
     end
 
     def formatted_uploads(uploads)
