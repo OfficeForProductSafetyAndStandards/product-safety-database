@@ -147,11 +147,11 @@ module Notifications
     end
 
     def formatted_notification_pretty_id(notification_pretty_id)
-      "<a class=\"govuk-link\" href=\"/notifications/#{notification_pretty_id}\">#{notification_pretty_id}</a>"
+      link_to(notification_pretty_id, notification_path(notification_pretty_id))
     end
 
     def formatted_product(product_id)
-      "<a class=\"govuk-link\" href=\"/products/#{product_id}\">psd-#{product_id}</a>"
+      link_to("psd-#{product_id.to_s}", product_path(product_id))
     end
 
     def formatted_uploads(uploads)
