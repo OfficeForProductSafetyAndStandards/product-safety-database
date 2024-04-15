@@ -17,3 +17,4 @@ RSpec.describe Notifications::CreateHelper, :with_stubbed_mailer do
     end
   end
 end
+# rubocop:enable RSpec/FilePath
