@@ -5,6 +5,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
   include ActionView::Helpers::UrlHelper
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user]) }
   let(:existing_product) { create(:product) }
+  let(:notification) { create(:notification, creator: user) }
+  let(:product) { create(:product) }
   let(:new_product_attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
@@ -285,8 +287,8 @@ RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_m
 
       expect(page).to have_content("Notification submitted")
 
-      expect(notification.formatted_notification_pretty_id(existing_product.investigations.last.pretty_id)).to eq "<a href=\"/notifications/#{existing_product.investigations.last.pretty_id}\">#{existing_product.investigations.last.pretty_id}</a>"
-      expect(notification.formatted_product(existing_product.id)).to eq "<a href=\"/products/#{existing_product.id}\">psd-#{existing_product.id}</a>"
+      expect(notification.formatted_notification_pretty_id(existing_product.investigations.last.pretty_id)).to eq "<a class=\"govuk-link\" href=\"/notifications/#{existing_product.investigations.last.pretty_id}\">#{existing_product.investigations.last.pretty_id}</a>"
+      expect(notification.formatted_product(existing_product.id)).to eq "<a class=\"govuk-link\" href=\"/products/#{existing_product.id}\">psd-#{existing_product.id}</a>"
     end
   end
 end
