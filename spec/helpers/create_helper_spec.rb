@@ -1,5 +1,6 @@
 require "rails_helper"
 
+# rubocop:disable RSpec/FilePath
 RSpec.describe Notifications::CreateHelper, :with_stubbed_mailer do
   describe "notification_link" do
     let(:existing_product) { create(:product) }
