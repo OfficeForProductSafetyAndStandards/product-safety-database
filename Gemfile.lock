@@ -780,7 +780,7 @@ DEPENDENCIES
   redis-rails (~> 5.0)
   report_portal!
   rollups
-  roo (~> 2.9)
+  roo (~> 2.10)
   rspec
   rspec-mocks (~> 3.12)
   rspec-rails

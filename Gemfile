@@ -103,7 +103,7 @@ group :test do
   gem "factory_bot_rails", "~> 6.4"
   gem "launchy", "~> 3.0"
   gem "rails-controller-testing", "~> 1.0"
-  gem "roo", "~> 2.9"
+  gem "roo", "~> 2.10"
   gem "rspec"
   gem "rspec-mocks", "~> 3.12"
   gem "rubocop", "~> 1.55"
