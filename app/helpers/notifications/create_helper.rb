@@ -136,6 +136,7 @@ module Notifications
           hyperlinks
         end
       end
+
     end
 
     def formatted_notification_pretty_id(notification_pretty_id)
