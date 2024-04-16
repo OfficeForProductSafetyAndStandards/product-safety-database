@@ -138,6 +138,14 @@ module Notifications
       end
     end
 
+    def formatted_notification_pretty_id(notification_pretty_id)
+      link_to(notification_pretty_id, notification_path(notification_pretty_id), class: "govuk-link")
+    end
+
+    def formatted_product(product_id)
+      link_to("psd-#{product_id}", product_path(product_id), class: "govuk-link")
+    end
+
     def formatted_uploads(uploads)
       uploads.map { |upload| link_to "#{upload.blob.filename} (opens in new tab)", upload.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" if upload.blob.present? }.join("<br>")
     end
