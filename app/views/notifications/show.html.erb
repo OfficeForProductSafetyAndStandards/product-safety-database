@@ -83,7 +83,7 @@
         # TODO: implement change link that leads to a single page for all investigation products
         summary_list.with_row do |row|
           row.with_key(text: "Number of affected products")
-          row.with_value(text: number_of_affected_units(@notification.investigation_products).html_safe)
+          row.with_value(text: number_of_affected_units(@notification.investigation_products, is_link: true).html_safe)
         end
       end
     %>

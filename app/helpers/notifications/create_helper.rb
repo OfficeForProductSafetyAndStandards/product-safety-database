@@ -65,7 +65,7 @@ module Notifications
         end
     end
 
-    def number_of_affected_units(investigation_products)
+    def number_of_affected_units(investigation_products, is_link: false)
       investigation_products.map { |investigation_product|
         units = case investigation_product.affected_units_status
                 when "exact"
@@ -79,8 +79,20 @@ module Notifications
                 else
                   "Not provided"
                 end
-        "#{investigation_product.product.decorate.name_with_brand}: #{units}"
+        if is_link
+          investigation_product_units_with_link(investigation_product, units)
+        else
+          investigation_product_units(investigation_product, units)
+        end
       }.join("<br>")
+    end
+
+    def investigation_product_units_with_link(investigation_product, units)
+      "#{link_to investigation_product.product.decorate.name_with_brand, product_path(investigation_product.product_id) }  #{units}"
+    end
+
+    def investigation_product_units(investigation_product, units)
+      "#{investigation_product.product.decorate.name_with_brand}: #{units}"
     end
 
     def investigation_products_options
@@ -110,7 +122,17 @@ module Notifications
     end
 
     def formatted_business_address(location)
-      [location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].map(&:presence).compact.join("<br>")
+      address_parts = [
+        location&.address_line_1,
+        location&.address_line_2,
+        location&.city,
+        location&.county,
+        location&.postal_code,
+        location&.country.nil? ? nil : country_from_code(location.country)
+      ]
+
+      formatted_address = address_parts.compact.join("<br>")
+      formatted_address.presence || "Address not available"
     end
 
     def formatted_business_contact(contact)
