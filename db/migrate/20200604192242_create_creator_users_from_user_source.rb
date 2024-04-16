@@ -5,7 +5,7 @@ class CreateCreatorUsersFromUserSource < ActiveRecord::Migration[5.2]
       # This was an irreversable migration for one time use but is kept for now to ensure it can be reversed
       if defined?(UserSource)
         UserSource.transaction do
-          UserSource.where(sourceable_type: "Investigation").each do |us|
+          UserSource.where(sourceable_type: "Investigation").find_each do |us|
             user = us.user
             next unless user
 

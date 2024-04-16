@@ -1,6 +1,6 @@
 class FixPhoneCallActivityMetadata < ActiveRecord::Migration[6.1]
   def up
-    AuditActivity::Correspondence::AddPhoneCall.includes(:correspondence).all.each do |activity|
+    AuditActivity::Correspondence::AddPhoneCall.includes(:correspondence).all.find_each do |activity|
       new_metadata = AuditActivity::Correspondence::AddPhoneCall.build_metadata(activity.correspondence)
       activity.metadata = new_metadata
       activity.save!

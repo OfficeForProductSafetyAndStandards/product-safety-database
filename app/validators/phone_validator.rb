@@ -7,7 +7,7 @@ class PhoneValidator < ActiveModel::EachValidator
     digits = value.delete("^0-9")
 
     if !digits.start_with?(*ACCEPTED_PREFIXES) || normalised_number(digits).length != ACCEPTED_LENGTH
-      record.errors.add(attribute, :invalid, message: (options[:message] || DEFAULT_ERROR))
+      record.errors.add(attribute, :invalid, message: options[:message] || DEFAULT_ERROR)
     end
   end
 

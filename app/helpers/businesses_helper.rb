@@ -27,7 +27,7 @@ module BusinessesHelper
 
     selected_countries = []
 
-    Country.all.each do |country|
+    Country.all.find_each do |country|
       selected_countries << country[1] if @search.send(country[0].parameterize.underscore)
     end
 

@@ -40,7 +40,7 @@ private
         return redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") }
       end
 
-      return redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") } unless InvestigationPolicy.new(current_user, related_investigation).view_non_protected_details?
+      redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") } unless InvestigationPolicy.new(current_user, related_investigation).view_non_protected_details?
     end
   end
 

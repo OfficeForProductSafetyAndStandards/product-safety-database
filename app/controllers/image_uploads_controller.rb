@@ -114,7 +114,8 @@ private
     end
 
     return Product.find(params[:product_id]) if params[:product_id]
-    return Business.find(params[:business_id]) if params[:business_id]
+
+    Business.find(params[:business_id]) if params[:business_id]
   end
 
   def image_upload_params

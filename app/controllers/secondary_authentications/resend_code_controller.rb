@@ -10,7 +10,7 @@ module SecondaryAuthentications
 
     def new
       @user = find_user
-      return render("errors/forbidden", status: :forbidden) unless @user
+      render("errors/forbidden", status: :forbidden) unless @user
     end
 
     def create

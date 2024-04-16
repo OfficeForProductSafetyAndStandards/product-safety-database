@@ -1,6 +1,6 @@
 class FixTestResultAuditActivityMetadata < ActiveRecord::Migration[6.1]
   def up
-    AuditActivity::Test::Result.all.each do |activity|
+    AuditActivity::Test::Result.all.find_each do |activity|
       test_result = resolve_test_result(activity)
       new_metadata = AuditActivity::Test::Result.build_metadata(test_result)
 
@@ -10,7 +10,7 @@ class FixTestResultAuditActivityMetadata < ActiveRecord::Migration[6.1]
   end
 
   def down
-    AuditActivity::Test::Result.all.each do |activity|
+    AuditActivity::Test::Result.all.find_each do |activity|
       activity.metadata = { test_result_id: activity.metadata["test_result"]["id"] }
       activity.save!
     end

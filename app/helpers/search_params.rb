@@ -58,7 +58,7 @@ class SearchParams
   Business::BUSINESS_TYPES.each do |business_type|
     attribute business_type.parameterize.underscore.to_sym, :boolean
   end
-  Country.all.each do |country|
+  Country.all.find_each do |country|
     attribute country[0].parameterize.underscore.to_sym, :boolean
   end
   attribute :countries, array: true, default: []

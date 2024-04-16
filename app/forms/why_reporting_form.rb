@@ -24,8 +24,8 @@ class WhyReportingForm
   end
 
   def self.from(investigation)
-    new(reported_reason_unsafe: (investigation.unsafe? || investigation.unsafe_and_non_compliant?),
-        reported_reason_non_compliant: (investigation.non_compliant? || investigation.unsafe_and_non_compliant?),
+    new(reported_reason_unsafe: investigation.unsafe? || investigation.unsafe_and_non_compliant?,
+        reported_reason_non_compliant: investigation.non_compliant? || investigation.unsafe_and_non_compliant?,
         reported_reason_safe_and_compliant: investigation.safe_and_compliant?,
         hazard_description: investigation.hazard_description,
         hazard_type: investigation.hazard_type,
@@ -36,7 +36,8 @@ class WhyReportingForm
     return :unsafe_and_non_compliant if reported_reason_unsafe && reported_reason_non_compliant
     return :unsafe                   if reported_reason_unsafe
     return :non_compliant            if reported_reason_non_compliant
-    return :safe_and_compliant       if reported_reason_safe_and_compliant
+
+    :safe_and_compliant if reported_reason_safe_and_compliant
   end
 
 private

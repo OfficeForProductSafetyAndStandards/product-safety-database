@@ -8,7 +8,7 @@ module ActivityAttachable
 
     def with_attachments(names)
       @attachment_names = names
-      @attachment_names.each do |key, _|
+      @attachment_names.each_key do |key|
         class_eval do
           has_one_attached key
         end

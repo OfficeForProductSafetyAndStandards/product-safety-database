@@ -31,14 +31,14 @@ module Prism
     end
 
     def confirmation
-      return redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
+      redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
     end
 
     def view_submitted_assessment
       @prism_risk_assessment = Prism::RiskAssessment.includes(:harm_scenarios).find_by!(id: params[:risk_assessment_id])
       @harm_scenarios = @prism_risk_assessment.harm_scenarios
 
-      return redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
+      redirect_to risk_assessment_tasks_path(@prism_risk_assessment) unless @prism_risk_assessment.submitted?
     end
 
     def download_assessment_pdf

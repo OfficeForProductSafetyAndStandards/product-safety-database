@@ -44,7 +44,7 @@ private
 
   def send_invite
     if !user.invitation_token || (user.invited_at < 1.hour.ago)
-      user.update! invitation_token: (user.invitation_token || SecureRandom.hex(15)), invited_at: Time.zone.now
+      user.update! invitation_token: user.invitation_token || SecureRandom.hex(15), invited_at: Time.zone.now
     end
 
     Rails.logger.info "Invitation sent to user: #{user.id} by #{inviting_user&.id}"

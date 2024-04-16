@@ -101,7 +101,8 @@ private
   def calculate_reported_reason(reason_for_concern_params)
     return "unsafe_and_non_compliant" if reason_for_concern_params["reported_reason_unsafe"] && reason_for_concern_params["reported_reason_non_compliant"]
     return "unsafe"                   if reason_for_concern_params["reported_reason_unsafe"]
-    return "non_compliant"            if reason_for_concern_params["reported_reason_non_compliant"]
+
+    "non_compliant" if reason_for_concern_params["reported_reason_non_compliant"]
   end
 
   def clear_session

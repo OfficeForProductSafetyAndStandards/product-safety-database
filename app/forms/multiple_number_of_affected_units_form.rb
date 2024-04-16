@@ -18,7 +18,7 @@ class MultipleNumberOfAffectedUnitsForm
   end
 
   def number_of_affected_units_forms_attributes=(attributes)
-    attributes.each do |_i, number_of_affected_units_forms_params|
+    attributes.each_value do |number_of_affected_units_forms_params|
       @number_of_affected_units_forms.push(NumberOfAffectedUnitsForm.new(number_of_affected_units_forms_params))
     end
   end
