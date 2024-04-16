@@ -408,7 +408,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (3.0.9.1)
+    rack (3.0.10)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -772,7 +772,7 @@ DEPENDENCIES
   pry-doc (~> 1.4)
   puma (~> 6.4)
   pundit (~> 2.3)
-  rack (~> 3.0.9)
+  rack (~> 3.0.10)
   rails (~> 7.1.3)
   rails-controller-testing (~> 1.0)
   rails-erd
