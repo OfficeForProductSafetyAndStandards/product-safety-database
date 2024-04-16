@@ -79,7 +79,7 @@ group :development, :test do
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 3.1"
   gem "faker", "~> 3.3"
-  gem "parallel_tests", "~> 4.3.0"
+  gem "parallel_tests", "~> 4.6.1"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
   gem "pry-doc", "~> 1.4"
