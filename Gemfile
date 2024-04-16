@@ -78,7 +78,7 @@ group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 3.1"
-  gem "faker", "~> 3.2"
+  gem "faker", "~> 3.3"
   gem "parallel_tests", "~> 4.3.0"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
