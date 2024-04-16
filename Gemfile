@@ -59,7 +59,7 @@ gem "sidekiq-scheduler", "~> 5.0.3"
 gem "sprockets", "~> 4.2.1"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "stimulus-rails"
-gem "strong_migrations", "~> 1.6"
+gem "strong_migrations", "~> 1.8"
 gem "turbo-rails"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw]
 gem "validate_email", "~> 0.1"

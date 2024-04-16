@@ -658,7 +658,7 @@ GEM
     store_attribute (1.2.0)
       activerecord (>= 6.0)
     stringio (3.1.0)
-    strong_migrations (1.6.4)
+    strong_migrations (1.8.0)
       activerecord (>= 5.2)
     super_diff (0.10.0)
       attr_extras (>= 6.2.4)
@@ -810,7 +810,7 @@ DEPENDENCIES
   sprockets (~> 4.2.1)
   sprockets-rails
   stimulus-rails
-  strong_migrations (~> 1.6)
+  strong_migrations (~> 1.8)
   super_diff
   support_portal!
   timecop (~> 0.9)
