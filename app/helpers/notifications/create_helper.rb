@@ -139,14 +139,6 @@ module Notifications
     end
 
     def formatted_notification_pretty_id(notification_pretty_id)
-      "/notifications/#{notification_pretty_id}"
-    end
-
-    def formatted_product(product_id)
-      "/products/#{product_id}"
-    end
-
-    def formatted_notification_pretty_id(notification_pretty_id)
       link_to(notification_pretty_id, notification_path(notification_pretty_id), class: "govuk-link")
     end
 
