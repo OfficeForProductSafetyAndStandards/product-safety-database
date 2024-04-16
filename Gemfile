@@ -4,7 +4,7 @@ ruby "3.2.1"
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.14"
 gem "active_storage_validations", "~> 1.1.3"
-gem "ahoy_matey", "~> 5.0"
+gem "ahoy_matey", "~> 5.1"
 gem "aws-sdk-s3", "~> 1.141"
 gem "aws-sdk-s3control", "~> 1.74"
 gem "bootsnap", require: false
