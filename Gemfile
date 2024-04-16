@@ -82,7 +82,7 @@ group :development, :test do
   gem "parallel_tests", "~> 4.6.1"
   gem "pry", "~> 0.14"
   gem "pry-byebug", "~> 3.10"
-  gem "pry-doc", "~> 1.4"
+  gem "pry-doc", "~> 1.5"
   gem "rspec-rails"
   gem "rswag-specs"
 end
