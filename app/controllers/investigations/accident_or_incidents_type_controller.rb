@@ -6,7 +6,7 @@ module Investigations
 
     def new
       @accident_or_incident_type_form = AccidentOrIncidentTypeForm.new(type: params[:type])
-      return render "no_products" if @investigation.products.empty?
+      render "no_products" if @investigation.products.empty?
     end
 
     def create

@@ -77,7 +77,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
         expect(page).to have_checked_field("Yes")
         expect(page).to have_unchecked_field("Remove attached file")
         expect(page).to have_link(corrective_action.document_blob.filename.to_s)
-        expect(page).to have_field("Attachment description", with: /#{Regexp.escape(corrective_action.document_blob.metadata["description"])}/)
+        expect(page).to have_field("Attachment description", with: /#{Regexp.escape(corrective_action.document_blob.metadata['description'])}/)
       end
 
       within_fieldset("What action is being taken?") do

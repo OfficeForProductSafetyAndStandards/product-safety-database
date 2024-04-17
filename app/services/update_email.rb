@@ -69,12 +69,12 @@ private
   end
 
   def email_file_unchanged?
-    (same_email_file? || email_file_action == "keep" || (email_file_action.nil? && !email.email_file.attached?))
+    same_email_file? || email_file_action == "keep" || (email_file_action.nil? && !email.email_file.attached?)
   end
 
   def email_attachment_unchanged?
-    (same_attachment? || (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
-    (!email.email_attachment.attached? || (attachment_description == @previous_attachment_description.to_s)))
+    same_attachment? || (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
+      (!email.email_attachment.attached? || (attachment_description == @previous_attachment_description.to_s))
   end
 
   def same_email_file?
@@ -114,7 +114,7 @@ private
       email:,
       email_changed: email_file_changed?,
       previous_email_filename: @previous_email_filename,
-      email_attachment_changed: (email_attachment.present? || email_attachment_action == "remove"),
+      email_attachment_changed: email_attachment.present? || email_attachment_action == "remove",
       previous_email_attachment_filename: @previous_email_attachment_filename,
       previous_attachment_description: @previous_attachment_description
     )

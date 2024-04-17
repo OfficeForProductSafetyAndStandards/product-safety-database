@@ -22,7 +22,7 @@ class MigrateSourceData < ActiveRecord::Migration[6.1]
     end
 
     [Activity, Business, Contact, Location, Product].each do |model|
-      model.all.each do |record|
+      model.all.find_each do |record|
         sql = ActiveRecord::Base.send(:sanitize_sql_array, ["INSERT INTO sources(sourceable_id,sourceable_type,user_id,created_at,updated_at) VALUES(?,?,?,?,NOW())", record.id, model, record.added_by_user_id, record.created_at])
         ActiveRecord::Base.connection.execute(sql)
       end

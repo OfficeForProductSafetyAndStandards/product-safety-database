@@ -138,7 +138,7 @@ private
         errors.add(key, :blank) if required
       when (1..2) # Date has some components entered, but not all
         errors.add(key, :date_missing_component, missing_components: missing_components_text(key))
-        missing_date_components.each do |missing_component, _|
+        missing_date_components.each_key do |missing_component|
           errors.add(missing_component, "")
         end
       when 0

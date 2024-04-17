@@ -2,7 +2,7 @@ class MoveUpdateOwnerActivityMetadata < ActiveRecord::Migration[5.2]
   def change
     klass = AuditActivity::Investigation::UpdateOwner
 
-    klass.all.each do |activity|
+    klass.all.find_each do |activity|
       next if activity.metadata
 
       # case owner ID is stored in the title column...
@@ -17,7 +17,7 @@ class MoveUpdateOwnerActivityMetadata < ActiveRecord::Migration[5.2]
 
     klass = AuditActivity::Investigation::AutomaticallyUpdateOwner
 
-    klass.all.each do |activity|
+    klass.all.find_each do |activity|
       next if activity.metadata
 
       # case owner ID is stored in the title column...

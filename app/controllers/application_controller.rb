@@ -131,16 +131,19 @@ private
 
   def highlight_businesses?
     return true if params[:controller].start_with?("businesses")
-    return true if params[:controller] == "documents" && params[:business_id]
+
+    true if params[:controller] == "documents" && params[:business_id]
   end
 
   def highlight_products?
     return true if params[:controller].start_with?("product", "bulk_product")
-    return true if %w[documents document_uploads image_uploads].include?(params[:controller]) && params[:product_id]
+
+    true if %w[documents document_uploads image_uploads].include?(params[:controller]) && params[:product_id]
   end
 
   def highlight_notifications?
     return true if params[:controller].match?(/investigations|notifications|searches|collaborators|comments/)
-    return true if %w[documents image_uploads].include?(params[:controller]) && params[:investigation_pretty_id]
+
+    true if %w[documents image_uploads].include?(params[:controller]) && params[:investigation_pretty_id]
   end
 end

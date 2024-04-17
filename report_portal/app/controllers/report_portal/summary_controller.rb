@@ -5,12 +5,12 @@ module ReportPortal
       @current_month = Date.current.beginning_of_month
 
       @total_users = User.active.count
-      @active_users_this_month = Rollup.series("Active users", interval: :month)[@current_month]&.to_i || 0
-      @active_users_last_month = Rollup.series("Active users", interval: :month)[@last_month]&.to_i || 0
+      @active_users_this_month = Rollup.series("Active users", interval: :month)[@current_month].to_i
+      @active_users_last_month = Rollup.series("Active users", interval: :month)[@last_month].to_i
       @active_users_change_pc = get_change_pc(@active_users_this_month, @active_users_last_month)
 
-      @notifications_this_month = Rollup.series("New notifications", interval: :month)[@current_month]&.to_i || 0
-      @notifications_last_month = Rollup.series("New notifications", interval: :month)[@last_month]&.to_i || 0
+      @notifications_this_month = Rollup.series("New notifications", interval: :month)[@current_month].to_i
+      @notifications_last_month = Rollup.series("New notifications", interval: :month)[@last_month].to_i
       @notifications_change_pc = get_change_pc(@notifications_this_month, @notifications_last_month)
 
       monthly_price_of_psd = Rails.application.config.statistics["yearly_price_of_psd"] / 12

@@ -11,7 +11,7 @@ class Investigation < ApplicationRecord
     SORT_OPTIONS = [DATE_OF_ACTIVITY, DATE_ADDED, TITLE].freeze
 
     def initialize(supporting_information, param_sort_by)
-      @sort_by = (param_sort_by || :date_added)
+      @sort_by = param_sort_by || :date_added
       @supporting_information = supporting_information
       sort
     end

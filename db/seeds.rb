@@ -241,7 +241,7 @@ unless User.find_by(email: "ts_user@example.com")
 end
 
 operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
-User.where(team_id: operational_support_unit.id).each do |u|
+User.where(team_id: operational_support_unit.id).find_each do |u|
   u.roles.create!(name: "all_data_exporter")
   u.roles.create!(name: "risk_level_validator")
 end

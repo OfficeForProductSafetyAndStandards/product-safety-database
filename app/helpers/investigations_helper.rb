@@ -7,7 +7,7 @@ module InvestigationsHelper
   def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
-    query = (@search.q.presence || "*")
+    query = @search.q.presence || "*"
 
     wheres = {}
 
@@ -130,7 +130,7 @@ module InvestigationsHelper
   def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
     # Opensearch is only used for searching across all investigations
     @search.q.strip! if @search.q
-    query = (@search.q.presence || "*")
+    query = @search.q.presence || "*"
 
     wheres = {}
 
