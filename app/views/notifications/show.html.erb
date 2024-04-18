@@ -41,7 +41,7 @@
           row.with_value(text: @notification.safe_and_compliant? ? "Safe and compliant product(s)" : "Unsafe or non-compliant product(s)")
           row.with_action(text: "Change", href: edit_investigation_reported_reason_path(@notification), visually_hidden_text: "notification reason") if show_edit_link?
         end
-        unless @notification.reported_reason.safe_and_compliant?
+        unless @notification.reported_reason&.safe_and_compliant?
           summary_list.with_row do |row|
             row.with_key(text: "Specific product safety issues")
             row.with_value(text: specific_product_safety_issues.html_safe)
