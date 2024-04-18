@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name        = "prism"
   spec.version     = Prism::VERSION
   spec.authors     = ["Office for Product Safety and Standards"]
-  spec.email       = ["opss.enquiries@beis.gov.uk"]
+  spec.email       = ["opss.enquiries@businessandtrade.gov.uk"]
   spec.homepage    = "https://github.com/OfficeForProductSafetyAndStandards/product-safety-database"
   spec.summary     = "Product Safety Risk Assessment Methodology"
   spec.description = "PRISM is a product safety risk assessment tool, part of the Product Safety Database (PSD)."

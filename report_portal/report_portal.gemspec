@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name        = "report_portal"
   spec.version     = ReportPortal::VERSION
   spec.authors     = ["Office for Product Safety and Standards"]
-  spec.email       = ["opss.enquiries@beis.gov.uk"]
+  spec.email       = ["opss.enquiries@businessandtrade.gov.uk"]
   spec.homepage    = "https://github.com/OfficeForProductSafetyAndStandards/product-safety-database"
   spec.summary     = "OSU Support Portal"
   spec.description = "Support portal for OSU support teams to administer PSD."

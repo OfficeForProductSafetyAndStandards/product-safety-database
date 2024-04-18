@@ -42,7 +42,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
       end
 
       scenario "shows an error message" do
-        expect(page).to have_summary_error("The email address is not recognised. Check you’ve entered it correctly, or email opss.enquiries@beis.gov.uk to add it to the approved list.")
+        expect(page).to have_summary_error("The email address is not recognised. Check you’ve entered it correctly, or email opss.enquiries@businessandtrade.gov.uk to add it to the approved list.")
       end
     end
 
@@ -76,7 +76,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
         let(:existing_user_team) { create(:team) }
 
         scenario "shows an error message" do
-          expect(page).to have_summary_error("You cannot invite this person to join your team because they are already a member of another team. Contact opss.enquiries@beis.gov.uk if the person’s team needs to be changed.")
+          expect(page).to have_summary_error("You cannot invite this person to join your team because they are already a member of another team. Contact opss.enquiries@businessandtrade.gov.uk if the person’s team needs to be changed.")
         end
       end
 
