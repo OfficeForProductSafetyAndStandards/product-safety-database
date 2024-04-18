@@ -66,10 +66,10 @@ module Notifications
     end
 
     def number_of_affected_units(investigation_products, is_link: false)
-      investigation_products.map do |investigation_product|
+      investigation_products.map { |investigation_product|
         units_text = units_text_for_product(investigation_product)
         is_link ? with_link(investigation_product, units_text) : without_link(investigation_product, units_text)
-      end.join("<br>")
+      }.join("<br>")
     end
 
     def units_text_for_product(investigation_product)
@@ -88,7 +88,7 @@ module Notifications
     end
 
     def with_link(investigation_product, units_text)
-      "#{link_to (investigation_product.product.psd_ref + " - " + investigation_product.product.decorate.name_with_brand), product_path(investigation_product.product_id) }  #{units_text}"
+      "#{link_to "#{investigation_product.product.psd_ref} - #{investigation_product.product.decorate.name_with_brand}", product_path(investigation_product.product_id)}  #{units_text}"
     end
 
     def without_link(investigation_product, units_text)
