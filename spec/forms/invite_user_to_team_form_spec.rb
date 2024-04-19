@@ -59,7 +59,7 @@ RSpec.describe InviteUserToTeamForm do
       context "with whitelisting enabled" do
         before { set_whitelisting_enabled(true) }
 
-        include_examples "invalid form", [:email, "The email address is not recognised. Check you’ve entered it correctly, or email opss.enquiries@beis.gov.uk to add it to the approved list."]
+        include_examples "invalid form", [:email, "The email address is not recognised. Check you’ve entered it correctly, or email opss.enquiries@businessandtrade.gov.uk to add it to the approved list."]
       end
     end
 
@@ -97,7 +97,7 @@ RSpec.describe InviteUserToTeamForm do
       end
 
       context "when the user is on a different team" do
-        include_examples "invalid form", [:email, "You cannot invite this person to join your team because they are already a member of another team. Contact opss.enquiries@beis.gov.uk if the person’s team needs to be changed."]
+        include_examples "invalid form", [:email, "You cannot invite this person to join your team because they are already a member of another team. Contact opss.enquiries@businessandtrade.gov.uk if the person’s team needs to be changed."]
       end
 
       context "when the user is on the same team" do
