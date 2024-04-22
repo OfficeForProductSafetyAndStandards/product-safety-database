@@ -88,7 +88,7 @@ module Notifications
     end
 
     def with_link(investigation_product, units_text)
-      "#{link_to "#{investigation_product.product.psd_ref} - #{investigation_product.product.decorate.name_with_brand}", product_path(investigation_product.product_id), target: '_blank', rel: 'nofollow noopener'}  #{units_text}"
+      "#{link_to "#{investigation_product.product.psd_ref} - #{investigation_product.product.decorate.name_with_brand}", product_path(investigation_product.product_id), target: '_blank', rel: 'nofollow noopener'}:  #{units_text}"
     end
 
     def without_link(investigation_product, units_text)
