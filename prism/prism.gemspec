@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "govuk-components", "~> 5.0"
   spec.add_runtime_dependency "govuk_design_system_formbuilder", "~> 5.0"
   spec.add_runtime_dependency "listen", "~> 3.8"
-  spec.add_runtime_dependency "pagy", ">= 6", "< 8"
+  spec.add_runtime_dependency "pagy", ">= 6", "< 9"
   spec.add_runtime_dependency "pg", "~> 1.5"
   spec.add_runtime_dependency "prawn", "~> 2.4"
   spec.add_runtime_dependency "prawn-table", "~> 0.2"
