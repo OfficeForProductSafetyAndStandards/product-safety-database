@@ -152,21 +152,21 @@ GEM
     attr_extras (7.1.0)
     awesome_print (1.9.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.914.0)
-    aws-sdk-core (3.192.0)
+    aws-partitions (1.922.0)
+    aws-sdk-core (3.193.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.79.0)
-      aws-sdk-core (~> 3, >= 3.191.0)
+    aws-sdk-kms (1.80.0)
+      aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.147.0)
-      aws-sdk-core (~> 3, >= 3.192.0)
+    aws-sdk-s3 (1.148.0)
+      aws-sdk-core (~> 3, >= 3.193.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.8)
-    aws-sdk-s3control (1.80.0)
-      aws-sdk-core (~> 3, >= 3.191.0)
+    aws-sdk-s3control (1.81.0)
+      aws-sdk-core (~> 3, >= 3.193.0)
     aws-sigv4 (1.8.0)
       aws-eventstream (~> 1, >= 1.0.2)
     backport (1.2.0)
@@ -265,11 +265,11 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    govuk-components (5.3.1)
+    govuk-components (5.3.2)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 8)
       view_component (>= 3.9, < 3.12)
-    govuk_design_system_formbuilder (5.3.2)
+    govuk_design_system_formbuilder (5.3.3)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -295,7 +295,7 @@ GEM
       rdoc
       reline (>= 0.4.2)
     jaro_winkler (1.5.6)
-    jbuilder (2.11.5)
+    jbuilder (2.12.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
@@ -377,7 +377,7 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     parallel (1.24.0)
-    parallel_tests (4.6.1)
+    parallel_tests (4.7.1)
       parallel
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -601,7 +601,7 @@ GEM
     searchkick (5.3.1)
       activemodel (>= 6.1)
       hashie
-    selenium-webdriver (4.19.0)
+    selenium-webdriver (4.20.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -670,7 +670,7 @@ GEM
     stringio (3.1.0)
     strong_migrations (1.8.0)
       activerecord (>= 5.2)
-    super_diff (0.11.0)
+    super_diff (0.12.1)
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
@@ -736,8 +736,8 @@ DEPENDENCIES
   active_storage_validations (~> 1.1.3)
   ahoy_matey (~> 5.1)
   awesome_print (~> 1.9)
-  aws-sdk-s3 (~> 1.146)
-  aws-sdk-s3control (~> 1.79)
+  aws-sdk-s3 (~> 1.148)
+  aws-sdk-s3control (~> 1.81)
   bootsnap
   byebug (~> 11.1)
   capybara (~> 3.40)
@@ -773,7 +773,7 @@ DEPENDENCIES
   opensearch-ruby
   pagy (~> 7.0.11)
   paper_trail
-  parallel_tests (~> 4.6.1)
+  parallel_tests (~> 4.7.1)
   pg (~> 1.5)
   prawn (~> 2.5)
   prawn-table (~> 0.2)
@@ -806,7 +806,7 @@ DEPENDENCIES
   sassc-rails
   scout_apm (~> 5.3)
   searchkick (~> 5.3)
-  selenium-webdriver (~> 4.19s)
+  selenium-webdriver (~> 4)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
