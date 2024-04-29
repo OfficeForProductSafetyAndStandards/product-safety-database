@@ -266,10 +266,10 @@ en:
       not_validated: "No"
       validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
       page_title: "Risk level validated"
-      validated_success_message: "The notification risk level has updated"
+      validated_success_message: "The notification risk level has been validated"
       validation_removed_success_message: "Notification risk level validation removed"
       activity:
-        added: "The notification risk level has updated"
+        added: "The notification risk level has been validated"
         removed: Notification risk level validation removed
     risk_level:
       show:
