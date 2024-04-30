@@ -42,12 +42,12 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{notification.pretty_id}")
-      expect_confirmation_banner("The notification risk level has updated")
+      expect_confirmation_banner("The notification risk level has been validated")
       expect(page).to have_css(".govuk-summary-list__value", text: "Validated by #{user.team.name} on #{notification.risk_validated_at}")
       expect(page).not_to have_link("Validate")
 
       click_on "Activity"
-      expect(page).to have_content "The notification risk level has updated"
+      expect(page).to have_content "The notification risk level has been validated"
 
       expect_email_with_correct_details_to_be_set("has been validated")
     end
@@ -66,12 +66,12 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{notification.pretty_id}")
-      expect(page).not_to have_content("The notification risk level has updated")
+      expect(page).not_to have_content("The notification risk level has been validated")
       expect(page).not_to have_content("Validated by #{user.team.name} on #{notification.risk_validated_at}")
       expect(page).to have_link("Validate")
 
       click_on "Activity"
-      expect(page).not_to have_content "The notification risk level has updated"
+      expect(page).not_to have_content "The notification risk level has been validated"
     end
 
     scenario "remove validation" do
@@ -106,7 +106,7 @@ RSpec.feature "Validate risk level", :with_stubbed_antivirus, :with_stubbed_mail
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{notification.pretty_id}")
-      expect(page).not_to have_content("The notification risk level has updated")
+      expect(page).not_to have_content("The notification risk level has been validated")
       expect(page).not_to have_content("Validated by #{user.team.name} on #{notification.risk_validated_at}")
       expect(page).to have_link("Validate")
 
