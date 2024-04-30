@@ -1,0 +1,28 @@
+<%= page_title(t("notifications.create.index.sections.business_details.tasks.add_business_location.title"), errors: @add_location_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @add_location_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
+        <%= t("notifications.create.index.sections.business_details.tasks.add_business_location.title") %>
+      </h1>
+      <%= f.govuk_text_field :address_line_1, label: { text: "Address line 1 (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :address_line_2, label: { text: "Address line 2 (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :city, label: { text: "Town or city (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :county, label: { text: "County (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :postal_code, label: { text: "Post code (optional)" }, width: "two-thirds" %>
+      <%= f.hidden_field :business_id %>
+      <%= f.hidden_field :location_id %>
+      <%= f.govuk_collection_select :country,
+            [OpenStruct.new(id: "", name: ""), OpenStruct.new(id: "Unknown", name: "Unknown")] + all_countries_with_uk_first.map { |country| OpenStruct.new(id: country[1], name: country[0]) },
+            :id,
+            :name,
+            label: { text: "Country" },
+            width: "two-thirds"
+      %>
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>
