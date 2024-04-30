@@ -16,9 +16,7 @@ module Notifications
       redirect_to notification_path(@notification)
     end
 
-
     def remove_business
-      begin
         @investigation_business = @notification.investigation_businesses.find(params[:investigation_business_id])
         if request.delete?
           RemoveBusinessFromNotification.call!(notification: @notification, business: @investigation_business.business, user: current_user, silent: true)
@@ -31,9 +29,8 @@ module Notifications
 
           redirect_to notification_edit_path(@notification, "search_for_or_add_a_business")
         end
-      rescue ActiveRecord::RecordNotFound
-        redirect_to "/404"
-      end
+    rescue ActiveRecord::RecordNotFound
+      redirect_to "/404"
     end
 
     def show
@@ -239,7 +236,6 @@ module Notifications
 
       end
 
-
       if params[:draft] == "true" || params[:final] == "true"
         # "Save as draft" or final save button of the section clicked.
         # Manually save, then finish the wizard.
@@ -308,25 +304,21 @@ module Notifications
       end
     end
 
-
-    private
+private
 
     def disallow_non_role_users
       redirect_to notifications_path unless current_user.can_use_notification_task_list?
     end
 
     def set_notification
-
-
       @notification = Investigation::Notification.includes(:creator_user).where(pretty_id: params[:notification_pretty_id], creator_user: { id: current_user.id }).first!
 
       if @notification.nil?
-          redirect_to "errors#not_found"
+        redirect_to "/404"
       else
         @notification
       end
     end
-
 
     def set_steps
       self.steps = Investigation::Notification::TASK_LIST_SECTIONS.values.flatten
