@@ -1,3 +1,4 @@
+
 <%= page_title(@notification.user_title) %>
 
 <div class="govuk-grid-row">
@@ -163,7 +164,7 @@
         )
       %>
     <% end %>
-    <%= govuk_button_link_to "Add business", new_investigation_business_types_path(@notification), secondary: true %>
+    <%= govuk_button_link_to "Add or Remove business", "#{@notification.pretty_id}/edit/search_for_or_add_a_business", secondary: true %>
     <h2 class="govuk-heading-m">Evidence</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
       <%=
