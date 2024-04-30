@@ -17,18 +17,18 @@ module Notifications
     end
 
     def remove_business
-        @investigation_business = @notification.investigation_businesses.find(params[:investigation_business_id])
-        if request.delete?
-          RemoveBusinessFromNotification.call!(notification: @notification, business: @investigation_business.business, user: current_user, silent: true)
+      @investigation_business = @notification.investigation_businesses.find(params[:investigation_business_id])
+      if request.delete?
+        RemoveBusinessFromNotification.call!(notification: @notification, business: @investigation_business.business, user: current_user, silent: true)
 
-          # If the last business has been removed, mark the task as in progress to prevent progression
-          if @notification.investigation_businesses.blank?
-            @notification.tasks_status["search_for_or_add_a_business"] = "in_progress"
-            @notification.save!
-          end
-
-          redirect_to notification_edit_path(@notification, "search_for_or_add_a_business")
+        # If the last business has been removed, mark the task as in progress to prevent progression
+        if @notification.investigation_businesses.blank?
+          @notification.tasks_status["search_for_or_add_a_business"] = "in_progress"
+          @notification.save!
         end
+
+        redirect_to notification_edit_path(@notification, "search_for_or_add_a_business")
+      end
     rescue ActiveRecord::RecordNotFound
       redirect_to "/404"
     end
@@ -304,7 +304,7 @@ module Notifications
       end
     end
 
-private
+  private
 
     def disallow_non_role_users
       redirect_to notifications_path unless current_user.can_use_notification_task_list?
