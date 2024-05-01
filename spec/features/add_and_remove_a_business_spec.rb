@@ -1,20 +1,15 @@
 require "rails_helper"
 
-RSpec.feature "Editing business details", :with_stubbed_antivirus, :with_stubbed_mailer, :with_opensearch, :with_product_form_helper  do
+RSpec.feature "Editing business details", :with_stubbed_antivirus, :with_stubbed_mailer, :with_opensearch, :with_product_form_helper do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user]) }
-  let(:business) { create(:business, trading_name: "OldCo") }
-  let(:business2) { create(:business, trading_name: "Test Business 100") }
   let(:existing_product) { create(:product) }
-  let!(:investigation) { create(:notification, businesses: [business]) }
   let(:image_file) { Rails.root.join "test/fixtures/files/testImage.png" }
   let(:text_file) { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
 
   before do
-      sign_in(user)
-      existing_product
-      create(:contact, business:)
+    sign_in(user)
+    existing_product
   end
-
 
   scenario "Creating a notification and adding and removing businesses" do
     visit "/notifications/create"
@@ -318,7 +313,7 @@ RSpec.feature "Editing business details", :with_stubbed_antivirus, :with_stubbed
     expect(page).to have_content("You have added 1 business")
     click_button "Continue"
 
-    within_fieldset "Do you need to add another corrective action?" do
+    within_fieldset "Do you need to add another business?" do
       choose "No"
     end
 
