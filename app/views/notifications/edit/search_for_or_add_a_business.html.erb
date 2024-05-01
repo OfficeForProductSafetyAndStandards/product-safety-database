@@ -58,8 +58,6 @@
           </div>
         </div>
       <% end %>
-      <%= @records_count %>
-      <%= @test %>
       <% if @records.any? %>
         <p class="govuk-body"><% if @records_count == 1 %>There is currently 1 business.<% else %>There are currently <%= @records_count %> businesses.<% end %></p>
         <%=
