@@ -28,7 +28,10 @@ class Test < ApplicationRecord
     end
 
     def attachment_description
-      document.blob.metadata["description"]
+      return "No description available" if document.nil?
+
+      description = document.blob&.metadata&.fetch("description", nil)
+      description || "No description available"
     end
 
     def supporting_information_title
