@@ -74,6 +74,7 @@ private
     @activity_counts ||= Activity.group(:investigation_id).count
   end
 
+
   def business_counts
     @business_counts ||= InvestigationBusiness.unscoped.group(:investigation_id).count
   end
@@ -119,6 +120,8 @@ private
                      Case_Creator_Team
                      Notifiers_Reference
                      Notifying_Country
+                     Overseas_Regulator
+                     Country
                      Trading_Standards_Region
                      Regulator_Name
                      OPSS_Internal_Team
@@ -162,6 +165,8 @@ private
       team&.name,
       notification.complainant_reference,
       country_from_code(notification.notifying_country, Country.notifying_countries),
+      @notification.is_from_overseas_regulator ? "Yes" : "No",
+      @notification.is_from_overseas_regulator ? "#{country_from_code(@notification.overseas_regulator_country)}" : "",
       team&.ts_region,
       team&.regulator_name,
       restrict_data_for_non_opss_user(team&.team_type == "internal"),
@@ -200,6 +205,8 @@ private
       notification.creator_user&.team&.name,
       "Restricted",
       country_from_code(notification.notifying_country, Country.notifying_countries),
+      @notification.is_from_overseas_regulator ? "Yes" : "No",
+      @notification.is_from_overseas_regulator ? "#{country_from_code(@notification.overseas_regulator_country)}" : "",
       team&.ts_region,
       team&.regulator_name,
       (team&.team_type == "internal"),
