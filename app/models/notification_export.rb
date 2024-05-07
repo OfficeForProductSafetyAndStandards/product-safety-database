@@ -119,15 +119,15 @@ private
                      Case_Creator_Team
                      Notifiers_Reference
                      Notifying_Country
+                     Overseas_Regulator
+                     Country
                      Trading_Standards_Region
                      Regulator_Name
                      OPSS_Internal_Team
                      Date_Created
                      Last_Updated
                      Date_Closed
-                     Date_Validated
-                     Overseas_Regulator
-                     Country]
+                     Date_Validated]
   end
 
   def find_notifications(ids)
@@ -164,15 +164,15 @@ private
       team&.name,
       notification.complainant_reference,
       country_from_code(notification.notifying_country, Country.notifying_countries),
+      notification.is_from_overseas_regulator ? "Yes" : "No",
+      notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : "",
       team&.ts_region,
       team&.regulator_name,
       restrict_data_for_non_opss_user(team&.team_type == "internal"),
       notification.created_at,
       notification.updated_at,
       notification.date_closed,
-      restrict_data_for_non_opss_user(notification.risk_validated_at),
-      notification.is_from_overseas_regulator ? "Yes" : "No",
-      notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : "",
+      restrict_data_for_non_opss_user(notification.risk_validated_at)
     ]
   end
 
@@ -204,15 +204,15 @@ private
       notification.creator_user&.team&.name,
       "Restricted",
       country_from_code(notification.notifying_country, Country.notifying_countries),
+      notification.is_from_overseas_regulator ? "Yes" : "No",
+      notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : "",
       team&.ts_region,
       team&.regulator_name,
       (team&.team_type == "internal"),
       notification.created_at,
       notification.updated_at,
       notification.date_closed,
-      notification.risk_validated_at,
-      notification.is_from_overseas_regulator ? "Yes" : "No",
-      notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : ""
+      notification.risk_validated_at
     ]
   end
 end
