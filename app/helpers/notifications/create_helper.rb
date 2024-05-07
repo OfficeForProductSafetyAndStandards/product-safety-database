@@ -128,7 +128,7 @@ module Notifications
         location&.city,
         location&.county,
         location&.postal_code,
-        location&.country.nil? ? nil : country_from_code(location.country)
+        location&.country ? country_from_code(location.country) : nil
       ]
 
       formatted_address = address_parts.compact.join("<br>")
