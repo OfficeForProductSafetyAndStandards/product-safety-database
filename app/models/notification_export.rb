@@ -42,7 +42,7 @@ class NotificationExport < ApplicationRecord
     package
   end
 
-  private
+private
 
   def notification_ids
     return @notification_ids if @notification_ids
@@ -73,7 +73,6 @@ class NotificationExport < ApplicationRecord
   def activity_counts
     @activity_counts ||= Activity.group(:investigation_id).count
   end
-
 
   def business_counts
     @business_counts ||= InvestigationBusiness.unscoped.group(:investigation_id).count
@@ -166,7 +165,7 @@ class NotificationExport < ApplicationRecord
       notification.complainant_reference,
       country_from_code(notification.notifying_country, Country.notifying_countries),
       @notification.is_from_overseas_regulator ? "Yes" : "No",
-      @notification.is_from_overseas_regulator ? "#{country_from_code(@notification.overseas_regulator_country)}" : "",
+      @notification.is_from_overseas_regulator ? country_from_code(@notification.overseas_regulator_country).to_s : "",
       team&.ts_region,
       team&.regulator_name,
       restrict_data_for_non_opss_user(team&.team_type == "internal"),
@@ -206,7 +205,7 @@ class NotificationExport < ApplicationRecord
       "Restricted",
       country_from_code(notification.notifying_country, Country.notifying_countries),
       @notification.is_from_overseas_regulator ? "Yes" : "No",
-      @notification.is_from_overseas_regulator ? "#{country_from_code(@notification.overseas_regulator_country)}" : "",
+      @notification.is_from_overseas_regulator ? country_from_code(@notification.overseas_regulator_country).to_s : "",
       team&.ts_region,
       team&.regulator_name,
       (team&.team_type == "internal"),
