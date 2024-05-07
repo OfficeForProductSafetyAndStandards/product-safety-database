@@ -127,8 +127,7 @@ private
                      Date_Closed
                      Date_Validated
                      Overseas_Regulator
-                     Country
-]
+                     Country]
   end
 
   def find_notifications(ids)
