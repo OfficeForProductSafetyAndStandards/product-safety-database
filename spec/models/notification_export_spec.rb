@@ -137,7 +137,6 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
       expect(sheet.cell(2, 22)).to eq nil
       expect(sheet.cell(3, 22)).to eq nil
 
-
       expect(sheet.cell(1, 23)).to eq "Trading_Standards_Region"
       expect(sheet.cell(2, 23)).to eq "Scotland"
       expect(sheet.cell(3, 23)).to eq nil
