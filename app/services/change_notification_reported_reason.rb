@@ -28,6 +28,9 @@ private
 
   def assign_attributes
     if reported_reason == "safe_and_compliant"
+      context.hazard_description = nil
+      context.hazard_type = nil
+      context.non_compliant_reason = nil
       notification.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason:)
     end
   end

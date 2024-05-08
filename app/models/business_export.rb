@@ -9,13 +9,14 @@ class BusinessExport < ApplicationRecord
   has_one_attached :export_file
 
   def params
-    self[:params].deep_symbolize_keys
+    (self[:params] || {}).deep_symbolize_keys
   end
 
   def export!
+    return unless params # Optional: Add an early return or raise an exception if params are mandatory
+
     Axlsx::Package.new do |p|
       book = p.workbook
-
       add_businesses_worksheet(book)
 
       Tempfile.create("business_export", Rails.root.join("tmp")) do |file|
