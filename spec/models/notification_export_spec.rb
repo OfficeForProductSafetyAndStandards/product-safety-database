@@ -129,33 +129,41 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
       expect(sheet.cell(2, 20)).to eq "England"
       expect(sheet.cell(3, 20)).to eq "England"
 
-      expect(sheet.cell(1, 21)).to eq "Trading_Standards_Region"
-      expect(sheet.cell(2, 21)).to eq "Scotland"
-      expect(sheet.cell(3, 21)).to eq nil
+      expect(sheet.cell(1, 21)).to eq "Overseas_Regulator"
+      expect(sheet.cell(2, 21)).to eq "No"
+      expect(sheet.cell(3, 21)).to eq "No"
 
-      expect(sheet.cell(1, 22)).to eq "Regulator_Name"
+      expect(sheet.cell(1, 22)).to eq "Country"
       expect(sheet.cell(2, 22)).to eq nil
-      expect(sheet.cell(3, 22)).to eq "Department of Agriculture, Environment and Rural Affairs (DAERA)"
+      expect(sheet.cell(3, 22)).to eq nil
 
-      expect(sheet.cell(1, 23)).to eq "OPSS_Internal_Team"
-      expect(sheet.cell(2, 23)).to eq "false"
-      expect(sheet.cell(3, 23)).to eq "false"
+      expect(sheet.cell(1, 23)).to eq "Trading_Standards_Region"
+      expect(sheet.cell(2, 23)).to eq "Scotland"
+      expect(sheet.cell(3, 23)).to eq nil
 
-      expect(sheet.cell(1, 24)).to eq "Date_Created"
-      expect(sheet.cell(2, 24)).to eq investigation.created_at&.to_s
-      expect(sheet.cell(3, 24)).to eq other_team_investigation.created_at&.to_s
+      expect(sheet.cell(1, 24)).to eq "Regulator_Name"
+      expect(sheet.cell(2, 24)).to eq nil
+      expect(sheet.cell(3, 24)).to eq "Department of Agriculture, Environment and Rural Affairs (DAERA)"
 
-      expect(sheet.cell(1, 25)).to eq "Last_Updated"
-      expect(sheet.cell(2, 25)).to eq investigation.updated_at&.to_s
-      expect(sheet.cell(3, 25)).to eq other_team_investigation.updated_at&.to_s
+      expect(sheet.cell(1, 25)).to eq "OPSS_Internal_Team"
+      expect(sheet.cell(2, 25)).to eq "false"
+      expect(sheet.cell(3, 25)).to eq "false"
 
-      expect(sheet.cell(1, 26)).to eq "Date_Closed"
-      expect(sheet.cell(2, 26)).to eq investigation.date_closed&.to_s
-      expect(sheet.cell(3, 26)).to eq other_team_investigation.date_closed&.to_s
+      expect(sheet.cell(1, 26)).to eq "Date_Created"
+      expect(sheet.cell(2, 26)).to eq investigation.created_at&.to_s
+      expect(sheet.cell(3, 26)).to eq other_team_investigation.created_at&.to_s
 
-      expect(sheet.cell(1, 27)).to eq "Date_Validated"
-      expect(sheet.cell(2, 27)).to eq investigation.risk_validated_at&.to_s
-      expect(sheet.cell(3, 27)).to eq other_team_investigation.risk_validated_at&.to_s
+      expect(sheet.cell(1, 27)).to eq "Last_Updated"
+      expect(sheet.cell(2, 27)).to eq investigation.updated_at&.to_s
+      expect(sheet.cell(3, 27)).to eq other_team_investigation.updated_at&.to_s
+
+      expect(sheet.cell(1, 28)).to eq "Date_Closed"
+      expect(sheet.cell(2, 28)).to eq investigation.date_closed&.to_s
+      expect(sheet.cell(3, 28)).to eq other_team_investigation.date_closed&.to_s
+
+      expect(sheet.cell(1, 29)).to eq "Date_Validated"
+      expect(sheet.cell(2, 29)).to eq investigation.risk_validated_at&.to_s
+      expect(sheet.cell(3, 29)).to eq other_team_investigation.risk_validated_at&.to_s
     end
     # rubocop:enable RSpec/ExampleLength
 
