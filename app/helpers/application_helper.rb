@@ -61,6 +61,16 @@ module ApplicationHelper
     )
   end
 
+  def replace_uploaded_file_field_not_hidden(form, field_name, label:, label_classes: "govuk-label--m")
+    existing_uploaded_file_id = form.hidden_field "existing_#{field_name}_file_id"
+    file_upload_field         = form.govuk_file_upload(field_name, label:, label_classes:)
+    uploaded_file             = form.object.public_send(field_name)
+
+    return existing_uploaded_file_id.to_s + file_upload_field.to_s + render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }) unless uploaded_file.nil?
+    existing_uploaded_file_id.to_s + file_upload_field.to_s
+
+  end
+
   def date_or_recent_time_ago(datetime)
     24.hours.ago < datetime ? "#{time_ago_in_words(datetime)} ago".capitalize : datetime.to_formatted_s(:govuk)
   end
