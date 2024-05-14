@@ -6,6 +6,9 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
 
+  let(:bad_file) { Rails.root.join "spec/fixtures/files/encrypted_data.bin" }
+  let(:good_file) { Rails.root.join "spec/fixtures/files/testImage.png" }
+
   before do
     sign_in user
     visit "/products/new"
@@ -203,6 +206,56 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
 
     fill_in "Description of product", with: attributes[:description]
     click_on "Save"
+
+    expect(page).to have_current_path("/products")
+    expect(page).not_to have_error_messages
+    expect(page).to have_selector("h1", text: "Product record created")
+
+    click_on "View the product record"
+    expect(page).to have_summary_item(key: "Country of origin", value: "Unknown")
+  end
+
+  scenario "Adding a product with an invalid image" do
+    select attributes[:category], from: "Product category"
+    fill_in "Product subcategory", with: attributes[:subcategory]
+    fill_in "Manufacturer's brand name", with: attributes[:brand]
+    fill_in "Product name", with: attributes[:name]
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:barcode]
+    fill_in "Other product identifiers", with: attributes[:product_code]
+    fill_in "Webpage", with: attributes[:webpage]
+
+    # attach invalid image type
+    byebug
+    attach_file "product[image]", bad_file
+
+    within_fieldset("Was the product placed on the market before 1 January 2021?") do
+      choose when_placed_on_market_answer(attributes[:when_placed_on_market])
+    end
+
+    within_fieldset("Is the product counterfeit?") do
+      choose counterfeit_answer(attributes[:authenticity])
+    end
+
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      page.find("input[value='#{attributes[:has_markings]}']").choose
+    end
+
+    within_fieldset("Select product marking") do
+      attributes[:markings].each { |marking| check(marking) } if attributes[:has_markings] == "markings_yes"
+    end
+
+    select "Unknown", from: "Country of origin"
+
+    fill_in "Description of product", with: attributes[:description]
+    click_on "Save"
+
+    # Expected validation errors
+    expect(page).to have_error_messages
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF"
+
+    # attach valid image type
+    attach_file "product[image]", good_file
 
     expect(page).to have_current_path("/products")
     expect(page).not_to have_error_messages
