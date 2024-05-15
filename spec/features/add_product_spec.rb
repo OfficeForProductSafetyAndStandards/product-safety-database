@@ -225,7 +225,6 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     fill_in "Webpage", with: attributes[:webpage]
 
     # attach invalid image type
-    byebug
     attach_file "product[image]", bad_file
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
