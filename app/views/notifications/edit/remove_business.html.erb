@@ -1,0 +1,15 @@
+<%= page_title("Remove business from notification", errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: remove_business_notification_edit_index_path(investigation_business_id: @investigation_business.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        Are you sure you want to remove this business from your notification?
+      </h1>
+      <p class="govuk-body">This action will remove <strong><%= @investigation_business.business.trading_name %></strong> from your notification. Please confirm if you wish to proceed.</p>
+      <%= f.govuk_submit "Remove business", warning: true do %>
+        <a href="<%= notification_edit_path(@notification, "search_for_or_add_a_business") %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

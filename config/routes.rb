@@ -117,7 +117,6 @@ Rails.application.routes.draw do
       get "your-notifications", to: "notifications#your_notifications", as: "your"
       get "team-notifications", to: "notifications#team_notifications", as: "team"
       get "assigned-notifications", to: "notifications#assigned_notifications", as: "assigned"
-
       scope module: :notifications do
         resources :create, only: %i[index] do
           collection do
@@ -180,6 +179,21 @@ Rails.application.routes.draw do
               get ":upload_id/remove", to: "create#remove_upload", as: "remove_upload"
               delete ":upload_id/remove", to: "create#remove_upload"
             end
+          end
+        end
+
+        resources :edit do
+          collection do
+            get "remove-business/:investigation_business_id", to: "edit#remove_business", as: "remove_business"
+            delete "remove-business/:investigation_business_id", to: "edit#remove_business"
+            get "confirmation", to: "edit#confirmation"
+
+            get "search_for_or_add_a_business/duplicate/:business_id", to: "edit#show_duplicate_business", as: "duplicate_business"
+            patch "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
+            put "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
+
+            # These routes need to appear before the next scope block to avoid clashing with the
+            # # `:investigation_product_id/:entity_id` routes.
           end
         end
       end

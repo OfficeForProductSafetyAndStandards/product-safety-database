@@ -1,0 +1,111 @@
+<%= page_title(t("notifications.create.index.sections.business_details.tasks.search_for_or_add_a_business.title"), errors: false) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
+          <%= t("notifications.create.index.sections.business_details.tasks.search_for_or_add_a_business.title") %>
+        </h1>
+      </div>
+      <% unless @manage %>
+        <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+          <%= govuk_button_link_to "Add a new business", wizard_path(:add_business_details), secondary: true %>
+        </div>
+      <% end %>
+    </div>
+    <% if @manage %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <p class="govuk-body">You have added <%= pluralize(@existing_business_ids.length, "business") %>.
+          <%=
+            govuk_summary_list do |summary_list|
+              @notification.investigation_businesses.decorate.each do |investigation_business|
+                summary_list.with_row do |row|
+                  row.with_key(text: "#{investigation_business.business.trading_name}#{@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>' : ''}".html_safe)
+                  if investigation_business.relationship&.match?(/authorised_representative/)
+                    row.with_value(text: "#{t('business.type.authorised_representative.' + investigation_business.relationship.to_s)}#{@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>' : ''}".html_safe)
+                  else
+                    row.with_value(text: "#{t('business.type.' + investigation_business.relationship.to_s)}#{@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>' : ''}".html_safe)
+                  end
+                  row.with_action(text: "Remove", href: remove_business_notification_edit_index_path(investigation_business_id: investigation_business.id), visually_hidden_text: "business from notification") unless @existing_attached_business_ids.include?(investigation_business.business_id)
+                end
+              end
+            end
+          %>
+          <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+            <%= f.govuk_collection_radio_buttons :add_another_business, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another business?", size: "m" } %>
+            <%= f.govuk_submit "Continue", name: "final", value: "true" %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <%= form_with url: "search_for_or_add_a_business", method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-three-quarters">
+            <div class="moj-search">
+              <div class="govuk-form-group">
+                <label for="q-field" class="govuk-label moj-search__label">Search by business name, Companies House number or address</label>
+                <input id="q-field" class="govuk-input moj-search__input" aria-describedby="q-hint" type="search" name="q" value="<%= params[:q] %>">
+              </div>
+              <button type="submit" formnovalidate="formnovalidate" class="govuk-button moj-search__button" data-module="govuk-button" data-prevent-double-click="true">
+                <span class="govuk-visually-hidden">Search</span>
+              </button>
+            </div>
+          </div>
+          <div class="govuk-grid-column-one-quarter">
+            <%= f.govuk_collection_select :sort_by, sort_by_options, :id, :name, label: { text: "Sort by" }, options: { selected: params[:sort_by] } %>
+          </div>
+        </div>
+      <% end %>
+      <% if @records.any? %>
+        <p class="govuk-body"><% if @records_count == 1 %>There is currently 1 business.<% else %>There are currently <%= @records_count %> businesses.<% end %></p>
+        <%=
+          govuk_table do |table|
+            table.with_head do |head|
+              head.with_row do |row|
+                row.with_cell(text: "Business name")
+                row.with_cell(text: "Companies House number")
+                row.with_cell(text: "Address")
+                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Select business</span>".html_safe)
+              end
+            end
+
+            table.with_body do |body|
+              @records.each do |record|
+                addresses = if record.locations.size > 4
+                              "Multiple addresses (#{record.locations.size})"
+                            else
+                              record.locations.map do |location|
+                                [location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].reject(&:blank?).join(", ")
+                              end.join("<hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">")
+                            end
+
+                select_button = form_with url: "#{wizard_path}?business_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
+                  f.govuk_submit "Select", name: "draft", value: true, secondary: true
+                end
+
+                body.with_row do |row|
+                  row.with_cell(text: record.trading_name)
+                  row.with_cell(text: record.company_number)
+                  row.with_cell(text: addresses.html_safe)
+                  if @existing_business_ids.include?(record.id)
+                    row.with_cell(text: "")
+                  else
+                    row.with_cell(text: select_button)
+                  end
+                end
+              end
+            end
+          end
+        %>
+        <%= govuk_pagination(pagy: @pagy) %>
+      <% else %>
+        <p class="govuk-body">
+          <%= "There are no business records." unless @search_query.present? %>
+          <%= "There are no business records for \"#{@search_query}\"." if @search_query.present? %>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
