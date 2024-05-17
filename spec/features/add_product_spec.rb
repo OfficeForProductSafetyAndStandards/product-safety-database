@@ -6,7 +6,7 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
 
-  let(:bad_file) { Rails.root.join "spec/fixtures/files/encrypted_data.bin" }
+  let(:bad_file) { Rails.root.join "spec/fixtures/files/testImages.bin" }
   let(:good_file) { Rails.root.join "spec/fixtures/files/testImage.png" }
 
   before do
