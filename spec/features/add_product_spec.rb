@@ -184,7 +184,7 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     fill_in "Other product identifiers", with: attributes[:product_code]
     fill_in "Webpage", with: attributes[:webpage]
 
-    attach_file "product[image]", "spec/fixtures/files/testImage.png"
+    attach_file "product[image]", good_file
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
       choose when_placed_on_market_answer(attributes[:when_placed_on_market])
@@ -203,14 +203,12 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     end
 
     select "Unknown", from: "Country of origin"
-
     fill_in "Description of product", with: attributes[:description]
     click_on "Save"
 
     expect(page).to have_current_path("/products")
     expect(page).not_to have_error_messages
     expect(page).to have_selector("h1", text: "Product record created")
-
     click_on "View the product record"
     expect(page).to have_summary_item(key: "Country of origin", value: "Unknown")
   end
@@ -253,14 +251,13 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF"
 
-    # attach valid image type
     attach_file "product[image]", good_file
+    click_on "Save"
 
-    expect(page).to have_current_path("/products")
+    click_link "View the product record"
+
     expect(page).not_to have_error_messages
-    expect(page).to have_selector("h1", text: "Product record created")
-
-    click_on "View the product record"
+    expect(page).to have_selector("h1", text: "Product")
     expect(page).to have_summary_item(key: "Country of origin", value: "Unknown")
   end
 end
