@@ -85,6 +85,7 @@ class ProductForm
 
   def acceptable_image
     return if image.blank?
+
     acceptable_types = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif"]
     unless acceptable_types.include?(image.content_type)
       errors.add(:image, "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF")
