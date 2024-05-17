@@ -46,29 +46,13 @@ module ApplicationHelper
   end
 
   def replace_uploaded_file_field(form, field_name, label:, label_classes: "govuk-label--m")
+    #binding.pry
     existing_uploaded_file_id = form.hidden_field "existing_#{field_name}_file_id"
     file_upload_field         = form.govuk_file_upload(field_name, label:, label_classes:)
     uploaded_file             = form.object.public_send(field_name)
 
-    return safe_join([existing_uploaded_file_id, file_upload_field]) if uploaded_file.blank?
-
-    safe_join(
-      [
-        existing_uploaded_file_id,
-        render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }),
-        govuk_details(summary_text: "Replace this file", text: file_upload_field)
-      ]
-    )
-  end
-
-  def replace_uploaded_file_field_not_hidden(form, field_name, label:, label_classes: "govuk-label--m")
-    existing_uploaded_file_id = form.hidden_field "existing_#{field_name}_file_id"
-    file_upload_field         = form.govuk_file_upload(field_name, label:, label_classes:)
-    uploaded_file             = form.object.public_send(field_name)
-
-    return existing_uploaded_file_id.to_s + file_upload_field.to_s + render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }) unless uploaded_file.nil?
+    return existing_uploaded_file_id.to_s + file_upload_field.to_s + render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }) unless uploaded_file.blank?
     existing_uploaded_file_id.to_s + file_upload_field.to_s
-
   end
 
   def date_or_recent_time_ago(datetime)
