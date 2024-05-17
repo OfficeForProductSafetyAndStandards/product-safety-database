@@ -11,7 +11,8 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
   end
 
   def title(_user)
-    I18n.t(".title.#{metadata['update_verb']}", level: new_risk_level&.downcase, scope: I18N_SCOPE)
+    level = new_risk_level&.downcase
+    I18n.t(".title.#{metadata['update_verb']}", level:, scope: I18N_SCOPE)
   end
 
 private
@@ -24,6 +25,8 @@ private
     return "" if metadata["update_verb"] == "removed"
 
     new_risk_level_value = metadata["updates"]["risk_level"]&.second
-    I18n.t(".investigations.risk_level.show.levels.#{new_risk_level_value}")
+
+    # Attempt to fetch the translation and handle cases where it might not exist
+    I18n.t(".investigations.risk_level.show.levels.#{new_risk_level_value}", default: new_risk_level_value.to_s)
   end
 end
