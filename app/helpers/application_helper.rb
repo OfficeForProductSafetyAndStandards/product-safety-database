@@ -45,13 +45,37 @@ module ApplicationHelper
     rc.render(sanitized_input).html_safe
   end
 
+  # def replace_uploaded_file_field(form, field_name, label:, label_classes: "govuk-label--m")
+  #   # binding.pry
+  #   existing_uploaded_file_id = form.hidden_field "existing_#{field_name}_file_id"
+  #   file_upload_field         = form.govuk_file_upload(field_name, label:, label_classes:)
+  #   uploaded_file             = form.object.public_send(field_name)
+  #
+  #   return existing_uploaded_file_id.to_s + file_upload_field.to_s + render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }) if uploaded_file.present?
+  #
+  #   existing_uploaded_file_id.to_s + file_upload_field.to_s
+  # end
   def replace_uploaded_file_field(form, field_name, label:, label_classes: "govuk-label--m")
-    existing_file_id_field, file_upload_field = create_form_fields(form, field_name, label, label_classes)
-    uploaded_file = form.object.public_send(field_name)
+    existing_uploaded_file_id = existing_uploaded_file_field(form, field_name)
+    file_upload_field         = file_upload_field(form, field_name, label, label_classes)
+    uploaded_file             = form.object.public_send(field_name)
 
-    return render_uploaded_file(existing_file_id_field, file_upload_field, uploaded_file) if uploaded_file.present?
+    file_fields = existing_uploaded_file_id + file_upload_field
+    return file_fields + render_uploaded_file_partial(uploaded_file) if uploaded_file.present?
 
-    "#{existing_file_id_field}#{file_upload_field}"
+    file_fields
+  end
+
+  def existing_uploaded_file_field(form, field_name)
+    form.hidden_field("existing_#{field_name}_file_id").to_s
+  end
+
+  def file_upload_field(form, field_name, label, label_classes)
+    form.govuk_file_upload(field_name, label: label, label_classes: label_classes).to_s
+  end
+
+  def render_uploaded_file_partial(uploaded_file)
+    render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file })
   end
 
   def date_or_recent_time_ago(datetime)
@@ -60,18 +84,5 @@ module ApplicationHelper
 
   def psd_abbr(title: true)
     tag.abbr "PSD", title: title ? "Product Safety Database" : nil
-  end
-
-  private
-
-  def create_form_fields(form, field_name, label, label_classes)
-    existing_file_id_field = form.hidden_field "existing_#{field_name}_file_id"
-    file_upload_field = form.govuk_file_upload(field_name, label: label, label_classes: label_classes)
-    [existing_file_id_field, file_upload_field]
-  end
-
-  def render_uploaded_file(existing_file_id_field, file_upload_field, uploaded_file)
-    "#{existing_file_id_field}#{file_upload_field}" +
-      render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file })
   end
 end
