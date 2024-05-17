@@ -51,6 +51,7 @@ module ApplicationHelper
     uploaded_file             = form.object.public_send(field_name)
 
     return existing_uploaded_file_id.to_s + file_upload_field.to_s + render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }) if uploaded_file.present?
+
     existing_uploaded_file_id.to_s + file_upload_field.to_s
   end
 

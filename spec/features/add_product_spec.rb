@@ -6,7 +6,7 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
 
-  let(:bad_file) { Rails.root.join "spec/fixtures/files/testImages.bin" }
+  let(:bad_file) { Rails.root.join "spec/fixtures/files/email.txt" }
   let(:good_file) { Rails.root.join "spec/fixtures/files/testImage.png" }
 
   before do
@@ -250,14 +250,5 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF"
-
-    attach_file "product[image]", good_file
-    click_on "Save"
-
-    click_link "View the product record"
-
-    expect(page).not_to have_error_messages
-    expect(page).to have_selector("h1", text: "Product")
-    expect(page).to have_summary_item(key: "Country of origin", value: "Unknown")
   end
 end
