@@ -6,8 +6,8 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
   end
 
-  let(:bad_file) { Rails.root.join "spec/fixtures/files/email.txt" }
-  let(:good_file) { Rails.root.join "spec/fixtures/files/testImage.png" }
+  let(:invalid_image_file) { Rails.root.join("spec/fixtures/files/testImages.bin") }
+  let(:valid_image_file) { Rails.root.join("spec/fixtures/files/testImage.png") }
 
   before do
     sign_in user
@@ -184,7 +184,7 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     fill_in "Other product identifiers", with: attributes[:product_code]
     fill_in "Webpage", with: attributes[:webpage]
 
-    attach_file "product[image]", good_file
+    attach_file "product[image]", valid_image_file
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
       choose when_placed_on_market_answer(attributes[:when_placed_on_market])
@@ -223,7 +223,7 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     fill_in "Webpage", with: attributes[:webpage]
 
     # attach invalid image type
-    attach_file "product[image]", bad_file
+    attach_file "product[image]", invalid_image_file
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
       choose when_placed_on_market_answer(attributes[:when_placed_on_market])

@@ -50,6 +50,9 @@ class ProductForm
   validates :has_markings, inclusion: { in: Product.has_markings.keys }
   validate :markings_validity, if: -> { has_markings == "markings_yes" }
 
+  # members
+  ACCEPTABLE_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif"].freeze
+
   def self.from(product)
     new(product.serializable_hash(except: %i[owning_team_id updated_at retired_at]))
   end
@@ -86,9 +89,8 @@ class ProductForm
   def acceptable_image
     return if image.blank?
 
-    acceptable_types = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif"]
-    unless acceptable_types.include?(image.content_type)
-      errors.add(:image, "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF")
+    unless ACCEPTABLE_IMAGE_TYPES.include?(image.content_type)
+      errors.add(:image, I18n.t('errors.messages.invalid_image_type'))
     end
   end
 
