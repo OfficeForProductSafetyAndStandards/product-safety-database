@@ -90,7 +90,7 @@ class ProductForm
     return if image.blank?
 
     unless ACCEPTABLE_IMAGE_TYPES.include?(image.content_type)
-      errors.add(:image, I18n.t('errors.messages.invalid_image_type'))
+      errors.add(:image, I18n.t("errors.messages.invalid_image_type"))
     end
   end
 
