@@ -162,7 +162,7 @@ en:
       team_cases: Team notifications
       your_cases: Your notifications
       assigned_cases: Assigned notifications
-      all_cases: All notifications – Search
+      all_cases: All notifications â€“ Search
     filters:
       teams_added_to_case: "Teams added to notification"
       my_team: "My team"
@@ -470,13 +470,14 @@ en:
   errors:
     format: "%{message}"
     messages:
+      invalid_image_type: "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF"
       # Full list available at https://guides.rubyonrails.org/i18n.html#error-message-interpolation
       # with default values at https://github.com/rails/rails/blob/master/activemodel/lib/active_model/locale/en.yml
       inclusion: "%{attribute} is not included in the list"
       exclusion: "%{attribute} is reserved"
       invalid: "%{attribute} is invalid"
       taken: "%{attribute} has already been taken"
-      confirmation: "%{attribute} doesn’t match %{attribute}"
+      confirmation: "%{attribute} doesnâ€™t match %{attribute}"
       accepted: "%{attribute} must be accepted"
       empty: "%{attribute} cannot be empty"
       blank: "%{attribute} cannot be blank"
@@ -668,7 +669,7 @@ en:
         correspondence_type_form:
           attributes:
             type:
-              blank: "Select the type of correspondence you’re adding"
+              blank: "Select the type of correspondence youâ€™re adding"
         document_form:
           attributes:
             document:
@@ -690,9 +691,9 @@ en:
               blank: "Enter an email address in the correct format, like name@example.com"
               email: "Enter an email address in the correct format, like name@example.com"
               user_deleted: "Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored."
-              not_whitelisted: "The email address is not recognised. Check you’ve entered it correctly, or email %{opss_enquiries_email} to add it to the approved list."
+              not_whitelisted: "The email address is not recognised. Check youâ€™ve entered it correctly, or email %{opss_enquiries_email} to add it to the approved list."
               already_in_team: "%{email} is already a member of %{team}"
-              existing_user: "You cannot invite this person to join your team because they are already a member of another team. Contact %{opss_enquiries_email} if the person’s team needs to be changed."
+              existing_user: "You cannot invite this person to join your team because they are already a member of another team. Contact %{opss_enquiries_email} if the personâ€™s team needs to be changed."
         risk_level_form:
           attributes:
             risk_level:
@@ -701,7 +702,7 @@ en:
         supporting_information_type_form:
           attributes:
             type:
-              blank: "Select the type of information you’re adding"
+              blank: "Select the type of information youâ€™re adding"
         why_reporting_form:
           attributes:
             hazard_type:
@@ -1070,8 +1071,8 @@ en:
   image_removed: "The image was successfully removed"
   otp_code:
     blank: "Enter the security code"
-    too_short: "You haven’t entered enough numbers"
-    too_long: "You’ve entered too many numbers"
+    too_short: "You havenâ€™t entered enough numbers"
+    too_long: "Youâ€™ve entered too many numbers"
     incorrect: "Incorrect security code"
     expired: "The security code has expired. New code sent."
     numericality: "The code must be 5 numbers"
