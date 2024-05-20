@@ -470,6 +470,7 @@ en:
   errors:
     format: "%{message}"
     messages:
+      invalid_image_type: "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF"
       # Full list available at https://guides.rubyonrails.org/i18n.html#error-message-interpolation
       # with default values at https://github.com/rails/rails/blob/master/activemodel/lib/active_model/locale/en.yml
       inclusion: "%{attribute} is not included in the list"
