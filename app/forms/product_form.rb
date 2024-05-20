@@ -115,7 +115,7 @@ class ProductForm
     authenticity == "unsure"
   end
 
-  private
+private
 
   def markings_validity
     if markings.blank? || !markings.all? { |value| Product::MARKINGS.include?(value) }
