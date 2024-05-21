@@ -45,9 +45,13 @@ class ProductForm
   validates :country_of_origin, presence: true
   validates :when_placed_on_market, presence: true
   validates :description, length: { maximum: 10_000 }
+  validate :acceptable_image
 
   validates :has_markings, inclusion: { in: Product.has_markings.keys }
   validate :markings_validity, if: -> { has_markings == "markings_yes" }
+
+  # members
+  ACCEPTABLE_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/heic", "image/heif"].freeze
 
   def self.from(product)
     new(product.serializable_hash(except: %i[owning_team_id updated_at retired_at]))
@@ -79,6 +83,14 @@ class ProductForm
 
       product.image_upload_ids.push(image_upload.id)
       product.save!
+    end
+  end
+
+  def acceptable_image
+    return if image.blank?
+
+    unless ACCEPTABLE_IMAGE_TYPES.include?(image.content_type)
+      errors.add(:image, I18n.t("errors.messages.invalid_image_type"))
     end
   end
 
