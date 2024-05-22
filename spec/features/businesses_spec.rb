@@ -60,10 +60,14 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
 
   scenario "displays cases for business" do
     investigation = business_one.investigations.first
+
+    expect(investigation).not_to be_nil
+    expect(investigation.user_title).not_to be_nil, "Investigation user_title should not be nil for this test"
+
     visit "/businesses/#{business_one.id}"
 
     within "#notifications-1" do
-      expect(page).to have_text(investigation.title)
+      expect(page).to have_text(investigation.user_title)
     end
   end
 
