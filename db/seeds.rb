@@ -212,6 +212,39 @@ relationships = %w[retailer online_seller manufacturer exporter importer fulfill
   notification.investigation_businesses.create!(business:, relationship: relationships.sample)
 end
 
+# Duplicate Businesses for Testing
+duplicate_business_params = {
+  trading_name: "Duplicate Business",
+  company_number: "12345678",
+  legal_name: "Duplicate Business Ltd"
+}
+
+3.times do
+  business = Business.create!(duplicate_business_params)
+
+  business.locations << Location.new(
+    name: "Duplicate Location",
+    country: "GB",
+    address_line_1: "123 Fake Street",
+    county: "Test County",
+    postal_code: "AB12 3CD",
+    phone_number: "01234567890",
+    address_line_2: "Suite 1",
+    city: "Test City"
+  )
+
+  business.contacts << Contact.new(
+    name: "Duplicate Contact",
+    email: "duplicate@example.com",
+    phone_number: "01234567890",
+    job_title: "Manager"
+  )
+  business.save!
+
+  notification = Investigation.all.sample
+  notification.investigation_businesses.create!(business:, relationship: relationships.sample)
+end
+
 # Additional teams and users
 organisation = Organisation.create!(name: "Office for Product Safety and Standards")
 trading_standards = Organisation.create!(name: "Trading Standards")

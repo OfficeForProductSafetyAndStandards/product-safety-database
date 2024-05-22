@@ -14,6 +14,8 @@ module BusinessesHelper
     query = filter_by_selected_countries(query)
     query = filter_by_case_owner(query, user)
 
+    query = distinct_by_name_and_number(query)
+
     for_export ? query : pagy(query.order(sorting_params))
   end
 
@@ -57,6 +59,12 @@ private
     else
       query
     end
+  end
+
+  def distinct_by_name_and_number(query)
+    subquery = query.select("MIN(businesses.id) as id")
+                    .group("businesses.trading_name, businesses.company_number")
+    Business.where(id: subquery)
   end
 
   def child_records(for_export)
