@@ -6,65 +6,80 @@ module BusinessesHelper
   end
 
   def search_for_businesses(user = current_user, for_export: false)
-    query = Business.without_online_marketplaces.includes(child_records(for_export))
+    query = initialize_business_query(for_export)
 
-    if @search.q.present?
-      @search.q.strip!
-      query = query.where("trading_name ILIKE ?", "%#{@search.q}%")
-        .or(Business.where("legal_name ILIKE ?", "%#{@search.q}%"))
-        .or(Business.where(company_number: @search.q))
-    end
+    query = filter_by_search(query) if @search.q.present?
+    query = filter_by_case_status(query)
+    query = filter_by_business_types(query)
+    query = filter_by_selected_countries(query)
+    query = filter_by_case_owner(query, user)
 
-    query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
+    for_export ? query : pagy(query.order(sorting_params))
+  end
 
-    business_types = []
+private
 
-    Business::BUSINESS_TYPES.each do |business_type|
-      business_types << business_type if @search.send(business_type)
-    end
+  def initialize_business_query(for_export)
+    Business.without_online_marketplaces.includes(child_records(for_export))
+  end
 
-    query = query.where(investigation_businesses: { relationship: business_types }) unless business_types.empty?
+  def filter_by_search(query)
+    search_term = @search.q.strip
+    query.where("trading_name ILIKE :term OR legal_name ILIKE :term OR company_number = :term", term: "%#{search_term}%")
+  end
 
-    selected_countries = []
+  def filter_by_case_status(query)
+    return query unless @search.case_status == "open_only"
 
-    Country.all.map do |country|
-      selected_countries << country[1] if @search.send(country[0].parameterize.underscore)
-    end
+    query.where(investigations: { is_closed: false })
+  end
 
-    unless selected_countries.empty?
-      primary_location_ids = Business.all.map(&:primary_location).compact.pluck(:id)
-      query = query.where(locations: { id: primary_location_ids, country: selected_countries })
-    end
+  def filter_by_business_types(query)
+    business_types = Business::BUSINESS_TYPES.select { |type| @search.send(type) }
+    business_types.empty? ? query : query.where(investigation_businesses: { relationship: business_types })
+  end
 
+  def filter_by_selected_countries(query)
+    selected_countries = Country.all.select { |country| @search.send(country[0].parameterize.underscore) }.map { |country| country[1] }
+    return query if selected_countries.empty?
+
+    primary_location_ids = Business.all.map(&:primary_location).compact.pluck(:id)
+    query.where(locations: { id: primary_location_ids, country: selected_countries })
+  end
+
+  def filter_by_case_owner(query, user)
     case @search.case_owner
     when "me"
-      query = query.where(users: { id: user.id })
+      query.where(users: { id: user.id })
     when "my_team"
       team = user.team
-      query = query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+      query.where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+    else
+      query
     end
-
-    return query if for_export
-
-    pagy(query.order(sorting_params))
   end
 
   def child_records(for_export)
-    return %i[investigations locations contacts] if for_export
-
-    [:online_marketplace, :locations, { investigations: %i[owner_user owner_team] }]
+    for_export ? %i[investigations locations contacts] : [:online_marketplace, :locations, { investigations: %i[owner_user owner_team] }]
   end
 
   def business_export_params
-    params.permit(:q, *Business::BUSINESS_TYPES.map(&:to_sym), *Country.all.map { |country| country[0].parameterize.underscore.to_sym })
+    params.permit(:q, *Business::BUSINESS_TYPES.map(&:to_sym), *country_params)
+  end
+
+  def country_params
+    Country.all.map { |country| country[0].parameterize.underscore.to_sym }
   end
 
   def sorting_params
-    return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
-    return { trading_name: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
-    return { trading_name: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
-
-    { created_at: :desc }
+    case params[:sort_by]
+    when SortByHelper::SORT_BY_RELEVANT
+      {}
+    when SortByHelper::SORT_BY_NAME
+      { trading_name: params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC ? :desc : :asc }
+    else
+      { created_at: :desc }
+    end
   end
 
   def sort_column
@@ -77,9 +92,7 @@ module BusinessesHelper
 
   def business_params
     params.require(:business).permit(
-      :legal_name,
-      :trading_name,
-      :company_number,
+      :legal_name, :trading_name, :company_number,
       locations_attributes: %i[id name address_line_1 address_line_2 phone_number city county country postal_code],
       contacts_attributes: %i[id name email phone_number job_title]
     )

@@ -17,7 +17,7 @@ def create_blob(filename, title: nil, description: nil)
 end
 
 organisation = Organisation.create!(name: "Seed Organisation")
-team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation, country: "country:GB")
+team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", organisation:, country: "country:GB")
 team.roles.create!(name: "opss")
 
 # Users
@@ -29,6 +29,38 @@ user = User.find_by(email: "seed_user@example.com") || User.create!(
   organisation:,
   team:,
 )
+
+# Roles
+roles = %w[
+  all_data_exporter
+  notifying_country_editor
+  opss
+  team_admin
+  super_user
+  prism
+  risk_level_validator
+  restricted_case_viewer
+  product_bulk_uploader
+  notification_task_list_user
+  use_new_search
+]
+
+roles.each do |role|
+  email = "#{role}@example.com"
+  next if User.find_by(email:)
+
+  role_user = User.create!(
+    name: role.humanize,
+    email:,
+    password: "testpassword",
+    password_confirmation: "testpassword",
+    organisation:,
+    team:,
+    mobile_number_verified: true,
+    mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+  )
+  role_user.roles.create!(name: role)
+end
 
 # Products
 country_codes = Country.all.map(&:second)
@@ -50,10 +82,7 @@ product_categories = Rails.application.config.product_constants["product_categor
     has_markings: "markings_unknown"
   }
 
-  product = CreateProduct.call!(
-    product_params.merge({ user: })
-  ).product
-
+  product = CreateProduct.call!(product_params.merge({ user: })).product
   product.update!(owning_team: team)
 
   blob = create_blob(all_seed_files.sample, title: Faker::Commerce.product_name, description: Faker::Hipster.sentence(word_count: 10))
@@ -103,7 +132,6 @@ end
 end
 
 # Accidents/incidents
-
 severities = UnexpectedEvent.severities.values
 usages = UnexpectedEvent.usages.values
 
@@ -184,21 +212,26 @@ relationships = %w[retailer online_seller manufacturer exporter importer fulfill
   notification.investigation_businesses.create!(business:, relationship: relationships.sample)
 end
 
+# Additional teams and users
 organisation = Organisation.create!(name: "Office for Product Safety and Standards")
 trading_standards = Organisation.create!(name: "Trading Standards")
 
-enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation, country: "country:GB")
+enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", organisation:, country: "country:GB")
 enforcement.roles.create!(name: "opss")
 
-operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
+operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, organisation:, country: "country:GB")
 operational_support.roles.create!(name: "opss")
 
-ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards, country: "country:GB")
+ts_team = Team.create!(name: "TS team", team_recipient_email: nil, organisation: trading_standards, country: "country:GB")
 
-Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
-Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
-Team.create!(name: "OPSS Incident Management", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
-Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
+[
+  "OPSS Science and Tech",
+  "OPSS Trading Standards Co-ordination",
+  "OPSS Incident Management",
+  "OPSS Testing"
+].each do |team_name|
+  Team.create!(name: team_name, team_recipient_email: nil, organisation:, country: "country:GB")
+end
 
 unless User.find_by(email: "user@example.com")
   User.create!(
@@ -248,13 +281,48 @@ end
 
 Investigation.reindex
 
-# rubocop:disable Layout/MultilineArrayLineBreaks
-marketplaces = ["Amazon", "eBay", "AliExpress", "Wish", "Etsy", "AliBaba", "Asos Marketplace", "Banggood",
-                "Bonanza", "Depop", "DesertCart", "Ecrater", "Facebook Marketplace", "Farfetch", "Fishpond",
-                "Folksy", "ForDeal", "Fruugo", "Grandado", "Groupon", "Gumtree", "Houzz", "Instagram",
-                "Joom", "Light In The Box", "OnBuy", "NotOnTheHighStreet", "Manomano", "PatPat", "Pinterest",
-                "Rakuten", "Shein", "Shpock", "Stockx", "Temu", "Vinted", "Wayfair", "Wowcher", "Zalando"]
-# rubocop:enable Layout/MultilineArrayLineBreaks
+# Online Marketplaces
+marketplaces = [
+  "Amazon",
+  "eBay",
+  "AliExpress",
+  "Wish",
+  "Etsy",
+  "AliBaba",
+  "Asos Marketplace",
+  "Banggood",
+  "Bonanza",
+  "Depop",
+  "DesertCart",
+  "Ecrater",
+  "Facebook Marketplace",
+  "Farfetch",
+  "Fishpond",
+  "Folksy",
+  "ForDeal",
+  "Fruugo",
+  "Grandado",
+  "Groupon",
+  "Gumtree",
+  "Houzz",
+  "Instagram",
+  "Joom",
+  "Light In The Box",
+  "OnBuy",
+  "NotOnTheHighStreet",
+  "Manomano",
+  "PatPat",
+  "Pinterest",
+  "Rakuten",
+  "Shein",
+  "Shpock",
+  "Stockx",
+  "Temu",
+  "Vinted",
+  "Wayfair",
+  "Wowcher",
+  "Zalando"
+]
 
 marketplaces.each do |marketplace|
   OnlineMarketplace.create(name: marketplace, approved_by_opss: true)
