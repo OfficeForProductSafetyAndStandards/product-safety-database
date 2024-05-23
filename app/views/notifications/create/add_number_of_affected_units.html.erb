@@ -1,5 +1,4 @@
 <%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_number_of_affected_units.title"), errors: @multiple_number_of_affected_units_form.errors.any?) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @multiple_number_of_affected_units_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>

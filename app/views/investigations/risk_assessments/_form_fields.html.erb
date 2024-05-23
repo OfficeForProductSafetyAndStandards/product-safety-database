@@ -1,5 +1,4 @@
 <%= form.govuk_date_input :assessed_on, legend: "Date of assessment", hint: "For example, 31 1 2020" %>
-
 <% radio_items = (Investigation.risk_levels.keys - ["other", "not_conclusive"]).map do |level|
   { text: t("investigations.risk_level.show.levels.#{level}"), value: level }
 end
