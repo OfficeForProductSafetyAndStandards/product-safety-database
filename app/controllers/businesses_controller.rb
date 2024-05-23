@@ -4,7 +4,7 @@ class BusinessesController < ApplicationController
   include CountriesHelper
   include BreadcrumbHelper
 
-  before_action :set_search_params, only: %i[index]
+  before_action :set_search_params, only: %i[index your_businesses team_businesses]
   before_action :set_business, only: %i[show edit update]
   before_action :update_business, only: %i[update]
   before_action :set_countries, only: %i[update edit]
@@ -56,11 +56,13 @@ class BusinessesController < ApplicationController
   end
 
   def your_businesses
-    @search = SearchParams.new({ "case_owner" => "me",
-                                 "case_status" => "open_only",
-                                 "sort_by" => params["sort_by"],
-                                 "sort_dir" => params["sort_dir"],
-                                 "page_name" => "your_businesses" })
+    @search = SearchParams.new({
+      "case_owner" => "me",
+      "case_status" => "open_only",
+      "sort_by" => params["sort_by"],
+      "sort_dir" => params["sort_dir"],
+      "page_name" => "your_businesses"
+    })
     @pagy, @results = search_for_businesses
     @count = @pagy.count
     @businesses = BusinessDecorator.decorate_collection(@results)
@@ -70,11 +72,13 @@ class BusinessesController < ApplicationController
   end
 
   def team_businesses
-    @search = SearchParams.new({ "case_owner" => "my_team",
-                                 "case_status" => "open_only",
-                                 "sort_by" => params["sort_by"],
-                                 "sort_dir" => params["sort_dir"],
-                                 "page_name" => "team_businesses" })
+    @search = SearchParams.new({
+      "case_owner" => "my_team",
+      "case_status" => "open_only",
+      "sort_by" => params["sort_by"],
+      "sort_dir" => params["sort_dir"],
+      "page_name" => "team_businesses"
+    })
     @pagy, @results = search_for_businesses
     @count = @pagy.count
     @businesses = BusinessDecorator.decorate_collection(@results)

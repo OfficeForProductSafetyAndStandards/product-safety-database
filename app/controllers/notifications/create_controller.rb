@@ -158,8 +158,8 @@ module Notifications
                          .or(Business.where("CONCAT(locations.address_line_1, ' ', locations.address_line_2, ' ', locations.city, ' ', locations.county, ' ', locations.country, ' ', locations.postal_code) ILIKE ?", "%#{@search_query}%"))
                          .or(Business.where(company_number: @search_query))
                          .without_online_marketplaces
-                         .distinct
-                         .order(sort_by)
+                         .select("DISTINCT ON (businesses.trading_name, businesses.company_number) businesses.*")
+                         .order("businesses.trading_name, businesses.company_number, businesses.id")
                      else
                        Business.without_online_marketplaces.order(sort_by)
                      end
