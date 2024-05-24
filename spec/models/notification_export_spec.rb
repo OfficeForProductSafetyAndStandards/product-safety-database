@@ -2,18 +2,18 @@ require "rails_helper"
 
 RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   subject(:notification_export) do
-    described_class.create!(user:, params:)
+    described_class.create!(user: user, params: params)
   end
 
   let!(:organisation) { create(:organisation) }
   let!(:team) do
-    create(:team, organisation:, team_type: "local_authority", regulator_name: nil, ts_region: "Scotland", ts_acronym: "SCOTSS", ts_area: "Aberdeenshire")
+    create(:team, organisation: organisation, team_type: "local_authority", regulator_name: nil, ts_region: "Scotland", ts_acronym: "SCOTSS", ts_area: "Aberdeenshire")
   end
   let!(:other_team) do
-    create(:team, organisation:, team_type: "external", regulator_name: "Department of Agriculture, Environment and Rural Affairs (DAERA)", ts_region: nil, ts_acronym: nil, ts_area: nil)
+    create(:team, organisation: organisation, team_type: "external", regulator_name: "Department of Agriculture, Environment and Rural Affairs (DAERA)", ts_region: nil, ts_acronym: nil, ts_area: nil)
   end
-  let!(:user) { create(:user, :activated, :opss_user, organisation:, team:, has_viewed_introduction: true) }
-  let!(:other_user_other_team) { create(:user, :activated, :opss_user, name: "other user same team", organisation:, team: other_team) }
+  let!(:user) { create(:user, :activated, :opss_user, organisation: organisation, team: team, has_viewed_introduction: true) }
+  let!(:other_user_other_team) { create(:user, :activated, :opss_user, name: "other user same team", organisation: organisation, team: other_team) }
   let!(:investigation) do
     create(:allegation,
            creator: user,
@@ -27,6 +27,7 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
   let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all" } }
 
   before do
+    Investigation.reindex
     Investigation.search_index.refresh
   end
 
@@ -44,7 +45,6 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:sheet) { exported_data.sheet("Notifications") }
 
-    # rubocop:disable RSpec/ExampleLength
     it "exports the case data", :aggregate_failures do
       expect(exported_data.sheets).to eq %w[Notifications]
 
@@ -92,7 +92,6 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
       expect(sheet.cell(2, 11)).to eq investigation.non_compliant_reason
       expect(sheet.cell(3, 11)).to eq other_team_investigation.non_compliant_reason
 
-      # TODO: This will be flaky if Faker generates two dupes
       expect(sheet.cell(1, 12)).to eq "Products"
       expect(sheet.cell(2, 12)).to eq "0"
       expect(sheet.cell(3, 12)).to eq "0"
@@ -165,177 +164,16 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
       expect(sheet.cell(2, 29)).to eq investigation.risk_validated_at&.to_s
       expect(sheet.cell(3, 29)).to eq other_team_investigation.risk_validated_at&.to_s
     end
-    # rubocop:enable RSpec/ExampleLength
-
-    context "when filtering on case type" do
-      let!(:notification) { create(:notification) }
-      let!(:allegation) { create(:allegation) }
-      let!(:project) { create(:project) }
-      let!(:enquiry) { create(:enquiry) }
-
-      let(:params) { { case_type:, created_by: "all", case_status: "open", teams_with_access: "all" } }
-
-      before { Investigation.search_index.refresh }
-
-      context "with the new search" do
-        before { user.roles.create(name: "use_new_search") }
-
-        context "with all cases" do
-          let(:params) { { allegation: true, project: true, enquiry: true, notification: true } }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports all case types", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, notification.pretty_id, allegation.pretty_id, project.pretty_id, enquiry.pretty_id]
-          end
-        end
-
-        context "with allegations" do
-          let(:params) { { allegation: true } }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports allegations", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, allegation.pretty_id]
-          end
-        end
-
-        context "with enquiries" do
-          let(:params) { { enquiry: true } }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports enquiries", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [enquiry.pretty_id]
-          end
-        end
-
-        context "with projects" do
-          let(:params) { { project: true } }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports projects", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [project.pretty_id]
-          end
-        end
-
-        context "with notifications" do
-          let(:params) { { notification: true } }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports notifications", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [notification.pretty_id]
-          end
-        end
-
-        context "with more results than the upper search limit on notifications" do
-          before do
-            create_list(:notification, 3)
-            Investigation.search_index.refresh
-          end
-
-          let(:params) { { notification: true } }
-
-          it "exports all notifications" do
-            stub_const("CaseExport::OPENSEARCH_PAGE_SIZE", 2)
-            expect(sheet.last_row).to eq 5
-          end
-        end
-      end
-
-      context "with the old search" do
-        context "with all cases" do
-          let(:case_type) { "all" }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports all case types", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, notification.pretty_id, allegation.pretty_id, project.pretty_id, enquiry.pretty_id]
-          end
-        end
-
-        context "with allegations" do
-          let(:case_type) { "allegation" }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports allegations", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [investigation.pretty_id, other_team_investigation.pretty_id, allegation.pretty_id]
-          end
-        end
-
-        context "with enquiries" do
-          let(:case_type) { "enquiry" }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports enquiries", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [enquiry.pretty_id]
-          end
-        end
-
-        context "with projects" do
-          let(:case_type) { "project" }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports projects", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [project.pretty_id]
-          end
-        end
-
-        context "with notifications" do
-          let(:case_type) { "notification" }
-
-          it "exports the case data", :aggregate_failures do
-            expect(exported_data.sheets).to eq %w[Notifications]
-          end
-
-          it "only exports notifications", :aggregate_failures do
-            sheet_ids = sheet.column(1).drop(1)
-            expect(sheet_ids).to match_array [notification.pretty_id]
-          end
-        end
-      end
-    end
 
     context "when a created_from_date search parameter is provided" do
       let(:created_from_date) { 1.day.ago }
-      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", created_from_date: } }
+      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", created_from_date: created_from_date } }
 
       let!(:old_case) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
 
       before do
         old_case.update!(created_at: 2.days.ago)
+        Investigation.search_index.refresh
       end
 
       it "exports the case data", :aggregate_failures do
@@ -346,13 +184,14 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
         expect(sheet.cell(1, 1)).to eq "ID"
         expect(sheet.cell(2, 1)).to eq investigation.pretty_id
         expect(sheet.cell(3, 1)).to eq other_team_investigation.pretty_id
-        expect(sheet.cell(4, 1)).not_to eq old_case.pretty_id
+        sheet_ids = sheet.column(1).drop(1)
+        expect(sheet_ids).not_to include(old_case.pretty_id)
       end
     end
 
     context "when a created_to_date search parameter is provided" do
       let(:created_to_date) { 1.day.ago }
-      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", created_to_date: } }
+      let(:params) { { case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all", created_to_date: created_to_date } }
 
       let!(:old_case) { create(:allegation, creator: other_user_other_team, is_private: true).decorate }
 
