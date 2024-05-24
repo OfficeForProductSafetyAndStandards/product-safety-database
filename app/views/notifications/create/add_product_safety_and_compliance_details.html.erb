@@ -1,5 +1,4 @@
 <%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_product_safety_and_compliance_details.title"), errors: @change_notification_product_safety_compliance_details_form.errors.any?) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @change_notification_product_safety_compliance_details_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
@@ -16,7 +15,7 @@
         <% end %>
         </ul>
       <% end %>
-      <% unless @notification.reported_reason&.safe_and_compliant? %>
+      <% unless @notification&.reported_reason&.safe_and_compliant? %>
         <%= f.govuk_check_boxes_fieldset :unsafe, multiple: false, legend: { text: "What specific issues make the #{'product'.pluralize(@notification.products.count)} unsafe or non-compliant?", size: "m" }, hint: { text: "Please select all applicable issues." } do %>
           <%= f.govuk_check_box :unsafe, true, false, multiple: false, link_errors: true, label: { text: "Product harm" } do %>
             <%= f.govuk_collection_select :primary_hazard, hazards_options, :id, :name, label: { text: "What is the primary harm?" } %>

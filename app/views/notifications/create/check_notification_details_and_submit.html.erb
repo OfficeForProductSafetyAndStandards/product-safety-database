@@ -1,5 +1,4 @@
 <%= page_title(t("notifications.create.index.sections.submit.tasks.check_notification_details_and_submit.title"), errors: false) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
@@ -36,7 +35,7 @@
           row.with_value(text: @notification.safe_and_compliant? ? "Safe and compliant product(s)" : "Unsafe or non-compliant product(s)")
           row.with_action(text: "Change", href: wizard_path(:add_notification_details), visually_hidden_text: "notification reason")
         end
-        unless @notification.reported_reason.safe_and_compliant?
+        unless @notification&.reported_reason&.safe_and_compliant?
           summary_list.with_row do |row|
             row.with_key(text: "Specific product safety issues")
             row.with_value(text: specific_product_safety_issues.html_safe)
