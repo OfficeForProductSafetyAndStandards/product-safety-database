@@ -372,7 +372,7 @@ GEM
       multi_json (>= 1.0)
     optimist (3.1.0)
     orm_adapter (0.5.0)
-    pagy (7.0.11)
+    pagy (8.4.0)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -773,7 +773,7 @@ DEPENDENCIES
   net-pop
   net-smtp
   opensearch-ruby
-  pagy (~> 7.0.11)
+  pagy (~> 8.4.0)
   paper_trail
   parallel_tests (~> 4.7.1)
   pg (~> 1.5)
