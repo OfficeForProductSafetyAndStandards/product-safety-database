@@ -86,7 +86,7 @@ RSpec.describe AddCorrectiveActionToNotification, :with_stubbed_mailer, :with_te
     end
   end
 
-  context "when the corrective action indicates a modification" do
+  context "when the corrective action indicates a modification programme" do
     let(:action_key) { "modification_programme" }
     let(:opss_imt) { create(:team, name: "OPSS Incident Management") }
 
