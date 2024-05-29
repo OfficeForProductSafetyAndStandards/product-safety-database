@@ -155,8 +155,6 @@ module Notifications
                        @search_query.strip!
                        Business.joins(:locations).where("businesses.trading_name ILIKE ?", "%#{@search_query}%")
                          .or(Business.where("businesses.legal_name ILIKE ?", "%#{@search_query}%"))
-                         .or(Business.where("CONCAT(locations.address_line_1, ' ', locations.address_line_2, ' ', locations.city, ' ', locations.county, ' ', locations.country, ' ', locations.postal_code) ILIKE ?", "%#{@search_query}%"))
-                         .or(Business.where(company_number: @search_query))
                          .without_online_marketplaces
                          .select("DISTINCT ON (businesses.trading_name, businesses.company_number) businesses.*")
                          .order("businesses.trading_name, businesses.company_number, businesses.id")
