@@ -39,7 +39,7 @@ private
     # the corrective action indicates a recall. If OPSS IMT has already been added,
     # `AddTeamToNotification` returns silently.
 
-    return unless %w[serious high].include?(notification.risk_level) || action == "recall_of_the_product_from_end_users"
+    return unless %w[serious high].include?(notification.risk_level) || action == "recall_of_the_product_from_end_users" || action == "modification_programme"
 
     team = Team.find_by(name: "OPSS Incident Management")
     return if team.blank?

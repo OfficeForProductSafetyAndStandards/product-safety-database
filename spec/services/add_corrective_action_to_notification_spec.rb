@@ -85,4 +85,19 @@ RSpec.describe AddCorrectiveActionToNotification, :with_stubbed_mailer, :with_te
       expect(result.notification.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
     end
   end
+
+  context "when the corrective action indicates a modification programme" do
+    let(:action_key) { "modification_programme" }
+    let(:opss_imt) { create(:team, name: "OPSS Incident Management") }
+
+    before do
+      opss_imt
+      notification.risk_level = "low"
+      notification.save!
+    end
+
+    it "adds OPSS IMT with edit permissions as a collaborator" do
+      expect(result.notification.teams_with_edit_access).to contain_exactly(user.team, opss_imt)
+    end
+  end
 end
