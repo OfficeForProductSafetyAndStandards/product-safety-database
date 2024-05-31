@@ -1,8 +1,14 @@
+<div class="govuk-hint">Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.</div>
 <% if old_file.present? %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><%= legend %></legend>
-    <%= render partial: "active_storage/blobs/blob", locals: { blob: old_file } %>
-
+    <!-- conditionally render the partial -->
+    <%=
+      errors_messages = form.object.errors.messages.map { |_, message| message }.join
+      unless errors_messages.nil? || !errors_messages.include?("The selected file must be")
+        render partial: "active_storage/blobs/blob", locals: { blob: old_file }
+      end
+    %>
     <%= govuk_details(summary_text: "Replace this file") do %>
       <%= form.govuk_file_upload field_name, label: "Select file", label_classes: "govuk-label--s" %>
     <% end %>

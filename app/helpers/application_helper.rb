@@ -50,8 +50,14 @@ module ApplicationHelper
     file_upload_field         = file_upload_field(form, field_name, label, label_classes)
     uploaded_file             = form.object.public_send(field_name)
 
+
     file_fields = existing_uploaded_file_id + file_upload_field
-    return file_fields + render_uploaded_file_partial(uploaded_file) if uploaded_file.present?
+
+    if (form.object.errors.messages.map { |_error, message| message }).join.to_s.include? "The selected file must be a"
+      return file_fields
+    elsif uploaded_file.present?
+      return file_fields + render_uploaded_file_partial(uploaded_file)
+    end
 
     file_fields
   end
