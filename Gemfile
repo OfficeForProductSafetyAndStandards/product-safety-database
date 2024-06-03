@@ -34,7 +34,7 @@ gem "net-smtp"
 
 gem "loaf", "~> 0.10"
 gem "matrix", "~> 0.4"
-gem "pagy", "~> 7.0.11"
+gem "pagy", "~> 8.4.0"
 gem "paper_trail"
 gem "pg", "~> 1.5"
 gem "prawn", "~> 2.5"
