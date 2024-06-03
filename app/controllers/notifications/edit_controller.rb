@@ -49,8 +49,8 @@ module Notifications
                        @search_query.strip!
                        Business.joins(:locations).where("businesses.trading_name ILIKE ?", "%#{@search_query}%")
                                .or(Business.where("businesses.legal_name ILIKE ?", "%#{@search_query}%"))
-                               .or(Business.where("CONCAT(locations.address_line_1, ' ', locations.address_line_2, ' ', locations.city, ' ', locations.county, ' ', locations.country, ' ', locations.postal_code) ILIKE ?", "%#{@search_query}%"))
-                               .or(Business.where(company_number: @search_query))
+                               .or(Business.where("CONCAT(locations.postal_code) ILIKE ?", "%#{@search_query}%"))
+                               .or(Business.where("businesses.company_number ILIKE ?",  "%#{@search_query}%"))
                                .without_online_marketplaces
                                .distinct
                                .order(sort_by)
