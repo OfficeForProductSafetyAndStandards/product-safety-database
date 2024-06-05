@@ -45,9 +45,9 @@ module ApplicationHelper
     rc.render(sanitized_input).html_safe
   end
 
-  def replace_uploaded_file_field(form, field_name, label:, label_classes: "govuk-label--m")
+  def replace_uploaded_file_field(form, field_name, label:, hint:, label_classes: "govuk-label--m")
     existing_uploaded_file_id = existing_uploaded_file_field(form, field_name)
-    file_upload_field         = file_upload_field(form, field_name, label, label_classes)
+    file_upload_field         = file_upload_field(form, field_name, label, label_classes, hint)
     uploaded_file             = form.object.public_send(field_name)
 
     file_fields = existing_uploaded_file_id + file_upload_field
@@ -60,8 +60,8 @@ module ApplicationHelper
     form.hidden_field("existing_#{field_name}_file_id").to_s
   end
 
-  def file_upload_field(form, field_name, label, label_classes)
-    form.govuk_file_upload(field_name, label:, label_classes:).to_s
+  def file_upload_field(form, field_name, label, label_classes, hint)
+    form.govuk_file_upload(field_name, label:, hint: hint, label_classes: ).to_s
   end
 
   def render_uploaded_file_partial(uploaded_file)
