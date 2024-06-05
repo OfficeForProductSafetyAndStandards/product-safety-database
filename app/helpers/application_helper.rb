@@ -61,7 +61,7 @@ module ApplicationHelper
   end
 
   def file_upload_field(form, field_name, label, label_classes, hint)
-    form.govuk_file_upload(field_name, label:, hint: hint, label_classes: ).to_s
+    form.govuk_file_upload(field_name, label:, hint:, label_classes:).to_s
   end
 
   def render_uploaded_file_partial(uploaded_file)
