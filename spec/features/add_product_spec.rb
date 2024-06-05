@@ -249,6 +249,6 @@ RSpec.feature "Adding a product", :with_stubbed_antivirus, :with_stubbed_mailer,
     # Expected validation errors
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "The selected file must be a JPG, PNG, GIF, WEBP, HEIC or HEIF"
+    expect(errors_list[0].text).to eq "The selected file must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF"
   end
 end
