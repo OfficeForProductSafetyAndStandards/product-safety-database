@@ -1,25 +1,16 @@
 <% label_class = "govuk-label--m" %>
 
-<%= govukSelect(
-  formGroup: { classes: class_names("govuk-form-group--error" => product_form.errors[:category].any?) },
-  choices: product_categories,
-  key: :category,
-  form: form,
-  include_blank: true,
-  id: "category",
-  aria_describedby: "report-product-category-hint",
-  label: { text: "Product category", classes: label_class },
-  hint: { text: "The product category will be permanent for this product record", classes: "govuk-!-font-size-16" },
-  attributes: { disabled: local_assigns[:disable_permanent_fields] }
-) %>
+<% category_items = [OpenStruct.new(value: "", text: "")] + product_categories.map{|x| OpenStruct.new(value: x, text: x)}  %>
+<%= form.govuk_collection_select :category,
+                                 category_items,
+                                 :value,
+                                 :text,
+                                 label: { text: "Product category", size: "m" },
+                                 hint: { text: "The product category will be permanent for this product record" } %>
+<%= form.govuk_text_field :subcategory, label: { text: 'Product subcategory', size: 'm' }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
 
-<%= govukInput(
-  key: :subcategory,
-  form: form,
-  id: "subcategory",
-  label: { text: "Product subcategory", classes: label_class },
-  hint: { text: "For example, 'Face mask' or 'Washing machine'" }
-) %>
+
+<%= form.govuk_text_field :subcategory, label: {text: "Product subcategory"}, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
 
 <% if product_form.authenticity_unsure? %>
   <fieldset class="govuk-fieldset">
@@ -27,33 +18,40 @@
     <p class="govuk-body">The original record was recorded as 'unsure'</p>
   </fieldset>
 <% else %>
-  <%= form.govuk_radios :authenticity,
-                        legend: "Is the product counterfeit?",
-                        hint: { text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", classes: "govuk-!-font-size-16" },
-                        items: conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]) %>
+  <% counterfeit_radio_items =  conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]).map{|x| OpenStruct.new(value: x.value, text: x.key)}%>
+  <%= form.govuk_collection_radio_buttons :authenticity,
+                                          counterfeit_radio_items,
+                                          :value,
+                                          :text,
+                                          legend: {text: "Is the product counterfeit?"},
+                                          hint: {text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", size: "16"}%>
+  <%= conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]) %>
 <% end %>
 
 <% product_marking_fields = capture do %>
-  <%= form.govuk_checkboxes :markings,
-                            legend: "Select product marking",
-                            legend_classes: "govuk-fieldset__legend--s",
-                            items: Product::MARKINGS.map { |value| { text: value, value: value, disable_ghost: true} } %>
+  <% markings = Product::MARKINGS.map{|x| OpenStruct.new(value: x, text: x)} %>
+  <%= form.govuk_collection_check_boxes :markings,
+                                        markings,
+                                        :value,
+                                        :text,
+                                        caption: nil,
+                                        legend: {text: "Select product marking"} %>
 <% end %>
 
-<%= form.govuk_radios :has_markings,
-  legend: "Does the product have UKCA, UKNI, or CE marking?",
-  items: [
-    { text: "Yes", value: "markings_yes", conditional: { html: product_marking_fields } },
-    { text: "No", value: "markings_no" },
-    { text: "Unknown", value: "markings_unknown" }
-  ]
-%>
 
+<%= form.govuk_radio_buttons_fieldset(:has_markings, legend: {text: "Does the product have UKCA, UKNI, or CE marking?"}) do %>
+  <%= form.govuk_radio_button :has_markings, 'markings_yes', label: {text: "Yes"} do %>
+    <%= product_marking_fields %>
+  <%= end %>
+  <%= form.govuk_radio_button :has_markings, 'markings_no', label: {text: "No"} %>
+  <%= form.govuk_radio_button :has_markings, 'markings_unknown', label: {text: "Unknown"} %>
+<% end %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= opss_aside title: "Number of units affected?", text: "The number of units affected is notification related data (and has now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
   </div>
 </div>
+
 
 <%= govukInput(
   key: :brand,
@@ -62,6 +60,11 @@
   hint: { html: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe },
   attributes: { disabled: local_assigns[:disable_permanent_fields] }
 ) %>
+
+<%= form.govuk_text_field :brand,
+                          label: {text: "Manufacturer's brand name"},
+                          hint: {text: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe}
+%>
 
 <%= govukInput(
   key: :name,
