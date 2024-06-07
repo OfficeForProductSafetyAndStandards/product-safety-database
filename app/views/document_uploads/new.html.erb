@@ -12,7 +12,7 @@
         <div class="govuk-hint govuk-!-margin-bottom-8"><%= hint_text %></div>
       <% end %>
 
-      <%= render "upload_file_component", form: form, old_file: nil, field_name: :file_upload, legend: "Upload a file", label: "Upload a file" %>
+      <%= render "upload_file_component", form: form, old_file: nil, field_name: :file_upload, legend: "Upload a file", label: "Upload a file", hint: nil %>
 
       <%= form.govuk_input :title, label_classes: "govuk-label--m", label: "Document title" %>
       <%= form.govuk_text_area :description, label: "Description", attributes: { maxlength: 10_000 } %>

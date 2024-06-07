@@ -59,7 +59,7 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
   <% end %>
 <% end %>
 
-<%= render "upload_file_component", form: form, old_file: form.object.old_file, field_name: :risk_assessment_file, legend: "Upload the risk assessment", label: "Upload the risk assessment" %>
+<%= render "upload_file_component", form: form, old_file: form.object.old_file, field_name: :risk_assessment_file, legend: "Upload the risk assessment", label: "Upload the risk assessment", hint: nil %>
 
 <%= form.govuk_text_area :details,
    label: "Further details (optional)"
