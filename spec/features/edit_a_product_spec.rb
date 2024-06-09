@@ -6,7 +6,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
   let(:user)              { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user)        { create(:user, :activated, has_viewed_introduction: true) }
   let(:brand)             { Faker::Appliance.brand }
-  let(:country_of_origin) { "France" }
+  let(:country_of_origin) { "country:FR" }
   let(:investigation)     { create(:notification, creator: user) }
   let(:product) do
     create(:product,
@@ -144,7 +144,6 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
       # expect(page).to have_link "Change product details"
 
       visit "/products/#{product.id}"
-
       click_link "Edit this product record"
 
       expect(page).to have_select("Product category", selected: product.category, disabled: true)

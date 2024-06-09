@@ -118,7 +118,7 @@ class ProductForm
 private
 
   def markings_validity
-    markings.delete("")
+    markings.delete("") unless markings.nil?
     if markings.blank? || !markings.all? { |value| Product::MARKINGS.include?(value) }
       errors.add(:markings, :blank)
     end

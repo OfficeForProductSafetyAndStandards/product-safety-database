@@ -14,14 +14,12 @@
     <p class="govuk-body">The original record was recorded as 'unsure'</p>
   </fieldset>
 <% else %>
-  <% counterfeit_radio_items =  conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]).map{|x| OpenStruct.new(value: x[:value], text: x[:text])}%>
-  <%= form.govuk_collection_radio_buttons :authenticity,
-                                          counterfeit_radio_items,
-                                          :value,
-                                          :text,
-                                          legend: {text: "Is the product counterfeit?"},
-                                          hint: {text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", size: "16"},
-                                          disabled: local_assigns[:disable_permanent_fields]%>
+  <% counterfeit_radio_items =  conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]).map{|x| OpenStruct.new(value: x[:value], text: x[:text], disabled: x[:disabled])}%>
+  <%= form.govuk_radio_buttons_fieldset(:authenticity, legend: {text: "Is the product counterfeit?"}, hint: {text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", size: "16"}) do %>
+    <%= form.govuk_radio_button :authenticity, counterfeit_radio_items[0].value, label: {text: counterfeit_radio_items[0].text}, link_errors: true, disabled: counterfeit_radio_items[0].disabled %>
+    <%= form.govuk_radio_button :authenticity, counterfeit_radio_items[1].value, label: {text: counterfeit_radio_items[1].text}, disabled: counterfeit_radio_items[1].disabled %>
+    <%= form.govuk_radio_button :authenticity, counterfeit_radio_items[2].value, label: {text: counterfeit_radio_items[2].text}, disabled: counterfeit_radio_items[2].disabled %>
+  <% end %>
 <% end %>
 
 <% markings_list = [OpenStruct.new(id: "UKCA", name: "UKCA"), OpenStruct.new(id: "UKNI", name: "UKNI"), OpenStruct.new(id: "CE", name: "CE")] %>
@@ -47,14 +45,14 @@
 <%= form.govuk_text_field :brand,
                           label: {text: "Manufacturer's brand name", size: 'm'},
                           hint: {text: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe},
-                          disabled: true
+                          disabled: local_assigns[:disable_permanent_fields]
 %>
 
 
 <%= form.govuk_text_field :name,
                           label: {text: "Product name", size: 'm'},
                           hint: {text: 'Include model name and model number, for example \'PlayStation 5\'<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The product name will be permanent for this product record</span>'.html_safe},
-                          disabled: true
+                          disabled: local_assigns[:disable_permanent_fields]
 %>
 
 <% if !local_assigns[:disable_image_upload] %>

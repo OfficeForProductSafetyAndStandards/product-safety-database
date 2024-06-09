@@ -311,7 +311,7 @@ module Notifications
     end
 
     def set_notification
-      @notification = Investigation::Notification.includes(:creator_user).where(pretty_id: params[:notification_pretty_id], creator_user: { id: current_user.id }).first!
+      @notification = Investigation::Notification.includes(:creator_user).where(pretty_id: params[:notification_pretty_id], creator_user: { id: current_user.id }).first
 
       if @notification.nil?
         redirect_to "/404"
