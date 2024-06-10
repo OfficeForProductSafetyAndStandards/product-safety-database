@@ -20,6 +20,10 @@
     label: { text: "Town or city" },
     classes: "govuk-!-width-two-thirds" ) %>
 
+  <%= form.govuk_text_field :city,
+                            width: 'two-thirds',
+                            label: {text: "Town or city"}
+  %>
   <%= govukInput(
     key: :county,
     form: form,
