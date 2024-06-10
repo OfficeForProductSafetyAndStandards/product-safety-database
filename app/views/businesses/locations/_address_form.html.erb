@@ -1,4 +1,4 @@
-<%= form.govuk_fieldset legend: {text: "Name and company number", size: 's'} do %>
+<%= form.govuk_fieldset legend: {text: "Official address", size: 's'} do %>
     <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
   <%= form.govuk_text_field :address_line_1,
                             width: 'two-thirds',
@@ -7,7 +7,7 @@
 
   <%= form.govuk_text_field :address_line_2,
                             width: 'two-thirds',
-                            label: {text: "Building and street line 2 of 2"}
+                            label: {text: "Building and street line 2 of 2", hidden: true}
   %>
 
   <%= form.govuk_text_field :city,
@@ -21,12 +21,12 @@
   %>
 
   <%= form.govuk_text_field :postal_code,
-                            width: 'two-thirds',
+                            width: 'one-quarter',
                             label: {text: "Postcode"}
   %>
 
   <% items = all_countries_with_uk_first.map { |country| OpenStruct.new(value: country[1], text: country[0] )}%>
-  <%= form.govuk_collection_select :category,
+  <%= form.govuk_collection_select :country,
                                    items,
                                    :value,
                                    :text,

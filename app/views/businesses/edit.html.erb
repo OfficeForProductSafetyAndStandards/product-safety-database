@@ -5,10 +5,10 @@
   </div>
 </div>
 
-<%= form_with(model: @business, html: { autocomplete: :off }) do |form| %>
+<%= form_for @business, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <%= govukErrorSummary form: form %>
+      <% form.govuk_error_summary %>
     </div>
   </div>
 

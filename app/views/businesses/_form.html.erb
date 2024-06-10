@@ -1,20 +1,20 @@
 <%= form.govuk_fieldset legend: {text: "Name and company number", size: 's'} do %>
   <%= form.govuk_text_field :trading_name,
                             width: 'two-thirds',
-                            label: {text: t("businesses.form.trading_name.label")},
-                            hint: { text: t("businesses.form.trading_name.hint"), size: 'm' }
+                            label: {text: t("businesses.form.trading_name.label"), },
+                            hint: { text: t("businesses.form.trading_name.hint"), style: "font-size: 0.975rem !important; line-height: 1.1428571429" }
   %>
 
   <%= form.govuk_text_field :legal_name,
                             width: 'two-thirds',
                             label: {text: t("businesses.form.legal_name.label")},
-                            hint: { text: t("businesses.form.legal_name.hint_html"), size: 'm'}
+                            hint: { text: t("businesses.form.legal_name.hint_html"), style: "font-size: 0.975rem; line-height: 1.1428571429"}
   %>
 
-  <%= form.govuk_number_field :company_number,
+  <%= form.govuk_text_field :company_number,
                             width: 'one-third',
                             label: {text: t("businesses.form.company_number.label") },
-                            hint: { text: t("businesses.form.company_number.hint_html"), size: 'm'}
+                            hint: { text: t("businesses.form.company_number.hint_html"), style: "font-size: 0.975rem; line-height: 1.1428571429"}
   %>
 <% end %>
 
@@ -27,4 +27,4 @@
   <%= render "businesses/contacts/form", form: ff %>
 <% end %>
 
-<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>
+<%= form.govuk_submit "Save" %>

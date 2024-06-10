@@ -1,10 +1,10 @@
-<%= form_with(model: @remove_business_form, url: investigation_business_path(@investigation, @business), method: :delete, builder: ApplicationFormBuilder) do |form| %>
-  <%= form.govuk_radios :remove,
-            legend: t(".remove_business_legend"),
-   items: [
-     { text: t(".yes_label"), value: "true", conditional: { html: form.govuk_text_area(:reason, label_classes: "govuk-label", label: t(".reason_for_removing_the_business_from_the_case"))} },
-     { text: t(".no_label"), value: "off" }]
-  %>
-  <%= form.submit "Submit", class: "govuk-button govuk-button--warning" %>
+<%= form_with(model: @remove_business_form, url: investigation_business_path(@investigation, @business), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+  <%= form.govuk_radio_buttons_fieldset(:remove, legend: {text: t(".remove_business_legend")}) do %>
+    <%= form.govuk_radio_button :remove, 'true', label: {text: "Yes", link_errors: true}  do %>
+      <% form.govuk_text_area :reason, label: {text: t(".reason_for_removing_the_business_from_the_case")} %>
+    <% end %>
+    <%= form.govuk_radio_button :remove, 'off', label: {text: "No", link_errors: true} %>
+  <% end %>
+  <%= form.govuk_submit "Submit" %>
 <% end %>
 <%= link_to t(".cancel"), investigation_businesses_path(@investigation), class: "govuk-link" %>
