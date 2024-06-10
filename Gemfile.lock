@@ -772,6 +772,7 @@ DEPENDENCIES
   net-imap
   net-pop
   net-smtp
+  nokogiri
   opensearch-ruby
   pagy (~> 8.4.4)
   paper_trail

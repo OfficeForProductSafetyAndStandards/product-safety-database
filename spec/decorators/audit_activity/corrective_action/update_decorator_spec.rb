@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
 
   include_context "with corrective action setup for updates"
 
-  let(:new_legislation) { "Food Imitations (Safety) Regulations 1989" }  # Example value, change as necessary
+  let(:new_legislation) { "Food Imitations (Safety) Regulations 1989" } # Example value, change as necessary
   let(:new_file_description) { "new corrective action file description" }
   let(:new_filename) { "corrective_action.txt" }
   let(:new_document) { fixture_file_upload(file_fixture(new_filename)) }
@@ -36,7 +36,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
   before do
     UpdateCorrectiveAction.call!(
       corrective_action_attributes
-        .merge(corrective_action: corrective_action, user: user, changes: changes)
+        .merge(corrective_action:, user:, changes:)
     )
   end
 

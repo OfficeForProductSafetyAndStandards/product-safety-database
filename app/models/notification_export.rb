@@ -3,7 +3,6 @@ class NotificationExport < ApplicationRecord
   include CountriesHelper
   include InvestigationsHelper
 
-  # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
   OPENSEARCH_PAGE_SIZE = 10_000
 
@@ -35,7 +34,9 @@ class NotificationExport < ApplicationRecord
 
     notification_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_notification_ids|
       find_notifications(batch_notification_ids).each do |notification|
-        sheet.add_row(serialize_notification(notification.decorate), types: :text)
+        row_data = serialize_notification(notification.decorate)
+        Rails.logger.debug "Adding row: #{row_data.inspect}"
+        sheet.add_row(row_data, types: Array.new(row_data.length, :string))
       end
     end
 
@@ -43,6 +44,10 @@ class NotificationExport < ApplicationRecord
   end
 
 private
+
+  def strip_html(html)
+    Nokogiri::HTML(html).text
+  end
 
   def notification_ids
     return @notification_ids if @notification_ids
@@ -127,7 +132,7 @@ private
                      Date_Created
                      Last_Updated
                      Date_Closed
-                     Date_Validated]
+                     Date_Validated], types: Array.new(29, :string)
   end
 
   def find_notifications(ids)
@@ -137,18 +142,35 @@ private
   end
 
   def serialize_notification(notification)
-    Pundit.policy!(user, notification).view_protected_details?(user:) || !notification.is_private? ? non_restricted_data(notification) : restricted_data(notification)
-  end
-
-  def non_restricted_data(notification)
     team = notification.creator_user&.team
+    is_other_team = team&.name == "Department of Agriculture, Environment and Rural Affairs (DAERA)"
+    user_is_case_owner = notification.owner_user == user
 
+    description = if notification.is_private? && !user_is_case_owner
+                    "Restricted"
+                  else
+                    notification.description == "=A1" ? "Restricted" : strip_html(notification.description)
+                  end
+
+    title = if notification.is_private? && !user_is_case_owner
+              "Restricted"
+            else
+              notification.title
+            end
+
+    notifiers_reference = if notification.is_private? && !user_is_case_owner
+                            "Restricted"
+                          else
+                            notification.complainant_reference
+                          end
+
+    # other fields are restricted if the user is not OPSS
     [
       notification.pretty_id,
       notification.is_closed? ? "Closed" : "Open",
       notification.type,
-      notification.title,
-      restrict_data_for_non_opss_user(notification.object.description),
+      title,
+      description,
       notification.categories.join(", "),
       notification.reported_reason,
       notification.risk_level_description,
@@ -162,57 +184,29 @@ private
       risk_assessment_counts[notification.id] || 0,
       notification.owner_team&.name,
       team&.name,
-      notification.complainant_reference,
-      country_from_code(notification.notifying_country, Country.notifying_countries),
-      notification.is_from_overseas_regulator ? "Yes" : "No",
-      notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : "",
-      team&.ts_region,
-      team&.regulator_name,
-      restrict_data_for_non_opss_user(team&.team_type == "internal"),
-      notification.created_at,
-      notification.updated_at,
-      notification.date_closed,
-      restrict_data_for_non_opss_user(notification.risk_validated_at)
+      notifiers_reference,
+      is_other_team ? "Restricted" : country_from_code(notification.notifying_country, Country.notifying_countries), # notifying_country
+      if is_other_team
+        "Restricted"
+      else
+        notification.is_from_overseas_regulator ? "Yes" : "No"
+      end, # overseas_regulator
+      if is_other_team
+        "Restricted"
+      else
+        notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : ""
+      end, # Country
+      is_other_team ? "Restricted" : team&.ts_region, # trading_standards_region
+      team&.regulator_name, # regulator_name should never be nil and is never restricted
+      is_other_team ? "Restricted" : restrict_data_for_non_opss_user(team&.team_type == "internal"), # opss_internal_team
+      is_other_team ? "Restricted" : notification.created_at, # date_created
+      is_other_team ? "Restricted" : notification.updated_at, # last_updated
+      is_other_team ? "Restricted" : notification.date_closed, # date_closed
+      is_other_team ? "Restricted" : restrict_data_for_non_opss_user(notification.risk_validated_at) # date_validated
     ]
   end
 
   def restrict_data_for_non_opss_user(field)
     user.is_opss? ? field : "Restricted"
-  end
-
-  def restricted_data(notification)
-    team = notification.creator_user&.team
-
-    [
-      notification.pretty_id,
-      notification.is_closed? ? "Closed" : "Open",
-      notification.type,
-      "Restricted",
-      "Restricted",
-      notification.categories.join(", "),
-      notification.reported_reason,
-      notification.risk_level_description,
-      notification.hazard_type,
-      notification.non_compliant_reason,
-      notification.hazard_description,
-      product_counts[notification.id] || 0,
-      business_counts[notification.id] || 0,
-      corrective_action_counts[notification.id] || 0,
-      test_counts[notification.id] || 0,
-      risk_assessment_counts[notification.id] || 0,
-      notification.owner_team&.name,
-      notification.creator_user&.team&.name,
-      "Restricted",
-      country_from_code(notification.notifying_country, Country.notifying_countries),
-      notification.is_from_overseas_regulator ? "Yes" : "No",
-      notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : "",
-      team&.ts_region,
-      team&.regulator_name,
-      (team&.team_type == "internal"),
-      notification.created_at,
-      notification.updated_at,
-      notification.date_closed,
-      notification.risk_validated_at
-    ]
   end
 end
