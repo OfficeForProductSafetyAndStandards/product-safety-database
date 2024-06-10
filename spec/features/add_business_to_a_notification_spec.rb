@@ -125,19 +125,57 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
       .to have_sibling(".govuk-body", text: "Role: retailer")
   end
 
-  scenario "Adding an approved online marketplace business" do
+  scenario "Adding an approved online marketplace business with selection" do
+    sign_in user
+
+    # start journey
+    visit "/cases/#{notification.pretty_id}/businesses"
+    click_link "Add business"
+
+    # validation
+    expect_to_be_on_investigation_add_business_type_page
+    expect_to_have_notification_breadcrumbs
+    expect(page).to have_unchecked_field("Retailer")
+    expect(page).to have_unchecked_field("Manufacturer")
+    expect(page).to have_unchecked_field("Exporter")
+    expect(page).to have_unchecked_field("Importer")
+    expect(page).to have_unchecked_field("Online seller")
+    expect(page).to have_unchecked_field("Online marketplace")
+    expect(page).to have_unchecked_field("Fulfillment house")
+    expect(page).to have_unchecked_field("Distributor")
+    expect(page).to have_unchecked_field("Authorised representative")
+
+    # choose the online marketplace
+    choose "Online marketplace"
+    expect(page).to have_unchecked_field(marketplace_1.name)
+    choose marketplace_1.name
+    click_on "Continue"
+
+    # Uses stored marketplace business & location, does not ask for details
+    expect_to_be_on_notification_businesses_page
+    expect(page).not_to have_error_messages
+    expect_to_have_notification_breadcrumbs
+
+    # validate the summary page after adding the business
+    expect(page).to have_text("These are the businesses included in the notification.")
+    expect(page.find("dt", text: "Online marketplace")).to have_sibling("dd", text: marketplace_1.name)
+
+    # Check that adding  the business was recorded in the
+    # activity log for the notification.
+    click_link "Activity"
+    expect_to_have_notification_breadcrumbs
+    expect(page.find("h3", text: "Business added"))
+      .to have_sibling(".govuk-body", text: "Role: online_marketplace")
+  end
+
+  scenario "Adding an approved online marketplace business without selection produces error" do
     sign_in user
     visit "/cases/#{notification.pretty_id}/businesses"
 
     click_link "Add business"
-    expect_to_have_notification_breadcrumbs
-
-    # Don't select a business type
-    click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
     expect_to_have_notification_breadcrumbs
-    expect(page).to have_error_summary("Select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
     expect(page).to have_unchecked_field("Manufacturer")
@@ -149,35 +187,10 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
     expect(page).to have_unchecked_field("Distributor")
     expect(page).to have_unchecked_field("Authorised representative")
 
-    choose "Online marketplace"
-    expect(page).to have_unchecked_field(marketplace_1.name)
-    expect(page).to have_unchecked_field(marketplace_2.name)
-    expect(page).not_to have_unchecked_field(unapproved_marketplace.name)
-    choose marketplace_1.name
-
+    # Don't select a business type
     click_on "Continue"
 
-    # Uses stored marketplace business & location, does not ask for details
-    expect_to_be_on_notification_businesses_page
-    expect(page).not_to have_error_messages
-    expect_to_have_notification_breadcrumbs
-
-    within("section##{marketplace_1_business.trading_name.parameterize}") do
-      expect(page.find("dt", text: "Online marketplace")).to have_sibling("dd", text: marketplace_1.name)
-      expect(page.find("dt", text: "Company number")).to have_sibling("dd", text: marketplace_1_business.company_number)
-
-      expect(page).to have_text(marketplace_1_business_location.address_line_1)
-      expect(page).to have_text(marketplace_1_business_location.address_line_2)
-    end
-
-    # Check that adding  the business was recorded in the
-    # activity log for the notification.
-    click_link "Activity"
-    expect(page).to have_text("Business added")
-    expect_to_have_notification_breadcrumbs
-
-    expect(page.find("h3", text: "Business added"))
-      .to have_sibling(".govuk-body", text: "Role: online_marketplace")
+    expect(page).to have_error_summary("Select a business type")
   end
 
   scenario "Adding a EU authorised rep business" do

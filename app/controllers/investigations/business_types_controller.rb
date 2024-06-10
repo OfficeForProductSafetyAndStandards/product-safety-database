@@ -14,7 +14,8 @@ class Investigations::BusinessTypesController < Investigations::BaseController
     if @business_type_form.valid?
       if @business_type_form.is_approved_online_marketplace?
         online_marketplace = @business_type_form.approved_online_marketplace
-
+        online_marketplace.business = Business.create(trading_name: online_marketplace.name)
+        online_marketplace.save!
         AddBusinessToNotification.call!(
           business: online_marketplace.business,
           relationship: "online_marketplace",
