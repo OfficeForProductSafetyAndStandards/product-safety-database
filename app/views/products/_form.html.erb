@@ -56,13 +56,9 @@
 %>
 
 <% if !local_assigns[:disable_image_upload] %>
-<<<<<<< HEAD
-  <%= render "upload_file_component", form: form, old_file: nil, field_name: :image, legend: "Upload a product image", label: "Upload a product image" , hint: "Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF."%>
-=======
   <%= form.govuk_file_field :image,
                             label: { text: 'Upload a product image', size: 'm' },
                             hint: { text: 'Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.' } %>
->>>>>>> 72885a6bc (Refactored Product Form)
 <% end %>
 
 
