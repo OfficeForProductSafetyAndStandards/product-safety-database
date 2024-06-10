@@ -5,7 +5,7 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
   let(:initial_product_description) { "Widget" }
   let(:new_product_description) { "Sausage" }
   let(:creation_time) { 1.day.ago }
-  let(:product) { create(:product, :with_antivirus_checked_image_upload, description: initial_product_description, owning_team: user.team) }
+  let(:product) { create(:product, :with_antivirus_checked_image_upload, description: initial_product_description, owning_team: user.team, country_of_origin: "country:BS") }
   let(:first_investigation) { create(:notification, creator: user, products: [product]) }
   let(:second_investigation) { create(:notification, creator: user) }
 

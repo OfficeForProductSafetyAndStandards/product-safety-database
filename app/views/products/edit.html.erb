@@ -1,5 +1,5 @@
 <%= page_title "Edit product", errors: @product_form.errors.any? %>
-<%= form_with model: @product_form, scope: :product, url: product_path(@product_form.id), method: :put, builder: ApplicationFormBuilder do |form| %>
+<%= form_with model: @product_form, scope: :product, url: product_path(@product_form.id), method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings when_placed_on_market name]) %>

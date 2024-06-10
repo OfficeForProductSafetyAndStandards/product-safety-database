@@ -8,6 +8,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, type: :feature d
            brand: "MyBrand",
            name: "Washing machine",
            category: "Electrical appliances and equipment",
+           country_of_origin: "country:AL",
            subcategory: "washing machine",
            product_code: "MBWM01",
            webpage: "http://example.com/mybrand/washing-machines",
