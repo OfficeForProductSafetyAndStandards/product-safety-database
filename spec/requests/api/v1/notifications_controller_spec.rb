@@ -28,16 +28,20 @@ RSpec.describe "API Notifications Controller", :with_opensearch, type: :request 
 
         after do |example|
           content = example.metadata[:response][:content] || {}
-          example_spec = {
-            "application/json"=>{
-              examples: {
-                test_example: {
-                  value: JSON.parse(response.body, symbolize_names: true)
+          if response
+            example_spec = {
+              "application/json"=>{
+                examples: {
+                  test_example: {
+                    value: JSON.parse(response.body, symbolize_names: true)
+                  }
                 }
               }
             }
-          }
-          example.metadata[:response][:content] = content.deep_merge(example_spec)
+            example.metadata[:response][:content] = content.deep_merge(example_spec)
+          else
+            raise "Response is nil"
+          end
         end
 
         run_test! do |response|
@@ -68,7 +72,7 @@ RSpec.describe "API Notifications Controller", :with_opensearch, type: :request 
       description %{
 Search for a Product
 
-* The search `q` query performs a full text search on the notificaiton title and product name. It uses the same code as the search bar in the UI within PSD.
+* The search `q` query performs a full text search on the notification title and product name. It uses the same code as the search bar in the UI within PSD.
 
 * The `sort_by` parameter can be used to sort the results. The default is `updated_at` which returns the most recent updated notification first. The `sort_dir` parameter can be used to sort the results in ascending or descending order. The default is descending.
 * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
@@ -90,16 +94,20 @@ Search for a Product
 
         after do |example|
           content = example.metadata[:response][:content] || {}
-          example_spec = {
-            "application/json"=>{
-              examples: {
-                test_example: {
-                  value: JSON.parse(response.body, symbolize_names: true)
+          if response
+            example_spec = {
+              "application/json"=>{
+                examples: {
+                  test_example: {
+                    value: JSON.parse(response.body, symbolize_names: true)
+                  }
                 }
               }
             }
-          }
-          example.metadata[:response][:content] = content.deep_merge(example_spec)
+            example.metadata[:response][:content] = content.deep_merge(example_spec)
+          else
+            raise "Response is nil"
+          end
         end
 
         run_test! do |response|
@@ -130,7 +138,7 @@ Search for a Product
           reported_reason: 'non_compliant',
           non_compliant_reason: "No earth pin on mains plug",
         }
-      }, name: 'notification', summary: "An non-compliant notification"
+      }, name: 'notification', summary: "A non-compliant notification"
 
       parameter name: :notification, in: :body, schema: { '$ref' => '#/components/schemas/new_notification' }
 
