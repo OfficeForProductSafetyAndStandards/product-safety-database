@@ -1,6 +1,4 @@
-<fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Name and company number</legend>
-
+<%= form.govuk_fieldset legend: {text: "Name and company number", size: 's'} do %>
   <%= form.govuk_text_field :trading_name,
                             width: 'two-thirds',
                             label: {text: t("businesses.form.trading_name.label")},
@@ -18,7 +16,8 @@
                             label: {text: t("businesses.form.company_number.label") },
                             hint: { text: t("businesses.form.company_number.hint_html"), size: 'm'}
   %>
-</fieldset>
+<% end %>
+
 
 <%= form.fields_for :locations, business.primary_location do |ff| %>
   <%= render "businesses/locations/address_form", form: ff, countries: countries %>
