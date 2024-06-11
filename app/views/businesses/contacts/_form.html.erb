@@ -13,7 +13,9 @@
 
   <%= form.govuk_phone_field :phone_number, width: 'two-thirds', label: -> do %>
     <label class=<%= label_classes %>>Telephone</label>
-  <% end, hint: {text: "For international numbers include the country code.", size: 'm'} %>
+  <% end, hint: {text: "For international numbers include the country code.",
+                 size: 'm',
+                 style: "font-size: 1rem !important; line-height: 1.25 !important"} %>
 
   <%= form.govuk_text_field :job_title,
                               width: 'two-thirds',

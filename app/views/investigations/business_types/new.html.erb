@@ -1,5 +1,5 @@
 <%= page_title "Add business to notification", errors: @business_type_form.errors.any? %>
-<%= form_with(model: @business_type_form, url: investigation_business_types_path(investigation_pretty_id: @investigation.pretty_id), builder: ApplicationFormBuilder) do |form| %>
+<%= form_with(model: @business_type_form, url: investigation_business_types_path(investigation_pretty_id: @investigation.pretty_id), builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
   <%= govukErrorSummary form: form %>
 
   <div class="govuk-grid-row">
@@ -21,8 +21,7 @@
               <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
                   <div class="govuk-radios govuk-radios--small">
-                    <%= form.govuk_radios_buttons_fieldset(:online_marketplace_id, legend: {text: t(".heading")}) do %>
-                      <div id="type-hint" class="govuk-hint govuk-!-margin-bottom-5"><%= t(".hint") %></div>
+                    <%= form.govuk_radio_buttons_fieldset(:online_marketplace_id, legend: {text: "", hidden: true}) do %>
                       <% online_marketplace_first_half.each do |marketplace| %>
                         <div class="govuk-radios__item">
                           <%= form.govuk_radio_button :online_marketplace_id, marketplace.id, label: {text: marketplace.name} %>
@@ -33,7 +32,7 @@
                 </div>
                 <div class="govuk-grid-column-one-half govuk-!-padding-right-0">
                   <div class="govuk-radios govuk-radios--small">
-                    <%= form.govuk_radios_buttons_fieldset(:online_marketplace_id, legend: {text: t(".heading")}) do %>
+                    <%= form.govuk_radio_buttons_fieldset(:online_marketplace_id, legend: {text: "", hidden: true}) do %>
                       <% online_marketplace_second_half.each do |marketplace| %>
                         <div class="govuk-radios__item">
                           <%= form.govuk_radio_button :online_marketplace_id, marketplace.id, label: {text: marketplace.name} %>
@@ -45,7 +44,7 @@
               </div>
             </div>
 
-            <%= form.govuk_text_input :other_marketplace_name, label: {text: t(".types.other.label")} %>
+            <%= form.govuk_text_field :other_marketplace_name, label: {text: t(".types.other.label")} %>
           <% end %>
 
           <% authorised_representative_radios = capture do %>
@@ -53,14 +52,14 @@
               <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                   <div class="govuk-radios govuk-radios--small">
-                    <div class="govuk-radios__item">
-                      <%= form.radio_button :authorised_representative_choice, t(".types.authorised_representative.uk.value"), class: "govuk-radios__input" %>
-                      <%= form.label :authorised_representative_choice, t(".types.authorised_representative.uk.label"), value: t(".types.authorised_representative.uk.value"), class: "govuk-label govuk-radios__label" %>
-                    </div>
-                    <div class="govuk-radios__item">
-                      <%= form.radio_button :authorised_representative_choice, t(".types.authorised_representative.eu.value"), class: "govuk-radios__input" %>
-                      <%= form.label :authorised_representative_choice, t(".types.authorised_representative.eu.label"), value: t(".types.authorised_representative.eu.value"), class: "govuk-label govuk-radios__label" %>
-                    </div>
+                    <%= form.govuk_radio_buttons_fieldset(:authorised_representative_choice, legend: {text: "", hidden: true}) do %>
+                      <div class="govuk-radios__item">
+                        <%= form.govuk_radio_button :authorised_representative_choice, t(".types.authorised_representative.uk.value"), label: {text: t(".types.authorised_representative.uk.label") } %>
+                      </div>
+                      <div class="govuk-radios__item">
+                        <%= form.govuk_radio_button :authorised_representative_choice, t(".types.authorised_representative.eu.value"), label: {text: t(".types.authorised_representative.eu.label") } %>
+                      </div>
+                    <% end %>
                   </div>
                 </div>
               </div>
@@ -81,22 +80,27 @@
           ] %>
 
           <%= form.govuk_radio_buttons_fieldset(:type, legend: {text: ""}) do %>
-            <%form.govuk_radio_button :type, "retailer", label:{text: t(".types.retailer.label")}, link_errors: true %>
-            <%form.govuk_radio_button :type, "online_seller", label:{text: t(".types.online_seller.label")} %>
-            <%form.govuk_radio_button :type, "online_marketplace", label:{text: t(".types.online_marketplace.label")} %>
-            <%form.govuk_radio_button :type, "manufacturer", label:{text: t(".types.manufacturer.label")} %>
-            <%form.govuk_radio_button :type, "exporter", label:{text: t(".types.exporter.label")} %>
-            <%form.govuk_radio_button :type, "importer", label:{text: t(".types.importer.label")} %>
-            <%form.govuk_radio_button :type, "fulfillment_house", label:{text: t(".types.fulfillment_house.label")} %>
-            <%form.govuk_radio_button :type, "distributor", label:{text: t(".types.distributor.label")} %>
-            <%form.govuk_radio_button :type, "authorised_representative", label:{text: t(".types.authorised_representative.label")} %>
-            <%form.govuk_radio_button :type, "responsible_person", label:{text: t(".types.responsible_person.label")} %>
+            <%= form.govuk_radio_button :type, "retailer", label: {text: t(".types.retailer.label")}, hint: {text: t(".types.retailer.hint")}, link_errors: true %>
+            <%= form.govuk_radio_button :type, "online_seller", label: {text: t(".types.online_seller.label")}, hint: { text: t(".types.online_seller.hint") } %>
+            <%= form.govuk_radio_button :type, "online_marketplace", label: {text: t(".types.online_marketplace.label")}, hint: { text: t(".types.online_marketplace.hint") } do %>
+              <%= online_marketplace_radios %>
+            <% end %>
+            <%= form.govuk_radio_button :type, "manufacturer", label: {text: t(".types.manufacturer.label")} %>
+            <%= form.govuk_radio_button :type, "exporter", label: {text: t(".types.exporter.label")} %>
+            <%= form.govuk_radio_button :type, "importer", label: {text: t(".types.importer.label")} %>
+            <%= form.govuk_radio_button :type, "fulfillment_house", label: {text: t(".types.fulfillment_house.label")} %>
+            <%= form.govuk_radio_button :type, "distributor", label: {text: t(".types.distributor.label")} %>
+            <%= form.govuk_radio_button :type, "authorised_representative", label: {text: t(".types.authorised_representative.label")} do %>
+              <%= authorised_representative_radios %>
+            <% end %>
+            <%= form.govuk_radio_button :type, "responsible_person", label: {text: t(".types.responsible_person.label")} %>
           <% end %>
+
           </div>
         </fieldset>
       </div>
     </div>
-  <%= form.submit "Continue", class: "govuk-button", data: { cy: "continue" } %>
+  <%= form.govuk_submit "Continue" %>
   </div>
 
 <% end %>
