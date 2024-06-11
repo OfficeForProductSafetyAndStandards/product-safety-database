@@ -25,11 +25,11 @@
                             label: {text: "Postcode"}
   %>
 
-  <% items = all_countries_with_uk_first.map { |country| OpenStruct.new(value: country[1], text: country[0] )}%>
+  <% items = [OpenStruct.new(value: "", text: "")] + all_countries_with_uk_first.map { |country| OpenStruct.new(value: country[1], text: country[0] )}%>
   <%= form.govuk_collection_select :country,
                                    items,
                                    :value,
                                    :text,
-                                   label: { text: "Country", size: "m" },
+                                   label: { text: "Country" },
                                    width: "two-thirds"%>
 <% end %>
