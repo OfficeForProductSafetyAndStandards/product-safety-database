@@ -4,6 +4,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
   let(:user)     { create(:user, :activated) }
   let(:business) { create(:business, trading_name: "OldCo") }
   let!(:investigation) { create(:notification, businesses: [business]) }
+
   before do
     create(:contact, business:)
   end
@@ -39,7 +40,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
       fill_in "Job title or role description", with: "CEO"
     end
     click_button "Save"
-    expect(page).to have_content('Country cannot be blank')
+    expect(page).to have_content("Country cannot be blank")
 
     within_fieldset "Official address" do
       select "France", from: "Country"
