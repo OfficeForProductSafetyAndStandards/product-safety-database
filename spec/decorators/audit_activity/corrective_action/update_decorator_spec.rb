@@ -34,10 +34,15 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
   let(:changes) { corrective_action_form.changes }
 
   before do
+    puts "New Legislation: #{new_legislation}" # Debug statement
+
     UpdateCorrectiveAction.call!(
       corrective_action_attributes
         .merge(corrective_action:, user:, changes:)
     )
+
+    # Reload the corrective action to ensure it has the latest data
+    corrective_action.reload
   end
 
   it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_formatted_s(:govuk)) }
@@ -217,7 +222,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
       it { is_expected.to be_file_description_changed }
     end
 
-    context "when file description did not changed" do
+    context "when file description did not change" do
       let(:updates) { { updates: {} } }
 
       it { is_expected.not_to be_file_description_changed }
