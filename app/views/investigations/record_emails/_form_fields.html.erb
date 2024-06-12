@@ -36,8 +36,8 @@
 
     <%= form.hidden_field :email_file_id  %>
 
-    <%= form.govuk_radio_buttons_fieldset(:email_file_action, legend: { text:  "Replace or remove file", hidden: true, size: 's' }) do %>
-      <%= form.govuk_radio_button :email_file_action, 'keep', label: { text: "Keep file" }, link_errors: true %>
+    <%= form.govuk_radio_buttons_fieldset(:email_file_action, legend: { text:  "Replace or remove file", size: 's' }, small: true) do %>
+      <%= form.govuk_radio_button :email_file_action, 'keep', label: { text: "Keep file" }, size: 's', link_errors: true %>
       <%= form.govuk_radio_button :email_file_action, 'remove', label: { text: "Remove file" } %>
       <%= form.govuk_radio_button :email_file_action, 'replace', label: { text: "Upload a replacement file" }  do %>
         <%= email_upload_field %>
@@ -86,8 +86,8 @@
         <%= link_to "#{email.email_attachment.filename} (opens in new tab)", email.email_attachment, target: "_blank", rel: "noreferrer noopener" %>
       </p>
 
-      <%= form.govuk_radio_buttons_fieldset(:email_attachment_action, legend: { text:  "Replace or remove email attachment", hidden: true, size: 's' }) do %>
-        <%= form.govuk_radio_button :email_attachment_action, 'keep', label: { text: "Keep file" }, link_errors: true %>
+      <%= form.govuk_radio_buttons_fieldset(:email_attachment_action, legend: { text:  "Replace or remove email attachment", size: 's' }, small: true) do %>
+        <%= form.govuk_radio_button :email_attachment_action, 'keep', label: { text: "Keep file" }, link_errors: true, size: 's' %>
         <%= form.govuk_radio_button :email_attachment_action, 'remove', label: { text: "Remove file" } %>
         <%= form.govuk_radio_button :email_attachment_action, 'replace', label: { text: "Upload a replacement file" }  do %>
           <%= file_upload_field %>
