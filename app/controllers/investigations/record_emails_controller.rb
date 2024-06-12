@@ -63,6 +63,8 @@ class Investigations::RecordEmailsController < Investigations::BaseController
 private
 
   def email_correspondence_form_params
+    email_params = params[:email_correspondence_form]
+    date = Date.new(email_params["correspondence_date(1i)"].to_i, email_params["correspondence_date(2i)"].to_i, email_params["correspondence_date(3i)"].to_i) if email_params["correspondence_date(1i)"] != "" && email_params["correspondence_date(2i)"] != "" && email_params["correspondence_date(3i)"] != nil
     params.require(:email_correspondence_form).permit(
       :correspondent_name,
       :email_address,
@@ -76,8 +78,7 @@ private
       :email_attachment_id,
       :email_file_id,
       :email_file_action,
-      :email_attachment_action,
-      correspondence_date: %i[day month year]
-    )
+      :email_attachment_action
+    ).merge(correspondence_date: date)
   end
 end
