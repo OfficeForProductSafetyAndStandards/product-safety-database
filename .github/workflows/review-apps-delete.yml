@@ -1,23 +1,16 @@
-name: Delete review app
+name: Delete all review apps
 
 on:
   pull_request:
     types: [closed]
 
-env:
-  PR_NUMBER: ${{ github.event.number }}
-
 jobs:
   cleanup_reviewapp:
-    name: Delete review app
+    name: Delete all review apps
     runs-on: ubuntu-latest
-    # Skip if it is a Dependabot created PR.
-    # For security reasons they do not have write permissions to deploy or access to secrets.
-    # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
     if: ${{ github.actor != 'dependabot[bot]' }}
 
     env:
-      SPACE: int
       CF_USERNAME: ${{ secrets.PaaSUsernameInt }}
       CF_PASSWORD: ${{ secrets.PaaSPasswordInt }}
 
@@ -30,18 +23,18 @@ jobs:
         curl -A "" -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
         echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
-    - name: Delete review app
+    - name: Delete all review apps
       run: |
         cf api api.london.cloud.service.gov.uk
         cf auth
         cf target -o 'beis-opss' -s $SPACE
-        if [[ $(cf apps | grep psd-pr-$PR_NUMBER) ]]; then
-          cf stop psd-pr-$PR_NUMBER
-          cf run-task psd-pr-$PR_NUMBER --command "./env/delete-opensearch-indexes.sh" --name delete-opensearch-indexes
-          task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-$PR_NUMBER | grep delete-opensearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
-          cf delete -f -r psd-pr-$PR_NUMBER
-          cf delete-service -f psd-db-pr-$PR_NUMBER
-        fi
+        for app in $(cf apps | grep 'psd-pr-' | awk '{print $1}'); do
+          cf stop $app
+          cf run-task $app --command "./env/delete-opensearch-indexes.sh" --name delete-opensearch-indexes
+          task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks $app | grep delete-opensearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
+          cf delete -f -r $app
+          cf delete-service -f ${app/psd-pr-/psd-db-pr-}
+        done
         cf logout
 
     - name: Checkout code to get deploy functions
@@ -52,4 +45,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         source deploy-github-functions.sh
-        gh_deploy_deactivate_dangling review-app-$PR_NUMBER
+        gh_deploy_deactivate_dangling all-review-apps
