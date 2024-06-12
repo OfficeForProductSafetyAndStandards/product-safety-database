@@ -1,31 +1,23 @@
-<fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Name and company number</legend>
+<%= form.govuk_fieldset legend: {text: "Name and company number", size: 's'} do %>
+  <%= form.govuk_text_field :trading_name,
+                            width: 'two-thirds',
+                            label: {text: t("businesses.form.trading_name.label"), },
+                            hint: { text: t("businesses.form.trading_name.hint"), style: "font-size: 0.975rem !important; line-height: 1.1428571429" }
+  %>
 
-  <%= govukInput(
-    key: :trading_name,
-    id: "trading_name",
-    form: form,
-    label: { text: t("businesses.form.trading_name.label") },
-    hint: { text: t("businesses.form.trading_name.hint"), classes: "govuk-!-font-size-16" },
-    classes: "govuk-!-width-two-thirds"
-  ) %>
-  <%= govukInput(
-    key: :legal_name,
-    id: "legal_name",
-    form: form,
-    label: { text: t("businesses.form.legal_name.label") },
-    hint: { html: t("businesses.form.legal_name.hint_html"), classes: "govuk-!-font-size-16" },
-    classes: "govuk-!-width-two-thirds"
-  ) %>
-  <%= govukInput(
-    key: :company_number,
-    id: "company_number",
-    form: form,
-    label: { text: t("businesses.form.company_number.label") },
-    hint: { html: t("businesses.form.company_number.hint_html"), classes: "govuk-!-font-size-16" },
-    classes: "govuk-!-width-one-third"
-  ) %>
-</fieldset>
+  <%= form.govuk_text_field :legal_name,
+                            width: 'two-thirds',
+                            label: {text: t("businesses.form.legal_name.label")},
+                            hint: { text: t("businesses.form.legal_name.hint_html"), style: "font-size: 0.975rem; line-height: 1.1428571429"}
+  %>
+
+  <%= form.govuk_text_field :company_number,
+                            width: 'one-third',
+                            label: {text: t("businesses.form.company_number.label") },
+                            hint: { text: t("businesses.form.company_number.hint_html"), style: "font-size: 0.975rem; line-height: 1.1428571429"}
+  %>
+<% end %>
+
 
 <%= form.fields_for :locations, business.primary_location do |ff| %>
   <%= render "businesses/locations/address_form", form: ff, countries: countries %>
@@ -35,4 +27,4 @@
   <%= render "businesses/contacts/form", form: ff %>
 <% end %>
 
-<%= form.submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>
+<%= form.govuk_submit "Save" %>

@@ -1,32 +1,24 @@
 <% label_classes = local_assigns[:label_classes].presence %>
 
-<fieldset class="govuk-fieldset govuk-!-margin-bottom-6" aria-describedby="contact-hint">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s"><%= t('.legend.title') %></legend>
+<%= form.govuk_fieldset legend: {text: "Contacts", size: 's'} do %>
   <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
 
-  <%= govukInput(
-    key: :name,
-    form: form,
-    classes: "govuk-!-width-two-thirds",
-    label: { text: "Name", classes: label_classes }
-  ) %>
-  <%= govukInput(
-    key: :email,
-    form: form,
-    classes: "govuk-!-width-two-thirds",
-    label: { text: "Email", classes: label_classes }
-  ) %>
+  <%= form.govuk_text_field :name, width: 'two-thirds', label: -> do %>
+    <label class=<%= label_classes %>>Name</label>
+  <% end %>
 
-  <div class="govuk-form-group">
-    <%= form.label :phone_number, "Telephone", class: "govuk-label" %>
-    <div id="telephone-number-hint" class="govuk-hint govuk-!-font-size-16">For international numbers include the country code.</div>
-    <%= form.telephone_field :phone_number, class: "govuk-input govuk-!-width-two-thirds", aria: { describedby: "telephone-number" } %>
-  </div>
+  <%= form.govuk_text_field :email, width: 'two-thirds', label: -> do %>
+    <label class=<%= label_classes %>>Email</label>
+  <% end %>
 
-  <%= govukInput(
-    key: :job_title,
-    form: form,
-    classes: "govuk-!-width-two-thirds",
-    label: { text: "Job title or role description", classes: label_classes }
-  ) %>
-</fieldset>
+  <%= form.govuk_phone_field :phone_number, width: 'two-thirds', label: -> do %>
+    <label class=<%= label_classes %>>Telephone</label>
+  <% end, hint: {text: "For international numbers include the country code.",
+                 size: 'm',
+                 style: "font-size: 1rem !important; line-height: 1.25 !important"} %>
+
+  <%= form.govuk_text_field :job_title,
+                              width: 'two-thirds',
+                              label: {text: "Job title or role description"} %>
+
+<% end %>

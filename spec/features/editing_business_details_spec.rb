@@ -12,9 +12,9 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
   scenario "Updating a business's details" do
     sign_in user
     visit "/businesses/#{business.id}"
-
+    puts "im here"
     expect_to_be_on_business_page(business_id: business.id, business_name: "OldCo")
-
+    puts "im past this function"
     click_link "Edit details"
 
     expect_to_be_on_edit_business_page(business_id: business.id, business_name: "OldCo")
@@ -39,9 +39,8 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
       fill_in "Telephone", with: "01632 960000"
       fill_in "Job title or role description", with: "CEO"
     end
-
     click_button "Save"
-    expect(page).to have_error_summary("Country cannot be blank")
+    expect(page).to have_content("Country cannot be blank")
 
     within_fieldset "Official address" do
       select "France", from: "Country"

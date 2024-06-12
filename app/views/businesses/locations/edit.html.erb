@@ -1,5 +1,5 @@
 <%= page_title "Edit location", errors: @location.errors.any? %>
-<%= form_with(model: @location, url: business_location_path(@business, @location)) do |form| %>
+<%= form_with(model: @location, url: business_location_path(@business, @location), builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= govukErrorSummary form: form %>
