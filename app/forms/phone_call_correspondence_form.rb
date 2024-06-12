@@ -11,7 +11,7 @@ class PhoneCallCorrespondenceForm
 
   validate :validate_transcript_and_content
 
-  attribute :correspondence_date, :govuk_date
+  attribute :correspondence_date
   attribute :correspondent_name
   attribute :phone_number
   attribute :overview

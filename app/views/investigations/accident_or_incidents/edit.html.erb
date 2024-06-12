@@ -2,15 +2,15 @@
 <% page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @accident_or_incident_form, url: investigation_accident_or_incident_path(@investigation, @accident_or_incident), method: :patch, builder: ApplicationFormBuilder) do |form| %>
-      <%= error_summary(@accident_or_incident_form.errors, %i[is_date_known date investigation_product_id usage severity severity_other]) %>
+    <%= form_with(model: @accident_or_incident_form, url: investigation_accident_or_incident_path(@investigation, @accident_or_incident), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= form.govuk_error_summary %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
       <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, type: @accident_or_incident.type %>
 
-      <%= govukButton text: "Update #{@accident_or_incident.type.downcase}" %>
+      <%= form.govuk_submit "Update #{@accident_or_incident.type.downcase}" %>
     <% end %>
   </div>
 </div>

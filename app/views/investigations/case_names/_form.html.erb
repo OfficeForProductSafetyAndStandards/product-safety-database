@@ -1,24 +1,5 @@
-<%= error_summary @notification_name_form.errors %>
-<% error_message = { text: @notification_name_form.errors.full_messages_for("user_title").first } if @notification_name_form.errors.any? %>
+<%= form.govuk_error_summary %>
 
-<%= govukInput(
-      form: form,
-      label: {
-        text: heading,
-        classes: "govuk-label--l",
-        isPageHeading: true
-      },
-      hint: {
-        text: 'Give the notification a short descriptive title.',
-        classes: "govuk-!-margin-bottom-5"
-      },
-      id: "user_title",
-      key: :user_title,
-      name: "investigation[user_title]",
-      attributes: { maxlength: 75 },
-      classes: "govuk-!-width-two-thirds",
-      formGroup: {
-        errorMessage: error_message
-      }
-    )
- %>
+<%= form.govuk_text_field :user_title, label: -> do %>
+  <header class="govuk-label--l"><%= heading %></header>
+<% end, hint: {text: "Give the notification a short descriptive title." }, width: 'two-thirds', name: "investigation[user_title]" %>

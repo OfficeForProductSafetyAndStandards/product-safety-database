@@ -2,7 +2,7 @@
 <%= page_title page_heading, errors: @notification_name_form.errors.any? %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @notification_name_form, url: investigation_case_names_path, method: :put do |form| %>
+    <%= form_with model: @notification_name_form, url: investigation_case_names_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
       <%= render "form", form: form, heading: "Edit the notification name" %>
 
        <div class="govuk-button-group">
