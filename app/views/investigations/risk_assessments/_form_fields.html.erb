@@ -68,16 +68,14 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
   <% end %>
 <% end %>
 
-#use govuk fieldset with a if statement inside
 <% if form.object.old_file.present? %>
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Upload the risk assessment</legend>
+  <%= form.govuk_fieldset legend: { text: "Upload the risk assessment" } do %>
     <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.old_file } %>
 
     <%= govuk_details(summary_text: "Replace this file") do %>
-      <%= form.govuk_file_field :risk_assessment_file, "Select file" %>
+      <%= form.govuk_file_field :risk_assessment_file, label: { text: "Select file", size: "s" } %>
     <% end %>
-  </fieldset>
+  <% end %>
 <% else %>
   <%= form.govuk_file_field :risk_assessment_file, legend: { text: "Upload the risk assessment" }, label: { text: "Upload the risk assessment" } %>
 <% end %>
