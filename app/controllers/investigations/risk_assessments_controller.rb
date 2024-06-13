@@ -122,6 +122,8 @@ module Investigations
   private
 
     def risk_assessment_params
+      risk_params = params[:risk_assessment_form]
+      assessed_date = Date.new(risk_params["assessed_on(1i)"].to_i, risk_params["assessed_on(2i)"].to_i, risk_params["assessed_on(3i)"].to_i) if !risk_params["assessed_on(1i)"].blank? || !risk_params["assessed_on(2i)"].blank? || !risk_params["assessed_on(3i)"].blank?
       params.require(:risk_assessment_form).permit(
         :details,
         :risk_level,
@@ -131,9 +133,8 @@ module Investigations
         :assessed_by_business_id,
         :assessed_by_other,
         :existing_risk_assessment_file_file_id,
-        assessed_on: %i[day month year],
         investigation_product_ids: []
-      )
+      ).merge(assessed_on: assessed_date)
     end
 
     def assessed_by

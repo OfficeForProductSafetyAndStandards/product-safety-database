@@ -15,7 +15,6 @@
                                 :value,
                                 :text,
                                 label: { text: "Choose team" } %>
-  <%= risk_assessment_form.other_teams %>
 <% end %>
 
 <%- businesses_html = capture do %>
@@ -27,7 +26,6 @@
                                 :text,
                                 label: { text: "Choose business" },
                                 hint: {text: hint}%>
-  <%= risk_assessment_form.businesses_select_items %>
 <% end %>
 
 <%- someone_else_html = capture do %>
@@ -42,14 +40,9 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
 
 %>
 
-<%= form.govuk_radios :assessed_by,
- legend: "Who completed the assessment?",
- items: assessed_by_radio_items
-%>
-
 <%= form.govuk_radio_buttons_fieldset(:assessed_by, legend: { text: "Who completed the assessment?" }) do %>
-  <%= form.govuk_radio_button :assessed_by, :my_team, label: { text: "current_user.team.name" } %>
-  <%= assessed_by_radio_items.each do |radio_item| %>
+  <%= form.govuk_radio_button :assessed_by, :my_team, label: { text: current_user.team.name } %>
+  <% assessed_by_radio_items.each do |radio_item| %>
     <%= form.govuk_radio_button :assessed_by, radio_item[:value], label: { text: radio_item[:text] } do %>
       <%= radio_item[:conditional][:html] %>
     <% end %>
@@ -64,7 +57,6 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
                                      caption: nil,
                                      legend: { text: "Which products were assessed?" },
                                      hint: { text: "You must choose at least one. Only products already added to the notification are listed." } %>
-  <%= risk_assessment_form.investigation_products %>
 <% else %>
 
   <h2 class="govuk-heading-m">Product assessed</h2>
@@ -76,7 +68,21 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
   <% end %>
 <% end %>
 
-<%= form.govuk_file_field :risk_assessment_file, legend: { text: "Upload the risk assessment" }, label: { text: "Upload the risk assessment" } %>
+#use govuk fieldset with a if statement inside
+<% if form.object.old_file.present? %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Upload the risk assessment</legend>
+    <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.old_file } %>
+
+    <%= govuk_details(summary_text: "Replace this file") do %>
+      <%= form.govuk_file_field :risk_assessment_file, "Select file" %>
+    <% end %>
+  </fieldset>
+<% else %>
+  <%= form.govuk_file_field :risk_assessment_file, legend: { text: "Upload the risk assessment" }, label: { text: "Upload the risk assessment" } %>
+<% end %>
+
 <%= form.govuk_text_area :details,
-   label: { text: "Further details (optional)" }
+   label: { text: "Further details (optional)", size: 'm' }
 %>
+
