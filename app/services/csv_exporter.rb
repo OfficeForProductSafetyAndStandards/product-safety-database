@@ -108,18 +108,23 @@ private
 
     (0...total_batches).each do |batch|
       offset = batch * batch_size
-      records = table_class.limit(batch_size).offset(offset).pluck(*attributes)
 
-      records.each do |row|
-        id = row[attributes.index("id")]
-        next if seen_ids[id]
+      begin
+        records = table_class.order(:id).limit(batch_size).offset(offset).pluck(*attributes)
 
-        seen_ids[id] = true
-        csv << row
+        records.each do |row|
+          id = row[attributes.index("id")]
+          if seen_ids[id]
+            next
+          end
+
+          seen_ids[id] = true
+          csv << row
+        end
+      rescue StandardError => e
+        Rails.logger.error "Error exporting records for table #{table_class}, batch #{batch + 1}: #{e.message}"
       end
     end
-  rescue StandardError => e
-    log_error("Error exporting records for table #{table_class}: #{e.message}")
   end
 
   def create_log_file

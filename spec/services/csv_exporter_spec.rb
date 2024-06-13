@@ -127,45 +127,85 @@ RSpec.describe CsvExporter, type: :model do
     let(:table_class) { class_double("TableClass") }
     let(:csv) { instance_double(CSV) }
     let(:attributes) { %w[id created_at] }
-    let(:records_batch_1) { [[1, "2023-01-01T00:00:00+00:00"], [1, "2023-01-01T00:00:00+00:00"]] } # Duplicate record
-    let(:records_batch_2) { [[2, "2023-01-02T00:00:00+00:00"]] }
-    let(:calls) { [] }
     let(:csv_exporter) { described_class.new }
+    let(:calls) { [] }
 
-    before do
-      allow(table_class).to receive(:count).and_return(3)
-      allow(table_class).to receive(:limit).with(2).and_return(table_class)
-      allow(table_class).to receive(:offset).with(0).and_return(instance_double("TableClass", pluck: records_batch_1))
-      allow(table_class).to receive(:offset).with(2).and_return(instance_double("TableClass", pluck: records_batch_2))
-      allow(csv).to receive(:<<) { |record| calls << record }
-    end
+    context "with multiple records" do
+      let(:records_batch_1) { (1..100).map { |i| [i, "2023-01-01T00:00:00+00:00"] } }
+      let(:records_batch_2) { (101..200).map { |i| [i, "2023-01-02T00:00:00+00:00"] } }
 
-    context "when exporting records" do
       before do
-        csv_exporter.send(:export_records_in_batches, table_class, attributes, csv, 2)
+        allow(table_class).to receive(:count).and_return(200)
+        allow(table_class).to receive(:order).with(:id).and_return(table_class)
+        allow(table_class).to receive(:limit).with(100).and_return(table_class)
+        allow(table_class).to receive(:offset).with(0).and_return(instance_double("TableClass", pluck: records_batch_1))
+        allow(table_class).to receive(:offset).with(100).and_return(instance_double("TableClass", pluck: records_batch_2))
+        allow(csv).to receive(:<<) { |record| calls << record }
       end
 
-      it "removes duplicate records" do
-        expect(calls).to include(
-          [1, "2023-01-01T00:00:00+00:00"]
-        )
-        expect(calls.count { |call| call == [1, "2023-01-01T00:00:00+00:00"] }).to eq(1)
-      end
-
-      it "exports records in batches" do
-        expect(calls).to eq([
-          [1, "2023-01-01T00:00:00+00:00"],
-          [2, "2023-01-02T00:00:00+00:00"]
-        ])
+      it "exports all records in the table in order" do
+        csv_exporter.send(:export_records_in_batches, table_class, attributes, csv, 100)
+        expect(calls.size).to eq(table_class.count)
+        expect(calls.map(&:first)).to eq((1..200).to_a)
       end
     end
 
-    it "handles errors gracefully" do
-      allow(table_class).to receive(:count).and_raise(StandardError.new("Error fetching records"))
+    context "with duplicate records" do
+      let(:records_batch_1) { [[1, "2023-01-01T00:00:00+00:00"], [1, "2023-01-01T00:00:00+00:00"]] }
+      let(:records_batch_2) { [[2, "2023-01-02T00:00:00+00:00"]] }
+      let(:expected_unique_records) { [[1, "2023-01-01T00:00:00+00:00"], [2, "2023-01-02T00:00:00+00:00"]] }
+      let(:all_records) { records_batch_1 + records_batch_2 }
 
-      expect {
-        csv_exporter.send(:export_records_in_batches, table_class, attributes, csv)
-      }.not_to raise_error
+      before do
+        allow(table_class).to receive(:count).and_return(3) # Simulate the total DB row count before removing duplicates
+        allow(table_class).to receive(:order).with(:id).and_return(table_class)
+        allow(table_class).to receive(:limit).with(2).and_return(table_class)
+
+        allow(table_class).to receive(:offset).with(0).and_return(instance_double("TableClass", pluck: records_batch_1))
+        allow(table_class).to receive(:offset).with(2).and_return(instance_double("TableClass", pluck: records_batch_2))
+
+        allow(csv).to receive(:<<) { |record| calls << record }
+      end
+
+      context "when exporting records" do
+        before do
+          calls.clear
+          csv_exporter.send(:export_records_in_batches, table_class, attributes, csv, 2)
+        end
+
+        it "removes duplicate records" do
+          unique_calls = calls.uniq
+          expect(unique_calls).to include([1, "2023-01-01T00:00:00+00:00"])
+          expect(unique_calls.count { |call| call == [1, "2023-01-01T00:00:00+00:00"] }).to eq(1)
+        end
+
+        it "exports records in batches in order" do
+          expect(calls).to eq(expected_unique_records)
+          expect(calls.map(&:first)).to eq([1, 2])
+        end
+
+        it "ensures the CSV count matches the DB rows count" do
+          expect(calls.size).to eq(2)
+        end
+
+        it "counts the duplicates removed" do
+          unique_calls = calls.uniq
+          duplicate_count = all_records.size - unique_calls.size
+
+          expect(duplicate_count).to eq(1)
+        end
+      end
+    end
+
+    context "when handling errors" do
+      it "handles errors gracefully" do
+        allow(table_class).to receive(:count).and_return(1)
+        allow(table_class).to receive(:order).and_raise(StandardError.new("Error fetching records"))
+
+        expect {
+          csv_exporter.send(:export_records_in_batches, table_class, attributes, csv)
+        }.not_to raise_error
+      end
     end
   end
 
