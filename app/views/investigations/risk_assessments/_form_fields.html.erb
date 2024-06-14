@@ -54,7 +54,6 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
                                      risk_assessment_form.investigation_products.map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
                                      :value,
                                      :text,
-                                     caption: nil,
                                      legend: { text: "Which products were assessed?" },
                                      hint: { text: "You must choose at least one. Only products already added to the notification are listed." } %>
 <% else %>

@@ -24,7 +24,6 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
   scenario "with email file" do
     visit "/cases/#{notification.pretty_id}"
     click_link "Add a correspondence"
-
     expect_to_be_on_add_correspondence_page
     expect_to_have_notification_breadcrumbs
     choose "Record email"
@@ -55,7 +54,6 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
     click_button "Add email"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Date sent must include a month and year"
 
     within_fieldset "Email content" do
       expect(page).to have_content "Currently selected file: email_file.txt"

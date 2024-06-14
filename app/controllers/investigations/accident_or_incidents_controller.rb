@@ -65,8 +65,8 @@ module Investigations
 
     def accident_or_incident_params
       accident_or_incident_date_params = params[:accident_or_incident_form]
-      date = Date.new(accident_or_incident_date_params["date(1i)"].to_i, accident_or_incident_date_params["date(2i)"].to_i, accident_or_incident_date_params["date(3i)"].to_i) if !accident_or_incident_date_params["date(1i)"].blank? || !accident_or_incident_date_params["date(2i)"].blank? || !accident_or_incident_date_params["date(3i)"].blank?
-      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :investigation_product_id, :type).merge(date: date)
+      accident_or_incident_date = Date.new(accident_or_incident_date_params["date(1i)"].to_i, accident_or_incident_date_params["date(2i)"].to_i, accident_or_incident_date_params["date(3i)"].to_i) if accident_or_incident_date_params["date(1i)"].present? && accident_or_incident_date_params["date(2i)"].present? && accident_or_incident_date_params["date(3i)"].present?
+      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :investigation_product_id, :type).merge(date: accident_or_incident_date)
     end
   end
 end

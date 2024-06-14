@@ -123,7 +123,9 @@ module Investigations
 
     def risk_assessment_params
       risk_params = params[:risk_assessment_form]
-      assessed_date = Date.new(risk_params["assessed_on(1i)"].to_i, risk_params["assessed_on(2i)"].to_i, risk_params["assessed_on(3i)"].to_i) if !risk_params["assessed_on(1i)"].blank? || !risk_params["assessed_on(2i)"].blank? || !risk_params["assessed_on(3i)"].blank?
+      assessed_date = Date.new(risk_params["assessed_on(1i)"].to_i, risk_params["assessed_on(2i)"].to_i, risk_params["assessed_on(3i)"].to_i) if risk_params["assessed_on(1i)"].present? && risk_params["assessed_on(2i)"].present? && risk_params["assessed_on(3i)"].present?
+      investigation_product_ids_arr = risk_params[:investigation_product_ids]
+      investigation_product_ids_arr.shift if investigation_product_ids_arr[0] == ""
       params.require(:risk_assessment_form).permit(
         :details,
         :risk_level,
@@ -133,8 +135,7 @@ module Investigations
         :assessed_by_business_id,
         :assessed_by_other,
         :existing_risk_assessment_file_file_id,
-        investigation_product_ids: []
-      ).merge(assessed_on: assessed_date)
+      ).merge(assessed_on: assessed_date).merge(investigation_product_ids: investigation_product_ids_arr)
     end
 
     def assessed_by

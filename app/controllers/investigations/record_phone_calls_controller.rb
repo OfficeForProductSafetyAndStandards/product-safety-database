@@ -52,7 +52,7 @@ private
 
   def phone_call_params
     phone_params = params[:phone_call_correspondence_form]
-    date = Date.new(phone_params["correspondence_date(1i)"].to_i, phone_params["correspondence_date(2i)"].to_i, phone_params["correspondence_date(3i)"].to_i) if !phone_params["correspondence_date(1i)"].blank? || !phone_params["correspondence_date(2i)"].blank? || !phone_params["correspondence_date(3i)"].blank?
+    date = Date.new(phone_params["correspondence_date(1i)"].to_i, phone_params["correspondence_date(2i)"].to_i, phone_params["correspondence_date(3i)"].to_i) if phone_params["correspondence_date(1i)"].present? && phone_params["correspondence_date(2i)"].present? && phone_params["correspondence_date(3i)"].present?
     params.require(:phone_call_correspondence_form).permit(
       :correspondent_name,
       :phone_number,

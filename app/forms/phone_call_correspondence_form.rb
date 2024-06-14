@@ -2,7 +2,6 @@ class PhoneCallCorrespondenceForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-
   validates :correspondence_date,
             presence: true,
             real_date: true,
@@ -63,8 +62,6 @@ class PhoneCallCorrespondenceForm
   def persisted?
     id.present?
   end
-
-
 
 private
 

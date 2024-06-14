@@ -2,7 +2,8 @@ class EmailCorrespondenceForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :correspondence_date, :govuk_date
+  attribute :correspondence_date
+  attribute 'correspondence_date(3i):'
   attribute :overview
 
   attribute :correspondent_name
