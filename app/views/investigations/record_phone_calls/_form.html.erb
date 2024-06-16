@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= form.govuk_error_summary %>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryUpperCasePresenter)  %>
 
       <span class="govuk-caption-l"><%= investigation.pretty_description %></span>
 

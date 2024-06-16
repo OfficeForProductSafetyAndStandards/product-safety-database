@@ -8,7 +8,6 @@ RSpec.describe PhoneCallCorrespondenceForm do
   let(:existing_transcript_file_id) { nil }
   let(:correspondence_date) { { "day" => day, "month" => "1", "year" => "2020" } }
   let(:day) { "1" }
-
   before do
     params[:existing_transcript_file_id] = existing_transcript_file_id
   end
@@ -63,7 +62,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
 
           it "is invalid and has a descriptive error", aggregate_failures: true do
             expect(form).to be_invalid
-            expect(form.errors.full_messages_for(:base)).to eq(["Please provide either a transcript or complete the summary and notes fields"])
+            expect(form.errors.full_messages_for(:overview)).to eq(["Please provide either a transcript or complete the summary and notes fields"])
           end
         end
 
@@ -72,7 +71,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
 
           it "is invalid and has a descriptive error", aggregate_failures: true do
             expect(form).to be_invalid
-            expect(form.errors.full_messages_for(:base)).to eq(["Please provide either a transcript or complete the summary and notes fields"])
+            expect(form.errors.full_messages_for(:overview)).to eq(["Please provide either a transcript or complete the summary and notes fields"])
           end
         end
       end

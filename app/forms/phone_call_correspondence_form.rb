@@ -9,9 +9,15 @@ class PhoneCallCorrespondenceForm
             not_in_future: true,
             recent_date: { on_or_before: false }
 
+  validate :date_fields_presence
+
   validate :validate_transcript_and_content
 
+  attr_accessor :correspondence_date_year, :correspondence_date_month, :correspondence_date_day
   attribute :correspondence_date
+  attribute 'correspondence_date(1i)'
+  attribute 'correspondence_date(2i)'
+  attribute 'correspondence_date(3i)'
   attribute :correspondent_name
   attribute :phone_number
   attribute :overview
@@ -19,6 +25,7 @@ class PhoneCallCorrespondenceForm
   attribute :transcript
   attribute :existing_transcript_file_id
   attribute :id
+
 
   ATTRIBUTES_FROM_PHONE_CALL = %w[
     correspondence_date
@@ -35,9 +42,12 @@ class PhoneCallCorrespondenceForm
     end
   end
 
-  def initialize(*args)
+  def initialize(attributes = {})
     super
 
+    @correspondence_date_year = attributes["correspondence_date(1i)"]
+    @correspondence_date_month = attributes["correspondence_date(2i)"]
+    @correspondence_date_day = attributes["correspondence_date(3i)"]
     strip_line_feed_from_textarea
   end
 
@@ -63,15 +73,64 @@ class PhoneCallCorrespondenceForm
     id.present?
   end
 
+
 private
+
+  def set_date
+    if @correspondence_date_year.present? && @correspondence_date_month.present? && @correspondence_date_day.present?
+      begin
+        Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
+      rescue ArgumentError
+        @correspondence_date = nil
+      end
+    else
+      @correspondence_date = nil
+    end
+  end
 
   def validate_transcript_and_content
     if transcript.nil? & (overview.blank? || details.blank?)
-      errors.add(:base, "Please provide either a transcript or complete the summary and notes fields")
+      errors.add(:overview, "Please provide either a transcript or complete the summary and notes fields")
     end
   end
 
   def strip_line_feed_from_textarea
     details&.strip!
   end
+
+  def date_fields_presence
+    year = @correspondence_date_year
+    month = @correspondence_date_month
+    day = @correspondence_date_day
+
+    errors.add(:correspondence_date, "Date sent must include a year") if !year.present?
+    errors.add(:correspondence_date, "Date sent must include a month") if !month.present?
+    errors.add(:correspondence_date, "Date sent must include a day") if !day.present?
+     Date.new(year.to_i, month.to_i, day.to_i)
+  rescue ArgumentError
+    errors.add(:correspondence_date, "Date is invalid")
+  end
 end
+
+class ErrorSummaryUpperCasePresenter
+  def initialize(error_messages)
+    @error_messages = [error_messages, @errors.to_h]
+  end
+
+  def formatted_error_messages
+    store = []
+
+    @error_messages.each do |attribute|
+      attribute.each do |arr|
+        arr[1].each do |message|
+          store << [arr[0], message]
+        end
+      end
+    end
+
+    @error_messages = store
+    @error_messages
+  end
+
+end
+

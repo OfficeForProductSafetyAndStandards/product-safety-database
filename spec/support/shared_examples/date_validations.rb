@@ -29,8 +29,7 @@ end
 RSpec.shared_examples "it does not allow far away dates" do |form_attribute, attribute, on_or_after: true, on_or_before: true|
   if on_or_before
     context "with a date 60 years from now" do
-      let(form_attribute) { Date.new(60.years.from_now.year, 1, 1) }
-
+      let(form_attribute) { Date.new(60.years.from_now.year, 1, 1)}
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid
         puts form.errors.details[attribute || form_attribute]
