@@ -32,7 +32,6 @@ RSpec.shared_examples "it does not allow far away dates" do |form_attribute, att
       let(form_attribute) { Date.new(60.years.from_now.year, 1, 1)}
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid
-        puts form.errors.details[attribute || form_attribute]
         expect(form.errors.details[attribute || form_attribute]).to eq([{ error: :recent_date }])
       end
     end

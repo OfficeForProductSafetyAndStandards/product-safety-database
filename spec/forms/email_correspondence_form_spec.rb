@@ -19,7 +19,7 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_mailer do
   end
 
   let(:attachment_description) { "" }
-  let(:correspondence_date) { { day: "20", month: "01", year: "2020" } }
+  let(:correspondence_date) { Date.new( 2020, 01, 20) }
   let(:correspondent_name) { "" }
   let(:details) { "" }
   let(:email_address) { "" }
