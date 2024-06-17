@@ -8,7 +8,12 @@ class RiskAssessmentForm
   attribute :investigation
   attribute :current_user
 
+  attr_accessor :assessed_on_year, :assessed_on_month, :assessed_on_day
   attribute :assessed_on, :govuk_date
+  attribute "assessed_on(1i)"
+  attribute "assessed_on(2i)"
+  attribute "assessed_on(3i)"
+
   attribute :risk_level
 
   attribute :assessed_by
@@ -41,6 +46,15 @@ class RiskAssessmentForm
             complete_date: true,
             not_in_future: true,
             recent_date: { on_or_before: false }
+
+  validate :date_fields_presence
+  def initialize(attributes = {})
+    super
+
+    @assessed_on_year = attributes["assessed_on(1i)"]
+    @assessed_on_month = attributes["assessed_on(2i)"]
+    @assessed_on_day = attributes["assessed_on(3i)"]
+  end
 
   def cache_file!
     return if risk_assessment_file.blank?
@@ -121,6 +135,31 @@ class RiskAssessmentForm
   end
 
 private
+
+  def set_date
+    if @assessed_on_year.present? && @assessed_on_month.present? && @assessed_on_day.present?
+      begin
+        Date.new(@assessed_on_year.to_i, @assessed_on_month.to_i, @assessed_on_day.to_i)
+      rescue ArgumentError
+        @assessed_on = nil
+      end
+    else
+      @assessed_on = nil
+    end
+  end
+
+  def date_fields_presence
+    year = @assessed_on_year
+    month = @assessed_on_month
+    day = @assessed_on_day
+
+    errors.add(:assessed_on, "Date sent must include a year") if year.blank?
+    errors.add(:assessed_on, "Date sent must include a month") if month.blank?
+    errors.add(:assessed_on, "Date sent must include a day") if day.blank?
+    Date.new(year.to_i, month.to_i, day.to_i)
+  rescue ArgumentError
+    errors.add(:assessed_on, "Date is invalid")
+  end
 
   def at_least_one_product_associated
     return unless investigation_product_ids.to_a.empty?

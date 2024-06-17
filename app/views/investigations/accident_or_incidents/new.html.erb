@@ -3,7 +3,7 @@
 <%= form_with model: @accident_or_incident_form, scope: :accident_or_incident_form, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :post, url: investigation_accident_or_incidents_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= form.govuk_error_summary %>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryUpperCasePresenter)  %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>

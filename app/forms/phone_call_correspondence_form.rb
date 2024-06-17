@@ -103,34 +103,11 @@ private
     month = @correspondence_date_month
     day = @correspondence_date_day
 
-    errors.add(:correspondence_date, "Date sent must include a year") if !year.present?
-    errors.add(:correspondence_date, "Date sent must include a month") if !month.present?
-    errors.add(:correspondence_date, "Date sent must include a day") if !day.present?
+    errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
+    errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
+    errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
      Date.new(year.to_i, month.to_i, day.to_i)
   rescue ArgumentError
     errors.add(:correspondence_date, "Date is invalid")
   end
 end
-
-class ErrorSummaryUpperCasePresenter
-  def initialize(error_messages)
-    @error_messages = [error_messages, @errors.to_h]
-  end
-
-  def formatted_error_messages
-    store = []
-
-    @error_messages.each do |attribute|
-      attribute.each do |arr|
-        arr[1].each do |message|
-          store << [arr[0], message]
-        end
-      end
-    end
-
-    @error_messages = store
-    @error_messages
-  end
-
-end
-

@@ -3,7 +3,9 @@ class EmailCorrespondenceForm
   include ActiveModel::Attributes
 
   attribute :correspondence_date
-  attribute 'correspondence_date(3i):'
+  attribute 'correspondence_date(1i)'
+  attribute 'correspondence_date(2i)'
+  attribute 'correspondence_date(3i)'
   attribute :overview
 
   attribute :correspondent_name
@@ -39,6 +41,8 @@ class EmailCorrespondenceForm
             not_in_future: true,
             recent_date: { on_or_before: false }
 
+  validate :date_fields_presence
+
   validate :validate_email_file_and_content
 
   validates :email_file, presence: true, if: -> { email_file_action == "replace" && email_file_id.blank? }
@@ -62,6 +66,14 @@ class EmailCorrespondenceForm
       form.attachment_description = email.email_attachment.try(:metadata).to_h["description"]
     end
   end
+  def initialize(attributes = {})
+    super
+
+    @correspondence_date_year = attributes["correspondence_date(1i)"]
+    @correspondence_date_month = attributes["correspondence_date(2i)"]
+    @correspondence_date_day = attributes["correspondence_date(3i)"]
+  end
+
 
   def cache_files!
     if email_file.present?
@@ -96,6 +108,18 @@ class EmailCorrespondenceForm
 
 private
 
+  def set_date
+    if @correspondence_date_year.present? && @correspondence_date_month.present? && @correspondence_date_day.present?
+      begin
+        Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
+      rescue ArgumentError
+        @correspondence_date = nil
+      end
+    else
+      @correspondence_date = nil
+    end
+  end
+
   def validate_email_file_and_content
     if email_subject_or_body_missing && email_file_removed_or_missing
       errors.add(:base, "Please provide either an email file or a subject and body")
@@ -112,5 +136,18 @@ private
 
   def email_file_missing
     email_file.nil? && email_file_id.nil?
+  end
+
+  def date_fields_presence
+    year = @correspondence_date_year
+    month = @correspondence_date_month
+    day = @correspondence_date_day
+
+    errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
+    errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
+    errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
+    Date.new(year.to_i, month.to_i, day.to_i)
+  rescue ArgumentError
+    errors.add(:correspondence_date, "Date is invalid")
   end
 end

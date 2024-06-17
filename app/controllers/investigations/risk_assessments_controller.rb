@@ -13,7 +13,7 @@ module Investigations
       @risk_assessment_form = RiskAssessmentForm.new(
         risk_assessment_params.merge(current_user:, investigation: @investigation_object)
       )
-
+      @risk_assessment_form.assessed_on = @risk_assessment_form.send(:set_date)
       @risk_assessment_form.cache_file!
       @risk_assessment_form.load_risk_assessment_file
 
@@ -79,11 +79,13 @@ module Investigations
       @risk_assessment = @investigation_object.risk_assessments.find(params[:id])
 
       @risk_assessment_form = RiskAssessmentForm.new(
+        risk_assessment_params.merge(
         current_user:,
         investigation: @investigation_object,
-        old_file: @risk_assessment.risk_assessment_file_blob
+        old_file: @risk_assessment.risk_assessment_file_blob)
       )
 
+      @risk_assessment_form.assessed_on = @risk_assessment_form.send(:set_date)
       @risk_assessment_form.attributes = risk_assessment_params
 
       if @risk_assessment_form.valid?
@@ -122,8 +124,6 @@ module Investigations
   private
 
     def risk_assessment_params
-      risk_params = params[:risk_assessment_form]
-      assessed_date = Date.new(risk_params["assessed_on(1i)"].to_i, risk_params["assessed_on(2i)"].to_i, risk_params["assessed_on(3i)"].to_i) if risk_params["assessed_on(1i)"].present? && risk_params["assessed_on(2i)"].present? && risk_params["assessed_on(3i)"].present?
       investigation_product_ids_arr = risk_params[:investigation_product_ids]
       investigation_product_ids_arr.shift if investigation_product_ids_arr[0] == ""
       params.require(:risk_assessment_form).permit(
@@ -135,7 +135,11 @@ module Investigations
         :assessed_by_business_id,
         :assessed_by_other,
         :existing_risk_assessment_file_file_id,
-      ).merge(assessed_on: assessed_date).merge(investigation_product_ids: investigation_product_ids_arr)
+        :assessed_on,
+        "assessed_on(1i)",
+        "assessed_on(2i)",
+        "assessed_on(3i)"
+      ).merge(investigation_product_ids: investigation_product_ids_arr)
     end
 
     def assessed_by

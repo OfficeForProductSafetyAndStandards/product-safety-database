@@ -2,7 +2,7 @@
 <%= form_with(model: @email_correspondence_form, url: investigation_emails_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= form.govuk_error_summary %>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryUpperCasePresenter)  %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l">Record email</h1>
       <%= govuk_warning_text(text: t("case.protected_details", data_type: "email correspondence")) %>

@@ -10,6 +10,7 @@ class Investigations::RecordEmailsController < Investigations::BaseController
 
   def create
     @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params)
+    @email_correspondence_form.correspondence_date = @email_correspondence_form.send(:set_date)
 
     if @email_correspondence_form.valid?
       AddEmailToNotification.call!(
@@ -44,7 +45,7 @@ class Investigations::RecordEmailsController < Investigations::BaseController
   def update
     @email = @investigation.emails.find(params[:id])
     @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params.merge(id: @email.id))
-
+    @email_correspondence_form.correspondence_date = @email_correspondence_form.send(:set_date)
     if @email_correspondence_form.valid?
       UpdateEmail.call!(
         @email_correspondence_form.attributes.merge({
@@ -63,8 +64,6 @@ class Investigations::RecordEmailsController < Investigations::BaseController
 private
 
   def email_correspondence_form_params
-    email_params = params[:email_correspondence_form]
-    date = Date.new(email_params["correspondence_date(1i)"].to_i, email_params["correspondence_date(2i)"].to_i, email_params["correspondence_date(3i)"].to_i) if !email_params["correspondence_date(1i)"].blank? || !email_params["correspondence_date(2i)"].blank? || !email_params["correspondence_date(3i)"].blank?
     params.require(:email_correspondence_form).permit(
       :correspondent_name,
       :email_address,
@@ -78,7 +77,11 @@ private
       :email_attachment_id,
       :email_file_id,
       :email_file_action,
-      :email_attachment_action
-    ).merge(correspondence_date: date)
+      :email_attachment_action,
+      :corrspondence_date,
+      "correspondence_date(1i)",
+      "correspondence_date(2i)",
+      "correspondence_date(3i)",
+    )
   end
 end
