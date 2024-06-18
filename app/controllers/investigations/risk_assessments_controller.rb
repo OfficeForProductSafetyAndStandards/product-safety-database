@@ -125,7 +125,7 @@ module Investigations
   private
 
     def risk_assessment_params
-      investigation_product_ids_arr = risk_params[:investigation_product_ids]
+      investigation_product_ids_arr = params[:risk_assessment_form][:investigation_product_ids]
       investigation_product_ids_arr.shift if investigation_product_ids_arr[0] == ""
       params.require(:risk_assessment_form).permit(
         :details,

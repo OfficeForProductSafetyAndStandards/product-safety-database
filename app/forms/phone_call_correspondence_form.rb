@@ -78,12 +78,12 @@ private
   def set_date
     if @correspondence_date_year.present? && @correspondence_date_month.present? && @correspondence_date_day.present?
       begin
-        Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
+        self.correspondence_date = Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
       rescue ArgumentError
-        @correspondence_date = nil
+        self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
       end
     else
-      @correspondence_date = nil
+      self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
     end
   end
 

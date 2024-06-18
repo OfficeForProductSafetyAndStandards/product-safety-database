@@ -75,10 +75,10 @@ private
       begin
         Date.new(@date_year.to_i, @date_month.to_i, @date_day.to_i)
       rescue ArgumentError
-        @date = nil
+        { day: @date_year, month: @date_month, year: @date_day }
       end
     else
-      @date = nil
+      { day: @date_year, month: @date_month, year: @date_day }
     end
   end
 

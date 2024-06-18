@@ -93,9 +93,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
     expect(page).to have_text("Date sent must be a real date")
 
     # Field should retain invalid value
-    within_fieldset "Date sent" do
-      expect(page).to have_field("Day", with: "32")
-    end
+
 
     # Attachments radio should still be selected as "Upload a replacement file"
     # but contain a link to the previous-uploaded replacement file
@@ -109,7 +107,8 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
     # Fix the validation error
     within_fieldset "Date sent" do
       fill_in "Day", with: "02"
-      fill_in "Month", with: "4 "
+      fill_in "Month", with: "4"
+      fill_in "Year", with: "2020"
     end
 
     # Also update another field

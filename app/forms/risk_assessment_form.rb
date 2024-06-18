@@ -140,12 +140,12 @@ private
   def set_date
     if @assessed_on_year.present? && @assessed_on_month.present? && @assessed_on_day.present?
       begin
-        Date.new(@assessed_on_year.to_i, @assessed_on_month.to_i, @assessed_on_day.to_i)
+        self.assessed_on = Date.new(@assessed_on_year.to_i, @assessed_on_month.to_i, @assessed_on_day.to_i)
       rescue ArgumentError
-        @assessed_on = nil
+        self.assessed_on = { day: @assessed_on_year, month: @assessed_on_month, year: @assessed_on_day }
       end
     else
-      @assessed_on = nil
+      self.assessed_on = { day: @assessed_on_year, month: @assessed_on_month, year: @assessed_on_day }
     end
   end
 

@@ -43,6 +43,8 @@ class EmailCorrespondenceForm
 
   validate :date_fields_presence
 
+
+
   validate :validate_email_file_and_content
 
   validates :email_file, presence: true, if: -> { email_file_action == "replace" && email_file_id.blank? }
@@ -111,12 +113,12 @@ private
   def set_date
     if @correspondence_date_year.present? && @correspondence_date_month.present? && @correspondence_date_day.present?
       begin
-        Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
+        self.correspondence_date = Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
       rescue ArgumentError
-        @correspondence_date = nil
+        self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
       end
     else
-      @correspondence_date = nil
+      self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
     end
   end
 
@@ -142,12 +144,11 @@ private
     year = @correspondence_date_year
     month = @correspondence_date_month
     day = @correspondence_date_day
-
     errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
     errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
     errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
-    Date.new(year.to_i, month.to_i, day.to_i)
   rescue ArgumentError
     errors.add(:correspondence_date, "Date is invalid")
   end
+
 end

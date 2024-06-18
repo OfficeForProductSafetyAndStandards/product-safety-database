@@ -45,7 +45,7 @@ class Investigations::RecordEmailsController < Investigations::BaseController
   def update
     @email = @investigation.emails.find(params[:id])
     @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params.merge(id: @email.id))
-    @email_correspondence_form.correspondence_date = @email_correspondence_form.send(:set_date)
+    @email_correspondence_form.send(:set_date)
     if @email_correspondence_form.valid?
       UpdateEmail.call!(
         @email_correspondence_form.attributes.merge({
