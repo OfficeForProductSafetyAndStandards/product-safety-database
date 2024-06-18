@@ -8,6 +8,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
   let(:existing_transcript_file_id) { nil }
   let(:correspondence_date) { { "day" => day, "month" => "1", "year" => "2020" } }
   let(:day) { "1" }
+
   before do
     params[:existing_transcript_file_id] = existing_transcript_file_id
   end

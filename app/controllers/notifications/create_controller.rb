@@ -830,6 +830,9 @@ module Notifications
         if params[:entity_id] == "new"
           # Create a legacy risk assessment
           @risk_assessment_form = RiskAssessmentForm.new(risk_assessments_params.merge(investigation_product_ids: [@investigation_product.id], current_user:))
+          @risk_assessment_form.assessed_on_day = @risk_assessment_form.assessed_on.day
+          @risk_assessment_form.assessed_on_month = @risk_assessment_form.assessed_on.month
+          @risk_assessment_form.assessed_on_year = @risk_assessment_form.assessed_on.year
           @risk_assessment_form.cache_file!
           @risk_assessment_form.load_risk_assessment_file
 

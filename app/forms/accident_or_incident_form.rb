@@ -5,6 +5,7 @@ class AccidentOrIncidentForm
   include ActiveModel::Dirty
 
   attr_accessor :date_year, :date_month, :date_day
+
   attribute :date
   attribute "date(1i)"
   attribute "date(2i)"

@@ -3,9 +3,9 @@ class EmailCorrespondenceForm
   include ActiveModel::Attributes
 
   attribute :correspondence_date
-  attribute 'correspondence_date(1i)'
-  attribute 'correspondence_date(2i)'
-  attribute 'correspondence_date(3i)'
+  attribute "correspondence_date(1i)"
+  attribute "correspondence_date(2i)"
+  attribute "correspondence_date(3i)"
   attribute :overview
 
   attribute :correspondent_name
@@ -66,6 +66,7 @@ class EmailCorrespondenceForm
       form.attachment_description = email.email_attachment.try(:metadata).to_h["description"]
     end
   end
+
   def initialize(attributes = {})
     super
 
@@ -73,7 +74,6 @@ class EmailCorrespondenceForm
     @correspondence_date_month = attributes["correspondence_date(2i)"]
     @correspondence_date_day = attributes["correspondence_date(3i)"]
   end
-
 
   def cache_files!
     if email_file.present?

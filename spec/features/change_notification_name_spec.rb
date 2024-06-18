@@ -20,10 +20,10 @@ RSpec.feature "Edit a notification name", :with_stubbed_mailer do
 
     expect(page).to have_current_path "/cases/#{notification.pretty_id}/case_names/edit", ignore_query: true
     expect(page).to have_css("h1", text: "Edit the notification name")
-    expect(page).to have_field("user_title", with: original_notification_name)
+    expect(page).to have_field("change-notification-name-form-user-title-field", with: original_notification_name)
     expect_to_have_notification_breadcrumbs
 
-    fill_in :user_title, with: ""
+    fill_in "change-notification-name-form-user-title-field", with: ""
 
     click_button "Save"
 
@@ -31,7 +31,7 @@ RSpec.feature "Edit a notification name", :with_stubbed_mailer do
     expect(errors_list[0].text).to eq "Enter a notification name"
     expect_to_have_notification_breadcrumbs
 
-    fill_in :user_title, with: taken_notification_name
+    fill_in "change-notification-name-form-user-title-field-error", with: taken_notification_name
 
     click_button "Save"
 
@@ -39,7 +39,7 @@ RSpec.feature "Edit a notification name", :with_stubbed_mailer do
     expect(errors_list[0].text).to eq "The notification name has already been used in an open notification by your team"
     expect_to_have_notification_breadcrumbs
 
-    fill_in :user_title, with: new_notification_name
+    fill_in "change-notification-name-form-user-title-field-error", with: new_notification_name
 
     click_button "Save"
 

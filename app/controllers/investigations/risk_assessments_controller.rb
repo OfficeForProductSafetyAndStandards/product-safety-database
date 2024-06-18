@@ -80,9 +80,10 @@ module Investigations
 
       @risk_assessment_form = RiskAssessmentForm.new(
         risk_assessment_params.merge(
-        current_user:,
-        investigation: @investigation_object,
-        old_file: @risk_assessment.risk_assessment_file_blob)
+          current_user:,
+          investigation: @investigation_object,
+          old_file: @risk_assessment.risk_assessment_file_blob
+        )
       )
 
       @risk_assessment_form.assessed_on = @risk_assessment_form.send(:set_date)

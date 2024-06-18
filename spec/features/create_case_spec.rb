@@ -88,12 +88,12 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       expect(errors_list[0].text).to eq "Enter a notification name"
 
-      find("#user_title").set(investigation_with_same_user_title.user_title)
+      find("#investigation-user-title-field-error").set(investigation_with_same_user_title.user_title)
       click_button "Save"
 
       expect(errors_list[0].text).to eq "The notification name has already been used in an open notification by your team"
 
-      find("#user_title").set(case_name)
+      find("#investigation-user-title-field-error").set(case_name)
 
       click_button "Save"
 
@@ -225,12 +225,12 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       expect(errors_list[0].text).to eq "Enter a notification name"
 
-      find("#user_title").set(investigation_with_same_user_title.user_title)
+      find("#investigation-user-title-field-error").set(investigation_with_same_user_title.user_title)
       click_button "Save"
 
       expect(errors_list[0].text).to eq "The notification name has already been used in an open notification by your team"
 
-      find("#user_title").set(case_name)
+      find("#investigation-user-title-field-error").set(case_name)
 
       click_button "Save"
 

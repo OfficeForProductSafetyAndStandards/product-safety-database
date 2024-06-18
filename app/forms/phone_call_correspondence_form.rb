@@ -14,10 +14,11 @@ class PhoneCallCorrespondenceForm
   validate :validate_transcript_and_content
 
   attr_accessor :correspondence_date_year, :correspondence_date_month, :correspondence_date_day
+
   attribute :correspondence_date
-  attribute 'correspondence_date(1i)'
-  attribute 'correspondence_date(2i)'
-  attribute 'correspondence_date(3i)'
+  attribute "correspondence_date(1i)"
+  attribute "correspondence_date(2i)"
+  attribute "correspondence_date(3i)"
   attribute :correspondent_name
   attribute :phone_number
   attribute :overview
@@ -25,7 +26,6 @@ class PhoneCallCorrespondenceForm
   attribute :transcript
   attribute :existing_transcript_file_id
   attribute :id
-
 
   ATTRIBUTES_FROM_PHONE_CALL = %w[
     correspondence_date
@@ -73,7 +73,6 @@ class PhoneCallCorrespondenceForm
     id.present?
   end
 
-
 private
 
   def set_date
@@ -106,7 +105,7 @@ private
     errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
     errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
     errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
-     Date.new(year.to_i, month.to_i, day.to_i)
+    Date.new(year.to_i, month.to_i, day.to_i)
   rescue ArgumentError
     errors.add(:correspondence_date, "Date is invalid")
   end

@@ -19,5 +19,4 @@ class ErrorSummaryUpperCasePresenter
     @error_messages = store
     @error_messages
   end
-
 end

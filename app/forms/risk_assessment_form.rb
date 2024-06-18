@@ -9,6 +9,7 @@ class RiskAssessmentForm
   attribute :current_user
 
   attr_accessor :assessed_on_year, :assessed_on_month, :assessed_on_day
+
   attribute :assessed_on, :govuk_date
   attribute "assessed_on(1i)"
   attribute "assessed_on(2i)"

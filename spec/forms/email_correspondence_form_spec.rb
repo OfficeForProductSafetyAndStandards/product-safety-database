@@ -14,12 +14,15 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_mailer do
       email_subject:,
       email_attachment_id:,
       email_file_id:,
-      overview:
+      overview:,
+      "correspondence_date(1i)" => 2020,
+      "correspondence_date(2i)" => 1,
+      "correspondence_date(3i)" => 20
     )
   end
 
   let(:attachment_description) { "" }
-  let(:correspondence_date) { Date.new( 2020, 01, 20) }
+  let(:correspondence_date) { Date.new(2020, 1, 20) }
   let(:correspondent_name) { "" }
   let(:details) { "" }
   let(:email_address) { "" }

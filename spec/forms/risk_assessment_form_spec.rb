@@ -30,7 +30,10 @@ RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
       investigation_product_ids:,
       old_file:,
       risk_assessment_file:,
-      details:
+      details:,
+      "assessed_on(1i)" => 2020,
+      "assessed_on(2i)" => 2,
+      "assessed_on(3i)" => 1
     }
   end
 

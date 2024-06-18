@@ -1,5 +1,5 @@
 <%= form.govuk_error_summary %>
 
 <%= form.govuk_text_field :user_title, label: -> do %>
-  <header class="govuk-label--l"><%= heading %></header>
+  <header class="govuk-label--l"><h1><%= heading %></h1></header>
 <% end, hint: {text: "Give the notification a short descriptive title." }, width: 'two-thirds', name: "investigation[user_title]" %>
