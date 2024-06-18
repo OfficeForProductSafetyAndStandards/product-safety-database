@@ -4,7 +4,7 @@ class AccidentOrIncidentForm
   include ActiveModel::Serialization
   include ActiveModel::Dirty
 
-  attr_accessor :date_year, :date_month, :date_day
+  attr_accessor :date_year, :date_month, :date_day, :type
 
   attribute :date
   attribute "date(1i)"
@@ -86,11 +86,11 @@ private
     year = @date_year
     month = @date_month
     day = @date_day
+    errors.add(:date, "Enter the date of " + @type.downcase) if year.blank? && month.blank? && day.blank?
 
     errors.add(:date, "Date sent must include a year") if year.blank?
     errors.add(:date, "Date sent must include a month") if month.blank?
     errors.add(:date, "Date sent must include a day") if day.blank?
-    Date.new(year.to_i, month.to_i, day.to_i)
   rescue ArgumentError
     errors.add(:date, "Date is invalid")
   end

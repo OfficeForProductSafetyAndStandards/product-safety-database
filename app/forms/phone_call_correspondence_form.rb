@@ -102,6 +102,7 @@ private
     month = @correspondence_date_month
     day = @correspondence_date_day
 
+    errors.add(:correspondence_date, "Enter the date of call") if year.blank? && month.blank? && day.blank?
     errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
     errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
     errors.add(:correspondence_date, "Date sent must include a day") if day.blank?

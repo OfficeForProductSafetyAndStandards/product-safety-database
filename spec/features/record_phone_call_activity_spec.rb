@@ -40,7 +40,8 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ant
     click_on "Add phone call"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Date of call must include a month and year"
+    expect(page).to have_error_summary "Date sent must include a month"
+    expect(page).to have_error_summary "Date sent must include a year"
 
     future_date = 1.day.from_now
     fill_in "Day", with: future_date.day

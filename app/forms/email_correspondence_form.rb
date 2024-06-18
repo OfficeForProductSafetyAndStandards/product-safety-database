@@ -43,8 +43,6 @@ class EmailCorrespondenceForm
 
   validate :date_fields_presence
 
-
-
   validate :validate_email_file_and_content
 
   validates :email_file, presence: true, if: -> { email_file_action == "replace" && email_file_id.blank? }
@@ -144,11 +142,11 @@ private
     year = @correspondence_date_year
     month = @correspondence_date_month
     day = @correspondence_date_day
+    errors.add(:correspondence_date, "Enter the date of email") if year.blank? && month.blank? && day.blank?
     errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
     errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
     errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
   rescue ArgumentError
     errors.add(:correspondence_date, "Date is invalid")
   end
-
 end

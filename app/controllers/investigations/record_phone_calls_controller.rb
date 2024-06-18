@@ -9,7 +9,7 @@ class Investigations::RecordPhoneCallsController < Investigations::BaseControlle
 
   def create
     @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
-    @correspondence_form.correspondence_date = @correspondence_form.send(:set_date)
+    @correspondence_form.send(:set_date)
     @correspondence_form.cache_file!
     @correspondence_form.load_transcript_file
 

@@ -92,9 +92,6 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_antivirus
     expect_to_have_notification_breadcrumbs
     expect(page).to have_text("Date sent must be a real date")
 
-    # Field should retain invalid value
-
-
     # Attachments radio should still be selected as "Upload a replacement file"
     # but contain a link to the previous-uploaded replacement file
     within_fieldset "Attachments" do
