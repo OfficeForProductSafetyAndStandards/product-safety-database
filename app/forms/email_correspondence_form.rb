@@ -113,10 +113,10 @@ private
       begin
         self.correspondence_date = Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
       rescue ArgumentError
-        self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
+        self.correspondence_date = { year: @correspondence_date_year, month: @correspondence_date_month, day: @correspondence_date_day }
       end
     else
-      self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
+      self.correspondence_date = { year: @correspondence_date_year, month: @correspondence_date_month, day: @correspondence_date_day }
     end
   end
 
@@ -142,10 +142,13 @@ private
     year = @correspondence_date_year
     month = @correspondence_date_month
     day = @correspondence_date_day
-    errors.add(:correspondence_date, "Enter the date of email") if year.blank? && month.blank? && day.blank?
-    errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
-    errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
-    errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
+    if year.blank? && month.blank? && day.blank?
+      errors.add(:correspondence_date, "Enter the date of email")
+    else
+      errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
+      errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
+      errors.add(:correspondence_date, "Date sent must include a day") if day.blank?
+    end
   rescue ArgumentError
     errors.add(:correspondence_date, "Date is invalid")
   end

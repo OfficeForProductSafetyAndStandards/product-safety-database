@@ -75,6 +75,14 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
       <%= form.govuk_file_field :risk_assessment_file, label: { text: "Select file", size: "s" } %>
     <% end %>
   <% end %>
+<% elsif form.object.risk_assessment_file.present? %>
+  <%= form.hidden_field :risk_assessment_file, value: form.object.risk_assessment_file.id %>
+  <%= form.govuk_fieldset legend: { text: "Upload the risk assessment" } do %>
+    <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.risk_assessment_file } %>
+    <%= govuk_details(summary_text: "Replace this file") do %>
+      <%= form.govuk_file_field :risk_assessment_file, label: { text: "Select file", size: "s" } %>
+    <% end %>
+  <% end %>
 <% else %>
   <%= form.govuk_file_field :risk_assessment_file, legend: { text: "Upload the risk assessment" }, label: { text: "Upload the risk assessment" } %>
 <% end %>

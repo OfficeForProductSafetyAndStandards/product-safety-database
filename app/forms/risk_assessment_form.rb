@@ -59,12 +59,15 @@ class RiskAssessmentForm
 
   def cache_file!
     return if risk_assessment_file.blank?
-
-    self.risk_assessment_file = ActiveStorage::Blob.create_and_upload!(
-      io: risk_assessment_file,
-      filename: risk_assessment_file.original_filename,
-      content_type: risk_assessment_file.content_type
-    )
+    if risk_assessment_file.class == String
+      self.risk_assessment_file = ActiveStorage::Blob.find(risk_assessment_file.to_i)
+    else
+      self.risk_assessment_file = ActiveStorage::Blob.create_and_upload!(
+        io: risk_assessment_file,
+        filename: risk_assessment_file.original_filename,
+        content_type: risk_assessment_file.content_type
+      )
+    end
 
     self.existing_risk_assessment_file_file_id = risk_assessment_file.signed_id
   end
@@ -142,10 +145,10 @@ private
       begin
         self.assessed_on = Date.new(@assessed_on_year.to_i, @assessed_on_month.to_i, @assessed_on_day.to_i)
       rescue ArgumentError
-        self.assessed_on = { day: @assessed_on_year, month: @assessed_on_month, year: @assessed_on_day }
+        self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
       end
     else
-      self.assessed_on = { day: @assessed_on_year, month: @assessed_on_month, year: @assessed_on_day }
+      self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
     end
   end
 
@@ -154,10 +157,11 @@ private
     month = @assessed_on_month
     day = @assessed_on_day
 
-    errors.add(:assessed_on, "Date sent must include a year") if year.blank?
-    errors.add(:assessed_on, "Date sent must include a month") if month.blank?
-    errors.add(:assessed_on, "Date sent must include a day") if day.blank?
-    Date.new(year.to_i, month.to_i, day.to_i)
+    unless year.blank? && month.blank? && day.blank?
+      errors.add(:assessed_on, "Date sent must include a year") if year.blank?
+      errors.add(:assessed_on, "Date sent must include a month") if month.blank?
+      errors.add(:assessed_on, "Date sent must include a day") if day.blank?
+    end
   rescue ArgumentError
     errors.add(:assessed_on, "Date is invalid")
   end
