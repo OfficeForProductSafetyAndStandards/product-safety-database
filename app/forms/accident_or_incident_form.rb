@@ -94,7 +94,7 @@ private
       errors.add(:date, "Date sent must include a month") if month.blank?
       errors.add(:date, "Date sent must include a day") if day.blank?
     end
-   rescue ArgumentError
+  rescue ArgumentError
     errors.add(:date, "Date is invalid")
   end
 end
