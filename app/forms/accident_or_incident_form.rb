@@ -88,14 +88,13 @@ private
     day = @date_day
 
     if year.blank? && month.blank? && day.blank?
-      errors.add(:date, "Enter the date of  #{@type.downcase}") if year.blank? && month.blank? && day.blank?
+      errors.add(:date, "Enter date") if year.blank? && month.blank? && day.blank?
     else
       errors.add(:date, "Date sent must include a year") if year.blank?
       errors.add(:date, "Date sent must include a month") if month.blank?
       errors.add(:date, "Date sent must include a day") if day.blank?
     end
-
-  rescue ArgumentError
+   rescue ArgumentError
     errors.add(:date, "Date is invalid")
   end
 end

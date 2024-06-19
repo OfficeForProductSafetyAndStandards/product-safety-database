@@ -60,7 +60,7 @@ class RiskAssessmentForm
   def cache_file!
     return if risk_assessment_file.blank?
 
-    self.risk_assessment_file = if risk_assessment_file.class.instance_of? String
+    self.risk_assessment_file = if risk_assessment_file.instance_of? String
                                   ActiveStorage::Blob.find(risk_assessment_file.to_i)
                                 else
                                   ActiveStorage::Blob.create_and_upload!(
