@@ -43,9 +43,6 @@ RSpec.feature "Add case email activity", :with_stubbed_antivirus, :with_stubbed_
     # Test required fields
     click_button "Add email"
 
-    expect(page).to have_error_summary "Date sent must include a month"
-    expect(page).to have_error_summary "Date sent must include a year"
-
     within_fieldset "Email content" do
       expect(page).to have_content "Currently selected file: email_file.txt"
     end

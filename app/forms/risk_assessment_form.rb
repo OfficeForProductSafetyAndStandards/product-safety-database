@@ -59,15 +59,16 @@ class RiskAssessmentForm
 
   def cache_file!
     return if risk_assessment_file.blank?
-    if risk_assessment_file.class == String
-      self.risk_assessment_file = ActiveStorage::Blob.find(risk_assessment_file.to_i)
-    else
-      self.risk_assessment_file = ActiveStorage::Blob.create_and_upload!(
-        io: risk_assessment_file,
-        filename: risk_assessment_file.original_filename,
-        content_type: risk_assessment_file.content_type
-      )
-    end
+
+    self.risk_assessment_file = if risk_assessment_file.class.instance_of? String
+                                  ActiveStorage::Blob.find(risk_assessment_file.to_i)
+                                else
+                                  ActiveStorage::Blob.create_and_upload!(
+                                    io: risk_assessment_file,
+                                    filename: risk_assessment_file.original_filename,
+                                    content_type: risk_assessment_file.content_type
+                                  )
+                                end
 
     self.existing_risk_assessment_file_file_id = risk_assessment_file.signed_id
   end

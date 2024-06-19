@@ -143,7 +143,7 @@ private
     month = @correspondence_date_month
     day = @correspondence_date_day
     if year.blank? && month.blank? && day.blank?
-      errors.add(:correspondence_date, "Enter the date of email")
+      errors.add(:correspondence_date, "Enter the date sent")
     else
       errors.add(:correspondence_date, "Date sent must include a year") if year.blank?
       errors.add(:correspondence_date, "Date sent must include a month") if month.blank?
