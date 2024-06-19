@@ -18,8 +18,9 @@
   <div class="govuk-grid-column-one-third">
     <h2 class="govuk-heading-m">Attachment</h2>
 
-    <p class="govuk-body"><%= link_to @test_result.document.filename, @test_result.document, class: "govuk-link" %></p>
-
-    <%= document_placeholder(@test_result.document) %>
+    <% if @test_result&.document.present? %>
+      <p class="govuk-body"><%= link_to @test_result.document.filename, @test_result.document, class: "govuk-link" %></p>
+      <%= document_placeholder(@test_result.document) %>
+    <% end %>
   </div>
 </div>
