@@ -12,9 +12,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
   scenario "Updating a business's details" do
     sign_in user
     visit "/businesses/#{business.id}"
-    puts "im here"
     expect_to_be_on_business_page(business_id: business.id, business_name: "OldCo")
-    puts "im past this function"
     click_link "Edit details"
 
     expect_to_be_on_edit_business_page(business_id: business.id, business_name: "OldCo")
