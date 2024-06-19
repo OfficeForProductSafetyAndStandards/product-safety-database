@@ -2,7 +2,7 @@
 <%= form_with model: @product_form, scope: :product, url: products_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings name when_placed_on_market barcode]) %>
+      <%= form.govuk_error_summary  %>
 
       <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Create a product record</h1>
       <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<%= psd_abbr title: false %>), you can create a product record for the product. This will also generate a new <%= psd_abbr %> product record reference number.</p>
