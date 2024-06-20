@@ -63,15 +63,13 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         end
 
         it "restricts the description" do
-          create(:notification, description: "=A1")
+          create(:notification, description: "To Restrict", is_private: true)
           Investigation.reindex
 
-          get generate_notification_exports_path, params: { q: "A1" }
+          get generate_notification_exports_path
 
-          cell_with_formula_as_description = exported_data.cell(2, 5)
-
-          aggregate_failures "cell value checks" do
-            expect(cell_with_formula_as_description).to eq "Restricted"
+          aggregate_failures do
+            expect(exported_data.cell(2, 5)).to eq "Restricted"
           end
         end
 

@@ -34,14 +34,11 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
   let(:changes) { corrective_action_form.changes }
 
   before do
-    puts "New Legislation: #{new_legislation}" # Debug statement
-
     UpdateCorrectiveAction.call!(
       corrective_action_attributes
         .merge(corrective_action:, user:, changes:)
     )
 
-    # Reload the corrective action to ensure it has the latest data
     corrective_action.reload
   end
 

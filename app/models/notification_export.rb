@@ -149,7 +149,7 @@ private
     description = if notification.is_private? && !user_is_case_owner
                     "Restricted"
                   else
-                    notification.description == "=A1" ? "Restricted" : strip_html(notification.description)
+                    notification.description = strip_html(notification.description)
                   end
 
     title = if notification.is_private? && !user_is_case_owner
