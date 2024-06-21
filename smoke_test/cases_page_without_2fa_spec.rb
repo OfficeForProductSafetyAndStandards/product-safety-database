@@ -13,7 +13,6 @@ end
 
 def take_screenshot_after_failed_example(example)
   return unless example.exception
-  puts "Saving screenshot to screenshot.html"
   @session.save_page("tmp/capybara/screenshot.html")
 end
 

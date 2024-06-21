@@ -18,9 +18,9 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
       expect_to_have_notification_breadcrumbs
 
       within_fieldset("What action is being taken?") { expect(page).to have_checked_field(CorrectiveAction.actions[corrective_action.action]) }
-      expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
-      expect(page).to have_field("Month",   with: corrective_action.date_decided.month)
-      expect(page).to have_field("Year",    with: corrective_action.date_decided.year)
+      expect(page).to have_field("Day", with: corrective_action.date_decided.day)
+      expect(page).to have_field("Month", with: corrective_action.date_decided.month)
+      expect(page).to have_field("Year", with: corrective_action.date_decided.year)
 
       within_fieldset("Which product is subject to action?") do
         expect(page).to have_checked_field("#{corrective_action.investigation_product.name} (#{corrective_action.investigation_product.product.psd_ref})")
@@ -84,9 +84,9 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
         choose new_action
       end
 
-      fill_in "Day",                        with: new_date_decided.day
-      fill_in "Month",                      with: new_date_decided.month
-      fill_in "Year",                       with: new_date_decided.year
+      fill_in "Day", with: new_date_decided.day
+      fill_in "Month", with: new_date_decided.month
+      fill_in "Year", with: new_date_decided.year
 
       within_fieldset("Which product is subject to action?") do
         choose "#{product_two.decorate.name_with_brand} (#{product_two.psd_ref})"
@@ -125,6 +125,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_mailer, :with_stubbed_noti
       fill_in "Attachment description", with: "New test result"
 
       click_on "Update corrective action"
+
       click_on CorrectiveAction.first.decorate.supporting_information_title
       expect_to_be_on_corrective_action_summary_page
       expect_to_have_notification_breadcrumbs

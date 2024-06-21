@@ -1,5 +1,6 @@
 require "rails_helper"
 
+# TODO: Refactor this test.
 RSpec.describe DeleteUnsafeFilesJob do
   describe "#perform", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
     subject(:job) { described_class.new }

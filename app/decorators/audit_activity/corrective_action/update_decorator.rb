@@ -15,7 +15,9 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def new_legislation
-    return unless (legislation = metadata.dig("updates", "legislation", 1))
+    legislation = metadata.dig("updates", "legislation", 1)
+    Rails.logger.debug { "Legislation Metadata: #{metadata}" } # Debugging output
+    return unless legislation
 
     legislation.is_a?(Array) ? legislation.to_sentence : legislation
   end

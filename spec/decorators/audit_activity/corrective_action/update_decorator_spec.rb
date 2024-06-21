@@ -5,10 +5,11 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
 
   include_context "with corrective action setup for updates"
 
-  let(:new_file_description)      { "new corrective action file description" }
-  let(:new_filename)              { "corrective_action.txt" }
-  let(:new_document)              { fixture_file_upload(file_fixture(new_filename)) }
-  let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
+  let(:new_legislation) { "Food Imitations (Safety) Regulations 1989" } # Example value, change as necessary
+  let(:new_file_description) { "new corrective action file description" }
+  let(:new_filename) { "corrective_action.txt" }
+  let(:new_document) { fixture_file_upload(file_fixture(new_filename)) }
+  let(:corrective_action_form) { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
     corrective_action_form.tap { |form|
       form.tap(&:valid?).assign_attributes(
@@ -24,7 +25,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
         duration: new_duration,
         details: new_details,
         business_id: corrective_action.business_id,
-        existing_document_file_id:,
+        existing_document_file_id: nil,
         related_file: true,
         file: file_form
       )
@@ -37,7 +38,13 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
       corrective_action_attributes
         .merge(corrective_action:, user:, changes:)
     )
+
+    corrective_action.reload
   end
+
+  it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_formatted_s(:govuk)) }
+
+  it { expect(decorated_activity.new_legislation).to eq(new_legislation) }
 
   describe "#new_action" do
     context "when action is other" do
@@ -54,8 +61,6 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
       end
     end
   end
-
-  it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_formatted_s(:govuk)) }
 
   describe "#new_online_recall_information" do
     context "when previously has online recall information was nil" do
@@ -214,14 +219,13 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
       it { is_expected.to be_file_description_changed }
     end
 
-    context "when file description did not changed" do
+    context "when file description did not change" do
       let(:updates) { { updates: {} } }
 
       it { is_expected.not_to be_file_description_changed }
     end
   end
 
-  it { expect(decorated_activity.new_legislation).to eq(new_legislation) }
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
   it { expect(decorated_activity.new_details).to eq(new_details) }
   it { expect(decorated_activity.new_measure_type).to eq(new_measure_type) }
