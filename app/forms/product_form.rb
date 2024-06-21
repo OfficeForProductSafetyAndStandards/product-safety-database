@@ -36,7 +36,6 @@ class ProductForm
   before_validation { trim_whitespace(:brand) }
   before_validation { nilify_blanks(:barcode, :brand) }
 
-
   validates :category, presence: true
   validates :subcategory, presence: true
   validates :authenticity, inclusion: { in: Product.authenticities.keys }
