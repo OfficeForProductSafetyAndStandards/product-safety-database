@@ -2,13 +2,14 @@
 <%= page_title page_heading, errors: @notification_name_form.errors.any? %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @notification_name_form, url: investigation_case_names_path, method: :put do |form| %>
-      <%= render "form", form: form, heading: "Edit the notification name" %>
+    <%= form_with model: @notification_name_form, url: investigation_case_names_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+      <%= render "form", form: form, investigation: @notification, heading: "Edit the notification name" %>
 
        <div class="govuk-button-group">
-         <%= form.submit "Save", class: "govuk-button" %>
+         <%= form.govuk_submit "Save", class: "govuk-button" %>
          <%= link_to "Cancel", investigation_path(@notification), class: "govuk-link govuk-link--no-visited-state" %>
        </div>
     <% end %>
   </div>
+  <%= params.inspect %>
 </div>

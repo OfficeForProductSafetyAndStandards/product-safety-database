@@ -65,7 +65,7 @@ class Investigations::TsInvestigationsController < ApplicationController
       end
       session[:form_answers] = reason_for_creating_params
     when :reason_for_concern
-      reported_reason = calculate_reported_reason(reason_for_concern_params)
+      reported_reason = calculate_reported_reason(params[:investigation])
       @edit_why_reporting_form = EditWhyReportingForm.new(reason_for_concern_params.merge(reported_reason:))
       return render_wizard unless @edit_why_reporting_form.valid?
 

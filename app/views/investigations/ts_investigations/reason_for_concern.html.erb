@@ -1,9 +1,16 @@
 <% page_heading = "Why is the product of concern?" %>
 <%= page_title page_heading, errors: @edit_why_reporting_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: @edit_why_reporting_form, url: wizard_path, method: :put do |form| %>
-  <%= error_summary @edit_why_reporting_form.errors, %i[hazard_type hazard_description anon_compliant_reason] %>
-  <%= edit_why_reporting_checkboxes(form, page_heading, @edit_why_reporting_form.errors, disabled: false, classes: "govuk-!-padding-top-3", attribute: :reported_reason) %>
-
-  <%= form.submit "Continue", class: "govuk-button" %>
+<%= form_with scope: :investigation, model: @edit_why_reporting_form, url: wizard_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+  <%= form.govuk_error_summary %>
+  <%= form.govuk_check_boxes_fieldset :reported_reason, legend: { text: "Why is the product of concern?", size: "m" }, hint: { text: "Select one or both descriptions." } do %>
+    <%= form.govuk_check_box :reported_reason_unsafe, "true", label: { text: "The product is unsafe" }, link_errors: true do %>
+      <%= edit_unsafe_details_html(form, hazard_types) %>
+    <% end %>
+    <%= form.govuk_check_box :reported_reason_non_compliant, "true", label: { text: "The product is non-compliant" } do %>
+      <%= non_compliant_details_html(form) %>
+    <% end %>
+  <% end %>
+  <%= form.govuk_submit "Continue" %>
 <% end %>
+

@@ -1,19 +1,14 @@
 <div id="hazard-type-auto-complete-container"></div>
 <div class="govuk-!-width-one-half govuk-!-margin-bottom-6">
-  <%= govukSelect(
-        items: hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
-        key: :hazard_type,
-        form: form,
-        aria_describedby: "hazard-type-category-hint", label: { text: "What is the primary hazard?" },
-        id: "hazard_type",
-        include_blank: true
-  ) %>
+  <%= form.govuk_collection_select :hazard_type,
+                                   [OpenStruct.new(value: "", type: "")] + hazard_types.map {|type| OpenStruct.new(value: type, text: type, attributes: {class: "govuk-!-font-size-16"})},
+                                   :value,
+                                   :text,
+                                   label: { text: "What is the primary hazard?" } %>
 </div>
-<%= govukTextarea(
-      key: :hazard_description, form: form,
-      attributes: { maxlength: 10000 },
-      label: { text: "Why is the product unsafe?" },
-      hint: { text: "If the product has been involved in an incident include this additional information.", classes: "govuk-!-font-size-16" },
-      id: "hazard_description",
-      classes: "govuk-!-width-three-quarters"
-) %>
+
+<%= form.govuk_text_area :hazard_description,
+                         label: { text: "Why is the product unsafe?" },
+                         hint: { text: "If the product has been involved in an incident include this additional information." },
+                         max_chars: 10000,
+                         width: "three-quarters" %>
