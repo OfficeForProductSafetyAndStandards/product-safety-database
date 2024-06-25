@@ -207,6 +207,11 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.3.3)
     connection_pool (2.4.1)
+    coveralls_reborn (0.28.0)
+      simplecov (~> 0.22.0)
+      term-ansicolor (~> 1.7)
+      thor (~> 1.2)
+      tins (~> 1.32)
     crack (1.0.0)
       bigdecimal
       rexml
@@ -342,6 +347,8 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     minitest (5.23.1)
+    mize (0.4.1)
+      protocol (~> 2.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
     mutex_m (0.2.0)
@@ -393,6 +400,8 @@ GEM
       ttfunk (~> 1.8)
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
+    protocol (2.0.0)
+      ruby_parser (~> 3.0)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -585,6 +594,9 @@ GEM
     rubyXL (3.4.27)
       nokogiri (>= 1.10.8)
       rubyzip (>= 1.3.0)
+    ruby_parser (3.21.0)
+      racc (~> 1.5)
+      sexp_processor (~> 4.16)
     rubyzip (2.3.2)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
@@ -616,6 +628,7 @@ GEM
     sentry-sidekiq (5.17.3)
       sentry-ruby (~> 5.17.3)
       sidekiq (>= 3.0)
+    sexp_processor (4.17.1)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
     sidekiq (7.2.4)
@@ -676,12 +689,19 @@ GEM
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
+    sync (0.5.0)
+    term-ansicolor (1.10.2)
+      mize
+      tins (~> 1.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.1)
     tilt (2.3.0)
     timecop (0.9.9)
     timeout (0.4.1)
+    tins (1.33.0)
+      bigdecimal
+      sync
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
     turbo-rails (2.0.5)
@@ -747,6 +767,7 @@ DEPENDENCIES
   caxlsx
   caxlsx_rails
   cf-app-utils (~> 0.6)
+  coveralls_reborn
   cssbundling-rails
   database_cleaner (~> 2.0)
   devise (~> 4.9)
