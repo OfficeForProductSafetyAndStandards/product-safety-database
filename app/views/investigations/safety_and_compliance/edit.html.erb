@@ -6,7 +6,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <%= form.govuk_error_summary %>
-      <%= form.govuk_check_boxes_fieldset :reported_reason, legend: { text: "Why is the product of concern?", size: "m" }, hint: { text: "Select one or both descriptions." } do %>
+      <%= form.govuk_check_boxes_fieldset :reported_reason, legend: { text: "Why is the product of concern?", size: "l" }, hint: { text: "Select one or both descriptions." } do %>
         <%= form.govuk_check_box :reported_reason_unsafe, "true", disabled: true, label: { text: "The product is unsafe" }, link_errors: true do %>
           <%= edit_unsafe_details_html(form, hazard_types) %>
         <% end %>
