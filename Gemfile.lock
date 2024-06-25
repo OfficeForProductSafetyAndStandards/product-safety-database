@@ -348,6 +348,8 @@ GEM
     mini_magick (4.13.1)
     mini_mime (1.1.5)
     minitest (5.24.0)
+    mize (0.4.1)
+      protocol (~> 2.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
     mutex_m (0.2.0)
