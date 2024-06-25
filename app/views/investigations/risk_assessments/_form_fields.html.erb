@@ -41,7 +41,7 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
 %>
 
 <%= form.govuk_radio_buttons_fieldset(:assessed_by, legend: { text: "Who completed the assessment?" }) do %>
-  <%= form.govuk_radio_button :assessed_by, :my_team, label: { text: current_user.team.name } %>
+  <%= form.govuk_radio_button :assessed_by, :my_team, label: { text: current_user.team.name }, link_errors: true %>
   <% assessed_by_radio_items.each do |radio_item| %>
     <%= form.govuk_radio_button :assessed_by, radio_item[:value], label: { text: radio_item[:text] } do %>
       <%= radio_item[:conditional][:html] %>

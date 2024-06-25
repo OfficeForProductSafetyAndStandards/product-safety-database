@@ -19,6 +19,7 @@ class AccidentOrIncidentForm
   attribute :additional_info
   attribute :type
 
+  validate  :is_date_known_inclusion
   validates :date,
             presence: true,
             real_date: true,
@@ -26,12 +27,10 @@ class AccidentOrIncidentForm
             not_in_future: true,
             recent_date: { on_or_before: false },
             if: -> { is_date_known }
-  validate :date_fields_presence, if: -> { is_date_known }
+  validate  :presence_of_product
   validates :usage, inclusion: { in: UnexpectedEvent.usages.values, message: I18n.t(".accident_or_incident_form.usage.inclusion") }
   validates :severity_other, presence: true, if: -> { severity == "other" }
   validate  :severity_inclusion
-  validate  :is_date_known_inclusion
-  validate  :presence_of_product
 
   ATTRIBUTES_FROM_ACCIDENT_OR_INCIDENT = %w[
     is_date_known
@@ -75,26 +74,10 @@ private
       begin
         Date.new(@date_year.to_i, @date_month.to_i, @date_day.to_i)
       rescue ArgumentError
-        { day: @date_year, month: @date_month, year: @date_day }
+        { year: @date_year, month: @date_month, day: @date_day }
       end
     else
-      { day: @date_year, month: @date_month, year: @date_day }
+      { year: @date_year, month: @date_month, day: @date_day }
     end
-  end
-
-  def date_fields_presence
-    year = @date_year
-    month = @date_month
-    day = @date_day
-
-    if year.blank? && month.blank? && day.blank?
-      errors.add(:date, "Enter date") if year.blank? && month.blank? && day.blank?
-    else
-      errors.add(:date, "Date sent must include a year") if year.blank?
-      errors.add(:date, "Date sent must include a month") if month.blank?
-      errors.add(:date, "Date sent must include a day") if day.blank?
-    end
-  rescue ArgumentError
-    errors.add(:date, "Date is invalid")
   end
 end

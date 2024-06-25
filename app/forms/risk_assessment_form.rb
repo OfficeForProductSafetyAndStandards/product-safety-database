@@ -30,25 +30,25 @@ class RiskAssessmentForm
 
   attribute :details
 
-  validates :assessed_on, presence: true
-  validates :risk_level, presence: true
-
-  validates :risk_assessment_file, presence: true, unless: -> { old_file.present? }
-
-  validates :assessed_by, presence: true
-  validate :at_least_one_product_associated
-
-  validates :assessed_by_team_id, presence: true, if: -> { assessed_by == "another_team" }
-  validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
-  validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
-
   validates :assessed_on,
             real_date: true,
             complete_date: true,
             not_in_future: true,
             recent_date: { on_or_before: false }
 
-  validate :date_fields_presence
+  validates :assessed_on, presence: true
+  validates :risk_level, presence: true
+
+  validates :assessed_by, presence: true
+
+  validates :assessed_by_team_id, presence: true, if: -> { assessed_by == "another_team" }
+  validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
+  validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
+
+  validate :at_least_one_product_associated
+
+  validates :risk_assessment_file, presence: true, unless: -> { old_file.present? }
+
   def initialize(attributes = {})
     super
 
@@ -151,20 +151,6 @@ private
     else
       self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
     end
-  end
-
-  def date_fields_presence
-    year = @assessed_on_year
-    month = @assessed_on_month
-    day = @assessed_on_day
-
-    unless year.blank? && month.blank? && day.blank?
-      errors.add(:assessed_on, "Date sent must include a year") if year.blank?
-      errors.add(:assessed_on, "Date sent must include a month") if month.blank?
-      errors.add(:assessed_on, "Date sent must include a day") if day.blank?
-    end
-  rescue ArgumentError
-    errors.add(:assessed_on, "Date is invalid")
   end
 
   def at_least_one_product_associated
