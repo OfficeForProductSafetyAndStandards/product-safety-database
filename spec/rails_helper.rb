@@ -2,7 +2,6 @@
 
 require "simplecov"
 
-# Output coverage in LCOV format for CodeCov in CI environment
 if ENV["CI"]
   require "simplecov-lcov"
   SimpleCov::Formatter::LcovFormatter.config do |c|
@@ -14,39 +13,23 @@ end
 
 unless ENV["COVERAGE"] == "false"
   require "coveralls"
-  Coveralls.wear!("rails") # Ensure 'rails' is specified to integrate Rails-specific coverage
+  Coveralls.wear!("rails")
   SimpleCov.start "rails" do
     enable_coverage :branch
   end
 end
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
 require "domain_helpers"
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
-# Prevent database truncation if the environment is production
+
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
 require "super_diff/rspec-rails"
 
-# Requires supporting ruby files with custom matchers and macros, etc, in
-# spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
-# run as spec files by default. This means that files in spec/support that end
-# in _spec.rb will both be required and run as specs, causing the specs to be
-# run twice. It is recommended that you do not name files matching this glob to
-# end with _spec.rb. You can configure this pattern with the --pattern
-# option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
-#
-# The following line is provided for convenience purposes. It has the downside
-# of increasing the boot-up time by auto-requiring all files in the support
-# directory. Alternatively, in the individual `*_spec.rb` files, manually
-# require only the support files necessary.
-#
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
-# Checks for pending migrations and applies them before tests are run.
-# If you are not using ActiveRecord, you can remove these lines.
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
@@ -55,14 +38,8 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [Rails.root.join("test/fixtures")]
   config.include Rails.application.routes.url_helpers
-
-  # If you're not using ActiveRecord, or you'd prefer not to run each of your
-  # examples within a transaction, remove the following line or assign false
-  # instead of true.
-  # config.use_transactional_fixtures = true
 
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ActiveSupport::Testing::Assertions
@@ -72,23 +49,9 @@ RSpec.configure do |config|
 
   config.include DomainHelpers
 
-  # RSpec Rails can automatically mix in different behaviours to your tests
-  # based on their file location, for example enabling you to call `get` and
-  # `post` in specs under `spec/controllers`.
-  #
-  # You can disable this behaviour by removing the line below, and instead
-  # explicitly tag your specs with their type, e.g.:
-  #
-  #     RSpec.describe UsersController, :type => :controller do
-  #       # ...
-  #     end
-  #
-  # The different available types are documented in the features, such as in
-  # https://relishapp.com/rspec/rspec-rails/docs
+  config.include Devise::Test::ControllerHelpers, type: :controller
+
   config.infer_spec_type_from_file_location!
 
-  # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
-  # arbitrary gems may also be filtered via:
-  # config.filter_gems_from_backtrace("gem name")
 end
