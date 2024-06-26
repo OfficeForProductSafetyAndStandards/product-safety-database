@@ -113,10 +113,10 @@ jobs:
         run: |
           bundle exec rspec ${{ matrix.rspec-folder }}
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Coveralls
+      #   uses: coverallsapp/github-action@v2
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Dump docker logs
         uses: jwalton/gh-docker-logs@v2
