@@ -19,7 +19,10 @@ RSpec.shared_context "with phone call correspondence setup" do
       phone_number:,
       correspondent_name:,
       overview:,
-      details:
+      details:,
+      "correspondence_date(1i)" => "2020",
+      "correspondence_date(2i)" => "1",
+      "correspondence_date(3i)" => "1",
     }
   end
 

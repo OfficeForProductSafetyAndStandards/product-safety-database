@@ -1,38 +1,33 @@
-<%= form_with(model: correspondence_form, url:, builder: ApplicationFormBuilder) do |form| %>
+<%= form_with(model: correspondence_form, url:, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= error_summary(correspondence_form.errors) %>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryPresenter)  %>
 
       <span class="govuk-caption-l"><%= investigation.pretty_description %></span>
 
       <h1 class="govuk-heading-l">Record phone call</h1>
 
-      <%= govukFieldset(legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" }) do %>
+      <%= form.govuk_fieldset legend: {text: "Who was the call with?"} do %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <%= form.govuk_input :correspondent_name, label: "Name" %>
-            <%= form.govuk_input :phone_number, label: "Phone number", hint: "Please include any dialing codes etc" %>
+            <%= form.govuk_text_field :correspondent_name, label: {text: "Name"} %>
+            <%= form.govuk_text_field :phone_number, label: {text: "Phone number"}, hint: {text: "Please include any dialing codes etc"} %>
           </div>
         </div>
       <% end %>
 
-      <%= form.govuk_date_input :correspondence_date, legend: "Date of call" %>
+      <%= form.govuk_date_field :correspondence_date, correspondence_date: true, legend: { text: "Date of call" } %>
 
 
-      <%= form.govuk_input :overview, classes: "govuk-!-width-two-thirds", label: "Summary", label_classes: "govuk-label--m", hint: "Give an overview of the phone call" %>
+      <%= form.govuk_text_field :overview, label: {text: "Summary"}, hint: {text: "Give an overview of the phone call"}, size: 'm', width: 'two-thirds' %>
 
-      <%= govukFieldset(legend: { text: "Details", classes: "govuk-fieldset__legend--m" }, describedBy: "details-hint") do %>
+      <%= form.govuk_fieldset legend: {text: "Details"} do %>
         <span id="details-hint" class="govuk-hint govuk-!-width-full">Upload the transcript if you have one, or enter notes below</span>
-
         <div class="govuk-form-group">
           <%= form.hidden_field :existing_transcript_file_id %>
           <% file_upload_field = capture do %>
-            <%= form.govuk_file_upload :transcript,
-               label: "Upload a file",
-               label_classes: "govuk-label",
-               classes: "govuk-file-upload"
-            %>
+            <%= form.govuk_file_field :transcript, label: {text: "Upload a file"} %>
           <% end %>
 
           <% if form.object.transcript.present? %>
@@ -45,14 +40,12 @@
           <% else %>
             <%= file_upload_field %>
           <% end %>
-
         </div>
 
-        <%= form.govuk_text_area :details, label: "Notes", label_classes: "govuk-!-width-two-thirds", attributes: { maxlength: 32_767 } %>
+        <%= form.govuk_text_area :details, label: {text: "Notes"}, width: 'two-thirds', max_chars: 32_767 %>
 
       <% end %>
 
-      <%= govukButton text: form.object.persisted? ? "Update phone call" : "Add phone call" %>
+      <%= form.govuk_submit form.object.persisted? ? "Update phone call" : "Add phone call" %>
     </div>
-  </div>
 <% end %>

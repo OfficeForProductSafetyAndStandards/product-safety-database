@@ -9,6 +9,7 @@ class Investigations::RecordPhoneCallsController < Investigations::BaseControlle
 
   def create
     @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
+    @correspondence_form.send(:set_date)
     @correspondence_form.cache_file!
     @correspondence_form.load_transcript_file
 
@@ -33,6 +34,7 @@ class Investigations::RecordPhoneCallsController < Investigations::BaseControlle
   def update
     phone_call = Correspondence::PhoneCall.find(params[:id])
     correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params.merge(id: phone_call.id))
+    correspondence_form.correspondence_date = correspondence_form.send(:set_date)
     correspondence_form.cache_file!
     correspondence_form.load_transcript_file
 
@@ -58,7 +60,10 @@ private
       :details,
       :transcript,
       :existing_transcript_file_id,
-      correspondence_date: %i[day month year]
+      :corrspondence_date,
+      "correspondence_date(1i)",
+      "correspondence_date(2i)",
+      "correspondence_date(3i)",
     )
   end
 end
