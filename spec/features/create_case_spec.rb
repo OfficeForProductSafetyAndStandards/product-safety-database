@@ -25,7 +25,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_link product.name
       click_link "Create a product notification"
-      expect(page).to have_css("h1", text: "Why are you creating a notification?")
+      expect(page).to have_css("legend", text: "Why are you creating a notification?")
       click_button "Continue"
 
       expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
@@ -36,7 +36,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Why is the product of concern?")
+      expect(page).to have_css("legend", text: "Why is the product of concern?")
 
       click_button "Continue"
 
@@ -58,13 +58,13 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
         check "The product is non-compliant"
       end
 
-      select hazard_type, from: "hazard_type"
+      select hazard_type, from: "investigation[hazard_type]"
       fill_in "Why is the product unsafe?", with: hazard_description
       fill_in "Why is the product non-compliant?", with: non_compliant_reason
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Do you want to add a reference number?")
+      expect(page).to have_css("legend", text: "Do you want to add a reference number?")
 
       click_button "Continue"
 
@@ -82,7 +82,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "What is the notification name?")
+      expect(page).to have_css("label", text: "What is the notification name?")
 
       click_button "Save"
 
@@ -119,7 +119,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
         click_link product.name
         click_link "Create a product notification"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("legend", text: "Why are you creating a notification?")
 
         click_button "Continue"
         expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
@@ -130,7 +130,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         click_button "Continue"
 
-        expect(page).to have_css("h1", text: "Do you want to add a reference number?")
+        expect(page).to have_css("legend", text: "Do you want to add a reference number?")
       end
     end
 
@@ -140,10 +140,10 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         visit "/ts_investigation/case_name"
 
-        expect(page).not_to have_css("h1", text: "What is the notification name?")
+        expect(page).not_to have_css("label", text: "What is the notification name?")
         expect(page).to have_no_current_path "ts_investigation/case_name"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("legend", text: "Why are you creating a notification?")
         expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
       end
     end
@@ -162,7 +162,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
       click_link product.name
       click_link "Create a product notification"
 
-      expect(page).to have_css("h1", text: "Why are you creating a notification?")
+      expect(page).to have_css("legend", text: "Why are you creating a notification?")
       click_button "Continue"
 
       expect(errors_list[0].text).to eq "Select a product is of concern if the product might be unsafe or non-compliant"
@@ -173,7 +173,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Why is the product of concern?")
+      expect(page).to have_css("legend", text: "Why is the product of concern?")
 
       click_button "Continue"
 
@@ -195,13 +195,13 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
         check "The product is non-compliant"
       end
 
-      select hazard_type, from: "hazard_type"
+      select hazard_type, from: "investigation[hazard_type]"
       fill_in "Why is the product unsafe?", with: hazard_description
       fill_in "Why is the product non-compliant?", with: non_compliant_reason
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Do you want to add a reference number?")
+      expect(page).to have_css("legend", text: "Do you want to add a reference number?")
 
       click_button "Continue"
 
@@ -219,7 +219,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "What is the notification name?")
+      expect(page).to have_css("label", text: "What is the notification name?")
 
       click_button "Save"
 
@@ -260,7 +260,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         click_link "Create a product notification"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("legend", text: "Why are you creating a notification?")
 
         click_button "Continue"
 
@@ -272,7 +272,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         click_button "Continue"
 
-        expect(page).to have_css("h1", text: "Do you want to add a reference number?")
+        expect(page).to have_css("legend", text: "Do you want to add a reference number?")
       end
     end
 
@@ -282,10 +282,10 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         visit "/ts_investigation/case_name"
 
-        expect(page).not_to have_css("h1", text: "What is the notification name?")
+        expect(page).not_to have_css("legend", text: "What is the notification name?")
         expect(page).to have_no_current_path "ts_investigation/case_name"
 
-        expect(page).to have_css("h1", text: "Why are you creating a notification?")
+        expect(page).to have_css("legend", text: "Why are you creating a notification?")
         expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
       end
     end

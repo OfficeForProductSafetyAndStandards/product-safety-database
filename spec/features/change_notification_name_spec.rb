@@ -19,6 +19,7 @@ RSpec.feature "Edit a notification name", :with_stubbed_mailer do
     click_link "Edit the notification name"
 
     expect(page).to have_current_path "/cases/#{notification.pretty_id}/case_names/edit", ignore_query: true
+
     expect(page).to have_css("h1", text: "Edit the notification name")
     expect(page).to have_field("change-notification-name-form-user-title-field", with: original_notification_name)
     expect_to_have_notification_breadcrumbs

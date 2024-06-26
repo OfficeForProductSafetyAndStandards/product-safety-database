@@ -3,3 +3,10 @@
 <%= form.govuk_text_field :user_title, label: -> do %>
   <header class="govuk-label--l"><h1><%= heading %></h1></header>
 <% end, hint: {text: "Give the notification a short descriptive title." }, width: 'two-thirds', name: "investigation[user_title]" %>
+
+<%= form.govuk_text_field :user_title,
+                          name: "investigation[user_title]",
+                          label: { text: heading, size: "l", isPageHeading: true },
+                          hint: {text: "Give the notification a short descriptive title.", style: "margin-bottom: 5px" },
+                          width: "two-thirds",
+                          maxlength: 75%>

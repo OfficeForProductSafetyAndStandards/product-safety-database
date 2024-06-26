@@ -6,7 +6,7 @@
       <%= render "form", form: form, heading: "Edit the notification name" %>
 
        <div class="govuk-button-group">
-         <%= form.submit "Save", class: "govuk-button" %>
+         <%= form.govuk_submit "Save", class: "govuk-button" %>
          <%= link_to "Cancel", investigation_path(@notification), class: "govuk-link govuk-link--no-visited-state" %>
        </div>
     <% end %>
