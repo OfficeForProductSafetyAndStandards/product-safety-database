@@ -2,37 +2,15 @@
 
 <%= page_title page_heading, errors: @reported_reason_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: @reported_reason_form, url: investigation_reported_reason_path, method: :put do |form| %>
-  <%= error_summary @reported_reason_form.errors %>
-  <% radio_items = (Investigation.reported_reasons.keys - ["other"]).map.with_index do |reason, index|
-      id = index.zero? ? "reported_reason" : "reported_reason-#{index}"
-      item = { text: t("why_reporting_form.reason.#{reason}"), value: reason, id: id }
+<%= form_with scope: :investigation, model: @reported_reason_form, url: investigation_reported_reason_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+  <%= form.govuk_error_summary %>
 
-      if reason == "safe_and_compliant"
-        item.merge!({
-          hint: {
-            text: "This helps other market surveillance authorities avoid testing the same product again.",
-            classes: "govuk-radios__hint govuk-!-font-size-16"
-          }
-        })
-      end
-      item
-     end
-  %>
-
-   <%= govukRadios(
-     form: form,
-     key: :reported_reason,
-     classes: "",
-     fieldset: {
-       legend: {
-         text: "How is the product being reported?",
-         isPageHeading: true,
-         classes: "govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-7"
-       }
-     },
-     items: radio_items
-   ) %>
+  <%= form.govuk_radio_buttons_fieldset(:reported_reason, legend: { text: "How is the product being reported?", isPageHeading: true, size: 'l', style: "margin-bottom: 35px" }) do %>
+    <%= form.govuk_radio_button :reported_reason, Investigation.reported_reasons.keys[0], label: { text: t("why_reporting_form.reason.#{Investigation.reported_reasons.keys[0]}") }, link_errors: true %>
+    <%= form.govuk_radio_button :reported_reason, Investigation.reported_reasons.keys[1], label: { text: t("why_reporting_form.reason.#{Investigation.reported_reasons.keys[1]}") } %>
+    <%= form.govuk_radio_button :reported_reason, Investigation.reported_reasons.keys[2], label: { text: t("why_reporting_form.reason.#{Investigation.reported_reasons.keys[2]}") } %>
+    <%= form.govuk_radio_button :reported_reason, Investigation.reported_reasons.keys[3], label: { text: t("why_reporting_form.reason.#{Investigation.reported_reasons.keys[3]}") }, hint: { text: "This helps other market surveillance authorities avoid testing the same product again.", style: "font-size: 0.975rem" } %>
+  <% end %>
 
    <div class="govuk-button-group">
      <%= form.submit "Continue", class: "govuk-button" %>
