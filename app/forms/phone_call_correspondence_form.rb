@@ -9,9 +9,16 @@ class PhoneCallCorrespondenceForm
             not_in_future: true,
             recent_date: { on_or_before: false }
 
+  validate :date_fields_presence
+
   validate :validate_transcript_and_content
 
-  attribute :correspondence_date, :govuk_date
+  attr_accessor :correspondence_date_year, :correspondence_date_month, :correspondence_date_day
+
+  attribute :correspondence_date
+  attribute "correspondence_date(1i)"
+  attribute "correspondence_date(2i)"
+  attribute "correspondence_date(3i)"
   attribute :correspondent_name
   attribute :phone_number
   attribute :overview
@@ -35,9 +42,12 @@ class PhoneCallCorrespondenceForm
     end
   end
 
-  def initialize(*args)
+  def initialize(attributes = {})
     super
 
+    @correspondence_date_year = attributes["correspondence_date(1i)"]
+    @correspondence_date_month = attributes["correspondence_date(2i)"]
+    @correspondence_date_day = attributes["correspondence_date(3i)"]
     strip_line_feed_from_textarea
   end
 
@@ -65,13 +75,35 @@ class PhoneCallCorrespondenceForm
 
 private
 
+  def set_date
+    if @correspondence_date_year.present? && @correspondence_date_month.present? && @correspondence_date_day.present?
+      begin
+        self.correspondence_date = Date.new(@correspondence_date_year.to_i, @correspondence_date_month.to_i, @correspondence_date_day.to_i)
+      rescue ArgumentError
+        self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
+      end
+    else
+      self.correspondence_date = { day: @correspondence_date_day, month: @correspondence_date_month, year: @correspondence_date_year }
+    end
+  end
+
   def validate_transcript_and_content
     if transcript.nil? & (overview.blank? || details.blank?)
-      errors.add(:base, "Please provide either a transcript or complete the summary and notes fields")
+      errors.add(:overview, "Please provide either a transcript or complete the summary and notes fields")
     end
   end
 
   def strip_line_feed_from_textarea
     details&.strip!
+  end
+
+  def date_fields_presence
+    year = @correspondence_date_year
+    month = @correspondence_date_month
+    day = @correspondence_date_day
+
+    errors.add(:correspondence_date, "Enter the date of call") if year.blank? && month.blank? && day.blank?
+  rescue ArgumentError
+    errors.add(:correspondence_date, "Date is invalid")
   end
 end
