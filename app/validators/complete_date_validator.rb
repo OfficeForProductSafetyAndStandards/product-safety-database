@@ -27,7 +27,7 @@ class CompleteDateValidator < ActiveModel::EachValidator
     end
 
     if missing_date_parts.size.between?(1, 2)
-       record.errors.add(attribute, :incomplete, missing_date_parts: missing_date_parts.to_sentence)
+      record.errors.add(attribute, :incomplete, missing_date_parts: missing_date_parts.to_sentence)
     end
   end
 end
