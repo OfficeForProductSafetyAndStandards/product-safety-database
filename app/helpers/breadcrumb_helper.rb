@@ -17,9 +17,9 @@ module BreadcrumbHelper
   def breadcrumb_case_path
     setting = cookies.fetch(:last_case_view, "your_cases")
 
-    return :notifications if setting == "index" && current_user.can_access_new_search?
+    return :notifications if setting == "index"
 
-    setting = "all_cases" if setting == "index"
+    setting = "all_cases"
 
     "#{setting}_investigations".to_sym
   end
