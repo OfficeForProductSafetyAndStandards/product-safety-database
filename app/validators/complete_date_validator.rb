@@ -16,9 +16,15 @@ class CompleteDateValidator < ActiveModel::EachValidator
     return if value.nil? || value.is_a?(Date)
 
     missing_date_parts = []
-    missing_date_parts << "day" if value.day.blank?
-    missing_date_parts << "month" if value.month.blank?
-    missing_date_parts << "year" if value.year.blank?
+    if value.is_a?(Hash)
+      missing_date_parts << "day" if value[:day].blank?
+      missing_date_parts << "month" if value[:month].blank?
+      missing_date_parts << "year" if value[:year].blank?
+    else
+      missing_date_parts << "day" if value.day.blank?
+      missing_date_parts << "month" if value.month.blank?
+      missing_date_parts << "year" if value.year.blank?
+    end
 
     if missing_date_parts.size.between?(1, 2)
       record.errors.add(attribute, :incomplete, missing_date_parts: missing_date_parts.to_sentence)

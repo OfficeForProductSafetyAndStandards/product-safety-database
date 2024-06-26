@@ -1,13 +1,13 @@
 <%= page_title "Edit email", errors: @email_correspondence_form.errors.any? %>
-<%= form_with(model: @email_correspondence_form, url: investigation_email_path(@investigation, @email), method: :patch, builder: ApplicationFormBuilder) do |form| %>
+<%= form_for @email_correspondence_form, url: investigation_email_path(@investigation, @email), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary form.object.errors %>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryPresenter)  %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l">Edit email</h1>
       <%= govuk_warning_text(text: t("case.protected_details", data_type: "email correspondence")) %>
       <%= render "form_fields", form: form, email: @email %>
-      <%= form.submit "Update email", class: "govuk-button" %>
+      <%= form.govuk_submit "Update email" %>
     </div>
   </div>
 <% end %>
