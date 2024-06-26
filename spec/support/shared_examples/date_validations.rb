@@ -1,5 +1,5 @@
 RSpec.shared_examples "it does not allow dates in the future" do |form_attribute, attribute|
-  let(form_attribute) { { day: "1", month: "1", year: 1.year.from_now.to_date.year.to_s } }
+  let(form_attribute) { Date.new(2028, 1, 1) }
 
   it "is not valid and contains an error message", :aggregate_failures do
     expect(form).not_to be_valid
@@ -28,7 +28,7 @@ end
 RSpec.shared_examples "it does not allow far away dates" do |form_attribute, attribute, on_or_after: true, on_or_before: true|
   if on_or_before
     context "with a date 60 years from now" do
-      let(form_attribute) { { day: "1", month: "1", year: 60.years.from_now.year.to_s } }
+      let(form_attribute) { Date.new(60.years.from_now.year, 1, 1) }
 
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid
@@ -39,7 +39,7 @@ RSpec.shared_examples "it does not allow far away dates" do |form_attribute, att
 
   if on_or_after
     context "with a date before 1970" do
-      let(form_attribute) { { day: "31", month: "12", year: "1969" } }
+      let(form_attribute) { Date.new(1969, 1, 1) }
 
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid
