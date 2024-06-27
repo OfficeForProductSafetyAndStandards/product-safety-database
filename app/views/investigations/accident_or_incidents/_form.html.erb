@@ -1,26 +1,44 @@
-<%= form.govuk_radios :is_date_known, legend: "Do you know when the #{form.object.type.downcase} happened?", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_date_input(:date, legend: "Date of #{form.object.type.downcase}", hint: "For example, 12 11 2020", classes: "govuk-fieldset__legend") } }, { text: "No", value: "false" }] %>
-
+<%= form.govuk_radio_buttons_fieldset(:is_date_known, legend: { size: 'm', text: "Do you know when the #{form.object.type.downcase} happened?" }) do %>
+  <%= form.govuk_radio_button :is_date_known, 'true', label: { text: 'Yes' }, link_errors: true do %>
+    <%= form.govuk_date_field :date, date: true, legend: { text: "Date of #{form.object.type.downcase}" }, hint: {text: "For example, 12 11 2020"} %>
+  <% end %>
+  <%= form.govuk_radio_button :is_date_known, 'false', label: { text: 'No' } %>
+<% end %>
 <% if investigation.products.uniq.one? %>
   <h2 class="govuk-heading-m"><%= "Product involved" %></h2>
   <p class="govuk-body"><%= investigation.products.first.name %></p>
   <%= form.hidden_field :investigation_product_id, value: investigation.investigation_products.first.id %>
 <% else %>
-  <%= form.govuk_select :investigation_product_id, label: "Which product was involved?", label_classes: "govuk-label--m", items: [{ text: "", value: "" }] + investigation.investigation_products.map { |investigation_product| { text: "#{investigation_product.name} (#{investigation_product.psd_ref})", value: investigation_product.id } } %>
+  <h2 class="govuk-heading-m"><%= "Which product was involved?" %></h2>
+  <%= form.govuk_collection_select :investigation_product_id,
+                                   [OpenStruct.new(value: "", text: "")] + investigation.investigation_products.map { |investigation_product| OpenStruct.new(value: investigation_product.id, text: "#{investigation_product.name} (#{investigation_product.psd_ref})" ) },
+                                   :value,
+                                   :text,
+                                   label: {text: "Which product was involved?", hidden: true} %>
 <% end %>
 
 <% other = capture do %>
-<%= govukInput(
-  key: :severity_other,
-  form: form,
-  classes: "govuk-!-width-one-third",
-  label: { text: "Other type", classes: "govuk-visually-hidden" }
-) %>
+  <%= form.govuk_text_field :severity_other,
+                            label: { text: "Other type", hidden: true }, width: "one-third" %>
 <% end %>
 
-<%= form.govuk_radios :usage, legend: "How was the product being used?", items: [{ text: "Normal use", value: "during_normal_use" },  { text: "Misuse", value: "during_misuse" }, { text: "With the supervision of an adult", value: "with_adult_supervision" }, { text: "Without the supervision of an adult", value: "without_adult_supervision" }, { text: "Unknown use", value: "unknown_usage" }] %>
+<%= form.govuk_collection_radio_buttons :usage,
+                                        [{ text: "Normal use", value: "during_normal_use" },  { text: "Misuse", value: "during_misuse" }, { text: "With the supervision of an adult", value: "with_adult_supervision" }, { text: "Without the supervision of an adult", value: "without_adult_supervision" }, { text: "Unknown use", value: "unknown_usage" }].map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                        :value,
+                                        :text,
+                                        legend: {text: "How was the product being used?"} %>
 
-<%= form.govuk_radios :severity, legend: "Indicate the severity", items: [{ text: "Serious", value: "serious" },  { text: "High", value: "high" }, { text: "Medium", value: "medium" }, { text: "Low", value: "low" }, { text: "Unknown", value: "unknown_severity" }, { text: "Other", value: "other", conditional: { html: other } }] %>
+<%= form.govuk_radio_buttons_fieldset(:severity, legend: { text: "Indicate the severity" }) do %>
+  <%= form.govuk_radio_button :severity, 'serious', label: { text: 'Serious' }, link_errors: true%>
+  <%= form.govuk_radio_button :severity, 'high', label: { text: 'High' } %>
+  <%= form.govuk_radio_button :severity, 'medium', label: { text: 'Medium' } %>
+  <%= form.govuk_radio_button :severity, 'low', label: { text: 'Low' } %>
+  <%= form.govuk_radio_button :severity, 'unknown_severity', label: { text: 'Unknown' } %>
+  <%= form.govuk_radio_button :severity, 'other', label: { text: 'Other' } do %>
+    <%= other %>
+  <% end %>
+<% end %>
 
-<%= form.govuk_text_area :additional_info, label: "Additional information (optional)", attributes: { maxlength: 32_767 } %>
+<%= form.govuk_text_area :additional_info, label: {text: "Additional information (optional)"}, max_chars: 32_767 %>
 
 <%= form.hidden_field :type, value: form.object.type %>

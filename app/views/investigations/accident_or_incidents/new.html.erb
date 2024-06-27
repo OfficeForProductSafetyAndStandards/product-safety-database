@@ -1,16 +1,16 @@
 <% page_heading = "Record an #{@accident_or_incident_form.type.downcase}" %>
 <%= page_title page_heading, errors: @accident_or_incident_form.errors.any? %>
-<%= form_with model: @accident_or_incident_form, scope: :accident_or_incident_form, builder: ApplicationFormBuilder, method: :post, url: investigation_accident_or_incidents_path(@investigation.pretty_id) do |form| %>
+<%= form_with model: @accident_or_incident_form, scope: :accident_or_incident_form, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :post, url: investigation_accident_or_incidents_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@accident_or_incident_form.errors, %i[is_date_known date investigation_product_id usage severity severity_other])%>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryPresenter)  %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
       <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, type: @accident_or_incident_form.type %>
 
-      <%= govukButton text: "Add #{@accident_or_incident_form.type.downcase}" %>
+      <%= form.govuk_submit "Add #{@accident_or_incident_form.type.downcase}" %>
     </div>
   </div>
 <% end %>

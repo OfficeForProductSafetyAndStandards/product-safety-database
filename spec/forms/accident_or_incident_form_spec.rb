@@ -4,7 +4,7 @@ RSpec.describe AccidentOrIncidentForm, :with_test_queue_adapter do
   let(:notification) { create(:notification) }
   let(:user) { create(:user) }
 
-  let(:date) { { day: "1", month: "2", year: "2020" } }
+  let(:date) { Date.new(2020, 2, 1) }
   let(:is_date_known) { "true" }
   let(:severity) { "serious" }
   let(:severity_other) { "" }
@@ -20,7 +20,10 @@ RSpec.describe AccidentOrIncidentForm, :with_test_queue_adapter do
       severity_other:,
       usage:,
       investigation_product_id:,
-      type:
+      type:,
+      "date(1i)" => 2020,
+      "date(2i)" => 2,
+      "date(3i)" => 1,
     }
   end
 
