@@ -8,7 +8,13 @@ class RiskAssessmentForm
   attribute :investigation
   attribute :current_user
 
+  attr_accessor :assessed_on_year, :assessed_on_month, :assessed_on_day
+
   attribute :assessed_on, :govuk_date
+  attribute "assessed_on(1i)"
+  attribute "assessed_on(2i)"
+  attribute "assessed_on(3i)"
+
   attribute :risk_level
 
   attribute :assessed_by
@@ -24,32 +30,45 @@ class RiskAssessmentForm
 
   attribute :details
 
-  validates :assessed_on, presence: true
-  validates :risk_level, presence: true
-
-  validates :risk_assessment_file, presence: true, unless: -> { old_file.present? }
-
-  validates :assessed_by, presence: true
-  validate :at_least_one_product_associated
-
-  validates :assessed_by_team_id, presence: true, if: -> { assessed_by == "another_team" }
-  validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
-  validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
-
   validates :assessed_on,
             real_date: true,
             complete_date: true,
             not_in_future: true,
             recent_date: { on_or_before: false }
 
+  validates :assessed_on, presence: true
+  validates :risk_level, presence: true
+
+  validates :assessed_by, presence: true
+
+  validates :assessed_by_team_id, presence: true, if: -> { assessed_by == "another_team" }
+  validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
+  validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
+
+  validate :at_least_one_product_associated
+
+  validates :risk_assessment_file, presence: true, unless: -> { old_file.present? }
+
+  def initialize(attributes = {})
+    super
+
+    @assessed_on_year = attributes["assessed_on(1i)"]
+    @assessed_on_month = attributes["assessed_on(2i)"]
+    @assessed_on_day = attributes["assessed_on(3i)"]
+  end
+
   def cache_file!
     return if risk_assessment_file.blank?
 
-    self.risk_assessment_file = ActiveStorage::Blob.create_and_upload!(
-      io: risk_assessment_file,
-      filename: risk_assessment_file.original_filename,
-      content_type: risk_assessment_file.content_type
-    )
+    self.risk_assessment_file = if risk_assessment_file.instance_of? String
+                                  ActiveStorage::Blob.find(risk_assessment_file.to_i)
+                                else
+                                  ActiveStorage::Blob.create_and_upload!(
+                                    io: risk_assessment_file,
+                                    filename: risk_assessment_file.original_filename,
+                                    content_type: risk_assessment_file.content_type
+                                  )
+                                end
 
     self.existing_risk_assessment_file_file_id = risk_assessment_file.signed_id
   end
@@ -87,16 +106,16 @@ class RiskAssessmentForm
         .order(:name)
         .where.not(id: current_user.team_id)
         .pluck(:name, :id).collect do |row|
-          { text: row[0], value: row[1] }
-        end
+        { text: row[0], value: row[1] }
+      end
   end
 
   def businesses_select_items
     EMPTY_PROMPT_OPTION.deep_dup + investigation.businesses
-      .reorder(:trading_name)
-      .pluck(:trading_name, :id).map do |row|
-        { text: row[0], value: row[1] }
-      end
+                                                .reorder(:trading_name)
+                                                .pluck(:trading_name, :id).map do |row|
+                                     { text: row[0], value: row[1] }
+                                   end
   end
 
   def assessed_by_business_id
@@ -121,6 +140,18 @@ class RiskAssessmentForm
   end
 
 private
+
+  def set_date
+    if @assessed_on_year.present? && @assessed_on_month.present? && @assessed_on_day.present?
+      begin
+        self.assessed_on = Date.new(@assessed_on_year.to_i, @assessed_on_month.to_i, @assessed_on_day.to_i)
+      rescue ArgumentError
+        self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
+      end
+    else
+      self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
+    end
+  end
 
   def at_least_one_product_associated
     return unless investigation_product_ids.to_a.empty?

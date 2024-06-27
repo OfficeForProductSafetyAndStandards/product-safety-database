@@ -16,10 +16,10 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     create(:allegation, products: [product1, product2],
                         risk_level: nil,
                         investigation_businesses:
-      [
-        build(:investigation_business, business: business1),
-        build(:investigation_business, business: business2)
-      ],
+             [
+               build(:investigation_business, business: business1),
+               build(:investigation_business, business: business2)
+             ],
                         creator: user)
   end
 
@@ -50,11 +50,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     expect(page).to have_select("Choose team",
                                 options: ["", "OtherCouncil Trading Standards"],
-                                selected: [""])
+                                selected: [])
 
     expect(page).to have_select("Choose business",
                                 options: ["", "MyBrand Distributors", "MyBrand Inc"],
-                                selected: [""])
+                                selected: [])
 
     click_button "Attach risk assessment"
 
@@ -156,6 +156,20 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     click_button "Attach risk assessment"
 
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "Serious risk"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      check "MyBrand washing machine model X"
+    end
+
     expect(page).to have_text("Select business related to the notification")
     select "MyBrand Inc", from: "Choose business"
 
@@ -215,6 +229,10 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     # Check that field retains value when there's a validation error
     expect(page).to have_field("Organisation name", with: "RiskAssessmentsRUs")
+
+    within_fieldset("Which products were assessed?") do
+      check "MyBrand washing machine model X"
+    end
 
     attach_file "Upload the risk assessment", risk_assessment_file
     click_button "Attach risk assessment"

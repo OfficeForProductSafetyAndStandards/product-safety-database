@@ -13,7 +13,7 @@ module Investigations
       @risk_assessment_form = RiskAssessmentForm.new(
         risk_assessment_params.merge(current_user:, investigation: @investigation_object)
       )
-
+      @risk_assessment_form.assessed_on = @risk_assessment_form.send(:set_date)
       @risk_assessment_form.cache_file!
       @risk_assessment_form.load_risk_assessment_file
 
@@ -79,11 +79,14 @@ module Investigations
       @risk_assessment = @investigation_object.risk_assessments.find(params[:id])
 
       @risk_assessment_form = RiskAssessmentForm.new(
-        current_user:,
-        investigation: @investigation_object,
-        old_file: @risk_assessment.risk_assessment_file_blob
+        risk_assessment_params.merge(
+          current_user:,
+          investigation: @investigation_object,
+          old_file: @risk_assessment.risk_assessment_file_blob
+        )
       )
 
+      @risk_assessment_form.assessed_on = @risk_assessment_form.send(:set_date)
       @risk_assessment_form.attributes = risk_assessment_params
 
       if @risk_assessment_form.valid?
@@ -122,6 +125,8 @@ module Investigations
   private
 
     def risk_assessment_params
+      investigation_product_ids_arr = params[:risk_assessment_form][:investigation_product_ids]
+      investigation_product_ids_arr.shift if investigation_product_ids_arr[0] == ""
       params.require(:risk_assessment_form).permit(
         :details,
         :risk_level,
@@ -131,9 +136,11 @@ module Investigations
         :assessed_by_business_id,
         :assessed_by_other,
         :existing_risk_assessment_file_file_id,
-        assessed_on: %i[day month year],
-        investigation_product_ids: []
-      )
+        :assessed_on,
+        "assessed_on(1i)",
+        "assessed_on(2i)",
+        "assessed_on(3i)"
+      ).merge(investigation_product_ids: investigation_product_ids_arr)
     end
 
     def assessed_by
