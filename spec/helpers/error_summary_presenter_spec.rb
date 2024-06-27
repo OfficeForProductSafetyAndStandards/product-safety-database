@@ -82,10 +82,10 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
 
     context "when the form submitted is an AccidentOrIncident form" do
       let(:accident_or_incident_form) { AccidentOrIncidentForm.new(type: "accident", date: { year: "", month: "", day: "" }) }
-      let(:accident_or_incident_form_with_date) { AccidentOrIncidentForm.new(type: "accident", is_date_known: "yes", date: Date.new(2022, 2, 11)) }
+      let(:accident_or_incident_form_with_date) { AccidentOrIncidentForm.new(type: "accident", is_date_known: "yes", date: Date.new(2022, 2, 11), "date(1i)" => 2022, "date(2i)" => 2, "date(3i)" => 11) }
       let(:accident_or_incident_form_with_usage) { AccidentOrIncidentForm.new(type: "accident", usage: "during_normal_use") }
       let(:accident_or_incident_form_with_severity) { AccidentOrIncidentForm.new(type: "accident", severity: "serious") }
-      let(:accident_or_incident_form_complete) { AccidentOrIncidentForm.new(type: "accident", investigation_product_id: create(:investigation_product).id, is_date_known: "yes", date: Date.new(2022, 2, 11), usage: "during_normal_use", severity: "serious") }
+      let(:accident_or_incident_form_complete) { AccidentOrIncidentForm.new(type: "accident", investigation_product_id: create(:investigation_product).id, is_date_known: "yes", date: Date.new(2022, 2, 11), "date(1i)" => 2022, "date(2i)" => 2, "date(3i)" => 11, usage: "during_normal_use", severity: "serious") }
 
       before do
         accident_or_incident_form.invalid?
