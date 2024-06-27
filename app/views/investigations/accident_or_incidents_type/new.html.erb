@@ -1,16 +1,19 @@
 <% page_heading = "Are you recording an accident or incident?" %>
 <% page_title page_heading, errors: @accident_or_incident_type_form.errors.any? %>
-<%= form_with scope: :investigation, model: @accident_or_incident_type_form, url: investigation_accident_or_incidents_type_index_path(@investigation), builder: ApplicationFormBuilder, method: :post do |form| %>
+<%= form_with scope: :investigation, model: @accident_or_incident_type_form, url: investigation_accident_or_incidents_type_index_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :post do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary @accident_or_incident_type_form.errors %>
+      <%= form.govuk_error_summary %>
 
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-      <%= form.govuk_radios :type, legend: nil, items: [{ text: "Accident", value: "Accident", id: "accident_type" }, { text: "Incident", value: "Incident", id: "incident_type" }] %>
-
+      <%= form.govuk_collection_radio_buttons :type,
+                                              [{ text: "Accident", value: "Accident", id: "accident_type" }, { text: "Incident", value: "Incident", id: "incident_type" }].map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                              :value,
+                                              :text,
+                                              legend: {text: "", hidden: true}%>
       <div class="govuk-form-group">
-        <%= govukButton(text: "Continue") %>
+        <%= form.govuk_submit "Continue" %>
         <p><%= link_to "Cancel", investigation_supporting_information_index_path(@investigation), class: "govuk-link--no-visited-state" %></p>
       </div>
     </div>

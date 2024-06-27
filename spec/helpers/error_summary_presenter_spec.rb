@@ -79,5 +79,66 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
         end
       end
     end
+
+    context "when the form submitted is an AccidentOrIncident form" do
+      let(:accident_or_incident_form) { AccidentOrIncidentForm.new(type: "accident", date: { year: "", month: "", day: "" }) }
+      let(:accident_or_incident_form_with_date) { AccidentOrIncidentForm.new(type: "accident", is_date_known: "yes", date: Date.new(2022, 2, 11), "date(1i)" => 2022, "date(2i)" => 2, "date(3i)" => 11) }
+      let(:accident_or_incident_form_with_usage) { AccidentOrIncidentForm.new(type: "accident", usage: "during_normal_use") }
+      let(:accident_or_incident_form_with_severity) { AccidentOrIncidentForm.new(type: "accident", severity: "serious") }
+      let(:accident_or_incident_form_complete) { AccidentOrIncidentForm.new(type: "accident", investigation_product_id: create(:investigation_product).id, is_date_known: "yes", date: Date.new(2022, 2, 11), "date(1i)" => 2022, "date(2i)" => 2, "date(3i)" => 11, usage: "during_normal_use", severity: "serious") }
+
+      before do
+        accident_or_incident_form.invalid?
+        accident_or_incident_form_with_date.invalid?
+        accident_or_incident_form_with_usage.invalid?
+        accident_or_incident_form_with_severity.invalid?
+        accident_or_incident_form_complete.invalid?
+      end
+
+      context "when no parameters supplied" do
+        it "returns the expected errors" do
+          presenter = described_class.new(accident_or_incident_form.errors.to_hash(full_messages: true))
+          formatted_errors = presenter.formatted_error_messages
+          expected_errors = [[:is_date_known, "Select yes if you know when the accident happened"], [:investigation_product_id, "Select the product involved in the accident"], [:usage, "Select how the product was being used"], [:severity, "Select the severity of the accident"]]
+          expect(formatted_errors).to eq(expected_errors)
+        end
+      end
+
+      context "when date is known parameter and date parameter supplied" do
+        it "does not have date error when parameter is filled" do
+          presenter = described_class.new(accident_or_incident_form_with_date.errors.to_hash(full_messages: true))
+          formatted_errors = presenter.formatted_error_messages
+          expected_errors = [[:investigation_product_id, "Select the product involved in the accident"], [:usage, "Select how the product was being used"], [:severity, "Select the severity of the accident"]]
+          expect(formatted_errors).to eq(expected_errors)
+        end
+      end
+
+      context "when :usage parameter is supplied" do
+        it "does not have :usage error" do
+          presenter = described_class.new(accident_or_incident_form_with_usage.errors.to_hash(full_messages: true))
+          formatted_errors = presenter.formatted_error_messages
+          expected_errors = [[:is_date_known, "Select yes if you know when the accident happened"], [:investigation_product_id, "Select the product involved in the accident"], [:severity, "Select the severity of the accident"]]
+          expect(formatted_errors).to eq(expected_errors)
+        end
+      end
+
+      context "when :severity parameter is supplied" do
+        it "does not have :severity error" do
+          presenter = described_class.new(accident_or_incident_form_with_severity.errors.to_hash(full_messages: true))
+          formatted_errors = presenter.formatted_error_messages
+          expected_errors = [[:is_date_known, "Select yes if you know when the accident happened"], [:investigation_product_id, "Select the product involved in the accident"], [:usage, "Select how the product was being used"]]
+          expect(formatted_errors).to eq(expected_errors)
+        end
+      end
+
+      context "when all parameters supplied" do
+        it "does not have errors" do
+          presenter = described_class.new(accident_or_incident_form_complete.errors.to_hash(full_messages: true))
+          formatted_errors = presenter.formatted_error_messages
+          expected_errors = []
+          expect(formatted_errors).to eq(expected_errors)
+        end
+      end
+    end
   end
 end
