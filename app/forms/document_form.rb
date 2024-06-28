@@ -11,12 +11,12 @@ class DocumentForm
   attribute :existing_document_file_id
   attribute :document
 
-  validates :title, presence: true
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
-  validates :description, length: { maximum: 10_000 }
   validate :file_size_below_max, if: -> { document.present? && existing_document_file_id.present? }
   validate :file_size_above_min, if: -> { document.present? && existing_document_file_id.present? }
   validate :file_is_free_of_viruses, if: -> { document.present? && existing_document_file_id.present? }
+  validates :title, presence: true
+  validates :description, length: { maximum: 10_000 }
 
   before_validation do
     trim_line_endings(:description)
@@ -37,6 +37,9 @@ class DocumentForm
       document.metadata["description"] = description
       document.metadata["updated"] = Time.zone.now
       document.save!
+    elsif document.instance_of?(String)
+      self.document = ActiveStorage::Blob.find(document)
+      document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
     elsif document
       self.document = ActiveStorage::Blob.create_and_upload!(
         io: document,
