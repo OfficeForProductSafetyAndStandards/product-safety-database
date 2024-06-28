@@ -9,7 +9,8 @@ class ChangeNotificationDetailsForm
   attribute :current_user
   attribute :notification_id
 
-  validates :user_title, :reported_reason, presence: true
+  validates :user_title, presence: true, length: { maximum: 100 }
+  validates :reported_reason, presence: true
   validates :description, length: { maximum: 10_000 }
   validate :unique_user_title_within_team
 
