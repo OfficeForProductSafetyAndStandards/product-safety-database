@@ -254,6 +254,7 @@ module Notifications
           return render :record_a_corrective_action_taken
         elsif params[:investigation_product_ids].present?
           @corrective_action_form = CorrectiveActionForm.new
+          @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
           @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
 
           return redirect_to wizard_path(:record_a_corrective_action) if @investigation_products.blank?
@@ -569,6 +570,7 @@ module Notifications
           end
         elsif params[:investigation_product_ids].present?
           @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
+          @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
           @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
 
           if @corrective_action_form.valid?
@@ -886,6 +888,7 @@ module Notifications
       @corrective_action = @notification.corrective_actions.find(params[:entity_id])
       if request.patch? || request.put?
         @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
+        @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
 
         if @corrective_action_form.valid?
           UpdateCorrectiveAction.call!(
@@ -914,6 +917,9 @@ module Notifications
         end
       else
         @corrective_action_form = CorrectiveActionForm.from(@corrective_action)
+        @corrective_action_form.date_decided_year = params[:corrective_action]["date_decided(1i)"]
+        @corrective_action_form.date_decided_month = params[:corrective_action]["date_decided(2i)"]
+        @corrective_action_form.date_decided_day = params[:corrective_action]["date_decided(3i)"]
         render :record_a_corrective_action_details
       end
     end
@@ -1132,7 +1138,7 @@ module Notifications
     end
 
     def record_a_corrective_action_details_params
-      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, date_decided: %i[day month year], legislation: [], geographic_scopes: [])
+      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action_form]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action_form]["date_decided(2i)"]).merge("date_decided(3i)" => params[:corrective_action_form]["date_decided(3i)"])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
       allowed_params[:legislation].reject!(&:blank?)
       allowed_params[:geographic_scopes].reject!(&:blank?)
