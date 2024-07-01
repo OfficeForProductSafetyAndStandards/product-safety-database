@@ -346,7 +346,7 @@ GEM
     method_source (1.1.0)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    minitest (5.23.1)
+    minitest (5.24.1)
     mize (0.4.1)
       protocol (~> 2.0)
     msgpack (1.7.2)
@@ -682,8 +682,8 @@ GEM
     store_attribute (1.2.0)
       activerecord (>= 6.0)
     stringio (3.1.0)
-    strong_migrations (1.8.0)
-      activerecord (>= 5.2)
+    strong_migrations (2.0.0)
+      activerecord (>= 6.1)
     strscan (3.1.0)
     super_diff (0.12.1)
       attr_extras (>= 6.2.4)
@@ -845,7 +845,7 @@ DEPENDENCIES
   sprockets (~> 4.2.1)
   sprockets-rails
   stimulus-rails
-  strong_migrations (~> 1.8)
+  strong_migrations (~> 2.0)
   super_diff
   support_portal!
   timecop (~> 0.9)
