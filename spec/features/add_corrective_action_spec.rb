@@ -48,12 +48,12 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     click_button "Add corrective action"
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Enter the date the corrective action came into effect"
-    expect(errors_list[1].text).to eq "Select the legislation relevant to the corrective action"
-    expect(errors_list[2].text).to eq "Select whether you want to upload a related file"
+    expect(errors_list[0].text).to eq "Select type of corrective action"
+    expect(errors_list[1].text).to eq "Enter the date the corrective action came into effect"
+    expect(errors_list[2].text).to eq "Select the legislation relevant to the corrective action"
     expect(errors_list[3].text).to eq "You must state whether the action is mandatory or voluntary"
     expect(errors_list[4].text).to eq "Select the geographic scope of the action"
-    expect(errors_list[5].text).to eq "Select type of corrective action"
+    expect(errors_list[5].text).to eq "Select whether you want to upload a related file"
 
     enter_non_numeric_date_and_expect_correct_error_message
 
