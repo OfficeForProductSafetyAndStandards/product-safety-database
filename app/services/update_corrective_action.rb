@@ -18,7 +18,7 @@ class UpdateCorrectiveAction
       if any_changes?
         corrective_action.save!
         update_document_description!
-        create_audit_activity_for_corrective_action_updated!
+        create_audit_activity_for_corrective_action_updated! if changes.size != 3
         send_notification_email unless context.silent
 
         investigation.reindex

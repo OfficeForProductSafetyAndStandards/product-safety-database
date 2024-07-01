@@ -96,7 +96,7 @@ module Investigations
             user: current_user
           })
         )
-        ahoy.track "Updated risk assessment", { notification_id: @investigation_object.id }
+        ahoy.track "Updated risk assessment", { notification_id: @investigation_object.id } if @risk_assessment.changes != {}
 
         # If the risk level has not been set for the investigation, set it to the same
         # as the risk assessment. This will force the redirect to the supporting information

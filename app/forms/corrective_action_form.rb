@@ -108,15 +108,7 @@ class CorrectiveActionForm
 private
 
   def set_date
-    if @date_decided_year.present? && @date_decided_month.present? && @date_decided_day.present?
-      begin
-        Date.new(@date_decided_year.to_i, @date_decided_month.to_i, @date_decided_day.to_i)
-      rescue ArgumentError
-        { year: @date_decided_year, month: @date_decided_month, day: @date_decided_day }
-      end
-    else
-      { year: @date_decided_year, month: @date_decided_month, day: @date_decided_day }
-    end
+    { year: @date_decided_year, month: @date_decided_month, day: @date_decided_day }
   end
 
   def other?

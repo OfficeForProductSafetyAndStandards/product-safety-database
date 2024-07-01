@@ -228,6 +228,7 @@ class BulkProductsController < ApplicationController
 
     if request.put?
       @bulk_products_create_corrective_action_form = CorrectiveActionForm.new(bulk_products_create_corrective_action_params.merge(duration: "unknown"))
+      @bulk_products_create_corrective_action_form.date_decided = @bulk_products_create_corrective_action_form.send(:set_date)
       @bulk_products_create_corrective_action_form.legislation.reject!(&:blank?)
       @bulk_products_create_corrective_action_form.geographic_scopes.reject!(&:blank?)
       @file_blob = @bulk_products_create_corrective_action_form.document
@@ -342,6 +343,6 @@ private
       geographic_scopes: [],
       file: %i[file description],
       date_decided: %i[day month year]
-    ).with_defaults(legislation: [], geographic_scopes: [])
+    ).with_defaults(legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action]["date_decided(2i)"]).merge("date_decided(3i)" => params[:corrective_action]["date_decided(3i)"])
   end
 end
