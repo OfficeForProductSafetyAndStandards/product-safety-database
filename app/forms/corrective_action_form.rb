@@ -29,6 +29,7 @@ class CorrectiveActionForm
   attribute :file_description
   attribute :further_corrective_action, :boolean
 
+  validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :investigation_product_id, presence: true, on: %i[add_corrective_action edit_corrective_action]
   validates :date_decided,
             presence: true,
@@ -36,8 +37,6 @@ class CorrectiveActionForm
             complete_date: true,
             recent_date: true
   validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
-  validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
-  validate :related_file_attachment_validation
   validates :has_online_recall_information, inclusion: { in: CorrectiveAction.has_online_recall_informations.keys }
   validate :online_recall_information_validation
   validates :further_corrective_action, inclusion: { in: [true, false] }, on: :ts_flow
@@ -47,10 +46,11 @@ class CorrectiveActionForm
   validates :duration, inclusion: { in: CorrectiveAction::DURATION_TYPES }, if: -> { duration.present? }
   validates :geographic_scopes, presence: true
   validate :geographic_scopes_inclusion
-  validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
   validates :details, length: { maximum: 32_767 }
+  validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
+  validate :related_file_attachment_validation
 
   before_validation { trim_whitespace(:other_action, :details, :file_description, :online_recall_information) }
   before_validation { nilify_blanks(:other_action, :details, :online_recall_information) }
@@ -97,7 +97,7 @@ class CorrectiveActionForm
     assign_file_and_description(document_params)
   end
 
-private
+  private
 
   def other?
     (action || "").inquiry.other?
