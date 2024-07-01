@@ -97,7 +97,7 @@ class CorrectiveActionForm
     assign_file_and_description(document_params)
   end
 
-  private
+private
 
   def other?
     (action || "").inquiry.other?
