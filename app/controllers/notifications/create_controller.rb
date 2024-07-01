@@ -99,20 +99,20 @@ module Notifications
 
         products = if @page_name == "your_products"
                      Product.includes(investigations: %i[owner_user owner_team])
-                       .where(users: { id: current_user.id })
-                       .order(sort_by)
+                            .where(users: { id: current_user.id })
+                            .order(sort_by)
                    elsif @page_name == "team_products"
                      team = current_user.team
                      Product.includes(investigations: %i[owner_user owner_team])
-                       .where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
-                       .order(sort_by)
+                            .where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
+                            .order(sort_by)
                    elsif @search_query
                      @search_query.strip!
                      Product.where("products.name ILIKE ?", "%#{@search_query}%")
-                       .or(Product.where("products.description ILIKE ?", "%#{@search_query}%"))
-                       .or(Product.where("CONCAT('psd-', products.id) = LOWER(?)", @search_query))
-                       .or(Product.where(id: @search_query))
-                       .order(sort_by)
+                            .or(Product.where("products.description ILIKE ?", "%#{@search_query}%"))
+                            .or(Product.where("CONCAT('psd-', products.id) = LOWER(?)", @search_query))
+                            .or(Product.where(id: @search_query))
+                            .order(sort_by)
                    else
                      Product.all.order(sort_by)
                    end
@@ -154,12 +154,12 @@ module Notifications
         businesses = if @search_query
                        @search_query.strip!
                        Business.joins(:locations).where("businesses.trading_name ILIKE ?", "%#{@search_query}%")
-                         .or(Business.where("businesses.legal_name ILIKE ?", "%#{@search_query}%"))
-                         .or(Business.where("CONCAT(locations.postal_code) ILIKE ?", "%#{@search_query}%"))
-                         .or(Business.where("businesses.company_number ILIKE ?",  "%#{@search_query}%"))
-                         .without_online_marketplaces
-                         .select("DISTINCT ON (businesses.trading_name, businesses.company_number) businesses.*")
-                         .order("businesses.trading_name, businesses.company_number, businesses.id")
+                               .or(Business.where("businesses.legal_name ILIKE ?", "%#{@search_query}%"))
+                               .or(Business.where("CONCAT(locations.postal_code) ILIKE ?", "%#{@search_query}%"))
+                               .or(Business.where("businesses.company_number ILIKE ?",  "%#{@search_query}%"))
+                               .without_online_marketplaces
+                               .select("DISTINCT ON (businesses.trading_name, businesses.company_number) businesses.*")
+                               .order("businesses.trading_name, businesses.company_number, businesses.id")
                      else
                        Business.without_online_marketplaces.order(sort_by)
                      end
@@ -368,14 +368,14 @@ module Notifications
           # Find potential duplicate businesses by looking for the same trading name
           # and preferring results with the same legal name too.
           duplicate_business = Business.where("LOWER(legal_name) = ?", @add_business_details_form.legal_name.downcase)
-            .or(Business.where(legal_name: nil))
-            .or(Business.where(legal_name: ""))
-            .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
-            .without_online_marketplaces
-            .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
-            .order(created_at: :desc)
-            .limit(1)
-            .first
+                                       .or(Business.where(legal_name: nil))
+                                       .or(Business.where(legal_name: ""))
+                                       .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
+                                       .without_online_marketplaces
+                                       .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
+                                       .order(created_at: :desc)
+                                       .limit(1)
+                                       .first
 
           return redirect_to duplicate_business_notification_create_index_path(@notification, business_id: duplicate_business.id, trading_name: @add_business_details_form.trading_name, legal_name: @add_business_details_form.legal_name) if duplicate_business.present?
 
@@ -751,17 +751,17 @@ module Notifications
           # Find all submitted PRISM risk assessments that are associated with the chosen product
           # either directly or via a notification that is not the current notification.
           @related_prism_risk_assessments = PrismRiskAssessment
-            .left_joins(:prism_associated_products, prism_associated_investigations: :prism_associated_investigation_products)
-            .where(prism_associated_products: { product_id: @investigation_product.product.id })
-            .or(PrismRiskAssessment.where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } }))
-            .where.not(id:
-              PrismRiskAssessment
-                .left_joins(prism_associated_investigations: :prism_associated_investigation_products)
-                .where(prism_associated_investigations: { investigation_id: @notification.id }).where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } })
-                .submitted
-                .distinct)
-            .submitted
-            .order(updated_at: :desc)
+                                              .left_joins(:prism_associated_products, prism_associated_investigations: :prism_associated_investigation_products)
+                                              .where(prism_associated_products: { product_id: @investigation_product.product.id })
+                                              .or(PrismRiskAssessment.where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } }))
+                                              .where.not(id:
+                                                           PrismRiskAssessment
+                                                             .left_joins(prism_associated_investigations: :prism_associated_investigation_products)
+                                                             .where(prism_associated_investigations: { investigation_id: @notification.id }).where(prism_associated_investigations: { prism_associated_investigation_products: { product_id: @investigation_product.product.id } })
+                                                             .submitted
+                                                             .distinct)
+                                              .submitted
+                                              .order(updated_at: :desc)
           render :add_risk_assessments_prism_or_legacy
         end
       end
@@ -830,6 +830,9 @@ module Notifications
         if params[:entity_id] == "new"
           # Create a legacy risk assessment
           @risk_assessment_form = RiskAssessmentForm.new(risk_assessments_params.merge(investigation_product_ids: [@investigation_product.id], current_user:))
+          @risk_assessment_form.assessed_on_day = @risk_assessment_form.assessed_on.day
+          @risk_assessment_form.assessed_on_month = @risk_assessment_form.assessed_on.month
+          @risk_assessment_form.assessed_on_year = @risk_assessment_form.assessed_on.year
           @risk_assessment_form.cache_file!
           @risk_assessment_form.load_risk_assessment_file
 
