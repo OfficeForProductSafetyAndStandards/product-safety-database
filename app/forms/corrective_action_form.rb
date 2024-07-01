@@ -7,8 +7,13 @@ class CorrectiveActionForm
   include SanitizationHelper
   include HasDocumentAttachedConcern
 
+  attr_accessor :date_decided_year, :date_decided_month, :date_decided_day
+
   attribute :id
   attribute :date_decided, :govuk_date
+  attribute "date_decided(1i)"
+  attribute "date_decided(2i)"
+  attribute "date_decided(3i)"
   attribute :investigation_product_id, :integer
   attribute :business_id, :integer
   attribute :legislation, default: []
@@ -86,9 +91,12 @@ class CorrectiveActionForm
     end
   end
 
-  def initialize(*args)
+  def initialize(attributes = {})
     super
     self.online_recall_information = nil unless has_online_recall_information_yes?
+    @date_decided_year = attributes["date_decided(1i)"]
+    @date_decided_month = attributes["date_decided(2i)"]
+    @date_decided_day = attributes["date_decided(3i)"]
   end
 
   def file=(document_params)
@@ -98,6 +106,18 @@ class CorrectiveActionForm
   end
 
 private
+
+  def set_date
+    if @date_decided_year.present? && @date_decided_month.present? && @date_decided_day.present?
+      begin
+        Date.new(@date_decided_year.to_i, @date_decided_month.to_i, @date_decided_day.to_i)
+      rescue ArgumentError
+        { year: @date_decided_year, month: @date_decided_month, day: @date_decided_day }
+      end
+    else
+      { year: @date_decided_year, month: @date_decided_month, day: @date_decided_day }
+    end
+  end
 
   def other?
     (action || "").inquiry.other?
