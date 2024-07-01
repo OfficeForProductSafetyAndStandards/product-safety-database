@@ -46,7 +46,7 @@ private
   end
 
   def investigation_products_unchanged?
-    @previous_investigation_product_ids.sort == investigation_product_ids.sort
+    @previous_investigation_product_ids.sort == investigation_product_ids.map(&:to_i).sort
   end
 
   def create_audit_activity

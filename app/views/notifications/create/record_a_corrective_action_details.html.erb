@@ -43,7 +43,7 @@
         <%= f.govuk_radio_button :action, "modification_programme", label: { text: "Modification programme" } %>
         <%= f.govuk_radio_button :action, "product_no_longer_available_for_sale", label: { text: "Product is no longer available for sale" } %>
       <% end %>
-      <%= f.govuk_date_field :date_decided, legend: { text: 'Enter your date of birth' }, hint: { text: 'For example, 31 3 1980' } %>
+      <%= f.govuk_date_field :date_decided, legend: { text: 'What date did the action come in to effect?' }, hint: { text: 'This may be in the future for example, 15 7 2024.' } %>
 
       <%= f.govuk_select :legislation, options_for_select([""] + Rails.application.config.legislation_constants["legislation"].sort, @corrective_action_form.legislation), label: { text: "Under which legislation?", size: "m" }, hint: { text: "Search applicable legislation and choose the ones you feel are relevant." }, multiple: true %>
       <%= f.govuk_collection_radio_buttons :business_id, @notification.investigation_businesses.decorate.map { |ib| OpenStruct.new(id: ib.business.id, name: "#{ib.business.trading_name} (#{ib.pretty_relationship})") }, :id, :name, legend: { text: "Which business is responsible?", size: "m" }, hint: { text: "Only businesses already added to the notification are listed." } %>

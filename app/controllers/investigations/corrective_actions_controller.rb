@@ -68,8 +68,7 @@ module Investigations
             changes: @corrective_action_form.changes
           )
       )
-
-      ahoy.track "Updated corrective action", { notification_id: @investigation.id }
+      ahoy.track "Updated corrective action", { notification_id: @investigation.id } if @corrective_action_form.changes != { "date_decided(1i)" => [nil, params[:corrective_action]["date_decided(1i)"]], "date_decided(2i)" => [nil, params[:corrective_action]["date_decided(2i)"]], "date_decided(3i)" => [nil, params[:corrective_action]["date_decided(3i)"]] }
 
       if params[:bulk_products_upload_id].present?
         redirect_to check_corrective_actions_bulk_upload_products_path(bulk_products_upload_id: params[:bulk_products_upload_id])
