@@ -10,16 +10,8 @@ class InvestigationsController < ApplicationController
 
   # GET /cases
   def index
-    return redirect_to notifications_path if current_user.can_access_new_search?
-
-    # Find the most recent incomplete bulk products upload for the current user, if any
-    @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
-
-    @pagy, @answer  = pagy_searchkick(opensearch_for_investigations(20, paginate: true))
-    @count          = count_to_display
-    @investigations = InvestigationDecorator
-                        .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
-    @page_name = "all_cases"
+    return redirect_to notifications_path
+    # removed the method code as part of use_new_serach roll out
   end
 
   # GET /cases/1

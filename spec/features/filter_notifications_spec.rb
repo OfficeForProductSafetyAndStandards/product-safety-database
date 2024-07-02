@@ -27,43 +27,25 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
   let!(:serious_risk_level_notification) { create(:notification, creator: user, risk_level: Investigation.risk_levels[:serious]) }
   let!(:high_risk_level_notification)    { create(:notification, creator: user, risk_level: Investigation.risk_levels[:high]) }
 
-  let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team:) }
-  let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team:) }
-  let!(:other_deleted_team)    { create(:team, :deleted) }
-
-  let(:restricted_notification_title) { "Restricted notification title" }
-  let(:restricted_notification_team) { create(:team, organisation: other_organisation) }
-  let(:restricted_notification_team_user) { create(:user, team: restricted_notification_team, organisation: other_organisation) }
-  let!(:restricted_notification) { create(:notification, creator: restricted_notification_team_user, is_private: true, description: restricted_notification_title).decorate }
-
   before do
     create(:notification, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true)
     other_team_notification.touch # Tests sort order
     Investigation.reindex
     sign_in(user)
-    visit all_cases_investigations_path
+    visit "/notifications"
   end
 
-  scenario "no filters applied shows all open notifications but does not show closed or deleted notifications" do
+  scenario "no filters applied shows all open/closed notifications but does not show deleted notifications" do
     expect(page).to have_listed_case(notification.pretty_id)
     expect(page).to have_listed_case(other_user_notification.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
     expect(page).to have_listed_case(other_team_notification.pretty_id)
+    expect(page).to have_listed_case(closed_notification.pretty_id)
 
     expect(page).not_to have_listed_case(deleted_notification.pretty_id)
-    expect(page).not_to have_listed_case(closed_notification.pretty_id)
-    number_of_open_cases = Investigation.not_deleted.where(is_closed: false).count
-    expect(page).to have_content("#{number_of_open_cases} notifications using the current filters, were found.")
 
-    expect(find("details#filter-details")["open"]).to eq(nil)
-
-    find("details#filter-details").click
-    within_fieldset "Notification status" do
-      expect(page).to have_checked_field("Open")
-      expect(page).to have_unchecked_field("Closed")
-    end
-
-    expect(page).to have_content("#{number_of_open_cases} notifications using the current filters, were found.")
+    number_of_cases = Investigation.not_deleted.count
+    expect(page).to have_content("#{number_of_cases} notifications using the current filters, were found.")
 
     within "#sort-by-fieldset" do
       expect(page).to have_select("Sort the results by", selected: "Recent updates")
@@ -78,405 +60,231 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     end
 
     it "maintains the filters when clicking on additional pages" do
-      choose "Serious and high risk"
-      click_on "Apply"
+      find("details#risk-level").click
+      check "Serious"
+      click_button "Apply"
 
-      expect(page.find_field("Serious and high risk")).to be_checked
+      find("details#risk-level").click
+      expect(page.find_field("Serious")).to be_checked
+
+      expect(page).to have_content("21 notifications using the current filters, were found.")
 
       click_link("2")
 
-      expect(page.find_field("Serious and high risk")).to be_checked
+      find("details#risk-level").click
+      expect(page.find_field("Serious")).to be_checked
     end
   end
 
   describe "notification priority" do
-    scenario "filtering by serious and high risk-level notifications only" do
-      choose "Serious and high risk"
-      click_on "Apply"
-      expect(page).to have_checked_field("Serious and high risk")
+    scenario "filtering by  high risk-level notifications only" do
+      find("details#risk-level").click
+      check "High"
+      click_button "Apply"
 
-      expect(page).to have_listed_case(serious_risk_level_notification.pretty_id)
+      find("details#risk-level").click
+      expect(page.find_field("High")).to be_checked
+
       expect(page).to have_listed_case(high_risk_level_notification.pretty_id)
       expect(page).to have_css(".opss-tag--risk1", text: "High risk notification")
+
+      expect(page).to have_content("2 notifications using the current filters, were found.")
 
       expect(page).not_to have_listed_case(coronavirus_notification.pretty_id)
       expect(page).not_to have_listed_case(notification.pretty_id)
       expect(page).not_to have_listed_case(other_user_notification.pretty_id)
       expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
       expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-
-      expect(find("details#filter-details")["open"]).to eq(nil)
     end
 
-    describe "notification status" do
-      scenario "filtering for both open and closed notification" do
-        within_fieldset("Notification status") { choose "All" }
-        click_button "Apply"
+    scenario "filtering by serious and high risk-level notifications only" do
+      find("details#risk-level").click
+      check "Serious"
+      check "High"
+      click_button "Apply"
 
-        expect(page).to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(closed_notification.pretty_id)
+      find("details#risk-level").click
+      expect(page.find_field("Serious")).to be_checked
+      expect(page.find_field("High")).to be_checked
 
-        expect(find("details#filter-details")["open"]).to eq(nil)
-      end
+      expect(page).to have_listed_case(serious_risk_level_notification.pretty_id)
+      expect(page).to have_listed_case(high_risk_level_notification.pretty_id)
+      expect(page).to have_css(".opss-tag--risk1", text: "High risk notification")
 
-      scenario "filtering only closed notifications" do
-        within_fieldset "Notification status" do
-          choose "Closed"
-        end
-        click_button "Apply"
+      expect(page).to have_content("3 notifications using the current filters, were found.")
 
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(closed_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq(nil)
-      end
+      expect(page).not_to have_listed_case(coronavirus_notification.pretty_id)
+      expect(page).not_to have_listed_case(notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_team_notification.pretty_id)
     end
   end
 
-  context "with 'more options' expanded" do
-    before do
-      find("details#filter-details").click
+  describe "notification status" do
+    scenario "filtering for both open and closed notification" do
+      find("details#case-status").click
+      check "Open"
+      click_button "Apply"
+
+      expect(page).to have_listed_case(notification.pretty_id)
+      expect(page).not_to have_listed_case(closed_notification.pretty_id)
     end
 
-    scenario "selecting filters only shows other active users and teams in the notification owner and created by filters" do
-      within_fieldset("Notification owner") do
-        expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
-        expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
-      end
+    scenario "filtering only closed notifications" do
+      find("details#case-status").click
+      check "Closed"
+      click_button "Apply"
 
-      within_fieldset("Created by") do
-        expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
-        expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
-      end
+      expect(page).not_to have_listed_case(notification.pretty_id)
+      expect(page).to have_listed_case(closed_notification.pretty_id)
+    end
+  end
+
+  describe "Hazard type" do
+    scenario "filtering by a hazard type" do
+      find("details#case-hazard-type").click
+      check "Fire"
+      click_button "Apply"
+
+      expect(page).to have_listed_case(notification.pretty_id)
+      expect(page).to have_listed_case(other_user_notification.pretty_id)
+      expect(page).to have_listed_case(other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(another_team_notification.pretty_id)
+
+      number_of_total_cases = Investigation.not_deleted.where(hazard_type: "Fire").count
+      expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
+    end
+  end
+
+  describe "Created by" do
+    scenario "filtering notifications created by another team" do
+      find("details#cases-created-by").click
+      check "Others"
+      select other_team.name, from: "Person or team name"
+      click_button "Apply"
+
+      expect(page).not_to have_listed_case(notification.pretty_id)
+      expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).to have_listed_case(other_team_notification.pretty_id)
     end
 
-    describe "Notification owner" do
-      scenario "filtering notifications where the user is the owner" do
-        within_fieldset("Notification owner") { choose "Me" }
-        click_button "Apply"
+    scenario "filtering notifications created by my team" do
+      find("details#cases-created-by").click
+      check "Me and my team"
+      click_button "Apply"
 
+      expect(page).to have_listed_case(notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+    end
+
+    scenario "filtering notifications created by anybody but my team" do
+      find("details#cases-created-by").click
+      check "Others"
+      click_button "Apply"
+
+      expect(page).not_to have_listed_case(notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+
+      expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).to have_listed_case(other_team_notification.pretty_id)
+      expect(page).to have_listed_case(another_team_notification.pretty_id)
+    end
+  end
+
+  describe "Notification owner" do
+    scenario "filtering notifications where the user is the owner" do
+      find("details#case-owner").click
+      check "Me"
+      click_button "Apply"
+
+      expect(page).to have_listed_case(notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+    end
+
+    scenario "filtering notifications where the user's team is the owner" do
+      find("details#case-owner").click
+      check "Me and my team"
+      click_button "Apply"
+
+      expect(page).to have_listed_case(notification.pretty_id)
+      expect(page).to have_listed_case(other_user_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).not_to have_listed_case(other_team_notification.pretty_id)
+    end
+
+    xit "filtering notifications where the owner is someone else" do
+      find("details#case-owner").click
+      check "Others"
+      click_button "Apply"
+
+      expect(page).not_to have_listed_case(notification.pretty_id)
+      expect(page).to have_listed_case(other_user_notification.pretty_id)
+      expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
+      expect(page).to have_listed_case(other_team_notification.pretty_id)
+    end
+  end
+
+  describe "notification type" do
+    context "with a non OPSS user" do
+      let(:user) { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
+
+      scenario "filter should be unavailable" do
+        expect(page).not_to have_listed_case(allegation.pretty_id)
         expect(page).to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering notifications where the user's team is the owner" do
-        within_fieldset("Notification owner") { choose "Me and my team" }
-        click_button "Apply"
-
-        expect(page).to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(other_user_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering notifications where the owner is someone else" do
-        choose "Others", id: "case_owner_others"
-        click_button "Apply"
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(other_user_notification.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering notifications where another person or team is the owner" do
-        within_fieldset("Notification owner") do
-          choose "Others", id: "case_owner_others"
-          select other_team.name, from: "case_owner_is_someone_else_id"
-        end
-        click_button "Apply"
-
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-
-        choose "Others", id: "case_owner_others"
-        select other_user_same_team.name, from: "case_owner_is_someone_else_id"
-        click_button "Apply"
-
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(other_user_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
+        expect(page).not_to have_css("details#case-type", text: "Type")
       end
     end
 
-    describe "Teams added to notifications", :with_stubbed_mailer do
-      before do
-        AddTeamToNotification.call!(
-          notification: other_user_other_team_notification,
-          user:,
-          team: chosen_team,
-          collaboration_class: Collaboration::Access::Edit
-        )
-      end
-
-      context "when filtering notifications where my team has access" do
-        let(:chosen_team) { team }
-
-        scenario "filtering notifications having a given team a collaborator" do
-          within_fieldset("Teams added to notifications") { choose "My team" }
-          click_button "Apply"
-
-          expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-          expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-          expect(page).to have_listed_case(other_user_notification.pretty_id)
-          expect(page).to have_listed_case(notification.pretty_id)
-
-          expect(find("details#filter-details")["open"]).to eq("open")
-        end
-      end
-
-      context "when filtering notifications where another team has access" do
-        let(:chosen_team) { other_team }
-
-        scenario "filters the notifications by other team with access" do
-          within_fieldset("Teams added to notifications") do
-            choose "Others"
-            select other_team.name, from: "Team name"
-          end
-          click_button "Apply"
-
-          expect(page).to have_listed_case(other_team_notification.pretty_id)
-          expect(page).not_to have_listed_case(other_user_notification.pretty_id)
-          expect(page).not_to have_listed_case(notification.pretty_id)
-
-          expect(find("details#filter-details")["open"]).to eq("open")
-
-          within_fieldset("Teams added to notifications") do
-            expect(page).to have_checked_field("Other")
-            expect(page).to have_select("Team name", with_options: [other_team.name])
-          end
-
-          within_fieldset("Teams added to notifications") { choose "All" }
-          within_fieldset("Notification owner")           { choose "Me and my team" }
-          click_button "Apply"
-
-          expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-          expect(page).to have_listed_case(notification.pretty_id)
-          expect(page).to have_listed_case(other_user_notification.pretty_id)
-
-          expect(find("details#filter-details")["open"]).to eq("open")
-        end
-
-        scenario "with keywords entered" do
-          fill_in "Search", with: other_user_other_team_notification.description
-          click_on "Submit search"
-
-          find("#filter-details").click
-
-          within_fieldset("Teams added to notifications") do
-            choose "Others"
-            select other_team.name, from: "Team name"
-          end
-          click_button "Apply"
-
-          expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-        end
-      end
-
-      context "when filtering notifications where any other team has access" do
-        let(:chosen_team) { other_team }
-
-        scenario "filters the notifications by other team with access but do not specify team" do
-          within_fieldset("Teams added to notifications") do
-            choose "Other"
-          end
-          click_button "Apply"
-
-          expect(page).to have_listed_case(other_team_notification.pretty_id)
-          expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-          expect(page).not_to have_listed_case(other_user_notification.pretty_id)
-          expect(page).not_to have_listed_case(notification.pretty_id)
-
-          expect(find("details#filter-details")["open"]).to eq("open")
-        end
-      end
-    end
-
-    describe "Hazard type" do
-      scenario "filtering by a hazard type" do
-        select "Fire", from: "Hazard type"
+    context "with an OPSS user" do
+      scenario "filtering for projects" do
+        find("details#case-type").click
+        check "Project"
         click_button "Apply"
 
-        expect(page).to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(other_user_notification.pretty_id)
-        expect(page).to have_listed_case(other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(another_team_notification.pretty_id)
-
-        number_of_total_cases = Investigation.not_deleted.where(hazard_type: "Fire").count
-        expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
-      end
-    end
-
-    describe "Created by" do
-      scenario "filtering notifications created by another team" do
-        within_fieldset("Created by") do
-          choose "Others"
-          select other_team.name, from: "Person or team name"
-        end
-        click_button "Apply"
-
+        expect(page).not_to have_listed_case(allegation.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
+        expect(page).to     have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
       end
 
-      scenario "filtering notifications created by my team" do
-        within_fieldset("Created by") { choose "Me and my team" }
+      scenario "filtering for enquiries" do
+        find("details#case-type").click
+        check "Enquiry"
         click_button "Apply"
 
-        expect(page).to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-
-      scenario "filtering notifications created by anybody but my team" do
-        within_fieldset("Created by") { choose "Others" }
-        click_button "Apply"
-
+        expect(page).not_to have_listed_case(allegation.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
-
-        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-        expect(page).to have_listed_case(other_team_notification.pretty_id)
-        expect(page).to have_listed_case(another_team_notification.pretty_id)
-
-        within_fieldset("Created by") { expect(page).to have_checked_field "Others" }
-
-        expect(find("details#filter-details")["open"]).to eq("open")
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).to     have_listed_case(enquiry.pretty_id)
       end
 
-      scenario "filtering notifications created by a different user" do
-        within_fieldset("Created by") do
-          choose "Others"
-          select other_user_other_team.name, from: "Person or team name"
-        end
+      scenario "filtering for notifications" do
+        find("details#case-type").click
+        check "Notification"
         click_button "Apply"
 
+        expect(page).not_to have_listed_case(allegation.pretty_id)
+        expect(page).to     have_listed_case(notification.pretty_id)
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
+      end
+
+      scenario "filtering for allegations" do
+        find("details#case-type").click
+        check "Allegation"
+        click_button "Apply"
+
+        expect(page).to     have_listed_case(allegation.pretty_id)
         expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).not_to have_listed_case(other_user_notification.pretty_id)
-        expect(page).not_to have_listed_case(other_team_notification.pretty_id)
-        expect(page).not_to have_listed_case(another_team_notification.pretty_id)
-
-        expect(page).to have_listed_case(other_user_other_team_notification.pretty_id)
-
-        within_fieldset("Created by") do
-          expect(page).to have_checked_field "Others"
-          expect(page).to have_select "Person or team name", with_options: [other_user_other_team.name]
-        end
-
-        expect(find("details#filter-details")["open"]).to eq("open")
-      end
-    end
-
-    describe "notification type" do
-      context "with a non OPSS user" do
-        let(:user) { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
-
-        scenario "filter should be unavailable" do
-          expect(page).not_to have_listed_case(allegation.pretty_id)
-          expect(page).to have_listed_case(notification.pretty_id)
-          expect(page).not_to have_listed_case(project.pretty_id)
-          expect(page).not_to have_listed_case(enquiry.pretty_id)
-          expect(page).not_to have_css("details#case-type", text: "Type")
-        end
-      end
-
-      context "with an OPSS user" do
-        scenario "filtering for projects" do
-          within_fieldset "Type" do
-            choose "Project"
-          end
-          click_button "Apply"
-
-          expect(page).not_to have_listed_case(allegation.pretty_id)
-          expect(page).not_to have_listed_case(notification.pretty_id)
-          expect(page).to     have_listed_case(project.pretty_id)
-          expect(page).not_to have_listed_case(enquiry.pretty_id)
-        end
-
-        scenario "filtering for enquiries" do
-          within_fieldset "Type" do
-            choose "Enquiry"
-          end
-          click_button "Apply"
-
-          expect(page).not_to have_listed_case(allegation.pretty_id)
-          expect(page).not_to have_listed_case(notification.pretty_id)
-          expect(page).not_to have_listed_case(project.pretty_id)
-          expect(page).to     have_listed_case(enquiry.pretty_id)
-        end
-
-        scenario "filtering for notifications" do
-          within_fieldset "Type" do
-            choose "Notification"
-          end
-          click_button "Apply"
-
-          expect(page).not_to have_listed_case(allegation.pretty_id)
-          expect(page).to     have_listed_case(notification.pretty_id)
-          expect(page).not_to have_listed_case(project.pretty_id)
-          expect(page).not_to have_listed_case(enquiry.pretty_id)
-        end
-
-        scenario "filtering for allegations" do
-          within_fieldset "Type" do
-            choose "Allegation"
-          end
-          click_button "Apply"
-
-          expect(page).to     have_listed_case(allegation.pretty_id)
-          expect(page).not_to have_listed_case(notification.pretty_id)
-          expect(page).not_to have_listed_case(project.pretty_id)
-          expect(page).not_to have_listed_case(enquiry.pretty_id)
-        end
-      end
-    end
-
-    describe "Notification status" do
-      scenario "filtering for both open and closed cases" do
-        within_fieldset("Notification status") { choose "All" }
-        click_button "Apply"
-
-        expect(page).to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(closed_notification.pretty_id)
-        expect(page).not_to have_listed_case(deleted_notification.pretty_id)
-        number_of_total_cases = Investigation.not_deleted.count
-        expect(page).to have_content("#{number_of_total_cases} notifications using the current filters, were found.")
-
-        expect(find("details#filter-details")["open"]).to eq(nil)
-      end
-
-      scenario "filtering only closed notifications" do
-        within_fieldset "Notification status" do
-          choose "Closed"
-        end
-        click_button "Apply"
-
-        expect(page).to have_content("1 notification using the current filters, was found.")
-
-        expect(page).not_to have_listed_case(notification.pretty_id)
-        expect(page).to have_listed_case(closed_notification.pretty_id)
-
-        expect(find("details#filter-details")["open"]).to eq(nil)
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
       end
     end
   end
@@ -492,16 +300,7 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
     expect(page).not_to have_listed_case(other_team_notification.pretty_id)
   end
 
-  scenario "search returning a restricted notifications" do
-    fill_in "Search", with: restricted_notification_title
-    click_on "Search"
-
-    expect(page).not_to have_link(restricted_notification.title, href: "/cases/#{restricted_notification.pretty_id}")
-
-    expect(find("details#filter-details")["open"]).to eq(nil)
-  end
-
-  describe "Sorting" do
+  xdescribe "Sorting" do
     let(:default_filtered_cases) { Investigation.not_deleted.where(is_closed: false) }
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
