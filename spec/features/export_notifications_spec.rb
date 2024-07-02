@@ -46,11 +46,11 @@ RSpec.describe "notification export", :with_opensearch, :with_stubbed_antivirus,
     expect(email.personalization[:name]).to eq user.name
     expect(email.personalization[:download_export_url]).to eq notification_export_url(export)
 
-    expect(spreadsheet.last_row).to eq(8)
+    expect(spreadsheet.last_row).to eq(5)
     expect(spreadsheet.cell(2, 1)).to eq(investigation.pretty_id)
-    expect(spreadsheet.cell(6, 1)).to eq(allegation_serious.pretty_id)
-    expect(spreadsheet.cell(7, 1)).to eq(allegation_other_team.pretty_id)
-    expect(spreadsheet.cell(8, 1)).to eq(allegation_closed.pretty_id)
+    expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
+    expect(spreadsheet.cell(4, 1)).to eq(allegation_other_team.pretty_id)
+    expect(spreadsheet.cell(5, 1)).to eq(allegation_closed.pretty_id)
   end
 
   it "with search query" do
@@ -99,11 +99,11 @@ RSpec.describe "notification export", :with_opensearch, :with_stubbed_antivirus,
       expect(email.personalization[:name]).to eq user.name
       expect(email.personalization[:download_export_url]).to eq notification_export_url(export)
 
-      expect(spreadsheet.last_row).to eq(8)
+      expect(spreadsheet.last_row).to eq(5)
       expect(spreadsheet.cell(2, 1)).to eq(investigation.pretty_id)
-      expect(spreadsheet.cell(6, 1)).to eq(allegation_serious.pretty_id)
-      expect(spreadsheet.cell(7, 1)).to eq(allegation_other_team.pretty_id)
-      expect(spreadsheet.cell(8, 1)).to eq(allegation_closed.pretty_id)
+      expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
+      expect(spreadsheet.cell(4, 1)).to eq(allegation_other_team.pretty_id)
+      expect(spreadsheet.cell(5, 1)).to eq(allegation_closed.pretty_id)
     end
   end
 
@@ -127,10 +127,10 @@ RSpec.describe "notification export", :with_opensearch, :with_stubbed_antivirus,
       expect(email.personalization[:name]).to eq user.name
       expect(email.personalization[:download_export_url]).to eq notification_export_url(export)
 
-      expect(spreadsheet.last_row).to eq(7)
+      expect(spreadsheet.last_row).to eq(4)
       expect(spreadsheet.cell(2, 1)).to eq(investigation.pretty_id)
-      expect(spreadsheet.cell(6, 1)).to eq(allegation_serious.pretty_id)
-      expect(spreadsheet.cell(7, 1)).to eq(allegation_other_team.pretty_id)
+      expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
+      expect(spreadsheet.cell(4, 1)).to eq(allegation_other_team.pretty_id)
     end
   end
 end
