@@ -10,8 +10,6 @@ class NotificationsController < ApplicationController
 
   # GET /notifications
   def index
-    return redirect_to all_cases_investigations_path unless current_user.can_access_new_search?
-
     # Find the most recent incomplete bulk products upload for the current user, if any
     @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
 

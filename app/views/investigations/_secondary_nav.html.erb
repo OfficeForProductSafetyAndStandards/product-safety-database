@@ -29,11 +29,9 @@
     <% else %>
       <li>
     <% end %>
-        <% if current_user.can_access_new_search? %>
-          <%= link_to "All notifications – Search", notifications_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
-        <% else %>
-          <%= link_to "All notifications – Search", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
-        <% end %>
+
+    <%= link_to "All notifications – Search", notifications_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless non_search_cases_page_names.include? @page_name) %>
+
       </li>
   </ul>
 </nav>

@@ -245,7 +245,6 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
       let(:non_compliant_notification) { create(:notification, reported_reason: "non_compliant") }
 
       before do
-        user.roles.create!(name: "use_new_search")
         unsafe_and_non_compliant_notification
         safe_and_compliant_notification
         non_compliant_notification

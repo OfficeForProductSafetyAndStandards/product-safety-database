@@ -2,11 +2,8 @@
   <div class="govuk-grid-column-full" role="region" aria-label="Cases">
     <p class="govuk-body opss-text-align-center">
       <%= t("investigations.no_cases.title.#{@page_name}") %><br>
-      <% if current_user.can_access_new_search? %>
-        <%= t("investigations.no_cases.subtitle_html", cases_path: notifications_path) %>
-      <% else %>
-        <%= t("investigations.no_cases.subtitle_html", cases_path: all_cases_investigations_path) %>
-      <% end %>
+
+      <%= t("investigations.no_cases.subtitle_html", cases_path: notifications_path) %>
     </p>
   </div>
 </div>

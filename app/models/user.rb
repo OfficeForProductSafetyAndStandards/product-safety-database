@@ -133,10 +133,6 @@ class User < ApplicationRecord
     team.name == "OPSS Incident Management"
   end
 
-  def can_access_new_search?
-    has_role? :use_new_search
-  end
-
   def has_role?(role)
     roles.exists?(name: role) || team.roles.exists?(name: role)
   end
