@@ -848,7 +848,7 @@ DEPENDENCIES
   sprockets (~> 4.2.1)
   sprockets-rails
   stimulus-rails
-  strong_migrations (~> 1.8)
+  strong_migrations (~> 2.0)
   super_diff
   support_portal!
   timecop (~> 0.9)
