@@ -10,10 +10,12 @@ module Investigations
     end
 
     def create
-      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params.merge(duration: "unknown"))
+      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params.merge(duration: "unknown").merge(params["date_decided(1i)"]))
       @corrective_action_form.legislation.reject!(&:blank?)
       @corrective_action_form.geographic_scopes.reject!(&:blank?)
       @file_blob = @corrective_action_form.document
+      @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
+
       return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
       result = AddCorrectiveActionToNotification.call(
@@ -47,9 +49,14 @@ module Investigations
       @corrective_action_form = CorrectiveActionForm.from(corrective_action)
       @file_blob              = corrective_action.document_blob
 
-      @corrective_action_form.assign_attributes(corrective_action_params.merge(duration: "unknown"))
+      @corrective_action_form.assign_attributes(corrective_action_params)
+      @corrective_action_form.date_decided_year = params[:corrective_action]["date_decided(1i)"]
+      @corrective_action_form.date_decided_month = params[:corrective_action]["date_decided(2i)"]
+      @corrective_action_form.date_decided_day = params[:corrective_action]["date_decided(3i)"]
+
       @corrective_action_form.legislation.reject!(&:blank?)
       @corrective_action_form.geographic_scopes.reject!(&:blank?)
+      @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
       return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
       UpdateCorrectiveAction.call!(
@@ -61,8 +68,7 @@ module Investigations
             changes: @corrective_action_form.changes
           )
       )
-
-      ahoy.track "Updated corrective action", { notification_id: @investigation.id }
+      ahoy.track "Updated corrective action", { notification_id: @investigation.id } if @corrective_action_form.changes != { "date_decided(1i)" => [nil, params[:corrective_action]["date_decided(1i)"]], "date_decided(2i)" => [nil, params[:corrective_action]["date_decided(2i)"]], "date_decided(3i)" => [nil, params[:corrective_action]["date_decided(3i)"]] }
 
       if params[:bulk_products_upload_id].present?
         redirect_to check_corrective_actions_bulk_upload_products_path(bulk_products_upload_id: params[:bulk_products_upload_id])

@@ -17,8 +17,7 @@ module CorrectiveActionsConcern
       :existing_document_file_id,
       legislation: [],
       geographic_scopes: [],
-      file: %i[file description],
-      date_decided: %i[day month year]
-    ).with_defaults(legislation: [], geographic_scopes: [])
+      file: %i[file description]
+    ).with_defaults(legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action]["date_decided(2i)"]).merge("date_decided(3i)" => params[:corrective_action]["date_decided(3i)"])
   end
 end
