@@ -10,7 +10,7 @@ class InvestigationsController < ApplicationController
 
   # GET /cases
   def index
-    return redirect_to notifications_path
+    redirect_to notifications_path
     # removed the method code as part of use_new_serach roll out
   end
 
