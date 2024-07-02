@@ -15,38 +15,7 @@
           <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
         </ul>
       <% end %>
-      <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
-      <div class="govuk-form-group<%= assessed_on_error ? ' govuk-form-group--error' : '' %>">
-        <fieldset class="govuk-fieldset" aria-describedby="risk-assessment-form-assessed-on-hint<%= assessed_on_error ? ' risk-assessment-form-assessed-on-error' : '' %>">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of assessment</legend>
-          <div class="govuk-hint" id="risk-assessment-form-assessed-on-hint">For example, 31 1 2020</div>
-          <% if assessed_on_error %>
-          <p class="govuk-error-message" id="risk-assessment-form-assessed-on-error">
-            <span class="govuk-visually-hidden">Error: </span><%= @risk_assessment_form.errors.full_messages_for(:assessed_on).first %>
-          </p>
-          <% end %>
-          <div class="govuk-date-input">
-            <div class="govuk-date-input__item">
-              <div class="govuk-form-group">
-                <label class="govuk-label govuk-date-input__label" for="risk_assessment_form_assessed_on_day">Day</label>
-                <input id="risk_assessment_form_assessed_on_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= assessed_on_error ? ' govuk-input--error' : '' %>" name="risk_assessment_form[assessed_on][day]" type="text" inputmode="numeric" value="<%= @risk_assessment_form.assessed_on&.day %>">
-              </div>
-            </div>
-            <div class="govuk-date-input__item">
-              <div class="govuk-form-group">
-                <label class="govuk-label govuk-date-input__label" for="risk_assessment_form_assessed_on_month">Month</label>
-                <input id="risk_assessment_form_assessed_on_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= assessed_on_error ? ' govuk-input--error' : '' %>" name="risk_assessment_form[assessed_on][month]" type="text" inputmode="numeric" value="<%= @risk_assessment_form.assessed_on&.month %>">
-              </div>
-            </div>
-            <div class="govuk-date-input__item">
-              <div class="govuk-form-group">
-                <label class="govuk-label govuk-date-input__label" for="risk_assessment_form_assessed_on_year">Year</label>
-                <input id="risk_assessment_form_assessed_on_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= assessed_on_error ? ' govuk-input--error' : '' %>" name="risk_assessment_form[assessed_on][year]" type="text" inputmode="numeric" value="<%= @risk_assessment_form.assessed_on&.year %>">
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </div>
+      <%= f.govuk_date_field :assessed_on, legend: { text: "Date of assessment" }, hint: { text: 'For example, 31 1 2020' } %>
       <%= f.govuk_radio_buttons_fieldset :risk_level, legend: { text: "What was the risk level?", size: "m" } do %>
         <%= f.govuk_radio_button :risk_level, "serious", label: { text: "Serious risk" }, link_errors: true %>
         <%= f.govuk_radio_button :risk_level, "high", label: { text: "High risk" } %>

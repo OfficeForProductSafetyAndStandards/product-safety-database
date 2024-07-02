@@ -142,15 +142,7 @@ class RiskAssessmentForm
 private
 
   def set_date
-    if @assessed_on_year.present? && @assessed_on_month.present? && @assessed_on_day.present?
-      begin
-        self.assessed_on = Date.new(@assessed_on_year.to_i, @assessed_on_month.to_i, @assessed_on_day.to_i)
-      rescue ArgumentError
-        self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
-      end
-    else
-      self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
-    end
+    self.assessed_on = { year: @assessed_on_year, month: @assessed_on_month, day: @assessed_on_day }
   end
 
   def at_least_one_product_associated
