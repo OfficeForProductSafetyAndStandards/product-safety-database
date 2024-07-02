@@ -23,9 +23,6 @@ RSpec.describe "notification export", :with_opensearch, :with_stubbed_antivirus,
   end
 
   let!(:investigation) { create(:notification, products: [product], user_title: "MyBrand washing machine", reported_reason: "unsafe") }
-  let!(:investigation1) { create(:notification, products: [product], user_title: "MyBrand washing machine1", reported_reason: "unsafe_and_non_compliant") }
-  let!(:investigation2) { create(:notification, products: [product], user_title: "MyBrand washing machine2", reported_reason: "non_compliant") }
-  let!(:enquiry_coronavirus) { create(:enquiry, coronavirus_related: true, creator: user) }
   let!(:allegation_serious) { create(:allegation, risk_level: "serious", description: "Serious risk case", creator: other_user_same_team) }
   let!(:allegation_other_team) { create(:allegation, creator: other_user, read_only_teams: [user.team]) }
   let!(:allegation_closed) { create(:allegation, :closed, creator: user) }
