@@ -25,9 +25,15 @@
   %>
 <% end %>
 
-<%= form.govuk_fieldset legend: { text: "Email content", size: 'm' } do %>
+<% value = @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) ? "email-correspondence-form-base-field-error" : "email-correspondence-form-base-field"  %>
+<% if @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) %>
+  <div class="govuk-form-group govuk-form-group--error" base="true">
+<% end %>
+<%= form.govuk_fieldset legend: { text: "Email content", size: 'm' }, id: value do %>
   <span id="email-content-hint" class="govuk-hint">Upload the email as a file, or enter the subject and body below</span>
-
+  <% if @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) %>
+    <p class="govuk-error-message" id="email-correspondence-form-correspondence-base-error"><span class="govuk-visually-hidden">Error: </span>Please provide either an email file or a subject and body</p>
+  <% end %>
   <% if email.email_file.present? %>
     <p class="govuk-body">
       Current file:
@@ -54,6 +60,9 @@
                            max_chars: 32_767
   %>
 
+<% end %>
+<% if @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) %>
+  </div>
 <% end %>
 
 <fieldset class="govuk-fieldset">
