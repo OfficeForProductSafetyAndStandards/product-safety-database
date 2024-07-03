@@ -30,12 +30,12 @@
   </div>
 </div>
 
-<%= form_with url: associated_image_upload_path(@parent, @image_upload), method: :delete do |form| %>
+<%= form_with url: associated_image_upload_path(@parent, @image_upload), builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :delete do |form| %>
   <% if params[:multiple] %>
-    <input type="hidden" name="multiple" value="true">
+    <%= form.hidden_field :multiple, value: true %>
     <% (params[:image_upload_id] || []).each do |image_upload_id| %>
-      <input type="hidden" name="image_upload_id[]" value="<%= image_upload_id %>">
+      <%= form.hidden_field :image_upload_id[], value: image_upload_id %>
     <% end %>
   <% end %>
-  <%= form.submit "Delete image", class: "govuk-button govuk-button--warning" %>
+  <%= form.govuk_submit "Delete image", class: "govuk-button govuk-button--warning" %>
 <% end %>
