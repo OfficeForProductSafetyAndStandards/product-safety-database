@@ -165,7 +165,7 @@ RSpec.feature "Bulk upload products", :with_stubbed_antivirus, :with_stubbed_mai
     fill_in "Reference number", with: "1234"
     click_button "Continue"
 
-    visit "/cases/all-cases"
+    visit "/notifications"
 
     expect_warning_banner("Important\nWe have noticed that your recent product upload is not complete, and the products have yet to be allocated to their respective notification. Resume the upload process")
 

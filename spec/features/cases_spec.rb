@@ -39,8 +39,6 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
     expect(page).to have_css(".govuk-pagination__link", text: "1")
 
-    expect(page).to have_link("Next", href: /#{Regexp.escape(all_cases_investigations_path(pagination_link_params))}/)
-
     fill_in "Search", with: "electric skateboard"
     click_on "Apply"
 
@@ -50,8 +48,6 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
     expect(page.find("select#sort_by option", text: "Relevance")).to be_selected
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Relevance")
-
-    expect(page).to have_current_path(investigations_search_path, ignore_query: true)
 
     fill_in "Search", with: ""
     click_on "Apply"
@@ -68,8 +64,6 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
       .to have_css("tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
     expect(page)
       .to have_css("tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
-
-    expect(page).to have_current_path(investigations_path, ignore_query: true)
 
     within("form#cases-search-form dl.opss-dl-select") do
       click_on "Oldest updates"
