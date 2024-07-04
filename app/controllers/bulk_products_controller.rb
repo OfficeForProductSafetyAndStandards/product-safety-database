@@ -92,10 +92,11 @@ class BulkProductsController < ApplicationController
   def add_business_details
     if request.put?
       @bulk_products_add_business_details_form = BulkProductsAddBusinessDetailsForm.new(bulk_products_add_business_details_params)
-      @bulk_products_add_business_details_form.locations_attributes["0"].store(:country, params[:bulk_products_add_business_details_form][:country])
-
       if @bulk_products_add_business_details_form.valid?
-        @bulk_products_upload.investigation_business.business.update!(bulk_products_add_business_details_params)
+        allowed_params = bulk_products_add_business_details_params
+        allowed_params.delete(:country)
+        allowed_params.delete(:locations_attributes)
+        @bulk_products_upload.investigation_business.business.update!(allowed_params.merge(locations_attributes: @bulk_products_add_business_details_form.locations_attributes))
 
         redirect_to upload_products_file_bulk_upload_products_path(@bulk_products_upload)
       end

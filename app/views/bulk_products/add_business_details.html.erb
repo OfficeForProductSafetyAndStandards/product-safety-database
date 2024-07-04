@@ -32,7 +32,7 @@
         ) %>
       <% end %>
       <%= form.fields_for :locations, @bulk_products_upload.investigation_business.business.primary_location do |ff| %>
-        <% id_name = @bulk_products_upload.investigation_business.business.primary_location.country.blank? ? "bulk-products-add-business-details-form-country-field-error" : "bulk-products-add-business-details-form-country-field" %>
+        <% id_name = (@bulk_products_upload.investigation_business.business.primary_location.country.blank? && @bulk_products_add_business_details_form.errors[:country].any?) ? "bulk-products-add-business-details-form-country-field-error" : "bulk-products-add-business-details-form-country-field" %>
         <%= ff.govuk_fieldset legend: {text: "Official address", size: 's'} do %>
           <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
           <%= ff.govuk_text_field :address_line_1,

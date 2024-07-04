@@ -23,6 +23,8 @@ class BulkProductsAddBusinessDetailsForm
     self.trading_name = nil if trading_name.start_with?("Auto-generated business for notification")
     self.locations = [Location.new] if locations.empty?
     self.contacts = [Contact.new] if contacts.empty?
+    self.locations_attributes["0"].store(:country, country) if country.present?
+    self.locations << Location.new(self.locations_attributes["0"]) if self.locations_attributes.present?
   end
 
   def primary_location
