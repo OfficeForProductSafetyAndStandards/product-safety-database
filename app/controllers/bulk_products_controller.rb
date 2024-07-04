@@ -92,6 +92,7 @@ class BulkProductsController < ApplicationController
   def add_business_details
     if request.put?
       @bulk_products_add_business_details_form = BulkProductsAddBusinessDetailsForm.new(bulk_products_add_business_details_params)
+      @bulk_products_add_business_details_form.locations_attributes["0"].store(:country, params[:bulk_products_add_business_details_form][:country])
 
       if @bulk_products_add_business_details_form.valid?
         @bulk_products_upload.investigation_business.business.update!(bulk_products_add_business_details_params)
@@ -301,8 +302,8 @@ private
 
   def bulk_products_add_business_details_params
     params.require(:bulk_products_add_business_details_form).permit(
-      :trading_name, :legal_name, :company_number,
-      locations_attributes: %i[id address_line_1 address_line_2 city county postal_code country],
+      :trading_name, :legal_name, :company_number, :country,
+      locations_attributes: %i[id address_line_1 address_line_2 city county postal_code],
       contacts_attributes: %i[id name email phone_number job_title]
     )
   end

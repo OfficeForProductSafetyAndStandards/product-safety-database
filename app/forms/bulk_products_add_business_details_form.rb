@@ -5,6 +5,7 @@ class BulkProductsAddBusinessDetailsForm
   attribute :trading_name
   attribute :legal_name
   attribute :company_number
+  attribute :country
 
   attribute :locations, default: []
   attribute :contacts, default: []
@@ -55,6 +56,6 @@ private
   def validate_country_set_for_location
     return if locations_attributes["0"][:country].present?
 
-    errors.add(:base, "Select a country")
+    errors.add(:country, "Select a country")
   end
 end
