@@ -15,7 +15,7 @@ class InvestigationsController < ApplicationController
 
   # GET /cases/1
   def show
-    return redirect_to notification_path(@investigation) if current_user.can_use_notification_task_list?
+    return redirect_to notification_path(@investigation) if current_user.can_use_notification_task_list? && investigation_is_a_notification
 
     authorize @investigation, :view_non_protected_details?
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
@@ -168,5 +168,9 @@ private
     end
 
     params["case_status"] == "all" && params[:q].blank?
+  end
+
+  def investigation_is_a_notification
+    @investigation.case_type == "notification"
   end
 end
