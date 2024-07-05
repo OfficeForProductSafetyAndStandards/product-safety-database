@@ -9,8 +9,6 @@
       <%= form.govuk_error_summary %>
 
       <h1 class="govuk-heading-l govuk-!-margin-bottom-8">Provide the business details</h1>
-      this should be true
-      <%= @business_form.errors.full_messages %>
       <%= render "businesses/form", form: form, business: @business_form, countries: @countries %>
     <% end %>
   </div>
