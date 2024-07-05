@@ -1,6 +1,6 @@
 <%= form.govuk_text_field :name,
                           label: {text: "Location name", size: 'm'},
                           hint: {text: "For example, 'Head office', 'Registered office' or 'Northern office'.", size: 'm', style: "font-size: 1rem !important; line-height: 1.25 !important;"} %>
-<%= render "address_form", form: form %>
+<%= render "address_form", form: form, id_name: id_name %>
 
 <%= form.submit "Save", class: "govuk-button" %>

@@ -2,13 +2,14 @@
 <%= form_with(model: @location, url: business_locations_path(@business), builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= govukErrorSummary form: form %>
+      <%= form.govuk_error_summary %>
 
+      <% id_name = (@location.country.blank? && @location.errors[:country].any?) ? "location-country-field-error" : "location-country-field" %>
       <span class="govuk-caption-l"><%= @business.pretty_description %></span>
 
       <h1 class="govuk-heading-l">Add location</h1>
 
-      <%= render "form", form: form %>
+      <%= render "form", form: form, id_name: id_name %>
     </div>
   </div>
 <% end %>

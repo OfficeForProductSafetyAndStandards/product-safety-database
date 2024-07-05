@@ -57,7 +57,7 @@ private
   def validate_country_set_for_location
     return if location_attrs[:country].present?
 
-    errors.add(:base, "Country cannot be blank")
+    errors.add(:country, "Country cannot be blank")
   end
 
   def new_location

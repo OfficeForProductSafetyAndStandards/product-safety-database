@@ -20,7 +20,7 @@
 
 
 <%= form.fields_for :locations, business.primary_location do |ff| %>
-  <%= render "businesses/locations/address_form", form: ff, countries: countries %>
+  <%= render "businesses/locations/address_form", form: ff, countries: countries, id_name: (business.primary_location.country.blank? && (business.errors.full_messages.include? "Country cannot be blank")) ? "business-locations-country-field-error" : "business-locations-country-field" %>
 <% end %>
 
 <%= form.fields_for :contacts, business.primary_contact do |ff| %>

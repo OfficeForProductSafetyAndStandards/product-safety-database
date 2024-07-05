@@ -41,7 +41,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
     expect(page).to have_content("Country cannot be blank")
 
     within_fieldset "Official address" do
-      select "France", from: "Country"
+      select "France", from: "business-locations-country-field-error"
     end
 
     click_on "Save"

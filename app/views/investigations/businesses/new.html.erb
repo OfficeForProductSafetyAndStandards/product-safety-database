@@ -6,7 +6,7 @@
           url: investigation_businesses_path(@investigation),
           html: { autocomplete: :off }, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
 
-      <%= error_summary @business_form.errors %>
+      <%= form.govuk_error_summary %>
 
       <h1 class="govuk-heading-l govuk-!-margin-bottom-8">Provide the business details</h1>
       <%= render "businesses/form", form: form, business: @business_form, countries: @countries %>

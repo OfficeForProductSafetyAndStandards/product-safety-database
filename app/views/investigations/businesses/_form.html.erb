@@ -1,4 +1,5 @@
 <%= form_with(model: @remove_business_form, url: investigation_business_path(@investigation, @business), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+  <%= form.govuk_error_summary %>
   <%= form.govuk_radio_buttons_fieldset(:remove, legend: {text: t(".remove_business_legend")}) do %>
     <%= form.govuk_radio_button :remove, 'true', label: {text: "Yes", link_errors: true}  do %>
       <% form.govuk_text_area :reason, label: {text: t(".reason_for_removing_the_business_from_the_case")} %>

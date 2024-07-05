@@ -32,7 +32,45 @@
         ) %>
       <% end %>
       <%= form.fields_for :locations, @bulk_products_upload.investigation_business.business.primary_location do |ff| %>
-        <%= render "businesses/locations/address_form", form: ff, countries: @countries %>
+        <% id_name = (@bulk_products_upload.investigation_business.business.primary_location.country.blank? && @bulk_products_add_business_details_form.errors[:country].any?) ? "bulk-products-add-business-details-form-country-field-error" : "bulk-products-add-business-details-form-country-field" %>
+        <%= ff.govuk_fieldset legend: {text: "Official address", size: 's'} do %>
+          <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
+          <%= ff.govuk_text_field :address_line_1,
+                                    width: 'two-thirds',
+                                    label: {text: "Building and street <span class=\"govuk-visually-hidden\">line 1 of 2</span>".html_safe }
+          %>
+
+          <%= ff.govuk_text_field :address_line_2,
+                                    width: 'two-thirds',
+                                    label: {text: "Building and street line 2 of 2", hidden: true}
+          %>
+
+          <%= ff.govuk_text_field :city,
+                                    width: 'two-thirds',
+                                    label: {text: "Town or city"}
+          %>
+
+          <%= ff.govuk_text_field :county,
+                                    width: 'two-thirds',
+                                    label: {text: "County"}
+          %>
+
+          <%= ff.govuk_text_field :postal_code,
+                                    width: 'one-quarter',
+                                    label: {text: "Postcode"}
+          %>
+
+          <% items = [OpenStruct.new(value: "", text: "")] + all_countries_with_uk_first.map { |country| OpenStruct.new(value: country[1], text: country[0] )}%>
+          <%= form.govuk_collection_select :country,
+                                           items,
+                                           :value,
+                                           :text,
+                                           id: id_name,
+                                           label: { text: "Country" },
+                                           width: "two-thirds"
+          %>
+
+        <% end %>
       <% end %>
       <%= form.fields_for :contacts, @bulk_products_upload.investigation_business.business.primary_contact do |ff| %>
         <%= render "businesses/contacts/form", form: ff %>

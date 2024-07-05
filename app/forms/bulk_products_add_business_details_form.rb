@@ -5,6 +5,7 @@ class BulkProductsAddBusinessDetailsForm
   attribute :trading_name
   attribute :legal_name
   attribute :company_number
+  attribute :country
 
   attribute :locations, default: []
   attribute :contacts, default: []
@@ -22,6 +23,8 @@ class BulkProductsAddBusinessDetailsForm
     self.trading_name = nil if trading_name.start_with?("Auto-generated business for notification")
     self.locations = [Location.new] if locations.empty?
     self.contacts = [Contact.new] if contacts.empty?
+    locations_attributes["0"].store(:country, country) if country.present?
+    locations << Location.new(locations_attributes["0"]) if locations_attributes.present?
   end
 
   def primary_location
@@ -55,6 +58,6 @@ private
   def validate_country_set_for_location
     return if locations_attributes["0"][:country].present?
 
-    errors.add(:base, "Select a country")
+    errors.add(:country, "Select a country")
   end
 end
