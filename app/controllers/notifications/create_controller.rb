@@ -283,14 +283,13 @@ module Notifications
     def update
       case step
       when :search_for_or_add_a_product
-        @add_another_product =  if params[:search_for_or_add_a_product_form].present?
-                                  SearchForOrAddAProductForm.new(search_for_or_add_a_product_params)
-                                else
-                                  SearchForOrAddAProductForm.new
-                                end
+        @add_another_product = if params[:search_for_or_add_a_product_form].present?
+                                 SearchForOrAddAProductForm.new(search_for_or_add_a_product_params)
+                               else
+                                 SearchForOrAddAProductForm.new
+                               end
 
         return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if @add_another_product.add_another_product == "true"
-
 
         return redirect_to wizard_path(:search_for_or_add_a_product, add_a_product_form: search_for_or_add_a_product_params) if @add_another_product.add_another_product.blank? && params[:final].present?
 
