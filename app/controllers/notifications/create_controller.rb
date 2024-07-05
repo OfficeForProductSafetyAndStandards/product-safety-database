@@ -148,6 +148,12 @@ module Notifications
         @multiple_number_of_affected_units_form = MultipleNumberOfAffectedUnitsForm.from(@notification.investigation_products)
       when :search_for_or_add_a_business
         @search_query = params[:q].presence
+        if params[:add_a_business_form].present?
+          @add_another_business = SearchForOrAddABusinessForm.new(add_another_business: params[:add_a_business_form][:add_another_business])
+          @add_another_business.valid?
+        else
+          @add_another_business = SearchForOrAddABusinessForm.new
+        end
 
         return redirect_to "#{request.path}?search&#{request.query_string}" if !request.query_string.start_with?("search") && @search_query.present?
 
@@ -371,9 +377,14 @@ module Notifications
           return render_wizard
         end
       when :search_for_or_add_a_business
-        return redirect_to "#{wizard_path(:search_for_or_add_a_business)}?search" if params[:add_another_business] == "true"
-        return redirect_to wizard_path(:search_for_or_add_a_business) if params[:add_another_business].blank? && params[:final].present?
-        return redirect_to wizard_path(:confirm_business_details, business_id: params[:business_id]) if params[:add_another_business].blank?
+        @add_another_business = if params[:search_for_or_add_a_business_form].present?
+                                  SearchForOrAddABusinessForm.new(search_for_or_add_a_business_params)
+                                else
+                                  SearchForOrAddABusinessForm.new
+                                end
+        return redirect_to "#{wizard_path(:search_for_or_add_a_business)}?search" if @add_another_business.add_another_business == "true"
+        return redirect_to wizard_path(:search_for_or_add_a_business, add_a_business_form: search_for_or_add_a_business_params) if @add_another_business.add_another_business.blank? && params[:final].present?
+        return redirect_to wizard_path(:confirm_business_details, business_id: params[:business_id]) if @add_another_business.add_another_business.blank?
       when :add_business_details
         @add_business_details_form = AddBusinessDetailsForm.new(add_business_details_params)
 
@@ -1063,8 +1074,11 @@ module Notifications
     end
 
     def search_for_or_add_a_product_params
-      # .require(:search_for_or_add_a_product_form)
       params.require(:search_for_or_add_a_product_form).permit(:add_another_product)
+    end
+
+    def search_for_or_add_a_business_params
+      params.require(:search_for_or_add_a_business_form).permit(:add_another_business)
     end
 
     def add_notification_details_params
