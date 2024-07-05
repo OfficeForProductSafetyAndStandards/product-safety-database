@@ -89,7 +89,12 @@ module Notifications
       when :search_for_or_add_a_product
         @page_name = params[:page_name]
         @search_query = params[:q].presence
-
+        if params[:add_a_product_form].present?
+          @add_another_product = SearchForOrAddAProductForm.new(add_another_product: params[:add_a_product_form][:add_another_product])
+          @add_another_product.valid?
+        else
+          @add_another_product = SearchForOrAddAProductForm.new
+        end
         return redirect_to "#{request.path}?search&#{request.query_string}" if !request.query_string.start_with?("search") && @search_query.present?
 
         sort_by = {
@@ -278,10 +283,17 @@ module Notifications
     def update
       case step
       when :search_for_or_add_a_product
-        return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if params[:add_another_product] == "true"
-        return redirect_to wizard_path(:search_for_or_add_a_product) if params[:add_another_product].blank? && params[:final].present?
+        @add_another_product = if params[:search_for_or_add_a_product_form].present?
+                                 SearchForOrAddAProductForm.new(search_for_or_add_a_product_params)
+                               else
+                                 SearchForOrAddAProductForm.new
+                               end
 
-        if params[:add_another_product].blank?
+        return redirect_to "#{wizard_path(:search_for_or_add_a_product)}?search" if @add_another_product.add_another_product == "true"
+
+        return redirect_to wizard_path(:search_for_or_add_a_product, add_a_product_form: search_for_or_add_a_product_params) if @add_another_product.add_another_product.blank? && params[:final].present?
+
+        if @add_another_product.add_another_product.blank?
           product = Product.find(params[:product_id])
           AddProductToNotification.call!(notification: @notification, product:, user: current_user, skip_email: true)
           return redirect_to wizard_path(:search_for_or_add_a_product)
@@ -1048,6 +1060,11 @@ module Notifications
       else
         "non_compliant"
       end
+    end
+
+    def search_for_or_add_a_product_params
+      # .require(:search_for_or_add_a_product_form)
+      params.require(:search_for_or_add_a_product_form).permit(:add_another_product)
     end
 
     def add_notification_details_params

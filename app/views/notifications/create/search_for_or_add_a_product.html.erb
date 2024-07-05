@@ -34,7 +34,8 @@
               end
             end
           %>
-          <%= form_with url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+          <%= form_with model: @add_another_product, url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+            <%= f.govuk_error_summary %>
             <%= f.govuk_collection_radio_buttons :add_another_product, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another product?", size: "m" } %>
             <%= f.govuk_submit "Continue", name: "final", value: "true" %>
           <% end %>
