@@ -17,7 +17,7 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
         it "returns the expected errors" do
           presenter = described_class.new(email_correspondence_form.errors.to_hash(full_messages: true))
           formatted_errors = presenter.formatted_error_messages
-          expected_errors = [[:correspondence_date, "Enter the date sentEnter the date sent"], [:base, "Please provide either an email file or a subject and body"]]
+          expected_errors = [[:correspondence_date, "Enter the date sent"], [:base, "Please provide either an email file or a subject and body"]]
           expect(formatted_errors).to eq(expected_errors)
         end
       end
@@ -56,7 +56,7 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
         it "returns the expected errors" do
           presenter = described_class.new(phone_call_correspondence_form.errors.to_hash(full_messages: true))
           formatted_errors = presenter.formatted_error_messages
-          expected_errors = [[:correspondence_date, "Enter the date of callEnter the date of call"], [:overview, "Please provide either a transcript or complete the summary and notes fields"]]
+          expected_errors = [[:correspondence_date, "Enter the date of call"], [:overview, "Please provide either a transcript or complete the summary and notes fields"]]
           expect(formatted_errors).to eq(expected_errors)
         end
       end
@@ -136,6 +136,25 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
           presenter = described_class.new(accident_or_incident_form_complete.errors.to_hash(full_messages: true))
           formatted_errors = presenter.formatted_error_messages
           expected_errors = []
+          expect(formatted_errors).to eq(expected_errors)
+        end
+      end
+    end
+  end
+
+  describe "testing GOVUK forms with multiple errors attached to one attribute" do
+    context "when the form submitted is a Product duplicate check form" do
+      let(:product_duplicate_check_form) { ProductDuplicateCheckForm.new(has_barcode: true) }
+
+      before do
+        product_duplicate_check_form.invalid?
+      end
+
+      context "when has_barcode: yes parameter supplied but no barcode is written" do
+        it "returns both barcode errors" do
+          presenter = described_class.new(product_duplicate_check_form.errors.to_hash(full_messages: true))
+          formatted_errors = presenter.formatted_error_messages
+          expected_errors = [[:barcode, "The barcode must be between 5 and 15 digits"], [:barcode, "Barcode cannot be blank"]]
           expect(formatted_errors).to eq(expected_errors)
         end
       end

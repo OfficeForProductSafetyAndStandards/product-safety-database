@@ -40,7 +40,6 @@ class EmailCorrespondenceForm
             complete_date: true,
             not_in_future: true,
             recent_date: { on_or_before: false }
-  validate :date_fields_presence
 
   validate :validate_email_file_and_content
 
@@ -135,15 +134,5 @@ private
 
   def email_file_missing
     email_file.nil? && email_file_id.nil?
-  end
-
-  def date_fields_presence
-    year = @correspondence_date_year
-    month = @correspondence_date_month
-    day = @correspondence_date_day
-
-    errors.add(:correspondence_date, "Enter the date sent") if year.blank? && month.blank? && day.blank?
-  rescue ArgumentError
-    errors.add(:correspondence_date, "Date is invalid")
   end
 end
