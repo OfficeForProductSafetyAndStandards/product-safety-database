@@ -3,12 +3,12 @@ class PhoneCallCorrespondenceForm
   include ActiveModel::Attributes
 
   validates :correspondence_date,
-            presence: true,
             real_date: true,
             complete_date: true,
             not_in_future: true,
             recent_date: { on_or_before: false }
 
+  validate :date_fields_presence
   validate :validate_transcript_and_content
 
   attr_accessor :correspondence_date_year, :correspondence_date_month, :correspondence_date_day
@@ -93,5 +93,15 @@ private
 
   def strip_line_feed_from_textarea
     details&.strip!
+  end
+
+  def date_fields_presence
+    year = @correspondence_date_year
+    month = @correspondence_date_month
+    day = @correspondence_date_day
+
+    errors.add(:correspondence_date, "Enter the date of call") if year.blank? && month.blank? && day.blank?
+  rescue ArgumentError
+    errors.add(:correspondence_date, "Date is invalid")
   end
 end
