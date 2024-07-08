@@ -1,6 +1,6 @@
 <%= page_title "Add a product to the notification", errors: @find_product_form.errors.any? %>
-<%= error_summary @find_product_form.errors %>
-<%= form_with model: @find_product_form, url: find_investigation_products_path(@investigation), builder: ApplicationFormBuilder do |form| %>
+<%= form_with model: @find_product_form, url: find_investigation_products_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <%= form.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-label-wrapper opss-label-wrapper">
@@ -22,9 +22,9 @@
           Using an existing <%= psd_abbr title: false %> product record to add to your notification avoids the need to create a new one and highlights other notifications investigating the same product. After checking that the product does not already exist within the <%= psd_abbr title: false %> product records, you can create a new product record (using the links provided in the Products area pages) and then use its <%= psd_abbr title: false %> reference number to add it to your notification.
         </p>
       <% end %>
-      <%= form.govuk_input(:reference, prefix: { text: "psd-" }, classes: "govuk-input--width-5", spellcheck: false, describedBy: "add-product-hint") %>
+      <%= form.govuk_text_field :reference, width: 5, label: { text: '', hidden: true }, prefix_text: "psd-" %>
       <div class="govuk-button-group">
-        <%= govukButton(text: "Continue") %>
+        <%= form.govuk_submit "Continue" %>
         <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     </div>

@@ -1,7 +1,6 @@
 <%= page_title "Is this the product?", errors: @confirm_product_form.errors.any? %>
-<%= error_summary @confirm_product_form.errors %>
-
-<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), builder: ApplicationFormBuilder do |form| %>
+<%= form_with model: @confirm_product_form, url: investigation_products_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <%= form.govuk_error_summary %>
   <%= form.hidden_field :product_id %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -56,22 +55,17 @@
           </div>
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds govuk-radios govuk-!-padding-top-3 govuk-!-padding-bottom-1">
-              <%= form.govuk_radios(
-                :correct,
-                legend: nil,
-                fieldset: false,
-                items: [
-                  { value: "yes", text: "Yes" },
-                  { value: "no", html: "No - Enter the #{psd_abbr title: false} reference number again".html_safe }
-                ]
-              ) %>
+              <%= form.govuk_radio_buttons_fieldset(:correct, legend: {text: nil, hidden: true}) do %>
+                <%= form.govuk_radio_button :correct, "yes", label: { text: "Yes" }, link_errors: true %>
+                <%= form.govuk_radio_button :correct, "no", label: { text: "No - Enter the #{psd_abbr title: false} reference number again".html_safe } %>
+              <% end %>
             </div>
           </div>
 
         </fieldset>
       </div>
       <div class="govuk-button-group">
-        <%= govukButton(text: "Save and continue") %>
+        <%= form.govuk_submit "Save and continue" %>
         <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
       </div>
     </div>
