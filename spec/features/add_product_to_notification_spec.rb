@@ -23,7 +23,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
     expect(errors_list[0].text).to eq "Enter a PSD product record reference number"
     expect_to_have_notification_breadcrumbs
 
-    fill_in "reference", with: "invalid"
+    fill_in "find-product-form-reference-field-error", with: "invalid"
 
     click_button "Continue"
 
@@ -32,7 +32,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
     expect(errors_list[0].text).to eq "Enter a PSD product record reference number"
     expect_to_have_notification_breadcrumbs
 
-    fill_in "reference", with: "PsD-#{wrong_product.id}"
+    fill_in "find-product-form-reference-field-error", with: "PsD-#{wrong_product.id}"
 
     click_button "Continue"
 
@@ -53,7 +53,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
     expect(page).to have_text("Enter a PSD product record reference number")
     expect_to_have_notification_breadcrumbs
 
-    fill_in "reference", with: right_product.id
+    fill_in "find-product-form-reference-field", with: right_product.id
     click_button "Continue"
 
     expect(page).to have_text("Is this the correct product record to add to your notification?")
@@ -69,7 +69,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
 
     click_link "Add a product to the notification"
 
-    fill_in "reference", with: right_product.id
+    fill_in "find-product-form-reference-field", with: right_product.id
     click_button "Continue"
 
     expect(page).to have_error_summary
@@ -119,7 +119,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
     visit "/cases/#{notification.pretty_id}/products"
 
     click_link "Add a product to the notification"
-    fill_in "reference", with: right_product.id
+    fill_in "find-product-form-reference-field", with: right_product.id
     click_button "Continue"
     choose "Yes"
     click_button "Save and continue"
@@ -133,7 +133,7 @@ RSpec.feature "Adding a product to a notification", :with_stubbed_mailer, :with_
     visit "/cases/#{notification.pretty_id}/products"
 
     click_link "Add a product to the notification"
-    fill_in "reference", with: new_product.id
+    fill_in "find-product-form-reference-field", with: new_product.id
     click_button "Continue"
     choose "Yes"
     click_button "Save and continue"

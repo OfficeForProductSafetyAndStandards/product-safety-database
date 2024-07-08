@@ -37,7 +37,7 @@ RSpec.feature "Product versioning", :with_stubbed_antivirus, :with_stubbed_maile
 
     # Link the product to an open case to be able to edit it again
     visit "/cases/#{second_investigation.pretty_id}/products/new"
-    fill_in "reference", with: product.id
+    fill_in "find-product-form-reference-field", with: product.id
     click_button "Continue"
     choose "Yes"
     click_button "Save and continue"

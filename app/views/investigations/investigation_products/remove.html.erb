@@ -1,6 +1,6 @@
 <%= page_title "Do you want to remove this product?", errors: @remove_product_form.errors.any? %>
-<%= error_summary @remove_product_form.errors %>
-<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete do |form| %>
+<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_investigation_product_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :delete do |form| %>
+  <%= form.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group">
@@ -10,11 +10,16 @@
               </legend>
               <div class="govuk-hint" id="remove-hint">The product record '<%= @product.name %>' (<%= @product.psd_ref %>) will be removed from the notification.</div>
               <%= govuk_warning_text(text: "Related Batch numbers, Customs codes and Units affected will be deleted from the notification.") %>
-              <%= form.govuk_radios :remove_product, legend: nil, fieldset: false, classes: "govuk-!-padding-bottom-1", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, label_classes: "govuk-label", label: "Enter the reason for removing the product")} },  { text: "No", value: "false" }] %>
+            <%= form.govuk_radio_buttons_fieldset(:remove_product, legend: {text: nil, hidden: true}) do %>
+              <%= form.govuk_radio_button :remove_product, "yes", label: { text: "Yes" }, link_errors: true do %>
+                <%= form.govuk_text_area :reason, label: { text: "Enter the reason for removing the product" } %>
+              <% end %>
+              <%= form.govuk_radio_button :remove_product, "false", label: { text: "No" } %>
+            <% end %>
           </fieldset>
       </div>
       <div class="govuk-button-group">
-        <%= govukButton(text: "Save and continue") %>
+        <%= form.govuk_submit "Save and continue" %>
         <%= link_to("Cancel", investigation_products_path(@investigation), class: "govuk-link govuk-link--no-visited-state") %>
       </div>
     </div>
