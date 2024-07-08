@@ -236,6 +236,14 @@ module Notifications
       when :add_test_reports
         investigation_products = @notification.investigation_products
         @existing_test_results = @notification.test_results.includes(investigation_product: :product)
+
+        if params[:add_a_test_report_form].present?
+          @add_another_test_report = AddTestReportsForm.new(add_another_test_report: params[:add_a_test_report_form][:add_another_test_report])
+          @add_another_test_report.valid?
+        else
+          @add_another_test_report = AddTestReportsForm.new
+        end
+
         @manage = request.query_string != "add" && @existing_test_results.present?
         return redirect_to with_product_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
 
@@ -492,10 +500,17 @@ module Notifications
 
         return redirect_to wizard_path(:search_for_or_add_a_business)
       when :add_test_reports
-        return redirect_to "#{wizard_path(:add_test_reports)}?add" if params[:add_another_test_report] == "true"
-        return redirect_to wizard_path(:add_test_reports) if params[:add_another_test_report].blank? && params[:final].present?
 
-        if params[:add_another_test_report].blank?
+        @add_another_test_report = if params[:add_test_reports_form].present?
+                                     AddTestReportsForm.new(add_test_report_params)
+                                   else
+                                     AddTestReportsForm.new
+                                   end
+
+        return redirect_to "#{wizard_path(:add_test_reports)}?add" if @add_another_test_report.add_another_test_report == "true"
+        return redirect_to wizard_path(:add_test_reports, add_a_test_report_form: add_test_report_params) if @add_another_test_report.add_another_test_report.blank? && params[:final].present?
+
+        if @add_another_test_report.add_another_test_report.blank?
           @choose_investigation_product_form = ChooseInvestigationProductForm.new(add_test_reports_params)
 
           if @choose_investigation_product_form.valid?
@@ -1079,6 +1094,10 @@ module Notifications
 
     def search_for_or_add_a_business_params
       params.require(:search_for_or_add_a_business_form).permit(:add_another_business)
+    end
+
+    def add_test_report_params
+      params.require(:add_test_reports_form).permit(:add_another_test_report)
     end
 
     def add_notification_details_params
