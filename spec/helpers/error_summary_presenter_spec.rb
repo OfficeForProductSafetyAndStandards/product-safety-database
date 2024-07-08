@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
   describe "testing GOVUK forms with date fields" do
     context "when the form submitted is an Correspondence Email form" do
-      let(:email_correspondence_form) { EmailCorrespondenceForm.new }
+      let(:email_correspondence_form) { EmailCorrespondenceForm.new(correspondence_date: nil) }
       let(:email_correspondence_form_with_date) { EmailCorrespondenceForm.new(correspondence_date: Date.new(2023, 2, 11), "correspondence_date(1i)" => 2020, "correspondence_date(2i)" => 1, "correspondence_date(3i)" => 20) }
       let(:email_correspondence_form_complete) { EmailCorrespondenceForm.new(correspondence_date: Date.new(2023, 2, 11), "correspondence_date(1i)" => 2020, "correspondence_date(2i)" => 1, "correspondence_date(3i)" => 20, email_file: Rack::Test::UploadedFile.new("spec/fixtures/files/email.txt")) }
 
@@ -17,7 +17,7 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
         it "returns the expected errors" do
           presenter = described_class.new(email_correspondence_form.errors.to_hash(full_messages: true))
           formatted_errors = presenter.formatted_error_messages
-          expected_errors = [[:correspondence_date, "Enter the date sent"], [:base, "Please provide either an email file or a subject and body"]]
+          expected_errors = [[:correspondence_date, "Enter the date sent"], [:correspondence_date, "Enter the date sent"], [:base, "Please provide either an email file or a subject and body"]]
           expect(formatted_errors).to eq(expected_errors)
         end
       end
@@ -42,7 +42,7 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
     end
 
     context "when the form submitted is an Correspondence Phone Call form" do
-      let(:phone_call_correspondence_form) { PhoneCallCorrespondenceForm.new }
+      let(:phone_call_correspondence_form) { PhoneCallCorrespondenceForm.new(correspondence_date: nil) }
       let(:phone_call_correspondence_form_with_date) { PhoneCallCorrespondenceForm.new(correspondence_date: Date.new(2023, 2, 11), "correspondence_date(1i)" => 2020, "correspondence_date(2i)" => 1, "correspondence_date(3i)" => 20) }
       let(:phone_call_correspondence_form_complete) { PhoneCallCorrespondenceForm.new(correspondence_date: Date.new(2023, 2, 11), "correspondence_date(1i)" => 2020, "correspondence_date(2i)" => 1, "correspondence_date(3i)" => 20, transcript: Rack::Test::UploadedFile.new("spec/fixtures/files/new_phone_call_transcript.txt")) }
 
@@ -56,7 +56,7 @@ RSpec.describe ErrorSummaryPresenter, :with_test_queue_adapter do
         it "returns the expected errors" do
           presenter = described_class.new(phone_call_correspondence_form.errors.to_hash(full_messages: true))
           formatted_errors = presenter.formatted_error_messages
-          expected_errors = [[:correspondence_date, "Enter the date of call"], [:overview, "Please provide either a transcript or complete the summary and notes fields"]]
+          expected_errors = [[:correspondence_date, "Enter the date of call"], [:correspondence_date, "Enter the date of call"], [:overview, "Please provide either a transcript or complete the summary and notes fields"]]
           expect(formatted_errors).to eq(expected_errors)
         end
       end

@@ -3,6 +3,7 @@ class PhoneCallCorrespondenceForm
   include ActiveModel::Attributes
 
   validates :correspondence_date,
+            presence: true,
             real_date: true,
             complete_date: true,
             not_in_future: true,
