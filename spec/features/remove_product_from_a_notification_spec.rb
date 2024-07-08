@@ -62,6 +62,7 @@ RSpec.feature "Remove product from notification", :with_stubbed_antivirus, :with
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Enter the reason for removing the product"
 
+      choose("Yes")
       fill_in "Enter the reason for removing the product", with: removal_reason
       click_on "Save and continue"
 
@@ -112,7 +113,7 @@ RSpec.feature "Remove product from notification", :with_stubbed_antivirus, :with
       click_link "Add a product to the notification"
       expect(page).to have_text("Enter a PSD product record reference number")
 
-      fill_in "reference", with: product.id
+      fill_in "find-product-form-reference-field", with: product.id
       click_button "Continue"
 
       expect(page).to have_text("Is this the correct product record to add to your notification?")
@@ -148,6 +149,7 @@ RSpec.feature "Remove product from notification", :with_stubbed_antivirus, :with
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Enter the reason for removing the product"
 
+      choose("Yes")
       fill_in "Enter the reason for removing the product", with: removal_reason
       click_on "Save and continue"
 
