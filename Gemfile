@@ -121,3 +121,8 @@ group :test do
   gem "timecop", "~> 0.9"
   gem "webmock", "~> 3.23"
 end
+
+gem "data_migrate"
+gem "flipper"
+gem "flipper-active_record"
+gem "flipper-ui"

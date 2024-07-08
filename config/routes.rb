@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
+  mount Flipper::UI.app(Flipper) => "/flipper" if Rails.env.development?
+
   devise_for :users, path: "", path_names: { sign_in: "sign-in", sign_out: "sign-out" }, controllers: { sessions: "users/sessions", passwords: "users/passwords", unlocks: "users/unlocks" } do
     get "reset-password", to: "users/passwords#new", as: :new_user_password
   end
