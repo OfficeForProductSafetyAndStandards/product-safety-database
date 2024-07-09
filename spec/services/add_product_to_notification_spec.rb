@@ -79,7 +79,7 @@ RSpec.describe AddProductToNotification, :with_test_queue_adapter do
       let(:product) { create(:product, owning_team: create(:team)) }
 
       it "does not change the owning team", :aggregate_failures do
-        expect(result.product.owning_team).not_to eq(nil)
+        expect(result.product.owning_team).not_to be_nil
         expect(result.product.owning_team).not_to eq(user.team)
       end
     end

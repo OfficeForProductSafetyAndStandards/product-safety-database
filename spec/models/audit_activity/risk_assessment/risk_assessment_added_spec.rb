@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:activity) do
     described_class.create!(
       added_by_user: risk_assessment.added_by_user,
@@ -68,12 +68,12 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
     end
 
     context "with multiple products on the risk assessment" do
-      let(:investigation) { create(:allegation, products: [product_1, product_2]) }
-      let(:product_1) { create(:product) }
-      let(:product_2) { create(:product) }
+      let(:investigation) { create(:allegation, products: [product_one, product__two]) }
+      let(:product_one) { create(:product) }
+      let(:product__two) { create(:product) }
 
       it "returns an Array of products" do
-        expect(activity.products_assessed).to eq([product_1, product_2])
+        expect(activity.products_assessed).to eq([product_one, product__two])
       end
     end
   end

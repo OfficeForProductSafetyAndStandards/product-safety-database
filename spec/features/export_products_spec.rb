@@ -12,8 +12,8 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
   end
 
   let!(:investigation) { create(:notification).decorate }
-  let!(:product_1) { create(:product, name: "ABC", category: "Lifts", investigations: [investigation]) }
-  let!(:product_2) { create(:product, name: "XYZ", category: "Hand sanitiser", investigations: [investigation]) }
+  let!(:product_one) { create(:product, name: "ABC", category: "Lifts", investigations: [investigation]) }
+  let!(:product_two) { create(:product, name: "XYZ", category: "Hand sanitiser", investigations: [investigation]) }
   let!(:hazardous_product) { create(:product, name: "STU", category: "Waste", investigations: [investigation]) }
 
   before do
@@ -25,8 +25,8 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
   scenario "with no filters selected" do
     visit products_path
 
-    expect(page).to have_text product_1.name
-    expect(page).to have_text product_2.name
+    expect(page).to have_text product_one.name
+    expect(page).to have_text product_two.name
     expect(page).to have_text hazardous_product.name
 
     click_link "XLSX (spreadsheet)"
@@ -38,25 +38,25 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     expect(email.personalization[:download_export_url]).to eq product_export_url(export)
 
     expect(spreadsheet.last_row).to eq(4)
-    expect(spreadsheet.cell(2, 10)).to eq(product_1.name)
-    expect(spreadsheet.cell(3, 10)).to eq(product_2.name)
+    expect(spreadsheet.cell(2, 10)).to eq(product_one.name)
+    expect(spreadsheet.cell(3, 10)).to eq(product_two.name)
     expect(spreadsheet.cell(4, 10)).to eq(hazardous_product.name)
   end
 
   scenario "with search query" do
     visit products_path
 
-    fill_in "Search", with: product_2.name
+    fill_in "Search", with: product_two.name
     click_button "Submit search"
 
-    expect(page).not_to have_text product_1.name
+    expect(page).not_to have_text product_one.name
     expect(page).not_to have_text hazardous_product.name
-    expect(page).to have_text product_2.name
+    expect(page).to have_text product_two.name
 
     click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2, 10)).to eq(product_2.name)
+    expect(spreadsheet.cell(2, 10)).to eq(product_two.name)
   end
 
   scenario "with category filter" do
@@ -65,8 +65,8 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     select hazardous_product.category, from: "Category"
     click_button "Submit search"
 
-    expect(page).not_to have_text product_1.name
-    expect(page).not_to have_text product_2.name
+    expect(page).not_to have_text product_one.name
+    expect(page).not_to have_text product_two.name
     expect(page).to have_text hazardous_product.name
 
     click_link "XLSX (spreadsheet)"

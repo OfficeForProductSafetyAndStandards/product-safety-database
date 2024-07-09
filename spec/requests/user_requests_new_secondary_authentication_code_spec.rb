@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User requests new secondary authentication code", type: :request, with_stubbed_notify: true, with_2fa: true do
+RSpec.describe "User requests new secondary authentication code", :with_2fa, :with_stubbed_notify, type: :request do
   describe "viewing the form" do
     subject(:request_code) { get new_resend_secondary_authentication_code_path }
 

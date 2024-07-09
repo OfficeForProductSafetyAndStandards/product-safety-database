@@ -157,7 +157,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify, :with_
     let(:investigation)    { create(:allegation, creator: user, read_only_teams: [read_only_team], edit_access_teams: [edit_access_team]) }
 
     it "returns teams with read access or edit access but excludes the owner team" do
-      expect(investigation.non_owner_teams_with_access).to match_array([read_only_team, edit_access_team])
+      expect(investigation.non_owner_teams_with_access).to contain_exactly(read_only_team, edit_access_team)
     end
   end
 end

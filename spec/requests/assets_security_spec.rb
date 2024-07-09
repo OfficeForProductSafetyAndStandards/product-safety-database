@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true do
+RSpec.describe "Asset security", :with_stubbed_opensearch, type: :request do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_team) { create(:team) }
   let(:investigation) { create(:allegation, :with_document, creator: user) }

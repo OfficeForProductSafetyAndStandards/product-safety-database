@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
-  let(:investigation_product1) { create(:investigation_product) }
-  let(:investigation_product2) { create(:investigation_product) }
+RSpec.describe UpdateRiskAssessment, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
+  let(:investigation_product_one) { create(:investigation_product) }
+  let(:investigation_product_two) { create(:investigation_product) }
   let(:team) { create(:team, name: "Team 2") }
   let(:user) { create(:user, name: "User 2", team:) }
 
@@ -25,7 +25,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
            assessed_by_other: nil,
            details: "More details",
            risk_assessment_file: Rack::Test::UploadedFile.new("test/fixtures/files/old_risk_assessment.txt"),
-           investigation_products: [investigation_product1])
+           investigation_products: [investigation_product_one])
   end
 
   describe ".call" do
@@ -78,7 +78,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
         let(:assessed_by_business_id) { nil }
         let(:assessed_by_other) { nil }
         let(:details) { "More details" }
-        let(:investigation_product_ids) { [investigation_product1.id] }
+        let(:investigation_product_ids) { [investigation_product_one.id] }
         let(:risk_assessment_file) { nil }
         let(:updated_at) { 1.hour.ago }
 
@@ -106,7 +106,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
         let(:assessed_by_business_id) { nil }
         let(:assessed_by_other) { "OtherBusiness Ltd" }
         let(:details) { "Updated details" }
-        let(:investigation_product_ids) { [investigation_product2.id] }
+        let(:investigation_product_ids) { [investigation_product_two.id] }
         let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
 
         it "updates the risk assessment", :aggregate_failures do
@@ -114,8 +114,8 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
 
           expect(risk_assessment.assessed_on).to eq(Date.parse("2020-01-02"))
           expect(risk_assessment.risk_level).to eq("serious")
-          expect(risk_assessment.assessed_by_team).to be nil
-          expect(risk_assessment.assessed_by_business).to be nil
+          expect(risk_assessment.assessed_by_team).to be_nil
+          expect(risk_assessment.assessed_by_business).to be_nil
           expect(risk_assessment.assessed_by_other).to eq("OtherBusiness Ltd")
           expect(risk_assessment.details).to eq("Updated details")
         end
@@ -123,7 +123,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
         it "updates the investigation products associated with the risk assessment" do
           result
 
-          expect(risk_assessment.investigation_products).to eq([investigation_product2])
+          expect(risk_assessment.investigation_products).to eq([investigation_product_two])
         end
 
         # rubocop:disable RSpec/ExampleLength
@@ -138,7 +138,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
               "assessed_on" => %w[2019-01-01 2020-01-02],
               "details" => ["More details", "Updated details"],
               "filename" => ["old_risk_assessment.txt", "new_risk_assessment.txt"],
-              "investigation_product_ids" => [[investigation_product1.id], [investigation_product2.id]],
+              "investigation_product_ids" => [[investigation_product_one.id], [investigation_product_two.id]],
               "risk_level" => %w[low serious],
             }
           })
@@ -157,7 +157,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_mailer, :with_stubbed_antivir
       end
 
       context "when only the file has changed" do
-        let(:investigation_product_ids) { [investigation_product1.id] }
+        let(:investigation_product_ids) { [investigation_product_one.id] }
         let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
 
         before { result }

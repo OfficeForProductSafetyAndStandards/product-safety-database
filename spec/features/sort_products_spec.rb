@@ -5,18 +5,18 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   let(:user)                  { create(:user, :opss_user, :activated, organisation:, has_viewed_introduction: true) }
 
   # rubocop:disable RSpec/LetSetup
-  let!(:fire_product_1)   { create(:product, name: "Hot product", category: "Lifts") }
-  let!(:fire_product_2)   { create(:product, name: "Xtra hot product", category: "Lifts") }
-  let!(:fire_product_3)   { create(:product, name: "Very very hot product", category: "Lifts") }
-  let!(:fire_product_4)   { create(:product, name: "Super hot product", category: "Lifts") }
-  let!(:fire_product_5)   { create(:product, name: "Extra hot product", category: "Lifts") }
-  let!(:fire_product_6)   { create(:product, name: "Firey hot product", category: "Lifts") }
-  let!(:fire_product_7)   { create(:product, name: "Mega hot product", category: "Lifts") }
-  let!(:fire_product_8)   { create(:product, name: "Crazy hot product", category: "Lifts") }
-  let!(:fire_product_9)   { create(:product, name: "Spicy hot product", category: "Lifts") }
-  let!(:fire_product_10)   { create(:product, name: "Ultra hot product", category: "Lifts") }
-  let!(:fire_product_11)   { create(:product, name: "Intense hot product", category: "Lifts") }
-  let!(:fire_product_12)   { create(:product, name: "Smoking hot product", category: "Lifts") }
+  let!(:fire_product_a)   { create(:product, name: "Hot product", category: "Lifts") }
+  let!(:fire_product_b)   { create(:product, name: "Xtra hot product", category: "Lifts") }
+  let!(:fire_product_c)   { create(:product, name: "Very very hot product", category: "Lifts") }
+  let!(:fire_product_d)   { create(:product, name: "Super hot product", category: "Lifts") }
+  let!(:fire_product_e)   { create(:product, name: "Extra hot product", category: "Lifts") }
+  let!(:fire_product_f)   { create(:product, name: "Firey hot product", category: "Lifts") }
+  let!(:fire_product_g)   { create(:product, name: "Mega hot product", category: "Lifts") }
+  let!(:fire_product_h)   { create(:product, name: "Crazy hot product", category: "Lifts") }
+  let!(:fire_product_i)   { create(:product, name: "Spicy hot product", category: "Lifts") }
+  let!(:fire_product_j)   { create(:product, name: "Ultra hot product", category: "Lifts") }
+  let!(:fire_product_k)   { create(:product, name: "Intense hot product", category: "Lifts") }
+  let!(:fire_product_l)   { create(:product, name: "Smoking hot product", category: "Lifts") }
   let!(:chemical_product) { create(:product, name: "Some lab stuff") }
   let!(:drowning_product) { create(:product, name: "Dangerous life vest") }
   let!(:another_drowning_product) { create(:product, name: "Another dangerous life vest") }
@@ -47,9 +47,9 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name A-Z")
 
     expect(page).to have_css("#item-0", text: another_drowning_product.name)
-    expect(page).to have_css("#item-1", text: fire_product_8.name)
+    expect(page).to have_css("#item-1", text: fire_product_h.name)
     expect(page).to have_css("#item-2", text: drowning_product.name)
-    expect(page).to have_css("#item-3", text: fire_product_5.name)
+    expect(page).to have_css("#item-3", text: fire_product_e.name)
   end
 
   scenario "selecting Name Z-A sorts descending by name" do
@@ -61,9 +61,9 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name Z-A")
 
     expect(page).to have_css("#item-0", text: zebra_product.name)
-    expect(page).to have_css("#item-1", text: fire_product_2.name)
-    expect(page).to have_css("#item-2", text: fire_product_3.name)
-    expect(page).to have_css("#item-3", text: fire_product_10.name)
+    expect(page).to have_css("#item-1", text: fire_product_b.name)
+    expect(page).to have_css("#item-2", text: fire_product_c.name)
+    expect(page).to have_css("#item-3", text: fire_product_j.name)
   end
 
   scenario "selected sort order is persisted when filtering by category" do

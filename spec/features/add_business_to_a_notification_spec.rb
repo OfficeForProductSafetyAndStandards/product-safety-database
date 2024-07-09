@@ -18,14 +18,14 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
   let(:other_user)       { create(:user, :activated) }
 
   # rubocop:disable RSpec/LetSetup
-  let!(:marketplace_1_business_location) { create(:location) }
-  let!(:marketplace_2_business_location) { create(:location) }
+  let!(:marketplace_one_business_location) { create(:location) }
+  let!(:marketplace_two_business_location) { create(:location) }
 
-  let!(:marketplace_1)   { create(:online_marketplace, :approved) }
-  let!(:marketplace_2)   { create(:online_marketplace, :approved) }
+  let!(:marketplace_one)   { create(:online_marketplace, :approved) }
+  let!(:marketplace_two)   { create(:online_marketplace, :approved) }
 
-  let!(:marketplace_1_business) { create(:business, online_marketplace: marketplace_1, locations: [marketplace_1_business_location]) }
-  let!(:marketplace_2_business) { create(:business, online_marketplace: marketplace_2, locations: [marketplace_2_business_location]) }
+  let!(:marketplace_one_business) { create(:business, online_marketplace: marketplace_one, locations: [marketplace_one_business_location]) }
+  let!(:marketplace_two_business) { create(:business, online_marketplace: marketplace_two, locations: [marketplace_two_business_location]) }
   let!(:unapproved_marketplace) { create(:online_marketplace) }
   # rubocop:enable RSpec/LetSetup
 
@@ -147,8 +147,8 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
 
     # choose the online marketplace
     choose "Online marketplace"
-    expect(page).to have_unchecked_field(marketplace_1.name)
-    choose marketplace_1.name
+    expect(page).to have_unchecked_field(marketplace_one.name)
+    choose marketplace_one.name
     click_on "Continue"
 
     # Uses stored marketplace business & location, does not ask for details
@@ -158,7 +158,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
 
     # validate the summary page after adding the business
     expect(page).to have_text("These are the businesses included in the notification.")
-    expect(page.find("dt", text: "Online marketplace")).to have_sibling("dd", text: marketplace_1.name)
+    expect(page.find("dt", text: "Online marketplace")).to have_sibling("dd", text: marketplace_one.name)
 
     # Check that adding  the business was recorded in the
     # activity log for the notification.
@@ -262,8 +262,8 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
     expect(page).to have_error_summary("Select a business type")
 
     choose "Online marketplace"
-    expect(page).to have_unchecked_field(marketplace_1.name)
-    expect(page).to have_unchecked_field(marketplace_2.name)
+    expect(page).to have_unchecked_field(marketplace_one.name)
+    expect(page).to have_unchecked_field(marketplace_two.name)
 
     fill_in "Other online platform", with: "Another amazing marketplace"
 

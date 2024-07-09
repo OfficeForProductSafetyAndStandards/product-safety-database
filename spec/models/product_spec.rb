@@ -43,7 +43,7 @@ RSpec.describe Product do
     let(:product) { build :product }
 
     it "returns nil for a new product" do
-      expect(product.owning_team).to eq(nil)
+      expect(product.owning_team).to be_nil
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.describe Product do
     end
   end
 
-  describe "#stale?", :with_stubbed_notify, :with_stubbed_mailer do
+  describe "#stale?", :with_stubbed_mailer, :with_stubbed_notify do
     context "when the product is less than 18 months old" do
       let(:product) { build :product, created_at: 1.day.ago }
 
@@ -128,14 +128,14 @@ RSpec.describe Product do
     end
   end
 
-  describe ".retire_stale_products!", :with_stubbed_notify, :with_stubbed_mailer do
+  describe ".retire_stale_products!", :with_stubbed_mailer, :with_stubbed_notify do
     let!(:young_product) { create :product, created_at: 1.day.ago }
     let(:open_notification) { create :notification, :with_products }
     let!(:product_with_open_notification) { open_notification.products.first }
     let(:newly_closed_notification) { create :notification, :with_products, :closed, date_closed: 3.months.ago }
     let!(:product_with_newly_closed_notification) { newly_closed_notification.products.first }
-    let(:older_notification_1) { create :notification, created_at: 2.years.ago }
-    let(:older_notification_2) { create :notification, created_at: 3.years.ago }
+    let(:older_notification_one) { create :notification, created_at: 2.years.ago }
+    let(:older_notification_two) { create :notification, created_at: 3.years.ago }
     let(:product_unlinked_recently) { create :product }
     let(:product_unlinked_in_the_past) { create :product }
     let!(:old_product_never_linked) { create :product, created_at: (18.months + 1.day).ago }
@@ -143,31 +143,31 @@ RSpec.describe Product do
 
     before do
       travel(-6.months) do
-        AddProductToNotification.call!(user:, notification: older_notification_1, product: product_unlinked_recently)
-        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_notification_1), notification: older_notification_1)
+        AddProductToNotification.call!(user:, notification: older_notification_one, product: product_unlinked_recently)
+        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_notification_one), notification: older_notification_one)
       end
 
       travel(-19.months) do
-        AddProductToNotification.call!(user:, notification: older_notification_1, product: product_unlinked_in_the_past)
-        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_1), notification: older_notification_1)
+        AddProductToNotification.call!(user:, notification: older_notification_one, product: product_unlinked_in_the_past)
+        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_one), notification: older_notification_one)
       end
 
       travel(-20.months) do
-        AddProductToNotification.call!(user:, notification: older_notification_2, product: product_unlinked_in_the_past)
-        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_2), notification: older_notification_2)
+        AddProductToNotification.call!(user:, notification: older_notification_two, product: product_unlinked_in_the_past)
+        RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_in_the_past.investigation_products.find_by(investigation: older_notification_two), notification: older_notification_two)
       end
     end
 
     it "retires any stale products", :aggregate_failures do
       described_class.retire_stale_products!
 
-      expect(young_product.reload.retired_at).to be(nil)
-      expect(product_with_open_notification.reload.retired_at).to be(nil)
-      expect(product_with_newly_closed_notification.reload.retired_at).to be(nil)
-      expect(product_unlinked_recently.reload.retired_at).to be(nil)
+      expect(young_product.reload.retired_at).to be_nil
+      expect(product_with_open_notification.reload.retired_at).to be_nil
+      expect(product_with_newly_closed_notification.reload.retired_at).to be_nil
+      expect(product_unlinked_recently.reload.retired_at).to be_nil
 
-      expect(product_unlinked_in_the_past.reload.retired_at).not_to be(nil)
-      expect(old_product_never_linked.reload.retired_at).not_to be(nil)
+      expect(product_unlinked_in_the_past.reload.retired_at).not_to be_nil
+      expect(old_product_never_linked.reload.retired_at).not_to be_nil
     end
   end
 end

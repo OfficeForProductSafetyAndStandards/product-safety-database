@@ -183,7 +183,7 @@ RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
         let(:assessed_by) { "my_team" }
 
         it "always returns nil" do
-          expect(form.assessed_by_business_id).to be nil
+          expect(form.assessed_by_business_id).to be_nil
         end
       end
     end
@@ -203,7 +203,7 @@ RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
         let(:assessed_by) { "business" }
 
         it "always returns nil" do
-          expect(form.assessed_by_team_id).to be nil
+          expect(form.assessed_by_team_id).to be_nil
         end
       end
     end
@@ -223,7 +223,7 @@ RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
         let(:assessed_by) { "business" }
 
         it "always returns nil" do
-          expect(form.assessed_by_other).to be nil
+          expect(form.assessed_by_other).to be_nil
         end
       end
     end
@@ -249,7 +249,7 @@ RSpec.describe RiskAssessmentForm, :with_test_queue_adapter do
     end
   end
 
-  describe "#load_transcript_file " do
+  describe "#load_transcript_file" do
     let(:previous_form) do
       described_class.new(params.merge(risk_assessment_file: Rack::Test::UploadedFile.new(file_fixture("risk_assessment.txt"))))
     end

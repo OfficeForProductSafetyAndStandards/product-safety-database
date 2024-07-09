@@ -10,8 +10,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   let!(:drowning_investigation)              { create(:notification, hazard_type: "Drowning") }
   let!(:allegation) { create(:allegation, hazard_type: "Drowning") }
 
-  let!(:lift_product_1)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Clothing, textiles and fashion items", country_of_origin: "territory:AE-AZ") }
-  let!(:lift_product_2)   { create(:product, name: "Very hot product", investigations: [fire_investigation], category: "Clothing, textiles and fashion items") }
+  let!(:lift_product_one)   { create(:product, name: "Elevator", investigations: [fire_investigation], category: "Clothing, textiles and fashion items", country_of_origin: "territory:AE-AZ") }
+  let!(:lift_product_two)   { create(:product, name: "Very hot product", investigations: [fire_investigation], category: "Clothing, textiles and fashion items") }
   let!(:furniture_product) { create(:product, name: "Hot product1", investigations: [chemical_investigation], category: "Furniture") }
   let!(:sanitiser_product) { create(:product, name: "SoapForHandz", investigations: [drowning_investigation], category: "Communication and media equipment") }
   let!(:retired_sanitiser_product) { create(:product, name: "Dangerous retired life vest", investigations: [drowning_investigation], retired_at: Time.zone.now, category: "Hand sanitiser") }
@@ -28,8 +28,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     end
 
     scenario "no filters applied shows all non-retired products" do
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).to have_content(lift_product_two.name)
       expect(page).to have_content(furniture_product.name)
       expect(page).to have_content(sanitiser_product.name)
       expect(page).not_to have_content(allegation_product.name)
@@ -51,8 +51,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       select "Clothing, textiles and fashion items", from: "Category"
       click_button "Apply"
 
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -64,8 +64,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       fill_in "Search", with: "Elevator"
       click_button "Apply"
 
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -76,8 +76,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       fill_in "Search", with: "SoapForHandz"
       click_button "Apply"
 
-      expect(page).not_to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -88,8 +88,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       fill_in "Search", with: "   SoapForHandz    "
       click_button "Apply"
 
-      expect(page).not_to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -100,19 +100,19 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       fill_in "Search", with: furniture_product.id
       click_button "Apply"
 
-      expect(page).not_to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
     end
 
     scenario "filtering by a PSD ref" do
-      fill_in "Search", with: lift_product_2.psd_ref
+      fill_in "Search", with: lift_product_two.psd_ref
       click_button "Apply"
 
-      expect(page).not_to have_content(lift_product_1.name)
-      expect(page).to have_content(lift_product_2.name)
+      expect(page).not_to have_content(lift_product_one.name)
+      expect(page).to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -126,8 +126,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     end
 
     scenario "no filters applied shows all non-retired products" do
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).to have_content(lift_product_two.name)
       expect(page).to have_content(furniture_product.name)
       expect(page).to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -139,8 +139,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       within_fieldset("Product record status") { choose "Active" }
       click_button "Apply"
 
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).to have_content(lift_product_two.name)
       expect(page).to have_content(furniture_product.name)
       expect(page).to have_content(sanitiser_product.name)
       expect(page).not_to have_content(retired_sanitiser_product.name)
@@ -152,8 +152,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       within_fieldset("Product record status") { choose "Retired" }
       click_button "Apply"
 
-      expect(page).not_to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).to have_content("#{retired_sanitiser_product.name} (Retired product record)")
@@ -165,8 +165,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       within_fieldset("Product record status") { choose "All" }
       click_button "Apply"
 
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).to have_content(lift_product_two.name)
       expect(page).to have_content(furniture_product.name)
       expect(page).to have_content(sanitiser_product.name)
       expect(page).to have_content("#{retired_sanitiser_product.name} (Retired product record)")
@@ -179,8 +179,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       check "Abu Dhabi"
       click_button "Apply"
 
-      expect(page).to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).not_to have_content("#{retired_sanitiser_product.name} (Retired product record)")
@@ -193,8 +193,8 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
       check "Allegation"
       click_button "Apply"
 
-      expect(page).not_to have_content(lift_product_1.name)
-      expect(page).not_to have_content(lift_product_2.name)
+      expect(page).not_to have_content(lift_product_one.name)
+      expect(page).not_to have_content(lift_product_two.name)
       expect(page).not_to have_content(furniture_product.name)
       expect(page).not_to have_content(sanitiser_product.name)
       expect(page).not_to have_content("#{retired_sanitiser_product.name} (Retired product record)")

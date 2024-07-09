@@ -2,7 +2,7 @@
 # rubocop:disable RSpec/ExampleLength
 require "rails_helper"
 
-RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe ProductExport, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   let!(:investigation) do
     create(:notification,
            reported_reason: "unsafe",
@@ -106,7 +106,7 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
 
       expect(product_sheet.cell(1, 15)).to eq "country_of_origin"
       expect(product_sheet.cell(2, 15)).to eq "GB-ENG"
-      expect(product_sheet.cell(3, 15)).to eq nil
+      expect(product_sheet.cell(3, 15)).to be_nil
 
       expect(product_sheet.cell(1, 16)).to eq "webpage"
       expect(product_sheet.cell(2, 16)).to eq product.webpage
@@ -194,11 +194,11 @@ RSpec.describe ProductExport, :with_stubbed_notify, :with_stubbed_mailer, :with_
 
       expect(test_result_sheet.cell(1, 14)).to eq "tso_sample_reference_number"
       expect(test_result_sheet.cell(2, 14)).to eq test.tso_certificate_reference_number
-      expect(test_result_sheet.cell(3, 14)).to eq nil
+      expect(test_result_sheet.cell(3, 14)).to be_nil
 
       expect(test_result_sheet.cell(1, 15)).to eq "date_issued"
       expect(test_result_sheet.cell(2, 15)).to eq test.tso_certificate_issue_date.to_formatted_s(:xmlschema)
-      expect(test_result_sheet.cell(3, 15)).to eq nil
+      expect(test_result_sheet.cell(3, 15)).to be_nil
 
       expect(risk_assessments_sheet.cell(1, 1)).to eq "psd_ref"
       expect(risk_assessments_sheet.cell(2, 1)).to eq product.psd_ref

@@ -169,7 +169,7 @@ RSpec.describe FindProductForm, :with_stubbed_mailer do
       let(:reference) { "1234" }
 
       it "returns nil" do
-        expect(form.product).to eq(nil)
+        expect(form.product).to be_nil
       end
     end
   end

@@ -19,9 +19,9 @@ RSpec.feature "Case product tab", :with_stubbed_antivirus, :with_stubbed_mailer 
   end
 
   context "when product has other investigations linked to it" do
-    let!(:investigation_1) { create(:allegation, creator: user, products: [product]) }
-    let!(:investigation_2) { create(:allegation, creator: user, products: [product]) }
-    let!(:investigation_3) { create(:allegation, creator: user, products: [product]) }
+    let!(:investigation_one) { create(:allegation, creator: user, products: [product]) }
+    let!(:investigation_two) { create(:allegation, creator: user, products: [product]) }
+    let!(:investigation_three) { create(:allegation, creator: user, products: [product]) }
 
     it "shows additional cases on the cases tab" do
       visit "/cases/#{original_investigation.pretty_id}"
@@ -31,9 +31,9 @@ RSpec.feature "Case product tab", :with_stubbed_antivirus, :with_stubbed_mailer 
 
       expect(page).to have_content "The original product record was or is also included in these 3 notifications."
 
-      expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_1.pretty_id)
-      expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_2.pretty_id)
-      expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_3.pretty_id)
+      expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_one.pretty_id)
+      expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_two.pretty_id)
+      expect(page).to have_css("dd.govuk-summary-list__value", text: investigation_three.pretty_id)
       expect(page).not_to have_css("dd.govuk-summary-list__value", text: original_investigation.pretty_id)
     end
   end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding a corrective action to a case", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
+RSpec.describe "Adding a corrective action to a case", :with_stubbed_mailer, :with_stubbed_opensearch, type: :request do
   let(:user_from_owner_team) { create(:user, :activated) }
   let(:user_from_team_with_read_only_access) { create(:user, :activated) }
   let(:user_from_team_with_edit_access) { create(:user, :activated) }

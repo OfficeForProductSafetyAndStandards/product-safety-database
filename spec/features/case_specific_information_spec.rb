@@ -7,19 +7,19 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
   let(:team_mate) { create :user, :activated, has_viewed_introduction: true, team: }
   let(:other_user) { create :user, :activated, has_viewed_introduction: true, team: other_team }
   let(:notification) { create :notification, creator: user }
-  let(:product_1) { create :product }
-  let(:product_2) { create :product }
-  let(:product_3) { create :product }
-  let(:product_4) { create :product }
+  let(:product_one) { create :product }
+  let(:product_two) { create :product }
+  let(:product_three) { create :product }
+  let(:product_four) { create :product }
   let(:new_batch_numbers) { "abc, def, 999" }
   let(:new_customs_code) { "eng98989" }
 
   context "when investigation has multiple linked products" do
     before do
-      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_1.id, customs_code: "ABC123", batch_number: "1", affected_units_status: "unknown")
-      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_2.id, customs_code: "XYZ987", batch_number: "2", affected_units_status: "exact", number_of_affected_units: "91")
-      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_3.id, customs_code: "ZZZ999", batch_number: "3", affected_units_status: "approx", number_of_affected_units: "10000")
-      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_4.id, customs_code: "BBB222", batch_number: "1000", affected_units_status: "not_relevant")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_one.id, customs_code: "ABC123", batch_number: "1", affected_units_status: "unknown")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_two.id, customs_code: "XYZ987", batch_number: "2", affected_units_status: "exact", number_of_affected_units: "91")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_three.id, customs_code: "ZZZ999", batch_number: "3", affected_units_status: "approx", number_of_affected_units: "10000")
+      InvestigationProduct.create!(investigation_id: notification.id, product_id: product_four.id, customs_code: "BBB222", batch_number: "1000", affected_units_status: "not_relevant")
     end
 
     it "shows all info on notification specific info section of notification page" do
@@ -190,8 +190,8 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
       end
 
       it "does not allow editing of the notification specific information" do
-        expect(page).not_to have_link("Edit the batch numbers for #{product_1.name}")
-        expect(page).not_to have_link("Edit the customs codes for #{product_1.name}")
+        expect(page).not_to have_link("Edit the batch numbers for #{product_one.name}")
+        expect(page).not_to have_link("Edit the customs codes for #{product_one.name}")
       end
     end
   end
@@ -210,5 +210,5 @@ def product_titles
 end
 
 def expect_investigation_products_to_be_listed_with_oldest_first
-  expect(product_titles).to eq(["#{product_1.name} (#{product_1.psd_ref})", "#{product_2.name} (#{product_2.psd_ref})", "#{product_3.name} (#{product_3.psd_ref})", "#{product_4.name} (#{product_4.psd_ref})"])
+  expect(product_titles).to eq(["#{product_one.name} (#{product_one.psd_ref})", "#{product_two.name} (#{product_two.psd_ref})", "#{product_three.name} (#{product_three.psd_ref})", "#{product_four.name} (#{product_four.psd_ref})"])
 end

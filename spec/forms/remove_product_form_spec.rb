@@ -30,7 +30,7 @@ RSpec.describe RemoveProductForm do
         end
 
         it "persists remove_product value" do
-          expect(form.remove_product).to eq true
+          expect(form.remove_product).to be true
         end
 
         it "persists reason value" do
@@ -47,7 +47,7 @@ RSpec.describe RemoveProductForm do
       end
 
       it "persists remove_product value" do
-        expect(form.remove_product).to eq false
+        expect(form.remove_product).to be false
       end
     end
   end

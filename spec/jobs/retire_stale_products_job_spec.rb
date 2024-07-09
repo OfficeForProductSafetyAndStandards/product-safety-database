@@ -22,7 +22,7 @@ RSpec.describe RetireStaleProductsJob do
         it "does not retire existing products", :aggregate_failures do
           job.perform
           existing_products.each(&:reload)
-          expect(existing_products.pluck(:retired_at)).to all(be nil)
+          expect(existing_products.pluck(:retired_at)).to all(be_nil)
           expect(existing_products).to all(be_not_retired)
         end
       end

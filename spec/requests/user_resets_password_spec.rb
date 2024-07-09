@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User resets password", type: :request, with_stubbed_notify: true, with_2fa: true do
+RSpec.describe "User resets password", :with_2fa, :with_stubbed_notify, type: :request do
   describe "viewing the form" do
     context "with a valid reset token" do
       let(:reset_token) { SecureRandom.hex(20) }

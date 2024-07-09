@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe UpdateEmail, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
   let!(:notification) { create(:allegation) }
   let(:product) { create(:product_washing_machine) }
 
@@ -184,7 +184,7 @@ RSpec.describe UpdateEmail, :with_stubbed_mailer, :with_stubbed_antivirus, :with
         it "creates no activity entry" do
           result
 
-          expect(activity_entry).to eq nil
+          expect(activity_entry).to be_nil
         end
       end
 

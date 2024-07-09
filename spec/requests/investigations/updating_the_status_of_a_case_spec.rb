@@ -31,7 +31,7 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
     context "when status is changed to closed" do
       it "updates the investigation and redirects to the investigation page", :aggregate_failures do
         expect(investigation.reload.is_closed).to be true
-        expect(investigation.date_closed).not_to be nil
+        expect(investigation.date_closed).not_to be_nil
         expect(response).to redirect_to(investigation_path(investigation))
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe "Updating the status of a case", :with_stubbed_mailer, :with_stub
 
       it "updates the investigation and redirects to the investigation page", :aggregate_failures do
         expect(investigation.reload.is_closed).to be false
-        expect(investigation.date_closed).to be nil
+        expect(investigation.date_closed).to be_nil
         expect(response).to redirect_to(investigation_path(investigation))
       end
     end

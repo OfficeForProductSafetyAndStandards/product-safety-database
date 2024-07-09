@@ -46,7 +46,7 @@ RSpec.describe ProductDuplicateCheckForm do
         it { is_expected.to be_valid }
 
         it "persists has_barcode value" do
-          expect(form.has_barcode).to eq true
+          expect(form.has_barcode).to be true
         end
 
         it "persists barcode value" do
@@ -60,7 +60,7 @@ RSpec.describe ProductDuplicateCheckForm do
         it { is_expected.to be_valid }
 
         it "persists has_barcode value" do
-          expect(form.has_barcode).to eq true
+          expect(form.has_barcode).to be true
         end
 
         it "persists barcode value" do
@@ -74,7 +74,7 @@ RSpec.describe ProductDuplicateCheckForm do
         it { is_expected.to be_valid }
 
         it "persists has_barcode value" do
-          expect(form.has_barcode).to eq true
+          expect(form.has_barcode).to be true
         end
 
         it "persists barcode value" do
@@ -88,7 +88,7 @@ RSpec.describe ProductDuplicateCheckForm do
         it { is_expected.to be_valid }
 
         it "persists has_barcode value" do
-          expect(form.has_barcode).to eq true
+          expect(form.has_barcode).to be true
         end
 
         it "persists barcode value" do

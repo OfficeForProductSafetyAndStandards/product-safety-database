@@ -8,19 +8,19 @@ RSpec.feature "Business sorting", :with_stubbed_mailer, type: :feature do
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }
   let!(:drowning_investigation)              { create(:allegation, hazard_type: "Drowning") }
   # rubocop:disable RSpec/LetSetup
-  let!(:business_1)   { create(:business, trading_name: "AA Business", investigations: [chemical_investigation]) }
-  let!(:business_2)   { create(:business, trading_name: "CC Business", investigations: [fire_investigation]) }
-  let!(:business_3)   { create(:business, trading_name: "BB Business", investigations: [drowning_investigation]) }
-  let!(:business_4)   { create(:business, trading_name: "DD Business", investigations: [drowning_investigation]) }
-  let!(:business_5)   { create(:business, trading_name: "EE Business", investigations: [drowning_investigation]) }
-  let!(:business_6)   { create(:business, trading_name: "FF Business", investigations: [drowning_investigation]) }
-  let!(:business_7)   { create(:business, trading_name: "GG Business", investigations: [drowning_investigation]) }
-  let!(:business_8)   { create(:business, trading_name: "HH Business", investigations: [drowning_investigation]) }
-  let!(:business_9)   { create(:business, trading_name: "II Business", investigations: [drowning_investigation]) }
-  let!(:business_10)   { create(:business, trading_name: "JJ Business", investigations: [drowning_investigation]) }
-  let!(:business_11)   { create(:business, trading_name: "KK Business", investigations: [drowning_investigation]) }
-  let!(:business_12)   { create(:business, trading_name: "ZZ Business", investigations: [drowning_investigation]) }
-  let!(:business_13)   { create(:business, trading_name: "MM Business", investigations: [drowning_investigation]) }
+  let!(:business_a)   { create(:business, trading_name: "AA Business", investigations: [chemical_investigation]) }
+  let!(:business_b)   { create(:business, trading_name: "CC Business", investigations: [fire_investigation]) }
+  let!(:business_c)   { create(:business, trading_name: "BB Business", investigations: [drowning_investigation]) }
+  let!(:business_d)   { create(:business, trading_name: "DD Business", investigations: [drowning_investigation]) }
+  let!(:business_e)   { create(:business, trading_name: "EE Business", investigations: [drowning_investigation]) }
+  let!(:business_f)   { create(:business, trading_name: "FF Business", investigations: [drowning_investigation]) }
+  let!(:business_g)   { create(:business, trading_name: "GG Business", investigations: [drowning_investigation]) }
+  let!(:business_h)   { create(:business, trading_name: "HH Business", investigations: [drowning_investigation]) }
+  let!(:business_i)   { create(:business, trading_name: "II Business", investigations: [drowning_investigation]) }
+  let!(:business_j)   { create(:business, trading_name: "JJ Business", investigations: [drowning_investigation]) }
+  let!(:business_k)   { create(:business, trading_name: "KK Business", investigations: [drowning_investigation]) }
+  let!(:business_l)   { create(:business, trading_name: "ZZ Business", investigations: [drowning_investigation]) }
+  let!(:business_m)   { create(:business, trading_name: "MM Business", investigations: [drowning_investigation]) }
   # rubocop:enable RSpec/LetSetup
 
   before do
@@ -32,11 +32,11 @@ RSpec.feature "Business sorting", :with_stubbed_mailer, type: :feature do
   scenario "no filters applied sorts by Recently added" do
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added")
 
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_13.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_12.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_11.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_10.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_9.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_m.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_l.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_k.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_j.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_i.trading_name)
   end
 
   scenario "selecting Name A–Z sorts ascending by name" do
@@ -47,11 +47,11 @@ RSpec.feature "Business sorting", :with_stubbed_mailer, type: :feature do
     expect(page).to have_current_path(/sort_dir=asc/, ignore_query: false)
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name A–Z")
 
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_1.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_3.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_2.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_4.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_5.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_a.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_c.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_b.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_d.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_e.trading_name)
   end
 
   scenario "selecting Name Z–A sorts descending by name" do
@@ -62,11 +62,11 @@ RSpec.feature "Business sorting", :with_stubbed_mailer, type: :feature do
     expect(page).to have_current_path(/sort_dir=desc/, ignore_query: false)
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name Z–A")
 
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_12.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_13.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_11.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_10.trading_name)
-    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_9.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)", text: business_l.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)", text: business_m.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)", text: business_k.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(4) > th:nth-child(1)", text: business_j.trading_name)
+    expect(page).to have_css("table tbody.govuk-table__body > tr:nth-child(5) > th:nth-child(1)", text: business_i.trading_name)
   end
 
   scenario "filtering by keyword sorts by Relevance by default" do

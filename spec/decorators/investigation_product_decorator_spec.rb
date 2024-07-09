@@ -63,11 +63,11 @@ RSpec.describe InvestigationProductDecorator, :with_stubbed_mailer do
       decorated_object.ucr_numbers_list
     end
 
-    let(:ucr_2) { create(:ucr_number, number: "87654321") }
-    let(:ucr_1) { create(:ucr_number, number: "12345678") }
+    let(:ucr_two) { create(:ucr_number, number: "87654321") }
+    let(:ucr_one) { create(:ucr_number, number: "12345678") }
 
     before do
-      investigation_product.ucr_numbers = [ucr_1, ucr_2]
+      investigation_product.ucr_numbers = [ucr_one, ucr_two]
       investigation_product.save!
     end
 

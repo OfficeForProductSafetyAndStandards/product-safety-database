@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:decorated_activity) { accident.reload.investigation.activities.find_by!(type: "AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated").decorate }
 
   let(:accident) { create(:accident, date:, is_date_known:, usage:, severity:, severity_other:, additional_info:) }
@@ -68,7 +68,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { false }
 
       it "returns true" do
-        expect(decorated_activity.date_changed?).to eq(true)
+        expect(decorated_activity.date_changed?).to be(true)
       end
     end
 
@@ -79,7 +79,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { true }
 
       it "returns true" do
-        expect(decorated_activity.date_changed?).to eq(true)
+        expect(decorated_activity.date_changed?).to be(true)
       end
     end
 
@@ -90,7 +90,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { false }
 
       it "returns false" do
-        expect(decorated_activity.date_changed?).to eq(false)
+        expect(decorated_activity.date_changed?).to be(false)
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { true }
 
       it "returns false" do
-        expect(decorated_activity.date_changed?).to eq(false)
+        expect(decorated_activity.date_changed?).to be(false)
       end
     end
   end
@@ -143,7 +143,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
         let(:new_severity) { "high" }
 
         it "returns true" do
-          expect(decorated_activity.severity_changed?).to eq(true)
+          expect(decorated_activity.severity_changed?).to be(true)
         end
       end
 
@@ -152,7 +152,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
         let(:new_severity) { "high" }
 
         it "returns true" do
-          expect(decorated_activity.severity_changed?).to eq(true)
+          expect(decorated_activity.severity_changed?).to be(true)
         end
       end
 
@@ -163,7 +163,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
         let(:new_severity_other) { "very" }
 
         it "returns false" do
-          expect(decorated_activity.severity_changed?).to eq(false)
+          expect(decorated_activity.severity_changed?).to be(false)
         end
       end
 
@@ -174,7 +174,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
         let(:new_severity_other) { "extreme" }
 
         it "returns true" do
-          expect(decorated_activity.severity_changed?).to eq(true)
+          expect(decorated_activity.severity_changed?).to be(true)
         end
       end
     end

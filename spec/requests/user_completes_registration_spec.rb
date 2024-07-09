@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User completes registration", type: :request, with_stubbed_notify: true do
+RSpec.describe "User completes registration", :with_stubbed_notify, type: :request do
   let(:user) { create(:user, :invited) }
 
   describe "viewing the form" do
@@ -16,14 +16,14 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
       end
     end
 
-    context "when the url points to an inexistent user id", with_errors_rendered: true do
+    context "when the url points to an inexistent user id", :with_errors_rendered do
       it "sends visitor to not found page" do
         get complete_registration_user_path(SecureRandom.uuid, invitation: user.invitation_token)
         expect(response).to have_http_status :not_found
       end
     end
 
-    context "when the url token differs from the user invitation token", with_errors_rendered: true do
+    context "when the url token differs from the user invitation token", :with_errors_rendered do
       it "does not allow the visitor into the complete registration page" do
         get complete_registration_user_path(user.id, invitation: "wrongToken")
         expect(response).to have_http_status :not_found
@@ -171,7 +171,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
         expect(response).to have_http_status :forbidden
       end
 
-      it "renders the forbidden error page", with_errors_rendered: true do
+      it "renders the forbidden error page", :with_errors_rendered do
         expect(response).to render_template("errors/forbidden")
       end
 

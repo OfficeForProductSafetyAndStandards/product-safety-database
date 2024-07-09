@@ -35,7 +35,7 @@ RSpec.describe ChangeNotificationRiskValidation, :with_test_queue_adapter do
     end
   end
 
-  context "when risk_validated_at and risk_validated_by are left unchanged " do
+  context "when risk_validated_at and risk_validated_by are left unchanged" do
     it "does not send an email" do
       expect { result }.not_to have_enqueued_mail(NotifyMailer, :risk_validation_updated)
     end
@@ -57,7 +57,7 @@ RSpec.describe ChangeNotificationRiskValidation, :with_test_queue_adapter do
       expect(result).to be_success
     end
 
-    it "does  create a new activity" do
+    it "does create a new activity" do
       expect { result }.to change(Activity, :count)
     end
 

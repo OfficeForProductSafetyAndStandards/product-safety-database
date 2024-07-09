@@ -120,19 +120,19 @@ RSpec.describe User do
     it "returns true if user mobile_number_verified and name details are present" do
       user = create(:user)
 
-      expect(user.has_filled_out_account_setup_form_and_verified_number?).to eq true
+      expect(user.has_filled_out_account_setup_form_and_verified_number?).to be true
     end
 
     it "returns false if name is nil" do
       user = create(:user, name: nil)
 
-      expect(user.has_filled_out_account_setup_form_and_verified_number?).to eq false
+      expect(user.has_filled_out_account_setup_form_and_verified_number?).to be false
     end
 
     it "returns false if mobile_number_verified is not verified" do
       user = create(:user, mobile_number_verified: false)
 
-      expect(user.has_filled_out_account_setup_form_and_verified_number?).to eq false
+      expect(user.has_filled_out_account_setup_form_and_verified_number?).to be false
     end
   end
 

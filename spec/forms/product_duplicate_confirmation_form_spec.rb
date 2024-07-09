@@ -32,7 +32,7 @@ RSpec.describe ProductDuplicateConfirmationForm do
       let(:params) { { correct: "yes" } }
 
       it "returns true" do
-        expect(form.correct?).to eq true
+        expect(form.correct?).to be true
       end
     end
 
@@ -40,7 +40,7 @@ RSpec.describe ProductDuplicateConfirmationForm do
       let(:params) { { correct: "no" } }
 
       it "returns false" do
-        expect(form.correct?).to eq false
+        expect(form.correct?).to be false
       end
     end
   end

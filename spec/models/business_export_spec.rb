@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let!(:business) { create(:business).decorate }
   let!(:business_2) { create(:business).decorate }
@@ -41,7 +41,7 @@ RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_notify, :with_stu
 
       expect(sheet.cell(1, 5)).to eq "types"
       expect(sheet.cell(2, 5)).to eq investigation_business.relationship
-      expect(sheet.cell(3, 5)).to eq nil
+      expect(sheet.cell(3, 5)).to be_nil
 
       expect(sheet.cell(1, 6)).to eq "primary_contact_email"
       expect(sheet.cell(2, 6)).to eq business.primary_contact.try(:email)

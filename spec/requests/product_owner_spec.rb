@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Viewing a product owner", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
+RSpec.describe "Viewing a product owner", :with_stubbed_mailer, :with_stubbed_opensearch, type: :request do
   let(:user) { create(:user, :activated) }
   let(:creation_time) { 1.day.ago }
 

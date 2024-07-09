@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddEmailToNotification, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AddEmailToNotification, :with_stubbed_antivirus, :with_stubbed_mailer do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:notification) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
@@ -74,7 +74,7 @@ RSpec.describe AddEmailToNotification, :with_stubbed_mailer, :with_stubbed_antiv
         expect(activity).to be_a(AuditActivity::Correspondence::AddEmail)
         expect(activity.investigation_product).to be_nil
         expect(activity.title(nil)).to be_nil
-        expect(activity.body).to eq nil
+        expect(activity.body).to be_nil
       end
 
       it "creates metadata" do

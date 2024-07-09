@@ -6,7 +6,7 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
   let!(:iphone_3g)       { create(:product_iphone_3g,       brand: "Apple", created_at: 2.days.ago, authenticity: "genuine") }
   let!(:product_samsung) { create(:product_samsung,         brand: "Samsung", created_at: 2.days.ago, authenticity: "genuine") }
   let!(:washing_machine) { create(:product_washing_machine, brand: "Whirlpool", created_at: 3.days.ago, authenticity: "unsure") }
-  let!(:investigation)    { create(:notification, products: [iphone], hazard_type: "Cuts") }
+  let!(:investigation)   { create(:notification, products: [iphone], hazard_type: "Cuts") }
 
   context "with less than 12 products" do
     before do
@@ -100,7 +100,7 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
 
     context "when over 10k cases exist" do
       before do
-        not_retired_products_double = instance_double("not_retired_products")
+        not_retired_products_double = instance_double(ActiveRecord::Relation)
         allow(Product).to receive(:not_retired).and_return(not_retired_products_double)
         allow(not_retired_products_double).to receive(:count).and_return(10_001)
       end

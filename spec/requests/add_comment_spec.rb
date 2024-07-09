@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
+RSpec.describe "Adding a comment to a case", :with_stubbed_mailer, :with_stubbed_opensearch, type: :request do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:notification) { create(:notification, creator: user) }
 

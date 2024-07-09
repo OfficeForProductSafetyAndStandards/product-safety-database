@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Document::Update, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::Document::Update, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:activity) { described_class.new(metadata: activity_metadata, title:, body: description) }
 
   let(:file) { fixture_file_upload("testImage.png") }

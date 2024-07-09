@@ -108,7 +108,7 @@ RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
 
       it "sets the product to unowned" do
         result
-        expect(product.reload.owning_team).to eq(nil)
+        expect(product.reload.owning_team).to be_nil
       end
 
       it_behaves_like "a service which notifies the notification owner"
@@ -120,7 +120,7 @@ RSpec.describe RemoveProductFromNotification, :with_test_queue_adapter do
           result
           product.reload
           expect(product.owning_team).not_to eq(notification.owner_team)
-          expect(product.owning_team).not_to eq(nil)
+          expect(product.owning_team).not_to be_nil
         end
       end
 

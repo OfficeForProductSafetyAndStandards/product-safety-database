@@ -44,7 +44,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               expect(Activity.where(type: activity.type).count).to eq 0
 
               email = delivered_emails.last
-              expect(email).to eq nil
+              expect(email).to be_nil
             end
           end
 
@@ -66,7 +66,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               expect(ActiveStorage::Blob.count).to eq 0
 
               email = delivered_emails.last
-              expect(email).to eq nil
+              expect(email).to be_nil
             end
           end
         end
@@ -117,7 +117,7 @@ RSpec.describe DeleteUnsafeFilesJob do
               expect(ActiveStorage::Blob.count).to eq 0
 
               email = delivered_emails.last
-              expect(email).to eq nil
+              expect(email).to be_nil
             end
           end
         end
@@ -141,7 +141,7 @@ RSpec.describe DeleteUnsafeFilesJob do
           expect(ActiveStorage::Blob.count).to eq 0
 
           email = delivered_emails.last
-          expect(email).to eq nil
+          expect(email).to be_nil
         end
       end
     end

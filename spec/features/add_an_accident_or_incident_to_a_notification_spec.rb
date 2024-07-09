@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   include_context "with read only team and user"
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:product1) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
-  let(:product2) { create(:product_iphone, name: "iPhone 23") }
-  let(:notification) { create(:notification, products: [product1, product2], creator: user, read_only_teams: read_only_team) }
+  let(:product_one) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
+  let(:product_two) { create(:product_iphone, name: "iPhone 23") }
+  let(:notification) { create(:notification, products: [product_one, product_two], creator: user, read_only_teams: read_only_team) }
 
   let(:date) { Date.parse("2020-05-01") }
 
@@ -48,7 +48,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     expect_ordered_error_list
 
     choose("No")
-    select product1.name, from: "Which product was involved?"
+    select product_one.name, from: "Which product was involved?"
     choose("Serious")
     choose("Normal use")
 
@@ -59,7 +59,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     expect_to_have_notification_breadcrumbs
 
     expect(page).to have_content "Supporting information"
-    expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
+    expect(page).to have_content "MyBrand Washing Machine #{product_one.psd_ref}: Normal use"
 
     expect_to_be_on_supporting_information_page(case_id: notification.pretty_id)
 
@@ -74,7 +74,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine (#{product1.psd_ref})", severity: "Serious", usage: "Normal use", additional_info: "")
+    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine (#{product_one.psd_ref})", severity: "Serious", usage: "Normal use", additional_info: "")
   end
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
@@ -112,7 +112,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     fill_in("Day", with: date.day)
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
-    select product1.name, from: "Which product was involved?"
+    select product_one.name, from: "Which product was involved?"
     choose("Other")
     fill_in "Other type", with: "Test"
     choose("Normal use")
@@ -123,7 +123,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
     expect(page).not_to have_error_messages
     expect_to_have_notification_breadcrumbs
 
-    expect(page).to have_content "MyBrand Washing Machine #{product1.psd_ref}: Normal use"
+    expect(page).to have_content "MyBrand Washing Machine #{product_one.psd_ref}: Normal use"
 
     expect_to_be_on_supporting_information_page(case_id: notification.pretty_id)
 
@@ -131,14 +131,14 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_antiviru
 
     expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
     expect_to_have_notification_breadcrumbs
-    expect_case_activity_page_to_show_entered_data(date.to_formatted_s(:govuk), product1.name, "Test", "Normal use")
+    expect_case_activity_page_to_show_entered_data(date.to_formatted_s(:govuk), product_one.name, "Test", "Normal use")
 
     click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
     expect_to_have_notification_breadcrumbs
 
-    expect_summary_list_to_have(date: date.to_formatted_s(:govuk), product_name: "#{product1.name} (#{product1.psd_ref})", severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
+    expect_summary_list_to_have(date: date.to_formatted_s(:govuk), product_name: "#{product_one.name} (#{product_one.psd_ref})", severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
   end
 
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)

@@ -62,14 +62,14 @@ RSpec.describe ConfirmProductForm, :with_stubbed_mailer do
 
   describe "confirmed?" do
     it "returns true when correct is 'yes'" do
-      expect(form.confirmed?).to eq(true)
+      expect(form.confirmed?).to be(true)
     end
 
     context "when correct is 'no'" do
       let(:correct) { "no" }
 
       it "returns false" do
-        expect(form.confirmed?).to eq(false)
+        expect(form.confirmed?).to be(false)
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe ConfirmProductForm, :with_stubbed_mailer do
       let(:correct) { nil }
 
       it "returns false" do
-        expect(form.confirmed?).to eq(false)
+        expect(form.confirmed?).to be(false)
       end
     end
   end

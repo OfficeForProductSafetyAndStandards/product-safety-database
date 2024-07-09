@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Notification task list", :with_stubbed_antivirus, :with_stubbed_mailer, :with_opensearch, :with_product_form_helper do
+RSpec.feature "Notification task list", :with_opensearch, :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user]) }
   let(:existing_product) { create(:product) }
   let(:new_product_attributes) do
