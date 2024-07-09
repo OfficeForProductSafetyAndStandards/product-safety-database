@@ -10,7 +10,6 @@ class PhoneCallCorrespondenceForm
             recent_date: { on_or_before: false }
 
   validate :date_fields_presence
-
   validate :validate_transcript_and_content
 
   attr_accessor :correspondence_date_year, :correspondence_date_month, :correspondence_date_day

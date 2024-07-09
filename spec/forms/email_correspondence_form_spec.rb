@@ -36,7 +36,7 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_mailer do
 
   describe "validations" do
     context "when a correspondence date is missing" do
-      let(:correspondence_date) { nil }
+      let(:correspondence_date) { {} }
 
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid

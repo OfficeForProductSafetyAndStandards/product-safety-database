@@ -4,8 +4,13 @@ class ErrorSummaryPresenter
   end
 
   def formatted_error_messages
-    @error_messages = @error_messages.each.map { |y| y.to_a.map { |x| [x[0], x[1].join] } }
-    @error_messages = @error_messages[0] + @error_messages[1] if @error_messages.length == 2
-    @error_messages[0]
+    store = []
+    @error_messages.each do |hash|
+      hash.each do |key, arr|
+        arr = arr.map { |x| [key, x] }
+        store += arr
+      end
+    end
+    @error_messages = store
   end
 end
