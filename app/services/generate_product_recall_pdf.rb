@@ -33,12 +33,13 @@ class GenerateProductRecallPdf
     pdf.table([
       [{ image: File.open(Rails.root.join("app/assets/images/opss-logo.jpg")), fit: [140, 140] }, { content: title, text_color: "FF0000", font_style: :bold, size: 20, align: :right, valign: :bottom }],
     ], width: pdf.bounds.width, cell_style: { borders: [] })
+
     pdf.table([
       [{ content: params["pdf_title"], colspan: 2, font_style: :bold, size: 14 }],
       [{ content: "Aspect", font_style: :bold }, { content: "Details", font_style: :bold }],
       [
         { content: "Images", font_style: :bold },
-        pdf.make_cell(image_rows, width: pdf.bounds.width - 120)
+        build_sub_table(pdf)
       ],
       [{ content: "Alert Number", font_style: :bold }, params["alert_number"]],
       [{ content: "Product Type", font_style: :bold }, [params["product_type"], params["subcategory"]].compact.join(" - ")],
@@ -53,6 +54,7 @@ class GenerateProductRecallPdf
       [{ content: "Online Marketplace", font_style: :bold }, online_marketplace],
       [{ content: "Notifier", font_style: :bold }, params["notified_by"]],
     ].compact, width: pdf.bounds.width, column_widths: { 0 => 120 })
+
     pdf.repeat :all do
       pdf.bounding_box [pdf.bounds.left, pdf.bounds.bottom + 25], width: pdf.bounds.width do
         pdf.text_box 'The OPSS Product Safety Alerts, Reports and Recalls Site can be accessed at the following link: <color rgb="#0000FF"><u><link href="https://www.gov.uk/guidance/product-recalls-and-alerts">https://www.gov.uk/guidance/product-recalls-and-alerts</link></u></color>', inline_format: true
@@ -69,6 +71,14 @@ private
 
   def title
     product_safety_report? ? "Product Safety Report" : "Product Recall"
+  end
+
+  def build_sub_table(pdf)
+    rows = image_rows
+    flattened_array = rows.flatten(1)
+    new_array = flattened_array.each_slice(3).to_a
+
+    pdf.make_cell(new_array, width: pdf.bounds.width - 120)
   end
 
   def image_rows
@@ -88,7 +98,7 @@ private
     return if image_upload.blank?
 
     image_upload.file_upload.blob.open do |file|
-      { image: File.open(file.path), fit: [200, 200], borders: [] }
+      { image: File.open(file.path), fit: [100, 100], borders: [] }
     end
   end
 
