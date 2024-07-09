@@ -2,7 +2,7 @@
 
 <%= render "prism_risk_assessments/heading/#{@page_name}" %>
 
-<%= form_with(model: @search, scope: "", url: all_prism_risk_assessments_path, method: :get, html: { role: "search" }) do |form| %>
+<%= form_with(model: @search, scope: "", url: all_prism_risk_assessments_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :get, html: { role: "search" }) do |form| %>
   <div class="govuk-grid-row opss-full-height">
     <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
       <%= render "prism_risk_assessments/secondary_nav" %>
@@ -12,6 +12,7 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
             <div class="govuk-form-group govuk-!-padding-bottom-2">
+              sdsdsdsd
               <%= form.label :q, "Search", class: "govuk-label" %>
               <div class="govuk-input__wrapper opss-search__wrapper">
                 <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>

@@ -2,7 +2,7 @@
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= form_with url: add_to_case_prism_risk_assessments_path, method: :post, builder: ApplicationFormBuilder do |form| %>
+    <%= form_with url: add_to_case_prism_risk_assessments_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
       <span class="govuk-caption-l"><%= @prism_risk_assessment.name %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
       <div class="govuk-inset-text">
@@ -43,7 +43,7 @@
                   <a href="<%= investigation_path(investigation) %>" class="govuk-link">View<span class="govuk-visually-hidden"> notification</span></a>
                 </td>
                 <td class="govuk-table__cell">
-                  <%= govukButton(text: "Add", name: "investigation_pretty_id", value: investigation.pretty_id, classes: "govuk-!-margin-bottom-0") %>
+                  <%= form.govuk_submit "Add", name: "investigation_pretty_id", value: investigation.pretty_id %>
                 </td>
               </tr>
             <% end %>
