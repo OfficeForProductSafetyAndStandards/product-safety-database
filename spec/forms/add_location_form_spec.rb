@@ -3,22 +3,18 @@ require "rails_helper"
 RSpec.describe AddLocationForm, :with_stubbed_mailer do
   subject(:form) { described_class.new(add_location_form_params) }
 
-  let(:add_location_form_params) do
+  let(:valid_address_params) do
     {
-      address_line_1:,
-      address_line_2:,
-      city:,
-      county:,
-      postal_code:,
-      country:,
+      address_line_1: "123 Fake St",
+      address_line_2: "Fake Heath",
+      city: "Faketon",
+      county: "Fakeshire",
+      postal_code: "FA1 2KE",
+      country: "country:BJ",
     }
   end
-  let(:address_line_1) { "123 Fake St" }
-  let(:address_line_2) { "Fake Heath" }
-  let(:city) { "Faketon" }
-  let(:county) { "Fakeshire" }
-  let(:postal_code) { "FA1 2KE" }
-  let(:country) { "country:BJ" }
+
+  let(:add_location_form_params) { valid_address_params }
 
   describe "validations" do
     context "with valid params" do
@@ -28,7 +24,9 @@ RSpec.describe AddLocationForm, :with_stubbed_mailer do
     end
 
     context "with no country" do
-      let(:country) { nil }
+      let(:add_location_form_params) do
+        valid_address_params.merge(country: nil)
+      end
 
       it "is not valid" do
         expect(form).not_to be_valid

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
+RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:params) { { sort_by: "recent", case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all" } }
 
   before do
@@ -145,7 +145,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
           aggregate_failures "cell value checks" do
             expect(cell_with_formula_as_description).to eq "=A1"
             expect(cell_with_formula_as_description).not_to eq cell_a1
-            expect(cell_with_formula_as_description).not_to eq nil
+            expect(cell_with_formula_as_description).not_to be_nil
           end
         end
 
@@ -294,7 +294,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
             aggregate_failures do
               expect(exported_data.cell(1, 18)).to eq "Case_Creator_Team"
-              expect(exported_data.cell(2, 18)).to eq nil
+              expect(exported_data.cell(2, 18)).to be_nil
             end
           end
         end
@@ -324,7 +324,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
             aggregate_failures do
               expect(exported_data.cell(1, 28)).to eq "Date_Closed"
-              expect(exported_data.cell(2, 28)).to eq nil
+              expect(exported_data.cell(2, 28)).to be_nil
             end
           end
         end

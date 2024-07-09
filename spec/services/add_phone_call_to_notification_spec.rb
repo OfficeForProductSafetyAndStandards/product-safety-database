@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddPhoneCallToNotification, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AddPhoneCallToNotification, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:result) { described_class.call(params) }
 
   include_context "with phone call correspondence setup"

@@ -19,7 +19,7 @@ RSpec.describe Team do
     end
 
     context "with an OPSS user" do
-      let(:user) { instance_double("User", is_opss?: true) }
+      let(:user) { instance_double(User, is_opss?: true) }
 
       it "returns all important teams" do
         expect(described_class.get_visible_teams(user).map(&:name).to_set).to eq(important_team_names.to_set)
@@ -27,7 +27,7 @@ RSpec.describe Team do
     end
 
     context "with a non-OPSS user" do
-      let(:user) { instance_double("User", is_opss?: false) }
+      let(:user) { instance_double(User, is_opss?: false) }
 
       it "returns first important team" do
         expect(described_class.get_visible_teams(user).map(&:name)).to eq([important_team_names.first])

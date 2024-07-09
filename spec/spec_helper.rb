@@ -19,7 +19,7 @@ RSpec.configure do |config|
     Searchkick.disable_callbacks
   end
 
-  config.around(:each, with_opensearch: true) do |example|
+  config.around(:each, :with_opensearch) do |example|
     Searchkick.callbacks(nil) do
       example.run
     end

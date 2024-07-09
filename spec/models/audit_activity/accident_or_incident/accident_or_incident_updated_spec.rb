@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_antivirus, :with_stubbed_mailer do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:notification) { create(:notification, :with_products, creator: user) }

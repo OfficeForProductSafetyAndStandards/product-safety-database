@@ -22,7 +22,7 @@ RSpec.describe ContactHelper do
 
     context "when both are blank" do
       it "returns nil" do
-        expect(name_and_contact_details(" ", " ")).to be nil
+        expect(name_and_contact_details(" ", " ")).to be_nil
       end
     end
   end

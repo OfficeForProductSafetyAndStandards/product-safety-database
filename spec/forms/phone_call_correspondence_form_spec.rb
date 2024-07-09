@@ -59,16 +59,16 @@ RSpec.describe PhoneCallCorrespondenceForm do
         context "when no overview provided" do
           let(:overview) { nil }
 
-          it "is invalid and has a descriptive error", aggregate_failures: true do
+          it "is invalid and has a descriptive error", :aggregate_failures do
             expect(form).to be_invalid
             expect(form.errors.full_messages_for(:overview)).to eq(["Please provide either a transcript or complete the summary and notes fields"])
           end
         end
 
-        context "when no details is provided", aggregate_failures: true do
+        context "when no details is provided", :aggregate_failures do
           let(:details) { nil }
 
-          it "is invalid and has a descriptive error", aggregate_failures: true do
+          it "is invalid and has a descriptive error", :aggregate_failures do
             expect(form).to be_invalid
             expect(form.errors.full_messages_for(:overview)).to eq(["Please provide either a transcript or complete the summary and notes fields"])
           end
@@ -96,7 +96,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
       end
     end
 
-    describe "#load_transcript_file " do
+    describe "#load_transcript_file" do
       let(:previous_form) do
         described_class.new(params.merge(transcript: Rack::Test::UploadedFile.new(file_fixture("phone_call_transcript.txt"))))
       end

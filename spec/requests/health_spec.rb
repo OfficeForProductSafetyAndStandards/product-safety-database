@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Health Check", :with_opensearch, :with_stubbed_mailer, :with_2fa do
+RSpec.describe "Health Check", :with_2fa, :with_opensearch, :with_stubbed_mailer do
   describe "/health/all" do
     let(:sidekiq_latency) { 29 }
     let(:sidekiq_queue) { instance_double(Sidekiq::Queue, latency: sidekiq_latency) }

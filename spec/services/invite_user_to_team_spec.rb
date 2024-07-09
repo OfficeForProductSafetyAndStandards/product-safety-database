@@ -222,13 +222,13 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_test_queue_adapter 
     def expect_user_to_have_been_reset_to_invited_state(existing_user)
       existing_user.reload
       expect(existing_user.name).to eq ""
-      expect(existing_user.deleted_at).to eq nil
-      expect(existing_user.account_activated).to eq false
-      expect(existing_user.mobile_number_verified).to eq false
-      expect(existing_user.has_accepted_declaration).to eq false
-      expect(existing_user.has_been_sent_welcome_email).to eq false
-      expect(existing_user.has_viewed_introduction).to eq false
-      expect(existing_user.mobile_number).to eq nil
+      expect(existing_user.deleted_at).to be_nil
+      expect(existing_user.account_activated).to be false
+      expect(existing_user.mobile_number_verified).to be false
+      expect(existing_user.has_accepted_declaration).to be false
+      expect(existing_user.has_been_sent_welcome_email).to be false
+      expect(existing_user.has_viewed_introduction).to be false
+      expect(existing_user.mobile_number).to be_nil
     end
   end
 end

@@ -58,7 +58,7 @@ RSpec.describe RedactedExport do
     let(:table_name) { "non_existent_table" }
 
     it "returns nil for an unknown model" do
-      expect(described_class.registry[table_name]).to eq(nil)
+      expect(described_class.registry[table_name]).to be_nil
     end
 
     describe ".to_sql" do

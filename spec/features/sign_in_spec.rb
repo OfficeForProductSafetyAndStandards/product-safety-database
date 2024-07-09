@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Signing in", :with_opensearch, :with_stubbed_mailer, :with_stubbed_notify, :with_2fa, type: :feature do
+RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:investigation) { create(:project) }

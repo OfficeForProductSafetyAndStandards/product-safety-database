@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_antivirus do
     context "with backward compatibilty, looking up by attachment" do
       context "with no attachment" do
         it "returns nil" do
-          expect(activity.corrective_action).to eq(nil)
+          expect(activity.corrective_action).to be_nil
         end
 
         context "with another corrective action without an attachment" do

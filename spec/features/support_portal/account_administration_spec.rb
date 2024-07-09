@@ -1,23 +1,24 @@
 require "rails_helper"
 
 RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
-  let(:user) { create(:user, roles: %w[support_portal]) }
-  let(:user1) { create(:user) }
-  let(:user2) { create(:user) }
-  let(:user3) { create(:user, name: user1.name) }
+  let!(:user) { create(:user, roles: %w[support_portal]) }
+  let!(:user_one) { create(:user) }
+  let!(:user_two) { create(:user) }
+  let!(:user_three) { create(:user, name: user_one.name) }
 
   before do
     configure_requests_for_support_domain
 
-    user1
-    user2
-    user3
+    user_one
+    user_two
+    user_three
 
     sign_in user
   end
 
   after do
     reset_domain_request_mocking
+    Capybara.reset_sessions!
   end
 
   scenario "Searching for an account that exists" do
@@ -28,16 +29,16 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
 
     expect(page).to have_h1("Search for an account")
 
-    fill_in "Enter a search term", with: user2.name
+    fill_in "Enter a search term", with: user_two.name
     click_on "Search"
 
-    expect(page).to have_text(user2.name)
-    expect(page).to have_text(user2.email)
-    expect(page).to have_text(user2.team.name)
-    expect(page).not_to have_text(user1.name)
-    expect(page).not_to have_text(user1.email)
-    expect(page).not_to have_text(user3.name)
-    expect(page).not_to have_text(user3.email)
+    expect(page).to have_text(user_two.name)
+    expect(page).to have_text(user_two.email)
+    expect(page).to have_text(user_two.team.name)
+    expect(page).not_to have_text(user_one.name)
+    expect(page).not_to have_text(user_one.email)
+    expect(page).not_to have_text(user_three.name)
+    expect(page).not_to have_text(user_three.email)
   end
 
   scenario "Searching for an account that exists with multiple results" do
@@ -48,17 +49,17 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
 
     expect(page).to have_h1("Search for an account")
 
-    fill_in "Enter a search term", with: user1.name
+    fill_in "Enter a search term", with: user_one.name
     click_on "Search"
 
-    expect(page).to have_text(user1.name)
-    expect(page).to have_text(user1.email)
-    expect(page).to have_text(user1.team.name)
-    expect(page).to have_text(user3.name)
-    expect(page).to have_text(user3.email)
-    expect(page).to have_text(user3.team.name)
-    expect(page).not_to have_text(user2.name)
-    expect(page).not_to have_text(user2.email)
+    expect(page).to have_text(user_one.name)
+    expect(page).to have_text(user_one.email)
+    expect(page).to have_text(user_one.team.name)
+    expect(page).to have_text(user_three.name)
+    expect(page).to have_text(user_three.email)
+    expect(page).to have_text(user_three.team.name)
+    expect(page).not_to have_text(user_two.name)
+    expect(page).not_to have_text(user_two.email)
   end
 
   scenario "Searching for a account that doesn't exist" do
@@ -89,36 +90,36 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
 
     click_on "Search"
 
-    expect(page).to have_text(user1.name)
-    expect(page).to have_text(user1.email)
-    expect(page).to have_text(user1.team.name)
-    expect(page).to have_text(user2.name)
-    expect(page).to have_text(user2.email)
-    expect(page).to have_text(user2.team.name)
-    expect(page).to have_text(user3.name)
-    expect(page).to have_text(user3.email)
-    expect(page).to have_text(user3.team.name)
+    expect(page).to have_text(user_one.name)
+    expect(page).to have_text(user_one.email)
+    expect(page).to have_text(user_one.team.name)
+    expect(page).to have_text(user_two.name)
+    expect(page).to have_text(user_two.email)
+    expect(page).to have_text(user_two.team.name)
+    expect(page).to have_text(user_three.name)
+    expect(page).to have_text(user_three.email)
+    expect(page).to have_text(user_three.team.name)
   end
 
   scenario "Viewing account details" do
-    visit "/account-admin/#{user2.id}"
+    visit "/account-admin/#{user_two.id}"
 
-    expect(page).to have_h1(user2.name)
+    expect(page).to have_h1(user_two.name)
 
-    expect(page).to have_text(user2.name)
-    expect(page).to have_text(user2.email)
-    expect(page).to have_text(user2.mobile_number)
-    expect(page).to have_text(user2.team.name)
+    expect(page).to have_text(user_two.name)
+    expect(page).to have_text(user_two.email)
+    expect(page).to have_text(user_two.mobile_number)
+    expect(page).to have_text(user_two.team.name)
     expect(page).to have_text("User is not a team admin")
     expect(page).to have_h2("Last login details")
   end
 
   scenario "Changing the name on an account" do
-    existing_name = user2.name
+    existing_name = user_two.name
 
-    visit "/account-admin/#{user2.id}"
+    visit "/account-admin/#{user_two.id}"
 
-    expect(page).to have_h1(user2.name)
+    expect(page).to have_h1(user_two.name)
 
     click_link "Change name"
 
@@ -136,11 +137,11 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
   end
 
   scenario "Changing the email on an account" do
-    existing_email = user3.email
+    existing_email = user_three.email
 
-    visit "/account-admin/#{user3.id}"
+    visit "/account-admin/#{user_three.id}"
 
-    expect(page).to have_h1(user3.name)
+    expect(page).to have_h1(user_three.name)
 
     click_link "Change email"
 
@@ -163,11 +164,11 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
   end
 
   scenario "Changing the mobile number on an account" do
-    existing_mobile_number = user2.mobile_number
+    existing_mobile_number = user_two.mobile_number
 
-    visit "/account-admin/#{user2.id}"
+    visit "/account-admin/#{user_two.id}"
 
-    expect(page).to have_h1(user2.name)
+    expect(page).to have_h1(user_two.name)
 
     click_link "Change mobile number"
 
@@ -185,9 +186,9 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
   end
 
   scenario "Changing the team admin role on an account" do
-    visit "/account-admin/#{user3.id}"
+    visit "/account-admin/#{user_three.id}"
 
-    expect(page).to have_h1(user3.name)
+    expect(page).to have_h1(user_three.name)
 
     click_link "Change team admin role"
 
@@ -208,21 +209,23 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     expect(page).to have_css("div.govuk-notification-banner", text: "The team admin role has been removed.")
   end
 
-  xit "Deleting an account" do
-    visit "/account-admin/#{user2.id}"
+  scenario "Deleting an account", skip: "This is not how deleting an account seems to work." do
+    visit "/account-admin/#{user.id}"
 
-    expect(page).to have_h1(user2.name)
+    expect(page).to have_h1(user.name)
 
+    expect(page).to have_link("Delete account")
     click_link "Delete account"
 
-    expect(page).to have_h1("Delete account for #{user2.name}")
+    expect(page).to have_h1("Delete account for #{user_two.name}")
     click_link("Cancel")
 
     expect(page).not_to have_css("div.govuk-notification-banner", text: "The user account has been deleted.")
 
+    expect(page).to have_link("Delete account")
     click_link "Delete account"
 
-    expect(page).to have_h1("Delete account for #{user2.name}")
+    expect(page).to have_h1("Delete account for #{user_two.name}")
     click_button("Confirm delete account")
 
     expect(page).to have_css("div.govuk-notification-banner", text: "The user account has been deleted.")

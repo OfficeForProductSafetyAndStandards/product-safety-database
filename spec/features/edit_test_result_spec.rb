@@ -4,9 +4,9 @@ RSpec.feature "Editing a test result", :with_stubbed_antivirus, :with_stubbed_ma
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:product1) { create(:product_washing_machine, name: "MyBrand red washing machine") }
-  let(:product2) { create(:product_washing_machine, name: "MyBrand blue washing machine") }
-  let(:investigation) { create(:allegation, products: [product1, product2], creator: user) }
+  let(:product_one) { create(:product_washing_machine, name: "MyBrand red washing machine") }
+  let(:product_two) { create(:product_washing_machine, name: "MyBrand blue washing machine") }
+  let(:investigation) { create(:allegation, products: [product_one, product_two], creator: user) }
   let(:investigation_product) { investigation.investigation_products.first }
   let(:standards_product_was_tested_against) { %w[test] }
   let(:failure_details) { "Something terrible happened" }
@@ -143,7 +143,7 @@ RSpec.feature "Editing a test result", :with_stubbed_antivirus, :with_stubbed_ma
   end
 
   context "when not opss funded" do
-    it "does not  have the text to indicate that it is opss funded" do
+    it "does not have the text to indicate that it is opss funded" do
       sign_in(user)
       go_edit_test_result
       expect(page).not_to have_text("This test was funded under the OPSS Sampling Protocol")

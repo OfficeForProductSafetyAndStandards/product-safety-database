@@ -105,11 +105,12 @@ RSpec.describe CsvExporter, type: :model do
   end
 
   describe "#export_table" do
-    let(:table_class) { class_double("TableClass") }
+    let(:table_class) { class_double(TableClass) }
     let(:attributes) { [{ "id" => :integer }, { "created_at" => :datetime }] }
     let(:csv) { instance_double(CSV) }
 
     before do
+      stub_const("TableClass", Class.new)
       allow(csv_exporter).to receive(:classify_table_name).and_return(table_class)
       allow(CSV).to receive(:open).and_yield(csv)
       allow(csv_exporter).to receive(:export_records_in_batches)
@@ -124,22 +125,26 @@ RSpec.describe CsvExporter, type: :model do
   end
 
   describe "#export_records_in_batches" do
-    let(:table_class) { class_double("TableClass") }
+    let(:table_class) { class_double(TableClass) }
     let(:csv) { instance_double(CSV) }
     let(:attributes) { %w[id created_at] }
     let(:csv_exporter) { described_class.new }
     let(:calls) { [] }
 
+    before do
+      stub_const("TableClass", Class.new)
+    end
+
     context "with multiple records" do
-      let(:records_batch_1) { (1..100).map { |i| [i, "2023-01-01T00:00:00+00:00"] } }
-      let(:records_batch_2) { (101..200).map { |i| [i, "2023-01-02T00:00:00+00:00"] } }
+      let(:records_batch_one) { (1..100).map { |i| [i, "2023-01-01T00:00:00+00:00"] } }
+      let(:records_batch_two) { (101..200).map { |i| [i, "2023-01-02T00:00:00+00:00"] } }
 
       before do
         allow(table_class).to receive(:count).and_return(200)
         allow(table_class).to receive(:order).with(:id).and_return(table_class)
         allow(table_class).to receive(:limit).with(100).and_return(table_class)
-        allow(table_class).to receive(:offset).with(0).and_return(instance_double("TableClass", pluck: records_batch_1))
-        allow(table_class).to receive(:offset).with(100).and_return(instance_double("TableClass", pluck: records_batch_2))
+        allow(table_class).to receive(:offset).with(0).and_return(instance_double(TableClass, pluck: records_batch_one))
+        allow(table_class).to receive(:offset).with(100).and_return(instance_double(TableClass, pluck: records_batch_two))
         allow(csv).to receive(:<<) { |record| calls << record }
       end
 
@@ -151,18 +156,18 @@ RSpec.describe CsvExporter, type: :model do
     end
 
     context "with duplicate records" do
-      let(:records_batch_1) { [[1, "2023-01-01T00:00:00+00:00"], [1, "2023-01-01T00:00:00+00:00"]] }
-      let(:records_batch_2) { [[2, "2023-01-02T00:00:00+00:00"]] }
+      let(:records_batch_one) { [[1, "2023-01-01T00:00:00+00:00"], [1, "2023-01-01T00:00:00+00:00"]] }
+      let(:records_batch_two) { [[2, "2023-01-02T00:00:00+00:00"]] }
       let(:expected_unique_records) { [[1, "2023-01-01T00:00:00+00:00"], [2, "2023-01-02T00:00:00+00:00"]] }
-      let(:all_records) { records_batch_1 + records_batch_2 }
+      let(:all_records) { records_batch_one + records_batch_two }
 
       before do
         allow(table_class).to receive(:count).and_return(3) # Simulate the total DB row count before removing duplicates
         allow(table_class).to receive(:order).with(:id).and_return(table_class)
         allow(table_class).to receive(:limit).with(2).and_return(table_class)
 
-        allow(table_class).to receive(:offset).with(0).and_return(instance_double("TableClass", pluck: records_batch_1))
-        allow(table_class).to receive(:offset).with(2).and_return(instance_double("TableClass", pluck: records_batch_2))
+        allow(table_class).to receive(:offset).with(0).and_return(instance_double(TableClass, pluck: records_batch_one))
+        allow(table_class).to receive(:offset).with(2).and_return(instance_double(TableClass, pluck: records_batch_two))
 
         allow(csv).to receive(:<<) { |record| calls << record }
       end

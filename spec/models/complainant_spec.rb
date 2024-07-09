@@ -29,34 +29,34 @@ RSpec.describe Complainant do
     context "when name is not blank" do
       it "returns true", :aggregate_failures do
         complainant.update!(name: "John Doe")
-        expect(complainant.has_contact_details?).to eq true
+        expect(complainant.has_contact_details?).to be true
       end
     end
 
     context "when email_address is not blank" do
       it "returns true", :aggregate_failures do
         complainant.update!(email_address: "test@email.com")
-        expect(complainant.has_contact_details?).to eq true
+        expect(complainant.has_contact_details?).to be true
       end
     end
 
     context "when phone_number is not blank" do
       it "returns true", :aggregate_failures do
         complainant.update!(phone_number: "077777777")
-        expect(complainant.has_contact_details?).to eq true
+        expect(complainant.has_contact_details?).to be true
       end
     end
 
     context "when other_details is not blank" do
       it "returns true", :aggregate_failures do
         complainant.update!(other_details: "From round the corner")
-        expect(complainant.has_contact_details?).to eq true
+        expect(complainant.has_contact_details?).to be true
       end
     end
 
     context "when name, other_details and email_address are blank" do
       it "returns false", :aggregate_failures do
-        expect(complainant.has_contact_details?).to eq false
+        expect(complainant.has_contact_details?).to be false
       end
     end
   end

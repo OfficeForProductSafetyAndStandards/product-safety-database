@@ -1,7 +1,7 @@
 require "rails_helper"
 require "nokogiri"
 
-RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   subject(:notification_export) { described_class.create!(user:, params:) }
 
   let!(:organisation) { create(:organisation) }
@@ -124,7 +124,7 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
 
       it "includes country" do
         expect(sheet.cell(1, 22)).to eq "Country"
-        expect(sheet.cell(2, 22)).to eq nil
+        expect(sheet.cell(2, 22)).to be_nil
       end
 
       it "includes trading standards region" do
@@ -175,11 +175,11 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
       end
 
       it "includes country for other team" do
-        expect(sheet.cell(3, 22)).to eq nil
+        expect(sheet.cell(3, 22)).to be_nil
       end
 
       it "includes trading standards region for other team" do
-        expect(sheet.cell(3, 23)).to eq nil
+        expect(sheet.cell(3, 23)).to be_nil
       end
 
       it "includes OPSS internal team for other team" do
@@ -256,7 +256,7 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
 
         it "only exports the cases with the selected reasons" do
           sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [investigation.pretty_id, safe_and_compliant_notification.pretty_id]
+          expect(sheet_ids).to contain_exactly(investigation.pretty_id, safe_and_compliant_notification.pretty_id)
         end
       end
 
@@ -265,7 +265,7 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
 
         it "exports all cases" do
           sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id, other_team_investigation.pretty_id]
+          expect(sheet_ids).to contain_exactly(investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id, other_team_investigation.pretty_id)
         end
       end
 
@@ -274,7 +274,7 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_notify, :with
 
         it "exports all cases with a reported reason" do
           sheet_ids = sheet.column(1).drop(1)
-          expect(sheet_ids).to match_array [investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id]
+          expect(sheet_ids).to contain_exactly(investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id)
         end
       end
     end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
   let!(:notification) do
     create(:notification,
            reported_reason: :unsafe_and_non_compliant,
@@ -67,15 +67,15 @@ RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, 
           end
 
           it "makes hazard_type nil" do
-            expect(notification.hazard_type).to eq(nil)
+            expect(notification.hazard_type).to be_nil
           end
 
           it "makes hazard_description nil" do
-            expect(notification.hazard_description).to eq(nil)
+            expect(notification.hazard_description).to be_nil
           end
 
           it "makes non_compliant_reason nil" do
-            expect(notification.non_compliant_reason).to eq(nil)
+            expect(notification.non_compliant_reason).to be_nil
           end
 
           it "creates an activity entry" do
@@ -171,7 +171,7 @@ RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, 
           end
 
           it "makes non_compliant_reason nil" do
-            expect(notification.non_compliant_reason).to eq(nil)
+            expect(notification.non_compliant_reason).to be_nil
           end
 
           it "creates an activity entry" do
@@ -209,11 +209,11 @@ RSpec.describe ChangeNotificationSafetyAndComplianceData, :with_stubbed_mailer, 
           end
 
           it "makes hazard_type nil" do
-            expect(notification.hazard_type).to eq(nil)
+            expect(notification.hazard_type).to be_nil
           end
 
           it "makes hazard_description nil" do
-            expect(notification.hazard_description).to eq(nil)
+            expect(notification.hazard_description).to be_nil
           end
 
           it "updates non_compliant_reason" do

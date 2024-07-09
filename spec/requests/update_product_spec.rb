@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
+RSpec.describe "Updating a product", :with_stubbed_mailer, :with_stubbed_opensearch, type: :request do
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user)    { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, creator: user) }

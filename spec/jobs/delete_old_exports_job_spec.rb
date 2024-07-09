@@ -52,16 +52,16 @@ RSpec.describe DeleteOldExportsJob, :with_stubbed_antivirus, :with_stubbed_maile
       expect { job.perform }.to change(ProductExport, :count).by(-1)
       expect(ProductExport.all).not_to include(old_product_export)
       expect(ProductExport.all).to include(recent_product_export)
-      expect(ActiveStorage::Attachment.exists?(old_product_export_file_id)).to eq false
-      expect(ActiveStorage::Attachment.exists?(recent_product_export_file_id)).to eq true
+      expect(ActiveStorage::Attachment.exists?(old_product_export_file_id)).to be false
+      expect(ActiveStorage::Attachment.exists?(recent_product_export_file_id)).to be true
     end
 
     it "deletes old NotificationExport instances and their attached files" do
       expect { job.perform }.to change(NotificationExport, :count).by(-1)
       expect(NotificationExport.all).not_to include(old_notification_export)
       expect(NotificationExport.all).to include(recent_notification_export)
-      expect(ActiveStorage::Attachment.exists?(old_notification_export_file_id)).to eq false
-      expect(ActiveStorage::Attachment.exists?(recent_notification_export_file_id)).to eq true
+      expect(ActiveStorage::Attachment.exists?(old_notification_export_file_id)).to be false
+      expect(ActiveStorage::Attachment.exists?(recent_notification_export_file_id)).to be true
     end
   end
   # rubocop:enable RSpec/MultipleExpectations

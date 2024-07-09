@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveActionForm, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe CorrectiveActionForm, :with_stubbed_antivirus, :with_stubbed_mailer do
   include ActionDispatch::TestProcess::FixtureFile
   subject(:corrective_action_form) do
     described_class.new(
@@ -263,7 +263,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_mailer, :with_stubbed_antivir
         let(:has_online_recall_information) { "has_online_recall_information_no" }
 
         it "clears the online_recall_information field" do
-          expect(corrective_action_form.online_recall_information).to eq(nil)
+          expect(corrective_action_form.online_recall_information).to be_nil
         end
       end
 
@@ -271,7 +271,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_mailer, :with_stubbed_antivir
         let(:has_online_recall_information) { "has_online_recall_information_not_relevant" }
 
         it "clears the online_recall_information field" do
-          expect(corrective_action_form.online_recall_information).to eq(nil)
+          expect(corrective_action_form.online_recall_information).to be_nil
         end
       end
 

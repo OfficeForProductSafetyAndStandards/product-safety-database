@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:decorated_activity) { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update").decorate }
 
   include_context "with corrective action setup for updates"
@@ -119,7 +119,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
           let(:new_online_recall_information) { corrective_action.online_recall_information }
 
           specify do
-            expect(decorated_activity.new_online_recall_information).to eq(nil)
+            expect(decorated_activity.new_online_recall_information).to be_nil
           end
         end
 
@@ -165,7 +165,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
         let(:new_online_recall_information) { "" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq(nil)
+          expect(decorated_activity.new_online_recall_information).to be_nil
         end
       end
 
@@ -204,7 +204,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_m
         let(:new_online_recall_information) { "" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq(nil)
+          expect(decorated_activity.new_online_recall_information).to be_nil
         end
       end
     end

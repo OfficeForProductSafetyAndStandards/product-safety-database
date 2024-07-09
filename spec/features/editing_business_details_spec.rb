@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch do
+RSpec.feature "Editing business details", :with_opensearch, :with_stubbed_mailer do
   let(:user)     { create(:user, :activated) }
   let(:business) { create(:business, trading_name: "OldCo") }
   let!(:investigation) { create(:notification, businesses: [business]) }

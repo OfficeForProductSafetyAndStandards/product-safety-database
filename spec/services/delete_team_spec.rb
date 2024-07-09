@@ -119,7 +119,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
         expect(activity.body).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously owned this notification.")
       end
 
-      it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
+      it "does not send notification e-mails", :aggregate_failures, :with_test_queue_adapter do
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
       end
@@ -156,7 +156,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
         expect(activity.body).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously owned this notification.")
       end
 
-      it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
+      it "does not send notification e-mails", :aggregate_failures, :with_test_queue_adapter do
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_updated)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
       end
@@ -216,7 +216,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
         expect(activity.metadata["message"]).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously had access to this notification.")
       end
 
-      it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
+      it "does not send notification e-mails", :aggregate_failures, :with_test_queue_adapter do
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_added_to_notification_email)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_removed_from_notification_email)
         expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :notification_permission_changed_for_team)
@@ -269,16 +269,16 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
     end
 
     context "when the team owns products" do
-      let!(:owned_product_1) { create(:product, owning_team: team) }
-      let!(:owned_product_2) { create(:product, owning_team: team) }
+      let!(:owned_product_one) { create(:product, owning_team: team) }
+      let!(:owned_product_two) { create(:product, owning_team: team) }
       let!(:unowned_product) { create(:product, owning_team: nil) }
       let!(:other_team_product) { create(:product, owning_team: create(:team)) }
 
       it "sets the new team to own the currently owned products", :aggregate_failures do
         result
-        expect(owned_product_1.reload.owning_team).to eq(new_team)
-        expect(owned_product_2.reload.owning_team).to eq(new_team)
-        expect(unowned_product.reload.owning_team).to eq(nil)
+        expect(owned_product_one.reload.owning_team).to eq(new_team)
+        expect(owned_product_two.reload.owning_team).to eq(new_team)
+        expect(unowned_product.reload.owning_team).to be_nil
         expect(other_team_product.reload.owning_team).not_to eq(new_team)
       end
     end

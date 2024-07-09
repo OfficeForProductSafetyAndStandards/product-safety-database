@@ -3,7 +3,7 @@ require "rails_helper"
 describe UserDeclarationService do
   describe ".accept_declaration" do
     let(:user) { create(:user, has_accepted_declaration: false, account_activated: false) }
-    let(:mailer) { instance_double("ActionMailer::MessageDelivery", deliver_later: true) }
+    let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
 
     before do
       allow(NotifyMailer).to receive(:welcome).with(user.name, user.email).and_return(mailer)

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, :with_2fa, type: :feature do
+RSpec.feature "Resetting your password", :with_2fa, :with_stubbed_mailer, :with_test_queue_adapter, type: :feature do
   let(:user)                              { create(:user) }
   let!(:reset_token)                      { stubbed_devise_generated_token }
   let(:edit_user_password_url_with_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
@@ -22,7 +22,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
-  context "when entering an email from a deleted user " do
+  context "when entering an email from a deleted user" do
     let(:user) { create(:user, :deleted) }
 
     scenario "does not send a notification but shows the confirmation page" do

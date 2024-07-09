@@ -111,7 +111,7 @@ RSpec.describe Test::ResultDecorator, :with_stubbed_mailer do
       before { allow(test_result.investigation_product).to receive(:investigation_closed_at).and_return(Time.zone.now) }
 
       it "returns true" do
-        expect(decorated_test_result.is_attached_to_versioned_product?).to eq(true)
+        expect(decorated_test_result.is_attached_to_versioned_product?).to be(true)
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe Test::ResultDecorator, :with_stubbed_mailer do
       before { allow(test_result.investigation_product).to receive(:investigation_closed_at).and_return(nil) }
 
       it "returns false" do
-        expect(decorated_test_result.is_attached_to_versioned_product?).to eq(false)
+        expect(decorated_test_result.is_attached_to_versioned_product?).to be(false)
       end
     end
   end

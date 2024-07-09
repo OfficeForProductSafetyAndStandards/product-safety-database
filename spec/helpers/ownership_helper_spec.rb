@@ -66,12 +66,12 @@ RSpec.describe OwnershipHelper do
 
     it "returns nil if current user is opss" do
       allow(helper).to receive(:current_user) { opss_user }
-      expect(helper.opss_hint_text(incident_management_team)).to eq nil
+      expect(helper.opss_hint_text(incident_management_team)).to be_nil
     end
 
     it "returns nil if team is not the incident management team" do
       allow(helper).to receive(:current_user) { other_user }
-      expect(helper.opss_hint_text(other_team)).to eq nil
+      expect(helper.opss_hint_text(other_team)).to be_nil
     end
   end
 end

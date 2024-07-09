@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe UpdateTestResult, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
   subject(:result) { described_class.call(params) }
 
   let(:user)                                     { create(:user, :activated) }

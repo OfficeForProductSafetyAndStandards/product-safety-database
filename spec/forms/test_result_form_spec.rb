@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TestResultForm, :with_stubbed_mailer, :with_stubbed_antivirus, type: :model do
+RSpec.describe TestResultForm, :with_stubbed_antivirus, :with_stubbed_mailer, type: :model do
   subject(:form) { described_class.new(params) }
 
   let(:document)             { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }

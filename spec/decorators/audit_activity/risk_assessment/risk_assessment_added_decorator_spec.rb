@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:activity) do
     AuditActivity::RiskAssessment::RiskAssessmentAdded.create!(
       added_by_user: risk_assessment.added_by_user,
@@ -66,13 +66,13 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
     end
 
     context "with multiple products" do
-      let(:product_1) { build(:investigation_product) }
-      let(:product_2) { build(:investigation_product) }
-      let(:product_3) { build(:investigation_product) }
-      let(:investigation_products) { [product_1, product_2, product_3] }
+      let(:product_one) { build(:investigation_product) }
+      let(:product_two) { build(:investigation_product) }
+      let(:product_three) { build(:investigation_product) }
+      let(:investigation_products) { [product_one, product_two, product_three] }
 
       it "returns the product names in a single String" do
-        expect(activity.products_assessed).to eq("#{product_1.name}, #{product_2.name} and #{product_3.name}")
+        expect(activity.products_assessed).to eq("#{product_one.name}, #{product_two.name} and #{product_three.name}")
       end
     end
   end

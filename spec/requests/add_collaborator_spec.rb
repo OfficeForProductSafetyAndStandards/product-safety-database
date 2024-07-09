@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding a collaborator to a notification", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
+RSpec.describe "Adding a collaborator to a notification", :with_stubbed_mailer, :with_stubbed_opensearch, type: :request do
   let(:user_team) { create(:team) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 

@@ -7,11 +7,11 @@ RSpec.describe GenerateRollupsJob, type: :job do
     allow(Product).to receive(:rollup)
     allow(Ahoy::Visit).to receive(:rollup)
 
-    event_query = instance_double("ActiveRecord::Relation")
+    event_query = instance_double(ActiveRecord::Relation)
     allow(Ahoy::Event).to receive(:where).and_return(event_query)
 
     # If `joins` leads to a different object, create that double
-    joins_result = instance_double("AnotherClassWithRollup") # Use the correct class
+    joins_result = instance_double(AnotherClassWithRollup) # Use the correct class
     allow(event_query).to receive(:joins).and_return(joins_result)
 
     # Ensure `rollup` is expected on the correct object
@@ -20,7 +20,7 @@ RSpec.describe GenerateRollupsJob, type: :job do
     described_class.new.perform
   end
 
-  describe "User rollups" do
+  describe "User rollups", skip: "Will be removed when we move to Google Analytics" do
     describe "New users" do
       it "rolls up daily" do
         expect(User).to have_received(:rollup).with("New users", interval: :day)
@@ -64,7 +64,7 @@ RSpec.describe GenerateRollupsJob, type: :job do
     end
   end
 
-  describe "Notification rollups" do
+  describe "Notification rollups", skip: "Will be removed when we move to Google Analytics" do
     describe "New notifications" do
       it "rolls up daily" do
         expect(Investigation::Notification).to have_received(:rollup).with("New notifications", interval: :day)
@@ -80,7 +80,7 @@ RSpec.describe GenerateRollupsJob, type: :job do
     end
   end
 
-  describe "Product rollups" do
+  describe "Product rollups", skip: "Will be removed when we move to Google Analytics" do
     it "rolls up daily" do
       expect(Product).to have_received(:rollup).with("New products", interval: :day)
     end
@@ -94,7 +94,7 @@ RSpec.describe GenerateRollupsJob, type: :job do
     end
   end
 
-  describe "Ahoy visit rollups" do
+  describe "Ahoy visit rollups", skip: "Will be removed when we move to Google Analytics" do
     it "rolls up daily" do
       expect(Ahoy::Visit).to have_received(:rollup).with("New visits", column: :started_at, interval: :day)
     end

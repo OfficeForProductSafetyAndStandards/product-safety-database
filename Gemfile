@@ -109,9 +109,9 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.13"
   gem "rubocop", "~> 1.64"
-  gem "rubocop-govuk", "~> 4.17"
+  gem "rubocop-govuk", "~> 5.0"
   gem "rubocop-performance", "~> 1.21"
-  gem "rubocop-rspec", "~> 2.29", require: false
+  gem "rubocop-rspec", "~> 3.0", require: false
   gem "selenium-webdriver", "~> 4"
   gem "shoulda-matchers"
   gem "simplecov"

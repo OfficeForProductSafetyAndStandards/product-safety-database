@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ChangeNotificationNotifyingCountry, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe ChangeNotificationNotifyingCountry, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
   let(:notification) { create(:notification) }
   let(:user) { create(:user, name: "User One") }
   let(:notifying_country_uk) { "country:GB-ENG" }

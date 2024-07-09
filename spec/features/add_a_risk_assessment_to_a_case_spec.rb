@@ -6,30 +6,30 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, team:, name: "Jo Bloggs") }
 
-  let(:product1) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
-  let(:product2) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }
+  let(:product_one) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
+  let(:product_two) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }
 
-  let(:business1) { create(:business, trading_name: "MyBrand Inc") }
-  let(:business2) { create(:business, trading_name: "MyBrand Distributors") }
+  let(:business_one) { create(:business, trading_name: "MyBrand Inc") }
+  let(:business_two) { create(:business, trading_name: "MyBrand Distributors") }
 
   let(:investigation) do
-    create(:allegation, products: [product1, product2],
+    create(:allegation, products: [product_one, product_two],
                         risk_level: nil,
                         investigation_businesses:
              [
-               build(:investigation_business, business: business1),
-               build(:investigation_business, business: business2)
+               build(:investigation_business, business: business_one),
+               build(:investigation_business, business: business_two)
              ],
                         creator: user)
   end
 
-  let(:investigation_with_no_businesses) { create(:allegation, products: [product1, product2], creator: user) }
+  let(:investigation_with_no_businesses) { create(:allegation, products: [product_one, product_two], creator: user) }
 
-  let(:investigation_with_single_product) { create(:allegation, products: [product1], creator: user) }
+  let(:investigation_with_single_product) { create(:allegation, products: [product_one], creator: user) }
 
-  let(:investigation_with_serious_risk_level) { create(:allegation, products: [product1], creator: user, risk_level: :serious) }
+  let(:investigation_with_serious_risk_level) { create(:allegation, products: [product_one], creator: user, risk_level: :serious) }
 
-  let(:investigation_with_not_conclusive_risk_level) { create(:allegation, products: [product1], creator: user, risk_level: :not_conclusive) }
+  let(:investigation_with_not_conclusive_risk_level) { create(:allegation, products: [product_one], creator: user, risk_level: :not_conclusive) }
 
   let(:investigation_with_no_products) { create(:allegation, products: [], creator: user) }
 
@@ -103,7 +103,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
     expect(page).to have_summary_item(key: "Date of assessment",  value: "3 April 2020")
     expect(page).to have_summary_item(key: "Risk level",          value: "Serious risk")
     expect(page).to have_summary_item(key: "Assessed by",         value: "MyCouncil Trading Standards")
-    expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X (#{product1.psd_ref})")
+    expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X (#{product_one.psd_ref})")
     expect(page).to have_summary_item(key: "Further details", value: "Products risk-assessed in response to incident.")
 
     expect(page).to have_text("new_risk_assessment.txt")
@@ -299,7 +299,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_antivirus, :wi
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
-    expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X (#{product1.psd_ref})")
+    expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X (#{product_one.psd_ref})")
   end
 
   scenario "Adding a risk assessment to a case where the assessed risk level matches the existing case risk level" do

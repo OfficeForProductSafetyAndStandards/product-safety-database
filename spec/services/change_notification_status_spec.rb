@@ -123,14 +123,14 @@ RSpec.describe ChangeNotificationStatus, :with_test_queue_adapter do
 
       it "changes the product to unowned" do
         result
-        expect(product.owning_team_id).to eq nil
+        expect(product.owning_team_id).to be_nil
       end
     end
 
     context "when the attached product is not attached to any other cases" do
       it "changes the product to unowned" do
         result
-        expect(product.owning_team_id).to eq nil
+        expect(product.owning_team_id).to be_nil
       end
     end
 
