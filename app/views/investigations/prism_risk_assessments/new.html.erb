@@ -2,7 +2,7 @@
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= form_with url: investigation_prism_risk_assessments_path, method: :post, builder: ApplicationFormBuilder do |form| %>
+    <%= form_with url: investigation_prism_risk_assessments_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
       <div class="govuk-inset-text">
@@ -39,7 +39,7 @@
                   <a href="<%= prism.view_submitted_assessment_risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">View<span class="govuk-visually-hidden"> assessment</span></a>
                 </td>
                 <td class="govuk-table__cell">
-                  <%= govukButton(text: "Add", name: "prism_risk_assessment_id", value: prism_risk_assessment.id, classes: "govuk-!-margin-bottom-0") %>
+                  <%= form.govuk_submit "Add", value: prism_risk_assessment.id %>
                 </td>
               </tr>
             <% end %>
@@ -60,7 +60,9 @@
       <% else %>
         <p class="govuk-body">There are no risk assessments for <%= @product.name %>. You can start a new assessment.</p>
       <% end %>
-      <%= govukButton(text: "Start a new risk assessment", href: prism.serious_risk_path(investigation_id: @investigation.id, product_ids: [@product.id]), classes: "govuk-button--secondary") %>
+      <a class="govuk-button govuk-button--secondary" data-module="govuk-button" role="button" draggable="false" href="<%= prism.serious_risk_path(investigation_id: @investigation.id, product_ids: [@product.id]) %>">
+        Start a new risk assessment
+      </a>
     <% end %>
     <p class="govuk-body">
       <a href="<%= new_investigation_risk_assessment_path %>" class="govuk-link">Attach existing risk assessment</a>
