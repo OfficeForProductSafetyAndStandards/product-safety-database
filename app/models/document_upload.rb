@@ -25,6 +25,6 @@ private
 
     return if file_upload.metadata["safe"] == true
 
-    errors.add(:base, :virus, message: "File upload must be virus free")
+    errors.add(:file_upload, :virus, message: "File upload must be virus free")
   end
 end

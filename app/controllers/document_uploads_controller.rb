@@ -17,11 +17,15 @@ class DocumentUploadsController < ApplicationController
         )
       )
     elsif document_upload_params[:file_upload].present?
-      file = ActiveStorage::Blob.create_and_upload!(
-        io: document_upload_params[:file_upload],
-        filename: document_upload_params[:file_upload].original_filename,
-        content_type: document_upload_params[:file_upload].content_type
-      )
+      if document_upload_params[:file_upload].instance_of?(String)
+        file = ActiveStorage::Blob.find_signed(document_upload_params[:file_upload])
+      else
+        file = ActiveStorage::Blob.create_and_upload!(
+          io: document_upload_params[:file_upload],
+          filename: document_upload_params[:file_upload].original_filename,
+          content_type: document_upload_params[:file_upload].content_type
+        )
+      end
       file.analyze_later
       @document_upload = DocumentUpload.new(
         document_upload_params.merge(
