@@ -3,7 +3,7 @@
                                  category_items,
                                  :value,
                                  :text,
-                                 label: { text: "Product category", size: "m" } %>
+                                 label: { text: "Product category", size: "m" }, hint: { text: "Select a Category from drop down" }, disabled: local_assigns[:is_not_allowed]  %>
 <%= form.govuk_text_field :subcategory, label: { text: 'Product subcategory', size: 'm' }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
 
 <% if product_form.authenticity_unsure? %>
