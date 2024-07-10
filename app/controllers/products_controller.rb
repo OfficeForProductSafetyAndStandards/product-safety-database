@@ -70,7 +70,7 @@ class ProductsController < ApplicationController
 
     @product_form = ProductForm.from(@product.object)
     @product_form.attributes = product_params_for_update
-    pry
+
     if @product_form.valid?
       UpdateProduct.call!(
         product: @product.object,

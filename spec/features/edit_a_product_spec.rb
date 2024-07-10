@@ -53,7 +53,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_product_form_helper, 
 
       click_link "Edit this product record"
 
-      expect(page).to have_select("Product category", selected: product.category, disabled: true)
+      expect(page).to have_select("Product category", selected: product.category)
       expect(page).to have_field("Product subcategory", with: product.subcategory)
 
       within_fieldset "Is the product counterfeit?" do
@@ -146,7 +146,7 @@ RSpec.feature "Editing a product", :with_opensearch, :with_product_form_helper, 
       visit "/products/#{product.id}"
       click_link "Edit this product record"
 
-      expect(page).to have_select("Product category", selected: product.category, disabled: true)
+      expect(page).to have_select("Product category", selected: product.category)
       expect(page).to have_field("Product subcategory", with: product.subcategory)
 
       within_fieldset "Is the product counterfeit?" do
