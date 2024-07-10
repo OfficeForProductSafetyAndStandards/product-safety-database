@@ -13,7 +13,7 @@ class ProductPolicy < ApplicationPolicy
     return false if record.version.present?
     return false if record.retired?
 
-    #superusers are allowed to edit any product record
+    # superusers are allowed to edit any product record
     record.owning_team == user.team || record_is_unowned_and_attatched_to_an_open_case_owned_by_users_team? || user.is_superuser?
   end
 
