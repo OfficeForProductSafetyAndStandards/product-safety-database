@@ -70,7 +70,7 @@ class ProductsController < ApplicationController
 
     @product_form = ProductForm.from(@product.object)
     @product_form.attributes = product_params_for_update
-
+    pry
     if @product_form.valid?
       UpdateProduct.call!(
         product: @product.object,
@@ -130,7 +130,7 @@ private
 
   def product_params_for_update
     params.require(:product).permit(
-      :subcategory, :product_code,
+      :category, :subcategory, :product_code,
       :webpage, :description, :country_of_origin, :barcode,
       :when_placed_on_market, :has_markings, markings: []
     )

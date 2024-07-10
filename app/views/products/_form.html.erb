@@ -3,9 +3,7 @@
                                  category_items,
                                  :value,
                                  :text,
-                                 label: { text: "Product category", size: "m" },
-                                 hint: { text: "The product category will be permanent for this product record" },
-                                 disabled: local_assigns[:disable_permanent_fields] %>
+                                 label: { text: "Product category", size: "m" } %>
 <%= form.govuk_text_field :subcategory, label: { text: 'Product subcategory', size: 'm' }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
 
 <% if product_form.authenticity_unsure? %>
