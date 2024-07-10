@@ -41,30 +41,30 @@ module Investigations
 
     def choose_product
       authorize PrismRiskAssessment, :index?
-      @prism_form = SelectProductForPrismForm.new()
-      if params[:counter].to_i > 0
+      @prism_form = SelectProductForPrismForm.new
+      if params[:counter].to_i.positive?
         @prism_form.valid?
       end
       @products = @investigation.products
     end
 
   private
+
     def ensure_one_product
       return if @investigation.products.size == 1
+
       counter = 0
       if params[:select_product_for_prism_form].present?
         counter += params[:select_product_for_prism_form][:counter].to_i
       end
-      redirect_to choose_product_investigation_prism_risk_assessments_path(counter: counter) unless params[:select_product_for_prism_form][:product_id].present? && @investigation.products.find_by(id: params[:select_product_for_prism_form][:product_id])
+      redirect_to choose_product_investigation_prism_risk_assessments_path(counter:) unless params[:select_product_for_prism_form][:product_id].present? && @investigation.products.find_by(id: params[:select_product_for_prism_form][:product_id])
     end
 
     def product
       @product ||= params[:product_id].present? ? @investigation.products.find(params[:product_id]) : @investigation.products.first!
     end
 
-    def increment
-
-    end
+    def increment; end
 
     def prism_params
       params.require(:select_product_for_prism_form).permit(:product_id)
