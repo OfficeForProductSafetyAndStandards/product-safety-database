@@ -697,7 +697,7 @@ module PageExpectations
     else
       expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+\/update-case-risk-level/)
     end
-    expect_page_to_have_h1("Do you want to match this notification risk level to the risk assessment level?")
+    expect(page).to have_selector("legend", text: "Do you want to match this notification risk level to the risk assessment level?")
   end
 
   def expect_to_be_on_case_summary_edit_page(case_id:)
@@ -721,6 +721,6 @@ module PageExpectations
 
   def expect_to_be_on_edit_units_affected_page(notification_product_id:)
     expect(page).to have_current_path("/investigation_products/#{notification_product_id}/edit-number-of-affected-units/edit")
-    expect(page).to have_css("h1", text: "Edit how many units are affected")
+    expect(page).to have_css("legend", text: "Edit how many units are affected")
   end
 end

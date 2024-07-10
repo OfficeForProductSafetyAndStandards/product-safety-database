@@ -2,21 +2,25 @@
 <%= page_title page_heading %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
-    <%= form_with url: new_investigation_prism_risk_assessment_path, method: :get, builder: ApplicationFormBuilder do |form| %>
+    <%= form_with model: @prism_form, url: new_investigation_prism_risk_assessment_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
-      <%= govukRadios(
-        form: form,
-        key: :product_id,
-        items: @products.map do |product|
-          {
-            id: "product_#{product.id}",
-            text: product.name,
-            value: product.id
-          }
-        end,
-        fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } }
-      ) %>
-      <%= govukButton(text: "Continue") %>
+      <% items = @products.map do |product|
+        OpenStruct.new(
+          id: "product_#{product.id}",
+          text: product.name,
+          value: product.id
+        )
+      end %>
+      <%= form.hidden_field :counter, value: 1 %>
+      <%= form.govuk_collection_radio_buttons :product_id,
+                                              items,
+                                              :value,
+                                              :text,
+                                              legend: { text: page_heading, size: 'l' },
+                                              is_page_heading: true %>
+
+      <%= form.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
