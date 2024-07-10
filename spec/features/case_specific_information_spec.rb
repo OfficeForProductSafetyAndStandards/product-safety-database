@@ -126,7 +126,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
 
         choose "Exact number"
 
-        fill_in "exact_units", with: ""
+        fill_in "number-of-affected-units-form-exact-units-field", with: ""
 
         click_button "Save"
 
@@ -135,7 +135,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
 
         choose "Exact number"
 
-        fill_in "exact_units", with: "100"
+        fill_in "number-of-affected-units-form-exact-units-field-error", with: "100"
 
         click_button "Save"
         expect_to_be_on_case_page(case_id: notification.pretty_id)
