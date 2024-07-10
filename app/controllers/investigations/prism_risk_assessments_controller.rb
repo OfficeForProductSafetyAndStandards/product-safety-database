@@ -5,7 +5,6 @@ module Investigations
     before_action :set_investigation_breadcrumbs
     before_action :ensure_one_product, except: %i[choose_product]
     before_action :product, except: %i[choose_product]
-    @count = 0
     def new
       authorize PrismRiskAssessment, :index?
       # Find all submitted PRISM risk assessments that are associated with the chosen product
