@@ -923,7 +923,6 @@ module Notifications
     end
 
     def update_with_entity
-      pry
       @corrective_action = @notification.corrective_actions.find(params[:entity_id])
       if request.patch? || request.put?
         @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
