@@ -923,6 +923,7 @@ module Notifications
     end
 
     def update_with_entity
+      pry
       @corrective_action = @notification.corrective_actions.find(params[:entity_id])
       if request.patch? || request.put?
         @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
@@ -955,9 +956,6 @@ module Notifications
         end
       else
         @corrective_action_form = CorrectiveActionForm.from(@corrective_action)
-        @corrective_action_form.date_decided_year = params[:corrective_action]["date_decided(1i)"]
-        @corrective_action_form.date_decided_month = params[:corrective_action]["date_decided(2i)"]
-        @corrective_action_form.date_decided_day = params[:corrective_action]["date_decided(3i)"]
         render :record_a_corrective_action_details
       end
     end
