@@ -264,6 +264,13 @@ module Notifications
         @risk_level_form = RiskLevelForm.new(risk_level: @notification.risk_level)
         highest_risk_level
       when :record_a_corrective_action
+        if params[:add_another_corrective_action_form].present?
+          @add_a_corrective_action = RecordACorrectiveActionForm.new(add_another_corrective_action: params[:add_another_corrective_action_form][:add_another_corrective_action])
+          @add_a_corrective_action.valid?
+        else
+          @add_a_corrective_action = RecordACorrectiveActionForm.new
+        end
+
         if @notification.corrective_action_taken.blank? || @notification.corrective_action_taken != "yes"
           @corrective_action_taken_form = CorrectiveActionTakenForm.new(
             corrective_action_taken_yes_no: @notification.corrective_action_taken.present? ? @notification.corrective_action_taken_yes? : nil,
@@ -637,10 +644,15 @@ module Notifications
             return render :record_a_corrective_action_details
           end
         elsif @notification.corrective_action_taken == "yes"
-          return redirect_to "#{wizard_path(:record_a_corrective_action)}?add" if params[:add_another_corrective_action] == "true"
-          return redirect_to wizard_path(:record_a_corrective_action) if params[:add_another_corrective_action].blank? && params[:final].present?
+          @add_a_corrective_action = if params[:record_a_corrective_action_form].present?
+                                       RecordACorrectiveActionForm.new(add_a_corrective_action_params)
+                                     else
+                                       RecordACorrectiveActionForm.new
+                                     end
+          return redirect_to "#{wizard_path(:record_a_corrective_action)}?add" if @add_a_corrective_action.add_another_corrective_action == "true"
+          return redirect_to wizard_path(:record_a_corrective_action, add_another_corrective_action_form: add_a_corrective_action_params) if @add_a_corrective_action.add_another_corrective_action.blank? && params[:final].present?
 
-          if params[:add_another_corrective_action].blank?
+          if @add_a_corrective_action.add_another_corrective_action.blank?
             @choose_investigation_products_form = ChooseInvestigationProductsForm.new(record_a_corrective_action_params)
 
             if @choose_investigation_products_form.valid?
@@ -955,9 +967,6 @@ module Notifications
         end
       else
         @corrective_action_form = CorrectiveActionForm.from(@corrective_action)
-        @corrective_action_form.date_decided_year = params[:corrective_action]["date_decided(1i)"]
-        @corrective_action_form.date_decided_month = params[:corrective_action]["date_decided(2i)"]
-        @corrective_action_form.date_decided_day = params[:corrective_action]["date_decided(3i)"]
         render :record_a_corrective_action_details
       end
     end
@@ -1098,6 +1107,10 @@ module Notifications
 
     def add_test_report_params
       params.require(:add_test_reports_form).permit(:add_another_test_report)
+    end
+
+    def add_a_corrective_action_params
+      params.require(:record_a_corrective_action_form).permit(:add_another_corrective_action)
     end
 
     def add_notification_details_params
