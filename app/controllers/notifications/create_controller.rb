@@ -644,7 +644,7 @@ module Notifications
             return render :record_a_corrective_action_details
           end
         elsif @notification.corrective_action_taken == "yes"
-          @add_a_corrective_action = if params[:add_another_corrective_action_form].present?
+          @add_a_corrective_action = if params[:record_a_corrective_action_form].present?
                                        RecordACorrectiveActionForm.new(add_a_corrective_action_params)
                                      else
                                        RecordACorrectiveActionForm.new
