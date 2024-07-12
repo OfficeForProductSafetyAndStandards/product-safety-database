@@ -27,13 +27,15 @@ private
   end
 
   def create_user
-    User.create!(
+    user = User.create!(
       email:,
       organisation: team.organisation,
       skip_password_validation: true,
       team:,
       name:
     )
+    user.roles.create!(name: "notification_task_list_user")
+    user
   end
 
   def reinstate_and_update_deleted_user(existing_user)
