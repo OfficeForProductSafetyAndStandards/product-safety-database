@@ -28,7 +28,7 @@
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of test</legend>
           <div class="govuk-hint" id="test-result-form-date-hint">For example, 12 5 2023</div>
           <% if date_error %>
-          <p class="govuk-error-message" id="test-result-form-date-error">
+          <p class="govuk-error-message" id="test-result-form-date-field-error">
             <span class="govuk-visually-hidden">Error: </span><%= @test_result_form.errors.full_messages_for(:date).first %>
           </p>
           <% end %>
@@ -63,11 +63,12 @@
       <% end %>
       <%= f.govuk_text_area :details, label: { text: "Further details", size: "m" }, max_chars: 32_767 %>
       <%= f.hidden_field :existing_document_file_id %>
-      <% if @test_result.document.blob.present? %>
+      <% if @test_result_form.document.present? %>
         <p id="current-attachment-details">
           Currently selected file:
-          <%= link_to "#{@test_result.document.blob.filename} (opens in new tab)", @test_result.document.blob, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+          <%= link_to "#{@test_result_form.document.filename} (opens in new tab)", @test_result_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
         </p>
+        <%= f.hidden_field :document, value: @test_result_form.document.id %>
         <%= govuk_details(summary_text: "Replace this file") do %>
           <%= f.govuk_file_field :document, label: { text: "Test report attachment", size: "m" }, hint: { text: "If you have multiple files, compress them in a zip file." } %>
         <% end %>

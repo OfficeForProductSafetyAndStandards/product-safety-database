@@ -23,7 +23,7 @@
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">What date was the test certificate issued?</legend>
           <div class="govuk-hint" id="set-test-result-certificate-on-case-form-tso-certificate-issue-date-hint">For example, 12 5 2023</div>
           <% if tso_certificate_issue_date_error %>
-          <p class="govuk-error-message" id="set-test-result-certificate-on-case-form-tso-certificate-issue-date-error">
+          <p class="govuk-error-message" id="set-test-result-certificate-on-case-form-tso-certificate-issue-date-field-error">
             <span class="govuk-visually-hidden">Error: </span><%= @set_test_result_certificate_on_case_form.errors.full_messages_for(:tso_certificate_issue_date).first %>
           </p>
           <% end %>
