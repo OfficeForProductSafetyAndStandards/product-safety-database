@@ -257,6 +257,13 @@ module Notifications
         @existing_prism_associated_investigations = @notification.prism_associated_investigations.includes(:prism_risk_assessment)
         @existing_risk_assessments = @notification.risk_assessments.includes(investigation_products: :product)
         @manage = request.query_string != "add" && (@existing_prism_associated_investigations.present? || @existing_risk_assessments.present?)
+        if params[:add_a_risk_assessment_form].present?
+          @add_another_risk_assessment = AddAnotherRiskAssessmentForm.new(add_another_risk_assessment: params[:add_a_risk_assessment_form][:add_another_risk_assessment])
+          @add_another_risk_assessment.valid?
+        else
+          @add_another_risk_assessment = AddAnotherRiskAssessmentForm.new
+        end
+
         return redirect_to with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: investigation_products.first.id) if investigation_products.count == 1 && !@manage
 
         @choose_investigation_product_form = ChooseInvestigationProductForm.new unless @manage
@@ -565,10 +572,17 @@ module Notifications
           return render_wizard
         end
       when :add_risk_assessments
-        return redirect_to "#{wizard_path(:add_risk_assessments)}?add" if params[:add_another_risk_assessment] == "true"
-        return redirect_to wizard_path(:add_risk_assessments) if params[:add_another_risk_assessment].blank? && params[:final].present?
 
-        if params[:add_another_risk_assessment].blank?
+        @add_another_risk_assessment = if params[:add_another_risk_assessment_form].present?
+                                         AddAnotherRiskAssessmentForm.new(add_another_risk_assessment_params)
+                                       else
+                                         AddAnotherRiskAssessmentForm.new
+                                       end
+
+        return redirect_to "#{wizard_path(:add_risk_assessments)}?add" if params[:add_another_risk_assessment_form][:add_another_risk_assessment] == "true"
+        return redirect_to wizard_path(:add_risk_assessments, add_a_risk_assessment_form: add_another_risk_assessment_params) if params[:add_another_risk_assessment_form][:add_another_risk_assessment].blank? && params[:final].present?
+
+        if params[:add_another_risk_assessment_form][:add_another_risk_assessment].blank?
           @choose_investigation_product_form = ChooseInvestigationProductForm.new(add_risk_assessments_params)
 
           if @choose_investigation_product_form.valid?
@@ -1109,6 +1123,10 @@ module Notifications
 
     def add_a_corrective_action_params
       params.require(:record_a_corrective_action_form).permit(:add_another_corrective_action)
+    end
+
+    def add_another_risk_assessment_params
+      params.require(:add_another_risk_assessment_form).permit(:add_another_risk_assessment)
     end
 
     def add_notification_details_params
