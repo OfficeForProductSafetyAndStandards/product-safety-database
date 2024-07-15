@@ -74,11 +74,15 @@ private
   end
 
   def build_sub_table(pdf)
-    rows = image_rows
-    flattened_array = rows.flatten(1)
-    new_array = flattened_array.each_slice(3).to_a
 
-    pdf.make_cell(new_array, width: pdf.bounds.width - 120)
+    rows = image_rows
+    if rows.present?
+
+      flattened_array = rows.flatten(1)
+      new_array = flattened_array.each_slice(3).to_a
+
+      pdf.make_cell(new_array, width: pdf.bounds.width - 120)
+    end
   end
 
   def image_rows
