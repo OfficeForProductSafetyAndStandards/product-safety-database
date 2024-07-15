@@ -27,16 +27,16 @@ class TestResultForm
   validates :details, length: { maximum: 32_767 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
   validates :standards_product_was_tested_against, presence: true
-  validates :result, inclusion: { in: Test::Result.results.keys }
-  validates :document, presence: true
-  validates :investigation_product_id, presence: true, on: :create_with_investigation_product
-  validates :further_test_results, presence: true, on: :ts_user_create
   validates :date,
             presence: true,
             real_date: true,
             complete_date: true,
             not_in_future: true,
             recent_date: { on_or_before: false }
+  validates :result, inclusion: { in: Test::Result.results.keys }
+  validates :document, presence: true
+  validates :investigation_product_id, presence: true, on: :create_with_investigation_product
+  validates :further_test_results, presence: true, on: :ts_user_create
   validates :failure_details, presence: true, if: -> { result == "failed" }
 
   before_validation do
@@ -53,6 +53,26 @@ class TestResultForm
       test_result_form.existing_document_file_id = test_result.document.signed_id
       test_result_form.load_document_file
       test_result_form.changes_applied
+    end
+  end
+
+  def cache_file!(user)
+    if document.is_a?(ActiveStorage::Blob)
+      document.metadata["title"] = title
+      document.metadata["description"] = description
+      document.metadata["updated"] = Time.zone.now
+      document.save!
+    elsif document.instance_of?(String)
+      self.document = ActiveStorage::Blob.find(document)
+      document.update!(metadata: { updated: Time.zone.now })
+    elsif document
+      self.document = ActiveStorage::Blob.create_and_upload!(
+        io: document,
+        filename: document.original_filename,
+        content_type: document.content_type
+      )
+      document.update!(metadata: { title: document.filename, description: "", created_by: user.id, updated: Time.zone.now })
+      document.analyze_later
     end
   end
 

@@ -507,7 +507,6 @@ module Notifications
 
         return redirect_to wizard_path(:search_for_or_add_a_business)
       when :add_test_reports
-
         @add_another_test_report = if params[:add_test_reports_form].present?
                                      AddTestReportsForm.new(add_test_report_params)
                                    else
@@ -827,8 +826,7 @@ module Notifications
 
           if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
             @test_result_form = TestResultForm.new(test_details_params)
-            @test_result_form.load_document_file
-
+            @test_result_form.cache_file!(current_user)
             if @test_result_form.valid?
               UpdateTestResult.call!(
                 investigation: @notification,
