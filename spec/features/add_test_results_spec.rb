@@ -231,9 +231,9 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the legislation that relates to this test"
     expect(errors_list[1].text).to eq "Enter the standard the product was tested against"
-    expect(errors_list[2].text).to eq "Select result of the test"
-    expect(errors_list[3].text).to eq "Provide the test results file"
-    expect(errors_list[4].text).to eq "Enter date of the test"
+    expect(errors_list[2].text).to eq "Enter date of the test"
+    expect(errors_list[3].text).to eq "Select result of the test"
+    expect(errors_list[4].text).to eq "Provide the test results file"
   end
 
   def expect_summary_to_reflect_values(result:, funded: false)
