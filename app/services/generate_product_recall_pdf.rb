@@ -74,7 +74,6 @@ private
   end
 
   def build_sub_table(pdf)
-
     rows = image_rows
     if rows.present?
 
