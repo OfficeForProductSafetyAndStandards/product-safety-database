@@ -55,6 +55,9 @@ module Investigations
       counter = 0
       if params[:select_product_for_prism_form].present?
         counter += params[:select_product_for_prism_form][:counter].to_i
+      else
+        redirect_to choose_product_investigation_prism_risk_assessments_path(counter:)
+        return
       end
       redirect_to choose_product_investigation_prism_risk_assessments_path(counter:) unless params[:select_product_for_prism_form][:product_id].present? && @investigation.products.find_by(id: params[:select_product_for_prism_form][:product_id])
     end
