@@ -100,7 +100,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
     expect(page).to have_error_summary("Country cannot be blank")
 
     within_fieldset "Official address" do
-      select country, from: "business-locations-country-field-error"
+      select country, from: "add-business-to-notification-form-country-field-error"
     end
 
     click_on "Save"
@@ -232,7 +232,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
     end
 
     within_fieldset "Official address" do
-      select "France", from: "business-locations-country-field"
+      select "France", from: "add-business-to-notification-form-country-field"
     end
 
     click_on "Save"
@@ -277,7 +277,7 @@ RSpec.feature "Adding and removing business to a notification", :with_stubbed_ma
     end
 
     within_fieldset "Official address" do
-      select "France", from: "business-locations-country-field"
+      select "France", from: "add-business-to-notification-form-country-field"
     end
 
     click_on "Save"
