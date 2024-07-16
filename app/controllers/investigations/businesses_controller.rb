@@ -27,7 +27,7 @@ class Investigations::BusinessesController < Investigations::BaseController
         authorised_representative_choice: session[:authorised_representative_choice],
       )
     )
-
+    @business_form.primary_location.valid?
     if @business_form.valid?
       @business = @business_form.business_object
 
