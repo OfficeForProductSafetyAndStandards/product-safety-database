@@ -9,7 +9,7 @@
       <%= form.govuk_error_summary %>
 
       <h1 class="govuk-heading-l govuk-!-margin-bottom-8">Provide the business details</h1>
-      <%= render "businesses/form", form: form, business: @business_form, countries: @countries %>
+      <%= render "businesses/form", form: form, business: @business_form, countries: @countries, id_name: (@business_form.primary_location.country.blank? && (@business_form.errors.full_messages.include? "Country cannot be blank")) ? "add-business-to-notification-form-country-field-error" : "add-business-to-notification-form-country-field" %>
     <% end %>
   </div>
 </div>

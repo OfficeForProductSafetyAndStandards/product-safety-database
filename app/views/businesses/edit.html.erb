@@ -14,7 +14,7 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <%= render "businesses/form", form: form, business: @business, countries: @countries %>
+      <%= render "businesses/form", form: form, business: @business, countries: @countries, id_name: (@business.primary_location.country.blank? && (@business.errors.full_messages.include? "Country cannot be blank")) ? "business-locations-country-field-error" : "business-locations-country-field" %>
     </div>
   </div>
 <% end %>
