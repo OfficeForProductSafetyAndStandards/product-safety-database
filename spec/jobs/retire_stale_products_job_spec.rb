@@ -5,7 +5,7 @@ RSpec.describe RetireStaleProductsJob do
     subject(:job) { described_class.new }
 
     context "when there are products to be retired" do
-      let!(:products_to_retire) { create_list(:product, 5, created_at: (18.months + 1.day).ago) }
+      let!(:products_to_retire) { create_list(:product, 5, created_at: (3.months + 1.day).ago) }
 
       it "marks all the products as retired", :aggregate_failures do
         freeze_time do
