@@ -429,7 +429,7 @@ en:
                 select_product:
                   title: Select a product to attach a test report
                 opss_funding:
-                  title: Was the test funded under the OPSS sampling protocol?
+                  title: Was the test funded under the OPSS Local Authority sampling protocol?
                 opss_funding_details:
                   title: Add the test certificate details
                 report_details:
