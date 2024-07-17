@@ -6,7 +6,6 @@ RSpec.feature "Add IMT to Notification", :with_opensearch, :with_product_form_he
   let!(:business_one) { create(:business, :online_marketplace, trading_name: "great value", created_at: 1.day.ago) }
   let!(:opss_imt) { create(:team, name: "OPSS Incident Management") }
 
-
   before do
     sign_in(user)
   end
@@ -14,23 +13,24 @@ RSpec.feature "Add IMT to Notification", :with_opensearch, :with_product_form_he
   scenario "creating a Serious risk notification with the mininum tasklist flow adds IMT to the notification" do
     create_notification_with_mandatory_tasklist
     choose_risk_level("Serious risk")
-    choose_corrective_action_as_No
+    choose_corrective_action_as_no
     submit_notification
     expect(page).to have_content("Notification submitted")
     click_link "Edit submitted notification"
 
-    expect(page).to have_content("OPSS Incident Management")
+    expect(page).to have_content(opss_imt.name)
   end
 
   scenario "creating a High risk notification with the mininum tasklist flow adds IMT to the notification" do
     create_notification_with_mandatory_tasklist
     choose_risk_level("High risk")
-    choose_corrective_action_as_No
+    choose_corrective_action_as_no
     submit_notification
     expect(page).to have_content("Notification submitted")
     click_link "Edit submitted notification"
-
-    expect(page).to have_content("OPSS Incident Management")
+    expect(page).to have_content(existing_product.name)
+    expect(page).to have_content(business_one.trading_name)
+    expect(page).to have_content(opss_imt.name)
   end
 
   scenario "creating a notification with the mininum tasklist flow and product recall as corrective action adds IMT to the notification" do
@@ -40,7 +40,7 @@ RSpec.feature "Add IMT to Notification", :with_opensearch, :with_product_form_he
     expect(page).to have_content("Notification submitted")
     click_link "Edit submitted notification"
 
-    expect(page).to have_content("OPSS Incident Management")
+    expect(page).to have_content(opss_imt.name)
   end
 
   def create_notification_with_mandatory_tasklist
@@ -150,7 +150,7 @@ RSpec.feature "Add IMT to Notification", :with_opensearch, :with_product_form_he
     click_button "Continue"
   end
 
-  def choose_corrective_action_as_No
+  def choose_corrective_action_as_no
     click_link "Record a corrective action"
 
     within_fieldset "Have you taken a corrective action for the unsafe or non-compliant product(s)?" do
