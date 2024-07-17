@@ -24,6 +24,8 @@ module Investigations
           .merge(user: current_user, notification: @investigation)
       )
 
+      add_incident_management_team
+
       if result.success?
         ahoy.track "Added corrective action", { investigation_id: @investigation.id }
         return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
@@ -68,6 +70,9 @@ module Investigations
             changes: @corrective_action_form.changes
           )
       )
+
+      add_incident_management_team
+
       ahoy.track "Updated corrective action", { notification_id: @investigation.id } if @corrective_action_form.changes != { "date_decided(1i)" => [nil, params[:corrective_action]["date_decided(1i)"]], "date_decided(2i)" => [nil, params[:corrective_action]["date_decided(2i)"]], "date_decided(3i)" => [nil, params[:corrective_action]["date_decided(3i)"]] }
 
       if params[:bulk_products_upload_id].present?
@@ -75,6 +80,10 @@ module Investigations
       else
         redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
       end
+    end
+
+    def add_incident_management_team
+      AddImtToNotification.call!(notification: @investigation, user: current_user)
     end
   end
 end

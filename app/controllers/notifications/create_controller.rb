@@ -686,6 +686,7 @@ module Notifications
         # Manually save, then finish the wizard.
         if @notification.save(context: step)
           if step == :check_notification_details_and_submit && params[:final] == "true"
+            pre_submission_tasks
             @notification.submit!
             return redirect_to confirmation_notification_create_index_path(@notification)
           end
@@ -1239,6 +1240,14 @@ module Notifications
                             else
                               "unknown"
                             end
+    end
+
+    def pre_submission_tasks
+      add_incident_management_team
+    end
+
+    def add_incident_management_team
+      AddImtToNotification.call!(notification: @notification, user: current_user)
     end
   end
 end
