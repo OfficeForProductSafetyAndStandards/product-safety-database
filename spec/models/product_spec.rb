@@ -67,7 +67,7 @@ RSpec.describe Product do
   end
 
   describe "#stale?", :with_stubbed_mailer, :with_stubbed_notify do
-    context "when the product is less than 18 months old" do
+    context "when the product is less than 90 days old" do
       let(:product) { build :product, created_at: 1.day.ago }
 
       it "returns false" do
@@ -84,7 +84,7 @@ RSpec.describe Product do
       end
     end
 
-    context "when the product has an closed case within 18 months" do
+    context "when the product has an closed case within 90 days" do
       let(:investigation) { create :allegation, :with_products, :closed, date_closed: 3.months.ago }
       let(:product) { investigation.products.first }
 
@@ -93,13 +93,13 @@ RSpec.describe Product do
       end
     end
 
-    context "when the product had a notification unlinked within the last 18 months" do
+    context "when the product had a notification unlinked within the last 90 days" do
       let(:notification) { create :notification, created_at: 2.years.ago }
       let(:product) { create :product }
       let(:user) { create :user }
 
       before do
-        travel(-6.months) do
+        travel(-2.months) do
           AddProductToNotification.call!(user:, notification:, product:)
           RemoveProductFromNotification.call!(user:, investigation_product: product.investigation_products.find_by(investigation: notification), notification:)
         end
@@ -110,7 +110,7 @@ RSpec.describe Product do
       end
     end
 
-    context "when the product had a notification unlinked outside the last 18 months" do
+    context "when the product had a notification unlinked outside the last 90 days" do
       let(:notification) { create :notification, created_at: 2.years.ago }
       let(:product) { create :product }
       let(:user) { create :user }
@@ -138,11 +138,11 @@ RSpec.describe Product do
     let(:older_notification_two) { create :notification, created_at: 3.years.ago }
     let(:product_unlinked_recently) { create :product }
     let(:product_unlinked_in_the_past) { create :product }
-    let!(:old_product_never_linked) { create :product, created_at: (18.months + 1.day).ago }
+    let!(:old_product_never_linked) { create :product, created_at: (3.months + 1.day).ago }
     let(:user) { create :user }
 
     before do
-      travel(-6.months) do
+      travel(-2.months) do
         AddProductToNotification.call!(user:, notification: older_notification_one, product: product_unlinked_recently)
         RemoveProductFromNotification.call!(user:, investigation_product: product_unlinked_recently.investigation_products.find_by(investigation: older_notification_one), notification: older_notification_one)
       end
