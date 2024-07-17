@@ -18,7 +18,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
       expect_to_have_notification_breadcrumbs
-      within_fieldset "Was the test funded under the OPSS Local Authority sampling protocol?" do
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
         page.choose "No"
       end
       click_button "Continue"
@@ -63,7 +63,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
       expect_to_have_notification_breadcrumbs
-      within_fieldset "Was the test funded under the OPSS Local Authority sampling protocol?" do
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
         page.choose "Yes"
       end
       click_button "Continue"
@@ -120,7 +120,7 @@ RSpec.feature "Adding a test result", :with_stubbed_antivirus, :with_stubbed_mai
 
       expect_to_be_on_record_test_result_opss_funding_decision_page(case_id: investigation.pretty_id)
       expect_to_have_notification_breadcrumbs
-      within_fieldset "Was the test funded under the OPSS Local Authority sampling protocol?" do
+      within_fieldset "Was the test funded under the OPSS Sampling Protocol?" do
         page.choose "No"
       end
       click_button "Continue"
