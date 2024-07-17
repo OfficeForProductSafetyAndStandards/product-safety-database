@@ -56,7 +56,8 @@
 <% if !local_assigns[:disable_image_upload] %>
   <%= form.govuk_file_field :image,
                             label: { text: 'Upload a product image', size: 'm' },
-                            hint: { text: 'Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.' } %>
+                            hint: { text: '<p style="margin-bottom: 5px;">Please ensure that the image you are uploading is in the correct orientation prior to uploading it</p>
+                            <p>Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.</p>'.html_safe } %>
 <% end %>
 
 
