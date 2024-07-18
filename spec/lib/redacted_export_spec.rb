@@ -1,106 +1,90 @@
 require "rails_helper"
 
 RSpec.describe RedactedExport do
-  describe ".register_model_attributes" do
-    let(:table_name) { "test_models" }
-    let(:model) { OpenStruct.new(table_name:) }
-    let(:attributes) { %i[id updated_at created_at] }
+  let(:dummy_class) do
+    Class.new do
+      def self.table_name
+        "dummy_table"
+      end
 
-    after do
-      described_class.registry.delete table_name
-    end
-
-    it "adds attributes into the registry" do
-      described_class.register_model_attributes model, *attributes
-      expect(described_class.registry[table_name]).to eq(attributes)
-    end
-
-    it "merges attributes in multiple calls" do
-      described_class.register_model_attributes model, *attributes
-      described_class.register_model_attributes model, :name, :location
-      expect(described_class.registry[table_name]).to eq(attributes + %i[name location])
-    end
-
-    it "deduplicates attributes" do
-      duplicate_attributes = attributes + attributes + [:id]
-      described_class.register_model_attributes model, *duplicate_attributes
-      expect(described_class.registry[table_name]).to eq(attributes)
+      include RedactedExport
     end
   end
 
-  describe ".register_table_attributes" do
-    let(:table_name) { "test_models" }
-    let(:attributes) { %i[id updated_at created_at] }
-
-    after do
-      described_class.registry.delete table_name
+  describe "class methods" do
+    it "has an empty redacted_export_attributes array by default" do
+      expect(dummy_class.redacted_export_attributes).to eq([])
     end
 
-    it "adds attributes into the registry" do
-      described_class.register_table_attributes table_name, *attributes
-      expect(described_class.registry[table_name]).to eq(attributes)
-    end
-
-    it "merges attributes in multiple calls" do
-      described_class.register_table_attributes table_name, *attributes
-      described_class.register_table_attributes table_name, :name, :location
-      expect(described_class.registry[table_name]).to eq(attributes + %i[name location])
-    end
-
-    it "deduplicates attributes" do
-      duplicate_attributes = attributes + attributes + [:id]
-      described_class.register_table_attributes table_name, *duplicate_attributes
-      expect(described_class.registry[table_name]).to eq(attributes)
+    it "registers model attributes" do
+      dummy_class.send(:redacted_export_with, :attr1, :attr2)
+      expect(described_class.registry["dummy_table"]).to include(:attr1, :attr2)
     end
   end
 
-  describe ".registry" do
-    let(:table_name) { "non_existent_table" }
+  describe RedactedExport::Registry do
+    let(:registry) { described_class.new }
 
-    it "returns nil for an unknown model" do
-      expect(described_class.registry[table_name]).to be_nil
+    describe "#register_model_attributes" do
+      it "registers attributes for a model" do
+        registry.register_model_attributes(dummy_class, :attr1, :attr2)
+        expect(registry["dummy_table"]).to contain_exactly(:attr1, :attr2)
+      end
     end
 
-    describe ".to_sql" do
-      let(:model_table_name) { "test_models" }
-      let(:model) { OpenStruct.new(table_name: model_table_name) }
-      let(:model_attributes) { %i[id updated_at created_at] }
-      let(:custom_table_name) { "test_custom" }
-      let(:custom_attributes) { %i[name description] }
+    describe "#register_table_attributes" do
+      it "registers attributes for a table" do
+        registry.register_table_attributes("custom_table", :attr1, :attr2)
+        expect(registry["custom_table"]).to contain_exactly(:attr1, :attr2)
+      end
 
+      it "avoids duplicate attributes" do
+        registry.register_table_attributes("custom_table", :attr1)
+        registry.register_table_attributes("custom_table", :attr1, :attr2)
+        expect(registry["custom_table"]).to contain_exactly(:attr1, :attr2)
+      end
+    end
+
+    describe "#with_all_tables" do
+      it "initializes all tables in the registry" do
+        allow(ActiveRecord::Base.connection).to receive(:tables).and_return(%w[table1 table2])
+        registry.with_all_tables
+        expect(registry.keys).to include("table1", "table2")
+      end
+    end
+
+    describe "#to_sql" do
       before do
-        described_class.register_model_attributes model, *model_attributes
-        described_class.register_table_attributes custom_table_name, *custom_attributes
+        allow(Time.zone).to receive(:now).and_return(Time.new(2023, 7, 18, 0, 0, 0, "+00:00"))
+        setup_registry_attributes
       end
 
-      it "returns the correct SQL for models" do
-        expect(described_class.registry.to_sql).to include("CREATE TABLE redacted.#{model_table_name} AS (SELECT #{model_attributes.join(', ')} FROM public.#{model_table_name});").once
+      it "generates SQL for the registered tables and attributes" do
+        expect(registry.to_sql).to eq(expected_sql)
       end
 
-      it "returns the correct SQL for custom tables" do
-        expect(described_class.registry.to_sql).to include("CREATE TABLE redacted.#{custom_table_name} AS (SELECT #{custom_attributes.join(', ')} FROM public.#{custom_table_name});").once
+      def setup_registry_attributes
+        registry.register_table_attributes("table1", "col1", "col2")
+        registry.register_table_attributes("table2", "col3")
       end
-    end
-  end
 
-  context "when included and used within a class" do
-    subject!(:model) do
-      Class.new do
-        def self.table_name = "things"
-        include RedactedExport
-        redacted_export_with :test_1, :test_2, :test_3
-      end
-    end
+      def expected_sql
+        <<~SQL_OUTPUT
+          --
+          -- Redacted export generation SQL
+          -- 2023-07-18 00:00:00 +0000
+          --
 
-    let(:table_name) { "things" }
+          DROP SCHEMA IF EXISTS redacted CASCADE; CREATE SCHEMA redacted;
 
-    after do
-      described_class.registry.delete table_name
-    end
+          CREATE TABLE redacted.table1 AS (SELECT col1, col2 FROM public.table1);
 
-    describe ".redacted_export_with" do
-      it "adds the attributes into the registry" do
-        expect(described_class.registry[table_name]).to eq(%i[test_1 test_2 test_3])
+          CREATE TABLE redacted.table2 AS (SELECT col3 FROM public.table2);
+
+          --
+          -- Redacted export generation SQL complete
+          --
+        SQL_OUTPUT
       end
     end
   end
