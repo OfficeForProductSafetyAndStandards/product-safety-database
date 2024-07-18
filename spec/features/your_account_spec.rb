@@ -39,6 +39,8 @@ RSpec.feature "Your Account", :with_stubbed_mailer, type: :feature do
     fill_in "Full name", with: "Joe Smith"
     click_button "Save"
 
+    expect_to_be_on_account_name_change_confirmation_page
+    click_link "Back to Your account"
     expect_to_be_on_your_account_page
     expect(page).to have_summary_item(key: "Name", value: "Joe Smith")
   end

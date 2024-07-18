@@ -532,6 +532,11 @@ module PageExpectations
     expect(page).to have_css("h1", text: "You have changed your password successfully")
   end
 
+  def expect_to_be_on_account_name_change_confirmation_page
+    expect(page).to have_current_path("/account/name")
+    expect(page).to have_selector("h1", text: "Your name has been changed")
+  end
+
   def expect_to_be_on_your_account_page
     expect(page).to have_current_path("/account")
     expect(page).to have_selector("h1", text: "Your account")
