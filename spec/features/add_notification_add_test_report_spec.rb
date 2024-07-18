@@ -116,7 +116,7 @@ RSpec.feature "Notification add test report", :with_opensearch, :with_product_fo
 
     click_link "Add test reports"
 
-    expect(page).to have_h1("Was the test funded under the OPSS Local Authority sampling protocol?")
+    expect(page).to have_h1("Was the test funded under the OPSS sampling protocol for Local Authorities?")
 
     expect(page).to have_content("This is only relevant if you are a Local Authority user. If you are not a Local Authority user, select 'No'.")
   end
