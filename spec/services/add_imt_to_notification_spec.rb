@@ -9,6 +9,7 @@ RSpec.describe AddImtToNotification, :with_stubbed_mailer do
 
   before do
     allow(notification).to receive(:corrective_actions).and_return(corrective_actions)
+    allow(AddTeamToNotification).to receive(:call!)
     allow(Team).to receive(:find_by).with(name: "OPSS Incident Management").and_return(team)
   end
 
@@ -37,8 +38,13 @@ RSpec.describe AddImtToNotification, :with_stubbed_mailer do
       let(:risk_level) { "low" }
       let(:corrective_actions) { [instance_double(CorrectiveAction, action: "some_other_action")] }
 
+      before do
+        allow(corrective_actions).to receive(:pluck).with("action").and_return(corrective_actions.map(&:action))
+      end
+
       it "does not add OPSS IMT team to the notification" do
-        expect(AddTeamToNotification).not_to receive(:call!)
+        described_class.call(notification:, user:)
+        expect(AddTeamToNotification).not_to have_received(:call!)
       end
     end
 
@@ -48,19 +54,27 @@ RSpec.describe AddImtToNotification, :with_stubbed_mailer do
       end
 
       it "does not add OPSS IMT team to the notification" do
-        expect(AddTeamToNotification).not_to receive(:call!)
+        described_class.call(notification:, user:)
+        expect(AddTeamToNotification).not_to have_received(:call!)
       end
     end
 
     context "when risk level is serious or high" do
+      before do
+        described_class.call(notification:, user:)
+      end
+
       it "adds OPSS IMT team to the notification" do
-        expect(AddTeamToNotification).to receive(:call!).with(
+        expect(AddTeamToNotification).to have_received(:call!).with(
           notification:,
           team:,
           collaboration_class: Collaboration::Access::Edit,
           user:,
           message: "System added OPSS IMT with edit permissions due to either risk level or corrective action."
         )
+      end
+
+      it "is successful" do
         expect(result).to be_a_success
       end
     end
@@ -69,14 +83,23 @@ RSpec.describe AddImtToNotification, :with_stubbed_mailer do
       let(:risk_level) { "low" }
       let(:corrective_actions) { [create(:corrective_action, action: "recall_of_the_product_from_end_users")] }
 
+      before do
+        allow(notification).to receive(:corrective_actions).and_return(corrective_actions)
+        allow(corrective_actions).to receive(:pluck).with("action").and_return(corrective_actions.map(&:action))
+        described_class.call(notification:, user:)
+      end
+
       it "adds OPSS IMT team to the notification" do
-        expect(AddTeamToNotification).to receive(:call!).with(
+        expect(AddTeamToNotification).to have_received(:call!).with(
           notification:,
           team:,
           collaboration_class: Collaboration::Access::Edit,
           user:,
           message: "System added OPSS IMT with edit permissions due to either risk level or corrective action."
         )
+      end
+
+      it "is successful" do
         expect(result).to be_a_success
       end
     end
@@ -85,14 +108,23 @@ RSpec.describe AddImtToNotification, :with_stubbed_mailer do
       let(:risk_level) { "low" }
       let(:corrective_actions) { [create(:corrective_action, action: "modification_programme")] }
 
+      before do
+        allow(notification).to receive(:corrective_actions).and_return(corrective_actions)
+        allow(corrective_actions).to receive(:pluck).with("action").and_return(corrective_actions.map(&:action))
+        described_class.call(notification:, user:)
+      end
+
       it "adds OPSS IMT team to the notification" do
-        expect(AddTeamToNotification).to receive(:call!).with(
+        expect(AddTeamToNotification).to have_received(:call!).with(
           notification:,
           team:,
           collaboration_class: Collaboration::Access::Edit,
           user:,
           message: "System added OPSS IMT with edit permissions due to either risk level or corrective action."
         )
+      end
+
+      it "is successful" do
         expect(result).to be_a_success
       end
     end
