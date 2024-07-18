@@ -39,7 +39,9 @@ Rails.application.routes.draw do
   post "text-not-received", to: "secondary_authentications/resend_code#create", as: :resend_secondary_authentication_code
 
   resource :account, only: [:show], controller: :account do
-    resource :name, controller: :account_name, only: %i[show update]
+    resource :name, controller: :account_name, only: %i[show update] do
+      get "confirmation", to: "account#confirmation"
+    end
   end
 
   resources :users, only: [:update] do
