@@ -14,7 +14,7 @@
           <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
         </ul>
       <% end %>
-            <p>This is only relevant if you are a Local Authority user. If you are not a Local Authority user, select 	&#39;No&#39;.</p>
+            <p>This is only relevant if you are a Local Authority user. If you are not a Local Authority user, select &#39;No&#39;.</p>
       <%= f.govuk_collection_radio_buttons :opss_funded, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, legend: nil, bold_labels: false %>
       <%= f.govuk_submit "Save and continue" %>
     <% end %>
