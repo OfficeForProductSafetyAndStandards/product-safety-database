@@ -3,6 +3,8 @@ en:
   mail:
     notification_risk_level_updated:
       verb_with_level:
+        increased: "Increased to high"
+        decreased: "Decreased to low"
         set: "set to %{level}"
         changed: "changed to %{level}"
         removed: "removed"

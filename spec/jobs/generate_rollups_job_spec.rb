@@ -21,7 +21,7 @@ RSpec.describe GenerateRollupsJob, type: :job do
     allow(ahoy_event_relation).to receive(:rollup)
   end
 
-  let(:ahoy_event_relation) { instance_double("RollupRelation") }
+  let(:ahoy_event_relation) { instance_double(RollupRelation) }
 
   describe "#perform - User rollups" do
     it "calls User rollup for New users (day)" do
