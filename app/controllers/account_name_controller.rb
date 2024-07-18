@@ -12,7 +12,7 @@ class AccountNameController < ApplicationController
     @user.name = params.dig(:user, :name)
 
     if @user.save(context: :change_name)
-      redirect_to account_path
+      render "account/confirmation"
     else
       render "account/name"
     end
