@@ -27,31 +27,9 @@ class AddCorrectiveActionToNotification
       create_audit_activity
       send_notification_email unless context.silent
     end
-
-    add_incident_management_team
   end
 
 private
-
-  def add_incident_management_team
-    # OPSS IMT is automatically added to an notification with edit permissions
-    # on adding a corrective action if either the risk level is serious/high or
-    # the corrective action indicates a recall. If OPSS IMT has already been added,
-    # `AddTeamToNotification` returns silently.
-
-    return unless %w[serious high].include?(notification.risk_level) || action == "recall_of_the_product_from_end_users" || action == "modification_programme"
-
-    team = Team.find_by(name: "OPSS Incident Management")
-    return if team.blank?
-
-    AddTeamToNotification.call!(
-      notification:,
-      team:,
-      collaboration_class: Collaboration::Access::Edit,
-      user:,
-      message: "System added OPSS IMT with edit permissions due to either risk level or corrective action."
-    )
-  end
 
   def create_audit_activity
     metadata = AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action)
