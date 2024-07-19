@@ -130,7 +130,11 @@ RSpec.feature "Edit corrective action", :with_stubbed_antivirus, :with_stubbed_m
       expect_to_be_on_corrective_action_summary_page
       expect_to_have_notification_breadcrumbs
 
-      expect(page).to have_css("h1.govuk-heading-l", text: new_action)
+      if new_action.length > CorrectiveActionDecorator::MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
+        expect(page).to have_css("h1.govuk-heading-m", text: new_action)
+      else
+        expect(page).to have_css("h1.govuk-heading-l", text: new_action)
+      end
 
       click_link "Edit corrective action"
 

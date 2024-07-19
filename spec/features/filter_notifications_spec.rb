@@ -323,10 +323,8 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
 
     context "with no sort by option selected" do
       it "shows results by most recently updated" do
-        puts "Checking for default sorting option: Recent updates"
         expect(page).to have_content("Recent updates")
 
-        puts "Checking if cases are listed in the expected order"
         cases.each do |investigation|
           expect(page).to have_content(investigation.pretty_id)
         end
@@ -339,7 +337,6 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       it "shows results by most recently updated" do
-        puts "Checking if cases are listed in the expected order"
         cases.each do |investigation|
           expect(page).to have_content(investigation.pretty_id)
         end
@@ -354,7 +351,6 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       it "shows results by least recently updated" do
-        puts "Checking if cases are listed in the expected order"
         cases.each do |investigation|
           expect(page).to have_content(investigation.pretty_id)
         end
@@ -369,7 +365,6 @@ RSpec.feature "Notification filtering", :with_opensearch, :with_stubbed_mailer, 
       end
 
       it "shows results by most recently created" do
-        puts "Checking if cases are listed in the expected order"
         cases.each do |investigation|
           expect(page).to have_content(investigation.pretty_id)
         end
