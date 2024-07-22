@@ -489,6 +489,11 @@ module PageExpectations
     expect(page).to have_css(".govuk-header__navigation-item--active", text: "Products")
   end
 
+  # Product recall pages
+  def expect_to_be_on_product_recall_page(product_id:)
+    expect(page).to have_current_path("/products/#{product_id}/recalls/start")
+  end
+
   # Login and account management pages
   def expect_to_be_on_secondary_authentication_page
     expect(page).to have_current_path(/\/two-factor/)

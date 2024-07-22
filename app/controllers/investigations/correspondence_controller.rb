@@ -1,4 +1,5 @@
 # This class serves as as a common base controller extended by the different types of correspondence
+# TODO: Remove this code?
 class Investigations::CorrespondenceController < ApplicationController
   include FileConcern
   include Wicked::Wizard
