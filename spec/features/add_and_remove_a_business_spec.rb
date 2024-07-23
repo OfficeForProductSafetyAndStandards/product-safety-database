@@ -29,6 +29,83 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
     expect(page).to have_content("You have completed 1 of 6 sections.")
 
+    add_notification_details
+
+    expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
+    expect(page).to have_selector(:id, "task-list-1-1-status", text: "Completed")
+    expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
+    expect(page).to have_content("You have completed 2 of 6 sections.")
+
+    search_for_or_add_a_business
+
+    expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 3 of 6 sections.")
+
+    # Ensure that all of section 4 and the first task of section are enabled once section 3 is completed
+    expect(page).to have_selector(:id, "task-list-3-0-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-1-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-2-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-3-5-status", text: "Not yet started")
+    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Not yet started")
+
+    click_link "Add product identification details"
+    click_link "Add batch numbers"
+    fill_in "batch_number", with: "1234, 5678"
+    click_button "Save"
+    click_button "Continue"
+
+    add_test_reports
+
+    add_supporting_images_documents_risk_assessments
+
+    within_fieldset "Do you need to add another risk assessment?" do
+      choose "No"
+    end
+
+    click_button "Continue"
+
+    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Completed")
+
+    click_link "Evaluate notification risk level"
+
+    expect(page).to have_content("This notification has 1 risk assessment added, assessing the risk as high.")
+
+    choose "Medium risk"
+
+    click_button "Save and complete tasks in this section"
+
+    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Completed")
+    expect(page).to have_content("You have completed 4 of 6 sections.")
+
+    record_a_corrective_action
+
+    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
+    expect(page).to have_content("You have completed 5 of 6 sections.")
+
+    click_link "Check the notification details and submit"
+    click_button "Submit notification"
+
+    expect(page).to have_content("Notification submitted")
+    click_link "Edit submitted notification"
+    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}/)
+    # the risk link is displayed as risk level: (brand of product) + (product name)
+    click_link "Add or Remove business"
+    expect(page).to have_content("You have added 1 business")
+    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/edit\/search_for_or_add_a_business/)
+    within_fieldset "Do you need to add another business?" do
+      choose "Yes"
+    end
+
+    click_button "Continue"
+
+    add_a_business
+  end
+
+  # functions
+
+  def add_notification_details
     click_link "Add notification details"
     fill_in "Notification title", with: "Fake name"
     fill_in "Notification summary", with: "This is a fake summary"
@@ -57,12 +134,9 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
 
     choose "Unknown"
     click_button "Save and complete tasks in this section"
+  end
 
-    expect(page).to have_selector(:id, "task-list-1-0-status", text: "Completed")
-    expect(page).to have_selector(:id, "task-list-1-1-status", text: "Completed")
-    expect(page).to have_selector(:id, "task-list-1-2-status", text: "Completed")
-    expect(page).to have_content("You have completed 2 of 6 sections.")
-
+  def search_for_or_add_a_business
     click_link "Search for or add a business"
     click_link "Add a new business"
     fill_in "Trading name", with: "Trading name"
@@ -92,25 +166,9 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
       choose "No"
     end
     click_button "Continue"
+  end
 
-    expect(page).to have_selector(:id, "task-list-2-0-status", text: "Completed")
-    expect(page).to have_content("You have completed 3 of 6 sections.")
-
-    # Ensure that all of section 4 and the first task of section are enabled once section 3 is completed
-    expect(page).to have_selector(:id, "task-list-3-0-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-3-1-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-3-2-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-3-5-status", text: "Not yet started")
-    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Not yet started")
-
-    click_link "Add product identification details"
-    click_link "Add batch numbers"
-    fill_in "batch_number", with: "1234, 5678"
-    click_button "Save"
-    click_button "Continue"
-
+  def add_test_reports
     click_link "Add test reports"
     choose "Yes"
     click_button "Save and continue"
@@ -142,7 +200,9 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
     end
 
     click_button "Continue"
+  end
 
+  def add_supporting_images_documents_risk_assessments
     expect(page).to have_selector(:id, "task-list-3-0-status", text: "Completed")
 
     click_link "Add supporting images"
@@ -191,26 +251,9 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
     click_button "Add risk assessment"
 
     expect(page).to have_content("You have added 1 risk assessment.")
+  end
 
-    within_fieldset "Do you need to add another risk assessment?" do
-      choose "No"
-    end
-
-    click_button "Continue"
-
-    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Completed")
-
-    click_link "Evaluate notification risk level"
-
-    expect(page).to have_content("This notification has 1 risk assessment added, assessing the risk as high.")
-
-    choose "Medium risk"
-
-    click_button "Save and complete tasks in this section"
-
-    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Completed")
-    expect(page).to have_content("You have completed 4 of 6 sections.")
-
+  def record_a_corrective_action
     click_link "Record a corrective action"
 
     within_fieldset "Have you taken a corrective action for the unsafe or non-compliant product(s)?" do
@@ -265,25 +308,9 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
     end
 
     click_button "Continue"
+  end
 
-    expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
-    expect(page).to have_content("You have completed 5 of 6 sections.")
-
-    click_link "Check the notification details and submit"
-    click_button "Submit notification"
-
-    expect(page).to have_content("Notification submitted")
-    click_link "Edit submitted notification"
-    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}/)
-    # the risk link is displayed as risk level: (brand of product) + (product name)
-    click_link "Add or Remove business"
-    expect(page).to have_content("You have added 1 business")
-    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/edit\/search_for_or_add_a_business/)
-    within_fieldset "Do you need to add another business?" do
-      choose "Yes"
-    end
-
-    click_button "Continue"
+  def add_a_business
     click_link "Add a new business"
     fill_in "Trading name", with: "Trading name 1"
     fill_in "Registered or legal name (optional)", with: "Legal name 1"
