@@ -13,6 +13,15 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
 
   # test scenario
   scenario "Creating a notification and adding and removing businesses" do
+    visit_new_notification_page
+    search_for_or_add_new_product
+    search_for_or_add_new_business
+    add_product_identification_details
+    add_test_reports
+    add_risk_assessments
+    record_a_corrective_action
+    check_notification_details
+    add_new_business
   end
 
   # functions
