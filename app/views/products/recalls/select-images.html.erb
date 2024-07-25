@@ -5,12 +5,9 @@
       <%= form.hidden_field :step, value: @form.step %>
       <div class="govuk-form-group image-select">
         <% if @product.virus_free_images.any? %>
-          <%= form.govuk_check_boxes_fieldset(:product_image_ids, legend: { text: "Select the images to include", size: "l" }, hint: { text: "<div>Sorry GIFs are not supported by PDF files</div><div>Supported file formats:JPEG, PNG, WEBP or HEIC/HEIF</div>".html_safe}) do %>
+          <%= form.govuk_check_boxes_fieldset(:product_image_ids, legend: { text: "Select the images to include", size: "l" }, hint: { text: "<div>Acceptable file formats to create a product recall PDF: JPEG & PNG</div><div>Any other file types you have uploaded will not be displayed here.</div>".html_safe}) do %>
             <% @product.virus_free_images.each do |image| %>
-              <% if image.file_upload.content_type == "image/gif" %>
-                  <%= "<div class='govuk-checkboxes__item'><label style='font-size: 1.1875rem; font-family: \"GDS Transport\", arial, sans-serif'>#{image.file_upload.filename}</label> <div class=\"opss-checkboxes-thumbnails_img\" style=\"background-image: url(#{rails_storage_proxy_path(image.file_upload, only_path: true)})\"></div>
-                  </div>".html_safe %>
-                <% else %>
+              <% if image.file_upload.content_type == "image/jpeg" || image.file_upload.content_type == "image/png" %>
                 <%= form.govuk_check_box :product_image_ids, image.id, label: { text: "#{image.file_upload.filename} <div class=\"opss-checkboxes-thumbnails_img\" style=\"background-image: url(#{rails_storage_proxy_path(image.file_upload, only_path: true)})\"></div>".html_safe }, checked: @form.product_image_ids.to_a.include?(image.id) %>
               <% end %>
             <% end %>
