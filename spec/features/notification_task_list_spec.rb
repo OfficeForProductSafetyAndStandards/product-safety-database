@@ -2,6 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Notification task list", :with_opensearch, :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user]) }
+  let(:user_one) { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
+  let(:notification) { create(:notification, :with_complainant, :with_business, :with_document, :reported_unsafe_and_non_compliant, creator: user) }
+  let(:notif_one) { create(:better_notif, :with_complainant, :with_business, :with_document, :reported_unsafe_and_non_compliant, creator: user_one) }
+  let(:notif_two) { create(:better_notif, :with_complainant, :with_business, :with_document, :reported_unsafe_and_non_compliant, creator: user_one) }
+  let(:notif_assigned) { create(:better_notif, read_only_teams: user_one.team) }
   let(:existing_product) { create(:product) }
   let(:new_product_attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
@@ -10,9 +15,13 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   let(:text_file) { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
 
   before do
-    sign_in(user)
-
     existing_product
+    user_one.team = user.team
+    user_one.save!
+    notification
+    notif_one
+    notif_two
+    notif_assigned
   end
 
   def add_a_product
@@ -168,7 +177,37 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     click_button "Finish uploading documents"
   end
 
+  scenario "without NTL role" do
+    sign_in(user_one)
+    visit "/notifications/your-notifications"
+    expect_to_be_on_cases_page
+    visit "/notifications/team-notifications"
+    expect_to_be_on_team_cases_page
+  end
+
+  scenario "Viewing user notifications and team notifications through filters" do
+    sign_in(user)
+
+    visit "/notifications"
+    expect(page).to have_text(notification.user_title)
+
+    visit "/notifications/your-notifications"
+    expect(page).to have_text(notification.user_title)
+
+    visit "/notifications/team-notifications"
+    expect(page).to have_text(notification.user_title)
+    expect(page).to have_text(notif_one.user_title)
+    expect(page).to have_text(notif_two.user_title)
+
+    click_link notification.user_title
+    expect(page).to have_current_path("/notifications/#{notification.pretty_id}")
+
+    visit "/notifications/assigned-notifications"
+    expect(page).to have_text(notif_assigned.user_title)
+  end
+
   scenario "Creating an empty notification" do
+    sign_in(user)
     visit "/notifications/create"
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
@@ -177,6 +216,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   end
 
   scenario "Creating a notification from an existing product" do
+    sign_in(user)
     visit "/notifications/create/from-product/#{existing_product.id}"
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create\/search_for_or_add_a_product/)
@@ -193,6 +233,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   end
 
   scenario "Creating a notification, adding two products and removing one" do
+    sign_in(user)
     visit "/notifications/create/from-product/#{existing_product.id}"
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create\/search_for_or_add_a_product/)
@@ -221,6 +262,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   end
 
   scenario "Adding a new product to an existing notification" do
+    sign_in(user)
     visit "/notifications/create"
 
     click_link "Search for or add a product"
@@ -237,6 +279,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   end
 
   scenario "Creating a notification with the normal flow" do
+    sign_in(user)
     visit "/notifications/create"
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
@@ -414,6 +457,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   end
 
   scenario "Creating a notification with form errors" do
+    sign_in(user)
     visit "/notifications/create"
 
     expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)

@@ -41,6 +41,11 @@ FactoryBot.define do
       user_title { "test notification title" }
     end
 
+    factory :better_notif, class: "Investigation::Notification" do
+      description { Faker::Lorem.sentence(word_count: 8) }
+      user_title { Faker::Name.name }
+    end
+
     trait :with_complainant do
       association :complainant
     end
@@ -60,7 +65,7 @@ FactoryBot.define do
     trait :reported_safe do
       after(:build) do |investigation|
         WhyReportingForm.new(reported_reason_safe_and_compliant: true)
-          .assign_to(investigation)
+                        .assign_to(investigation)
       end
     end
 

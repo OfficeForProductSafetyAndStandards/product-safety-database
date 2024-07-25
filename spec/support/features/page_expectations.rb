@@ -16,6 +16,14 @@ module PageExpectations
   end
 
   # Cases pages
+  def expect_to_be_on_cases_page
+    expect(page).to have_current_path("/cases/your-cases")
+  end
+
+  def expect_to_be_on_team_cases_page
+    expect(page).to have_current_path("/cases/team-cases")
+  end
+
   def expect_to_be_on_case_page(case_id: nil)
     if case_id
       expect(page).to have_current_path("/cases/#{case_id}")
