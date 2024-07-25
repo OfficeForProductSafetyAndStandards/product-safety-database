@@ -156,7 +156,7 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         expect(delivered_emails.last.personalization[:subject_text]).to eq "Notification units affected updated"
       end
 
-      it "allows editing of UCR numbers" do
+      it "allows adding of UCR numbers" do
         within("dl#product-0") do
           click_link "Edit the UCR numbers for #{InvestigationProduct.first.product.name}"
         end
@@ -178,6 +178,44 @@ RSpec.describe "Case specific information spec", :with_stubbed_mailer do
         expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
         expect(page).to have_css("h3", text: "Notification specific product information updated")
         expect(page).to have_content("UCR numbers: ucr-123")
+
+        expect(delivered_emails.last.personalization[:subject_text]).to eq "Notification UCR numbers updated"
+      end
+
+      it "allows edit of UCR numbers" do
+        within("dl#product-0") do
+          click_link "Edit the UCR numbers for #{InvestigationProduct.first.product.name}"
+        end
+        expect_to_be_on_edit_ucr_numbers_page(notification_product_id: InvestigationProduct.first.id)
+
+        fill_in "investigation_product_ucr_numbers_attributes_0_number", with: "ucr-123"
+
+        click_button "Save"
+        expect_to_be_on_case_page(case_id: notification.pretty_id)
+
+        expect(page).to have_content("The UCR numbers were updated")
+
+        within("dl#product-0") do
+          click_link "Edit the UCR numbers for #{InvestigationProduct.first.product.name}"
+        end
+        expect_to_be_on_edit_ucr_numbers_page(notification_product_id: InvestigationProduct.first.id)
+
+        fill_in "investigation_product_ucr_numbers_attributes_0_number", with: "ucr-456"
+
+        click_button "Save"
+        expect_to_be_on_case_page(case_id: notification.pretty_id)
+
+        expect(page).to have_content("The UCR numbers were updated")
+
+        within("dl#product-0") do
+          expect(page).to have_css("dt.govuk-summary-list__key", text: "UCR numbers")
+          expect(page).to have_css("dd.govuk-summary-list__value", text: "ucr-456")
+        end
+
+        click_link "Activity"
+        expect_to_be_on_case_activity_page(case_id: notification.pretty_id)
+        expect(page).to have_css("h3", text: "Notification specific product information updated")
+        expect(page).to have_content("UCR numbers: ucr-456")
 
         expect(delivered_emails.last.personalization[:subject_text]).to eq "Notification UCR numbers updated"
       end
