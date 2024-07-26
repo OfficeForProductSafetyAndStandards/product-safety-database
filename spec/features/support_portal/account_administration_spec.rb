@@ -134,6 +134,32 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     click_on "Save changes"
 
     expect(page).to have_css("div.govuk-notification-banner", text: "The name has been updated from #{existing_name} to This is a different name.")
+
+    visit "/history"
+
+    expect(page).to have_text(user.name)
+    expect(page).to have_text("User #{user_two.email} name updated")
+  end
+
+  scenario "Changing role on an account that exists" do
+    visit "/account-admin/#{user_two.id}"
+
+    expect(page).to have_h1(user_two.name)
+
+    click_link "Roles"
+    click_link "Add a role"
+
+    choose "Other"
+
+    click_button "Add role"
+    expect(page).to have_error_messages
+
+    fill_in "add-role-form-custom-role-name-field-error", with: "custom_role"
+
+    click_button "Add role"
+
+    click_link "Remove"
+    click_button "Confirm remove role"
   end
 
   scenario "Changing the email on an account" do
@@ -161,6 +187,11 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     click_on "Save changes"
 
     expect(page).to have_css("div.govuk-notification-banner", text: "The email address has been updated from #{existing_email} to something@example.com.")
+
+    visit "/history"
+
+    expect(page).to have_text(user.name)
+    expect(page).to have_text("User something@example.com email updated")
   end
 
   scenario "Changing the mobile number on an account" do
@@ -183,6 +214,11 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     click_on "Save changes"
 
     expect(page).to have_css("div.govuk-notification-banner", text: "The mobile number has been updated from #{existing_mobile_number} to 01234567890.")
+
+    visit "/history"
+
+    expect(page).to have_text(user.name)
+    expect(page).to have_text("User #{user_two.email} mobile number updated")
   end
 
   scenario "Changing the team admin role on an account" do
@@ -207,6 +243,11 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     click_on "Save changes"
 
     expect(page).to have_css("div.govuk-notification-banner", text: "The team admin role has been removed.")
+
+    visit "/history"
+
+    expect(page).to have_text(user.name)
+    expect(page).to have_text("Role removed for #{user_three.email}")
   end
 
   scenario "Deleting an account", skip: "This is not how deleting an account seems to work." do
@@ -251,5 +292,10 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     click_on "Send invitation"
 
     expect(page).to have_text("New user account invitation has been sent.")
+
+    visit "/history"
+    expect(page).to have_text(user.name)
+    expect(page).to have_text("User fake@example.com created")
+    expect(page).to have_text("Role added for fake@example.com")
   end
 end

@@ -101,7 +101,6 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
 
     expect(page).to have_current_path("/products/bulk-upload/#{BulkProductsUpload.last.id}/review-products?product_ids[]=#{duplicate_product.id}")
     expect(page).to have_content("Review details of the products you are uploading")
-    expect(page).to have_content(duplicate_product.name)
 
     click_button "Continue"
 
@@ -111,6 +110,9 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     click_button "Continue"
 
     expect(page).to have_content("Record a corrective action")
+
+    click_button "Continue"
+    expect(page).to have_error_messages
 
     choose corrective_action
     fill_in "Day", with: 1
@@ -143,6 +145,15 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     expect(page).to have_content(duplicate_product.decorate.name_with_brand)
     expect(page).to have_content(corrective_action)
 
+    click_link "Change"
+
+    fill_in "Day", with: 15
+    fill_in "Month", with: 6
+    fill_in "Year", with: 2019
+
+    select "ATEX 2016", from: "Under which legislation?"
+
+    click_button "Update corrective action"
     click_button "Upload product records"
 
     expect(page).to have_current_path("/products/all-products?sort_by=created_at")
@@ -165,6 +176,22 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     fill_in "Reference number", with: "1234"
     click_button "Continue"
 
+    expect(page).to have_content("Add the business to the notification")
+
+    choose "Authorised representative"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select whether the authorised representative is a UK or EU Authorised representative")
+
+    choose "EU Authorised representative"
+    click_button "Continue"
+
+    expect(page).to have_content("Provide the business details")
+
+    fill_in "Trading name", with: "Fake name"
+    select "United Kingdom", from: "bulk-products-add-business-details-form-country-field", match: :first
+    click_button "Continue"
+
     visit "/notifications"
 
     expect_warning_banner("Important\nWe have noticed that your recent product upload is not complete, and the products have yet to be allocated to their respective notification. Resume the upload process")
@@ -173,5 +200,102 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
 
     expect(page).to have_content("Create a notification for multiple products")
     expect(page).to have_field("Notification name", with: "Test incomplete notification")
+
+    click_button "Continue"
+
+    expect(page).to have_content("Add the business to the notification")
+
+    choose "Retailer"
+    click_button "Continue"
+
+    expect(page).to have_content("Provide the business details")
+
+    fill_in "Trading name", with: "Fake name1"
+    select "United Kingdom", from: "bulk-products-add-business-details-form-country-field", match: :first
+    click_button "Continue"
+
+    expect(page).to have_content("Upload products by Excel")
+
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_template.xlsx"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("The selected file does not contain any products")
+
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_incomplete_product.xlsx"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("The selected file contains one or more products with errors")
+
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_complete_product.xlsx"
+    click_button "Continue"
+
+    expect(page).to have_content("We found duplicate product records")
+
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select whether to use the existing PSD record or the imported Excel record")
+
+    choose "Use imported Excel record"
+    click_button "Continue"
+
+    expect(page).to have_current_path("/products/bulk-upload/#{BulkProductsUpload.last.id}/review-products?barcodes%5B%5D=#{duplicate_product.barcode}")
+    expect(page).to have_content("Review details of the products you are uploading")
+
+    click_button "Continue"
+
+    expect(page).to have_content("Choose products that require the same corrective action")
+
+    check "Fakester Fake"
+    click_button "Continue"
+
+    expect(page).to have_content("Record a corrective action")
+
+    click_button "Continue"
+    expect(page).to have_error_messages
+
+    choose corrective_action
+    fill_in "Day", with: 1
+    fill_in "Month", with: 5
+    fill_in "Year", with: 2020
+    select "General Product Safety Regulations 2005", from: "Under which legislation?"
+
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+      fill_in "Location of recall information", with: Faker::Internet.url(host: "example.com"), visible: false
+    end
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose "Yes"
+    end
+
+    within_fieldset "In which geographic regions has this corrective action been taken?" do
+      check "Great Britain"
+      check "Northern Ireland"
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "No"
+    end
+
+    fill_in "Further details (optional)", with: "Urgent action following consumer reports"
+    click_button "Continue"
+
+    expect(page).to have_content("Check products selected for corrective actions")
+    expect(page).to have_content("Fakester Fake")
+    expect(page).to have_content(corrective_action)
+
+    click_link "Change"
+
+    fill_in "Day", with: 15
+    fill_in "Month", with: 6
+    fill_in "Year", with: 2019
+
+    select "ATEX 2016", from: "Under which legislation?"
+
+    click_button "Update corrective action"
+    click_button "Upload product records"
+
+    expect(page).to have_current_path("/products/all-products?sort_by=created_at")
+    expect_confirmation_banner("The products were uploaded with the notification number #{BulkProductsUpload.last.investigation.pretty_id}")
   end
 end

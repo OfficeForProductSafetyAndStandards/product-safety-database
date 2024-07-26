@@ -20,21 +20,22 @@ module InvestigationProducts
       end
     end
 
-    def add_ucr_number
-      @investigation_product.assign_attributes(ucr_numbers_params)
-      if @investigation_product.save
-        @ucr_number = @investigation_product.ucr_numbers.build
-      end
-
-      render :edit, status: :unprocessable_entity
-    end
-
-    def destroy
-      @ucr_number = @investigation_product.ucr_numbers.find(params[:id])
-      @ucr_number.destroy!
-      ahoy.track "Deleted UCR number", { notification_id: @investigation_product.investigation.id }
-      redirect_to investigation_path(@investigation_product.investigation, anchor: "case_ucr_numbers_#{@investigation_product.id}"), flash: { success: "The UCR numbers were deleted" }
-    end
+    # TODO: needs to be reviewed during refactoring
+    # def add_ucr_number
+    #   @investigation_product.assign_attributes(ucr_numbers_params)
+    #   if @investigation_product.save
+    #     @ucr_number = @investigation_product.ucr_numbers.build
+    #   end
+    #
+    #   render :edit, status: :unprocessable_entity
+    # end
+    #
+    # def destroy
+    #   @ucr_number = @investigation_product.ucr_numbers.find(params[:id])
+    #   @ucr_number.destroy!
+    #   ahoy.track "Deleted UCR number", { notification_id: @investigation_product.investigation.id }
+    #   redirect_to investigation_path(@investigation_product.investigation, anchor: "case_ucr_numbers_#{@investigation_product.id}"), flash: { success: "The UCR numbers were deleted" }
+    # end
 
   private
 
