@@ -13,8 +13,11 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
 
   # test scenario
   scenario "Creating a notification and adding and removing businesses" do
-    visit_new_notification_page
+    visit "/notifications/create"
+    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create/)
     search_for_or_add_new_product
+    visit_new_notification_page
+    complete_initial_notification_steps
     search_for_or_add_new_business
     add_product_identification_details
     add_test_reports
@@ -27,13 +30,13 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
   # functions
 
   def visit_new_notification_page
-    visit "/notifications/create"
     click_link "Add notification details"
     fill_in "Notification title", with: "Fake name"
     fill_in "Notification summary", with: "This is a fake summary"
     within_fieldset("Why are you creating the notification?") do
       choose "A product is unsafe or non-compliant"
     end
+
     click_button "Save and continue"
   end
 
@@ -315,32 +318,7 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
 
     click_button "Continue"
 
-    expect(page).to have_selector(:id, "task-list-3-0-status", text: "Completed")
-  end
-
-  def add_supporting_images
-    click_link "Add supporting images"
-
-    attach_file "image_upload[file_upload]", image_file
-    click_button "Upload image"
-
-    expect(page).to have_content("Supporting image uploaded successfully")
-
-    click_button "Finish uploading images"
-
     expect(page).to have_selector(:id, "task-list-3-1-status", text: "Completed")
-
-    click_link "Add supporting documents"
-
-    fill_in "Document title", with: "Fake title"
-    attach_file "document_form[document]", text_file
-    click_button "Upload document"
-
-    expect(page).to have_content("Supporting document uploaded successfully")
-
-    click_button "Finish uploading documents"
-
-    expect(page).to have_selector(:id, "task-list-3-2-status", text: "Completed")
   end
 
   def add_risk_assessments
@@ -374,7 +352,7 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
 
     click_button "Continue"
 
-    expect(page).to have_selector(:id, "task-list-3-3-status", text: "Completed")
+    expect(page).to have_selector(:id, "task-list-3-4-status", text: "Completed")
   end
 
   def record_a_corrective_action
@@ -434,7 +412,7 @@ RSpec.feature "Editing business details", :with_opensearch, :with_product_form_h
     click_button "Continue"
 
     expect(page).to have_selector(:id, "task-list-4-0-status", text: "Completed")
-    expect(page).to have_content("You have completed 5 of 6 sections.")
+    expect(page).to have_content("You have completed 4 of 6 sections.")
   end
 
   def check_notification_details

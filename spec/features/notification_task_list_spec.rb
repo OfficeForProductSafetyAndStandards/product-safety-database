@@ -24,160 +24,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     notif_assigned
   end
 
-  def add_a_product
-    click_link "Add a new product"
-    select new_product_attributes[:category], from: "Product category"
-
-    fill_in "Product subcategory", with: new_product_attributes[:subcategory]
-    fill_in "Manufacturer's brand name", with: new_product_attributes[:brand]
-    fill_in "Product name", with: new_product_attributes[:name]
-    fill_in "Barcode number (GTIN, EAN or UPC)", with: new_product_attributes[:barcode]
-    fill_in "Other product identifiers", with: new_product_attributes[:product_code]
-    fill_in "Webpage", with: new_product_attributes[:webpage]
-
-    within_fieldset("Was the product placed on the market before 1 January 2021?") do
-      choose when_placed_on_market_answer(new_product_attributes[:when_placed_on_market])
-    end
-
-    within_fieldset("Is the product counterfeit?") do
-      choose counterfeit_answer(new_product_attributes[:authenticity])
-    end
-
-    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
-      page.find("input[value='#{new_product_attributes[:has_markings]}']").choose
-    end
-
-    within_fieldset("Select product marking") do
-      new_product_attributes[:markings].each { |marking| check(marking) } if new_product_attributes[:has_markings] == "markings_yes"
-    end
-
-    select new_product_attributes[:country_of_origin], from: "Country of origin"
-
-    fill_in "Description of product", with: new_product_attributes[:description]
-
-    click_button "Save"
-
-    expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create\/search_for_or_add_a_product/)
-    expect(page).to have_content("Search for or add a product")
-  end
-
-  def add_notification_details_one
-    fill_in "Notification title", with: "Fake name"
-    fill_in "Notification summary", with: "This is a fake summary"
-    within_fieldset("Why are you creating the notification?") do
-      choose "A product is unsafe or non-compliant"
-    end
-    click_button "Save and continue"
-  end
-
-  def add_notification_details_two
-    within_fieldset "What specific issues make the product unsafe or non-compliant?" do
-      check "Product harm"
-      select "Chemical", from: "What is the primary harm?"
-      fill_in "Provide additional information about the product harm", with: "Fake description"
-    end
-
-    within_fieldset "Was the safety issue reported by an overseas regulator?" do
-      choose "Yes"
-      select "France", from: "Country"
-    end
-
-    within_fieldset "Do you want to add your own reference number?" do
-      choose "Yes"
-      fill_in "Reference number", with: "123456"
-    end
-
-    click_button "Save and continue"
-  end
-
-  def add_notification_details_three
-    choose "Unknown"
-    click_button "Save and complete tasks in this section"
-  end
-
-  def create_business
-    click_link "Search for or add a business"
-    click_link "Add a new business"
-    fill_in "Trading name", with: "Trading name"
-    fill_in "Registered or legal name (optional)", with: "Legal name"
-    click_button "Save and continue"
-
-    fill_in "Address line 1", with: "123 Fake St"
-    fill_in "Address line 2", with: "Fake Heath"
-    fill_in "Town or city", with: "Faketon"
-    fill_in "County", with: "Fake County"
-    fill_in "Post code", with: "FA1 2KE"
-    select "United Kingdom", from: "Country"
-    click_button "Save and continue"
-
-    fill_in "Full name", with: "Max Mustermann"
-    fill_in "Job title or role description", with: "Manager"
-    fill_in "Email", with: "max@example.com"
-    fill_in "Phone", with: "+441121121212"
-    click_button "Save and continue"
-
-    click_button "Use business details"
-
-    check "Retailer"
-    click_button "Save and continue"
-  end
-
-  def add_product_identification_details
-    click_link "Add product identification details"
-    click_link "Add batch numbers"
-    fill_in "batch_number", with: "1234, 5678"
-    click_button "Save"
-    click_button "Continue"
-  end
-
-  def add_test_report
-    fill_in "What is the trading standards officer sample reference number?", with: "12345678"
-    fill_in "Day", with: "12"
-    fill_in "Month", with: "5"
-    fill_in "Year", with: "2023"
-    click_button "Save and continue"
-
-    select "ATEX 2016", from: "Under which legislation?"
-    fill_in "Which standard was the product tested against?", with: "EN71"
-    fill_in "Day", with: "12"
-    fill_in "Month", with: "5"
-    fill_in "Year", with: "2023"
-
-    within_fieldset "What was the result?" do
-      choose "Fail"
-      fill_in "How the product failed", with: "Because it did"
-    end
-
-    attach_file "Test report attachment", image_file
-    click_button "Add test report"
-
-    within_fieldset "Do you need to add another test report?" do
-      choose "No"
-    end
-
-    click_button "Continue"
-  end
-
-  def add_supporting_images
-    attach_file "image_upload[file_upload]", image_file
-    click_button "Upload image"
-
-    expect(page).to have_content("Supporting image uploaded successfully")
-
-    click_button "Finish uploading images"
-  end
-
-  def add_supporting_documents
-    fill_in "Document title", with: "Fake title"
-    attach_file "document_form[document]", text_file
-    click_button "Upload document"
-
-    expect(page).to have_content("Supporting document uploaded successfully")
-
-    click_button "Finish uploading documents"
-  end
-
-  scenario "without NTL role" do
+  scenario "Viewing notifications page without NTL role" do
     sign_in(user_one)
     visit "/notifications/your-notifications"
     expect_to_be_on_cases_page
@@ -232,7 +79,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     expect(page).to have_selector(:id, "task-list-0-0-status", text: "Completed")
   end
 
-  scenario "Creating a notification, adding two products and removing one" do
+  scenario "Creating a draft notification with two products and removing one" do
     sign_in(user)
     visit "/notifications/create/from-product/#{existing_product.id}"
 
@@ -717,4 +564,157 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
 
     expect(page).to have_content("Notification submitted")
   end
+end
+
+def add_a_product
+  click_link "Add a new product"
+  select new_product_attributes[:category], from: "Product category"
+
+  fill_in "Product subcategory", with: new_product_attributes[:subcategory]
+  fill_in "Manufacturer's brand name", with: new_product_attributes[:brand]
+  fill_in "Product name", with: new_product_attributes[:name]
+  fill_in "Barcode number (GTIN, EAN or UPC)", with: new_product_attributes[:barcode]
+  fill_in "Other product identifiers", with: new_product_attributes[:product_code]
+  fill_in "Webpage", with: new_product_attributes[:webpage]
+
+  within_fieldset("Was the product placed on the market before 1 January 2021?") do
+    choose when_placed_on_market_answer(new_product_attributes[:when_placed_on_market])
+  end
+
+  within_fieldset("Is the product counterfeit?") do
+    choose counterfeit_answer(new_product_attributes[:authenticity])
+  end
+
+  within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+    page.find("input[value='#{new_product_attributes[:has_markings]}']").choose
+  end
+
+  within_fieldset("Select product marking") do
+    new_product_attributes[:markings].each { |marking| check(marking) } if new_product_attributes[:has_markings] == "markings_yes"
+  end
+
+  select new_product_attributes[:country_of_origin], from: "Country of origin"
+
+  fill_in "Description of product", with: new_product_attributes[:description]
+
+  click_button "Save"
+
+  expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/create\/search_for_or_add_a_product/)
+  expect(page).to have_content("Search for or add a product")
+end
+
+def add_notification_details_one
+  fill_in "Notification title", with: "Fake name"
+  fill_in "Notification summary", with: "This is a fake summary"
+  within_fieldset("Why are you creating the notification?") do
+    choose "A product is unsafe or non-compliant"
+  end
+  click_button "Save and continue"
+end
+
+def add_notification_details_two
+  within_fieldset "What specific issues make the product unsafe or non-compliant?" do
+    check "Product harm"
+    select "Chemical", from: "What is the primary harm?"
+    fill_in "Provide additional information about the product harm", with: "Fake description"
+  end
+
+  within_fieldset "Was the safety issue reported by an overseas regulator?" do
+    choose "Yes"
+    select "France", from: "Country"
+  end
+
+  within_fieldset "Do you want to add your own reference number?" do
+    choose "Yes"
+    fill_in "Reference number", with: "123456"
+  end
+
+  click_button "Save and continue"
+end
+
+def add_notification_details_three
+  choose "Unknown"
+  click_button "Save and complete tasks in this section"
+end
+
+def create_business
+  click_link "Search for or add a business"
+  click_link "Add a new business"
+  fill_in "Trading name", with: "Trading name"
+  fill_in "Registered or legal name (optional)", with: "Legal name"
+  click_button "Save and continue"
+
+  fill_in "Address line 1", with: "123 Fake St"
+  fill_in "Address line 2", with: "Fake Heath"
+  fill_in "Town or city", with: "Faketon"
+  fill_in "County", with: "Fake County"
+  fill_in "Post code", with: "FA1 2KE"
+  select "United Kingdom", from: "Country"
+  click_button "Save and continue"
+
+  fill_in "Full name", with: "Max Mustermann"
+  fill_in "Job title or role description", with: "Manager"
+  fill_in "Email", with: "max@example.com"
+  fill_in "Phone", with: "+441121121212"
+  click_button "Save and continue"
+
+  click_button "Use business details"
+
+  check "Retailer"
+  click_button "Save and continue"
+end
+
+def add_product_identification_details
+  click_link "Add product identification details"
+  click_link "Add batch numbers"
+  fill_in "batch_number", with: "1234, 5678"
+  click_button "Save"
+  click_button "Continue"
+end
+
+def add_test_report
+  fill_in "What is the trading standards officer sample reference number?", with: "12345678"
+  fill_in "Day", with: "12"
+  fill_in "Month", with: "5"
+  fill_in "Year", with: "2023"
+  click_button "Save and continue"
+
+  select "ATEX 2016", from: "Under which legislation?"
+  fill_in "Which standard was the product tested against?", with: "EN71"
+  fill_in "Day", with: "12"
+  fill_in "Month", with: "5"
+  fill_in "Year", with: "2023"
+
+  within_fieldset "What was the result?" do
+    choose "Fail"
+    fill_in "How the product failed", with: "Because it did"
+  end
+
+  attach_file "Test report attachment", image_file
+  click_button "Add test report"
+
+  within_fieldset "Do you need to add another test report?" do
+    choose "No"
+  end
+
+  click_button "Continue"
+end
+
+def add_supporting_images
+  attach_file "image_upload[file_upload]", image_file
+  click_button "Upload image"
+
+  expect(page).to have_content("Supporting image uploaded successfully")
+
+  click_button "Finish uploading images"
+end
+
+def add_supporting_documents
+  fill_in "Document title", with: "Fake title"
+  attach_file "document_form[document]", text_file
+  click_button "Upload document"
+
+  expect(page).to have_content("Supporting document uploaded successfully")
+
+  click_button "Finish uploading documents"
 end
