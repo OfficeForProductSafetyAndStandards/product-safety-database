@@ -243,7 +243,6 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
 
     within_fieldset "Which business is responsible?" do
       choose "Trading name (Retailer)"
-      # TODO: add test here once business selection is possible
     end
 
     within_fieldset "Is the corrective action mandatory?" do
