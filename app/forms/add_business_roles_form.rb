@@ -9,6 +9,7 @@ class AddBusinessRolesForm
   attribute :authorised_representative_choice
   attribute :business_id
 
+  validate :select_at_least_one_role
   validate :online_marketplace_or_other
   validate :online_marketplace_provided
   validate :only_allowed_business_types
@@ -21,7 +22,11 @@ private
   end
 
   def only_allowed_business_types
-    errors.add(:roles, "Please select at least one role") unless (roles.compact_blank! - Business::BUSINESS_TYPES).empty?
+    errors.add(:roles, "Please select a valid role") unless (roles.compact_blank! - Business::BUSINESS_TYPES).empty?
+  end
+
+  def select_at_least_one_role
+    errors.add(:roles, "Please select at least one role") if roles.compact_blank!.empty?
   end
 
   def online_marketplace_provided

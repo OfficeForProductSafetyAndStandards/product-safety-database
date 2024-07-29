@@ -89,5 +89,13 @@ RSpec.describe AddBusinessRolesForm, :with_stubbed_mailer do
         expect(form).not_to be_valid
       end
     end
+
+    context "when no roles are selected" do
+      let(:roles) { %w[""] }
+
+      it "is not valid" do
+        expect(form).not_to be_valid
+      end
+    end
   end
 end

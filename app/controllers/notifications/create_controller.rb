@@ -492,13 +492,15 @@ module Notifications
 
         additional_params = { business_id: @add_contact_form.business_id }
       when :confirm_business_details
-        business = Business.find(confirm_business_details_params)
-        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
+
         additional_params = { business_id: confirm_business_details_params }
       when :add_business_roles
         @add_business_roles_form = AddBusinessRolesForm.new(add_business_roles_params)
 
         return render_wizard unless @add_business_roles_form.valid?
+
+        business = Business.find(@add_business_roles_form.business_id)
+        AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
 
         business = Business.without_online_marketplaces.where(id: @add_business_roles_form.business_id).first
 
