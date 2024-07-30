@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DocumentsHelper, type: :helper do
   let(:document) { double("Document", filename: "test.pdf", content_type: "application/pdf") }
@@ -6,9 +6,9 @@ RSpec.describe DocumentsHelper, type: :helper do
 
   describe "#document_placeholder" do
     it "renders the placeholder partial" do
-      allow(helper).to receive(:render).with("documents/placeholder", document: document)
+      allow(helper).to receive(:render).with("documents/placeholder", document:)
       helper.document_placeholder(document)
-      expect(helper).to have_received(:render).with("documents/placeholder", document: document)
+      expect(helper).to have_received(:render).with("documents/placeholder", document:)
     end
   end
 
@@ -26,10 +26,7 @@ RSpec.describe DocumentsHelper, type: :helper do
 
   describe "#pretty_type_description" do
     before do
-      allow(document).to receive(:audio?).and_return(false)
-      allow(document).to receive(:image?).and_return(false)
-      allow(document).to receive(:video?).and_return(false)
-      allow(document).to receive(:text?).and_return(false)
+      allow(document).to receive_messages(audio?: false, image?: false, video?: false, text?: false)
     end
 
     it "returns 'PDF document' for a pdf file" do
@@ -75,12 +72,12 @@ RSpec.describe DocumentsHelper, type: :helper do
   describe "#spreadsheet?" do
     it "returns true for an Excel file" do
       allow(document).to receive(:content_type).and_return("application/vnd.ms-excel")
-      expect(helper.spreadsheet?(document)).to be_truthy
+      expect(helper).to be_spreadsheet(document)
     end
 
     it "returns false for a non-Excel file" do
       allow(document).to receive(:content_type).and_return("application/pdf")
-      expect(helper.spreadsheet?(document)).to be_falsey
+      expect(helper).not_to be_spreadsheet(document)
     end
   end
 

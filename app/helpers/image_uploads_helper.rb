@@ -16,8 +16,6 @@ module ImageUploadsHelper
 
     return product_image_upload_path(image.upload_model, image) if image.upload_model.is_a?(Product)
 
-    return business_image_upload_path(image.upload_model, image) if image.upload_model.is_a?(Business)
-
     ""
   end
 
