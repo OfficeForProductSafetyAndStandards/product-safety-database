@@ -1,8 +1,0 @@
-<%= link_with_hidden_text_to("Edit #{image_document_text(document)}",
-  "(#{document.title})",
-  edit_associated_document_path(parent, document),
-  class: "govuk-link govuk-!-margin-right-3") if documentable_policy(parent).update? %>
-<%= link_with_hidden_text_to("Remove #{image_document_text(document)}",
-  "(#{document.title})",
-  remove_associated_document_path(parent, document),
-  class: "govuk-link") if documentable_policy(parent).remove? %>
