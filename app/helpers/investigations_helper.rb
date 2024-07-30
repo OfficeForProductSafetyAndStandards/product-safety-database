@@ -4,128 +4,129 @@ module InvestigationsHelper
   CASE_TYPES = %i[allegation enquiry project notification].freeze
   REPORTED_REASONS = %i[safe_and_compliant unsafe_and_non_compliant unsafe non_compliant].freeze
 
-  def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
-    # Opensearch is only used for searching across all investigations
-    @search.q.strip! if @search.q
-    query = @search.q.presence || "*"
-
-    wheres = {}
-
-    case @search.case_type
-    when "allegation"
-      wheres[:type] = "Investigation::Allegation"
-    when "project"
-      wheres[:type] = "Investigation::Project"
-    when "notification"
-      wheres[:type] = "Investigation::Notification"
-    when "enquiry"
-      wheres[:type] = "Investigation::Enquiry"
-    end
-
-    wheres[:type] = "Investigation::Notification" unless user.is_opss?
-
-    if @search.priority == "serious_and_high_risk_level_only"
-      wheres[:risk_level] = %i[serious high]
-    end
-
-    if @search.hazard_type.present?
-      wheres[:hazard_type] = @search.hazard_type
-    end
-
-    case @search.case_status
-    when "open"
-      wheres[:is_closed] = false
-    when "closed"
-      wheres[:is_closed] = true
-    end
-
-    case @search.created_by
-    when "me"
-      wheres[:creator_user] = user.id
-    when "my_team"
-      team = user.team
-      wheres[:_or] = [
-        { creator_user: team.users.pluck(:id) },
-        { creator_team: team.id }
-      ]
-    when "others"
-      if @search.created_by_other_id.blank?
-        wheres[:_not] = { creator_user: user.team.user_ids }
-      elsif (team = Team.find_by(id: @search.created_by_other_id))
-        wheres[:_or] = [
-          { creator_user: team.users.pluck(:id) },
-          { creator_team: team.id }
-        ]
-      else
-        wheres[:creator_user] = @search.created_by_other_id
-      end
-    end
-
-    case @search.case_owner
-    when "me"
-      wheres[:owner_id] = user.id
-    when "my_team"
-      team = user.team
-      wheres[:_or] = [
-        { owner_id: team.users.pluck(:id) },
-        { team_ids_with_access: team.id }
-      ]
-    when "others"
-      if @search.case_owner_is_someone_else_id.present?
-        team = Team.find_by(id: @search.case_owner_is_someone_else_id)
-        wheres[:owner_id] = if team
-                              team.users.pluck(:id)
-                            else
-                              @search.case_owner_is_someone_else_id
-                            end
-      else
-        wheres[:_not] = { owner_id: user.id }
-      end
-    end
-
-    case @search.teams_with_access
-    when "my_team"
-      wheres[:team_ids_with_access] = user.team.id
-    when "other"
-      if @search.teams_with_access_other_id.present?
-        wheres[:team_ids_with_access] = @search.teams_with_access_other_id
-      else
-        wheres[:_not] = { team_ids_with_access: user.team.id }
-      end
-    end
-
-    if @search.created_from_date.present? && @search.created_to_date.present?
-      wheres[:created_at] = { gte: @search.created_from_date.at_midnight, lte: @search.created_to_date.at_end_of_day }
-    elsif @search.created_from_date.present?
-      wheres[:created_at] = { gte: @search.created_from_date.at_midnight }
-    elsif @search.created_to_date.present?
-      wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
-    end
-
-    if paginate
-      Investigation.pagy_search(
-        query,
-        where: wheres,
-        order: @search.sorting_params,
-        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
-        page: page_number,
-        per_page: page_size,
-        body_options: { track_total_hits: true },
-        scroll: scroll_time(scroll)
-      )
-    else
-      Investigation.search(
-        query,
-        where: wheres,
-        order: @search.sorting_params,
-        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
-        page: page_number,
-        per_page: page_size,
-        body_options: { track_total_hits: true },
-        scroll: scroll_time(scroll)
-      )
-    end
-  end
+  # TODO: remove this function, old opensearch not used anymore
+  # def opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
+  #   # Opensearch is only used for searching across all investigations
+  #   @search.q.strip! if @search.q
+  #   query = @search.q.presence || "*"
+  #
+  #   wheres = {}
+  #
+  #   case @search.case_type
+  #   when "allegation"
+  #     wheres[:type] = "Investigation::Allegation"
+  #   when "project"
+  #     wheres[:type] = "Investigation::Project"
+  #   when "notification"
+  #     wheres[:type] = "Investigation::Notification"
+  #   when "enquiry"
+  #     wheres[:type] = "Investigation::Enquiry"
+  #   end
+  #
+  #   wheres[:type] = "Investigation::Notification" unless user.is_opss?
+  #
+  #   if @search.priority == "serious_and_high_risk_level_only"
+  #     wheres[:risk_level] = %i[serious high]
+  #   end
+  #
+  #   if @search.hazard_type.present?
+  #     wheres[:hazard_type] = @search.hazard_type
+  #   end
+  #
+  #   case @search.case_status
+  #   when "open"
+  #     wheres[:is_closed] = false
+  #   when "closed"
+  #     wheres[:is_closed] = true
+  #   end
+  #
+  #   case @search.created_by
+  #   when "me"
+  #     wheres[:creator_user] = user.id
+  #   when "my_team"
+  #     team = user.team
+  #     wheres[:_or] = [
+  #       { creator_user: team.users.pluck(:id) },
+  #       { creator_team: team.id }
+  #     ]
+  #   when "others"
+  #     if @search.created_by_other_id.blank?
+  #       wheres[:_not] = { creator_user: user.team.user_ids }
+  #     elsif (team = Team.find_by(id: @search.created_by_other_id))
+  #       wheres[:_or] = [
+  #         { creator_user: team.users.pluck(:id) },
+  #         { creator_team: team.id }
+  #       ]
+  #     else
+  #       wheres[:creator_user] = @search.created_by_other_id
+  #     end
+  #   end
+  #
+  #   case @search.case_owner
+  #   when "me"
+  #     wheres[:owner_id] = user.id
+  #   when "my_team"
+  #     team = user.team
+  #     wheres[:_or] = [
+  #       { owner_id: team.users.pluck(:id) },
+  #       { team_ids_with_access: team.id }
+  #     ]
+  #   when "others"
+  #     if @search.case_owner_is_someone_else_id.present?
+  #       team = Team.find_by(id: @search.case_owner_is_someone_else_id)
+  #       wheres[:owner_id] = if team
+  #                             team.users.pluck(:id)
+  #                           else
+  #                             @search.case_owner_is_someone_else_id
+  #                           end
+  #     else
+  #       wheres[:_not] = { owner_id: user.id }
+  #     end
+  #   end
+  #
+  #   case @search.teams_with_access
+  #   when "my_team"
+  #     wheres[:team_ids_with_access] = user.team.id
+  #   when "other"
+  #     if @search.teams_with_access_other_id.present?
+  #       wheres[:team_ids_with_access] = @search.teams_with_access_other_id
+  #     else
+  #       wheres[:_not] = { team_ids_with_access: user.team.id }
+  #     end
+  #   end
+  #
+  #   if @search.created_from_date.present? && @search.created_to_date.present?
+  #     wheres[:created_at] = { gte: @search.created_from_date.at_midnight, lte: @search.created_to_date.at_end_of_day }
+  #   elsif @search.created_from_date.present?
+  #     wheres[:created_at] = { gte: @search.created_from_date.at_midnight }
+  #   elsif @search.created_to_date.present?
+  #     wheres[:created_at] = { lte: @search.created_to_date.at_midnight }
+  #   end
+  #
+  #   if paginate
+  #     Investigation.pagy_search(
+  #       query,
+  #       where: wheres,
+  #       order: @search.sorting_params,
+  #       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+  #       page: page_number,
+  #       per_page: page_size,
+  #       body_options: { track_total_hits: true },
+  #       scroll: scroll_time(scroll)
+  #     )
+  #   else
+  #     Investigation.search(
+  #       query,
+  #       where: wheres,
+  #       order: @search.sorting_params,
+  #       misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+  #       page: page_number,
+  #       per_page: page_size,
+  #       body_options: { track_total_hits: true },
+  #       scroll: scroll_time(scroll)
+  #     )
+  #   end
+  # end
 
   def new_opensearch_for_investigations(page_size = Investigation.count, user = current_user, scroll: false, paginate: false)
     # Opensearch is only used for searching across all investigations
