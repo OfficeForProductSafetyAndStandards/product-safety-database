@@ -1,8 +1,10 @@
 require "rails_helper"
 
+class Form; end
+
 RSpec.describe Investigations::EnquiryHelper, type: :helper do
   describe "#date_received" do
-    let(:form) { instance_double("form") }
+    let(:form) { instance_double(Form) }
 
     it "renders the date input field with the correct parameters" do
       allow(helper).to receive(:govukDateInput)
@@ -16,7 +18,7 @@ RSpec.describe Investigations::EnquiryHelper, type: :helper do
   end
 
   describe "#received_type" do
-    let(:form) { instance_double("form") }
+    let(:form) { instance_double(Form) }
     let(:expected_result) do
       [
         { text: "Email", value: "email" },
@@ -33,15 +35,15 @@ RSpec.describe Investigations::EnquiryHelper, type: :helper do
   end
 
   describe "#other_type" do
-    let(:form) { instance_double("form") }
+    let(:form) { instance_double(Form) }
     let(:params) { { enquiry: { other_received_type: "test" } } }
 
     before do
       allow(helper).to receive(:params).and_return(params)
+      allow(helper).to receive(:govukInput)
     end
 
     it "renders the input field with the correct parameters" do
-      allow(helper).to receive(:govukInput)
       helper.other_type(form)
       expect(helper).to have_received(:govukInput).with(
         key: :other_received_type,

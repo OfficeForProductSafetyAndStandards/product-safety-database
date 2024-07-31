@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe SearchHelper, type: :helper do
   subject(:search_helper) { described_class.new }
 
-  let(:user) { double("User", id: 1, team:) }
-  let(:team) { double("Team", id: 1, users: [user]) }
+  let(:user) { instance_double("User", id: 1, team: team) } # rubocop:disable RSpec/VerifiedDoubleReference
+  let(:team) { instance_double("Team", id: 1, users: [user]) } # rubocop:disable RSpec/VerifiedDoubleReference
   let(:params) { ActionController::Parameters.new(q: "test_query", page: "1", sort_by: "name", sort_dir: "asc", page_name: "example_page") }
   let(:search_params) { instance_double(SearchParams, q: "test_query", case_owner: nil) }
   let(:opensearch_query) { instance_double(OpensearchQuery) }
@@ -24,6 +24,7 @@ RSpec.describe SearchHelper, type: :helper do
     end
   end
 end
+
 # search_params
 # search_query(user)
 # query_params

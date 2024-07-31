@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe DocumentsHelper, type: :helper do
-  let(:document) { double("Document", filename: "test.pdf", content_type: "application/pdf") }
-  let(:file) { double("File", filename: "test_file.pdf", blob: double("Blob", byte_size: 1024, metadata: { updated: "2023-07-30T12:00:00Z" })) }
+  let(:document) { instance_double("Document", filename: "test.pdf", content_type: "application/pdf") } # rubocop:disable RSpec/VerifiedDoubleReference
+  let(:blob) { instance_double(ActiveStorage::Blob, byte_size: 1024, metadata: { updated: "2023-07-30T12:00:00Z" }) }
+  let(:file) { instance_double(ActiveStorage::Attachment, filename: "test_file.pdf", blob:) }
 
   describe "#document_placeholder" do
     it "renders the placeholder partial" do
@@ -33,17 +34,17 @@ RSpec.describe DocumentsHelper, type: :helper do
       expect(helper.pretty_type_description(document)).to eq("PDF document")
     end
 
-    it "returns 'Word document' for a pdf file" do
+    it "returns 'Word document' for a Word file" do
       allow(document).to receive(:content_type).and_return("application/msword")
       expect(helper.pretty_type_description(document)).to eq("Word document")
     end
 
-    it "returns 'Excel document' for a pdf file" do
+    it "returns 'Excel document' for an Excel file" do
       allow(document).to receive(:content_type).and_return("application/vnd.ms-excel")
       expect(helper.pretty_type_description(document)).to eq("Excel document")
     end
 
-    it "returns 'PowerPoint document' for a pdf file" do
+    it "returns 'PowerPoint document' for a PowerPoint file" do
       allow(document).to receive(:content_type).and_return("application/vnd.ms-powerpoint")
       expect(helper.pretty_type_description(document)).to eq("PowerPoint document")
     end
