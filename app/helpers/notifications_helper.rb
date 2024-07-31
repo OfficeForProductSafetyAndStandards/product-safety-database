@@ -4,10 +4,10 @@ module NotificationsHelper
   end
 
   def collaborator_access(collaborator)
-    case collaborator
-    when Collaboration::Access::Edit
+    case collaborator.to_s
+    when Collaboration::Access::Edit.to_s
       "Edit"
-    when Collaboration::Access::ReadOnly
+    when Collaboration::Access::ReadOnly.to_s
       "View"
     end
   end
