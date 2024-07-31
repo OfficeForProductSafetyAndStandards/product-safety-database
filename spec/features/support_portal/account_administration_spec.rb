@@ -41,6 +41,29 @@ RSpec.feature "Account administration", :with_stubbed_mailer, :with_stubbed_noti
     expect(page).not_to have_text(user_three.email)
   end
 
+  scenario "Checking last time user signed_in" do
+    user_two.last_sign_in_at = 1.day.ago
+    user_two.save!
+    expect(page).to have_h1("Dashboard")
+
+    click_link "Account administration"
+    click_link "Search for an account"
+
+    expect(page).to have_h1("Search for an account")
+
+    fill_in "Enter a search term", with: user_two.name
+    click_on "Search"
+
+    expect(page).to have_text(user_two.name)
+    expect(page).to have_text(user_two.email)
+    click_link "View", match: :first
+    expect(page).to have_text(user_two.name)
+    expect(page).to have_text(user_two.email)
+    expect(page).to have_text(user_two.team.name)
+    expect(page).to have_text(user_two.last_sign_in_at&.strftime("%d/%m/%Y"))
+    expect(page).to have_text(user_two.last_sign_in_at&.strftime("%H:%M:%S"))
+  end
+
   scenario "Searching for an account that exists with multiple results" do
     expect(page).to have_h1("Dashboard")
 
