@@ -1,8 +1,11 @@
 require "rails_helper"
 
 RSpec.describe DocumentsHelper, type: :helper do
-  let(:document) { double("Document", filename: "test.pdf", content_type: "application/pdf") }
-  let(:file) { double("File", filename: "test_file.pdf", blob: double("Blob", byte_size: 1024, metadata: { updated: "2023-07-30T12:00:00Z" })) }
+  let(:document) { instance_double(Document, filename: "test.pdf", content_type: "application/pdf") }
+  let(:file) { FileStruct.new("test_file.pdf", blob) }
+  let(:blob) { instance_double(ActiveStorage::Blob, byte_size: 1024, metadata: { updated: "2023-07-30T12:00:00Z" }) }
+
+  FileStruct = Struct.new(:filename, :blob)
 
   describe "#document_placeholder" do
     it "renders the placeholder partial" do
@@ -94,9 +97,9 @@ RSpec.describe DocumentsHelper, type: :helper do
   end
 
   describe "#documentable_policy" do
-    let(:current_user) { double("User") }
-    let(:record) { double("Record") }
-    let(:policy) { double("DocumentablePolicy") }
+    let(:current_user) { instance_double(User) }
+    let(:record) { instance_double(Record) }
+    let(:policy) { instance_double(DocumentablePolicy) }
 
     before do
       allow(helper).to receive(:current_user).and_return(current_user)
