@@ -10,8 +10,8 @@
           <ul class="govuk-list">
             <% item[:sub_items].each do |sub_item| %>
               <li>
-                <%= link_to(sub_item[:href], class: "govuk-link govuk-link--no-visited-state", data: { cy: sub_item[:text].parameterize }) do %>
-                  <%= sub_item[:html] || sub_item[:text] + sub_item[:count].to_s %>
+                <%= link_to(sub_item[:href], class: "govuk-link govuk-link--no-visited-state", data: { cy: sub_item[:text]&.parameterize }) do %>
+                  <%= sub_item[:html] || sub_item[:text].present? ? sub_item[:text] : "" + sub_item[:count].to_s %>
                 <% end %>
               </li>
             <% end %>
