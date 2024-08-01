@@ -71,7 +71,7 @@ module ProductsHelper
   end
 
   def child_records(for_export)
-    return [:investigations, :owning_team, { investigation_products: [:test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }] }] if for_export
+    return [:owning_team, { investigation_products: [:test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }] }, { investigations: %i[owner_user owner_team] }] if for_export
 
     { investigations: %i[owner_user owner_team] }
   end

@@ -20,6 +20,7 @@ RSpec.describe ProductExport, :with_stubbed_antivirus, :with_stubbed_mailer, :wi
   let!(:other_product)          { create(:product, country_of_origin: nil).decorate }
   let!(:investigation_product)  { create(:investigation_product, product:, investigation:, affected_units_status: "approx", number_of_affected_units: 49, batch_number: "2112", customs_code: "6987") }
   let!(:investigation_product_2) { create(:investigation_product, product: other_product, investigation: other_investigation) }
+  let!(:notification) { create(:better_notif, creator: user) }
   let!(:risk_assessment)        { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:risk_assessment_2)      { create(:risk_assessment, investigation:, investigation_products: [investigation_product]).decorate }
   let!(:test)                   { create(:test_result, investigation:, investigation_product:, failure_details: "something bad", tso_certificate_issue_date: Time.zone.now, tso_certificate_reference_number: "12321").decorate }
@@ -36,6 +37,23 @@ RSpec.describe ProductExport, :with_stubbed_antivirus, :with_stubbed_mailer, :wi
     it "attaches the spreadsheet as a file" do
       result
       expect(product_export.export_file).to be_attached
+    end
+  end
+
+  describe "#get_owner_filter" do
+    it "equal the owner output" do
+      AddProductToNotification.call!(notification:, product:, user:)
+      AddProductToNotification.call!(notification:, product: other_product, user:)
+      product_export.send(:products)
+      product_export.send(:filter_params, user)
+
+      product_export = described_class.create!(user:, params: { case_owner: "my_team" })
+      product_export.send(:products)
+      expect(product_export.send(:filter_params, user)).to eq my_team_query
+
+      product_export = described_class.create!(user:, params: { case_owner: "me" })
+      product_export.send(:products)
+      expect(product_export.send(:filter_params, user)).to eq my_query
     end
   end
 
@@ -349,6 +367,20 @@ RSpec.describe ProductExport, :with_stubbed_antivirus, :with_stubbed_mailer, :wi
       expect(products_sheet.cell(5, 3)).to eq investigation_b.pretty_id
     end
   end
+end
+
+def my_query
+  { must: [{ term: { "retired?" => false } }],
+    should: [user.id].map do |a|
+              { match: { "investigations.owner_id" => a } }
+            end }
+end
+
+def my_team_query
+  { must: [{ term: { "retired?" => false } }],
+    should: ([user.team.id] + user.team.users.map(&:id)).map do |a|
+              { match: { "investigations.owner_id" => a } }
+            end }
 end
 
 # rubocop:enable RSpec/ExampleLength

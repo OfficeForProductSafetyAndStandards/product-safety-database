@@ -3,11 +3,6 @@ module SearchHelper
     { query: params[:q], sort_by: sort_column, direction: sort_direction }
   end
 
-  def search_query(user)
-    @search.q.strip! if @search.q
-    OpensearchQuery.new(@search.q, filter_params(user), sorting_params)
-  end
-
   def filter_params(user)
     # Default empty filter params. To be overridden by the controller.
   end
@@ -28,8 +23,6 @@ module SearchHelper
       owners << user.id
     when "my_team"
       owners += user_ids_from_team(user.team)
-    when "others"
-      owners += other_owner_ids
     end
     format_owner_terms(owners.uniq)
   end
