@@ -10,36 +10,40 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :redirect_to_first_step_if_wizard_not_started, if: -> { step && (step != :reason_for_creating) }
 
   def show
-    case step
-    when :reason_for_creating
-      @reason_for_creating_form = if session.dig(:form_answers, :case_is_safe)
-                                    ReasonForCreatingForm.new(case_is_safe: session[:form_answers][:case_is_safe])
-                                  else
-                                    ReasonForCreatingForm.new
-                                  end
-      @product = authorize_product
-    when :reason_for_concern
-      skip_step if session[:investigation].reported_reason == "safe_and_compliant"
-      @edit_why_reporting_form = EditWhyReportingForm.new
-    when :reference_number
-      @reference_number_form = if session.dig(:form_answers, :has_complainant_reference)
-                                 ReferenceNumberForm.new(has_complainant_reference: session[:form_answers][:has_complainant_reference], complainant_reference: session[:investigation].try(:complainant_reference))
-                               else
-                                 ReferenceNumberForm.new
-                               end
-    when :case_name
-      @notification_name_form = ChangeNotificationNameForm.new
-      @product = authorize_product
-    when :case_created
-      @investigation = session[:investigation]
-      @product = authorize_product
-      @investigation.build_owner_collaborations_from(current_user)
-      prism_risk_assessment = PrismRiskAssessment.find(session[:prism_risk_assessment_id]) if session[:prism_risk_assessment_id].present?
-      CreateNotification.call(notification: session[:investigation], user: current_user, product: Product.find(session[:product_id]), prism_risk_assessment:)
-      clear_session
-    end
+    if session[:product_id].nil?
+      redirect_to "/create_a_case_page"
+    else
+      case step
+      when :reason_for_creating
+        @reason_for_creating_form = if session.dig(:form_answers, :case_is_safe)
+                                      ReasonForCreatingForm.new(case_is_safe: session[:form_answers][:case_is_safe])
+                                    else
+                                      ReasonForCreatingForm.new
+                                    end
+        @product = authorize_product
+      when :reason_for_concern
+        skip_step if session[:investigation].reported_reason == "safe_and_compliant"
+        @edit_why_reporting_form = EditWhyReportingForm.new
+      when :reference_number
+        @reference_number_form = if session.dig(:form_answers, :has_complainant_reference)
+                                   ReferenceNumberForm.new(has_complainant_reference: session[:form_answers][:has_complainant_reference], complainant_reference: session[:investigation].try(:complainant_reference))
+                                 else
+                                   ReferenceNumberForm.new
+                                 end
+      when :case_name
+        @notification_name_form = ChangeNotificationNameForm.new
+        @product = authorize_product
+      when :case_created
+        @investigation = session[:investigation]
+        @product = authorize_product
+        @investigation.build_owner_collaborations_from(current_user)
+        prism_risk_assessment = PrismRiskAssessment.find(session[:prism_risk_assessment_id]) if session[:prism_risk_assessment_id].present?
+        CreateNotification.call(notification: session[:investigation], user: current_user, product: Product.find(session[:product_id]), prism_risk_assessment:)
+        clear_session
+      end
 
-    render_wizard
+      render_wizard
+    end
   end
 
   def new
