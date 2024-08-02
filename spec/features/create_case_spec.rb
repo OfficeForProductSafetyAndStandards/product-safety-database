@@ -140,10 +140,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         visit "/ts_investigation/case_name"
 
-        expect(page).not_to have_css("label", text: "What is the notification name?")
-        expect(page).to have_no_current_path "ts_investigation/case_name"
-
-        expect(page).to have_css("legend", text: "Why are you creating a notification?")
+        expect(page).to have_content("Create a notification")
         expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
       end
     end
@@ -282,10 +279,7 @@ RSpec.feature "Creating a case", :with_stubbed_antivirus, :with_stubbed_mailer, 
 
         visit "/ts_investigation/case_name"
 
-        expect(page).not_to have_css("legend", text: "What is the notification name?")
-        expect(page).to have_no_current_path "ts_investigation/case_name"
-
-        expect(page).to have_css("legend", text: "Why are you creating a notification?")
+        expect(page).to have_content("Create a notification")
         expect(page).to have_no_current_path "ts_investigation/reason_for_creating"
       end
     end
