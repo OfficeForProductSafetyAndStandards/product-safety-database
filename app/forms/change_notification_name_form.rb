@@ -6,7 +6,7 @@ class ChangeNotificationNameForm
   attribute :user_title, :string
   attribute :current_user
 
-  validates :user_title, presence: true
+  validates :user_title, presence: true, length: { maximum: 100 }
   validate :unique_user_title_within_team
 
   def unique_user_title_within_team
