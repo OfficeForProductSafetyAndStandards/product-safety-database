@@ -1,5 +1,6 @@
 class ProductExport < ApplicationRecord
   include ProductsHelper
+  include SearchHelper
 
   belongs_to :user
   has_one_attached :export_file

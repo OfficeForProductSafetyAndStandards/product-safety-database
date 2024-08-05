@@ -3,10 +3,11 @@ require "rails_helper"
 RSpec.feature "Notification task list", :with_opensearch, :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user]) }
   let(:user_one) { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
-  let(:notification) { create(:notification, :with_complainant, :with_business, :with_document, :reported_unsafe_and_non_compliant, creator: user) }
-  let(:notif_one) { create(:better_notif, :with_complainant, :with_business, :with_document, :reported_unsafe_and_non_compliant, creator: user_one) }
-  let(:notif_two) { create(:better_notif, :with_complainant, :with_business, :with_document, :reported_unsafe_and_non_compliant, creator: user_one) }
-  let(:notif_assigned) { create(:better_notif, read_only_teams: user_one.team) }
+  let(:user_two) { create(:user, :opss_user, :activated, has_viewed_introduction: true) }
+  let(:notif_one) { create_new_notification(user) }
+  let(:notif_two) { create_new_notification(user_one) }
+  let(:notif_three) { create_new_notification(user_one) }
+  let(:notif_four) { create_new_notification(user_one, team: user_two) }
   let(:existing_product) { create(:product) }
   let(:new_product_attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
@@ -18,10 +19,6 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     existing_product
     user_one.team = user.team
     user_one.save!
-    notification
-    notif_one
-    notif_two
-    notif_assigned
   end
 
   scenario "Viewing notifications page without NTL role" do
@@ -33,24 +30,29 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
   end
 
   scenario "Viewing user notifications and team notifications through filters" do
-    sign_in(user)
+    notif_one
+    notif_two
+    notif_three
+    notif_four
+    Investigation::Notification.reindex
 
+    sign_in(user)
     visit "/notifications"
-    expect(page).to have_text(notification.user_title)
+    expect(page).to have_text(notif_one.user_title)
 
     visit "/notifications/your-notifications"
-    expect(page).to have_text(notification.user_title)
+    expect(page).to have_text(notif_one.user_title)
 
     visit "/notifications/team-notifications"
-    expect(page).to have_text(notification.user_title)
     expect(page).to have_text(notif_one.user_title)
     expect(page).to have_text(notif_two.user_title)
+    expect(page).to have_text(notif_three.user_title)
 
-    click_link notification.user_title
-    expect(page).to have_current_path("/notifications/#{notification.pretty_id}")
+    click_link notif_one.user_title
+    expect(page).to have_current_path("/notifications/#{notif_one.pretty_id}")
 
     visit "/notifications/assigned-notifications"
-    expect(page).to have_text(notif_assigned.user_title)
+    expect(page).to have_text(notif_four.user_title)
   end
 
   scenario "Creating an empty notification" do
@@ -267,7 +269,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     select "Consumer Protection Act 1987", from: "Under which legislation?"
 
     within_fieldset "Which business is responsible?" do
-      # TODO: add test here once business selection is possible
+      choose "Trading name"
     end
 
     within_fieldset "Is the corrective action mandatory?" do
@@ -532,7 +534,7 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     select "Consumer Protection Act 1987", from: "Under which legislation?"
 
     within_fieldset "Which business is responsible?" do
-      # TODO: add test here once business selection is possible
+      choose "Trading name"
     end
 
     within_fieldset "Is the corrective action mandatory?" do
@@ -717,4 +719,31 @@ def add_supporting_documents
   expect(page).to have_content("Supporting document uploaded successfully")
 
   click_button "Finish uploading documents"
+end
+
+def create_new_notification(user, team: nil)
+  notification = Investigation::Notification.new(complainant_reference: Faker::Lorem.sentence(word_count: 2),
+                                                 corrective_action_not_taken_reason: nil,
+                                                 corrective_action_taken: nil,
+                                                 date_received: 1.day.ago,
+                                                 received_type: %w[email phone other].sample,
+                                                 is_closed: false,
+                                                 coronavirus_related: false,
+                                                 description: Faker::Lorem.sentence(word_count: 8),
+                                                 user_title: Faker::Name.name)
+  if team.present?
+    CreateNotification.call(notification:,
+                            user: team)
+    AddTeamToNotification.call!(
+      notification:,
+      user: notification.creator_user,
+      team: user.team,
+      collaboration_class: Collaboration::Access::ReadOnly
+    )
+  else
+    CreateNotification.call(notification:,
+                            user:)
+  end
+
+  notification
 end

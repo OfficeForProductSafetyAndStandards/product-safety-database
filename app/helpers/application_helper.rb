@@ -45,29 +45,6 @@ module ApplicationHelper
     rc.render(sanitized_input).html_safe
   end
 
-  def replace_uploaded_file_field(form, field_name, label:, hint:, label_classes: "govuk-label--m")
-    existing_uploaded_file_id = existing_uploaded_file_field(form, field_name)
-    file_upload_field         = file_upload_field(form, field_name, label, label_classes, hint)
-    uploaded_file             = form.object.public_send(field_name)
-
-    file_fields = existing_uploaded_file_id + file_upload_field
-    return file_fields + render_uploaded_file_partial(uploaded_file) if uploaded_file.present?
-
-    file_fields
-  end
-
-  def existing_uploaded_file_field(form, field_name)
-    form.hidden_field("existing_#{field_name}_file_id").to_s
-  end
-
-  def file_upload_field(form, field_name, label, label_classes, hint)
-    form.govuk_file_upload(field_name, label:, hint:, label_classes:).to_s
-  end
-
-  def render_uploaded_file_partial(uploaded_file)
-    render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file })
-  end
-
   def date_or_recent_time_ago(datetime)
     24.hours.ago < datetime ? "#{time_ago_in_words(datetime)} ago".capitalize : datetime.to_formatted_s(:govuk)
   end

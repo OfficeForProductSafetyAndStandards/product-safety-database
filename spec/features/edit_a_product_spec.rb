@@ -139,9 +139,8 @@ RSpec.feature "Editing a product", :with_opensearch, :with_product_form_helper, 
     end
 
     it "allows the user to edit the product, and their team becomes the owner" do
-      # TODO: Reinstate these lines of code when the investigation products page has a link to edit products again
-      # visit "/cases/#{investigation.pretty_id}/products"
-      # expect(page).to have_link "Change product details"
+      visit "/cases/#{investigation.pretty_id}/products"
+      expect(page).to have_link "Edit this product"
 
       visit "/products/#{product.id}"
       click_link "Edit this product record"
