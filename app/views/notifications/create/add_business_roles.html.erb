@@ -8,7 +8,6 @@
         <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
         <%= t("notifications.create.index.sections.business_details.tasks.add_business_roles.title") %>
       </h1>
-      <div class="govuk-hint" id="add-business-roles-form-roles-hint">You can select more than one option except for online marketplace.</div>
       <%= f.govuk_check_boxes_fieldset :roles, legend: nil, hint: { text: "You can select more than one option except for online marketplace." } do %>
         <%= f.govuk_check_box :roles, :retailer, label: { text: t("investigations.business_types.new.types.retailer.label") }, hint:{ text: "This includes traditional retailers and retailers selling directly to customers via their own online presence." } %>
         <%= f.govuk_check_box :roles, :online_seller, label: { text: t("investigations.business_types.new.types.online_seller.label") }, hint:{ text: "This includes businesses primarily selling products to end users via an online marketplace such as Amazon." }%>
