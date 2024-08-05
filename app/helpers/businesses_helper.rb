@@ -27,7 +27,7 @@ private
 
   def filter_by_search(query)
     search_term = @search.q.strip
-    query.where("trading_name ILIKE :term OR legal_name ILIKE :term OR company_number = :term", term: "%#{search_term}%")
+    query.where("trading_name ILIKE :term OR legal_name ILIKE :term OR company_number ILIKE :term", term: "%#{search_term}%")
   end
 
   def filter_by_case_status(query)
