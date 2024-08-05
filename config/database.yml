@@ -11,10 +11,16 @@ test:
   <<: *default
   database: psd_test<%= ENV['TEST_ENV_NUMBER'] %>
 
-
 production:
   adapter: postgresql
   url: <%= ENV['RAILS_DATABASE_URL'] %>
+  # Sets the connection pool size, using the RAILS_MAX_THREADS environment variable if available, otherwise defaults to 15
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 15) %>
+  # Sets the maximum time (in milliseconds) to wait for any database operation to complete (the entire scope of operation)
+  timeout: 5000
+  # Sets the maximum time (in seconds) to wait when establishing a new database connection
   connect_timeout: 2
   variables:
+    # Sets a PostgreSQL-specific timeout for individual SQL statements,
+    # using the STATEMENT_TIMEOUT environment variable if available, otherwise defaults to 500 milliseconds
     statement_timeout: <%= ENV["STATEMENT_TIMEOUT"] || "500ms" %>
