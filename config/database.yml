@@ -11,10 +11,11 @@ test:
   <<: *default
   database: psd_test<%= ENV['TEST_ENV_NUMBER'] %>
 
-
 production:
   adapter: postgresql
   url: <%= ENV['RAILS_DATABASE_URL'] %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 15) %>
+  timeout: 5000
   connect_timeout: 2
   variables:
     statement_timeout: <%= ENV["STATEMENT_TIMEOUT"] || "500ms" %>
