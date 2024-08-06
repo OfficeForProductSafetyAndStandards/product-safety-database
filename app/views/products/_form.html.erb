@@ -54,10 +54,20 @@
 %>
 
 <% if !local_assigns[:disable_image_upload] %>
-  <%= form.govuk_file_field :image,
+  <% if form.object.existing_image_file_id.present? %>
+    <%= form.hidden_field :existing_image_file_id, value: form.object.existing_image_file_id %>
+      <%= form.govuk_file_field :image,
+                                label: { text: 'Upload a product image', size: 'm' },
+                                hint: { text: 'Please ensure that the image you are uploading is in the correct orientation prior to uploading it.</br>
+                            Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.'.html_safe } %>
+
+      <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.image } %>
+  <% else %>
+    <%= form.govuk_file_field :image,
                             label: { text: 'Upload a product image', size: 'm' },
                             hint: { text: 'Please ensure that the image you are uploading is in the correct orientation prior to uploading it.</br>
                             Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.'.html_safe } %>
+  <% end %>
 <% end %>
 
 
