@@ -64,7 +64,7 @@ class ProductForm
 
   def cache_file!(user, product)
     if image.present?
-      unless image.is_a?(ActiveStorage::Blob)
+      unless image.is_a?(ActiveStorage::Blob) || !ACCEPTABLE_IMAGE_TYPES.include?(image.content_type)
         self.image = ActiveStorage::Blob.create_and_upload!(
           io: image,
           filename: image.original_filename,
@@ -73,8 +73,9 @@ class ProductForm
 
         image.analyze_later
       end
-
-      self.existing_image_file_id = image.signed_id
+      self.existing_image_file_id = if ACCEPTABLE_IMAGE_TYPES.include?(image.content_type)
+                                      image.signed_id
+                                    end
     end
 
     if existing_image_file_id.present? && product.present?
