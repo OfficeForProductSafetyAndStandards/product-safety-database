@@ -24,7 +24,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
     end
 
     it "can succesfully change the pre-populated overseas regulator" do
-      notification.update!(is_from_overseas_regulator: true, overseas_regulator_country: "country:AM")
+      notification.update!(is_from_overseas_regulator: true, notifying_country: "country:AM")
 
       sign_in_and_visit_change_overseas_regulator_page("Armenia")
 
@@ -39,7 +39,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
     end
 
     it "can succesfully clear the pre-populated overseas regulator" do
-      notification.update!(is_from_overseas_regulator: true, overseas_regulator_country: "country:AM")
+      notification.update!(is_from_overseas_regulator: true, notifying_country: "country:AM")
 
       sign_in_and_visit_change_overseas_regulator_page("Armenia")
 

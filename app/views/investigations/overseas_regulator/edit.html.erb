@@ -5,13 +5,13 @@
     <%= form_with scope: :investigation, model: @overseas_regulator_form, url: investigation_overseas_regulator_path(@investigation), method: :put do |form| %>
       <%= error_summary @overseas_regulator_form.errors, map_errors: {
         is_from_overseas_regulator: :investigation_is_from_overseas_regulator_true,
-        overseas_regulator_country: :investigation_overseas_regulator_country
+        notifying_country: :investigation_notifying_country
       } %>
 
       <% select_menu_html = capture do %>
         <%= govukSelect(
           form: form,
-          key: :overseas_regulator_country,
+          key: :notifying_country,
           items: options_for_overseas_regulator(Country.overseas_countries, @overseas_regulator_form),
           include_blank: true,
           label: { text: "Select which country" }

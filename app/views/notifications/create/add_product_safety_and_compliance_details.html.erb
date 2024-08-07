@@ -28,7 +28,7 @@
       <% end %>
       <%= f.govuk_radio_buttons_fieldset :is_from_overseas_regulator, legend: { text: "Was the safety issue reported by an overseas regulator?", size: "m" } do %>
         <%= f.govuk_radio_button :is_from_overseas_regulator, true, label: { text: "Yes" }, link_errors: true do %>
-          <%= f.govuk_collection_select :overseas_regulator_country, countries_options, :id, :name, label: { text: "Country" } %>
+          <%= f.govuk_collection_select :notifying_country, countries_options, :id, :name, label: { text: "Country" } %>
         <% end %>
         <%= f.govuk_radio_button :is_from_overseas_regulator, false, label: { text: "No" } %>
       <% end %>

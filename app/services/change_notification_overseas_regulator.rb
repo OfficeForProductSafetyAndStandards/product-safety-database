@@ -2,14 +2,14 @@ class ChangeNotificationOverseasRegulator
   include Interactor
   include EntitiesToNotify
 
-  delegate :notification, :is_from_overseas_regulator, :overseas_regulator_country, :user, to: :context
+  delegate :notification, :is_from_overseas_regulator, :notifying_country, :user, to: :context
 
   def call
     context.fail!(error: "No notification supplied") unless notification.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     assign_overseas_regulator
-    return if notification.changes[:overseas_regulator_country].blank?
+    return if notification.changes[:notifying_country].blank?
 
     ActiveRecord::Base.transaction do
       notification.save!
@@ -23,7 +23,6 @@ private
 
   def create_audit_activity_for_overseas_regulator_changed
     metadata = activity_class.build_metadata(notification)
-
     activity_class.create!(
       added_by_user: user,
       investigation: notification,
@@ -36,12 +35,8 @@ private
   end
 
   def assign_overseas_regulator
-    country = is_from_overseas_regulator ? overseas_regulator_country : nil
-    if country.present?
-      notification.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country, notifying_country: country)
-    else
-      notification.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country)
-    end
+    country = is_from_overseas_regulator ? notifying_country : nil
+    notification.assign_attributes(is_from_overseas_regulator:, notifying_country: country)
   end
 
   def send_notification_email(notification, user)

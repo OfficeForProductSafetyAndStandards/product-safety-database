@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
-  let(:notification) { create(:notification, is_from_overseas_regulator: true, overseas_regulator_country: "country:AM") }
+  let(:notification) { create(:notification, is_from_overseas_regulator: true, notifying_country: "country:AM") }
   let(:user) { create(:user, name: "User One") }
 
   describe ".call" do
@@ -35,14 +35,14 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_antivirus, :wi
           user:,
           notification:,
           is_from_overseas_regulator: true,
-          overseas_regulator_country:
+          notifying_country:
         )
       end
 
       let(:activity_entry) { notification.activities.where(type: AuditActivity::Investigation::ChangeOverseasRegulator.to_s).order(:created_at).last }
 
       context "when no changes have been made" do
-        let(:overseas_regulator_country) { "country:AM" }
+        let(:notifying_country) { "country:AM" }
 
         it "does not generate an activity entry" do
           result
@@ -56,12 +56,12 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_antivirus, :wi
       end
 
       context "when changes have been made" do
-        let(:overseas_regulator_country) { "country:US" }
+        let(:notifying_country) { "country:US" }
 
         it "updates the notification", :aggregate_failures do
           result
 
-          expect(notification.overseas_regulator_country).to eq("country:US")
+          expect(notification.notifying_country).to eq("country:US")
         end
 
         it "creates an activity entry" do
@@ -69,7 +69,7 @@ RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_antivirus, :wi
 
           expect(activity_entry.metadata).to eq({
             "updates" => {
-              "overseas_regulator_country" => ["country:AM", "country:US"]
+              "notifying_country" => ["country:AM", "country:US"]
             }
           })
         end

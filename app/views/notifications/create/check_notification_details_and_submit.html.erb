@@ -44,7 +44,7 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Reported by overseas regulator")
-          row.with_value(text: @notification.is_from_overseas_regulator ? "Yes: #{country_from_code(@notification.overseas_regulator_country)}" : "No")
+          row.with_value(text: @notification.is_from_overseas_regulator ? "Yes: #{country_from_code(@notification.notifying_country)}" : "No")
           row.with_action(text: "Change", href: wizard_path(:add_product_safety_and_compliance_details), visually_hidden_text: "reported by overseas regulator")
         end
         summary_list.with_row do |row|

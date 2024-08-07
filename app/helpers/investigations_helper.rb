@@ -682,7 +682,7 @@ module InvestigationsHelper
     countries.map do |country|
       text = country[0]
       option = { text:, value: country[1] }
-      option[:selected] = true if overseas_regulator_form.overseas_regulator_country == text
+      option[:selected] = true if overseas_regulator_form.notifying_country == text
       option
     end
   end
@@ -909,7 +909,7 @@ private
   def overseas_regulator_value(investigation)
     return if investigation.is_from_overseas_regulator.nil?
 
-    investigation.is_from_overseas_regulator ? country_from_code(investigation.overseas_regulator_country, Country.overseas_countries) : t("investigations.overseas_regulator.no")
+    investigation.is_from_overseas_regulator ? country_from_code(investigation.notifying_country, Country.overseas_countries) : t("investigations.overseas_regulator.no")
   end
 
   def summary_html(investigation)

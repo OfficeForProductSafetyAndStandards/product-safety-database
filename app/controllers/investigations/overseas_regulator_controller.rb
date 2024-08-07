@@ -32,7 +32,7 @@ module Investigations
     end
 
     def overseas_regulator_params
-      params.require(:investigation).permit(:is_from_overseas_regulator, :overseas_regulator_country)
+      params.require(:investigation).permit(:is_from_overseas_regulator, :notifying_country)
     end
   end
 end

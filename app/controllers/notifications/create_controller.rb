@@ -140,7 +140,7 @@ module Notifications
           primary_hazard_description: @notification.hazard_description,
           noncompliance_description: @notification.non_compliant_reason,
           is_from_overseas_regulator: @notification.is_from_overseas_regulator,
-          overseas_regulator_country: @notification.overseas_regulator_country,
+          notifying_country: @notification.notifying_country,
           add_reference_number: @notification.complainant_reference.nil? ? nil : @notification.complainant_reference.present?,
           reference_number: @notification.complainant_reference
         )
@@ -369,7 +369,7 @@ module Notifications
           ChangeNotificationOverseasRegulator.call!(
             notification: @notification,
             is_from_overseas_regulator: add_product_safety_and_compliance_details_params[:is_from_overseas_regulator],
-            overseas_regulator_country: add_product_safety_and_compliance_details_params[:overseas_regulator_country],
+            notifying_country: add_product_safety_and_compliance_details_params[:notifying_country],
             user: current_user,
             silent: true
           )
@@ -1137,7 +1137,7 @@ module Notifications
     end
 
     def add_product_safety_and_compliance_details_params
-      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :is_from_overseas_regulator, :overseas_regulator_country, :add_reference_number, :reference_number, :draft)
+      params.require(:change_notification_product_safety_compliance_details_form).permit(:unsafe, :noncompliant, :primary_hazard, :primary_hazard_description, :noncompliance_description, :is_from_overseas_regulator, :notifying_country, :add_reference_number, :reference_number, :draft)
     end
 
     def add_number_of_affected_units_params
