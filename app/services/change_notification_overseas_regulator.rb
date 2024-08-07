@@ -9,7 +9,7 @@ class ChangeNotificationOverseasRegulator
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     assign_overseas_regulator
-    return if notification.changes.none?
+    return if notification.changes[:overseas_regulator_country].blank?
 
     ActiveRecord::Base.transaction do
       notification.save!
@@ -37,7 +37,11 @@ private
 
   def assign_overseas_regulator
     country = is_from_overseas_regulator ? overseas_regulator_country : nil
-    notification.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country)
+    if country.present?
+      notification.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country, notifying_country: country)
+    else
+      notification.assign_attributes(is_from_overseas_regulator:, overseas_regulator_country: country)
+    end
   end
 
   def send_notification_email(notification, user)
