@@ -8,7 +8,7 @@ class CreateBulkProductsUpload
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     ActiveRecord::Base.transaction do
-      notification = Investigation::Notification.new(reported_reason: "non_compliant", hazard_description:)
+      notification = Investigation::Notification.new(state: "draft", reported_reason: "non_compliant", hazard_description:)
       CreateNotification.call!(notification:, user:, bulk: true, silent: true)
       context.bulk_products_upload = BulkProductsUpload.create!(investigation: notification, user:)
     end
