@@ -6,7 +6,10 @@ RSpec.describe AuditActivity::Investigation::ChangeNotifyingCountry, :with_stubb
   let(:audit_activity) { described_class.from(investigation) }
 
   let(:user) { create(:user).decorate }
-  let(:investigation) { create(:enquiry, notifying_country: previous_country) }
+  let(:investigation) { notif = create(:enquiry, is_from_overseas_regulator: true)
+  notif.notifying_country = previous_country
+  notif.save!
+  notif }
   let(:previous_country) { "country:GB-ENG" }
   let(:new_country) { "country:GB-SCT" }
 

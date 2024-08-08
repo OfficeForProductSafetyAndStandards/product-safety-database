@@ -192,7 +192,7 @@ private
       if is_other_team
         "Restricted"
       else
-        notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : ""
+        nil
       end, # Country
       is_other_team ? "Restricted" : team&.ts_region, # trading_standards_region
       team&.regulator_name, # regulator_name should never be nil and is never restricted

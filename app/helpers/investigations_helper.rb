@@ -685,7 +685,7 @@ module InvestigationsHelper
       option[:selected] = true if overseas_regulator_form.notifying_country == text
       option
     end
-    countries.unshift(OpenStruct.new(text: "", value: "None"))
+    countries.unshift(OpenStruct.new(text: "", value: ""))
     countries
   end
 

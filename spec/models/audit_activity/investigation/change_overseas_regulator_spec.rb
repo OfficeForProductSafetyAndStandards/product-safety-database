@@ -6,7 +6,12 @@ RSpec.describe AuditActivity::Investigation::ChangeOverseasRegulator, :with_stub
   let(:audit_activity) { described_class.from(investigation) }
 
   let(:user) { create(:user).decorate }
-  let(:investigation) { create(:enquiry, is_from_overseas_regulator: true, notifying_country: previous_country) }
+  let(:investigation) do
+    notif = create(:enquiry, is_from_overseas_regulator: true)
+    notif.notifying_country = previous_country
+    notif.save!
+    notif
+  end
   let(:previous_country) { "country:AM" }
   let(:new_country) { "country:US" }
   let(:previous_country_human) { "Armenia" }
@@ -14,7 +19,9 @@ RSpec.describe AuditActivity::Investigation::ChangeOverseasRegulator, :with_stub
 
   let(:activity) { described_class.create(metadata:) }
 
-  before { investigation.update!(notifying_country: new_country) }
+  before do
+    investigation.update!(notifying_country: new_country)
+  end
 
   describe ".build_metadata" do
     context "when the case's overseas regulator has been updated" do

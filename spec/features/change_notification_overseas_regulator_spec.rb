@@ -20,7 +20,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Overseas regulator changed")
-      expect(page).to have_css("p", text: "Overseas regulator changed from test to Armenia")
+      expect(page).to have_css("p", text: "Overseas regulator changed from England to Armenia")
     end
 
     it "can succesfully change the pre-populated overseas regulator" do
@@ -50,7 +50,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Overseas regulator changed")
-      expect(page).to have_css("p", text: "Overseas regulator changed from Armenia to None")
+      expect(page).to have_css("p", text: "Overseas regulator changed from Armenia to England")
     end
   end
 
