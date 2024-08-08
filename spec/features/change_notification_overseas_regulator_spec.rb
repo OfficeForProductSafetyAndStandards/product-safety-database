@@ -20,7 +20,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Overseas regulator changed")
-      expect(page).to have_css("p", text: "Overseas regulator set to Armenia")
+      expect(page).to have_css("p", text: "Overseas regulator changed from test to Armenia")
     end
 
     it "can succesfully change the pre-populated overseas regulator" do
@@ -68,7 +68,11 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
     expect(page.find("dt", text: "Overseas regulator")).to have_sibling("dd", text: country)
     click_link "Change overseas regulator"
     expect(page).to have_css("h1", text: "Was the allegation made by an overseas regulator?")
-    expect(page).to have_select("Select which country", selected: country)
+    if country == ""
+      expect(page).to have_select("investigation[notifying_country]", selected: [])
+    else
+      expect(page).to have_select("investigation[notifying_country]", selected: country)
+    end
     expect_to_have_notification_breadcrumbs
   end
 end

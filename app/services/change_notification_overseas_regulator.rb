@@ -35,7 +35,7 @@ private
   end
 
   def assign_overseas_regulator
-    country = is_from_overseas_regulator ? notifying_country : nil
+    country = is_from_overseas_regulator ? notifying_country : country_from_code(notification.creator_team.country)
     notification.assign_attributes(is_from_overseas_regulator:, notifying_country: country)
   end
 
@@ -52,5 +52,10 @@ private
         "Overseas regulator edited for notification"
       ).deliver_later
     end
+  end
+
+  def country_from_code(code)
+    country = Country.notifying_countries.find { |c| c[1] == code }
+    (country && country[0]) || code
   end
 end

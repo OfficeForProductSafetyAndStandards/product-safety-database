@@ -679,12 +679,14 @@ module InvestigationsHelper
   end
 
   def options_for_overseas_regulator(countries, overseas_regulator_form)
-    countries.map do |country|
+    countries = countries.map do |country|
       text = country[0]
-      option = { text:, value: country[1] }
+      option = OpenStruct.new(text:, value: country[1])
       option[:selected] = true if overseas_regulator_form.notifying_country == text
       option
     end
+    countries.unshift(OpenStruct.new(text: "", value: "None"))
+    countries
   end
 
   def non_search_cases_page_names

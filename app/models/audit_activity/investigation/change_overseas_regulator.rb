@@ -27,17 +27,19 @@ class AuditActivity::Investigation::ChangeOverseasRegulator < AuditActivity::Inv
   end
 
   def previous_country
+    pry
     metadata["updates"]["notifying_country"]&.first || "None"
   end
 
   def new_country
+    pry
     metadata["updates"]["notifying_country"]&.second || "None"
   end
 
 private
 
   def country_from_code(code)
-    country = Country.overseas_countries.find { |c| c[1] == code }
+    country = Country.notifying_countries.find { |c| c[1] == code }
     (country && country[0]) || code
   end
 end
