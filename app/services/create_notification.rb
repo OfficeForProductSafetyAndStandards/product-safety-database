@@ -25,7 +25,7 @@ class CreateNotification
       notification.build_owner_collaborations_from(user)
 
       notification.save!
-      byebug
+
       AddProductToNotification.call!(notification:, product:, user:, skip_email: true) if product
 
       AddPrismRiskAssessmentToNotification.call!(notification:, product:, prism_risk_assessment:, user:) if prism_risk_assessment
