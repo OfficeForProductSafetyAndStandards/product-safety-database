@@ -12,7 +12,12 @@ class CreateNotification
     notification.creator_user = user
     notification.creator_team = team
     notification.notifying_country = team.country
-    notification.state ||= "draft" unless from_task_list
+
+    notification.state = if from_task_list
+                           notification.state ||= "draft"
+                         else
+                           "submitted"
+                         end
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happening concurrently.
