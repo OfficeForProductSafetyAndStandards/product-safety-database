@@ -40,11 +40,7 @@ class CreateNotification
 private
 
   def get_notification_state
-    notification.state = notification.state ||= if from_task_list
-                                                  "draft"
-                                                else
-                                                  "submitted"
-                                                end
+    notification.state = "submitted" unless from_task_list || its_product_bulk_upload
   end
 
   def generate_pretty_id
