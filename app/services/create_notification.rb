@@ -12,7 +12,7 @@ class CreateNotification
     notification.creator_user = user
     notification.creator_team = team
     notification.notifying_country = team.country
-    notification.state = "submitted" unless from_task_list
+    notification.state ||= "draft"
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happening concurrently.
@@ -25,7 +25,7 @@ class CreateNotification
       notification.build_owner_collaborations_from(user)
 
       notification.save!
-
+      byebug
       AddProductToNotification.call!(notification:, product:, user:, skip_email: true) if product
 
       AddPrismRiskAssessmentToNotification.call!(notification:, product:, prism_risk_assessment:, user:) if prism_risk_assessment
