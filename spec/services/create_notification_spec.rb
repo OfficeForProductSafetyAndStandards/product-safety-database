@@ -55,6 +55,10 @@ RSpec.describe CreateNotification, :with_test_queue_adapter do
     context "with required parameters" do
       let(:result) { described_class.call(notification:, user:, product:) }
 
+      it "has draft notification state" do
+        expect(notification.state).to eq("draft")
+      end
+
       it "returns success" do
         expect(result).to be_success
       end
