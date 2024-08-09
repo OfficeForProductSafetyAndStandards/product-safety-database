@@ -43,6 +43,10 @@ private
     notification.state = "submitted" unless from_task_list || its_product_bulk_upload
   end
 
+  def its_product_bulk_upload
+    user.can_bulk_upload_products?
+  end
+
   def generate_pretty_id
     "#{date.strftime('%y%m')}-#{latest_case_number_this_month.next}"
   end
