@@ -13,7 +13,7 @@ class CreateNotification
     notification.creator_team = team
     notification.notifying_country = team.country
 
-    get_notification_state
+    notification.state = "submitted" unless from_task_list || bulk
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happening concurrently.
@@ -38,23 +38,6 @@ class CreateNotification
   end
 
 private
-
-  def get_notification_state
-    notification.state = "submitted" unless from_task_list || its_product_bulk_upload
-  end
-
-  def its_product_bulk_upload
-    check_caller("create_bulk_products_upload")
-  end
-
-  def check_caller(class_pattern, method_name = "call")
-    regex = /#{class_pattern}.*in `#{method_name}'/
-    if caller.any? { |call| call.match?(regex) }
-      true
-    else
-      false
-    end
-  end
 
   def generate_pretty_id
     "#{date.strftime('%y%m')}-#{latest_case_number_this_month.next}"
