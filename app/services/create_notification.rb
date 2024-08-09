@@ -44,7 +44,16 @@ private
   end
 
   def its_product_bulk_upload
-    user.can_bulk_upload_products?
+    check_caller("create_bulk_products_upload")
+  end
+
+  def check_caller(class_pattern, method_name = "call")
+    regex = /#{class_pattern}.*in `#{method_name}'/
+    if caller.any? { |call| call.match?(regex) }
+      true
+    else
+      false
+    end
   end
 
   def generate_pretty_id
