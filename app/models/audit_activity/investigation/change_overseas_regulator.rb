@@ -1,7 +1,6 @@
 class AuditActivity::Investigation::ChangeOverseasRegulator < AuditActivity::Investigation::Base
   def self.build_metadata(investigation)
-    updated_values = investigation.previous_changes.slice(:is_from_overseas_regulator, :overseas_regulator_country)
-
+    updated_values = investigation.previous_changes.slice(:is_from_overseas_regulator, :notifying_country)
     {
       updates: updated_values
     }
@@ -20,25 +19,25 @@ class AuditActivity::Investigation::ChangeOverseasRegulator < AuditActivity::Inv
   end
 
   def previous_from_overseas_regulator
-    metadata["updates"]["is_from_overseas_regulator"]&.first
+    metadata["updates"]["notifying_country"]&.first
   end
 
   def new_from_overseas_regulator
-    metadata["updates"]["is_from_overseas_regulator"]&.second
+    metadata["updates"]["notifying_country"]&.second
   end
 
   def previous_country
-    metadata["updates"]["overseas_regulator_country"]&.first || "None"
+    metadata["updates"]["notifying_country"]&.first || "None"
   end
 
   def new_country
-    metadata["updates"]["overseas_regulator_country"]&.second || "None"
+    metadata["updates"]["notifying_country"]&.second || "None"
   end
 
 private
 
   def country_from_code(code)
-    country = Country.overseas_countries.find { |c| c[1] == code }
+    country = Country.notifying_countries.find { |c| c[1] == code }
     (country && country[0]) || code
   end
 end

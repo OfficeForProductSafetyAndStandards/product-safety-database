@@ -20,11 +20,11 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Overseas regulator changed")
-      expect(page).to have_css("p", text: "Overseas regulator set to Armenia")
+      expect(page).to have_css("p", text: "Overseas regulator changed from England to Armenia")
     end
 
     it "can succesfully change the pre-populated overseas regulator" do
-      notification.update!(is_from_overseas_regulator: true, overseas_regulator_country: "country:AM")
+      notification.update!(is_from_overseas_regulator: true, notifying_country: "country:AM")
 
       sign_in_and_visit_change_overseas_regulator_page("Armenia")
 
@@ -39,7 +39,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
     end
 
     it "can succesfully clear the pre-populated overseas regulator" do
-      notification.update!(is_from_overseas_regulator: true, overseas_regulator_country: "country:AM")
+      notification.update!(is_from_overseas_regulator: true, notifying_country: "country:AM")
 
       sign_in_and_visit_change_overseas_regulator_page("Armenia")
 
@@ -50,7 +50,7 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Overseas regulator changed")
-      expect(page).to have_css("p", text: "Overseas regulator changed from Armenia to None")
+      expect(page).to have_css("p", text: "Overseas regulator changed from Armenia to England")
     end
   end
 
@@ -68,7 +68,11 @@ RSpec.feature "Changing the overseas regulator of a notification", :with_stubbed
     expect(page.find("dt", text: "Overseas regulator")).to have_sibling("dd", text: country)
     click_link "Change overseas regulator"
     expect(page).to have_css("h1", text: "Was the allegation made by an overseas regulator?")
-    expect(page).to have_select("Select which country", selected: country)
+    if country == ""
+      expect(page).to have_select("investigation[notifying_country]", selected: [])
+    else
+      expect(page).to have_select("investigation[notifying_country]", selected: country)
+    end
     expect_to_have_notification_breadcrumbs
   end
 end

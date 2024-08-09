@@ -189,11 +189,7 @@ private
       else
         notification.is_from_overseas_regulator ? "Yes" : "No"
       end, # overseas_regulator
-      if is_other_team
-        "Restricted"
-      else
-        notification.is_from_overseas_regulator ? country_from_code(notification.overseas_regulator_country).to_s : ""
-      end, # Country
+      is_other_team ? "Restricted" : nil, # Country
       is_other_team ? "Restricted" : team&.ts_region, # trading_standards_region
       team&.regulator_name, # regulator_name should never be nil and is never restricted
       is_other_team ? "Restricted" : restrict_data_for_non_opss_user(team&.team_type == "internal"), # opss_internal_team

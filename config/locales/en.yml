@@ -572,7 +572,7 @@ en:
           attributes:
             is_from_overseas_regulator:
               inclusion: Select yes if the allegation was made by an overseas regulator
-            overseas_regulator_country:
+            notifying_country:
               inclusion: Select which country
         comment_form:
           attributes:
@@ -879,7 +879,7 @@ en:
               too_long: Description of the product non-compliance issues must be %{count} characters or less
             is_from_overseas_regulator:
               inclusion: Choose whether the safety issue was reported by an overseas regulator
-            overseas_regulator_country:
+            notifying_country:
               inclusion: Choose the country of the overseas regulator
             add_reference_number:
               inclusion: Choose whether you want to add your own reference number
