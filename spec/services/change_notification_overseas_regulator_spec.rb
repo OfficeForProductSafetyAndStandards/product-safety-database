@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe ChangeNotificationOverseasRegulator, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter do
-  let(:notification) { notif = create(:notification, is_from_overseas_regulator: true)
-  notif.notifying_country = "country:AM"
-  notif.save!
-  notif }
+  let(:notification) do
+    notif = create(:notification, is_from_overseas_regulator: true)
+    notif.notifying_country = "country:AM"
+    notif.save!
+    notif
+  end
   let(:user) { create(:user, name: "User One") }
 
   describe ".call" do

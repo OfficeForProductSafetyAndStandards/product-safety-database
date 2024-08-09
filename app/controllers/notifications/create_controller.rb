@@ -368,7 +368,7 @@ module Notifications
           end
           ChangeNotificationOverseasRegulator.call!(
             notification: @notification,
-            is_from_overseas_regulator: add_product_safety_and_compliance_details_params[:is_from_overseas_regulator],
+            is_from_overseas_regulator: add_product_safety_and_compliance_details_params[:is_from_overseas_regulator] == "true",
             notifying_country: add_product_safety_and_compliance_details_params[:notifying_country],
             user: current_user,
             silent: true

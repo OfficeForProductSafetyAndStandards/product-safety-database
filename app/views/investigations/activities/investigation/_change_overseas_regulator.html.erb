@@ -1,7 +1,7 @@
 <p class="govuk-body">
   <% if activity.previous_from_overseas_regulator.nil? && activity.previous_country == "None" %>
-    <%= I18n.t(".audit_activity.investigation.update_overseas_regulator.body_set", new_country: country_from_code(activity.new_country, Country.overseas_countries) ) %>
+    <%= I18n.t(".audit_activity.investigation.update_overseas_regulator.body_set", new_country: country_from_code(activity.new_country, Country.notifying_countries) ) %>
   <% else %>
-    <%= I18n.t(".audit_activity.investigation.update_overseas_regulator.body_changed", previous_country: country_from_code(activity.previous_country, Country.overseas_countries), new_country: country_from_code(activity.new_country, Country.overseas_countries) ) %>
+    <%= I18n.t(".audit_activity.investigation.update_overseas_regulator.body_changed", previous_country: country_from_code(activity.previous_country, Country.notifying_countries), new_country: country_from_code(activity.new_country, Country.notifying_countries) ) %>
   <% end %>
 </p>

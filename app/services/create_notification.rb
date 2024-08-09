@@ -11,7 +11,7 @@ class CreateNotification
 
     notification.creator_user = user
     notification.creator_team = team
-    notification.notifying_country = country_from_code(team.country)
+    notification.notifying_country = team.country
     notification.state = "submitted" unless from_task_list
 
     ActiveRecord::Base.transaction do
@@ -77,10 +77,5 @@ private
     return "0000" unless case_number
 
     case_number.split("-").last
-  end
-
-  def country_from_code(code)
-    country = Country.notifying_countries.find { |c| c[1] == code }
-    (country && country[0]) || code
   end
 end
