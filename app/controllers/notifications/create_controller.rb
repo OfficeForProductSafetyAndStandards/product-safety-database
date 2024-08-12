@@ -631,6 +631,7 @@ module Notifications
         elsif params[:investigation_product_ids].present?
           @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
           @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
+          @corrective_action_form.cache_file!(current_user)
           @investigation_products = @notification.investigation_products.where(id: params[:investigation_product_ids])
 
           if @corrective_action_form.valid?
@@ -954,7 +955,7 @@ module Notifications
       if request.patch? || request.put?
         @corrective_action_form = CorrectiveActionForm.new(record_a_corrective_action_details_params.merge(duration: "unknown"))
         @corrective_action_form.date_decided = @corrective_action_form.send(:set_date)
-
+        @corrective_action_form.cache_file!(current_user)
         if @corrective_action_form.valid?
           UpdateCorrectiveAction.call!(
             corrective_action: @corrective_action,

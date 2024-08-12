@@ -105,6 +105,29 @@ class CorrectiveActionForm
     assign_file_and_description(document_params)
   end
 
+  def cache_file!(user)
+    if document.is_a?(ActiveStorage::Blob)
+      document.metadata["title"] = title
+      document.metadata["description"] = description
+      document.metadata["updated"] = Time.zone.now
+      document.save!
+    elsif document.instance_of?(String)
+      self.document = ActiveStorage::Blob.find_signed!(document)
+      document.update!(metadata: { updated: Time.zone.now })
+    elsif document
+      self.document = ActiveStorage::Blob.create_and_upload!(
+        io: document,
+        filename: document.original_filename,
+        content_type: document.content_type
+      )
+
+      document.update!(metadata: { title: document.filename, description: "", created_by: user.id, updated: Time.zone.now })
+      document.analyze_later
+
+      self.existing_document_file_id = document.signed_id
+    end
+  end
+
 private
 
   def set_date
