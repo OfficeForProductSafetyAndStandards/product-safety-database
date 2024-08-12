@@ -62,6 +62,7 @@
       <%= f.govuk_radio_buttons_fieldset :related_file, legend: { text: "Are there any files related to the action?", size: "m" } do %>
         <%= f.govuk_radio_button :related_file, true, label: { text: "Yes" }, link_errors: true do %>
           <% if @corrective_action_form.document.present? %>
+            <%= f.hidden_field :document, value: @corrective_action_form.existing_document_file_id %>
             <p id="current-attachment-details">
               Currently selected file:
               <%= link_to "#{@corrective_action_form.document.filename} (opens in new tab)", @corrective_action_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>

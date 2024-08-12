@@ -493,9 +493,6 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
     click_button "Save and continue"
     expect(page).to have_error_messages
 
-    click_button "Save and continue"
-    expect(page).to have_error_messages
-
     within_fieldset "Have you taken a corrective action for the unsafe or non-compliant product(s)?" do
       choose "No"
       choose "I need to refer the issue to another authority"
@@ -541,15 +538,19 @@ RSpec.feature "Notification task list", :with_opensearch, :with_product_form_hel
       choose "Yes"
     end
 
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "corrective_action_form[document]", text_file
+    end
+
+    click_button "Add corrective action"
+
     within_fieldset "In which geographic regions has this corrective action been taken?" do
       check "Great Britain"
       check "European Economic Area (EEA)"
     end
 
-    within_fieldset "Are there any files related to the action?" do
-      choose "Yes"
-      attach_file "corrective_action_form[document]", text_file
-    end
+    expect(page).to have_error_messages
 
     click_button "Add corrective action"
 
