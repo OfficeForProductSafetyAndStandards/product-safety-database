@@ -35,6 +35,37 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     expect(page).to have_content("You can’t upload a mix of multiple non-compliant and unsafe products")
   end
 
+  scenario "Draft notification when adding non-compliant products" do
+    visit "/products/bulk-upload/triage"
+
+    expect(page).to have_content("How would you describe the products in terms of their compliance and safety?")
+
+    choose "Products are non-compliant"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Enter why the products are non-compliant")
+
+    fill_in "Why are the products non-compliant?", with: "Testing"
+    click_button "Continue"
+
+    expect(page).to have_content("Create a notification for multiple products")
+
+    fill_in "Notification name", with: "Test notification"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select yes if you want to add a reference number")
+
+    choose "No"
+
+    visit "/cases/your-cases"
+    expect(page).to have_content("Your notifications")
+
+    within "section.govuk-grid-column-three-quarters#page-content" do
+      # expect(page).to have_content("Test notification")
+      byebug
+    end
+  end
+
   scenario "Adding non-compliant products" do
     visit "/products/bulk-upload/triage"
 
