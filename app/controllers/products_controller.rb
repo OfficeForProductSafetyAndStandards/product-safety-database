@@ -46,7 +46,10 @@ class ProductsController < ApplicationController
       )
       @product = context.product
       @product_form.cache_file!(current_user, @product)
-
+      if @product_form.errors.include?(:image)
+        set_countries
+        return render :new
+      end
       return redirect_to add_product_notification_create_index_path(notification_pretty_id: product_params[:notification_pretty_id], product_id: @product.id) if product_params[:notification_pretty_id].present?
 
       render :confirmation
