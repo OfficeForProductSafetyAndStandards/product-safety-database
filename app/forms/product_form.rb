@@ -78,6 +78,12 @@ class ProductForm
                                     end
     end
 
+    if image.present? && ACCEPTABLE_IMAGE_TYPES.include?(image.content_type) && image.byte_size < 1.bytes
+      errors.add(:image, "Image must be larger than 0MB")
+      self.image.delete
+      self.existing_image_file_id = nil
+    end
+
     if existing_image_file_id.present? && product.present?
       image_upload = ImageUpload.new(upload_model: product, created_by: user.id, file_upload: ActiveStorage::Blob.find_signed!(existing_image_file_id))
       image_upload.save!
