@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[product_bulk_uploader]) }
+  let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[product_bulk_uploader notification_task_list_user]) }
   let(:online_marketplace) { create(:online_marketplace, name: "My marketplace", approved_by_opss: true) }
   let(:duplicate_product) { create(:product, barcode: "12345678") }
   let(:corrective_action) { CorrectiveAction.actions[(CorrectiveAction.actions.keys - %w[other]).sample] }
@@ -33,6 +33,36 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     click_button "Continue"
 
     expect(page).to have_content("You can’t upload a mix of multiple non-compliant and unsafe products")
+  end
+
+  scenario "Upload multiple products creates a draft Notification" do
+    visit "/products/bulk-upload/triage"
+
+    expect(page).to have_content("How would you describe the products in terms of their compliance and safety?")
+
+    choose "Products are non-compliant"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Enter why the products are non-compliant")
+
+    fill_in "Why are the products non-compliant?", with: "Testing"
+    click_button "Continue"
+
+    expect(page).to have_content("Create a notification for multiple products")
+
+    fill_in "Notification name", with: "Test notification"
+
+    choose "Yes"
+    fill_in "Reference number", with: "1234"
+    click_button "Continue"
+
+    visit "/notifications/your-notifications"
+
+    expect(page).to have_content("Draft notifications")
+    within("table") do
+      expect(page).to have_content("Test notification")
+      expect(page).to have_content("Draft")
+    end
   end
 
   scenario "Adding non-compliant products" do
