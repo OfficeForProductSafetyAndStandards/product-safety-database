@@ -1,5 +1,10 @@
 module ProductsHelper
-  NOTIFICATION_TYPES = %i[allegation enquiry project notification].freeze
+  NOTIFICATION_TYPES = {
+    notification: "Investigation::Notification",
+    allegation: "Investigation::Allegation",
+    enquiry: "Investigation::Enquiry",
+    project: "Investigation::Project"
+  }.freeze
 
   def search_for_products(user = current_user, for_export: false)
     query = Product.includes(child_records(for_export))
@@ -18,13 +23,20 @@ module ProductsHelper
 
     query = query.where(investigations: { is_closed: false }) if @search.case_status == "open_only"
 
-    query = query.where(retired_at: nil) if @search.retired_status == "active" || @search.retired_status.blank?
+    query = if @search.retired_status == "active" || @search.retired_status.blank?
+              query.where(retired_at: nil)
+            elsif @search.retired_status == "retired"
+              query.where.not(retired_at: nil)
+            else
+              query
+            end
 
-    query = query.where.not(retired_at: nil) if @search.retired_status == "retired"
+    query = query.where(country_of_origin: @search.countries) if @search.countries.present?
 
-    query = query.where(country_of_origin: @search.countries&.compact_blank) if @search.countries && !@search.countries.compact_blank.empty?
-
-    query = query.where(investigations: { type: notification_types(user) }) unless notification_types(user).empty?
+    notification_types_list = notification_types(user)
+    if notification_types_list.any?
+      query = query.where(investigations: { type: notification_types_list })
+    end
 
     case @search.case_owner
     when "me"
@@ -164,8 +176,12 @@ private
   end
 
   def notification_types(user)
-    return ["Investigation::Notification", nil] unless user.is_opss?
-
-    NOTIFICATION_TYPES.map { |type| "Investigation::#{type.capitalize}" if @search.send(type) }.compact
+    if user.is_opss?
+      NOTIFICATION_TYPES.filter_map do |param, type|
+        type if params[param] == "true"
+      end
+    else
+      ["Investigation::Notification", nil]
+    end
   end
 end
