@@ -269,6 +269,8 @@ class BulkProductsController < ApplicationController
 
     if request.put?
       @bulk_products_upload.update!(submitted_at: Time.zone.now)
+      @bulk_products_upload.investigation.state = "submitted"
+      @bulk_products_upload.investigation.save!
       redirect_to all_products_path(sort_by: "created_at"), flash: { success: "The products were uploaded with the notification number <a href=\"#{investigation_path(pretty_id: @bulk_products_upload.investigation.pretty_id)}\" class=\"govuk-link\">#{@bulk_products_upload.investigation.pretty_id}</a>".html_safe }
     else
       @investigation_products = @bulk_products_upload.investigation.investigation_products.includes(:product)
