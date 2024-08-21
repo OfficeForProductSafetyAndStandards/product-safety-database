@@ -16,6 +16,7 @@
     <%= csrf_meta_tags %>
     <% if Rails.env.production? && analytics_cookies_accepted? %>
       <%= render "shared/ga_head" %>
+      <%= render "shared/ga_tag" %>
     <% end %>
   </head>
   <body class="govuk-template__body app-body-class">
