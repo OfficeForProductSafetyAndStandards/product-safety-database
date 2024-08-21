@@ -57,7 +57,7 @@ module CookiesConcern
 private
 
   def get_policy
-    # these would get assigned by an extended form or another source
+    # these would get assigned from the cookie policy form
     {
       essential: true,
       settings: true,
