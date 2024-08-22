@@ -35,6 +35,8 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
         { error: "Request timed out" }
       rescue StandardError => e
         { error: "An unexpected error occurred: #{e.message}" }
+      ensure
+        file.close
       end
     end
   rescue StandardError => e
