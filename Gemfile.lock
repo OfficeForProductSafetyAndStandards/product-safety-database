@@ -528,7 +528,7 @@ GEM
       railties (>= 5.2)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.3.3)
+    rexml (3.3.6)
       strscan
     rollups (0.3.2)
       activesupport (>= 6.1)
