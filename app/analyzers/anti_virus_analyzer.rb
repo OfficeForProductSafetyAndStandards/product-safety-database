@@ -28,7 +28,7 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
           end
         end
       rescue Errno::ENOENT
-        { error: "File not found" }
+        { error: "File not found locally" }
       rescue JSON::ParserError
         { error: "Invalid JSON response" }
       rescue Net::ReadTimeout
@@ -36,9 +36,11 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       rescue StandardError => e
         { error: "An unexpected error occurred: #{e.message}" }
       ensure
-        file.close
+        file.close unless file.closed?
       end
     end
+  rescue ActiveStorage::FileNotFoundError
+    { error: "File not found in storage" }
   rescue StandardError => e
     { error: "Failed to download blob: #{e.message}" }
   end
