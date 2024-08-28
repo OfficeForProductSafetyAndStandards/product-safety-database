@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.2.1"
+ruby "3.3.4"
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.15"
 gem "active_storage_validations", "~> 1.4.0"
