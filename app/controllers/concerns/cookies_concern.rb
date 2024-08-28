@@ -43,5 +43,26 @@ module CookiesConcern
 
   def set_analytics_cookies(accept_analytics_cookies)
     cookies[:accept_analytics_cookies] = { value: accept_analytics_cookies, expires: 1.year.from_now }
+    cookies[:cookie_preferences_set] = { value: accept_analytics_cookies, expires: 1.year.from_now }
+
+    if accept_analytics_cookies == true
+      cookies[:cookies_policy] = {
+        value: get_policy.to_json,
+        expires: 1.year.from_now,
+        httponly: true
+      }
+    end
+  end
+
+private
+
+  def get_policy
+    # these would get assigned from the cookie policy form
+    {
+      essential: true,
+      settings: true,
+      usage: true,
+      campaigns: true
+    }
   end
 end
