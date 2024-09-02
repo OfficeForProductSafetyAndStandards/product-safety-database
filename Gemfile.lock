@@ -230,6 +230,9 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.3.4)
+    debug (1.9.2)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
     device_detector (1.1.3)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -772,26 +775,27 @@ DEPENDENCIES
   active_model_serializers
   active_storage_validations
   ahoy_matey
-  awesome_print (~> 1.9)
+  awesome_print
   aws-sdk-s3
   aws-sdk-s3control
   bootsnap
-  byebug (~> 11.1)
-  capybara (~> 3.40)
-  capybara-screenshot (~> 1.0)
+  byebug
+  capybara
+  capybara-screenshot
   caxlsx
   caxlsx_rails
   cf-app-utils
   coveralls_reborn
   cssbundling-rails
   data_migrate
-  database_cleaner (~> 2.0)
+  database_cleaner
+  debug
   devise
   devise-encryptable
-  dotenv-rails (~> 3.1)
+  dotenv-rails
   draper
-  factory_bot_rails (~> 6.4)
-  faker (~> 3.4)
+  factory_bot_rails
+  faker
   flipper
   flipper-active_record
   flipper-ui
@@ -803,10 +807,10 @@ DEPENDENCIES
   interactor
   jbuilder
   jsbundling-rails
-  launchy (~> 3.0)
+  launchy
   loaf
   lograge
-  m (~> 1.6)
+  m
   matrix
   mini_magick
   net-imap
@@ -816,63 +820,63 @@ DEPENDENCIES
   opensearch-ruby
   pagy
   paper_trail
-  parallel_tests (~> 4.7.1)
+  parallel_tests
   pg
   prawn
   prawn-table
   prism!
-  pry (~> 0.14)
-  pry-byebug (~> 3.10)
-  pry-doc (~> 1.5)
+  pry
+  pry-byebug
+  pry-doc
   puma (~> 6.4)
   pundit
   rack
   rails (~> 7.1.3)
-  rails-controller-testing (~> 1.0)
+  rails-controller-testing
   rails-erd
   redcarpet
   redis-rails
   report_portal!
   rollups
-  roo (~> 2.10)
+  roo
   rspec
-  rspec-mocks (~> 3.13)
+  rspec-mocks
   rspec-rails
   rswag-api
   rswag-specs
   rswag-ui
-  rubocop (~> 1.64)
-  rubocop-govuk (~> 5.0)
-  rubocop-performance (~> 1.21)
-  rubocop-rspec (~> 3.0)
+  rubocop
+  rubocop-govuk
+  rubocop-performance
+  rubocop-rspec
   rubyXL
   sassc-rails
   scout_apm
   searchkick
-  selenium-webdriver (~> 4)
+  selenium-webdriver
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
   sidekiq
   sidekiq-scheduler
   simplecov
-  simplecov-console (~> 0.9)
+  simplecov-console
   simplecov-lcov
-  solargraph (~> 0.50)
-  spring (~> 4.2)
-  spring-commands-rspec (~> 1.0)
+  solargraph
+  spring
+  spring-commands-rspec
   sprockets
   sprockets-rails
   stimulus-rails
   strong_migrations
   super_diff
   support_portal!
-  timecop (~> 0.9)
+  timecop
   turbo-rails
   tzinfo-data
   validate_email
   web-console
-  webmock (~> 3.23)
+  webmock
   wicked
 
 RUBY VERSION
