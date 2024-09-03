@@ -344,7 +344,7 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.10)
     loaf (0.10.0)
       railties (>= 3.2)
-    logger (1.6.0)
+    logger (1.6.1)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -374,7 +374,7 @@ GEM
     mutex_m (0.2.0)
     net-http (0.4.1)
       uri
-    net-imap (0.4.14)
+    net-imap (0.4.15)
       date
       net-protocol
     net-pop (0.1.2)
@@ -399,7 +399,7 @@ GEM
       multi_json (>= 1.0)
     optimist (3.1.0)
     orm_adapter (0.5.0)
-    pagy (9.0.6)
+    pagy (9.0.8)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -635,7 +635,7 @@ GEM
     searchkick (5.3.1)
       activemodel (>= 6.1)
       hashie
-    selenium-webdriver (4.23.0)
+    selenium-webdriver (4.24.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -822,7 +822,7 @@ DEPENDENCIES
   net-smtp
   nokogiri
   opensearch-ruby
-  pagy (~> 9.0.6)
+  pagy (~> 9.0.8)
   paper_trail
   parallel_tests (~> 4.7.1)
   pg (~> 1.5)
