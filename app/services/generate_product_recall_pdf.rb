@@ -127,9 +127,18 @@ private
     if params["online_marketplace"].nil?
       "N/A"
     elsif params["online_marketplace"]
-      params["other_marketplace_name"].presence || params["online_marketplace_id"] || "Yes"
+      (params["other_marketplace_name"].presence || params["online_marketplace_id"] || "Yes") + omp_responsible_for_recall
     else
       "No"
+    end
+  end
+
+  def omp_responsible_for_recall
+    text = " - The listing has been removed by the online marketplace"
+    if params["omp_responsible_for_recall"].nil? || !params["omp_responsible_for_recall"]
+      ""
+    else
+      text
     end
   end
 end
