@@ -103,23 +103,27 @@ module Notifications
         }[params[:sort_by]] || { created_at: :desc }
 
         products = if @page_name == "your_products"
-                     Product.includes(investigations: %i[owner_user owner_team])
+                     Product.not_retired
+                            .includes(investigations: %i[owner_user owner_team])
                             .where(users: { id: current_user.id })
                             .order(sort_by)
                    elsif @page_name == "team_products"
                      team = current_user.team
-                     Product.includes(investigations: %i[owner_user owner_team])
+                     Product.not_retired
+                            .includes(investigations: %i[owner_user owner_team])
                             .where(users: { id: team.users.map(&:id) }, teams: { id: team.id })
                             .order(sort_by)
                    elsif @search_query
                      @search_query.strip!
-                     Product.where("products.name ILIKE ?", "%#{@search_query}%")
-                            .or(Product.where("products.description ILIKE ?", "%#{@search_query}%"))
-                            .or(Product.where("CONCAT('psd-', products.id) = LOWER(?)", @search_query))
-                            .or(Product.where(id: @search_query))
+                     Product.not_retired
+                            .where("products.name ILIKE ?", "%#{@search_query}%")
+                            .or(Product.not_retired.where("products.description ILIKE ?", "%#{@search_query}%"))
+                            .or(Product.not_retired.where("CONCAT('psd-', products.id) = LOWER(?)", @search_query))
+                            .or(Product.not_retired.where(id: @search_query))
                             .order(sort_by)
                    else
-                     Product.all.order(sort_by)
+                     Product.not_retired
+                     .all.order(sort_by)
                    end
 
         @records_count = products.size
