@@ -94,6 +94,17 @@
         <% end %>
         <%= form.govuk_radio_button :online_marketplace, false, label: { text: "No" } %>
       <% end %>
+      <%= form.govuk_collection_radio_buttons :omp_responsible_for_recall,
+          [
+            OpenStruct.new(id: true, name: "Yes"),
+            OpenStruct.new(id: false, name: "No")
+          ],
+          :id,
+          :name,
+          legend: { text: "Is the online marketplace responsible for the recall?", size: "s" },
+          hint: {text: "Only applicable if you answered yes to online marketplace"},
+          small: true
+      %>
       <%= form.govuk_collection_radio_buttons :notified_by,
           [
             OpenStruct.new(id: "OPSS Enforcement", name: "OPSS Enforcement"),
