@@ -105,37 +105,20 @@
           hint: {text: "Only applicable if you answered yes to online marketplace"},
           small: true
       %>
-      <% if current_user.team.name = "OPSS Incident Management" %>
-        <%= form.govuk_collection_radio_buttons :notified_by,
-          [
-            OpenStruct.new(id: "OPSS Enforcement", name: "OPSS Enforcement"),
-            OpenStruct.new(id: "HSE", name: "HSE"),
-            OpenStruct.new(id: "Office for Product Safety and Standards", name: "Office for Product Safety and Standards"),
-            OpenStruct.new(id: "Local Authority Trading Standards",  name: "Local Authority Trading Standards"),
-            OpenStruct.new(id: "Medicines and Healthcare products Regulatory Agency (MHRA)",  name: "Medicines and Healthcare products Regulatory Agency (MHRA)"),
-            OpenStruct.new(id: "Health and Safety Executive",  name: "Health and Safety Executive"),
-            OpenStruct.new(id: "Environmental Health Northern Ireland",  name: "Environmental Health Northern Ireland"),
-            OpenStruct.new(id: "Ofcom",  name: "Ofcom")
-          ],
-          :id,
-          :name,
-          legend: { text: "Notified by", size: "s" },
-          small: true
-        %>      
-      <% else %>
-        <%= form.govuk_collection_radio_buttons :notified_by,
-          [
+      <%= form.govuk_collection_radio_buttons :notified_by,
+        [
           OpenStruct.new(id: "OPSS Enforcement", name: "OPSS Enforcement"),
-          OpenStruct.new(id: "Local authority trading standards", name: "Local authority trading standards"),
-          OpenStruct.new(id: "HSE", name: "HSE")
-          ],
-          :id,
-          :name,
-          legend: { text: "Notified by", size: "s" },
-          small: true
-        %>
-      <% end %>
-
+          OpenStruct.new(id: "Local Authority Trading Standards",  name: "Local Authority Trading Standards"),
+          OpenStruct.new(id: "HSE", name: "HSE"),
+          OpenStruct.new(id: "Medicines and Healthcare products Regulatory Agency (MHRA)",  name: "Medicines and Healthcare products Regulatory Agency (MHRA)"),
+          OpenStruct.new(id: "Environmental Health Northern Ireland",  name: "Environmental Health Northern Ireland"),
+          OpenStruct.new(id: "Ofcom",  name: "Ofcom")
+        ],
+        :id,
+        :name,
+        legend: { text: "Notified by", size: "s" },
+        small: true
+      %>
       <div class="govuk-button-group">
         <%= form.govuk_submit("Continue") %>
       </div>

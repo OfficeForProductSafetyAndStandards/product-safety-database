@@ -92,7 +92,7 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
 
     within_fieldset "Notified by" do
       radio_button_count = all('input[type="radio"]').count
-      expect(radio_button_count).to eq(8)
+      expect(radio_button_count).to eq(6)
       radio_button = find('input[type="radio"][id="product-recall-form-notified-by-medicines-and-healthcare-products-regulatory-agency-mhra-field"]')
       expect(radio_button[:value]).to eq("Medicines and Healthcare products Regulatory Agency (MHRA)")
       choose("Medicines and Healthcare products Regulatory Agency (MHRA)")
@@ -151,7 +151,7 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
 
     within_fieldset "Notified by" do
       radio_button_count = all('input[type="radio"]').count
-      expect(radio_button_count).to eq(8)
+      expect(radio_button_count).to eq(6)
       radio_button = find('input[type="radio"][id="product-recall-form-notified-by-medicines-and-healthcare-products-regulatory-agency-mhra-field"]')
       expect(radio_button[:value]).to eq("Medicines and Healthcare products Regulatory Agency (MHRA)")
       choose("Medicines and Healthcare products Regulatory Agency (MHRA)")
