@@ -89,7 +89,19 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
     within_fieldset "Risk level" do
       choose(%w[Serious High Medium Low].sample)
     end
+
+    within_fieldset "Notified by" do
+      radio_button_count = all('input[type="radio"]').count
+      expect(radio_button_count).to eq(8)
+      radio_button = find('input[type="radio"][id="product-recall-form-notified-by-medicines-and-healthcare-products-regulatory-agency-mhra-field"]')
+      expect(radio_button[:value]).to eq("Medicines and Healthcare products Regulatory Agency (MHRA)")
+      choose("Medicines and Healthcare products Regulatory Agency (MHRA)")
+    end
+
     click_button "Continue"
+
+    expect(find("textarea#markdown_template_product_safety_report").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
+    expect(find("textarea#markdown_template_product_recall").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
 
     download = page.all("button", text: "Download the PDF").first
     download.click
@@ -136,7 +148,19 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
     within_fieldset "Risk level" do
       choose(%w[Serious High Medium Low].sample)
     end
+
+    within_fieldset "Notified by" do
+      radio_button_count = all('input[type="radio"]').count
+      expect(radio_button_count).to eq(8)
+      radio_button = find('input[type="radio"][id="product-recall-form-notified-by-medicines-and-healthcare-products-regulatory-agency-mhra-field"]')
+      expect(radio_button[:value]).to eq("Medicines and Healthcare products Regulatory Agency (MHRA)")
+      choose("Medicines and Healthcare products Regulatory Agency (MHRA)")
+    end
+
     click_button "Continue"
+
+    expect(find("textarea#markdown_template_product_safety_report").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
+    expect(find("textarea#markdown_template_product_recall").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
 
     download = page.all("button", text: "Download the PDF").first
     download.click
