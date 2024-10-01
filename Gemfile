@@ -5,8 +5,8 @@ gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.14"
 gem "active_storage_validations", "~> 1.2.0"
 gem "ahoy_matey", "~> 5.2"
-gem "aws-sdk-s3", "~> 1.165"
-gem "aws-sdk-s3control", "~> 1.93"
+gem "aws-sdk-s3", "~> 1.166"
+gem "aws-sdk-s3control", "~> 1.94"
 gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
@@ -119,7 +119,7 @@ group :test do
   gem "simplecov-lcov"
   gem "super_diff"
   gem "timecop", "~> 0.9"
-  gem "webmock", "~> 3.23"
+  gem "webmock", "~> 3.24"
 end
 
 gem "data_migrate"
