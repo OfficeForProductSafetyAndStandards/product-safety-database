@@ -106,15 +106,18 @@
           small: true
       %>
       <%= form.govuk_collection_radio_buttons :notified_by,
-          [
-            OpenStruct.new(id: "OPSS Enforcement", name: "OPSS Enforcement"),
-            OpenStruct.new(id: "Local authority trading standards", name: "Local authority trading standards"),
-            OpenStruct.new(id: "HSE", name: "HSE")
-          ],
-          :id,
-          :name,
-          legend: { text: "Notified by", size: "s" },
-          small: true
+        [
+          OpenStruct.new(id: "OPSS Enforcement", name: "OPSS Enforcement"),
+          OpenStruct.new(id: "Local Authority Trading Standards",  name: "Local Authority Trading Standards"),
+          OpenStruct.new(id: "HSE", name: "HSE"),
+          OpenStruct.new(id: "Medicines and Healthcare products Regulatory Agency (MHRA)",  name: "Medicines and Healthcare products Regulatory Agency (MHRA)"),
+          OpenStruct.new(id: "Environmental Health Northern Ireland",  name: "Environmental Health Northern Ireland"),
+          OpenStruct.new(id: "Ofcom",  name: "Ofcom")
+        ],
+        :id,
+        :name,
+        legend: { text: "Notified by", size: "s" },
+        small: true
       %>
       <div class="govuk-button-group">
         <%= form.govuk_submit("Continue") %>
