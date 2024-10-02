@@ -3,11 +3,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= form_with url: add_to_case_prism_risk_assessments_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
-      <span class="govuk-caption-l"><%= @prism_risk_assessment.name %></span>
+      <span class="govuk-caption-l"><%= sanitize(@prism_risk_assessment.name) %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
       <div class="govuk-inset-text">
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
       </div>
       <h2 class="govuk-heading-m">Related notifications</h2>
       <% if (@related_investigations.size + @associated_investigations.size).positive? %>
@@ -28,10 +28,10 @@
             <% @related_investigations.each do |investigation| %>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                  <%= investigation.title %><br><%= investigation.pretty_id %>
+                  <%= sanitize(investigation.title) %><br><%= sanitize(investigation.pretty_id) %>
                 </th>
                 <td class="govuk-table__cell">
-                  <%= investigation.creator_user.team.name %>
+                  <%= sanitize(investigation.creator_user.team.name) %>
                 </td>
                 <td class="govuk-table__cell">
                   <%= date_or_recent_time_ago investigation.updated_at %>
@@ -50,10 +50,10 @@
             <% @associated_investigations.each do |investigation| %>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                  <%= investigation.title %><br><%= investigation.pretty_id %>
+                  <%= sanitize(investigation.title) %><br><%= sanitize(investigation.pretty_id) %>
                 </th>
                 <td class="govuk-table__cell">
-                  <%= investigation.creator_user.team.name %>
+                  <%= sanitize(investigation.creator_user.team.name) %>
                 </td>
                 <td class="govuk-table__cell">
                   <%= date_or_recent_time_ago investigation.updated_at %>
@@ -85,7 +85,7 @@
         </table>
         <%= form.hidden_field :prism_risk_assessment_id, value: @prism_risk_assessment.id %>
       <% else %>
-        <p class="govuk-body">There are no notifications for <%= @prism_risk_assessment.product_name %>. You can create a new product notification.</p>
+        <p class="govuk-body">There are no notifications for <%= sanitize(@prism_risk_assessment.product_name) %>. You can create a new product notification.</p>
       <% end %>
       <%= govukButton(text: "Create a new product notification", href: new_investigation_ts_investigation_path(product_id: @prism_risk_assessment.product_id, prism_risk_assessment_id: @prism_risk_assessment.id), classes: "govuk-button--secondary") %>
     <% end %>

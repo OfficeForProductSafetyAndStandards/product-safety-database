@@ -6,7 +6,7 @@
       Notification title
     </th>
     <th id="<%= dom_id investigation, :item %>" colspan="4" scope="colgroup" class="govuk-table__header">
-      <%= link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      <%= link_to sanitize(investigation.title), investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
     </th>
   </tr>
   <tr class="govuk-table__row">
@@ -17,7 +17,7 @@
       <%= investigation.pretty_id %>
     </td>
     <td headers="caseowner <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
-      <%= investigation.owner_display_name_for(viewer: current_user) %>
+      <%= sanitize(investigation.owner_display_name_for(viewer: current_user)) %>
     </td>
     <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
       <td headers="created <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
@@ -35,9 +35,9 @@
       <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :keywords %>" class="govuk-visually-hidden">
         Matching keywords
       </th>
-      <td headers="<%= dom_id investigation, :item %> <%= dom_id investigation, :keywords %>" colspan="4" class="govuk-table__cell">
+      <td headers="case <%= dom_id investigation, :item %> <%= dom_id investigation, :keywords %>" colspan="4" class="govuk-table__cell">
         <% displayable_highlights.each do |highlight| %>
-          <span class="govuk-!-font-size-16"><%= highlight[:label] %>: <%= highlight[:content] %>. </span>
+          <span class="govuk-!-font-size-16"><%= sanitize(highlight[:label]) %>: <%= sanitize(highlight[:content]) %>. </span>
         <% end %>
       </td>
     </tr>
