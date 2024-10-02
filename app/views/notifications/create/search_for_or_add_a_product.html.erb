@@ -15,6 +15,7 @@
         </div>
       <% end %>
     </div>
+    
     <% if @manage %>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -28,7 +29,7 @@
             govuk_summary_list do |summary_list|
               @notification.investigation_products.decorate.each do |investigation_product|
                 summary_list.with_row do |row|
-                  row.with_key(text: investigation_product.product.name_with_brand)
+                  row.with_key(text: sanitize(investigation_product.product.name_with_brand))
                   row.with_action(text: "Remove", href: remove_product_notification_create_index_path(investigation_product_id: investigation_product.id), visually_hidden_text: "product from notification") unless @notification.tasks_status["add_notification_details"] == "completed"
                 end
               end
@@ -46,25 +47,13 @@
         <div class="govuk-grid-column-one-quarter">
           <nav aria-label="Secondary">
             <ul class="govuk-list opss-left-nav">
-            <% unless ["team_products", "your_products"].include?(@page_name) %>
-              <li class="opss-left-nav__active">
-            <% else %>
-              <li>
-            <% end %>
+              <li class="<%= "opss-left-nav__active" unless ["team_products", "your_products"].include?(@page_name) %>">
                 <%= link_to "All products", wizard_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_products", "your_products"].include?(@page_name)) %>
               </li>
-            <% if @page_name == "team_products" %>
-              <li class="opss-left-nav__active">
-            <% else %>
-              <li>
-            <% end %>
+              <li class="<%= "opss-left-nav__active" if @page_name == "team_products" %>">
                 <%= link_to "Team products", "#{wizard_path}?page_name=team_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_products") %>
               </li>
-            <% if @page_name == "your_products" %>
-              <li class="opss-left-nav__active">
-            <% else %>
-              <li>
-            <% end %>
+              <li class="<%= "opss-left-nav__active" if @page_name == "your_products" %>">
                 <%= link_to "Your products", "#{wizard_path}?page_name=your_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_products") %>
               </li>
             </ul>
@@ -91,23 +80,23 @@
               </div>
             <% end %>
           <% end %>
+          
           <% if @records.any? %>
-            <p class="govuk-body"><% if @records_count == 1 %>There is currently 1 product.<% else %>There are currently <%= @records_count %> products.<% end %></p>
+            <p class="govuk-body"><%= "There #{pluralize(@records_count, 'is', 'are')} currently #{@records_count} product#{'s' if @records_count != 1}." %></p>
             <%=
               govuk_table do |table|
                 table.with_caption(size: "s", text: "Product details")
-
                 table.with_body do |body|
                   @records.decorate.each do |record|
                     image = if record.virus_free_images.present?
-                      image_tag(record.virus_free_images.first.file_upload, width: 80, alt: record.virus_free_images.first.file_upload.filename)
+                      image_tag(record.virus_free_images.first.file_upload, width: 80, alt: sanitize(record.virus_free_images.first.file_upload.filename))
                     else
                       image_tag("no-product-image.jpg", width: 80, height: 80, alt: "No product image available")
                     end
 
                     details = <<~DETAILS.strip
                       <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">#{sanitize(record.name_with_brand)}</p>
-                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{record.category}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{sanitize(record.category)}</p>
                       <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Sub-category:</strong> #{sanitize(record.subcategory)}</p>
                       <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>PSD reference:</strong> #{sanitize(record.psd_ref)}</p>
                       #{
@@ -141,14 +130,6 @@
               end
             %>
             <%= govuk_pagination(pagy: @pagy) %>
-          <% elsif ["team_products", "your_products"].include?(@page_name) %>
-            <p class="govuk-body">
-              <%= "There are no product records linked to your open cases." if @page_name == "your_products" %>
-              <%= "There are no product records linked to the team's open cases." if @page_name == "team_products" %>
-            </p>
-            <p class="govuk-body">
-              You can search all product records in the <a href="<%= wizard_path %>" class="govuk-link">all products</a> search page.
-            </p>
           <% else %>
             <p class="govuk-body">
               <%= "There are no product records." unless @search_query.present? %>

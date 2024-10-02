@@ -12,12 +12,12 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
-          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
         </ul>
       <% end %>
       <% if @test_result.date.present? %>
         <%= govuk_inset_text do %>
-          This test report is marked as <strong><%= "not" if @test_result.tso_certificate_issue_date.blank? %> being funded under the <abbr>OPSS</abbr> sampling protocol</strong>. If this is incorrect, <a href="<%= remove_with_product_and_entity_notification_create_index_path(@notification, step: "add_test_reports", investigation_product_id: @test_result.investigation_product.id, entity_id: @test_result.id) %>" class="govuk-link">remove this test report</a> and create a new one.
+          This test report is marked as <strong><%= sanitize(@test_result.tso_certificate_issue_date.blank? ? "not" : "") %> being funded under the <abbr>OPSS</abbr> sampling protocol</strong>.
         <% end %>
       <% end %>
       <%= f.govuk_collection_select :legislation, legislation_options, :id, :name, label: { text: "Under which legislation?", size: "m" }, hint: { text: "Select the relevant legislation from the list." } %>
@@ -29,26 +29,26 @@
           <div class="govuk-hint" id="test-result-form-date-hint">For example, 12 5 2023</div>
           <% if date_error %>
           <p class="govuk-error-message" id="test-result-form-date-field-error">
-            <span class="govuk-visually-hidden">Error: </span><%= @test_result_form.errors.full_messages_for(:date).first %>
+            <span class="govuk-visually-hidden">Error: </span><%= sanitize(@test_result_form.errors.full_messages_for(:date).first) %>
           </p>
           <% end %>
           <div class="govuk-date-input">
             <div class="govuk-date-input__item">
               <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" for="test_result_form_date_day">Day</label>
-                <input id="test_result_form_date_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][day]" type="text" inputmode="numeric" value="<%= @test_result_form.date&.day || @test_result.date&.day %>">
+                <input id="test_result_form_date_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][day]" type="text" inputmode="numeric" value="<%= sanitize(@test_result_form.date&.day.to_s || @test_result.date&.day.to_s) %>">
               </div>
             </div>
             <div class="govuk-date-input__item">
               <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" for="test_result_form_date_month">Month</label>
-                <input id="test_result_form_date_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][month]" type="text" inputmode="numeric" value="<%= @test_result_form.date&.month || @test_result.date&.month %>">
+                <input id="test_result_form_date_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][month]" type="text" inputmode="numeric" value="<%= sanitize(@test_result_form.date&.month.to_s || @test_result.date&.month.to_s) %>">
               </div>
             </div>
             <div class="govuk-date-input__item">
               <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" for="test_result_form_date_year">Year</label>
-                <input id="test_result_form_date_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][year]" type="text" inputmode="numeric" value="<%= @test_result_form.date&.year || @test_result.date&.year %>">
+                <input id="test_result_form_date_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][year]" type="text" inputmode="numeric" value="<%= sanitize(@test_result_form.date&.year.to_s || @test_result.date&.year.to_s) %>">
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@
       <% if @test_result_form.document.present? %>
         <p id="current-attachment-details">
           Currently selected file:
-          <%= link_to "#{@test_result_form.document.filename} (opens in new tab)", @test_result_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+          <%= link_to sanitize(@test_result_form.document.filename), @test_result_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
         </p>
         <%= f.hidden_field :document, value: @test_result_form.document.id %>
         <%= govuk_details(summary_text: "Replace this file") do %>

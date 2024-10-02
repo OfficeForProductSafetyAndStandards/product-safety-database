@@ -1,9 +1,9 @@
-<%= page_title @product.retired? ? "Retired product record" : "Product - #{@product.name_with_brand}" %>
+<%= page_title @product.retired? ? "Retired product record" : "Product - #{sanitize(@product.name_with_brand)}" %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
     <span class="govuk-caption-m">&nbsp;</span>
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
-      Product <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= @product.psd_ref %></span>
+      Product <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= sanitize(@product.psd_ref) %></span>
     </h1>
     <% if @product.retired? %>
       <p class="govuk-body opss-secondary-text">
@@ -48,7 +48,7 @@
     <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The product record</h2>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h3 class="govuk-heading-m" data-cy="product-name"><%= @product.name_with_brand %></h3>
+        <h3 class="govuk-heading-m" data-cy="product-name"><%= sanitize(@product.name_with_brand) %></h3>
       </div>
     </div>
     <div class="govuk-grid-row">
@@ -58,7 +58,7 @@
       <% unless @product.virus_free_images.empty? %>
         <div class="govuk-grid-column-one-third">
           <figure class="opss-margin-bottom-1-desktop">
-            <%= image_tag @product.virus_free_images.first.file_upload.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop" %>
+            <%= image_tag @product.virus_free_images.first.file_upload.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop", alt: @product.virus_free_images.first.file_upload.filename %>
           </figure>
         </div>
       <% end %>
@@ -94,7 +94,7 @@
         <% end %>
       <% else %>
         <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
-          This product record is currently owned by <%= @product.owning_team.name %>. You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries. You can still add this product record to your notification.
+          This product record is currently owned by <%= sanitize(@product.owning_team.name) %>. You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries. You can still add this product record to your notification.
         </p>
       <% end %>
     <% end %>

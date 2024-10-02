@@ -46,7 +46,7 @@
             <% end %>
           </div>
           <div class="govuk-grid-column-three-quarters">
-            <h2 class="govuk-heading-m"><%= product.name_with_brand %></h2>
+            <h2 class="govuk-heading-m"><%= sanitize(product.name_with_brand) %></h2>
             <%=
               govuk_summary_list(actions: false) do |summary_list|
                 summary_list.with_row do |row|

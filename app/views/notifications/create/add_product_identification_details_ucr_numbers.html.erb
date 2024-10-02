@@ -10,7 +10,7 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
-          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
         </ul>
       <% end %>
       <template data-nested-form-target="template">

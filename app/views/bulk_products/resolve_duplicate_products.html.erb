@@ -17,7 +17,7 @@
         <div class="opss-panels">
           <!-- Existing record -->
           <div class="opss-panels__pair opss-panels__pair--merged--left" data-type="panel" data-identifier="<%= product.barcode %>" data-variant="existing">
-            <h2 class="govuk-heading-m"><%= product.name_with_brand %></h2>
+            <h2 class="govuk-heading-m"><%= sanitize(product.name_with_brand) %></h2>
             <p class="govuk-body"><%= govuk_tag(text: "Existing PSD record", colour: "yellow") %></p>
             <%=
               govuk_summary_list(actions: false) do |summary_list|
@@ -51,7 +51,7 @@
           <!-- New record -->
           <% new_record = new_record_for_product(product).decorate %>
           <div class="opss-panels__pair opss-panels__pair--merged--right" data-type="panel" data-identifier="<%= product.barcode %>" data-variant="new">
-            <h2 class="govuk-heading-m"><%= new_record.name_with_brand %></h2>
+            <h2 class="govuk-heading-m"><%= sanitize(new_record.name_with_brand) %></h2>
             <p class="govuk-body"><%= govuk_tag(text: "Imported Excel record", colour: "green") %></p>
             <%=
               govuk_summary_list(actions: false) do |summary_list|

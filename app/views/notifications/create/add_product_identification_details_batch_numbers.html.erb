@@ -10,7 +10,7 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
-          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
         </ul>
       <% end %>
       <%= f.govuk_text_field :batch_number, label: nil, hint: { text: "Use a comma and a space to separate multiple batch numbers. For example, 37364361, 98774776" }, value: @investigation_product.batch_number %>

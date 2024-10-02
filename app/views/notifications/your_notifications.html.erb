@@ -35,7 +35,6 @@
                   row.with_cell(text: sanitize("<a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\">Make changes</a><hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\"><a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\">Delete</a>", tags: %w(a hr), attributes: %w(href class)).html_safe)
                 end
               end
-
             end
           end
         %>
@@ -67,7 +66,6 @@
                   row.with_cell(text: sanitize("<a href=\"#{notification_path(notification)}\" class=\"govuk-link\">Update notification</a>", tags: %w(a), attributes: %w(href class)).html_safe)
                 end
               end
-
             end
           end
         %>
