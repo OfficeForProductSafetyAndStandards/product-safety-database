@@ -1,39 +1,40 @@
-<%= page_title(@notification.user_title) %>
+<%= page_title(sanitize(@notification.user_title)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <%= @notification.user_title %>
+      <%= sanitize(@notification.user_title) %>
     </h1>
     <%= govuk_tag(text: "Submitted", colour: "green") %>
     <%= govuk_inset_text do %>
       <p class="govuk-body">For</p>
       <ul class="govuk-list">
       <% @notification.investigation_products.decorate.each do |investigation_product| %>
-        <li class="govuk-body-l"><%= investigation_product.product.name_with_brand %></li>
+        <li class="govuk-body-l"><%= sanitize(investigation_product.product.name_with_brand) %></li>
       <% end %>
       </ul>
       <p class="govuk-body"><a href="<%= new_investigation_product_path(@notification) %>" class="govuk-link govuk-link--no-visited-state">Add another product</a></p>
     <% end %>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     <p class="govuk-body-s">
-      <strong>Notification number:</strong> <%= @notification.pretty_id %><br>
+      <strong>Notification number:</strong> <%= sanitize(@notification.pretty_id) %><br>
       <strong>Last updated:</strong> <%= date_or_recent_time_ago(@notification.updated_at) %><br>
       <strong>Created:</strong> <%= @notification.created_at.to_formatted_s(:govuk) %><br>
-      <strong>Created by:</strong> <%= @notification.creator_user.name %> (<%= @notification.creator_team.name %>)<br>
-      <strong>Notifying country:</strong> <%= country_from_code(@notification.notifying_country, Country.notifying_countries) %>
+      <strong>Created by:</strong> <%= sanitize(@notification.creator_user.name) %> (<%= sanitize(@notification.creator_team.name) %>)<br>
+      <strong>Notifying country:</strong> <%= sanitize(country_from_code(@notification.notifying_country, Country.notifying_countries)) %>
     </p>
+
     <h2 class="govuk-heading-m">Notification details</h2>
     <%=
       govuk_summary_list do |summary_list|
         summary_list.with_row do |row|
           row.with_key(text: "Notification title")
-          row.with_value(text: @notification.user_title)
+          row.with_value(text: sanitize(@notification.user_title))
           row.with_action(text: "Change", href: edit_investigation_case_names_path(@notification), visually_hidden_text: "notification title") if show_edit_link?
         end
         summary_list.with_row do |row|
           row.with_key(text: "Notification summary")
-          row.with_value(text: @notification.description || "Not provided", classes: "opss-text-limit-scroll-s")
+          row.with_value(text: sanitize(@notification.description.presence || "Not provided"), classes: "opss-text-limit-scroll-s")
           row.with_action(text: "Change", href: edit_investigation_summary_path(@notification), visually_hidden_text: "notification summary") if show_edit_link?
         end
         summary_list.with_row do |row|
@@ -50,12 +51,12 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Reported by overseas regulator")
-          row.with_value(text: @notification.is_from_overseas_regulator ? "Yes: #{country_from_code(@notification.notifying_country)}" : "No")
+          row.with_value(text: @notification.is_from_overseas_regulator ? "Yes: #{sanitize(country_from_code(@notification.notifying_country))}" : "No")
           row.with_action(text: "Change", href: edit_investigation_overseas_regulator_path(@notification), visually_hidden_text: "reported by overseas regulator") if show_edit_link?
         end
         summary_list.with_row do |row|
           row.with_key(text: "Notification risk level")
-          row.with_value(text: risk_level_tag)
+          row.with_value(text: risk_level_tag.html_safe)
           row.with_action(text: "Change", href: investigation_risk_level_path(@notification), visually_hidden_text: "notification risk level") if show_edit_link?
         end
         if current_user.can_validate_risk_level?
@@ -67,35 +68,35 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Notification owner")
-          row.with_value(text: @notification.owner_user.present? ? "#{@notification.owner_user.name} (#{@notification.owner_team.name})" : @notification.owner_team.name)
+          row.with_value(text: @notification.owner_user.present? ? "#{sanitize(@notification.owner_user.name)} (#{sanitize(@notification.owner_team.name)})" : sanitize(@notification.owner_team.name))
           row.with_action(text: "Change", href: access_notification_path(@notification), visually_hidden_text: "notification owner") if show_edit_link?
         end
         summary_list.with_row do |row|
           row.with_key(text: "Team access")
-          row.with_value(text: @notification.non_owner_teams_with_access.map(&:name).join("<br>").html_safe)
+          row.with_value(text: @notification.non_owner_teams_with_access.map { |team| sanitize(team.name) }.join("<br>").html_safe)
           row.with_action(text: "Change", href: access_notification_path(@notification), visually_hidden_text: "team access") if show_edit_link?
         end
         summary_list.with_row do |row|
           row.with_key(text: "Internal reference number")
-          row.with_value(text: @notification.complainant_reference.presence || "Not provided")
+          row.with_value(text: sanitize(@notification.complainant_reference.presence || "Not provided"))
           row.with_action(text: "Change", href: edit_investigation_reference_numbers_path(@notification), visually_hidden_text: "internal reference number") if show_edit_link?
         end
-        # TODO: implement change link that leads to a single page for all investigation products
         summary_list.with_row do |row|
           row.with_key(text: "Number of affected products")
           row.with_value(text: number_of_affected_units(@notification.investigation_products, is_link: true).html_safe)
         end
       end
     %>
+
     <h2 class="govuk-heading-m">Product identification details</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
       <%=
         govuk_summary_list(
-          card: { title: investigation_product.product.name_with_brand },
+          card: { title: sanitize(investigation_product.product.name_with_brand) },
           rows: [
             {
               key: { text: "Batch numbers" },
-              value: { text: investigation_product.batch_number.presence || "Not provided" },
+              value: { text: sanitize(investigation_product.batch_number.presence || "Not provided") },
               actions: show_edit_link? ? [
                 {
                   text: "Change",
@@ -106,7 +107,7 @@
             },
             {
               key: { text: "Customs codes" },
-              value: { text: investigation_product.customs_code.presence || "Not provided" },
+              value: { text: sanitize(investigation_product.customs_code.presence || "Not provided") },
               actions: show_edit_link? ? [
                 {
                   text: "Change",
@@ -117,7 +118,7 @@
             },
             {
               key: { text: "Unique Consignment Reference (UCR) numbers" },
-              value: { text: investigation_product.ucr_numbers.pluck(:number).join(", ").presence || "Not provided" },
+              value: { text: sanitize(investigation_product.ucr_numbers.pluck(:number).join(", ").presence || "Not provided") },
               actions: show_edit_link? ? [
                 {
                   text: "Change",
@@ -130,26 +131,27 @@
         )
       %>
     <% end %>
+
     <h2 class="govuk-heading-m">Businesses and their role in the supply chain</h2>
     <% @notification.investigation_businesses.decorate.each do |investigation_business| %>
       <%=
         govuk_summary_list(
           card: {
-            title: investigation_business.business.trading_name,
+            title: sanitize(investigation_business.business.trading_name),
             actions: show_edit_link? ? [govuk_link_to("Change", edit_business_path(investigation_business.business))] : []
           },
           rows: [
             {
               key: { text: "Business role in the supply chain" },
-              value: { text: investigation_business.relationship.present? ? investigation_business.pretty_relationship : "Not provided" }
+              value: { text: sanitize(investigation_business.relationship.present? ? investigation_business.pretty_relationship : "Not provided") }
             },
             {
               key: { text: "Registered or legal name" },
-              value: { text: investigation_business.business.legal_name.presence || "Not provided" }
+              value: { text: sanitize(investigation_business.business.legal_name.presence || "Not provided") }
             },
             {
               key: { text: "Companies House number" },
-              value: { text: investigation_business.business.company_number.presence || "Not provided" }
+              value: { text: sanitize(investigation_business.business.company_number.presence || "Not provided") }
             },
             {
               key: { text: "Address" },
@@ -163,12 +165,14 @@
         )
       %>
     <% end %>
+
     <%= govuk_button_link_to "Add or Remove business", "#{@notification.pretty_id}/edit/search_for_or_add_a_business", secondary: true %>
+
     <h2 class="govuk-heading-m">Evidence</h2>
     <% @notification.investigation_products.decorate.each do |investigation_product| %>
       <%=
         govuk_summary_list(
-          card: { title: investigation_product.product.name_with_brand },
+          card: { title: sanitize(investigation_product.product.name_with_brand) },
           rows: [
             {
               key: { text: "Test reports" },
@@ -183,8 +187,7 @@
             },
             {
               key: { text: "Risk assessments" },
-              value: { text: formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id).html_safe.presence,
-              },
+              value: { text: formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id).html_safe.presence || "Not provided" },
               actions: show_edit_link? ? [
                 {
                   text: "Change",
@@ -197,6 +200,7 @@
         )
       %>
     <% end %>
+
     <%=
       govuk_summary_list do |summary_list|
         summary_list.with_row do |row|
@@ -211,53 +215,55 @@
         end
       end
     %>
+
     <%= govuk_button_link_to "Add evidence", investigation_supporting_information_index_path(@notification, anchor: "risk-assessments"), secondary: true %>
+
     <h2 class="govuk-heading-m">Corrective actions</h2>
     <% @notification.corrective_actions.includes(investigation_product: :product).decorate.each do |corrective_action| %>
       <%=
         govuk_summary_list(
           card: {
-            title: corrective_action.investigation_product.product.decorate.name_with_brand,
+            title: sanitize(corrective_action.investigation_product.product.decorate.name_with_brand),
             actions: show_edit_link? ? [govuk_link_to("Change", edit_investigation_corrective_action_path(@notification, corrective_action))] : []
           },
           rows: [
             {
               key: { text: "Corrective action" },
-              value: { text: corrective_action.page_title }
+              value: { text: sanitize(corrective_action.page_title) }
             },
             {
               key: { text: "Effective date" },
-              value: { text: corrective_action.date_of_activity }
+              value: { text: sanitize(corrective_action.date_of_activity) }
             },
             {
               key: { text: "Date added" },
-              value: { text: corrective_action.date_added }
+              value: { text: sanitize(corrective_action.date_added) }
             },
             {
               key: { text: "Legislation" },
-              value: { text: corrective_action.legislation }
+              value: { text: sanitize(corrective_action.legislation) }
             },
             {
               key: { text: "Responsible business" },
-              value: { text: corrective_action.business&.trading_name || "Not provided" }
+              value: { text: sanitize(corrective_action.business&.trading_name || "Not provided") }
             },
             if corrective_action.recall_of_the_product_from_end_users?
               {
                 key: { text: "Recall information" },
-                value: { text: corrective_action.has_online_recall_information == "has_online_recall_information_yes" ? "Yes: #{corrective_action.online_recall_information}" : "No" }
+                value: { text: corrective_action.has_online_recall_information == "has_online_recall_information_yes" ? "Yes: #{sanitize(corrective_action.online_recall_information)}" : "No" }
               }
             end,
             {
               key: { text: "Action type" },
-              value: { text: corrective_action.measure_type }
+              value: { text: sanitize(corrective_action.measure_type) }
             },
             {
               key: { text: "Geographic scope" },
-              value: { text: corrective_action.geographic_scopes }
+              value: { text: sanitize(corrective_action.geographic_scopes) }
             },
             {
               key: { text: "Further details" },
-              value: { text: corrective_action.details.presence || "Not provided" }
+              value: { text: sanitize(corrective_action.details.presence || "Not provided") }
             },
             {
               key: { text: "Related file" },
@@ -267,20 +273,23 @@
         )
       %>
     <% end %>
+
     <%= govuk_button_link_to "Add corrective action", new_investigation_corrective_action_path(@notification), secondary: true %>
+
     <h2 class="govuk-heading-m">Comments</h2>
     <div class="timeline opss-timeline">
       <% if @notification.comments.present? %>
         <ul class="govuk-list">
         <% @notification.comments.each do |comment| %>
           <li>
-            <p class="govuk-body-s opss-secondary-text">Comment added by <%= comment.added_by_user&.name %>, <%= comment.created_at.to_formatted_s(:govuk) %></p>
-            <p class="govuk-body"><%= comment.metadata["comment_text"] %></p>
+            <p class="govuk-body-s opss-secondary-text">Comment added by <%= sanitize(comment.added_by_user&.name) %>, <%= comment.created_at.to_formatted_s(:govuk) %></p>
+            <p class="govuk-body"><%= sanitize(comment.metadata["comment_text"]) %></p>
           </li>
         <% end %>
         </ul>
       <% end %>
     </div>
+
     <%= govuk_button_link_to "Add comment", new_investigation_activity_comment_path(@notification), secondary: true %>
   </div>
 </div>

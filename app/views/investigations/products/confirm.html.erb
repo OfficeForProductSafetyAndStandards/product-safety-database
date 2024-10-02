@@ -12,7 +12,7 @@
           <div class="govuk-grid-row">
             <section class="govuk-grid-column-three-quarters opss-panels">
               <div class="opss-panels__single">
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= sanitize(@product.name_with_brand) %></h2>
                 <%= govuk_summary_list(
                   borders: false,
                   rows: [

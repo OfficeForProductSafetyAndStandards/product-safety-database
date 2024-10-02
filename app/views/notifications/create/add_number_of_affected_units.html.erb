@@ -11,12 +11,12 @@
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
         <% @notification.investigation_products.decorate.each do |investigation_product| %>
-          <li class="govuk-body-l"><%= investigation_product.product.name_with_brand %></li>
+          <li class="govuk-body-l"><%= sanitize(investigation_product.decorate.product.name_with_brand) %></li>
         <% end %>
         </ul>
       <% end %>
       <% @multiple_number_of_affected_units_form.number_of_affected_units_forms.each do |number_of_affected_units_form| %>
-        <%= govuk_summary_card(title: @notification.investigation_products.find(number_of_affected_units_form.investigation_product_id).product.decorate.name_with_brand) do %>
+        <%= govuk_summary_card(title: sanitize(@notification.investigation_products.find(number_of_affected_units_form.investigation_product_id).product.decorate.name_with_brand)) do %>
           <%= f.fields_for :number_of_affected_units_forms, number_of_affected_units_form do |ip_f| %>
             <%= ip_f.hidden_field :investigation_product_id, value: number_of_affected_units_form.investigation_product_id %>
             <%= ip_f.govuk_radio_buttons_fieldset :affected_units_status, legend: nil do %>

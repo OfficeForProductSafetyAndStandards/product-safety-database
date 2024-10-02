@@ -11,7 +11,7 @@
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
         <% @notification.investigation_products.decorate.each do |investigation_product| %>
-          <li class="govuk-body-l"><%= investigation_product.product.name_with_brand %></li>
+          <li class="govuk-body-l"><%= sanitize(investigation_product.product.name_with_brand) %></li>
         <% end %>
         </ul>
       <% end %>

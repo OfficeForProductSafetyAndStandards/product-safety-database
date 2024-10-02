@@ -6,7 +6,7 @@
       <h1 class="govuk-heading-l">
         Are you sure you want to remove this product from your notification?
       </h1>
-      <p class="govuk-body">This action will remove <strong><%= @investigation_product.decorate.product.name_with_brand %></strong> from your notification. Please confirm if you wish to proceed.</p>
+      <p class="govuk-body">This action will remove <strong><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></strong> from your notification. Please confirm if you wish to proceed.</p>
       <%= f.govuk_submit "Remove product", warning: true do %>
         <a href="<%= notification_create_path(@notification, "search_for_or_add_a_product") %>" class="govuk-link">Cancel</a>
       <% end %>

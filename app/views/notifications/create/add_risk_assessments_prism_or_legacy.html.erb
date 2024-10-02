@@ -9,7 +9,7 @@
     <%= govuk_inset_text do %>
       <p class="govuk-body">For</p>
       <ul class="govuk-list">
-        <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+        <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
       </ul>
     <% end %>
     <% if current_user.is_prism_user? %>
@@ -31,10 +31,10 @@
               <% @related_prism_risk_assessments.each do |prism_risk_assessment| %>
                 <tr class="govuk-table__row">
                   <th scope="row" class="govuk-table__header">
-                    <%= prism_risk_assessment.name || "Unknown" %>
+                    <%= sanitize(prism_risk_assessment.name.presence || "Unknown") %>
                   </th>
                   <td class="govuk-table__cell">
-                    <%= prism_risk_assessment.user_and_organisation.join("<br>").html_safe %>
+                    <%= sanitize(prism_risk_assessment.user_and_organisation.join("<br>").html_safe) %>
                   </td>
                   <td class="govuk-table__cell">
                     <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
@@ -58,7 +58,7 @@
           </table>
         <% end %>
       <% else %>
-        <p class="govuk-body">There are no risk assessments for <%= @investigation_product.decorate.product.name_with_brand %>. <strong>To conduct a new risk assessment</strong>, use the 'Risk Assessments' section of the Product Safety Database.</p>
+        <p class="govuk-body">There are no risk assessments for <%= sanitize(@investigation_product.decorate.product.name_with_brand) %>. <strong>To conduct a new risk assessment</strong>, use the 'Risk Assessments' section of the Product Safety Database.</p>
       <% end %>
     <% end %>
     <%= govuk_button_link_to("Add legacy risk assessment", with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id, entity_id: "new"), secondary: true) %>

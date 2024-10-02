@@ -6,10 +6,10 @@
     <p class="govuk-body">There are no products associated with this notification.</p>
   <% elsif investigation.investigation_products.one? %>
     <h2 class="govuk-heading-m">Which product was tested?</h2>
-    <p class="govuk-body"><%= investigation.investigation_products.first.product.decorate.name_with_brand %></p>
+    <p class="govuk-body"><%= sanitize(investigation.investigation_products.first.product.decorate.name_with_brand) %></p>
     <%= f.hidden_field :investigation_product_id, value: investigation.investigation_products.first.id %>
   <% else %>
-    <%= f.govuk_collection_radio_buttons :investigation_product_id, investigation.investigation_products.decorate.map { |ip| OpenStruct.new(id: ip.id, name: "#{ip.product.name_with_brand} (#{ip.psd_ref})") }, :id, :name, legend: { text: "Which product was tested?", size: "m" }, hint: { text: "Only products already added to the notification are listed." } %>
+    <%= f.govuk_collection_radio_buttons :investigation_product_id, investigation.investigation_products.decorate.map { |ip| OpenStruct.new(id: ip.id, name: "#{sanitize(ip.product.name_with_brand)} (#{sanitize(ip.psd_ref)})") }, :id, :name, legend: { text: "Which product was tested?", size: "m" }, hint: { text: "Only products already added to the notification are listed." } %>
   <% end %>
 <% end %>
 
@@ -17,7 +17,6 @@
 
 <%= f.govuk_text_field :standards_product_was_tested_against, label: { text: "Which standard was the product tested against?", size: "m" }, hint: { text: "For example, EN71. Use a comma to separate multiple standards." } %>
 
-<%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
 <div class="govuk-form-group<%= date_error ? ' govuk-form-group--error' : '' %>">
   <fieldset class="govuk-fieldset" aria-describedby="test-result-form-date-hint<%= date_error ? ' test-result-form-date-error' : '' %>">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of test</legend>

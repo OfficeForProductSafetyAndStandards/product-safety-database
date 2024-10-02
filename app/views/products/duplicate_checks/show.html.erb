@@ -19,30 +19,30 @@
           <div class="govuk-grid-row">
             <section class="govuk-grid-column-three-quarters opss-panels">
               <div class="opss-panels__single">
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= @product.name_with_brand %></h2>
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-3"><%= sanitize(@product.name_with_brand) %></h2>
 
                 <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-6">
                   <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key"><%= psd_abbr %> <span title="reference">ref</span></dt>
-                    <dd class="govuk-summary-list__value"><%= @product.psd_ref %></dd>
+                    <dd class="govuk-summary-list__value"><%= sanitize(@product.psd_ref) %></dd>
                   </div>
                   <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Brand name</dt>
-                    <dd class="govuk-summary-list__value"><%= @product.brand %></dd>
+                    <dd class="govuk-summary-list__value"><%= sanitize(@product.brand) %></dd>
                   </div>
                   <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Product name</dt>
-                    <dd class="govuk-summary-list__value"><%= @product.name %></dd>
+                    <dd class="govuk-summary-list__value"><%= sanitize(@product.name) %></dd>
                   </div>
                   <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Barcode</dt>
-                    <dd id="barNumber" class="govuk-summary-list__value"><%= @product.barcode %></dd>
+                    <dd id="barNumber" class="govuk-summary-list__value"><%= sanitize(@product.barcode) %></dd>
                   </div>
                   <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Counterfeit</dt>
                     <dd class="govuk-summary-list__value">
                       <%= @product.counterfeit_value %>
-                      <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= @product.counterfeit_explanation %></span>
+                      <span class="govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text"><%= sanitize(@product.counterfeit_explanation) %></span>
                     </dd>
                   </div>
                 </dl>
@@ -55,7 +55,7 @@
                       </span>
                     </summary>
                       <div class="govuk-details__text">
-                        <%= image_tag(@image.file_upload, alt: @image.file_upload.filename, class: 'opss-details-img') %>
+                        <%= image_tag(@image.file_upload, alt: sanitize(@image.file_upload.filename), class: 'opss-details-img') %>
                       </div>
                   </details>
                 <% end %>

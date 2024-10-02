@@ -12,7 +12,7 @@
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
         <ul class="govuk-list">
-          <li class="govuk-body-l"><%= @investigation_product.decorate.product.name_with_brand %></li>
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
         </ul>
       <% end %>
       <%= f.govuk_date_field :assessed_on, legend: { text: "Date of assessment" }, hint: { text: 'For example, 31 1 2020' } %>

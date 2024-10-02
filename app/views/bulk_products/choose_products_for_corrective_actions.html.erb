@@ -18,7 +18,7 @@
           <%= form.govuk_check_box_divider %>
         <% end %>
         <% @products.decorate.each_with_index do |product, index| %>
-          <%= form.govuk_check_box :product_ids, product.id, label: { text: product.name_with_brand }, "data-checkbox-select-all-target": "checkbox", link_errors: index.zero? %>
+          <%= form.govuk_check_box :product_ids, product.id, label: { text: sanitize(product.name_with_brand) }, "data-checkbox-select-all-target": "checkbox", link_errors: index.zero? %>
         <% end %>
       <% end %>
       <div class="govuk-button-group">

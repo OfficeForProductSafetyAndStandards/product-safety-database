@@ -6,7 +6,7 @@
       <h1 class="govuk-heading-l">
         Are you sure you want to remove this test report from your notification?
       </h1>
-      <p class="govuk-body">This action will permanently delete the test report for <strong><%= @investigation_product.decorate.product.name_with_brand %></strong>. Please confirm if you wish to proceed.</p>
+      <p class="govuk-body">This action will permanently delete the test report for <strong><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></strong>. Please confirm if you wish to proceed.</p>
       <%= f.govuk_submit "Remove test report", warning: true do %>
         <a href="<%= notification_create_path(@notification, "add_test_reports") %>" class="govuk-link">Cancel</a>
       <% end %>

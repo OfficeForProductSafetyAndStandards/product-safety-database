@@ -24,7 +24,7 @@
           <% @investigation_products.decorate.each do |investigation_product| %>
             <tr class="govuk-table__row">
               <th scope="row" class="govuk-table__header">
-                <%= investigation_product.product.name_with_brand %>
+                <%= sanitize(investigation_product.product.name_with_brand) %>
               </th>
               <td class="govuk-table__cell">
                 <%= investigation_product.corrective_actions.first.other_action || investigation_product.corrective_actions.first.action_label %>
