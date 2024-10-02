@@ -3,45 +3,52 @@ class ProductDecorator < ApplicationDecorator
   delegate_all
   decorates_association :investigations
 
+  # Include the sanitize helper
+  include ActionView::Helpers::SanitizeHelper
+
+  # Safely combines the brand and name of the product
   def name_with_brand
-    [brand, name].compact.join(" ")
+    [sanitize(brand), sanitize(name)].compact.join(" ")
   end
 
   def pretty_description
-    "Product: #{name}"
+    "Product: #{sanitize(name)}"
   end
 
   def unformatted_description
-    # Bypasses `FormattedDescription` for situations where we want the raw value of the field.
     object.description
   end
 
   def details_list(date_case_closed: nil)
     timestamp = date_case_closed.to_i if date_case_closed
+
     psd_ref_key_html = '<abbr title="Product Safety Database">PSD</abbr> <span title="reference">ref</span>'.html_safe
     psd_secondary_text_html = if date_case_closed.present?
-                                " - The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the notification was closed: #{date_case_closed.to_formatted_s(:govuk)}."
+                                " - The <abbr>PSD</abbr> reference number for this version of the product record - as recorded when the notification was closed: #{sanitize(date_case_closed.to_formatted_s(:govuk))}."
                               else
                                 " - The <abbr>PSD</abbr> reference number for this product record"
                               end.html_safe
-    webpage_html = "<span class='govuk-!-font-size-16'>#{webpage}</span>".html_safe
-    when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : when_placed_on_market
+
+    webpage_html = "<span class='govuk-!-font-size-16'>#{sanitize(webpage.presence || '')}</span>".html_safe
+
+    when_placed_on_market_value = when_placed_on_market == "unknown_date" ? nil : sanitize(when_placed_on_market.presence || "")
+
     psd_ref_value_html = date_case_closed.present? ? psd_ref(timestamp:, investigation_was_closed: true) : psd_ref(timestamp:, investigation_was_closed: false)
 
     rows = [
       { key: { text: psd_ref_key_html }, value: { text: "#{psd_ref_value_html}#{psd_secondary_text_html}".html_safe } },
-      { key: { text: "Brand name" }, value: { text: object.brand } },
-      { key: { text: "Product name" }, value: { text: object.name } },
-      { key: { text: "Category" }, value: { text: category } },
-      { key: { text: "Subcategory" }, value: { text: subcategory } },
-      { key: { text: "Barcode" }, value: { text: barcode } },
-      { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Webpage" }, value: { text: webpage_html } },
+      { key: { text: "Brand name" }, value: { text: sanitize(object.brand.presence || "") } },
+      { key: { text: "Product name" }, value: { text: sanitize(object.name.presence || "") } },
+      { key: { text: "Category" }, value: { text: sanitize(category.presence || "") } },
+      { key: { text: "Subcategory" }, value: { text: sanitize(subcategory.presence || "") } },
+      { key: { text: "Barcode" }, value: { text: sanitize(barcode.presence || "") } },
+      { key: { text: "Description" }, value: { text: sanitize(description.presence || "") } },
+      { key: { text: "Webpage" }, value: { text: webpage_html } }, # Already sanitized
       { key: { text: "Market date" }, value: { text: when_placed_on_market_value } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
-      { key: { text: "Counterfeit" }, value: counterfeit_row_value },
-      { key: { text: "Product marking" }, value: { text: markings } },
-      { key: { text: "Other product identifiers" }, value: { text: product_code } },
+      { key: { text: "Country of origin" }, value: { text: sanitize(country_from_code(country_of_origin.presence || "")) } },
+      { key: { text: "Counterfeit" }, value: counterfeit_row_value }, # Assuming this is already safe
+      { key: { text: "Product marking" }, value: { text: sanitize(markings.presence || "") } },
+      { key: { text: "Other product identifiers" }, value: { text: sanitize(product_code.presence || "") } },
     ]
 
     h.govuk_summary_list(rows:)
@@ -65,7 +72,7 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def subcategory_and_category_label
-    product_and_category = [subcategory.presence, category.presence].compact
+    product_and_category = [sanitize(subcategory.presence), sanitize(category.presence)].compact
 
     if product_and_category.length > 1
       "#{product_and_category.first} (#{product_and_category.last.downcase})"
@@ -79,7 +86,7 @@ class ProductDecorator < ApplicationDecorator
     return I18n.t(".product.unknown") if object.markings_unknown?
     return I18n.t(".product.none") if object.markings_no?
 
-    object.markings.join(", ")
+    sanitize(object.markings.join(", "))
   end
 
   def case_ids
@@ -88,11 +95,11 @@ class ProductDecorator < ApplicationDecorator
 
   def counterfeit_row_value
     if product.counterfeit?
-      return { text: "<span class=\"opss-tag opss-tag--risk2 opss-tag--lrg\">Yes</span> - #{counterfeit_explanation}".html_safe }
+      return { text: "<span class=\"opss-tag opss-tag--risk2 opss-tag--lrg\">Yes</span> - #{sanitize(counterfeit_explanation)}".html_safe }
     end
 
     if product.genuine?
-      return { text: "No - #{counterfeit_explanation}" }
+      return { text: "No - #{sanitize(counterfeit_explanation)}" }
     end
 
     { text: I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key) }
@@ -107,14 +114,14 @@ class ProductDecorator < ApplicationDecorator
   def counterfeit_explanation
     return if product.unsure?
 
-    product.counterfeit? ? I18n.t("products.counterfeit") : I18n.t("products.genuine")
+    sanitize(product.counterfeit? ? I18n.t("products.counterfeit") : I18n.t("products.genuine"))
   end
 
   def owning_team_link
     return "No owner" if owning_team.nil?
     return "Your team is the product record owner" if owning_team == h.current_user.team
 
-    h.link_to owning_team.name, h.owner_product_path(object), class: "govuk-link govuk-link--no-visited-state"
+    h.link_to sanitize(owning_team.name), h.owner_product_path(object), class: "govuk-link govuk-link--no-visited-state"
   end
 
   def unique_cases_except(investigation)
@@ -149,7 +156,7 @@ class ProductDecorator < ApplicationDecorator
     rows = [
       {
         key: { text: "Product" },
-        value: { text: "#{name_with_brand} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(psd-#{id})</span>".html_safe }
+        value: { text: "#{sanitize(name_with_brand)} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(psd-#{sanitize(id.to_s)})</span>".html_safe }
       }
     ]
 
@@ -157,7 +164,7 @@ class ProductDecorator < ApplicationDecorator
       object.investigations.each_with_index do |investigation, i|
         rows << {
           key: { text: i.zero? ? "Notification(s)" : "" },
-          value: { text: "#{investigation.user_title} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(#{investigation.pretty_id})</span>".html_safe }
+          value: { text: "#{sanitize(investigation.user_title)} <span class='govuk-!-font-weight-regular govuk-!-font-size-16 govuk-!-padding-left-2 opss-no-wrap'>(#{sanitize(investigation.pretty_id)})</span>".html_safe }
         }
       end
     end
