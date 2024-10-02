@@ -19,23 +19,21 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <p class="govuk-body">You have added <%= pluralize(@existing_business_ids.length, "business") %>.
-          <%= govuk_summary_list do |summary_list| %>
-            <% @notification.investigation_businesses.decorate.each do |investigation_business| %>
-              <%= summary_list.with_row do |row| %>
-                <% row.with_key(text: sanitize(investigation_business.business.trading_name) + (@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>'.html_safe : ''.html_safe)) %>
-                <% if investigation_business.relationship&.match?(/authorised_representative/) %>
-                  <% row.with_value(text: sanitize(t('business.type.authorised_representative.' + investigation_business.relationship.to_s)) + (@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>'.html_safe : ''.html_safe)) %>
-                <% else %>
-                  <% row.with_value(text: sanitize(t('business.type.' + investigation_business.relationship.to_s)) + (@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>'.html_safe : ''.html_safe)) %>
-                <% end %>
-
-                <% unless @existing_attached_business_ids.include?(investigation_business.business_id) %>
-                  <% row.with_action(text: "Remove", href: remove_business_notification_create_index_path(investigation_business_id: investigation_business.id), visually_hidden_text: "business from notification") %>
-                <% end %>
-              <% end %>
-            <% end %>
-          <% end %>
-
+          <%=
+            govuk_summary_list do |summary_list|
+              @notification.investigation_businesses.decorate.each do |investigation_business|
+                summary_list.with_row do |row|
+                  row.with_key(text: "#{investigation_business.business.trading_name}#{@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>' : ''}".html_safe)
+                  if investigation_business.relationship&.match?(/authorised_representative/)
+                    row.with_value(text: "#{t('business.type.authorised_representative.' + investigation_business.relationship.to_s)}#{@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>' : ''}".html_safe)
+                  else
+                    row.with_value(text: "#{t('business.type.' + investigation_business.relationship.to_s)}#{@existing_attached_business_ids.include?(investigation_business.business_id) ? '<br><span class="govuk-hint govuk-!-font-size-16">This business cannot be removed because it is associated with a risk assessment or corrective action.</span>' : ''}".html_safe)
+                  end
+                  row.with_action(text: "Remove", href: remove_business_notification_create_index_path(investigation_business_id: investigation_business.id), visually_hidden_text: "business from notification") unless @existing_attached_business_ids.include?(investigation_business.business_id)
+                end
+              end
+            end
+          %>
           <%= form_with model: @add_another_business, url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
               <%= f.govuk_error_summary %>
             <%= f.govuk_collection_radio_buttons :add_another_business, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another business?", size: "m" } %>
@@ -81,7 +79,7 @@
                               "Multiple addresses (#{record.locations.size})"
                             else
                               record.locations.map do |location|
-                                [sanitize(location.address_line_1), sanitize(location.address_line_2), sanitize(location.city), sanitize(location.county), sanitize(location.postal_code), sanitize(country_from_code(location.country))].reject(&:blank?).join(", ")
+                                [location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].reject(&:blank?).join(", ")
                               end.join("<hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">")
                             end
 
@@ -90,9 +88,9 @@
                 end
 
                 body.with_row do |row|
-                  row.with_cell(text: sanitize(record.trading_name))
-                  row.with_cell(text: sanitize(record.company_number))
-                  row.with_cell(text: sanitize(addresses).html_safe)
+                  row.with_cell(text: record.trading_name)
+                  row.with_cell(text: record.company_number)
+                  row.with_cell(text: addresses.html_safe)
                   if @existing_business_ids.include?(record.id)
                     row.with_cell(text: "")
                   else

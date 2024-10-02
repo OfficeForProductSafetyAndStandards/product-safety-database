@@ -4,7 +4,7 @@
       Notification title
     </th>
     <th id="<%= dom_id investigation, :item %>" colspan="5" scope="colgroup" class="govuk-table__header">
-      <%= link_to sanitize(investigation.title), investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      <%= link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
     </th>
   </tr>
   <tr class="govuk-table__row">
@@ -14,31 +14,27 @@
     <td headers="case <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
       <%= investigation.pretty_id %>
     </td>
-
     <% if non_search_cases_page_names.include? @page_name %>
       <td headers="casecreated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= investigation.created_at.to_formatted_s(:govuk) %>
       </td>
     <% else %>
       <td headers="caseowner <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
-        <%= sanitize(investigation.owner_display_name_for(viewer: current_user)) %>
+        <%= investigation.owner_display_name_for(viewer: current_user) %>
       </td>
     <% end %>
-
     <% if @page_name == "assigned_cases" %>
       <td headers="assigner" class="govuk-table__cell">
-        <%= sanitize(investigation.owner_team&.name) %>
+        <%= investigation.owner_team&.name %>
       </td>
     <% else %>
       <td headers="haztype" class="govuk-table__cell">
-        <%= sanitize(investigation.hazard_type) %>
+        <%= investigation.hazard_type %>
       </td>
     <% end %>
-
     <td headers="product_count" class="govuk-table__cell">
       <%= pluralize investigation.products.count, "product" %>
     </td>
-
     <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
       <td headers="created <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
@@ -49,6 +45,5 @@
       </td>
     <% end %>
   </tr>
-
   <%= render "investigations/status_table_row", investigation: investigation %>
 </tbody>
