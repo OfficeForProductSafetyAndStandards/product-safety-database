@@ -11,7 +11,6 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def unformatted_description
-    # Bypasses `FormattedDescription` for situations where we want the raw value of the field.
     object.description
   end
 
@@ -44,7 +43,7 @@ class InvestigationDecorator < ApplicationDecorator
   def case_summary_values
     values = []
 
-    if investigation.is_private?
+    if object.is_private?
       values << { text: "" }
       values << { text: "" }
     else
@@ -53,7 +52,6 @@ class InvestigationDecorator < ApplicationDecorator
     end
 
     values << { text: status }
-
     values
   end
 
@@ -62,13 +60,9 @@ class InvestigationDecorator < ApplicationDecorator
     contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right")
 
     rows = [
-      should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_formatted_s(:govuk) } } : nil,
-      should_display_received_by? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
       { key: { text: "Source type" }, value: { text: complainant.complainant_type } },
       { key: { text: "Contact details" }, value: { text: contact_details } }
     ]
-
-    rows.compact!
 
     h.govuk_summary_list(rows:, borders: false, classes: "opss-summary-list-mixed opss-summary-list-mixed--narrow-dt")
   end
@@ -76,11 +70,11 @@ class InvestigationDecorator < ApplicationDecorator
   def contact_details_list
     h.tag.ul(class: "govuk-list govuk-list--bullet govuk-list--spaced") do
       lis = []
-      lis << h.tag.li(complainant.name) if complainant.name.present?
-      lis << h.tag.li("Telephone: #{complainant.phone_number}") if complainant.phone_number.present?
-      lis << h.tag.li("Email: ".html_safe + h.mail_to(complainant.email_address, class: "govuk-link govuk-link--no-visited-state")) if complainant.email_address.present?
-      lis << h.tag.li(complainant.other_details) if complainant.other_details.present?
-      safe_join(lis)
+      lis << h.tag.li(h.sanitize(complainant.name)) if complainant.name.present?
+      lis << h.tag.li("Telephone: #{h.sanitize(complainant.phone_number)}") if complainant.phone_number.present?
+      lis << h.tag.li("Email: ".html_safe + h.mail_to(h.sanitize(complainant.email_address), class: "govuk-link govuk-link--no-visited-state")) if complainant.email_address.present?
+      lis << h.tag.li(h.sanitize(complainant.other_details)) if complainant.other_details.present?
+      h.safe_join(lis)
     end
   end
 
@@ -95,7 +89,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner_display_name_for(viewer:)
-    return "No notification owner" unless investigation.owner
+    return "No notification owner" unless object.owner
 
     owner.owner_short_name(viewer:)
   end
@@ -125,22 +119,12 @@ class InvestigationDecorator < ApplicationDecorator
 private
 
   def category
-    @category ||= \
-      if categories.size == 1
-        h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
-      else
-        h.tag.ul(class: "govuk-list") do
-          lis = categories.map { |cat| h.tag.li(cat.downcase.upcase_first) }
-          lis.join.html_safe
-        end
-      end
-  end
-
-  def should_display_date_received?
-    false
-  end
-
-  def should_display_received_by?
-    false
+    @category ||= if categories.size == 1
+                    h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
+                  else
+                    h.tag.ul(class: "govuk-list") do
+                      h.safe_join(categories.map { |cat| h.tag.li(cat.downcase.upcase_first) })
+                    end
+                  end
   end
 end
