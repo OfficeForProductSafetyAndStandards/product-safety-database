@@ -12,20 +12,24 @@ class Location < ApplicationRecord
                        :business_id, :city, :country, :county, :created_at,
                        :name, :phone_number, :postal_code, :updated_at
 
+  def formatted_address(*fields)
+    fields.reject(&:blank?).join(", ")
+  end
+
   def summary
-    [
+    formatted_address(
       address_line_1,
       address_line_2,
       city,
       postal_code,
       country_from_code(country)
-    ].reject(&:blank?).join(", ")
+    )
   end
 
   def short
-    [
+    formatted_address(
       county,
       country_from_code(country)
-    ].reject(&:blank?).join(", ")
+    )
   end
 end
