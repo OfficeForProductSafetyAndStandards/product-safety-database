@@ -19,7 +19,7 @@
         <ul class="govuk-list govuk-list--bullet">
           <% @product.investigations.each do |investigation| %>
             <li>
-              <%= link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
+              <%= link_to sanitize(investigation.title), investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
             </li>
           <% end %>
         </ul>

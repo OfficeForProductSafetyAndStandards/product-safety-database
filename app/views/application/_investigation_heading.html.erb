@@ -1,2 +1,2 @@
-<span class="govuk-caption-l"><%= investigation.pretty_description %></span>
-<h1 class="govuk-heading-l"><%= investigation.title %></h1>
+<span class="govuk-caption-l"><%= sanitize(investigation.pretty_description) %></span>
+<h1 class="govuk-heading-l"><%= sanitize(investigation.title) %></h1>

@@ -7,10 +7,10 @@
 <div class="govuk-grid-row psd-case-card <%= card_classes.join(" ") %>">
   <div class="govuk-grid-column-one-half">
     <span class="govuk-caption-m govuk-!-font-size-16">
-      <%= investigation.pretty_description %>
+      <%= sanitize(investigation.pretty_description) %>
     </span>
     <span>
-      <%= link_to investigation.title, investigation_path(investigation) %>
+      <%= link_to sanitize(investigation.title), investigation_path(investigation) %>
     </span>
     <%= render "investigations/case_card_status_area", investigation: investigation %>
   </div>
@@ -18,9 +18,10 @@
   <div class="govuk-grid-column-one-quarter">
     <span class="govuk-caption-m govuk-!-font-size-16">Notification owner</span>
     <span>
-      <%= investigation.owner_display_name_for(viewer: current_user) %>
+      <%= sanitize(investigation.owner_display_name_for(viewer: current_user)) %>
     </span>
   </div>
+
   <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
     <div class="govuk-grid-column-one-quarter">
       <span class="govuk-caption-m govuk-!-font-size-16">
