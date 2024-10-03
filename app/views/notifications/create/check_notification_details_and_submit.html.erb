@@ -125,7 +125,7 @@
             },
             {
               key: { text: "Address" },
-              value: { text: formatted_business_address(investigation_business.business.locations.find_by(name: "Registered office address")).html_safe.presence || "Not provided" },
+              value: { text: sanitize(formatted_business_address(investigation_business.business.locations.find_by(name: "Registered office address"))).presence || "Not provided" },
               actions: []
             },
             {
