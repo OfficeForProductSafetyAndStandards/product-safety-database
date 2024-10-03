@@ -116,27 +116,32 @@ module Notifications
     end
 
     def specific_product_safety_issues
-      unsafe = "<p class=\"govuk-body\">Product harm: #{@notification.hazard_type}</p><p class=\"govuk-body-s\">#{@notification.hazard_description}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
-      non_compliant = "<p class=\"govuk-body\">Product incomplete markings, labeling or other issues</p><p class=\"govuk-body-s\">#{@notification.non_compliant_reason}</p>" if @notification.non_compliant? || @notification.unsafe_and_non_compliant?
-      [unsafe, non_compliant].join
+      unsafe = "<p class=\"govuk-body\">Product harm: #{sanitize(@notification.hazard_type)}</p><p class=\"govuk-body-s\">#{sanitize(@notification.hazard_description)}</p>" if @notification.unsafe? || @notification.unsafe_and_non_compliant?
+      non_compliant = "<p class=\"govuk-body\">Product incomplete markings, labeling or other issues</p><p class=\"govuk-body-s\">#{sanitize(@notification.non_compliant_reason)}</p>" if @notification.non_compliant? || @notification.unsafe_and_non_compliant?
+      [unsafe, non_compliant].compact.join
     end
 
     def formatted_business_address(location)
       address_parts = [
-        location&.address_line_1,
-        location&.address_line_2,
-        location&.city,
-        location&.county,
-        location&.postal_code,
-        location&.country ? country_from_code(location.country) : nil
-      ]
+        sanitize(location&.address_line_1.presence),
+        sanitize(location&.address_line_2.presence),
+        sanitize(location&.city.presence),
+        sanitize(location&.county.presence),
+        sanitize(location&.postal_code.presence),
+        (sanitize(country_from_code(location.country).presence) if location&.country)
+      ].compact
 
-      formatted_address = address_parts.compact.join("<br>")
-      formatted_address.presence || "Address not available"
+      formatted_address = address_parts.join("<br>")
+      sanitize(formatted_address.presence || "Address not available", tags: %w[br])
     end
 
     def formatted_business_contact(contact)
-      [contact.name, contact.job_title, contact.email, contact.phone_number].map(&:presence).compact.join("<br>")
+      [
+        sanitize(contact.name),
+        sanitize(contact.job_title),
+        sanitize(contact.email),
+        sanitize(contact.phone_number)
+      ].map(&:presence).compact.join("<br>")
     end
 
     def formatted_test_results(test_results)
