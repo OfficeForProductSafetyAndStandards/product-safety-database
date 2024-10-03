@@ -89,7 +89,7 @@
                 table.with_body do |body|
                   @records.decorate.each do |record|
                     image = if record.virus_free_images.present?
-                      image_tag(record.virus_free_images.first.file_upload, width: 80, alt: sanitize(record.virus_free_images.first.file_upload.filename))
+                      image_tag(record.virus_free_images.first.file_upload, width: 80, alt: record.virus_free_images.first.file_upload.filename)
                     else
                       image_tag("no-product-image.jpg", width: 80, height: 80, alt: "No product image available")
                     end
