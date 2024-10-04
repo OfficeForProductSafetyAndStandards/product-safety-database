@@ -12,17 +12,17 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "Trading name")
-            row.with_value(text: @business.trading_name)
+            row.with_value(text: sanitize(@business.trading_name))
             row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}") unless @business.investigations.any?
           end
           summary_list.with_row do |row|
             row.with_key(text: "Registered or legal name")
-            row.with_value(text: @business.legal_name)
+            row.with_value(text: sanitize(@business.legal_name))
             row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}")  unless @business.investigations.any?
           end
           summary_list.with_row do |row|
             row.with_key(text: "Companies house number")
-            row.with_value(text: @business.company_number)
+            row.with_value(text: sanitize(@business.company_number))
             row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}")  unless @business.investigations.any?
           end
         end
@@ -32,7 +32,7 @@
         <%=
           govuk_summary_list do |summary_list|
             summary_list.with_row do |row|
-              row.with_value(text: [location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].reject(&:blank?).join(", "))
+              row.with_value(text: sanitize([location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].reject(&:blank?).join(", ")))
             end
           end
         %>
@@ -46,19 +46,19 @@
             govuk_summary_list do |summary_list|
               summary_list.with_row do |row|
                 row.with_key(text: "Name")
-                row.with_value(text: contact.name)
+                row.with_value(text: sanitize(contact.name))
               end
               summary_list.with_row do |row|
                 row.with_key(text: "Job title")
-                row.with_value(text: contact.job_title)
+                row.with_value(text: sanitize(contact.job_title))
               end
               summary_list.with_row do |row|
                 row.with_key(text: "Email")
-                row.with_value(text: contact.email)
+                row.with_value(text: sanitize(contact.email))
               end
               summary_list.with_row do |row|
                 row.with_key(text: "Phone number")
-                row.with_value(text: contact.phone_number)
+                row.with_value(text: sanitize(contact.phone_number))
               end
             end
           %>
