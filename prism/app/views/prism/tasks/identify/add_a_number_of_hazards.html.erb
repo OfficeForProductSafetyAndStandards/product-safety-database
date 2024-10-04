@@ -11,7 +11,7 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
       <% end %>
       <%= f.govuk_collection_radio_buttons :number_of_hazards, number_of_hazards_radios, :id, :name, legend: { text: "Number of hazards identified" } %>
       <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>

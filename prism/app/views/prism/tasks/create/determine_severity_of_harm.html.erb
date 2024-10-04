@@ -11,10 +11,10 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l"><%= hazard_type %></p>
-        <p class="govuk-body"><%= @prism_risk_assessment.product_name %></p>
-        <p class="govuk-body"><%= @harm_scenario.description %></p>
-        <p class="govuk-body">Affected users: <%= affected_users %></p>
+        <p class="govuk-body-l"><%= sanitize(hazard_type) %></p>
+        <p class="govuk-body"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+        <p class="govuk-body"><%= sanitize(@harm_scenario.description) %></p>
+        <p class="govuk-body">Affected users: <%= sanitize(affected_users) %></p>
       <% end %>
       <p class="govuk-body">Choose the level of severity of harm most appropriate for the effect the hazard will have upon the subject in the context of the harm scenario.</p>
       <%= f.govuk_collection_radio_buttons :severity, severity_radios, :id, :name, :description, legend: nil, bold_labels: false %>

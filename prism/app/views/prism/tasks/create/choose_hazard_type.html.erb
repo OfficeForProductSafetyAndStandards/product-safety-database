@@ -11,7 +11,7 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l"><%= @prism_risk_assessment.product_name %></p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
       <% end %>
       <%= f.govuk_radio_buttons_fieldset :hazard_type, legend: { text: "What is the hazard type?", size: "m" } do %>
         <%= f.govuk_radio_button :hazard_type, "mechanical", label: { text: "Mechanical" }, hint: { text: "Examples: Sharp edges, trapping hazards, crushing hazards, impact hazards, entanglement hazards." }, link_errors: true %>
