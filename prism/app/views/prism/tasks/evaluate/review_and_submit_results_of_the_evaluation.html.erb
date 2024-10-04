@@ -14,17 +14,17 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "Assessment name")
-            row.with_value(text: @prism_risk_assessment.name)
+            row.with_value(text: sanitize(@prism_risk_assessment.name))
             row.with_action(text: "Change", href: task_path("define", @prism_risk_assessment.serious_risk? ? "add_evaluation_details" : "add_assessment_details"), visually_hidden_text: "assessment name")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Name of assessor")
-            row.with_value(text: @prism_risk_assessment.assessor_name)
+            row.with_value(text: sanitize(@prism_risk_assessment.assessor_name))
             row.with_action(text: "Change", href: task_path("define", @prism_risk_assessment.serious_risk? ? "add_evaluation_details" : "add_assessment_details"), visually_hidden_text: "assessor name")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Name of assessment organisation")
-            row.with_value(text: @prism_risk_assessment.assessment_organisation)
+            row.with_value(text: sanitize(@prism_risk_assessment.assessment_organisation))
             row.with_action(text: "Change", href: task_path("define", @prism_risk_assessment.serious_risk? ? "add_evaluation_details" : "add_assessment_details"), visually_hidden_text: "assessment organisation")
           end
         end
@@ -35,27 +35,27 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "<abbr>PSD</abbr> reference".html_safe)
-            row.with_value(text: "<a href=\"#{main_app.product_path(@prism_risk_assessment.product)}\" class=\"govuk-link\">#{@prism_risk_assessment.product.psd_ref}</a>".html_safe)
+            row.with_value(text: "<a href=\"#{main_app.product_path(@prism_risk_assessment.product)}\" class=\"govuk-link\">#{sanitize(@prism_risk_assessment.product.psd_ref)}</a>".html_safe)
           end
           summary_list.with_row do |row|
             row.with_key(text: "Product")
-            row.with_value(text: @prism_risk_assessment.product.name)
+            row.with_value(text: sanitize(@prism_risk_assessment.product.name))
           end
           summary_list.with_row do |row|
             row.with_key(text: "Brand name")
-            row.with_value(text: @prism_risk_assessment.product.brand)
+            row.with_value(text: sanitize(@prism_risk_assessment.product.brand))
           end
           summary_list.with_row do |row|
             row.with_key(text: "Description")
-            row.with_value(text: @prism_risk_assessment.product.description)
+            row.with_value(text: sanitize(@prism_risk_assessment.product.description))
           end
           summary_list.with_row do |row|
             row.with_key(text: "Country of origin")
-            row.with_value(text: country_from_code(@prism_risk_assessment.product.country_of_origin))
+            row.with_value(text: sanitize(country_from_code(@prism_risk_assessment.product.country_of_origin)))
           end
           summary_list.with_row do |row|
             row.with_key(text: "Counterfeit")
-            row.with_value(text: counterfeit(@prism_risk_assessment.product.authenticity))
+            row.with_value(text: sanitize(counterfeit(@prism_risk_assessment.product.authenticity)))
           end
         end
       %>
@@ -64,12 +64,12 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "Level of uncertainty associated with the risk assessment")
-            row.with_value(text: evaluation_translate_simple("level_of_uncertainty", @prism_risk_assessment.evaluation.level_of_uncertainty))
+            row.with_value(text: sanitize(evaluation_translate_simple("level_of_uncertainty", @prism_risk_assessment.evaluation.level_of_uncertainty)))
             row.with_action(text: "Change", href: task_path("evaluate", "add_level_of_uncertainty_and_sensitivity_analysis"), visually_hidden_text: "level of uncertainty associated with the risk assessment")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Has sensitivity analysis been undertaken?")
-            row.with_value(text: sensitivity_analysis_with_details(@prism_risk_assessment.evaluation.sensitivity_analysis, @prism_risk_assessment.evaluation.sensitivity_analysis_details))
+            row.with_value(text: sanitize(sensitivity_analysis_with_details(@prism_risk_assessment.evaluation.sensitivity_analysis, @prism_risk_assessment.evaluation.sensitivity_analysis_details)))
             row.with_action(text: "Change", href: task_path("evaluate", "add_level_of_uncertainty_and_sensitivity_analysis"), visually_hidden_text: "whether sensitivity analysis has been undertaken")
           end
         end
@@ -80,12 +80,12 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "Could the hazard cause other types of harm?")
-            row.with_value(text: other_types_of_harm(@prism_risk_assessment.evaluation.other_types_of_harm))
+            row.with_value(text: sanitize(other_types_of_harm(@prism_risk_assessment.evaluation.other_types_of_harm)))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "what other types of harm the hazard could cause")
           end
           summary_list.with_row do |row|
             row.with_key(text: "Is the number of products estimated to be in use expected to change?")
-            row.with_value(text: evaluation_translate_simple("number_of_products_expected_to_change", @prism_risk_assessment.evaluation.number_of_products_expected_to_change))
+            row.with_value(text: sanitize(evaluation_translate_simple("number_of_products_expected_to_change", @prism_risk_assessment.evaluation.number_of_products_expected_to_change)))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether the number of products estimated to be in use is expected to change")
           end
           summary_list.with_row do |row|
@@ -95,7 +95,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "How does the risk level compare to that of comparable products?")
-            row.with_value(text: evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level))
+            row.with_value(text: sanitize(evaluation_translate_simple("comparable_risk_level", @prism_risk_assessment.evaluation.comparable_risk_level)))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "how the risk level compares to that of comparable products")
           end
           summary_list.with_row do |row|
@@ -105,7 +105,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Are there people at increased risk?")
-            row.with_value(text: people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details))
+            row.with_value(text: sanitize(people_at_increased_risk(@prism_risk_assessment.evaluation.people_at_increased_risk, @prism_risk_assessment.evaluation.people_at_increased_risk_details)))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are people at increased risk")
           end
           summary_list.with_row do |row|
@@ -114,9 +114,9 @@
             row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether relevant action is planned or underway by another MSA or other organisation")
           end
           summary_list.with_row do |row|
-            row.with_key(text: "As regards the nature of the risk, are there factors to take account of in relation to risk management decisions?")
-            row.with_value(text: factors_to_take_into_account(@prism_risk_assessment.evaluation.factors_to_take_into_account, @prism_risk_assessment.evaluation.factors_to_take_into_account_details))
-            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are there factors to take account of in relation to risk management decisions")
+            row.with_key(text: "Are there factors to consider in relation to risk management decisions?")
+            row.with_value(text: sanitize(factors_to_take_into_account(@prism_risk_assessment.evaluation.factors_to_take_into_account, @prism_risk_assessment.evaluation.factors_to_take_into_account_details)))
+            row.with_action(text: "Change", href: task_path("evaluate", "consider_the_nature_of_the_risk"), visually_hidden_text: "whether there are factors to take into account in relation to risk management decisions")
           end
         end
       %>
@@ -129,7 +129,7 @@
             row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether the risk has featured in the media")
           end
           summary_list.with_row do |row|
-            row.with_key(text: "As well as the hazard associated with the non-compliance, does the product have any other hazards that can and do cause harm?")
+            row.with_key(text: "Does the product have any other hazards that can and do cause harm?")
             row.with_value(text: evaluation_translate_simple("yes_no", @prism_risk_assessment.evaluation.other_hazards))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether the product has any other hazards that can and do cause harm")
           end
@@ -160,7 +160,7 @@
           end
           summary_list.with_row do |row|
             row.with_key(text: "Are there other matters that will influence the way the risk is perceived?")
-            row.with_value(text: other_risk_perception_matters(@prism_risk_assessment.evaluation.other_risk_perception_matters))
+            row.with_value(text: sanitize(other_risk_perception_matters(@prism_risk_assessment.evaluation.other_risk_perception_matters)))
             row.with_action(text: "Change", href: task_path("evaluate", "consider_perception_and_tolerability_of_the_risk"), visually_hidden_text: "whether there are other matters that will influence the way the risk is perceived")
           end
         end
@@ -170,7 +170,7 @@
         govuk_summary_list do |summary_list|
           summary_list.with_row do |row|
             row.with_key(text: "How would you describe the risk presented by the product?")
-            row.with_value(text: evaluation_translate_simple("risk_tolerability", @prism_risk_assessment.evaluation.risk_tolerability))
+            row.with_value(text: sanitize(evaluation_translate_simple("risk_tolerability", @prism_risk_assessment.evaluation.risk_tolerability)))
             row.with_action(text: "Change", href: task_path("evaluate", "risk_evaluation_outcome"), visually_hidden_text: "how you would describe the risk presented by the product")
           end
         end
