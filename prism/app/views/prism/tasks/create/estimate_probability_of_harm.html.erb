@@ -14,11 +14,11 @@
       </h1>
       <%= govuk_inset_text do %>
         <p class="govuk-body">For</p>
-        <p class="govuk-body-l"><%= hazard_type %></p>
-        <p class="govuk-body"><%= @prism_risk_assessment.product_name %></p>
-        <p class="govuk-body"><%= @harm_scenario.description %></p>
-        <p class="govuk-body">Affected users: <%= affected_users %></p>
-        <p class="govuk-body">Severity of harm: <%= severity_of_harm %></p>
+        <p class="govuk-body-l"><%= sanitize(hazard_type) %></p>
+        <p class="govuk-body"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+        <p class="govuk-body"><%= sanitize(@harm_scenario.description) %></p>
+        <p class="govuk-body">Affected users: <%= sanitize(affected_users) %></p>
+        <p class="govuk-body">Severity of harm: <%= sanitize(severity_of_harm) %></p>
         <p class="govuk-body">Multiple casualties: <%= @harm_scenario.multiple_casualties ? "yes" : "no" %></p>
       <% end %>
       <p class="govuk-text">At this stage a probability is attached to each of the steps within the harm scenario. They will then be multiplied together to give an overall probability of harm.</p>
@@ -32,9 +32,9 @@
       <% end %>
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
       <h2 class="govuk-heading-m govuk-!-padding-top-4">Overall probability of harm</h2>
-      <p class="govuk-body-l" id="overall-probability-of-harm"><%= overall_probability_of_harm.probability_human %></p>
+      <p class="govuk-body-l" id="overall-probability-of-harm"><%= sanitize(overall_probability_of_harm.probability_human) %></p>
       <h2 class="govuk-heading-m">Risk level</h2>
-      <p class="govuk-body" id="overall-risk-level"><%= overall_risk_level.risk_level_tag_html %></p>
+      <p class="govuk-body" id="overall-risk-level"><%= sanitize(overall_risk_level.risk_level_tag_html).html_safe %></p>
       <%= f.hidden_field :severity_level, value: @harm_scenario.severity %>
       <%= f.hidden_field :back_to, value: params[:back_to] %>
       <%= f.govuk_submit "Save and continue" do %>
