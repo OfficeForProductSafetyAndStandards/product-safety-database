@@ -17,6 +17,9 @@
       <% @form.product_image_ids.each do |product_image_id| %>
         <%= form.hidden_field :product_image_ids, value: product_image_id, multiple: true %>
       <% end %>
+      <% @form.notification_image_ids.each do |notification_image_id| %>
+        <%= form.hidden_field :notification_image_ids, value: notification_image_id, multiple: true %>
+      <% end %>
       <%= form.govuk_text_field :pdf_title, label: { text: "PDF title", size: "s" }, value: @product.name %>
       <%= form.govuk_text_field :alert_number, label: { text: "Alert number", size: "s" }, value: @case&.pretty_id %>
       <%= form.govuk_collection_select :product_type,

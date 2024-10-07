@@ -78,9 +78,7 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
     click_link "Start now"
 
     expect(page).to have_h1("Select the images to include")
-    expect(page).to have_text("Images have not been added to the PSD product record.")
-
-    click_button "Continue"
+    click_button "Save and continue"
 
     within_fieldset "Counterfeit" do
       choose(%w[Yes No Unsure].sample)
@@ -109,37 +107,21 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
     expect(page).to have_current_path("/products/#{product.id}/recalls/pdf")
   end
 
-  scenario "Creating a product recall with images" do
-    visit "/products/#{product.id}"
-
-    expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-
-    click_link "Add an image"
-    expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
-
-    click_button "Upload"
-
-    expect(page).to have_error_summary("Select a file")
-
-    attach_file "image_upload[file_upload]", image
-
-    click_button "Upload"
-
-    expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
+  scenario "Creating a product recall with product images" do
+    upload_product_image
 
     visit "/products/#{product.id}"
     click_link "product recall formatting tool"
 
     expect_to_be_on_product_recall_page(product_id: Product.last.id)
 
-    puts product.country_of_origin
     click_link "Start now"
 
-    within_fieldset "Select the images to include" do
+    within_fieldset "Product record images" do
       check(image.to_s.split("/")[-1])
     end
 
-    click_button "Continue"
+    click_button "Save and continue"
 
     within_fieldset "Counterfeit" do
       choose(%w[Yes No Unsure].sample)
@@ -166,5 +148,35 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
     download.click
     # clicking button sends to page with PDF on it
     expect(page).to have_current_path("/products/#{product.id}/recalls/pdf")
+  end
+
+  scenario "When Product and Notification does not have images" do
+    visit "/products/#{product.id}"
+    click_link "product recall formatting tool"
+
+    expect_to_be_on_product_recall_page(product_id: Product.last.id)
+    click_link "Start now"
+
+    expect(page).to have_h2("Product record images")
+    expect(page).to have_text("No images have yet been added to this product record")
+    expect(page).to have_h2("Supporting images for all linked notifications")
+    expect(page).to have_text("No supporting images have been added to the product safety notification(s) related to this product")
+  end
+
+  # functions
+
+  def upload_product_image
+    visit "/products/#{product.id}"
+
+    expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
+
+    click_link "Add an image"
+    expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
+
+    attach_file "image_upload[file_upload]", image
+
+    click_button "Upload"
+
+    expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
   end
 end
