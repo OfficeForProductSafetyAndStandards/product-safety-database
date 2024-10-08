@@ -87,7 +87,9 @@ private
   end
 
   def build_sub_table(pdf)
-    rows = image_rows
+    rows = image_rows if image_rows.present?
+    rows ||= [] # Ensure rows is initialized if image_rows was blank
+    rows += notification_image_rows if notification_image_rows.present?
     return if rows.blank?
 
     flattened_array = rows.flatten(1)
@@ -139,6 +141,21 @@ private
       ""
     else
       text
+    end
+  end
+
+  def notification_image_rows
+    return if params["notification_image_ids"].blank?
+
+    params["notification_image_ids"].reject(&:blank?).map { |image_id| [notification_image_cell(image_id)] }
+  end
+
+  def notification_image_cell(id)
+    image_upload = ImageUpload.find_by(id:, upload_model_type: "Investigation")
+    return if image_upload.blank?
+
+    image_upload.file_upload.blob.open do |file|
+      { image: File.open(file.path), fit: [100, 100], borders: [] }
     end
   end
 end

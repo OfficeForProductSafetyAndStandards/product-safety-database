@@ -117,4 +117,8 @@ class Product < ApplicationRecord
   def unique_investigation_products
     investigation_products.uniq(&:investigation_id)
   end
+
+  def get_notification_images
+    investigations.flat_map(&:image_uploads)
+  end
 end

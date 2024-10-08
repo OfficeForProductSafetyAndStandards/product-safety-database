@@ -24,6 +24,7 @@ class ProductRecallForm
   attribute :online_marketplace_id, :string
   attribute :other_marketplace_name, :string
   attribute :notified_by, :string
+  attribute :notification_image_ids, default: []
 
   def advance!(num = 1)
     self.step += num
