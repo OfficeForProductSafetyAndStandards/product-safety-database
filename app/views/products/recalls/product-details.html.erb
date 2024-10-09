@@ -97,14 +97,14 @@
         <% end %>
         <%= form.govuk_radio_button :online_marketplace, false, label: { text: "No" } %>
       <% end %>
-      <%= form.govuk_collection_radio_buttons :omp_responsible_for_recall,
+      <%= form.govuk_collection_radio_buttons :is_listing_removed,
           [
             OpenStruct.new(id: true, name: "Yes"),
             OpenStruct.new(id: false, name: "No")
           ],
           :id,
           :name,
-          legend: { text: "Is the online marketplace responsible for the recall?", size: "s" },
+          legend: { text: "Has the listing been removed by the online marketplace?", size: "s" },
           hint: {text: "Only applicable if you answered yes to online marketplace"},
           small: true
       %>
