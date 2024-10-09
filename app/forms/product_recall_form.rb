@@ -20,7 +20,7 @@ class ProductRecallForm
   attribute :corrective_actions, :string
   attribute :other_corrective_action, :string
   attribute :online_marketplace, :boolean
-  attribute :omp_responsible_for_recall, :boolean
+  attribute :is_listing_removed, :boolean
   attribute :online_marketplace_id, :string
   attribute :other_marketplace_name, :string
   attribute :notified_by, :string

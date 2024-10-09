@@ -168,21 +168,21 @@ RSpec.describe GenerateProductRecallPdf, type: :service do
       end
     end
 
-    describe "#omp_responsible_for_recall" do
-      it 'returns "N/A" for online_marketplace if omp_responsible_for_recall is nil' do
+    describe "#has_omp_removed_listing" do
+      it 'returns "N/A" for online_marketplace if is_listing_removed is nil' do
         params["online_marketplace"] = nil
-        params["omp_responsible_for_recall"] = nil
+        params["is_listing_removed"] = nil
         expect(generate_product_recall_pdf.send(:online_marketplace)).to eq("N/A")
       end
 
-      it 'returns "No" for online_marketplace if omp_responsible_for_recall is false' do
+      it 'returns "No" for online_marketplace if is_listing_removed is false' do
         params["online_marketplace"] = false
-        params["omp_responsible_for_recall"] = false
+        params["is_listing_removed"] = false
         expect(generate_product_recall_pdf.send(:online_marketplace)).to eq("No")
       end
 
-      it "returns the online marketplace name with text if omp_responsible_for_recall present" do
-        params["omp_responsible_for_recall"] = true
+      it "returns the online marketplace name with text if is_listing_removed present" do
+        params["is_listing_removed"] = true
         expect(generate_product_recall_pdf.send(:online_marketplace)).to eq("Etsy - The listing has been removed by the online marketplace")
       end
     end
