@@ -96,7 +96,7 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
       choose("Medicines and Healthcare products Regulatory Agency (MHRA)")
     end
 
-    click_button "Continue"
+    click_button "Save and continue"
 
     expect(find("textarea#markdown_template_product_safety_report").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
     expect(find("textarea#markdown_template_product_recall").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
@@ -139,7 +139,7 @@ RSpec.feature "Product Recall Spec", :with_product_form_helper, :with_stubbed_an
       choose("Medicines and Healthcare products Regulatory Agency (MHRA)")
     end
 
-    click_button "Continue"
+    click_button "Save and continue"
 
     expect(find("textarea#markdown_template_product_safety_report").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
     expect(find("textarea#markdown_template_product_recall").value).to have_text("Medicines and Healthcare products Regulatory Agency (MHRA)")
