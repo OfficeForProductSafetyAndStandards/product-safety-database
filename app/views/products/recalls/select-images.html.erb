@@ -5,7 +5,12 @@
       <h1 class="govuk-heading-l">
          Select the images to include
       </h1>
-      <% if @product.virus_free_images.any? ||  @product.get_notification_images.any? %>
+      <%
+	      has_notification_images =  @product.get_notification_images.any?
+	      has_product_images = @product.virus_free_images.any?
+	      has_valid_images = ( has_product_images || has_notification_images)
+      %>
+      <% if has_valid_images %>
         <div class="govuk-hint" id="image-ids-hint">
           <div>Acceptable file formats to create a product recall PDF: JPEG &amp; PNG</div>
           <div>Any other file types you have uploaded will not be displayed here.</div>
@@ -13,7 +18,7 @@
       <% end %>
       <%= form.hidden_field :step, value: @form.step %>
       <div class="govuk-form-group image-select">
-        <% if @product.virus_free_images.any? %>
+        <% if has_product_images %>
           <%= form.govuk_check_boxes_fieldset(:product_image_ids, legend: { text: "Product record images", size: "m" }) do %>
             <% @product.virus_free_images.each do |image| %>
               <% if image.file_upload.content_type == "image/jpeg" || image.file_upload.content_type == "image/png" %>
@@ -31,7 +36,7 @@
         <% end %>
       </div>
       <div class="govuk-form-group image-select">
-      <% if @product.get_notification_images.any? %>
+      <% if has_notification_images %>
         <%= form.govuk_check_boxes_fieldset(:notification_image_ids, legend: { text: "Supporting images for all linked notifications", size: "m" }) do %>
           <% @product.get_notification_images.each do |image| %>
             <% if image.file_upload.content_type == "image/jpeg" || image.file_upload.content_type == "image/png" %>
@@ -51,11 +56,13 @@
 
       <div class="govuk-button-group">
         <%= form.govuk_submit("Save and continue") %>
-        <a href="<%= product_recall_path(product_id: @product.id, id: "product-details") %>" class="govuk-link">Skip</a>
-      </div>
-      <div>
         <%= link_to "Back", product_recall_path(product_id: @product.id, id: :start), class: "govuk-link" %>
       </div>
+      <% if has_valid_images %>
+        <div>
+          <a href="<%= product_recall_path(product_id: @product.id, id: "product-details") %>" class="govuk-link">Skip</a>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>

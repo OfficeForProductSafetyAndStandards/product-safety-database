@@ -123,7 +123,8 @@
         small: true
       %>
       <div class="govuk-button-group">
-        <%= form.govuk_submit("Continue") %>
+        <%= form.govuk_submit("Save and continue") %>
+        <%= link_to "Back", product_recall_path(product_id: @product.id, id: "select-images"), class: "govuk-link" %>
       </div>
     <% end %>
   </div>
