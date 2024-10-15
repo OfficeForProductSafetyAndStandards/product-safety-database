@@ -143,7 +143,7 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    ahoy_matey (5.2.0)
+    ahoy_matey (5.2.1)
       activesupport (>= 6.1)
       device_detector (>= 1)
       safely_block (>= 0.4)
@@ -219,7 +219,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.1)
       railties (>= 6.0.0)
-    data_migrate (11.0.0)
+    data_migrate (11.1.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
     database_cleaner (2.0.2)
@@ -289,11 +289,11 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    govuk-components (5.6.1)
+    govuk-components (5.7.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
-      view_component (>= 3.9, < 3.15)
-    govuk_design_system_formbuilder (5.6.0)
+      view_component (>= 3.9, < 3.17)
+    govuk_design_system_formbuilder (5.7.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -301,7 +301,7 @@ GEM
     govuk_notify_rails (3.0.0)
       notifications-ruby-client (~> 6.2)
       rails (>= 4.1.0)
-    groupdate (6.5.0)
+    groupdate (6.5.1)
       activesupport (>= 7)
     hashdiff (1.1.1)
     hashie (5.0.0)
@@ -374,7 +374,7 @@ GEM
     mutex_m (0.2.0)
     net-http (0.4.1)
       uri
-    net-imap (0.4.16)
+    net-imap (0.4.17)
       date
       net-protocol
     net-pop (0.1.2)
@@ -440,7 +440,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.1.7)
+    rack (3.1.8)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
@@ -529,7 +529,7 @@ GEM
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.3.8)
-    rollups (0.4.0)
+    rollups (0.4.1)
       activesupport (>= 7)
       groupdate (>= 6.1)
     roo (2.10.1)
@@ -737,7 +737,7 @@ GEM
     validate_email (0.1.6)
       activemodel (>= 3.0)
       mail (>= 2.2.5)
-    view_component (3.14.0)
+    view_component (3.16.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -762,7 +762,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.36)
-    zeitwerk (2.6.18)
+    zeitwerk (2.7.0)
 
 PLATFORMS
   arm64-darwin-22
@@ -800,9 +800,9 @@ DEPENDENCIES
   flipper
   flipper-active_record
   flipper-ui
-  govuk-components (~> 5.6)
+  govuk-components (~> 5.7)
   govuk-design-system-rails (~> 0.10.5)!
-  govuk_design_system_formbuilder (~> 5.6)
+  govuk_design_system_formbuilder (~> 5.7)
   govuk_notify_rails (~> 3.0)
   image_processing
   interactor (~> 3.1)
@@ -831,7 +831,7 @@ DEPENDENCIES
   pry-doc (~> 1.5)
   puma (~> 6.4)
   pundit (~> 2.4)
-  rack (~> 3.1.6)
+  rack (~> 3.1.8)
   rails (~> 7.1.3)
   rails-controller-testing (~> 1.0)
   rails-erd
