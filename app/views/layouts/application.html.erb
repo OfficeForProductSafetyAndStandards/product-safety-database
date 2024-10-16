@@ -14,12 +14,12 @@
     <%= javascript_include_tag "application", type: "module", nonce: true %>
     <%= stylesheet_link_tag "application" %>
     <%= csrf_meta_tags %>
-    <% unless Rails.env.development? %>
+    <% if Rails.env.production? && analytics_cookies_accepted? %>
       <%= render "shared/ga_head" %>
     <% end %>
   </head>
   <body class="govuk-template__body app-body-class">
-    <% unless Rails.env.development? %>
+    <% if Rails.env.production? && analytics_cookies_accepted? %>
       <%= render "shared/ga_body" %>
     <% end %>
     <%= javascript_tag nonce: true do -%>

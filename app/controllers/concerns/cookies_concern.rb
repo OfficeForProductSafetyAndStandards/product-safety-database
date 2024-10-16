@@ -45,12 +45,14 @@ module CookiesConcern
     cookies[:accept_analytics_cookies] = { value: accept_analytics_cookies, expires: 1.year.from_now }
     cookies[:cookie_preferences_set] = { value: accept_analytics_cookies, expires: 1.year.from_now }
 
-    cookies[:cookies_policy] = {
-      value: get_policy.to_json,
-      expires: 1.year.from_now,
-      httponly: true,
-      raw: true
-    }
+    if accept_analytics_cookies == true
+      cookies[:cookies_policy] = {
+        value: get_policy.to_json,
+        expires: 1.year.from_now,
+        httponly: true,
+        raw: true
+      }
+    end
   end
 
 private
