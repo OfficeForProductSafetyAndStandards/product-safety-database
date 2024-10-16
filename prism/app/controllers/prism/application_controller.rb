@@ -5,7 +5,6 @@ module Prism
     protect_from_forgery with: :exception
 
     before_action :authenticate_user!
-    before_action :authorize_user
 
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -21,12 +20,6 @@ module Prism
 
     def root_path_for(*)
       root_path
-    end
-
-  private
-
-    def authorize_user
-      redirect_to "/403" if current_user && !current_user.is_prism_user?
     end
   end
 end

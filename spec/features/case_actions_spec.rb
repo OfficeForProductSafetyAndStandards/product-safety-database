@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-  let(:user) { create :user, :opss_user, :activated, roles: %w[prism], has_viewed_introduction: true }
+  let(:user) { create :user, :opss_user, :activated, has_viewed_introduction: true }
   let(:washing_machine) { create :product_washing_machine }
   let(:investigation_a) { create :allegation, creator: user }
   let(:investigation_b) { create :allegation, products: [washing_machine], creator: user }
@@ -84,7 +84,7 @@ RSpec.feature "Case actions", :with_stubbed_antivirus, :with_stubbed_mailer, typ
         expect(page).to have_link("Add a notification image", href: new_investigation_image_upload_path(investigation_a))
         expect(page).to have_link("Add an accident or incident", href: new_investigation_accident_or_incidents_type_path(investigation_a))
         expect(page).to have_link("Add a corrective action", href: new_investigation_corrective_action_path(investigation_a))
-        expect(page).to have_link("Add a risk assessment", href: new_investigation_prism_risk_assessment_path(investigation_a))
+        expect(page).to have_link("Add a prism risk assessment", href: new_investigation_prism_risk_assessment_path(investigation_a))
         expect(page).to have_link("Add a correspondence", href: new_investigation_correspondence_path(investigation_a))
         expect(page).to have_link("Add a test result", href: new_investigation_funding_source_path(investigation_a))
         expect(page).to have_link("Add a document or attachment", href: new_investigation_document_path(investigation_a))

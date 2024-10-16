@@ -4,7 +4,7 @@ require "rails_helper"
 # See `risk_assessment_spec.rb` for a full set of tests
 # for the entire workflow.
 RSpec.feature "PRISM tasks", type: :feature do
-  let(:user) { create(:user, :activated, roles: %w[prism]) }
+  let(:user) { create(:user, :activated) }
 
   before do
     sign_in user
@@ -144,22 +144,6 @@ RSpec.feature "PRISM tasks", type: :feature do
 
       expect(page).not_to have_link("Complete product risk evaluation")
       expect(page).to have_selector("#task-list-1-0-status", text: "Cannot start yet")
-    end
-  end
-
-  context "when signed in as a user without the PRISM role" do
-    let(:non_prism_user) { create(:user, :activated) }
-    let(:prism_risk_assessment) { create(:prism_risk_assessment, created_by_user_id: non_prism_user.id) }
-
-    before do
-      sign_out
-      sign_in non_prism_user
-    end
-
-    scenario "visiting the task list" do
-      visit prism.risk_assessment_tasks_path(prism_risk_assessment)
-
-      expect(page).to have_current_path("/403")
     end
   end
 

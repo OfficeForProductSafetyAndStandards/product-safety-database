@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "PRISM triage", type: :feature do
-  let(:user) { create(:user, :activated, roles: %w[prism]) }
+  let(:user) { create(:user, :activated) }
   let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, :with_product, created_by_user_id: user.id) }
 
   before do
@@ -94,21 +94,6 @@ RSpec.feature "PRISM triage", type: :feature do
     click_button "Continue"
 
     expect(page).to have_text("Perform risk triage")
-  end
-
-  context "when signed in as a user without the PRISM role" do
-    let(:non_prism_user) { create(:user, :activated) }
-
-    before do
-      sign_out
-      sign_in non_prism_user
-    end
-
-    scenario "visiting the start page" do
-      visit prism.root_path
-
-      expect(page).to have_current_path("/403")
-    end
   end
 
   context "when not signed in" do

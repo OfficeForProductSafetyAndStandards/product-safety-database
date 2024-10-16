@@ -29,13 +29,9 @@ class BulkProductsController < ApplicationController
     end
   end
 
-  def no_upload_unsafe
-    @prism_user = current_user.is_prism_user?
-  end
+  def no_upload_unsafe; end
 
-  def no_upload_mixed
-    @prism_user = current_user.is_prism_user?
-  end
+  def no_upload_mixed; end
 
   def create_case
     if request.put?
