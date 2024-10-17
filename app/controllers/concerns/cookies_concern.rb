@@ -49,7 +49,8 @@ module CookiesConcern
       cookies[:cookies_policy] = {
         value: get_policy.to_json,
         expires: 1.year.from_now,
-        httponly: true
+        httponly: true,
+        raw: true
       }
     end
   end
