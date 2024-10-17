@@ -30,10 +30,8 @@
           <% end %>
         <% end %>
       <% end %>
-      <% if policy(@product).can_create_prism_risk_assessment? %>
-        <% prism_risk_assessment_href = session[:prism_risk_assessment_id].present? ? prism.risk_assessment_tasks_path(session[:prism_risk_assessment_id], product_id: @product.id) : prism.serious_risk_path(product_id: @product.id) %>
-        <%= govukButton(text: "Start a new risk assessment", href: prism_risk_assessment_href, classes: "govuk-button--secondary") %>
-      <% end %>
+      <% prism_risk_assessment_href = session[:prism_risk_assessment_id].present? ? prism.risk_assessment_tasks_path(session[:prism_risk_assessment_id], product_id: @product.id) : prism.serious_risk_path(product_id: @product.id) %>
+      <%= govukButton(text: "Start a new risk assessment", href: prism_risk_assessment_href, classes: "govuk-button--secondary") %>
     </div>
   </div>
 </div>

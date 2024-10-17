@@ -1,7 +1,6 @@
 module Prism
   class ApiController < ApplicationController
     skip_before_action :authenticate_user!
-    skip_before_action :authorize_user
 
     def overall_probability_of_harm_and_risk_level
       # Process probabilities by handling `nil`, splitting into an array and casting to decimals

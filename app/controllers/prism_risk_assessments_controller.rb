@@ -8,8 +8,6 @@ class PrismRiskAssessmentsController < ApplicationController
   before_action :set_last_prism_risk_assessment_view_cookie, only: %i[index your_prism_risk_assessments team_prism_risk_assessments]
 
   def index
-    authorize PrismRiskAssessment, :index?
-
     @submitted_prism_risk_assessments = PrismRiskAssessment.submitted
 
     if @search.q
@@ -30,8 +28,6 @@ class PrismRiskAssessmentsController < ApplicationController
   end
 
   def your_prism_risk_assessments
-    authorize PrismRiskAssessment, :index?
-
     @draft_pagy, @draft_prism_risk_assessments = pagy(PrismRiskAssessment.for_user(current_user).draft.order(sorting_params), page_param: :draft_page)
     @submitted_pagy, @submitted_prism_risk_assessments = pagy(PrismRiskAssessment.for_user(current_user).submitted.order(sorting_params), page_param: :submitted_page)
     @count = @draft_pagy.count + @submitted_pagy.count
@@ -41,8 +37,6 @@ class PrismRiskAssessmentsController < ApplicationController
   end
 
   def team_prism_risk_assessments
-    authorize PrismRiskAssessment, :index?
-
     @submitted_pagy, @submitted_prism_risk_assessments = pagy(PrismRiskAssessment.for_team(current_user.team).submitted.order(sorting_params), page_param: :submitted_page)
     @count = @submitted_pagy.count
     @page_name = "team_prism_risk_assessments"

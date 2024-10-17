@@ -12,8 +12,7 @@
         <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
       </ul>
     <% end %>
-    <% if current_user.is_prism_user? %>
-      <h2 class="govuk-heading-m">Related risk assessments</h2>
+    <h2 class="govuk-heading-m">Related risk assessments</h2>
       <% if @related_prism_risk_assessments.size.positive? %>
         <%= form_with url: with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
           <p class="govuk-body">Select a related risk assessment to add to the notification.</p>
@@ -60,7 +59,6 @@
       <% else %>
         <p class="govuk-body">There are no risk assessments for <%= sanitize(@investigation_product.decorate.product.name_with_brand) %>. <strong>To conduct a new risk assessment</strong>, use the 'Risk Assessments' section of the Product Safety Database.</p>
       <% end %>
-    <% end %>
     <%= govuk_button_link_to("Add legacy risk assessment", with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id, entity_id: "new"), secondary: true) %>
   </div>
 </div>
