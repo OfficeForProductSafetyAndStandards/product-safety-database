@@ -133,10 +133,10 @@ module Notifications
         if add_business_details_params[:business_id].blank?
           # Find potential duplicate businesses by looking for the same trading name
           # and preferring results with the same legal name too.
-          duplicate_business = Business.where("LOWER(legal_name) = ?", @add_business_details_form.legal_name.downcase)
+          duplicate_business = Business.where("LOWER(TRIM(legal_name)) = ?", @add_business_details_form.legal_name&.downcase)
                                        .or(Business.where(legal_name: nil))
                                        .or(Business.where(legal_name: ""))
-                                       .where("LOWER(trading_name) = ?", @add_business_details_form.trading_name.downcase)
+                                       .where("LOWER(TRIM(trading_name)) = ?", @add_business_details_form.trading_name&.downcase)
                                        .without_online_marketplaces
                                        .order(Arel.sql("CASE WHEN legal_name IS NULL OR legal_name = '' THEN 1 ELSE 0 END"))
                                        .order(created_at: :desc)
