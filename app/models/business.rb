@@ -7,6 +7,7 @@ class Business < ApplicationRecord
     retailer online_seller online_marketplace manufacturer exporter importer fulfillment_house distributor authorised_representative responsible_person
   ].freeze
 
+  before_validation :trim_spaces
   validates :trading_name, presence: true
 
   has_many_attached :documents
@@ -55,5 +56,11 @@ class Business < ApplicationRecord
 
   def locations_have_errors?
     locations&.any? { |location| location.errors.any? } || false
+  end
+
+  def trim_spaces
+    self.legal_name = legal_name&.strip
+    self.trading_name = trading_name&.strip
+    self.company_number = company_number&.strip
   end
 end
