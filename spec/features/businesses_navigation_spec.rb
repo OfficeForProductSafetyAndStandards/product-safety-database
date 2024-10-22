@@ -5,10 +5,10 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
   let(:user) { create :user, :activated, has_viewed_introduction: true, team: }
 
   let(:other_user_same_team) { create :user, :activated, has_viewed_introduction: true, team: }
-  let(:user_business) { create(:business, trading_name: "user_business") }
-  let(:team_business) { create(:business, trading_name: "team_business") }
-  let(:closed_business) { create(:business, trading_name: "closed_business") }
-  let(:other_business) { create(:business, trading_name: "other_business") }
+  let(:user_business) { create(:business, trading_name: "user_business", legal_name: "user_business Ltd") }
+  let(:team_business) { create(:business, trading_name: "team_business", legal_name: "team_business Ltd") }
+  let(:closed_business) { create(:business, trading_name: "closed_business", legal_name: "closed_business Ltd") }
+  let(:other_business) { create(:business, trading_name: "other_business", legal_name: "other_business Ltd") }
 
   def create_four_businesses!
     user_case = create(:allegation, creator: user)
@@ -75,6 +75,30 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
 
     visit "/businesses"
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added") # sort filter drop down
+  end
+
+  scenario "Business table is displayed with columns" do
+    create_four_businesses!
+
+    sign_in(user)
+    visit "/businesses"
+
+    expect(highlighted_tab).to eq "All businesses - Search"
+
+    within "table > thead" do
+      expect(page).to have_text("Trading name")
+      expect(page).to have_text("Registered or Legal name")
+      expect(page).to have_text("Company number")
+    end
+
+    within "table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      expect(page).to have_link(other_business.trading_name, href: business_path(other_business))
+    end
+
+    within "table tbody.govuk-table__body > tr:nth-child(1)" do
+      expect(page).to have_text(other_business.legal_name)
+      expect(page).to have_text(other_business.company_number)
+    end
   end
 
   def highlighted_tab
