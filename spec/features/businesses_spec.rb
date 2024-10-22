@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
   let(:user)            { create :user, :opss_user, :activated, has_viewed_introduction: true }
   let(:non_opss_user)            { create :user, :activated, has_viewed_introduction: true }
-  let!(:business_one)   { create(:business, :online_marketplace, trading_name: "great value", created_at: 1.day.ago) }
-  let!(:business_two)   { create(:business, :retailer, trading_name: "mediocre stuff", created_at: 2.days.ago) }
-  let!(:business_three) { create(:business, :manufacturer, trading_name: "pretty bad", created_at: 3.days.ago) }
+  let!(:business_one)   { create(:business, :online_marketplace, trading_name: "great value", legal_name: "Great Value Ltd", created_at: 1.day.ago) }
+  let!(:business_two)   { create(:business, :retailer, trading_name: "Business name", legal_name: "Business name Ltd", created_at: 2.days.ago) }
+  let!(:business_three) { create(:business, :manufacturer, trading_name: "Some Business", legal_name: "Some Business Ltd", created_at: 3.days.ago) }
 
   before do
     create_list :business, 18, created_at: 4.days.ago
@@ -30,12 +30,27 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
       expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
     end
 
+    within "table tbody.govuk-table__body > tr:nth-child(1)" do
+      expect(page).to have_text(business_one.legal_name)
+      expect(page).to have_text(business_one.company_number)
+    end
+
     within "table tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
       expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
     end
 
+    within "table tbody.govuk-table__body > tr:nth-child(2)" do
+      expect(page).to have_text(business_two.legal_name)
+      expect(page).to have_text(business_two.company_number)
+    end
+
     within "table tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+    end
+
+    within "table tbody.govuk-table__body > tr:nth-child(3)" do
+      expect(page).to have_text(business_three.legal_name)
+      expect(page).to have_text(business_three.company_number)
     end
 
     expect(page).to have_css(".govuk-pagination__link", text: "1")
@@ -46,6 +61,11 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
 
     within "table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+    end
+
+    within "table tbody.govuk-table__body > tr:nth-child(1)" do
+      expect(page).to have_text(business_three.legal_name)
+      expect(page).to have_text(business_three.company_number)
     end
   end
 

@@ -69,6 +69,7 @@
             table.with_head do |head|
               head.with_row do |row|
                 row.with_cell(text: "Business name")
+                row.with_cell(text: "Registered or Legal name")
                 row.with_cell(text: "Companies House number")
                 row.with_cell(text: "Address")
                 row.with_cell(text: "<span class=\"govuk-visually-hidden\">Select business</span>".html_safe)
@@ -91,6 +92,7 @@
 
                 body.with_row do |row|
                   row.with_cell(text: sanitize(record.trading_name))
+                  row.with_cell(text: sanitize(record.legal_name))
                   row.with_cell(text: sanitize(record.company_number))
                   row.with_cell(text: sanitize(addresses).html_safe)
                   if @existing_business_ids.include?(record.id)

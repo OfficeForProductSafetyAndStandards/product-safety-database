@@ -1,11 +1,11 @@
 <tr class="govuk-table__row">
   <th scope="row" class="govuk-table__header">
-    <%= link_to business.trading_name, business, class: "govuk-link govuk-link--no-visited-state" %>
+    <%= link_to sanitize(business&.trading_name), business, class: "govuk-link govuk-link--no-visited-state" %>
   </th>
   <td class="govuk-table__cell">
-    <%= date_or_recent_time_ago business.created_at %>
+    <%= sanitize(business&.legal_name) %>
   </td>
   <td class="govuk-table__cell">
-    <%= business.company_number %>
+    <%= sanitize(business&.company_number) %>
   </td>
 </tr>
