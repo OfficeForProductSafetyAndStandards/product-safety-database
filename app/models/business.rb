@@ -59,8 +59,8 @@ class Business < ApplicationRecord
   end
 
   def trim_spaces
-    self.legal_name = legal_name&.strip
-    self.trading_name = trading_name&.strip
-    self.company_number = company_number&.strip
+    self.legal_name = legal_name&.squish
+    self.trading_name = trading_name&.squish
+    self.company_number = company_number&.squish
   end
 end
