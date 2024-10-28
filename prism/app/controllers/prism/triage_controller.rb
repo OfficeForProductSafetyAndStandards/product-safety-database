@@ -35,10 +35,9 @@ module Prism
     def serious_risk_rebuttable; end
 
     def serious_risk_rebuttable_choose
-      if !@prism_risk_assessment.associated_products.present? && @prism_risk_assessment.associated_products.count == 0
-        if session[:serious_risk_params_product_id].present?
-          @prism_risk_assessment.associated_products.create!(product_id: session[:serious_risk_params])
-        end
+      byebug
+      if @prism_risk_assessment.associated_products.blank? && @prism_risk_assessment.associated_products.count.zero? && session[:serious_risk_params_product_id].present?
+        @prism_risk_assessment.associated_products.create!(product_id: session[:serious_risk_params_product_id])
       end
 
       @prism_risk_assessment.assign_attributes(serious_risk_rebuttable_params)
