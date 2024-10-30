@@ -528,7 +528,7 @@ GEM
       railties (>= 5.2)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.3.8)
+    rexml (3.3.9)
     rollups (0.4.1)
       activesupport (>= 7)
       groupdate (>= 6.1)
