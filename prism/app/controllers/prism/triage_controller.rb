@@ -8,18 +8,25 @@ module Prism
     def index; end
 
     def serious_risk
-      @prism_risk_assessment = Prism::RiskAssessment.new
+      @serious_risk_form = Form::SeriousRisk.new(
+        risk_assessment: Prism::RiskAssessment.new
+      )
+      @prism_risk_assessment = @serious_risk_form.risk_assessment.presence
     end
 
     def serious_risk_choose
-      @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params.merge(created_by_user_id: current_user.id).except(:investigation_id, :product_id, :product_ids))
-      if @prism_risk_assessment.save(context: :serious_risk)
-        if serious_risk_params[:investigation_id].present? && serious_risk_params[:product_ids].present?
-          associated_investigation = @prism_risk_assessment.associated_investigations.create!(investigation_id: serious_risk_params[:investigation_id])
-          serious_risk_params[:product_ids].each { |product_id| associated_investigation.associated_investigation_products.create!(product_id:) }
-        elsif serious_risk_params[:product_id].present?
-          @prism_risk_assessment.associated_products.create!(product_id: serious_risk_params[:product_id])
-          set_serious_risk_params
+      byebug
+      @serious_risk_form = Form::SeriousRisk.new(
+        serious_risk_params.merge(created_by_user_id: current_user.id).except(:investigation_id, :product_id, :product_ids)
+      )
+
+      if @serious_risk_form.persist!
+        byebug
+        @prism_risk_assessment = @serious_risk_form.risk_assessment
+        
+        # Store the product ID for the rebuttable step if needed
+        if @serious_risk_form.current_product_id.present?
+          session[:serious_risk_params_product_id] = @serious_risk_form.current_product_id
         end
 
         if @prism_risk_assessment.serious_risk?
@@ -35,12 +42,15 @@ module Prism
     def serious_risk_rebuttable; end
 
     def serious_risk_rebuttable_choose
-      if @prism_risk_assessment.associated_products.blank? && @prism_risk_assessment.associated_products.count.zero? && session[:serious_risk_params_product_id].present?
-        @prism_risk_assessment.associated_products.create!(product_id: session[:serious_risk_params_product_id])
+      # Keep existing session check for backward compatibility
+      if @prism_risk_assessment.associated_products.blank? && session[:serious_risk_params_product_id].present?
+        @prism_risk_assessment.associated_products.create!(
+          product_id: session[:serious_risk_params_product_id]
+        )
       end
 
       @prism_risk_assessment.assign_attributes(serious_risk_rebuttable_params)
-
+      
       if @prism_risk_assessment.save(context: :serious_risk_rebuttable)
         if @prism_risk_assessment.less_than_serious_risk?
           redirect_to full_risk_assessment_required_path(@prism_risk_assessment)
@@ -93,8 +103,8 @@ module Prism
 
   private
 
-    def set_serious_risk_params
-      session[:serious_risk_params_product_id] = serious_risk_params[:product_id].presence
+    def serious_risk_params
+      params.require(:risk_assessment).permit(:risk_type, :investigation_id, :product_id, product_ids: [])
     end
 
     def prism_risk_assessment
