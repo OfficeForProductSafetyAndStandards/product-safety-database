@@ -35,8 +35,6 @@ class User < ApplicationRecord
   has_many :product_exports
   has_many :api_tokens, dependent: :destroy
 
-  has_many :visits, class_name: "Ahoy::Visit", dependent: :nullify
-
   belongs_to :team
 
   validates :password,

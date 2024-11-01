@@ -1,8 +1,6 @@
 class Investigation < ApplicationRecord
   extend Pagy::Searchkick
 
-  visitable :ahoy_visit
-
   include Documentable
   include SanitizationHelper
   include InvestigationSearchkick
@@ -99,6 +97,8 @@ class Investigation < ApplicationRecord
                        :is_closed, :is_private, :non_compliant_reason, :notifying_country, :pretty_id,
                        :product_category, :received_type, :reported_reason, :risk_level, :risk_validated_at,
                        :risk_validated_by, :type, :updated_at, :user_title, :deleted_at, :deleted_by
+
+  self.ignored_columns += %w[ahoy_visit_id]
 
   # All sub-classes share this policy class
   def self.policy_class

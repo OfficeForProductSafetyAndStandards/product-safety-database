@@ -25,7 +25,6 @@ module Investigations
 
       if @remove_product_form.remove_product
         RemoveProductFromNotification.call!(notification: @investigation, investigation_product: @investigation_product, user: current_user, reason: @remove_product_form.reason)
-        ahoy.track "Removed product from notification", { notification_id: @investigation.id }
         redirect_to_investigation_products_tab success: "The product record was removed from the notification"
       else
         redirect_to_investigation_products_tab

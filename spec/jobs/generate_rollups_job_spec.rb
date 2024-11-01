@@ -15,13 +15,7 @@ RSpec.describe GenerateRollupsJob, type: :job do
     allow(User).to receive(:rollup)
     allow(Investigation::Notification).to receive(:rollup)
     allow(Product).to receive(:rollup)
-    allow(Ahoy::Visit).to receive(:rollup)
-    allow(Ahoy::Event).to receive(:where).and_return(ahoy_event_relation)
-    allow(ahoy_event_relation).to receive(:joins).and_return(ahoy_event_relation)
-    allow(ahoy_event_relation).to receive(:rollup)
   end
-
-  let(:ahoy_event_relation) { instance_double(RollupRelation) }
 
   describe "#perform - User rollups" do
     it "calls User rollup for New users (day)" do
@@ -101,60 +95,6 @@ RSpec.describe GenerateRollupsJob, type: :job do
     it "calls Product rollup for New products (year)" do
       described_class.new.perform
       expect(Product).to have_received(:rollup).with("New products", interval: :year)
-    end
-  end
-
-  describe "#perform - Ahoy::Visit rollups" do
-    it "calls Ahoy::Visit rollup for New visits (day)" do
-      described_class.new.perform
-      expect(Ahoy::Visit).to have_received(:rollup).with("New visits", column: :started_at, interval: :day)
-    end
-
-    it "calls Ahoy::Visit rollup for New visits (month)" do
-      described_class.new.perform
-      expect(Ahoy::Visit).to have_received(:rollup).with("New visits", column: :started_at, interval: :month)
-    end
-
-    it "calls Ahoy::Visit rollup for New visits (year)" do
-      described_class.new.perform
-      expect(Ahoy::Visit).to have_received(:rollup).with("New visits", column: :started_at, interval: :year)
-    end
-  end
-
-  describe "#perform - ahoy_rollups for various events" do
-    events = [
-      "Visited help page",
-      "Performed search",
-      "Generated notification export",
-      "Generated product export",
-      "Generated business export",
-      "Updated product",
-      "Created notification from product",
-      "Added product to existing notification",
-      "Updated notification name",
-      "Updated batch number",
-      "Updated custom codes",
-      "Updated number of affected units",
-      "Updated overseas regulator",
-      "Added test result",
-      "Updated test result"
-    ]
-
-    events.each do |event|
-      it "calls ahoy_rollups for #{event} (day)" do
-        described_class.new.perform
-        expect(ahoy_event_relation).to have_received(:rollup).with(event, column: :started_at, interval: :day)
-      end
-
-      it "calls ahoy_rollups for #{event} (month)" do
-        described_class.new.perform
-        expect(ahoy_event_relation).to have_received(:rollup).with(event, column: :started_at, interval: :month)
-      end
-
-      it "calls ahoy_rollups for #{event} (year)" do
-        described_class.new.perform
-        expect(ahoy_event_relation).to have_received(:rollup).with(event, column: :started_at, interval: :year)
-      end
     end
   end
 end

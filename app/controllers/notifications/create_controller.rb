@@ -10,9 +10,6 @@ module Notifications
     before_action :setup_wizard
     before_action :validate_step, except: %i[index from_product add_product remove_product remove_business]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers update_batch_numbers update_customs_codes update_ucr_numbers delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
-    before_action :track_notification_events, only: %i[update]
-    before_action :track_product_events, only: %i[update_with_notification_product]
-    before_action :track_product_removal_events, only: %i[remove_with_notification_product]
 
     breadcrumb "cases.label", :your_cases_investigations
 
@@ -35,7 +32,6 @@ module Notifications
       CreateNotification.call!(notification:, product:, user: current_user, from_task_list: true, silent: true)
       notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
       notification.save!(context: :search_for_or_add_a_product)
-      ahoy.track "Created notification from product", { notification_id: notification.id, product_id: product.id }
       redirect_to notification_create_path(notification, "search_for_or_add_a_product")
     end
 
@@ -45,7 +41,6 @@ module Notifications
       AddProductToNotification.call!(notification: @notification, product:, user: current_user, skip_email: true)
       @notification.tasks_status["search_for_or_add_a_product"] = "in_progress"
       @notification.save!(context: :search_for_or_add_a_product)
-      ahoy.track "Added product to existing notification", { notification_id: @notification.id, product_id: product.id }
       redirect_to notification_create_path(@notification, "search_for_or_add_a_product")
     end
 
@@ -184,7 +179,6 @@ module Notifications
         @existing_business_ids = InvestigationBusiness.where(investigation: @notification).pluck(:business_id)
         @existing_attached_business_ids = @notification.corrective_actions.pluck(:business_id) + @notification.risk_assessments.pluck(:assessed_by_business_id)
         @manage = request.query_string.split("&").first != "search" && @existing_business_ids.present?
-        track_notification_event(name: "Show search for or add a business page")
       when :add_business_details
         business = if params[:business_id].present?
                      Business.find(params[:business_id])
@@ -193,12 +187,6 @@ module Notifications
                    end
 
         @add_business_details_form = AddBusinessDetailsForm.new(trading_name: business.trading_name, legal_name: business.legal_name, company_number: business.company_number, business_id: business.id)
-
-        if business.persisted?
-          track_notification_event(name: "Edit new business for notification")
-        else
-          track_notification_event(name: "Create new business for notification")
-        end
       when :add_business_roles
         @add_business_roles_form = AddBusinessRolesForm.new(business_id: params[:business_id])
       when :add_business_location
@@ -729,26 +717,22 @@ module Notifications
 
     def update_batch_numbers
       ChangeNotificationBatchNumber.call!(notification_product: @investigation_product, batch_number: params[:batch_number], user: current_user, silent: true)
-      track_notification_event(name: "Update batch numbers")
       redirect_to wizard_path(:add_product_identification_details)
     end
 
     def update_customs_codes
       ChangeCustomsCode.call!(investigation_product: @investigation_product, customs_code: params[:customs_code], user: current_user, silent: true)
-      track_notification_event(name: "Update customs codes")
       redirect_to wizard_path(:add_product_identification_details)
     end
 
     def update_ucr_numbers
       ChangeUcrNumbers.call!(investigation_product: @investigation_product, ucr_numbers: ucr_numbers_params, user: current_user, silent: true)
-      track_notification_event(name: "Update UCR numbers")
       redirect_to wizard_path(:add_product_identification_details)
     end
 
     def delete_ucr_number
       ucr_number = @investigation_product.ucr_numbers.find(params[:ucr_number_id])
       ucr_number.destroy!
-      track_notification_event(name: "Delete UCR number")
       redirect_to ucr_numbers_notification_create_index_path
     end
 
@@ -760,7 +744,6 @@ module Notifications
         legal_name: params[:legal_name]
       )
 
-      track_notification_event(name: "Show duplicate businesses")
       @duplicate_business = Business.without_online_marketplaces.find(params[:business_id])
 
       render :add_business_details_duplicate
@@ -778,7 +761,6 @@ module Notifications
         business = Business.without_online_marketplaces.find(params[:business_id])
 
         AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
-        track_notification_event(name: "Add existing business to notification")
 
         redirect_to notification_create_path(@notification, id: "confirm_business_details", business_id: business.id)
       else
@@ -793,7 +775,6 @@ module Notifications
         )
 
         AddBusinessToNotification.call!(notification: @notification, business:, user: current_user, skip_email: true)
-        track_notification_event(name: "Add new business to notification")
 
         redirect_to notification_create_path(@notification, id: "add_business_location", business_id: business.id)
       end
@@ -1058,30 +1039,6 @@ module Notifications
       optional_tasks = Investigation::Notification::TASK_LIST_SECTIONS.slice(*Investigation::Notification::TASK_LIST_SECTIONS_OPTIONAL).values.flatten
       previous_task = TaskListService.previous_task(task: step, all_tasks: wizard_steps, optional_tasks:, hidden_tasks: Investigation::Notification::TASK_LIST_TASKS_HIDDEN)
       redirect_to notification_create_index_path(@notification) unless step == previous_step || step == :wizard_finish || @notification.tasks_status[previous_task.to_s] == "completed"
-    end
-
-    def track_notification_events
-      name = params[:step].presence || params[:id]
-      track_notification_event(name: name.to_s)
-    end
-
-    def track_product_events
-      name = params[:step].presence || params[:id]
-      track_notification_product_event(name: name.to_s)
-    end
-
-    def track_product_removal_events
-      return unless request.delete?
-
-      track_notification_product_event(name: "Remove #{params[:step]}")
-    end
-
-    def track_notification_event(name:)
-      ahoy.track "Notification create: #{name}", { notification: @notification.id }
-    end
-
-    def track_notification_product_event(name:)
-      ahoy.track "Notification create: #{name}", { notification: @notification.id, investigation_product: @investigation_product.product.id }
     end
 
     def set_notification_product

@@ -21,7 +21,6 @@ module Investigations
         })
       )
 
-      ahoy.track "Added accident or incident", { notification_id: @investigation.id }
       redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     end
 
@@ -54,7 +53,6 @@ module Investigations
             user: current_user
           })
         )
-        ahoy.track "Updated accident or incident", { notification_id: @investigation.id }
         redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
       else
         @type = type

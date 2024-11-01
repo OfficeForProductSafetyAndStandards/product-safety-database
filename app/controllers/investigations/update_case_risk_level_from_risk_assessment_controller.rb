@@ -22,7 +22,6 @@ module Investigations
           risk_level: @risk_assessment.risk_level
         )
       end
-      ahoy.track "Updated risk level from risk assessment", { notification_id: @investigation.id }
 
       redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
     end

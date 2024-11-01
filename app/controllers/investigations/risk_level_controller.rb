@@ -18,7 +18,6 @@ module Investigations
 
       add_incident_management_team
 
-      ahoy.track "Updated risk level", { notification_id: @investigation.id }
       set_success_flash_message(result)
       redirect_to investigation_path(@investigation)
     end

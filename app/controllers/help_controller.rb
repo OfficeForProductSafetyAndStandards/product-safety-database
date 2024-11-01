@@ -4,8 +4,6 @@ class HelpController < ApplicationController
                      :has_viewed_introduction,
                      :require_secondary_authentication
 
-  before_action :track_ahoy_visit
-
   def terms_and_conditions; end
 
   def privacy_notice; end
@@ -18,11 +16,5 @@ class HelpController < ApplicationController
 
   def hide_nav?
     !(current_user.present? && current_user.has_accepted_declaration)
-  end
-
-private
-
-  def track_ahoy_visit
-    ahoy.track "Visited help page", { page: request.path }
   end
 end
