@@ -12,7 +12,6 @@ module Investigations
       return render :edit unless @risk_validation_form.valid?
 
       result = ChangeNotificationRiskValidation.call!(@risk_validation_form.serializable_hash.merge(notification: @investigation, user: current_user))
-      ahoy.track "Updated risk validation", { notification_id: @investigation.id }
 
       if result.changes_made
         success_message = @risk_validation_form.is_risk_validated ? "validated_success_message" : "validation_removed_success_message"

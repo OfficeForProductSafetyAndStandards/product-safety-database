@@ -35,7 +35,6 @@ class Investigations::OwnershipController < Investigations::BaseController
 
     session[session_store_key] = nil
 
-    ahoy.track "Changed notification owner", { notification_id: @investigation.id }
     message = "Notification owner changed to #{form.owner.decorate.display_name(viewer: current_user)}"
     @investigation = @investigation.decorate
     redirect_to investigation_path(@investigation), flash: { success: message }

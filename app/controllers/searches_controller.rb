@@ -6,7 +6,6 @@ class SearchesController < ApplicationController
     if @search.q.blank?
       redirect_to notifications_path(query_params.except(:page_name))
     else
-      ahoy.track "Performed search", { query: query_params[:q] }
       @pagy, @answer = pagy_searchkick(notifications_search)
       @count = @pagy.count
       @investigations = @answer.includes([{ owner_team: :organisation, owner_user: :organisation }, :products])

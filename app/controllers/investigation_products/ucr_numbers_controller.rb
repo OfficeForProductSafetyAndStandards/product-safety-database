@@ -13,7 +13,6 @@ module InvestigationProducts
         ucr_numbers: ucr_numbers_params
       )
       if service.success?
-        ahoy.track "Updated UCR numbers", { notification_id: @investigation_product.investigation.id }
         redirect_to investigation_path(@investigation_product.investigation, anchor: "case_ucr_numbers_#{@investigation_product.id}"), flash: { success: "The UCR numbers were updated" }
       else
         render :edit, status: :unprocessable_entity
@@ -33,7 +32,6 @@ module InvestigationProducts
     # def destroy
     #   @ucr_number = @investigation_product.ucr_numbers.find(params[:id])
     #   @ucr_number.destroy!
-    #   ahoy.track "Deleted UCR number", { notification_id: @investigation_product.investigation.id }
     #   redirect_to investigation_path(@investigation_product.investigation, anchor: "case_ucr_numbers_#{@investigation_product.id}"), flash: { success: "The UCR numbers were deleted" }
     # end
 

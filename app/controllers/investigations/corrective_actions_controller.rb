@@ -27,7 +27,6 @@ module Investigations
       add_incident_management_team
 
       if result.success?
-        ahoy.track "Added corrective action", { investigation_id: @investigation.id }
         return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "The supporting information was updated" }
       end
 
@@ -72,8 +71,6 @@ module Investigations
       )
 
       add_incident_management_team
-
-      ahoy.track "Updated corrective action", { notification_id: @investigation.id } if @corrective_action_form.changes != { "date_decided(1i)" => [nil, params[:corrective_action]["date_decided(1i)"]], "date_decided(2i)" => [nil, params[:corrective_action]["date_decided(2i)"]], "date_decided(3i)" => [nil, params[:corrective_action]["date_decided(3i)"]] }
 
       if params[:bulk_products_upload_id].present?
         redirect_to check_corrective_actions_bulk_upload_products_path(bulk_products_upload_id: params[:bulk_products_upload_id])

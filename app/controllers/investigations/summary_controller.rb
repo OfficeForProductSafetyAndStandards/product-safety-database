@@ -11,7 +11,6 @@ class Investigations::SummaryController < Investigations::BaseController
     @form = ChangeNotificationSummaryForm.new(params.require(:change_notification_summary_form).permit(:summary))
     return render :edit, status: :unprocessable_entity unless @form.valid?
 
-    ahoy.track "Updated notification summary", { notification_id: @investigation.id }
     ChangeNotificationSummary.call!(notification: @investigation_object, summary: @form.summary, user: current_user)
     redirect_to investigation_path(@investigation), flash: { success: "Notification was successfully updated" }
   end

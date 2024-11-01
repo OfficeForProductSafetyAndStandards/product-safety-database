@@ -16,7 +16,6 @@ module InvestigationProducts
                                                  affected_units_status: @number_of_affected_units_form.affected_units_status,
                                                  investigation_product: @investigation_product,
                                                  user: current_user)
-      ahoy.track "Updated number of affected units", { notification_id: @investigation.id }
 
       redirect_to investigation_path(@investigation_product.investigation, anchor: "case_units_affected_#{@investigation_product.id}"), flash: result.changed ? { success: "The notification information was updated" } : nil
     end

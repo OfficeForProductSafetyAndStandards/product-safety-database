@@ -23,7 +23,6 @@ class ProductForm
   attribute :when_placed_on_market
   attribute :document_upload_ids
   attribute :image_upload_ids
-  attribute :ahoy_visit_id
 
   # Used when adding an image during product creation
   attribute :image

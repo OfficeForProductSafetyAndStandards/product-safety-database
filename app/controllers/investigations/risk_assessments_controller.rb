@@ -26,8 +26,6 @@ module Investigations
             assessed_by_team_id: @risk_assessment_form.assessed_by_team_id
           })
         )
-        ahoy.track "Added risk assessment", { notification_id: @investigation_object.id }
-
         # If the risk level has not been set for the investigation, set it to the same
         # as the risk assessment. This will force the redirect to the supporting information
         # page below and skip the "Do you want to match this case risk level to the risk assessment level?"
@@ -96,8 +94,6 @@ module Investigations
             user: current_user
           })
         )
-        ahoy.track "Updated risk assessment", { notification_id: @investigation_object.id } if @risk_assessment.changes != {}
-
         # If the risk level has not been set for the investigation, set it to the same
         # as the risk assessment. This will force the redirect to the supporting information
         # page below and skip the "Do you want to match this case risk level to the risk assessment level?"

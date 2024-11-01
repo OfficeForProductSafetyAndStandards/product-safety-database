@@ -12,7 +12,6 @@ module InvestigationProducts
       end
 
       result = ChangeCustomsCode.call!(investigation_product: @investigation_product, customs_code: customs_code_params[:customs_code], user: current_user)
-      ahoy.track "Updated custom codes", { notification_id: @investigation.id }
       redirect_to investigation_path(@investigation_product.investigation, anchor: "case_customs_codes_#{@investigation_product.id}"), flash: result.changed ? { success: "The notification information was updated" } : nil
     end
 

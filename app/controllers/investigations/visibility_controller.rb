@@ -31,7 +31,6 @@ module Investigations
         return render(template)
       end
 
-      ahoy.track "Updated notification visibility", { notification_id: @investigation.id }
       ChangeNotificationVisibility.call!(@change_notification_visibility_form.serializable_hash.merge(user: current_user, notification: @investigation))
 
       redirect_to investigation_path(@investigation), flash: { success: "Notification was #{flash}" }
