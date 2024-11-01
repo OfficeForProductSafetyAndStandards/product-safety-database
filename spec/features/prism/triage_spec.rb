@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "PRISM triage", type: :feature do
   let(:user) { create(:user, :activated) }
   let(:prism_risk_assessment) { create(:prism_risk_assessment, :serious_risk, :with_product, created_by_user_id: user.id) }
+  let(:product) { create(:product) }
 
   before do
     sign_in user
@@ -16,7 +17,7 @@ RSpec.feature "PRISM triage", type: :feature do
   end
 
   scenario "selecting that a product poses a serious risk" do
-    visit prism.serious_risk_path
+    visit prism.serious_risk_path(product_id: product.id)
 
     expect(page).to have_text("Is the product or hazard of a type where a serious risk can generally be deemed to exist?")
 
@@ -31,7 +32,7 @@ RSpec.feature "PRISM triage", type: :feature do
   end
 
   scenario "selecting that a product does not pose a serious risk" do
-    visit prism.serious_risk_path
+    visit prism.serious_risk_path(product_id: product.id)
 
     expect(page).to have_text("Is the product or hazard of a type where a serious risk can generally be deemed to exist?")
 

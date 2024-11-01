@@ -4,9 +4,10 @@ module Prism
       include ActiveModel::Model
       include ActiveModel::Attributes
 
-      attribute :poses_a_serious_risk, :boolean
+      attribute :product_id, :string
+      attribute :risk_type, :string
 
-      validates :poses_a_serious_risk, inclusion: [true, false]
+      validates :risk_type, presence: true, inclusion: { in: %w[serious_risk normal_risk] }
     end
   end
 end
