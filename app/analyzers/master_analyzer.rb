@@ -3,14 +3,24 @@ class MasterAnalyzer < ActiveStorage::Analyzer
     true
   end
 
-  # Collect metadata from all of the other analyzers to add to the blob
   def metadata
-    Rails.application.config.document_analyzers.each do |analyzer_class|
-      if analyzer_class.accept? @blob
-        analyzer = analyzer_class.new @blob
-        @blob.metadata.merge!(analyzer.metadata)
+    combined_metadata = {}
+
+    @blob.open do |_file|
+      Rails.application.config.document_analyzers.each do |analyzer_class|
+        next unless analyzer_class.accept?(@blob)
+
+        analyzer = analyzer_class.new(@blob)
+        begin
+          metadata = analyzer.metadata
+          combined_metadata.merge!(metadata) if metadata.present?
+        rescue ActiveStorage::FileNotFoundError => e
+          Rails.logger.warn("File not found for blob #{@blob.id}: #{e.message}")
+          next
+        end
       end
     end
-    @blob.metadata
+
+    combined_metadata
   end
 end
