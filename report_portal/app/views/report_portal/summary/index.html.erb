@@ -65,7 +65,6 @@
       <%= pluralize @notifications_this_month, 'notification' %>
     </h2>
     <p class="govuk-body">
-      <span class="govuk-caption-m"><%= pluralize @total_notifications, 'notification' %> in total</span>
       <span class="govuk-caption-m">
         <% if @notifications_change_pc.positive? %>
           <span class="govuk-visually-hidden">Increase of</span>
@@ -93,40 +92,6 @@
 </div>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-l">
-      <span class="govuk-caption-l">Submission rate</span>
-      <%= @submission_rate_this_month.round(0) %>% submitted
-    </h2>
-    <p class="govuk-body">
-      <span class="govuk-caption-m">
-        <%= @submitted_notifications_this_month %> of <%= @draft_notifications_this_month + @submitted_notifications_this_month %> submitted
-      </span>
-      <span class="govuk-caption-m">
-        <% if @submission_rate_change_pc.positive? %>
-          <span class="govuk-visually-hidden">Increase of</span>
-          +<%= number_to_percentage @submission_rate_change_pc, precision: 0 %>
-        <% elsif @submission_rate_change_pc.zero? %>
-          No change
-        <% else %>
-          <span class="govuk-visually-hidden">Decrease of</span>
-          -<%= number_to_percentage @submission_rate_change_pc, precision: 0 %>
-        <% end %>
-        from last month
-      </span>
-    </p>
-    <details class="govuk-details">
-      <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-          How do we measure submission rate?
-        </span>
-      </summary>
-      <div class="govuk-details__text">
-        A completed notification is one that has been submitted to <abbr title="Office for Product Safety and Standards">OPSS</abbr> for review, and is not a draft.
-      </div>
-    </details>
-  </div>
-
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-l">
       <span class="govuk-caption-l">Cost per notification</span>
@@ -159,4 +124,5 @@
       </div>
     </details>
   </div>
+  <div class="govuk-grid-column-one-half"></div>
 </div>
