@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
+  include_context "with stubbed notify"
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
@@ -21,9 +22,16 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
     expect(page).not_to have_link("Notifications")
   end
 
-  def expect_user_to_have_received_sms_code(code)
+  def expect_user_to_have_received_sms_code(expected_code)
+    # Add a small delay to ensure async operations complete
+    sleep 0.1
+
     expect(notify_stub).to have_received(:send_sms).with(
-      hash_including(phone_number: user.mobile_number, personalisation: { code: })
+      hash_including(
+        phone_number: user.mobile_number,
+        template_id: SendSMS::TEMPLATES[:otp_code],
+        personalisation: { code: expected_code }
+      )
     )
   end
 
@@ -74,6 +82,7 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
     allow(SecureRandom).to receive(:random_number).and_return(12_345, 54_321)
 
     visit "/sign-in"
+
     fill_in_credentials
 
     expect_user_to_have_received_sms_code("12345")

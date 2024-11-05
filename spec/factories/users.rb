@@ -16,7 +16,7 @@ FactoryBot.define do
     has_viewed_introduction { false }
     account_activated { false }
     hash_iterations { 27_500 }
-    mobile_number { "07700 900 982" }
+    mobile_number { "+447700900982" }
     mobile_number_verified { true }
     direct_otp_sent_at { Time.zone.now }
     direct_otp { "12345" }

@@ -60,6 +60,7 @@ RSpec.describe "User requests new secondary authentication code", :with_2fa, :wi
 
         perform_enqueued_jobs
 
+        Phonelib.parse(user.mobile_number).international
         expect(notify_stub).to have_received(:send_sms).with(
           hash_including(phone_number: user.mobile_number, personalisation: { code: user.reload.direct_otp })
         )
@@ -107,7 +108,7 @@ RSpec.describe "User requests new secondary authentication code", :with_2fa, :wi
       end
 
       context "when a mobile number is provided" do
-        let(:mobile_number) { "07123456789" }
+        let(:mobile_number) { "+44 7123 456789" }
 
         it "generates a new secondary authentication code for the user" do
           expect {
