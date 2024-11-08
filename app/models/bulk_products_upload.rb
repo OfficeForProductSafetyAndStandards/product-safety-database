@@ -18,7 +18,6 @@ class BulkProductsUpload < ApplicationRecord
     source_products = Product.where(id: product_ids)
 
     investigation&.destroy!
-    business&.destroy!
     products&.destroy_all
     source_products&.destroy_all
     destroy!
