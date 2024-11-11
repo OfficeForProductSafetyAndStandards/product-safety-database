@@ -21,7 +21,6 @@
       <strong>Last updated:</strong> <%= date_or_recent_time_ago(@notification.updated_at) %><br>
       <strong>Created:</strong> <%= @notification.created_at.to_formatted_s(:govuk) %><br>
       <strong>Created by:</strong> <%= sanitize(@notification.creator_user.name) %> (<%= sanitize(@notification.creator_team.name) %>)<br>
-      <strong>Notifying country:</strong> <%= sanitize(country_from_code(@notification.notifying_country, Country.notifying_countries)) %>
     </p>
 
     <h2 class="govuk-heading-m">Notification details</h2>
@@ -51,7 +50,7 @@
         end
         summary_list.with_row do |row|
           row.with_key(text: "Reported by overseas regulator")
-          row.with_value(text: @notification.is_from_overseas_regulator ? "Yes: #{sanitize(country_from_code(@notification.notifying_country))}" : "No")
+          row.with_value(text: "#{@notification.is_from_overseas_regulator ? 'Yes ' : 'No '}: #{sanitize(country_from_code(@notification.notifying_country))}")
           row.with_action(text: "Change", href: edit_investigation_overseas_regulator_path(@notification), visually_hidden_text: "reported by overseas regulator") if show_edit_link?
         end
         summary_list.with_row do |row|
