@@ -250,7 +250,7 @@ module Notifications
         @existing_risk_assessments = @notification.risk_assessments.includes(investigation_products: :product)
         @manage = request.query_string != "add" && (@existing_prism_associated_investigations.present? || @existing_risk_assessments.present?)
         if params[:add_a_risk_assessment_form].present?
-          @add_another_risk_assessment = AddAnotherRiskAssessmentForm.new(add_another_risk_assessment: params[:add_a_risk_assessment_form][:add_another_risk_assessment])
+          @add_another_risk_assessment = AddAnotherRiskAssessmentForm.new(add_another_risk_assessment: params[:add_a_risk_assessment_form]&.dig(:add_another_risk_assessment))
           @add_another_risk_assessment.valid?
         else
           @add_another_risk_assessment = AddAnotherRiskAssessmentForm.new
@@ -573,10 +573,10 @@ module Notifications
                                          AddAnotherRiskAssessmentForm.new
                                        end
 
-        return redirect_to "#{wizard_path(:add_risk_assessments)}?add" if params[:add_another_risk_assessment_form][:add_another_risk_assessment] == "true"
-        return redirect_to wizard_path(:add_risk_assessments, add_a_risk_assessment_form: add_another_risk_assessment_params) if params[:add_another_risk_assessment_form][:add_another_risk_assessment].blank? && params[:final].present?
+        return redirect_to "#{wizard_path(:add_risk_assessments)}?add" if params[:add_another_risk_assessment_form]&.dig(:add_another_risk_assessment) == "true"
+        return redirect_to wizard_path(:add_risk_assessments, add_a_risk_assessment_form: add_another_risk_assessment_params) if params[:add_another_risk_assessment_form]&.dig(:add_another_risk_assessment).blank? && params[:final].present?
 
-        if params[:add_another_risk_assessment_form][:add_another_risk_assessment].blank?
+        if params[:add_another_risk_assessment_form]&.dig(:add_another_risk_assessment).blank?
           @choose_investigation_product_form = ChooseInvestigationProductForm.new(add_risk_assessments_params)
 
           if @choose_investigation_product_form.valid?
