@@ -483,4 +483,8 @@ Rails.application.routes.draw do
   match "/sessions/signin", to: redirect("/"), via: %i[get post]
 
   get "/health/all", to: "health#show"
+
+  namespace :pingdom do
+    get "ping", to: "check#pingdom", constraints: { format: :xml }
+  end
 end
