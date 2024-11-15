@@ -46,7 +46,7 @@ end
 RSpec.configure do |config|
   config.fixture_paths = [Rails.root.join("test/fixtures")]
   config.include Rails.application.routes.url_helpers
-
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ActiveSupport::Testing::Assertions
 
