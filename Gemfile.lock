@@ -410,6 +410,7 @@ GEM
     pdf-core (0.10.0)
     pg (1.5.9)
     pg (1.5.9-x64-mingw-ucrt)
+    phonelib (0.8.9)
     prawn (2.5.0)
       matrix (~> 0.4)
       pdf-core (~> 0.10.0)
@@ -814,6 +815,7 @@ DEPENDENCIES
   paper_trail
   parallel_tests (~> 4.7.2)
   pg (~> 1.5)
+  phonelib (~> 0.8.5)
   prawn (~> 2.5)
   prawn-table (~> 0.2)
   prism!

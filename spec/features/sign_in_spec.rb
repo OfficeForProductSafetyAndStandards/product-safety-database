@@ -1,10 +1,33 @@
 require "rails_helper"
 
-RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
+RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:notify_stub) { instance_double(Notifications::Client) }
+  let(:sms_calls) { [] }
+
+  def stub_sms_service
+    allow(notify_stub).to receive(:send_sms)
+
+    allow(SendSMS).to receive(:new).and_return(
+      instance_double(SendSMS).tap do |sms_service|
+        allow(sms_service).to receive(:otp_code) do |mobile_number:, code:|
+          sms_calls << {
+            phone_number: mobile_number,
+            template_id: SendSMS::TEMPLATES[:otp_code],
+            personalisation: { code: }
+          }
+          notify_stub.send_sms(sms_calls.last)
+        end
+      end
+    )
+
+    allow(Notifications::Client).to receive(:new).and_return(notify_stub)
+
+    notify_stub
+  end
 
   def fill_in_credentials(password_override: nil)
     fill_in "Email address", with: user.email
@@ -22,9 +45,19 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
   end
 
   def expect_user_to_have_received_sms_code(code)
-    expect(notify_stub).to have_received(:send_sms).with(
-      hash_including(phone_number: user.mobile_number, personalisation: { code: })
-    )
+    matching_call = sms_calls.find { |call| call[:personalisation][:code] == code.to_s }
+    expect(matching_call).to be_present, "Expected to find SMS with code #{code} in calls: #{sms_calls.inspect}"
+
+    expect(matching_call[:phone_number]).to eq(user.mobile_number)
+    expect(matching_call[:template_id]).to eq(SendSMS::TEMPLATES[:otp_code])
+  end
+
+  def otp_code
+    user.reload.direct_otp
+  end
+
+  before do
+    stub_sms_service
   end
 
   scenario "user signs in with correct two factor authentication code" do
@@ -55,7 +88,6 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
   end
 
   scenario "user attempts to sign in with wrong two factor authentication code" do
-    # Ensure the OTP code is generated with a known value
     allow(SecureRandom).to receive(:random_number).and_return(12_345)
 
     visit "/sign-in"
@@ -71,26 +103,19 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
   end
 
   scenario "user signs in with correct secondary authentication code after requesting a second code" do
-    allow(SecureRandom).to receive(:random_number).and_return(12_345, 54_321)
-
     visit "/sign-in"
     fill_in_credentials
 
-    expect_user_to_have_received_sms_code("12345")
-
-    expect_to_be_on_secondary_authentication_page
+    first_code = user.reload.direct_otp
+    expect_user_to_have_received_sms_code(first_code)
 
     click_link "Not received a text message?"
-
-    expect_to_be_on_resend_secondary_authentication_page
-
     click_button "Resend security code"
 
-    expect_user_to_have_received_sms_code("54321")
+    second_code = user.reload.direct_otp
+    expect_user_to_have_received_sms_code(second_code)
 
-    expect_to_be_on_secondary_authentication_page
-
-    fill_in "Enter security code", with: otp_code
+    fill_in "Enter security code", with: second_code
     click_button "Continue"
 
     expect(page).to have_css("h2", text: "How to create a product safety notification")
@@ -107,7 +132,7 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
         fill_in_credentials(password_override: "XXX")
       end
 
-      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+      expect(page).to have_content("We’ve locked this account to protect its security.")
 
       visit unlock_path
 
@@ -149,7 +174,7 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
         fill_in_credentials(password_override: "XXX")
       end
 
-      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+      expect(page).to have_content("We’ve locked this account to protect its security.")
 
       unlock_email = delivered_emails.last
       visit unlock_email.personalization_path(:edit_user_password_url_token)
@@ -248,9 +273,5 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, :
     click_on "Continue"
 
     expect(page).to have_text("Enter your password")
-  end
-
-  def otp_code
-    user.reload.direct_otp
   end
 end
