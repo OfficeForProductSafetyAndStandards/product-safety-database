@@ -4,7 +4,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @prism_risk_assessment, url: serious_risk_rebuttable_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :patch do |f| %>
-    <%= f.hidden_field :product_id, value: params[:product_id] %>
       <%= f.govuk_error_summary %>
       <%= f.govuk_radio_buttons_fieldset(:less_than_serious_risk, legend: { text: "Are there any factors to indicate the product risk to be less than serious?", size: "l" }, hint: { text: "Even where the product or hazard is of a type where a serious risk can generally be assumed to exist, you should take account of any evidence to indicate the risk might be less than serious in the particular circumstances. Where such evidence exists, you will be asked to summarise it and will then be returned to the standard risk assessment process." }) do %>
         <%= f.govuk_radio_button :less_than_serious_risk, true, label: { text: "Yes" }, link_errors: true do %>

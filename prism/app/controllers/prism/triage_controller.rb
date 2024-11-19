@@ -12,12 +12,8 @@ module Prism
     end
 
     def serious_risk_choose
+      @product_id = serious_risk_params[:product_id]
       @prism_risk_assessment = Prism::RiskAssessment.new(serious_risk_params.merge(created_by_user_id: current_user.id).except(:investigation_id, :product_id, :product_ids))
-
-      if serious_risk_params[:product_id].blank? && params[:product_id].present?
-        serious_risk_params[:product_id] = params[:product_id]
-      end
-
       if @prism_risk_assessment.save(context: :serious_risk)
         if serious_risk_params[:investigation_id].present? && serious_risk_params[:product_ids].present?
           associated_investigation = @prism_risk_assessment.associated_investigations.create!(investigation_id: serious_risk_params[:investigation_id])
@@ -27,7 +23,7 @@ module Prism
         end
 
         if @prism_risk_assessment.serious_risk?
-          redirect_to serious_risk_rebuttable_path(@prism_risk_assessment, product_id: serious_risk_params[:product_id])
+          redirect_to serious_risk_rebuttable_path(@prism_risk_assessment)
         else
           redirect_to full_risk_assessment_required_path(@prism_risk_assessment)
         end
@@ -39,8 +35,6 @@ module Prism
     def serious_risk_rebuttable; end
 
     def serious_risk_rebuttable_choose
-      params[:product_id] = params[:risk_assessment][:product_id] if params[:product_id].blank? && params[:risk_assessment][:product_id].present?
-
       @prism_risk_assessment.assign_attributes(serious_risk_rebuttable_params)
 
       if @prism_risk_assessment.save(context: :serious_risk_rebuttable)
@@ -69,7 +63,7 @@ module Prism
       return render :full_risk_assessment_required unless @form_model.valid?
 
       if full_risk_assessment_required_params[:full_risk_assessment_required] == "false"
-        redirect_to perform_risk_triage_path(@prism_risk_assessment, product_id: params[:product_id])
+        redirect_to perform_risk_triage_path(@prism_risk_assessment)
       elsif @prism_risk_assessment.associated_investigations.present? || @prism_risk_assessment.associated_products.present?
         @prism_risk_assessment.update!(triage_complete: true)
         redirect_to risk_assessment_tasks_path(@prism_risk_assessment)
