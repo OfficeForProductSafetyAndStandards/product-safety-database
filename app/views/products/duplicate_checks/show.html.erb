@@ -55,7 +55,7 @@
                       </span>
                     </summary>
                       <div class="govuk-details__text">
-                        <%= image_tag(@image.file_upload, alt: sanitize(@image.file_upload.filename), class: 'opss-details-img') %>
+                        <%= image_tag(@image.file_upload, alt: sanitize(@image.file_upload&.filename&.to_s || 'Image not available'), class: 'opss-details-img') if @image&.file_upload %>
                       </div>
                   </details>
                 <% end %>
