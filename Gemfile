@@ -25,6 +25,7 @@ gem "jsbundling-rails"
 gem "lograge", "~> 0.14"
 gem "mini_magick", "~> 4.13"
 gem "opensearch-ruby"
+gem "phonelib", "~> 0.8.5"
 
 # ActionMailer dependencies
 gem "net-imap"
