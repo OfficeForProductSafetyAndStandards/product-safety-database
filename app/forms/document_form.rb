@@ -76,7 +76,7 @@ private
   end
 
   def min_file_byte_size
-    1.bytes
+    1.byte
   end
 
   def file_is_free_of_viruses

@@ -21,6 +21,6 @@ module Prism
       application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
     ].freeze
 
-    validates :evidence_file, attached: true, size: { between: 1.bytes..30.megabytes }, content_type: { in: ALLOWED_CONTENT_TYPES }
+    validates :evidence_file, attached: true, size: { between: 1.byte..30.megabytes }, content_type: { in: ALLOWED_CONTENT_TYPES }
   end
 end
