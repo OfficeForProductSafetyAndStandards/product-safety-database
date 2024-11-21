@@ -77,7 +77,7 @@ class ProductForm
                                     end
     end
 
-    if image.present? && ACCEPTABLE_IMAGE_TYPES.include?(image.content_type) && image.byte_size < 1.bytes
+    if image.present? && ACCEPTABLE_IMAGE_TYPES.include?(image.content_type) && image.byte_size < 1.byte
       errors.add(:image, "Image must be larger than 0MB")
       self.image.delete
       self.existing_image_file_id = nil
