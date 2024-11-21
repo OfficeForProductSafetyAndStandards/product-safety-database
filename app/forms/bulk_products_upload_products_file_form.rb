@@ -107,7 +107,7 @@ private
   end
 
   def file_too_small?
-    products_file&.byte_size.to_i < 1.bytes
+    products_file&.byte_size.to_i < 1.byte
   end
 
   def headers_mismatched?
