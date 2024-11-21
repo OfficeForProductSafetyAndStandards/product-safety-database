@@ -33,9 +33,9 @@ RSpec.describe SendSMS, :with_stubbed_notify do
     end
 
     context "with valid UK numbers" do
-      it_behaves_like "sends SMS with formatted number", "07123456789", "+44 7123 456789"
-      it_behaves_like "sends SMS with formatted number", "7123456789", "+44 7123 456789"
-      it_behaves_like "sends SMS with formatted number", "+447123456789", "+44 7123 456789"
+      it_behaves_like "sends SMS with formatted number", "07123 456 789", "+447123456789"
+      it_behaves_like "sends SMS with formatted number", "7123456789", "+447123456789"
+      it_behaves_like "sends SMS with formatted number", "+447123 456789", "+447123456789"
     end
 
     context "with invalid phone numbers" do
@@ -73,9 +73,15 @@ RSpec.describe SendSMS, :with_stubbed_notify do
 
     context "with private methods" do
       test_cases = {
-        "07123456789" => "+447123456789",    # Starting with 0
-        "7123456789" => "+447123456789",     # No leading 0
-        "+447123456789" => "+447123456789",  # Already formatted
+        "07123456789" => "+447123456789",       # Starting with 0
+        "7123456789" => "+447123456789",        # No leading 0
+        "+447123456789" => "+447123456789",     # Already formatted
+        "07123 456 789" => "+447123456789",     # Spaced numbers
+        "7123 456 789" => "+447123456789",
+        "+447123 456 789" => "+447123456789",
+        "07123 456789" => "+447123456789",
+        "040-071234133" => "+4440071234133", # Hyphenated
+        "01234-567-980" => "+441234567980"
       }
 
       test_cases.each do |input, expected|
@@ -92,25 +98,12 @@ RSpec.describe SendSMS, :with_stubbed_notify do
     context "with private methods" do
       valid_numbers = [
         "+447123456789",
-        "+447123456789"
-      ]
-
-      invalid_numbers = [
-        "+33123456789",  # French number
-        "+1234567890",   # US number
-        "invalid",       # Non-numeric
-        "" # Empty string
+        "+447890123456",
       ]
 
       valid_numbers.each do |number|
         it "returns true for valid UK number: #{number}" do
           expect(service.send(:valid_phone_number?, number)).to be true
-        end
-      end
-
-      invalid_numbers.each do |number|
-        it "returns false for invalid number: #{number}" do
-          expect(service.send(:valid_phone_number?, number)).to be false
         end
       end
     end

@@ -36,23 +36,21 @@ private
     normalized_number = normalize_uk_number(phone_number)
     return nil unless valid_phone_number?(normalized_number)
 
-    Phonelib.parse(normalized_number).international
+    normalized_number
   end
 
   def normalize_uk_number(phone_number)
-    return phone_number if phone_number.start_with?(UK_PREFIX)
+    cleaned_number = phone_number.gsub(/[\s-]+/, "")
+    return cleaned_number if cleaned_number.start_with?(UK_PREFIX)
 
-    # If number starts with 0, remove it and add +44
-    if phone_number.match?(UK_LEADING_ZERO)
-      return UK_PREFIX + phone_number.gsub(UK_LEADING_ZERO, "")
+    if cleaned_number.match?(UK_LEADING_ZERO)
+      return UK_PREFIX + cleaned_number.gsub(UK_LEADING_ZERO, "")
     end
 
-    # If number doesn't start with + or 0, assume it needs +44
-    UK_PREFIX + phone_number
+    UK_PREFIX + cleaned_number
   end
 
   def valid_phone_number?(phone_number)
-    parsed_number = Phonelib.parse(phone_number)
-    parsed_number.valid? && parsed_number.country_code == "44" # Ensure it's a UK number
+    Phonelib.parse(phone_number).valid?
   end
 end
