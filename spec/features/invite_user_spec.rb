@@ -96,7 +96,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
     let(:user) { create(:user, :activated, :team_admin, team:, has_viewed_introduction: true) }
 
     before do
-      travel_to(4.hours.ago) do
+      travel_to(1.hour.ago) do
         sign_in(user)
       end
     end
