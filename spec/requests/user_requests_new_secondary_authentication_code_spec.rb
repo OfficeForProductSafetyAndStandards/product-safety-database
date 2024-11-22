@@ -35,7 +35,7 @@ RSpec.describe "User requests new secondary authentication code", :with_2fa, :wi
 
       let(:mobile_number) { "07123456789" }
       let(:user) { create(:user, :activated, mobile_number:) }
-      let(:expected_phone_number) { "+44 7123 456789" }
+      let(:expected_phone_number) { "+447123456789" }
 
       before do
         sign_in(user)
@@ -102,7 +102,7 @@ RSpec.describe "User requests new secondary authentication code", :with_2fa, :wi
 
       context "when a mobile number is provided" do
         let(:mobile_number) { "07123456789" }
-        let(:expected_phone_number) { "+44 7123 456789" }
+        let(:expected_phone_number) { "+447123456789" }
 
         it "generates a new secondary authentication code for the user" do
           expect {
