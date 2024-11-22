@@ -95,14 +95,22 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, type: :feature do
   context "when the user is a team admin that needs secondary authentication for the invitation", :with_2fa, :with_stubbed_notify do
     let(:user) { create(:user, :activated, :team_admin, team:, has_viewed_introduction: true) }
 
-    before do
-      travel_to(4.hours.ago) do
-        sign_in(user)
-      end
-    end
+    scenario "sends the invite after session expiry and secondary authentication" do
+      sign_in(user)
+      expect(page).to have_current_path("/")
 
-    scenario "sends the invite after after being able to request a second code" do
+      user.update!(current_sign_in_at: 31.minutes.ago)
+
+      Capybara.current_session.reset!
+
       visit "/teams/#{team.id}/invitations/new"
+      expect(page).to have_current_path("/sign-in")
+
+      within("#new_user") do
+        fill_in "Email address", with: user.email
+        fill_in "Password", with: "2538fhdkvuULE36f"
+        click_button "Continue"
+      end
 
       expect_to_be_on_secondary_authentication_page
       click_link "Not received a text message?"
