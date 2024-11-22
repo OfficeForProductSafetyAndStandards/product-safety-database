@@ -12,57 +12,24 @@
 #                               region1.google-analytics.com]
 # google_static_domains = %w[www.gstatic.com]
 
-# Rails.application.configure do
-#   config.content_security_policy do |policy|
-#     policy.default_src :self
+trusted_script_sources = [:self, "https://www.googletagmanager.com"]
+trusted_style_sources  = [:self, "https://fonts.googleapis.com"]
+trusted_font_sources = [:self, "https://fonts.gstatic.com", "*.gov.uk"]
+trusted_img_sources = %i[self data]
 
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/base-uri
-#     policy.base_uri :none
+Rails.application.config.content_security_policy do |policy|
+  policy.default_src :self
+  policy.object_src :none
+  policy.child_src :self
+  policy.frame_ancestors :none
+  policy.upgrade_insecure_requests true
+  policy.block_all_mixed_content true
+  policy.script_src(*trusted_script_sources)
+  policy.style_src(*trusted_style_sources)
+  policy.font_src(*trusted_font_sources)
+  policy.img_src(*trusted_img_sources)
+end
 
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src
-#     policy.img_src :self,
-#                    *govuk_domains,
-#                    *google_analytics_domains, # Tracking pixels
-#                    :data # Inline images via CSS
-
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
-#     # Note: we purposely don't include `data:`, `unsafe-inline` or `unsafe-eval` because
-#     # they are security risks, if you need them for a legacy app please only apply them at
-#     # an app level.
-#     policy.script_src :self,
-#                       *google_analytics_domains,
-#                       *google_static_domains
-
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
-#     # Note: we purposely don't include `data:`, `unsafe-inline` or `unsafe-eval` because
-#     # they are security risks, if you need them for a legacy app please only apply them at
-#     # an app level.
-#     policy.style_src :self,
-#                      *google_static_domains
-
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src
-#     # Note: we purposely don't include data here because it produces a security risk.
-#     policy.font_src :self
-
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
-#     policy.connect_src :self,
-#                        *govuk_domains,
-#                        *google_analytics_domains
-
-#     # Disallow all <object>, <embed>, and <applet> elements
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/object-src
-#     policy.object_src :none
-
-#     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src
-#     policy.frame_src :self, *govuk_domains
-
-#     policy.report_uri ENV.fetch("SENTRY_CSP_REPORT_URI") if ENV["SENTRY_CSP_REPORT_URI"].present?
-#   end
-
-#   # Generate session nonces for permitted importmap, inline scripts and inline styles
-#   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-#   config.content_security_policy_nonce_directives = %w[script-src style-src]
-
-#   # For now, only report to any reports to Sentry in production
-#   config.content_security_policy_report_only = true
-# end
+# Enable CSP nonce generation
+Rails.application.config.content_security_policy_nonce_generator = ->(_request) { SecureRandom.base64(16) }
+Rails.application.config.content_security_policy_nonce_directives = %w[script-src style-src]
