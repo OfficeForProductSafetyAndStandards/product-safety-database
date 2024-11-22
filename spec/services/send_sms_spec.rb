@@ -81,7 +81,8 @@ RSpec.describe SendSMS, :with_stubbed_notify do
         "+447123 456 789" => "+447123456789",
         "07123 456789" => "+447123456789",
         "040-071234133" => "+4440071234133", # Hyphenated
-        "01234-567-980" => "+441234567980"
+        "01234-567-980" => "+441234567980",
+        "00 44 7922 574466" => "+447922574466"
       }
 
       test_cases.each do |input, expected|
@@ -99,6 +100,7 @@ RSpec.describe SendSMS, :with_stubbed_notify do
       valid_numbers = [
         "+447123456789",
         "+447890123456",
+        "+447922574466"
       ]
 
       valid_numbers.each do |number|

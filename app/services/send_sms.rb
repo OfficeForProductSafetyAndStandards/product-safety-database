@@ -41,6 +41,9 @@ private
 
   def normalize_uk_number(phone_number)
     cleaned_number = phone_number.gsub(/[\s-]+/, "")
+
+    cleaned_number = cleaned_number.sub(/\A00/, "+")
+
     return cleaned_number if cleaned_number.start_with?(UK_PREFIX)
 
     if cleaned_number.match?(UK_LEADING_ZERO)
