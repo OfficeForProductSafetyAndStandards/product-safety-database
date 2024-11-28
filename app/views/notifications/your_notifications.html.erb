@@ -28,8 +28,8 @@
             @draft_notifications.each do |notification|
               table.with_body do |body|
                 body.with_row do |row|
-                  row.with_cell(header: true, text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe)
-                  row.with_cell(text: sanitize(notification.user_title))
+                  row.with_cell(header: true, text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe)
+                  row.with_cell(text: sanitize(notification.user_title.presence || "Not provided"))
                   row.with_cell(text: notification.updated_at.to_formatted_s(:govuk))
                   row.with_cell(text: govuk_tag(text: "Draft", colour: "grey").html_safe)
                   row.with_cell(text: sanitize("<a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\">Make changes</a><hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\"><a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\">Delete</a>", tags: %w(a hr), attributes: %w(href class)).html_safe)
