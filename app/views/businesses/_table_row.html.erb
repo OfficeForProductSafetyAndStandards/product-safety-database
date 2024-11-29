@@ -3,9 +3,9 @@
     <%= link_to sanitize(business&.trading_name), business, class: "govuk-link govuk-link--no-visited-state" %>
   </th>
   <td class="govuk-table__cell">
-    <%= sanitize(business&.legal_name) %>
+    <%= sanitize(business&.legal_name.presence || "Not provided") %>
   </td>
   <td class="govuk-table__cell">
-    <%= sanitize(business&.company_number) %>
+    <%= sanitize(business&.company_number.presence || "Not provided") %>
   </td>
 </tr>

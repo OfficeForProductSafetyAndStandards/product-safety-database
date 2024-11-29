@@ -31,7 +31,7 @@
       </td>
     <% else %>
       <td headers="haztype" class="govuk-table__cell">
-        <%= sanitize(investigation.hazard_type) %>
+        <%= sanitize(investigation.hazard_type.presence || "Not provided") %>
       </td>
     <% end %>
 

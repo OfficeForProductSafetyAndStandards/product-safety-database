@@ -9,6 +9,7 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
   let(:team_business) { create(:business, trading_name: "team_business", legal_name: "team_business Ltd") }
   let(:closed_business) { create(:business, trading_name: "closed_business", legal_name: "closed_business Ltd") }
   let(:other_business) { create(:business, trading_name: "other_business", legal_name: "other_business Ltd") }
+  let!(:business_five) { create(:business, trading_name: "business_five", legal_name: nil, company_number: nil) }
 
   def create_four_businesses!
     user_case = create(:allegation, creator: user)
@@ -98,6 +99,22 @@ RSpec.feature "Searching businesses", :with_opensearch, :with_stubbed_mailer, ty
     within "table tbody.govuk-table__body > tr:nth-child(1)" do
       expect(page).to have_text(other_business.legal_name)
       expect(page).to have_text(other_business.company_number)
+    end
+  end
+
+  scenario "Business table is displayed with Not provided where data is nil" do
+    sign_in(user)
+    visit "/businesses"
+
+    expect(highlighted_tab).to eq "All businesses - Search"
+
+    within "table tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      expect(page).to have_link(business_five.trading_name, href: business_path(business_five))
+    end
+
+    within "table tbody.govuk-table__body > tr:nth-child(1)" do
+      expect(page).to have_text("Not provided")
+      expect(page).to have_text("Not provided")
     end
   end
 
