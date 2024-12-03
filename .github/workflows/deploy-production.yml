@@ -17,7 +17,7 @@ jobs:
 
     - name: Install cf client
       env:
-        CF_CLI_VERSION: v7
+        CF_CLI_VERSION: '7.7.15' 
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin
         curl -A "" -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
