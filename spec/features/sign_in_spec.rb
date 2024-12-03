@@ -192,9 +192,17 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, t
     visit investigation_path(investigation)
     expect(page).not_to have_text("You need to sign in or sign up before continuing.")
 
-    travel_to 24.hours.from_now do
+    travel_to (29.minutes + 31.seconds).from_now do
+      sign_in_with_otp_code
       visit investigation_path(investigation)
+
       expect(page).not_to have_text("Your session expired. Please sign in again to continue.")
+      expect(page).to have_content("From here you can find all the information about this notification. If you have editing rights for this notification, you can add products, businesses and supporting information.")
+    end
+
+    travel_to 60.minutes.from_now do
+      visit investigation_path(investigation)
+      expect(page).to have_text("If you don’t have an account, ask someone in your team to send you an invite")
     end
   end
 
@@ -273,5 +281,14 @@ RSpec.feature "Signing in", :with_2fa, :with_opensearch, :with_stubbed_mailer, t
     click_on "Continue"
 
     expect(page).to have_text("Enter your password")
+  end
+
+private
+
+  def sign_in_with_otp_code
+    visit "/sign-in"
+    fill_in_credentials
+    fill_in "Enter security code", with: otp_code
+    click_on "Continue"
   end
 end
