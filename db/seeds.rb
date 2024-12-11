@@ -306,10 +306,12 @@ unless User.find_by(email: "ts_user@example.com")
   )
 end
 
-operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
+operational_support_unit = Team.find_by!(name: "OPSS Operational support unit")
+
 User.where(team_id: operational_support_unit.id).find_each do |u|
-  u.roles.create!(name: "all_data_exporter")
-  u.roles.create!(name: "risk_level_validator")
+  %w[all_data_exporter risk_level_validator].each do |role_name|
+    u.roles.find_or_create_by!(name: role_name)
+  end
 end
 
 Investigation.reindex
