@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_01_121108) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_11_101216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -648,6 +648,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_01_121108) do
     t.string "secondary_authentication_operation"
     t.integer "sign_in_count", default: 0, null: false
     t.uuid "team_id", null: false
+    t.string "unique_session_id"
     t.string "unlock_token"
     t.datetime "updated_at", precision: nil, null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"

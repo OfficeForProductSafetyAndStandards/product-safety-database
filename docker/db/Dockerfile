@@ -1,4 +1,4 @@
-FROM postgres:11
+FROM postgres:14
 
 WORKDIR /docker-entrypoint-initdb.d
 
