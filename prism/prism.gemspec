@@ -39,6 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "prawn", "~> 2.4"
   spec.add_runtime_dependency "prawn-table", "~> 0.2"
   spec.add_runtime_dependency "rails", ">= 7.1.3.2"
-  spec.add_runtime_dependency "store_attribute", "~> 1.1"
+  spec.add_runtime_dependency "store_attribute", ">= 1.1", "< 3.0"
   spec.add_runtime_dependency "wicked", "~> 2.0"
 end
