@@ -2,9 +2,12 @@
 
 # Trusted sources
 trusted_script_sources = [:self, "https://www.googletagmanager.com"]
-trusted_style_sources  = [:self, "https://fonts.googleapis.com"]
+trusted_style_sources = [:self, "https://fonts.googleapis.com"]
 trusted_font_sources = [:self, "https://fonts.gstatic.com", "*.gov.uk"]
 trusted_img_sources = %i[self data]
+trusted_connect_sources = [:self,
+                           "https://*.google-analytics.com",
+                           "https://stats.g.doubleclick.net"]
 
 # Configuration
 Rails.application.config.content_security_policy do |policy|
@@ -30,6 +33,9 @@ Rails.application.config.content_security_policy do |policy|
   # Additional resource directives
   policy.font_src(*trusted_font_sources)
   policy.img_src(*trusted_img_sources)
+
+  # Connect-src directive for Google Analytics
+  policy.connect_src(*trusted_connect_sources)
 end
 
 # CSP nonce configuration
