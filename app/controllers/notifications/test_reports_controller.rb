@@ -3,7 +3,7 @@ module Notifications
     include BreadcrumbHelper
 
     before_action :set_notification
-    before_action :validate_step
+    before_action :validate_step, only: %i[show_with_notification_product]
     before_action :set_notification_product
     before_action :set_test_result, only: %i[show_with_notification_product_test update_with_notification_product_test]
     before_action :set_test_result_list, only: %i[show_with_notification_product update_with_notification_product]
@@ -13,7 +13,6 @@ module Notifications
     def index; end
 
     def show_with_notification_product
-      # byebug
       if params[:add_a_test_report_form].present?
         @add_another_test_report = AddTestReportsForm.new(add_another_test_report: params[:add_a_test_report_form][:add_another_test_report])
         @add_another_test_report.valid?
@@ -30,7 +29,6 @@ module Notifications
     end
 
     def update_with_notification_product
-      # byebug
       @add_another_test_report = if params[:add_test_reports_form].present?
                                    AddTestReportsForm.new(add_test_report_params)
                                  else
@@ -43,7 +41,7 @@ module Notifications
             @set_test_result_funding_on_case_form = SetTestResultFundingOnCaseForm.new
             render :add_test_reports_opss_funding and return
           else
-            return redirect_to notification_path(@notification), flash: { success: "Notification updated successfully." }
+            return redirect_to notification_path(@notification)
           end
         else
           render :add_test_reports and return
@@ -60,7 +58,7 @@ module Notifications
     end
 
     def show_with_notification_product_test
-      if @test_result.tso_certificate_issue_date.present? || (params[:opss_funded] == "false")
+      if @test_result.tso_certificate_issue_date.present? || (params[:opss_funded] == "false") || params[:edit_test_report] == "true"
         @test_result_form = TestResultForm.from(@test_result)
         render :add_test_reports_details
       else
@@ -70,7 +68,12 @@ module Notifications
     end
 
     def update_with_notification_product_test
-      if @test_result.tso_certificate_issue_date.present? || params[:opss_funded] == "false"
+      if @test_result.tso_certificate_issue_date.present? || (params[:opss_funded] == "false") || params[:edit_test_report] == "true"
+        flash_message = if params[:edit_test_report] == "true"
+                          "Test report updated successfully."
+                        else
+                          "Test report uploaded successfully."
+                        end
         @test_result_form = TestResultForm.new(test_details_params)
         @test_result_form.cache_file!(current_user)
         if @test_result_form.valid?
@@ -89,7 +92,7 @@ module Notifications
             user: current_user,
             silent: true
           )
-          redirect_to with_product_notification_test_reports_path(@notification, investigation_product_id: @investigation_product.id), flash: { success: "Test report added/updated successfully." }
+          redirect_to with_product_notification_test_reports_path(@notification, investigation_product_id: @investigation_product.id), flash: { success: flash_message }
         else
           render :add_test_reports_details
         end

@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @test_result_form, url: with_product_testid_notification_test_reports_path(@notification, investigation_product_id: @investigation_product.id, test_report_id: @test_result.id, opss_funded: params[:opss_funded]), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= form_with model: @test_result_form, url: with_product_testid_notification_test_reports_path(@notification, investigation_product_id: @investigation_product.id, test_report_id: @test_result.id, opss_funded: params[:opss_funded], edit_test_report: params[:edit_test_report]), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
