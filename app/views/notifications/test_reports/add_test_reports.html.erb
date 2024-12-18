@@ -1,0 +1,26 @@
+
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_test_reports.title"), errors: false) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+      <%= t("notifications.create.index.sections.evidence.tasks.add_test_reports.title") %>
+    </h1>
+    <p class="govuk-body">You have added <%= pluralize(@existing_test_results&.count, "test report") %>.
+    <%=
+      govuk_summary_list do |summary_list|
+        @existing_test_results.each do |test_result|
+          summary_list.with_row do |row|
+            row.with_key(text: "#{sanitize(test_result.document.blob&.filename.to_s) || 'No document'}<br>#{sanitize(test_result.investigation_product.product.decorate.name_with_brand)}".html_safe)
+            row.with_action(text: "Change", href: with_product_testid_notification_test_reports_path(@notification, investigation_product_id: test_result.investigation_product.id, test_report_id: test_result.id, edit_test_report: true), visually_hidden_text: "test report")
+          end
+        end
+      end
+    %>
+    <%= form_with model: @add_another_test_report, url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_collection_radio_buttons :add_another_test_report, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another test report?", size: "m" } %>
+      <%= f.govuk_submit "Save and continue", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

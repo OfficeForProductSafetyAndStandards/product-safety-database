@@ -178,8 +178,8 @@
               value: { text: formatted_test_results(investigation_product.test_results).html_safe.presence || "Not provided" },
               actions: show_edit_link? ? [
                 {
-                  text: "Change",
-                  href: investigation_supporting_information_index_path(@notification, anchor: "test-results"),
+                  text: "Edit",
+                  href: with_product_notification_test_reports_path(@notification.pretty_id,investigation_product_id: investigation_product.id),
                   visually_hidden_text: "test reports"
                 }
               ] : []

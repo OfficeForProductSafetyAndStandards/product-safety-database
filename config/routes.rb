@@ -200,6 +200,20 @@ Rails.application.routes.draw do
             # # `:investigation_product_id/:entity_id` routes.
           end
         end
+
+        resources :test_reports, controller: "notifications/test_reports", only: %i[index], path: "test-reports" do
+          collection do
+            # Routes without test_report_id
+            get ":investigation_product_id", to: "test_reports#show_with_notification_product", as: "with_product"
+            patch ":investigation_product_id", to: "test_reports#update_with_notification_product"
+            put ":investigation_product_id", to: "test_reports#update_with_notification_product"
+
+            # Existing routes that use test_report_id
+            get ":investigation_product_id/:test_report_id", to: "test_reports#show_with_notification_product_test", as: "with_product_testid"
+            patch ":investigation_product_id/:test_report_id", to: "test_reports#update_with_notification_product_test"
+            put ":investigation_product_id:test_report_id", to: "test_reports#update_with_notification_product_test"
+          end
+        end
       end
     end
 

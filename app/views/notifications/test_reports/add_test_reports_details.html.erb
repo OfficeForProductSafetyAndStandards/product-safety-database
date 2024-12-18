@@ -1,0 +1,81 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_test_reports.report_details.title"), errors: @test_result_form.errors.any?) %>
+<% date_error = @test_result_form.errors.include?(:date) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @test_result_form, url: with_product_testid_notification_test_reports_path(@notification, investigation_product_id: @investigation_product.id, test_report_id: @test_result.id, opss_funded: params[:opss_funded], edit_test_report: params[:edit_test_report]), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_test_reports.report_details.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
+        </ul>
+      <% end %>
+      <% if @test_result.date.present? %>
+        <%= govuk_inset_text do %>
+          This test report is marked as <strong><%= sanitize(@test_result.tso_certificate_issue_date.blank? ? "not" : "") %> being funded under the <abbr>OPSS</abbr> sampling protocol</strong>.
+        <% end %>
+      <% end %>
+      <%= f.govuk_collection_select :legislation, legislation_options, :id, :name, label: { text: "Under which legislation?", size: "m" }, hint: { text: "Select the relevant legislation from the list." } %>
+      <%= f.govuk_text_field :standards_product_was_tested_against, label: { text: "Which standard was the product tested against?", size: "m" }, hint: { text: "For example, EN71. Use a comma to separate multiple standards." } %>
+      <%# Manually add the date fields since we use virtual models for forms that don't support the default Rails date format %>
+      <div class="govuk-form-group<%= date_error ? ' govuk-form-group--error' : '' %>">
+        <fieldset class="govuk-fieldset" aria-describedby="test-result-form-date-hint<%= date_error ? ' test-result-form-date-error' : '' %>">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of test</legend>
+          <div class="govuk-hint" id="test-result-form-date-hint">For example, 12 5 2023</div>
+          <% if date_error %>
+          <p class="govuk-error-message" id="test-result-form-date-field-error">
+            <span class="govuk-visually-hidden">Error: </span><%= sanitize(@test_result_form.errors.full_messages_for(:date).first) %>
+          </p>
+          <% end %>
+          <div class="govuk-date-input">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="test_result_form_date_day">Day</label>
+                <input id="test_result_form_date_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][day]" type="text" inputmode="numeric" value="<%= sanitize(@test_result_form.date&.day.to_s || @test_result.date&.day.to_s) %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="test_result_form_date_month">Month</label>
+                <input id="test_result_form_date_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][month]" type="text" inputmode="numeric" value="<%= sanitize(@test_result_form.date&.month.to_s || @test_result.date&.month.to_s) %>">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="test_result_form_date_year">Year</label>
+                <input id="test_result_form_date_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= date_error ? ' govuk-input--error' : '' %>" name="test_result_form[date][year]" type="text" inputmode="numeric" value="<%= sanitize(@test_result_form.date&.year.to_s || @test_result.date&.year.to_s) %>">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <%= f.govuk_radio_buttons_fieldset :result, legend: { text: "What was the result?", size: "m" } do %>
+        <%= f.govuk_radio_button :result, "passed", label: { text: "Pass" }, link_errors: true %>
+        <%= f.govuk_radio_button :result, "failed", label: { text: "Fail" } do %>
+          <%= f.govuk_text_area :failure_details, label: { text: "How the product failed" }, hint: { text: "Describe how the product was tested and how it failed to meet the requirements." }, max_chars: 32_767 %>
+        <% end %>
+        <%= f.govuk_radio_button :result, "other", label: { text: "Other" } %>
+      <% end %>
+      <%= f.govuk_text_area :details, label: { text: "Further details", size: "m" }, max_chars: 32_767 %>
+      <%= f.hidden_field :existing_document_file_id %>
+      <% if @test_result_form.document.present? %>
+        <p id="current-attachment-details">
+          Currently selected file:
+          <%= link_to sanitize(@test_result_form.document.filename.to_s), @test_result_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+        </p>
+        <%= f.hidden_field :document, value: @test_result_form.document.id %>
+        <%= govuk_details(summary_text: "Replace this file") do %>
+          <%= f.govuk_file_field :document, label: { text: "Test report attachment", size: "m" }, hint: { text: "If you have multiple files, compress them in a zip file." } %>
+        <% end %>
+      <% else %>
+        <%= f.govuk_file_field :document, label: { text: "Test report attachment", size: "m" }, hint: { text: "If you have multiple files, compress them in a zip file." } %>
+      <% end %>
+      <%= f.govuk_submit @test_result.date.present? ? "Update test report" : "Add test report" %>
+    <% end %>
+  </div>
+</div>
