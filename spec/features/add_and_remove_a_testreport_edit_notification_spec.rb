@@ -55,7 +55,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
 
     click_link "Change test reports (#{product_one.decorate.name_with_brand})"
 
-    expect(page).to  have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
+    expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "No"
     click_button "Save and continue"
 
@@ -80,7 +80,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
     click_link "Update notification"
     expect(page).to have_content(notification.user_title)
     click_link "Change test reports (#{product_one.decorate.name_with_brand})"
-    expect(page).to  have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
+    expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "No"
     click_button "Save and continue"
     fill_in "Further details", with: "Test result includes certificate of conformity"
@@ -105,7 +105,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
     click_link "Update notification"
     expect(page).to have_content(notification.user_title)
     click_link "Change test reports (#{product_one.decorate.name_with_brand})"
-    expect(page).to  have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
+    expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "No"
     click_button "Save and continue"
     fill_in "Further details", with: "Test result includes certificate of conformity"
