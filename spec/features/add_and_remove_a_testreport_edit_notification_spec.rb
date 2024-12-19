@@ -17,7 +17,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
     click_link "Update notification"
     expect(page).to have_content(notification.user_title)
 
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
     expect(page).to have_breadcrumb("Notifications")
     expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "Yes"
@@ -53,9 +53,9 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
     click_link "Update notification"
     expect(page).to have_content(notification.user_title)
 
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
 
-    expect(page).to  have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
+    expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "No"
     click_button "Save and continue"
 
@@ -79,8 +79,8 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
     visit "/notifications/your-notifications"
     click_link "Update notification"
     expect(page).to have_content(notification.user_title)
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
-    expect(page).to  have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
+    expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "No"
     click_button "Save and continue"
     fill_in "Further details", with: "Test result includes certificate of conformity"
@@ -89,7 +89,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
       choose "No"
     end
     click_button "Save and continue"
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
     expect(page).to  have_content("Add test reports")
     expect(page).to  have_content("You have added 1 test report.")
     within_fieldset "Do you need to add another test report?" do
@@ -104,8 +104,8 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
     visit "/notifications/your-notifications"
     click_link "Update notification"
     expect(page).to have_content(notification.user_title)
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
-    expect(page).to  have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
+    expect(page).to have_content("Was the test funded under the OPSS sampling protocol for Local Authorities?")
     choose "No"
     click_button "Save and continue"
     fill_in "Further details", with: "Test result includes certificate of conformity"
@@ -114,7 +114,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
       choose "No"
     end
     click_button "Save and continue"
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
     expect(page).to  have_content("Add test reports")
     expect(page).to  have_content("You have added 1 test report.")
 
@@ -132,7 +132,7 @@ RSpec.feature "Add or remove test report during Edit Notification journey", :wit
   scenario "Expect validation errors when mandatory fields are not entered" do
     visit "/notifications/your-notifications"
     click_link "Update notification"
-    click_link "Edit test reports (#{product_one.decorate.name_with_brand})"
+    click_link "Change test reports (#{product_one.decorate.name_with_brand})"
     choose "Yes"
     click_button "Save and continue"
 
