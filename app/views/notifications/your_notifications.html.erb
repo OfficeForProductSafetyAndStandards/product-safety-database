@@ -12,8 +12,23 @@
 
       <% if @draft_notifications.any? %>
         <%=
-          govuk_table do |table|
-            table.with_caption(size: "m", text: "Draft notifications")
+          govuk_table do |table|       
+          if Flipper.enabled?(:submit_notification_reminder)
+            table.with_caption(size: "m") do
+                  safe_join([
+                    "Draft notifications",
+                    content_tag(:p, "If a notification remains in a draft status for 90 days it
+                    will be automatically deleted. Please submit or delete a draft in the time frame
+                    provided to help improve data quality and reporting. The 90 day period is reset
+                    if an update is applied to the draft.", class: "govuk-hint")
+                  ])
+                end
+          else
+            table.with_caption(
+              size: "m", 
+              text: "Draft notifications"
+            )          
+          end
 
             table.with_head do |head|
               head.with_row do |row|
