@@ -74,14 +74,12 @@ module InvestigationsHelper
     end
 
     case_owner_ids = []
-    teams_with_access_ids = []
 
     case_owner_ids << user.id if @search.case_owner_me
 
     if @search.case_owner_my_team
       team = user.team
       case_owner_ids += team.users.pluck(:id)
-      teams_with_access_ids << team.id
     end
 
     if @search.case_owner_other && @search.case_owner_is_someone_else_id.present?
@@ -92,15 +90,14 @@ module InvestigationsHelper
       end
     end
 
-    if case_owner_ids.empty? && teams_with_access_ids.empty?
+    if case_owner_ids.empty?
       wheres[:_not] ||= {}
       wheres[:_not][:owner_id] = user.team.user_ids if @search.case_owner_other
     else
       unless @search.case_owner_other && @search.case_owner_is_someone_else_id.blank?
         wheres[:_or] ||= []
         wheres[:_or] += [
-          { owner_id: case_owner_ids },
-          { team_ids_with_access: teams_with_access_ids }
+          { owner_id: case_owner_ids }
         ]
       end
     end
