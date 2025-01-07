@@ -23,6 +23,10 @@ class Investigation < ApplicationRecord
       { confirm_business_details: :add_number_of_affected_units },
     ].freeze
 
+    DRAFT_NOTIFICATION_AGE_LIMIT = 90.days
+
+    scope :old_drafts, -> { where(state: "draft").where("updated_at < ?", DRAFT_NOTIFICATION_AGE_LIMIT.ago) }
+
     has_one :add_audit_activity,
             class_name: "AuditActivity::Investigation::AddCase",
             foreign_key: :investigation_id,
@@ -60,6 +64,26 @@ class Investigation < ApplicationRecord
 
     def case_created_audit_activity_class
       AuditActivity::Investigation::AddCase
+    end
+
+    def self.soft_delete_old_drafts!
+      Rails.logger.info "Starting to soft delete old draft notifications"
+      processed_count = 0
+
+      old_drafts.find_each do |notification|
+        notification.mark_as_deleted!
+        notification.update!(deleted_by: "System")
+        AuditActivity::Investigation::AutomaticallyClosedCase.create!(
+          investigation: notification,
+          metadata: AuditActivity::Investigation::AutomaticallyClosedCase.build_metadata(notification)
+        )
+        notification.reindex
+        processed_count += 1
+      rescue StandardError => e
+        Rails.logger.error "Failed to soft delete notification #{notification.id}: #{e.message}"
+      end
+
+      Rails.logger.info "Completed soft deleting old draft notifications. Processed: #{processed_count}"
     end
   end
 end
