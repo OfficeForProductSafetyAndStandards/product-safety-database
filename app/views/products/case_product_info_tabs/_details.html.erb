@@ -1,0 +1,25 @@
+<h4 class="govuk-heading-m">Product details</h4>
+
+<%= @product.details_list(date_case_closed: @investigation_product.investigation_closed_at) %>
+
+<% if @product.owning_team.nil? %>
+  <% if policy(@investigation_product).edit_product? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      To edit the details for this product go to the full <%= link_to(product_path(@product), class: "govuk-link govuk-link--no-visited-state") do %><span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record page<% end %>.
+      <br class="opss-br-desktop">
+      By editing this product record your team will become the owner of this product record
+    </p>
+  <% end %>
+<% elsif @product.owning_team == current_user.team %>
+  <% if policy(@investigation_product).edit_product? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      To edit the details for this product go to the full <%= link_to(product_path(@product), class: "govuk-link govuk-link--no-visited-state") do %><span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record page<% end %>
+    </p>
+  <% end %>
+<% else %>
+  <% if @investigation_product.investigation_closed_at.blank? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      You can contact the <%= link_to(owner_investigation_investigation_product_path(@investigation_product.investigation, @investigation_product), class: "govuk-link govuk-link--no-visited-state") do %><span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record owner<% end %> with editorial requests,<br class="opss-br-desktop"> amendments, or additional information.
+    </p>
+  <% end %>
+<% end %>

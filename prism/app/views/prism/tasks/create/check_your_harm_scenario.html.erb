@@ -1,0 +1,74 @@
+<% content_for :page_title, "Check your harm scenario" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
+      <h1 class="govuk-heading-l">
+        Check your harm scenario
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+      <% end %>
+      <h2 class="govuk-heading-m">
+        Hazard details
+      </h2>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "Hazard type")
+            row.with_value(text: sanitize(hazard_type))
+            row.with_action(text: "Change", href: wizard_path(:choose_hazard_type, back_to: "summary"), visually_hidden_text: "hazard type")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Hazard description")
+            row.with_value(text: sanitize(@harm_scenario.description))
+            row.with_action(text: "Change", href: wizard_path(:choose_hazard_type, back_to: "summary"), visually_hidden_text: "hazard description")
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m">
+        Harm scenario
+      </h2>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "Affected users")
+            row.with_value(text: sanitize(affected_users))
+            row.with_action(text: "Change", href: wizard_path(:identify_who_might_be_harmed, back_to: "summary"), visually_hidden_text: "affected users")
+          end
+          @harm_scenario.harm_scenario_steps.each_with_index do |harm_scenario_step, index|
+            summary_list.with_row do |row|
+              row.with_key(text: "Step #{index + 1}")
+              row.with_value(text: sanitize(harm_scenario_step_summary(harm_scenario_step).html_safe))
+              row.with_action(text: "Change", href: wizard_path(:add_steps_to_harm, back_to: "summary", anchor: "step-#{index}"), visually_hidden_text: "harm scenario step #{index + 1}")
+            end
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Overall probability of harm")
+            row.with_value(text: sanitize(overall_probability_of_harm.probability_human))
+            row.with_action(text: "Change", href: wizard_path(:estimate_probability_of_harm, back_to: "summary"), visually_hidden_text: "overall probability of harm")
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Severity level")
+            row.with_value(text: "#{severity_of_harm}, multiple casualties: #{@harm_scenario.multiple_casualties ? 'yes' : 'no'}")
+            row.with_action(text: "Change", href: wizard_path(:determine_severity_of_harm, back_to: "summary"), visually_hidden_text: "severity level")
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m">
+        Scenario risk level
+      </h2>
+      <p class="govuk-body"><%= sanitize(overall_risk_level.risk_level_tag_html).html_safe %></p>
+      <%= f.hidden_field :confirmed, value: true %>
+      <% if @harm_scenario.confirmed? %>
+        <div class="govuk-button-group">
+          <%= f.govuk_submit "Confirm changes", name: "final", value: "true" %>
+          <%= govuk_button_link_to "Delete scenario", remove_harm_scenario_risk_assessment_tasks_path(harm_scenario_id: @harm_scenario.id), { warning: true } %>
+        </div>
+      <% else %>
+        <%= f.govuk_submit "Confirm and create scenario", name: "final", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

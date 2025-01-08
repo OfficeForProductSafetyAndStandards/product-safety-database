@@ -1,0 +1,54 @@
+<tbody class="govuk-table__body" data-cy-case-id="<%= investigation.pretty_id %>">
+  <tr class="govuk-table__row">
+    <th class="govuk-visually-hidden">
+      Notification title
+    </th>
+    <th id="<%= dom_id investigation, :item %>" colspan="5" scope="colgroup" class="govuk-table__header">
+      <%= link_to sanitize(investigation.title), investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
+    </th>
+  </tr>
+  <tr class="govuk-table__row">
+    <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :meta %>" class="govuk-visually-hidden">
+      Metadata
+    </th>
+    <td headers="case <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+      <%= investigation.pretty_id %>
+    </td>
+
+    <% if non_search_cases_page_names.include? @page_name %>
+      <td headers="casecreated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+        <%= investigation.created_at.to_formatted_s(:govuk) %>
+      </td>
+    <% else %>
+      <td headers="caseowner <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+        <%= sanitize(investigation.owner_display_name_for(viewer: current_user)) %>
+      </td>
+    <% end %>
+
+    <% if @page_name == "assigned_cases" %>
+      <td headers="assigner" class="govuk-table__cell">
+        <%= sanitize(investigation.owner_team&.name) %>
+      </td>
+    <% else %>
+      <td headers="haztype" class="govuk-table__cell">
+        <%= sanitize(investigation.hazard_type.presence || "Not provided") %>
+      </td>
+    <% end %>
+
+    <td headers="product_count" class="govuk-table__cell">
+      <%= pluralize investigation.products.count, "product" %>
+    </td>
+
+    <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
+      <td headers="created <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+        <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
+      </td>
+    <% else %>
+      <td headers="updated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+        <%= date_or_recent_time_ago investigation.updated_at %>
+      </td>
+    <% end %>
+  </tr>
+
+  <%= render "investigations/status_table_row", investigation: investigation %>
+</tbody>

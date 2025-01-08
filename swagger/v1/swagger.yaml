@@ -1,0 +1,967 @@
+---
+openapi: 3.0.0
+info:
+  title: PSD API
+  version: v1
+components:
+  schemas:
+    add_product_to_notification:
+      title: Add Product to Notification
+      type: object
+      properties:
+        product:
+          type: object
+          properties:
+            id:
+              type: string
+      required:
+      - product
+    new_notification:
+      title: New Notification
+      type: object
+      properties:
+        user_title:
+          type: string
+        complainant_reference:
+          type: string
+          nullable: true
+        reported_reason:
+          "$ref": "#/components/schemas/notification_reported_reason"
+          nullable: true
+        hazard_type:
+          "$ref": "#/components/schemas/notification_hazard_type"
+          nullable: true
+        hazard_description:
+          type: string
+          nullable: true
+        non_compliant_reason:
+          type: string
+          nullable: true
+    new_product:
+      title: New Product
+      type: object
+      properties:
+        name:
+          type: string
+        brand:
+          type: string
+        product_code:
+          type: string
+          nullable: true
+        barcode:
+          type: string
+          nullable: true
+        category:
+          "$ref": "#/components/schemas/product_category"
+        subcategory:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        country_of_origin:
+          "$ref": "#/components/schemas/country_code"
+        authenticity:
+          "$ref": "#/components/schemas/product_authenticity"
+        when_placed_on_market:
+          "$ref": "#/components/schemas/product_when_placed_on_market"
+        has_markings:
+          "$ref": "#/components/schemas/product_has_markings"
+        markings:
+          type: array
+          items:
+            "$ref": "#/components/schemas/product_markings"
+        webpage:
+          type: string
+          nullable: true
+    product_category:
+      title: Product (category)
+      type: string
+      enum:
+      - Personal protective equipment (PPE)
+      - Chemical products
+      - Childcare articles and children's equipment
+      - Clothing, textiles and fashion items
+      - Communication and media equipment
+      - Construction products
+      - Cosmetics
+      - Decorative articles
+      - Eco-design
+      - Electrical appliances and equipment
+      - Explosive atmospheres equipment
+      - Food-imitating products
+      - Furniture
+      - Gadgets
+      - Gas appliances and components
+      - Hand tools
+      - Hobby / sports equipment
+      - Jewellery
+      - Kitchen / cooking accessories
+      - Laser pointers
+      - Lifts
+      - Lighters
+      - Lighting chains
+      - Lighting equipment
+      - Machinery
+      - Measuring instruments
+      - Motor vehicles (including spare parts)
+      - Pressure equipment / vessels
+      - Pyrotechnic articles
+      - Rail and guided transport
+      - Recreational crafts
+      - Stationery
+      - Toys
+      - Waste
+    product_when_placed_on_market:
+      title: Product (when_placed_on_market)
+      type: string
+      enum:
+      - on_or_after_2021
+      - before_2021
+      - unknown_date
+    product_authenticity:
+      title: Product (authenticity)
+      type: string
+      enum:
+      - genuine
+      - counterfeit
+      - unsure
+    product_markings:
+      title: Product (markings)
+      type: array
+      items:
+        type: string
+      enum:
+      - UKCA
+      - UKNI
+      - CE
+    product_has_markings:
+      title: Product (has_markings)
+      type: array
+      items:
+        type: string
+      enum:
+      - markings_yes
+      - markings_no
+      - markings_unknown
+    notification_reported_reason:
+      title: Notification (reported_reason)
+      type: string
+      enum:
+      - unsafe
+      - non_compliant
+      - unsafe_and_non_compliant
+      - safe_and_compliant
+    notification_hazard_type:
+      title: Notification (hazard_type)
+      type: string
+      enum:
+      - Asphyxiation
+      - Burns
+      - Chemical
+      - Choking
+      - Cuts
+      - Damage to hearing
+      - Damage to sight
+      - Drowning
+      - Electric shock
+      - Electromagnetic disturbance
+      - Energy consumption
+      - Entrapment
+      - Environment
+      - Fire
+      - Health risk
+      - Incorrect measurement
+      - Injuries
+      - Microbiological
+      - Security
+      - Strangulation
+      - Suffocation
+    notification_object:
+      title: Notification
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          nullable: true
+        product_category:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        user_title:
+          type: string
+        complainant_reference:
+          type: string
+          nullable: true
+        risk_level:
+          type: string
+          nullable: true
+        reported_reason:
+          type: string
+          nullable: true
+        non_compliant_reason:
+          type: string
+          nullable: true
+        hazard_type:
+          type: string
+          nullable: true
+        hazard_description:
+          type: string
+          nullable: true
+        notifying_country:
+          type: string
+        overseas_regulator_country:
+          type: string
+          nullable: true
+        is_from_overseas_regulator:
+          type: boolean
+        is_closed:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+      required:
+      - id
+    product_object:
+      title: Product
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        brand:
+          type: string
+        product_code:
+          type: string
+          nullable: true
+        barcode:
+          type: string
+          nullable: true
+        category:
+          "$ref": "#/components/schemas/product_category"
+        subcategory:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        country_of_origin:
+          "$ref": "#/components/schemas/country_code"
+        authenticity:
+          "$ref": "#/components/schemas/product_authenticity"
+        when_placed_on_market:
+          "$ref": "#/components/schemas/product_when_placed_on_market"
+        webpage:
+          type: string
+          nullable: true
+        owning_team:
+          type: object
+          properties:
+            name:
+              type: string
+              nullable: true
+            email:
+              type: string
+              nullable: true
+        product_images:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+      required:
+      - name
+    country_code:
+      title: Country
+      type: string
+      enum:
+      - country:AD
+      - country:AE
+      - country:AF
+      - country:AG
+      - country:AL
+      - country:AM
+      - country:AO
+      - country:AR
+      - country:AT
+      - country:AU
+      - country:AZ
+      - country:BA
+      - country:BB
+      - country:BD
+      - country:BE
+      - country:BF
+      - country:BG
+      - country:BH
+      - country:BI
+      - country:BJ
+      - country:BN
+      - country:BO
+      - country:BR
+      - country:BS
+      - country:BT
+      - country:BW
+      - country:BY
+      - country:BZ
+      - country:CA
+      - country:CD
+      - country:CF
+      - country:CG
+      - country:CH
+      - country:CI
+      - country:CL
+      - country:CM
+      - country:CN
+      - country:CO
+      - country:CR
+      - country:CS
+      - country:CU
+      - country:CV
+      - country:CY
+      - country:CZ
+      - country:DD
+      - country:DE
+      - country:DJ
+      - country:DK
+      - country:DM
+      - country:DO
+      - country:DZ
+      - country:EC
+      - country:EE
+      - country:EG
+      - country:ER
+      - country:ES
+      - country:ET
+      - country:FI
+      - country:FJ
+      - country:FM
+      - country:FR
+      - country:GA
+      - country:GB
+      - country:GB-ENG
+      - country:GB-GBN
+      - country:GB-NIR
+      - country:GB-SCT
+      - country:GB-WLS
+      - country:GD
+      - country:GE
+      - country:GH
+      - country:GM
+      - country:GN
+      - country:GQ
+      - country:GR
+      - country:GT
+      - country:GW
+      - country:GY
+      - country:HN
+      - country:HR
+      - country:HT
+      - country:HU
+      - country:ID
+      - country:IE
+      - country:IL
+      - country:IN
+      - country:IQ
+      - country:IR
+      - country:IS
+      - country:IT
+      - country:JM
+      - country:JO
+      - country:JP
+      - country:KE
+      - country:KG
+      - country:KH
+      - country:KI
+      - country:KM
+      - country:KN
+      - country:KP
+      - country:KR
+      - country:KW
+      - country:KZ
+      - country:LA
+      - country:LB
+      - country:LC
+      - country:LI
+      - country:LK
+      - country:LR
+      - country:LS
+      - country:LT
+      - country:LU
+      - country:LV
+      - country:LY
+      - country:MA
+      - country:MC
+      - country:MD
+      - country:ME
+      - country:MG
+      - country:MH
+      - country:MK
+      - country:ML
+      - country:MM
+      - country:MN
+      - country:MR
+      - country:MT
+      - country:MU
+      - country:MV
+      - country:MW
+      - country:MX
+      - country:MY
+      - country:MZ
+      - country:NA
+      - country:NE
+      - country:NG
+      - country:NI
+      - country:NL
+      - country:NO
+      - country:NP
+      - country:NR
+      - country:NZ
+      - country:OM
+      - country:PA
+      - country:PE
+      - country:PG
+      - country:PH
+      - country:PK
+      - country:PL
+      - country:PT
+      - country:PW
+      - country:PY
+      - country:QA
+      - country:RO
+      - country:RS
+      - country:RU
+      - country:RW
+      - country:SA
+      - country:SB
+      - country:SC
+      - country:SD
+      - country:SE
+      - country:SG
+      - country:SI
+      - country:SK
+      - country:SL
+      - country:SM
+      - country:SN
+      - country:SO
+      - country:SR
+      - country:SS
+      - country:ST
+      - country:SU
+      - country:SV
+      - country:SY
+      - country:SZ
+      - country:TD
+      - country:TG
+      - country:TH
+      - country:TJ
+      - country:TL
+      - country:TM
+      - country:TN
+      - country:TO
+      - country:TR
+      - country:TT
+      - country:TV
+      - country:TZ
+      - country:UA
+      - country:UG
+      - country:US
+      - country:UY
+      - country:UZ
+      - country:VA
+      - country:VC
+      - country:VE
+      - country:VN
+      - country:VU
+      - country:WS
+      - country:XK
+      - country:YE
+      - country:YU
+      - country:ZA
+      - country:ZM
+      - country:ZW
+      - territory:AE-AJ
+      - territory:AE-AZ
+      - territory:AE-DU
+      - territory:AE-FU
+      - territory:AE-RK
+      - territory:AE-SH
+      - territory:AE-UQ
+      - territory:AI
+      - territory:AQ
+      - territory:AS
+      - territory:AW
+      - territory:AX
+      - territory:BAT
+      - territory:BL
+      - territory:BM
+      - territory:BQ-BO
+      - territory:BQ-SA
+      - territory:BQ-SE
+      - territory:BV
+      - territory:CC
+      - territory:CK
+      - territory:CW
+      - territory:CX
+      - territory:EH
+      - territory:ES-CE
+      - territory:ES-ML
+      - territory:FK
+      - territory:FO
+      - territory:GF
+      - territory:GG
+      - territory:GI
+      - territory:GL
+      - territory:GP
+      - territory:GS
+      - territory:GU
+      - territory:HK
+      - territory:HM
+      - territory:IM
+      - territory:IO
+      - territory:JE
+      - territory:KY
+      - territory:MF
+      - territory:MO
+      - territory:MP
+      - territory:MQ
+      - territory:MS
+      - territory:NC
+      - territory:NF
+      - territory:NU
+      - territory:PF
+      - territory:PM
+      - territory:PN
+      - territory:PR
+      - territory:PS
+      - territory:RE
+      - territory:SH-AC
+      - territory:SH-HL
+      - territory:SH-TA
+      - territory:SJ
+      - territory:SX
+      - territory:TC
+      - territory:TF
+      - territory:TK
+      - territory:TW
+      - territory:UM-67
+      - territory:UM-71
+      - territory:UM-76
+      - territory:UM-79
+      - territory:UM-81
+      - territory:UM-84
+      - territory:UM-86
+      - territory:UM-89
+      - territory:UM-95
+      - territory:VG
+      - territory:VI
+      - territory:WF
+      - territory:XQZ
+      - territory:XXD
+      - territory:YT
+paths:
+  "/api/v1/auth":
+    post:
+      summary: Request an API token
+      tags:
+      - Authentication
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: password
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User authenticated and API token returned
+        '401':
+          description: Unauthorized
+    delete:
+      summary: Delete an API token
+      description: Delete a users API tokens using a valid PSD account email and password
+      tags:
+      - Authentication
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: password
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User API tokens destroyed
+        '401':
+          description: Unauthorised user
+  "/api/v1/notifications/{notification_id}/products":
+    post:
+      summary: Adds a Product to a Notification
+      description: "\n        Adds a Product to a Notification\n\n        This endpoint
+        allows you to add a product to a notification.\n        An email will be sent
+        to the notification owner if the `send_email` parameter is set to `true`,
+        otherwise no email will be sent.\n    "
+      tags:
+      - - Products
+        - Notifications
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: notification_id
+        in: path
+        required: true
+        description: Notification ID
+        example: 1232-434
+        schema:
+          type: string
+      - name: send_email
+        in: path
+        description: Send a PSD email notification to the owner of Notification
+        default: 'false'
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Product added to Notification
+        '422':
+          description: Notification not found
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorised user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/add_product_to_notification"
+            examples:
+              add_product:
+                summary: An sample product
+                value:
+                  product:
+                    id: '123'
+  "/api/v1/notifications/{id}":
+    get:
+      summary: Retrieves a Notification
+      description: Retrieves a Notification's detail by ID
+      tags:
+      - Notifications
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Notification found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/notification_object"
+        '404':
+          description: Notification not found
+        '401':
+          description: Unauthorised user
+  "/api/v1/notifications":
+    get:
+      summary: Search for Notifications
+      description: |2
+
+        Search for a Product
+
+        * The search `q` query performs a full text search on the notificaiton title and product name. It uses the same code as the search bar in the UI within PSD.
+
+        * The `sort_by` parameter can be used to sort the results. The default is `updated_at` which returns the most recent updated notification first. The `sort_dir` parameter can be used to sort the results in ascending or descending order. The default is descending.
+        * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+        * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
+      tags:
+      - Notifications
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: Search query. Searches based on name, description, brand, PSD
+          ID, and product_code
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        required: false
+        description: Sort by parameter. Choose name, updated_at, or relevant. Default
+          is updated_at
+        schema:
+          type: string
+      - name: sort_dir
+        in: query
+        required: false
+        description: Sort direction. Choose asc or desc. Default is desc
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Search results returned
+    post:
+      summary: Creates a draft Notification
+      description: Creates a draft Notification in PSD
+      tags:
+      - Notifications
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Notification created
+        '406':
+          description: Notification not valid
+        '401':
+          description: Unauthorised user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/new_notification"
+            examples:
+              notification:
+                summary: An non-compliant notification
+                value:
+                  notification:
+                    user_title: Turbo vac 3000
+                    reported_reason: non_compliant
+                    non_compliant_reason: No earth pin on mains plug
+  "/api/v1/products/{id}":
+    get:
+      summary: Retrieves a Product
+      description: Retrieves a Product's detail by ID
+      tags:
+      - Products
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Product found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/product_object"
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorised user
+  "/api/v1/products":
+    get:
+      summary: Search for a Product
+      description: |2
+
+        Search for a Product
+
+        * The search `q` query searches for Products in PSD with the same code as is used in the application. It fuzzy matches based on name, description, brand, PSD ID, and product_code.
+        * The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending `asc` or descending `desc` order. The default is descending.
+        * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+        * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
+      tags:
+      - Products
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: Search query. Searches based on name, description, brand, PSD
+          ID, and product_code
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        required: false
+        description: Sort by parameter. Choose name, created_at, updated_at, or relevant.
+          Default is relevant
+        schema:
+          type: string
+      - name: sort_dir
+        in: query
+        required: false
+        description: Sort direction. Choose asc or desc. Default is desc
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        description: Category of the product. If given, only products in this category
+          will be returned
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Search results returned
+    post:
+      summary: Creates a Product
+      description: Creates a Product in PSD
+      tags:
+      - Products
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Product created
+        '406':
+          description: Product not valid
+        '401':
+          description: Unauthorised user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/new_product"
+            examples:
+              product:
+                summary: An sample product
+                value:
+                  product:
+                    name: Super Vac 2020
+                    category: Electrical appliances and equipment
+                    subcategory: Vacuum cleaners
+                    country_of_origin: country:GB
+                    when_placed_on_market: on_or_after_2021
+                    authenticity: genuine
+                    has_markings: markings_no
+  "/api/v1/products/named_parameter_search":
+    get:
+      summary: Named parameter search for a Product
+      description: |2
+
+        Search for a Product using named parameters.
+
+        * The `name` parameter fuzzy searches based on `name`
+        * The `ID`, `barcode`, and `product_code` parameters search based on exact matches
+        * Providing each parameter will perform an AND search, i.e. all parameters must match
+        * For PSD ID, please issue without `psd-` (e.g. for `psd-1234` use `1234`).
+        * `product_code` can contain the ASIN, EAN, or UPC codes for a given product.
+        * The `sort_by` parameter can be used to sort the results. The default is `relevant` which returns the most relevant first. The `sort_dir` parameter can be used to sort the results in ascending `asc` or descending `desc` order. The default is descending.
+        * The `category` parameter can be used to filter the results by category. If given, only products in this category will be returned.
+        * The `page` parameter can be used to paginate the results. By default, 20 results are returned per page.
+      tags:
+      - Products
+      security:
+      - bearer: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Fuzzy searches based on product name
+        required: false
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Search based on exact match of PSD ID. Please issue without `psd-`
+          (e.g. for `psd-1234` use `1234`)
+        required: false
+        schema:
+          type: string
+      - name: barcode
+        in: query
+        description: Search based on exact match of barcode
+        required: false
+        schema:
+          type: string
+      - name: product_code
+        in: query
+        description: Search based on fuzzy match of product_code. Can contain the
+          ASIN, EAN, or UPC codes for a given product
+        required: false
+        schema:
+          type: string
+      - name: sort_by
+        in: query
+        required: false
+        description: Sort by parameter. Choose name, created_at, updated_at, or relevant.
+          Default is relevant
+        schema:
+          type: string
+      - name: sort_dir
+        in: query
+        required: false
+        description: Sort direction. Choose asc or desc. Default is desc
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        description: Category of the product. If given, only products in this category
+          will be returned
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Search results returned

@@ -1,0 +1,23 @@
+<% content_for :page_title, "Most active teams" %>
+
+<% content_for :aside do %>
+  Last 12 months
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%=
+      govuk_tabs(title: "Team reports") do |t|
+        t.with_tab(label: "By notifications") do
+          render partial: "notifications"
+        end
+        t.with_tab(label: "By active users") do
+          render partial: "users"
+        end
+        t.with_tab(label: "By products") do
+          render partial: "products"
+        end
+      end
+    %>
+  </div>
+</div>

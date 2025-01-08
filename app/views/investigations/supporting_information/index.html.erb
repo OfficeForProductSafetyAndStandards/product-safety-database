@@ -1,0 +1,7 @@
+<%= render "investigations/navigable_case_nav", investigation: @investigation,
+                                                current_tab: "supporting_information",
+                                                case_page_heading: "Supporting information",
+                                                secondary_text: "This is the supporting information for the notification.",
+                                                link_text: nil do %>
+  <%= render "investigations/tabs/supporting_information" %>
+<% end %>

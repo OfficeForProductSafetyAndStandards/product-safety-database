@@ -1,0 +1,61 @@
+<% page_title = "Confirm #{@test_result.pretty_name} details" %>
+<%= page_title page_title %>
+
+<span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+<h1 class="govuk-heading-l"><%= page_title %></h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Product</th>
+          <td class="govuk-table__cell"><%= @test_result.product.name %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Legislation</th>
+          <td class="govuk-table__cell"><%= @test_result.legislation %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row"><%= @test_result.requested? ? "Date of request" : "Test date" %></th>
+          <td class="govuk-table__cell"><%= @test_result.date&.strftime("%d/%m/%Y") %></td>
+        </tr>
+
+        <% if @test_result.result %>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Test result</th>
+            <td class="govuk-table__cell"><%= @test_result.result.upcase_first %></td>
+          </tr>
+        <% end %>
+
+        <% if @test_result.details.present? %>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Details</th>
+            <td class="govuk-table__cell"><%= @test_result.details %></td>
+          </tr>
+        <% end %>
+
+        <% if @file_blob %>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Attachment</th>
+            <td class="govuk-table__cell"><%= @file_blob.filename %></td>
+          </tr>
+
+          <% if @file_blob.metadata[:description].present? %>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Attachment description</th>
+              <td class="govuk-table__cell"><%= @file_blob.metadata[:description] %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= form_with model: @test_result, scope: :test, url: investigation_test_results_path(@investigation), method: :post do |form| %>
+      <div class="govuk-button-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= link_to "Edit details", new_investigation_test_result_path(@investigation), class: "govuk-link" %>
+      </div>
+    <% end %>
+  </div>
+</div>

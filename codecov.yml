@@ -1,0 +1,7 @@
+# Delay notifying or posting PR comments about coverage until both CI test
+# suite workflows are completed. See .github/workflows/rspec.yml
+codecov:
+    notify:
+        after_n_builds: 2
+comment:
+  after_n_builds: 2

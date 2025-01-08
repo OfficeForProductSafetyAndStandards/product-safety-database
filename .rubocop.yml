@@ -1,0 +1,51 @@
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rspec
+
+Rails:
+  Enabled: true
+
+AllCops:
+  Exclude:
+    - 'app/**/*.axlsx'
+    - 'bin/**/*'
+    - 'coverage/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/20200402142659_init_schema.rb'
+    - 'log/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/bundle/**/*'
+    - 'config/initializers/devise.rb'
+    - 'smoke_test/**/*'
+    - 'app/controllers/api/base_controller.rb'
+    - 'spec/requests/api/**/*'
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 6
+
+RSpec/ExampleLength:
+  Max: 7
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 2

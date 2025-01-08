@@ -1,0 +1,38 @@
+<% content_for :page_title, "Add level of uncertainty and sensitivity analysis" %>
+<% @errors = @evaluation.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @evaluation, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Risk assessment outcome</span>
+        Add level of uncertainty and sensitivity analysis
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">Overall product risk recorded in the assessment</p>
+        <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
+      <% end %>
+      <%=
+        f.govuk_collection_radio_buttons :level_of_uncertainty,
+        [
+          OpenStruct.new(id: "low", name: "Low"),
+          OpenStruct.new(id: "medium", name: "Medium"),
+          OpenStruct.new(id: "high", name: "High")
+        ],
+        :id,
+        :name,
+        legend: { text: "What is the level of uncertainty associated with the risk assessment?" },
+        hint: { text: "Every risk assessment that involves some degree of estimation will come with an associated degree of uncertainty; this is normal and does not in itself mean that the risk assessment is flawed." },
+        bold_labels: false
+      %>
+      <%= f.govuk_radio_buttons_fieldset :sensitivity_analysis, legend: { text: "Has sensitivity analysis been undertaken?", size: "m" }, hint: { text: 'The implications of the uncertainty can be considered by undertaking a sensitivity analysis. For example, where there is uncertainty surrounding one or more of the probabilities within a harm scenario, then different probabilities can be applied (which can be higher, lower, or both than the orignal figures used) to fairly reflect the extent of the uncertainty. For more information on sensitivity analysis, refer to the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=24" class="govuk-link" target="_blank" rel="noreferrer noopener"><abbr>PRISM</abbr> guidance (opens in a new tab)</a>.'.html_safe } do %>
+        <%= f.govuk_radio_button :sensitivity_analysis, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_area :sensitivity_analysis_details, label: { text: "Add additional sensitivity analysis information if required." } %>
+        <% end %>
+        <%= f.govuk_radio_button :sensitivity_analysis, false, label: { text: "No" } %>
+      <% end %>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<% page_heading = "Create a notification for multiple products - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_create_case_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: triage_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_create_case_form, url: create_case_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Create a notification for multiple products
+      </h1>
+      <p class="govuk-body">All the products you upload will be grouped together in a single notification.</p>
+      <%= form.govuk_text_field(
+        :name,
+        label: { text: "Notification name", size: "m" },
+        hint: { text: "Give the notification a short descriptive title." }
+      ) %>
+      <%= form.govuk_radio_buttons_fieldset(:reference_number_provided, legend: { text: "Do you want to add your own reference number to the notification?", size: "m" }, hint: { text: "This might be a number already created in a different internal system for your notification, or a number you intend to use globally across different systems to reference your notification." }) do %>
+        <%= form.govuk_radio_button :reference_number_provided, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= form.govuk_text_field :reference_number, label: { text: "Reference number" } %>
+        <% end %>
+        <%= form.govuk_radio_button :reference_number_provided, false, label: { text: "No" } %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Continue") %>
+      </div>
+    </div>
+  </div>
+<% end %>

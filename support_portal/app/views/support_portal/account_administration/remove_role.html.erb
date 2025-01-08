@@ -1,0 +1,16 @@
+<% content_for :page_title, "Remove role \"#{@role.name}\" for #{@user.name}" %>
+<% @back_link_href = account_administration_path(@user, q: params[:q], anchor: "roles") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_warning_text do %>
+      <%= @user.name %> will immediately lose access to any PSD features that are dependent on having the <code><%= @role.name %></code> role.
+    <% end %>
+    <%= form_with model: @user, url: delete_role_account_administration_path(role_id: @role.id), method: :delete do |f| %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Confirm remove role", warning: true %>
+        <%= govuk_button_link_to "Cancel", account_administration_path(@user, q: params[:q], anchor: "roles"), secondary: true %>
+      </div>
+    <% end %>
+  </div>
+</div>

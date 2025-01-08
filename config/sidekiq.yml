@@ -1,0 +1,36 @@
+---
+:concurrency: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+:queues:
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
+  - searchkick
+  - active_storage_purge
+:scheduler:
+  :schedule:
+    delete_unsafe_files_job:
+      cron: "*/15 * * * *"
+      class: "DeleteUnsafeFilesJob"
+    log_db_metrics_job:
+      cron: "*/15 * * * *"
+      class: "LogDbMetricsJob"
+    generate_and_upload_export_csv_job:
+      cron: "0 2 * * *"
+      class: "GenerateAndUploadExportCsvJob"
+    lock_inactive_users_job:
+      cron: "0 1 * * *"
+      class: "LockInactiveUsersJob"
+    retire_stale_products_job:
+      cron: "0 2 * * *"
+      class: "RetireStaleProductsJob"
+    delete_old_exports_job:
+      cron: "0 3 * * *"
+      class: "DeleteOldExportsJob"
+    delete_abandoned_bulk_products_uploads_job:
+      cron: "0 4 * * *"
+      class: "DeleteAbandonedBulkProductsUploadsJob"
+    generate_rollups_job:
+      cron: "45 23 * * *"
+      class: "GenerateRollupsJob"
+    soft_delete_draft_notifications_job:
+      cron: "30 1 * * *"
+      class: "SoftDeleteDraftNotificationsJob"

@@ -1,0 +1,72 @@
+<%= page_title(@team.display_name(viewer: current_user)) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
+          Your team
+          <span class="govuk-visually-hidden">:</span>
+          <span class="govuk-caption-l"><%= @team.display_name(viewer: current_user) %></span>
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-third">
+        <div class="opss-text-align-right">
+          <% if current_user.is_team_admin? %>
+            <p class="govuk-body"><a href="<%= new_team_invitation_path(@team) %>" class="govuk-link">Invite another team member</a></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <table class="govuk-table opss-table opss-table--last-col-right">
+      <caption class="govuk-table__caption govuk-visually-hidden">Your team members</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Name</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-half">Email</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @team.users_alphabetically_with_users_without_names_first.each do |user| %>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+              <%= user.name %>
+              <% if user.is_team_admin? %>
+                <p class="govuk-body">
+                  <span class="opss-icon opss-icon--tick opss-icon--16sm"></span>
+                  Can invite team members
+                </p>
+              <% end %>
+              <% if !user.has_filled_out_account_setup_form_and_verified_number? %>
+                <p class="govuk-body">
+                  <span class="opss-icon opss-icon--alert opss-icon--16sm"></span>
+                  Awaiting confirmation <span class="govuk-visually-hidden"> for <%= user.email %></span>
+                </p>
+              <% end %>
+            </th>
+            <td class="govuk-table__cell">
+              <a href="mailto:<%= user.email %>" class="govuk-link"><%= user.email %></a>
+              <% if !user.has_filled_out_account_setup_form_and_verified_number? && current_user.is_team_admin? %>
+                <p class="govuk-body">
+                  <%= form_with(url: resend_team_invitation_path(@team, user), method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |resend_invitation_form| %>
+                    <%= resend_invitation_form.govuk_submit("Resend invitation <span class=\"govuk-visually-hidden\"> to #{user.email}</span>".html_safe, secondary: true) %>
+                  <% end %>
+                </p>
+              <% end %>
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
+      <% if @team.users.not_deleted.count > 11 %>
+        <tfoot class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Name</th>
+            <th scope="col" class="govuk-table__header govuk-!-width-one-half">Email</th>
+          </tr>
+        </tfoot>
+      <% end %>
+    </table>
+  </div>

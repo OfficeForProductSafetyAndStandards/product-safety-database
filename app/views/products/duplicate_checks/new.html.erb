@@ -1,0 +1,28 @@
+<%= page_title "Do you have a barcode number?", errors: @product_duplicate_check_form.errors.any? %>
+<%= form_with model: @product_duplicate_check_form, url: duplicate_check_products_path(@product_duplicate_check_form), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary(presenter: ErrorSummaryPresenter) %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <div class="govuk-form-group <%= class_names("govuk-form-group--error") if @product_duplicate_check_form&.errors[:has_barcode].present? %>">
+        <%= f.govuk_radio_buttons_fieldset(:has_barcode, legend: { size: "l", text: "Do you have the product barcode number?", style: "margin-bottom: 25px" }) do %>
+          <%= f.govuk_radio_button :has_barcode, "true", label: { text: 'Yes' }, link_errors: true do %>
+            <%= f.govuk_text_field :barcode, width: "one-third", label: { text: "Barcode number (GTIN, EAN or UPC)" }, hint: { text: "It is normally 13 digits, although older products may have a 12 digit number.", style: "font-size: 1rem !important;" } %>
+          <% end %>
+          <%= f.govuk_radio_button :has_barcode, "false", label: { text: 'No' } %>
+        <% end %>
+      </div>
+
+      <%= f.govuk_submit "Continue" %>
+    </div>
+
+
+    <div class="govuk-grid-column-one-quarter">
+      <h2 class="govuk-heading-s govuk-visually-hidden">Barcode example</h2>
+      <figure class="govuk-!-margin-top-9">
+        <%= image_tag "product-barcode.jpg", class: "opss-desktop-img-s", alt: "A barcode example" %>
+        <figcaption class="govuk-body govuk-!-font-size-16">An example of a barcode on product packaging</figcaption>
+      </figure>
+    </div>
+  </div>
+<% end %>
+

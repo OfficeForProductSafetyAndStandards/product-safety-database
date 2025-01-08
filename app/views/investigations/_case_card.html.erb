@@ -1,0 +1,40 @@
+<%
+  card_classes = []
+  card_classes << "psd-case-card--closed" if investigation.is_closed?
+  card_classes << "psd-case-card--restricted-access" if investigation.is_private?
+%>
+
+<div class="govuk-grid-row psd-case-card <%= card_classes.join(" ") %>">
+  <div class="govuk-grid-column-one-half">
+    <span class="govuk-caption-m govuk-!-font-size-16">
+      <%= sanitize(investigation.pretty_description) %>
+    </span>
+    <span>
+      <%= link_to sanitize(investigation.title), investigation_path(investigation) %>
+    </span>
+    <%= render "investigations/case_card_status_area", investigation: investigation %>
+  </div>
+
+  <div class="govuk-grid-column-one-quarter">
+    <span class="govuk-caption-m govuk-!-font-size-16">Notification owner</span>
+    <span>
+      <%= sanitize(investigation.owner_display_name_for(viewer: current_user)) %>
+    </span>
+  </div>
+
+  <% if sorted_by == SortByHelper::SORT_BY_CREATED_AT %>
+    <div class="govuk-grid-column-one-quarter">
+      <span class="govuk-caption-m govuk-!-font-size-16">
+        Date created
+      </span>
+      <span>
+        <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
+      </span>
+    </div>
+  <% else %>
+    <div class="govuk-grid-column-one-quarter">
+      <span class="govuk-caption-m govuk-!-font-size-16">Last updated</span>
+      <span><%= "#{time_ago_in_words(investigation.updated_at)} ago" %></span>
+    </div>
+  <% end %>
+</div>

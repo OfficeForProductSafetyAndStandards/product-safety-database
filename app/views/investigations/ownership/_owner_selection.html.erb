@@ -1,0 +1,19 @@
+<% actual_items = items.map do |item|
+    {
+      text: item.decorate.display_name(viewer: current_user),
+      value: item.id
+    }
+  end
+%>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govukSelect(
+      key: key,
+      items: actual_items,
+      form: form,
+      label: { text: label, classes: "govuk-visually-hidden" },
+      include_blank: true
+    ) %>
+  </div>
+</div>

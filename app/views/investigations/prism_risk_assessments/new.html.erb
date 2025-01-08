@@ -1,0 +1,71 @@
+<% page_heading = "Add risk assessment" %>
+<%= page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with url: investigation_prism_risk_assessments_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
+      <div class="govuk-inset-text">
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= @product.name %></p>
+      </div>
+      <h2 class="govuk-heading-m">Related risk assessments</h2>
+      <% if @related_prism_risk_assessments.size.positive? %>
+        <p class="govuk-body">Select a related risk assessment to add to the notification. If you find that the assessment doesn't fit your notification, you have the choice to either start a new assessment or attach one you've previously created.</p>
+        <table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table--borders">
+          <caption class="govuk-table__caption govuk-visually-hidden">PRISM risk assessments: a simple data table.</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Assessment title</th>
+              <th scope="col" class="govuk-table__header">Created by</th>
+              <th scope="col" class="govuk-table__header">Last updated</th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">View assessment</span></th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Add assessment to notification</span></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <% @related_prism_risk_assessments.each do |prism_risk_assessment| %>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  <%= prism_risk_assessment.name || "Unknown" %>
+                </th>
+                <td class="govuk-table__cell">
+                  <%= prism_risk_assessment.user_and_organisation.join("<br>").html_safe %>
+                </td>
+                <td class="govuk-table__cell">
+                  <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
+                </td>
+                <td class="govuk-table__cell">
+                  <a href="<%= prism.view_submitted_assessment_risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">View<span class="govuk-visually-hidden"> assessment</span></a>
+                </td>
+                <td class="govuk-table__cell">
+                  <%= form.govuk_submit "Add", value: prism_risk_assessment.id %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <% if @related_prism_risk_assessments.size > 11 %>
+            <tfoot class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Assessment title</th>
+                <th scope="col" class="govuk-table__header">Created by</th>
+                <th scope="col" class="govuk-table__header">Last updated</th>
+                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">View assessment</span></th>
+                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Add assessment to notification</span></th>
+              </tr>
+            </tfoot>
+          <% end %>
+        </table>
+        <%= form.hidden_field :product_id, value: @product.id %>
+      <% else %>
+        <p class="govuk-body">There are no risk assessments for <%= @product.name %>. You can start a new assessment.</p>
+      <% end %>
+      <a class="govuk-button govuk-button--secondary" data-module="govuk-button" role="button" draggable="false" href="<%= prism.serious_risk_path(investigation_id: @investigation.id, product_ids: [@product.id]) %>">
+        Start a new risk assessment
+      </a>
+    <% end %>
+    <p class="govuk-body">
+      <a href="<%= new_investigation_risk_assessment_path %>" class="govuk-link">Attach existing risk assessment</a>
+    </p>
+  </div>
+</div>

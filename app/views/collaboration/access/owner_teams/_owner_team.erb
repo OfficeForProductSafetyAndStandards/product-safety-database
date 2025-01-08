@@ -1,0 +1,8 @@
+<tr class="govuk-table__row">
+  <th scope="row" class="govuk-table__header govuk-!-font-weight-regular">
+    <%= owner_team.collaborator.name %>
+    <%= render "collaboration/case_creator_label" if owner_team.creator_team? %>
+  </th>
+  <td class="govuk-table__cell">Notification owner</td>
+  <td class="govuk-table__cell"></td>
+</tr>

@@ -1,0 +1,106 @@
+<%= page_title @product.retired? ? "Retired product record" : "Product - #{sanitize(@product.name_with_brand)}" %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
+    <span class="govuk-caption-m">&nbsp;</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">
+      Product <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= sanitize(@product.psd_ref) %></span>
+    </h1>
+    <% if @product.retired? %>
+      <p class="govuk-body opss-secondary-text">
+        <span class="govuk-!-font-weight-bold opss-primary-text">
+          This product record has been retired and can no longer be added to notifications.
+        </span>
+        <br class="opss-br-desktop">
+        <span class="govuk-!-font-size-16">
+          It was not used in an open notification for 90 days. You can create a new product record for this product.
+        </span>
+      </p>
+    <% else %>
+      <p class="govuk-body opss-secondary-text">This is a Product Safety Database (<%= psd_abbr title: false %>) product record.</p>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
+    <div class="govuk-button-group opss-text-align-right">
+      <% if policy(@product).can_spawn_case? %>
+        <% if current_user.can_use_notification_task_list? %>
+          <a href="<%= from_product_notifications_create_index_path(product_id: @product.id) %>" class="govuk-link govuk-link--no-visited-state" data-cy="create-new-notification">Add to a notification</a>
+        <% else %>
+          <%= link_to new_investigation_ts_investigation_path(product_id: @product.id), class: "govuk-link govuk-link--no-visited-state", data: { cy: "create-new-case" } do %>
+            Create a product notification
+          <% end %>
+        <% end %>
+      <% end %>
+      <% prism_risk_assessment_href = session[:prism_risk_assessment_id].present? ? prism.risk_assessment_tasks_path(session[:prism_risk_assessment_id], product_id: @product.id) : prism.serious_risk_path(product_id: @product.id) %>
+      <%= govukButton(text: "Start a new risk assessment", href: prism_risk_assessment_href, classes: "govuk-button--secondary") %>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <%= render "sub_nav", product: @product %>
+
+  <section id="page-content" role="region" class="govuk-grid-column-three-quarters">
+    <% if @product.retired? %>
+      <%= govuk_warning_text(text: "This product record is retired.", classes: "govuk-!-display-inline-block govuk-!-margin-bottom-4") %>
+    <% end %>
+    <h2 class="govuk-heading-m govuk-!-margin-top-1 govuk-visually-hidden">The product record</h2>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h3 class="govuk-heading-m" data-cy="product-name"><%= sanitize(@product.name_with_brand) %></h3>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <%= @product.overview_summary_list %>
+      </div>
+      <% unless @product.virus_free_images.empty? %>
+        <div class="govuk-grid-column-one-third">
+          <figure class="opss-margin-bottom-1-desktop">
+            <%= image_tag @product.virus_free_images.first.file_upload.variant(resize_to_limit: [300, 500]), class: "opss-details-img opss-details-img--thumbnail opss-float-right-desktop", alt: @product.virus_free_images.first.file_upload.filename %>
+          </figure>
+        </div>
+      <% end %>
+    </div>
+
+    <h4 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-visually-hidden">Product details</h4>
+
+    <%= @product.details_list %>
+
+    <%=
+      govuk_accordion do |accordion|
+        accordion.with_section(heading_text: "Images (#{@product.virus_free_images.size})") do
+          render("images", product: @product)
+        end
+        accordion.with_section(heading_text: "Notifications (#{@product.unique_investigation_products.size})") do
+          render("cases", product: @product)
+        end
+      end
+    %>
+
+    <% unless @product.retired? %>
+      <% if @product.owning_team.nil? %>
+        <% if policy(@product).update? %>
+          <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+            This product record currently has no owner.
+          </p>
+        <% end %>
+      <% elsif @product.owning_team == current_user.team %>
+        <% if policy(@product).update? %>
+          <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+            This product record is currently owned by your team.
+          </p>
+        <% end %>
+      <% else %>
+        <p class="govuk-!-font-size-16 govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+          This product record is currently owned by <%= sanitize(@product.owning_team.name) %>. You can <%= link_to "contact the product record owner", owner_product_path(@product), class: "govuk-link govuk-link--no-visited-state opss-no-wrap-desktop" %> with editorial requests or general enquiries. You can still add this product record to your notification.
+        </p>
+      <% end %>
+    <% end %>
+
+    <% if policy(@product).update? %>
+      <%= govukButton(text: "Edit this product record", href: edit_product_path(@product)) %>
+    <% end %>
+
+    <%= render 'products/recalls/product_recall_notice' if current_user.can_use_product_recall_tool? %>
+  </section>
+</div>

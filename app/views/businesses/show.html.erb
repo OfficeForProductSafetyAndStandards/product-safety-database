@@ -1,0 +1,27 @@
+<%= page_title "Business - #{@business.trading_name}" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= @business.trading_name %></h1>
+  </div>
+</div>
+
+<%=
+  govuk_tabs(title: "Business details") do |tabs|
+    tabs.with_tab(label: "Full detail") do
+      render("businesses/tabs/details")
+    end
+    tabs.with_tab(label: "Locations (#{@business.locations.count})") do
+      render("businesses/tabs/locations")
+    end
+    tabs.with_tab(label: "Contacts (#{@business.contacts.count})") do
+      render("businesses/tabs/contacts")
+    end
+    tabs.with_tab(label: "Notifications (#{@business.investigations.count})") do
+      render("businesses/tabs/notifications")
+    end
+    tabs.with_tab(label: "Products (#{@business.investigation_products.count})") do
+      render("businesses/tabs/products")
+    end
+  end
+%>

@@ -1,0 +1,30 @@
+<%= form.govuk_fieldset legend: {text: "Name and company number", size: 's'} do %>
+  <%= form.govuk_text_field :trading_name,
+                            width: 'two-thirds',
+                            label: {text: t("businesses.form.trading_name.label"), },
+                            hint: { text: t("businesses.form.trading_name.hint"), style: "font-size: 0.975rem !important; line-height: 1.1428571429" }
+  %>
+
+  <%= form.govuk_text_field :legal_name,
+                            width: 'two-thirds',
+                            label: {text: t("businesses.form.legal_name.label")},
+                            hint: { text: t("businesses.form.legal_name.hint_html"), style: "font-size: 0.975rem; line-height: 1.1428571429"}
+  %>
+
+  <%= form.govuk_text_field :company_number,
+                            width: 'one-third',
+                            label: {text: t("businesses.form.company_number.label") },
+                            hint: { text: t("businesses.form.company_number.hint_html"), style: "font-size: 0.975rem; line-height: 1.1428571429"}
+  %>
+<% end %>
+
+
+<%= form.fields_for :locations, business.primary_location do |ff| %>
+  <%= render "businesses/locations/address_form", form: ff, countries: countries, id_name: id_name %>
+<% end %>
+
+<%= form.fields_for :contacts, business.primary_contact do |ff| %>
+  <%= render "businesses/contacts/form", form: ff %>
+<% end %>
+
+<%= form.govuk_submit "Save" %>

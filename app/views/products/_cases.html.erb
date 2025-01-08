@@ -1,0 +1,13 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body opss-secondary-text">
+      This product record has been added to <%= pluralize @product.investigations.size, 'notification' %>.
+    </p>
+  </div>
+</div>
+<% if @product.investigations.any? %>
+  <% rows = @product.investigations.uniq.map do |investigation| %>
+    <% [investigation.case_title_key(@current_user), *investigation.case_summary_values] %>
+  <% end %>
+  <%= govuk_table(head: ["Notification name", "Notification number", "Notification owner", "Status"], rows:) %>
+<% end %>

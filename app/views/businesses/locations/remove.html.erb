@@ -1,0 +1,33 @@
+<%= page_title "View location" %>
+<div class="govuk-grid-row govuk-!-padding-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= "Business: #{@business.trading_name}" %></span>
+
+    <h1 class="govuk-heading-l">Remove location</h1>
+
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Name</th>
+          <td class="govuk-table__cell"><%= @location.name %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Location</th>
+          <td class="govuk-table__cell"><%= @location.summary %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Postcode</th>
+          <td class="govuk-table__cell"><%= @location.postal_code %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Phone</th>
+          <td class="govuk-table__cell"><%= @location.phone_number %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <%= form_with url: business_location_path(@business, @location), method: :delete do |form| %>
+      <%= form.submit "Remove location", class: "govuk-button govuk-button--warning" %>
+    <% end %>
+  </div>
+</div>

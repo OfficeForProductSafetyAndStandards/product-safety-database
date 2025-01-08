@@ -1,0 +1,68 @@
+<%= page_title(t("notifications.create.index.sections.business_details.tasks.add_business_details_duplicate.title"), errors: @add_business_details_duplicate_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with model: @add_business_details_duplicate_form, url: duplicate_business_notification_create_index_path(@notification, business_id: params[:business_id]), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
+        <%= t("notifications.create.index.sections.business_details.tasks.add_business_details_duplicate.title") %>
+      </h1>
+      <p class="govuk-body">A similar business already exists in the database.</p>
+      <div class="opss-panels">
+        <!-- Existing record -->
+        <div class="opss-panels__pair opss-panels__pair--merged--left" data-type="panel" data-identifier="<%= @duplicate_business.id %>" data-variant="existing">
+          <h2 class="govuk-heading-m"><%= @duplicate_business.trading_name %></h2>
+          <p class="govuk-body"><%= govuk_tag(text: "Existing PSD record", colour: "yellow") %></p>
+          <%=
+            govuk_summary_list(actions: false) do |summary_list|
+              summary_list.with_row do |row|
+                row.with_key(text: "Trading name")
+                row.with_value(text: @duplicate_business.trading_name)
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Legal name")
+                row.with_value(text: @duplicate_business.legal_name)
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Companies House number")
+                row.with_value(text: @duplicate_business.company_number)
+              end
+            end
+          %>
+          <%= govuk_button_link_to("Select", "#", secondary: true, class: "opss-nojs-hide opss-variant-select-button", "data-identifier": @duplicate_business.id, "data-variant": "existing") %>
+        </div>
+        <!-- New record -->
+        <div class="opss-panels__pair opss-panels__pair--merged--right" data-type="panel" data-identifier="<%= @duplicate_business.id %>" data-variant="new">
+          <h2 class="govuk-heading-m"><%= @add_business_details_duplicate_form.trading_name %></h2>
+          <p class="govuk-body"><%= govuk_tag(text: "New manual entry", colour: "green") %></p>
+          <%=
+            govuk_summary_list(actions: false) do |summary_list|
+              summary_list.with_row do |row|
+                row.with_key(text: "Trading name")
+                row.with_value(text: @add_business_details_duplicate_form.trading_name)
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Legal name")
+                row.with_value(text: @add_business_details_duplicate_form.legal_name)
+              end
+            end
+          %>
+          <%= govuk_button_link_to("Select", "#", secondary: true, class: "opss-nojs-hide opss-variant-select-button", "data-identifier": @duplicate_business.id, "data-variant": "new") %>
+        </div>
+      </div>
+      <div class="opss-js-enabled-hidden">
+        <%= f.hidden_field :resolution, value: "" %>
+        <%= f.govuk_radio_buttons_fieldset :resolution, legend: { text: "What would you like to do?", size: "m" }, class: ["opss-variant-select-form"] do %>
+          <%= f.govuk_radio_button :resolution, "existing_record", label: { text: "Use existing PSD record" }, "data-type": "form", "data-identifier": @duplicate_business.id, "data-variant": "existing", link_errors: true %>
+          <%= f.govuk_radio_button :resolution, "new_record", label: { text: "Continue with manual entry" }, "data-type": "form", "data-identifier": @duplicate_business.id, "data-variant": "new" %>
+        <% end %>
+      </div>
+      <div class="govuk-button-group">
+        <%= f.hidden_field :trading_name, value: @add_business_details_duplicate_form.trading_name %>
+        <%= f.hidden_field :legal_name, value: @add_business_details_duplicate_form.legal_name %>
+        <%= f.govuk_submit "Save and continue" %>
+      </div>
+    <% end %>
+  </div>
+</div>

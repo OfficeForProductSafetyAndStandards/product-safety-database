@@ -1,0 +1,24 @@
+<%= govukCheckboxes(
+      key: "",
+      form: form,
+      items: [
+        {
+          key: "case_owner_me",
+          text: "Me",
+          value: true,
+        },
+        {
+          key: "case_owner_my_team",
+          text: "Me and my team",
+          value: true,
+        },
+        {
+          key: "case_owner_other",
+          text: "Others",
+          value: true,
+          conditional: {
+            html: other_owner(form)
+          }
+        },
+      ]
+    ) %>

@@ -1,0 +1,15 @@
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+            Team businesses
+        </h1>
+
+        <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-1">
+          <% if count == 1 %>
+            <%= "There is #{count} business linked to open notifications where the #{current_user.team.name} team is the notification owner." %>
+          <% else %>
+            <%= "There are #{count} businesses linked to open notifications where the #{current_user.team.name} team is the notification owner." %>
+          <% end %>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,117 @@
+<%= form.govuk_fieldset legend: { text: "Email details", size: 'm' } do %>
+  <%= form.govuk_collection_radio_buttons :email_direction,
+                                          Correspondence::Email.email_directions.map { |value, label| OpenStruct.new( value: value, text: label ) },
+                                          :value,
+                                          :text,
+                                          inline: true,
+                                          legend: { text:  "Email direction", hidden: true } %>
+  <%= form.govuk_text_field :correspondent_name, width: 'two-thirds', label: { text: "Name" } %>
+  <%= form.govuk_text_field :email_address, width: 'two-thirds', label: { text: "Email address" } %>
+<% end %>
+
+<%= form.govuk_date_field :correspondence_date, correspondence_date: true, legend: { text: "Date sent" } %>
+
+<%= form.govuk_text_field :overview, width: 'two-thirds', label: { text: "Summary", size: 'm' }, hint: {text: "Give an overview of the email"} %>
+
+<% email_upload_field = capture do %>
+
+  <% if form.object.email_file_id.present? %>
+    <p class="govuk-body">Currently selected file: <%= link_to form.object.cached_email_file.filename, form.object.cached_email_file, class: "govuk-link" %></p>
+    <%= form.hidden_field :email_file_id %>
+  <% end %>
+
+  <%= form.govuk_file_field :email_file,
+                            label: { text: ((form.object.email_file.present? || form.object.email_file_id.present?) ? "Select replacement file" : "Upload a file"),  }
+  %>
+<% end %>
+
+<% value = @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) ? "email-correspondence-form-base-field-error" : "email-correspondence-form-base-field"  %>
+<% if @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) %>
+  <div class="govuk-form-group govuk-form-group--error" base="true">
+<% end %>
+<%= form.govuk_fieldset legend: { text: "Email content", size: 'm' }, id: value do %>
+  <span id="email-content-hint" class="govuk-hint">Upload the email as a file, or enter the subject and body below</span>
+  <% if @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) %>
+    <p class="govuk-error-message" id="email-correspondence-form-correspondence-base-error"><span class="govuk-visually-hidden">Error: </span>Please provide either an email file or a subject and body</p>
+  <% end %>
+  <% if email.email_file.present? %>
+    <p class="govuk-body">
+      Current file:
+      <%= link_to "#{email.email_file.filename} (opens in new tab)", email.email_file, target: "_blank", rel: "noreferrer noopener" %>
+    </p>
+
+    <%= form.hidden_field :email_file_id  %>
+
+    <%= form.govuk_radio_buttons_fieldset(:email_file_action, legend: { text:  "Replace or remove file", size: 's' }, small: true) do %>
+      <%= form.govuk_radio_button :email_file_action, 'keep', label: { text: "Keep file" }, size: 's', link_errors: true %>
+      <%= form.govuk_radio_button :email_file_action, 'remove', label: { text: "Remove file" } %>
+      <%= form.govuk_radio_button :email_file_action, 'replace', label: { text: "Upload a replacement file" }  do %>
+        <%= email_upload_field %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= email_upload_field %>
+  <% end %>
+
+  <%= form.govuk_text_field :email_subject, width: "two-thirds", label: {text: "Subject line"} %>
+
+  <%= form.govuk_text_area :details,
+                           label: { text: "Body" },
+                           max_chars: 32_767
+  %>
+
+<% end %>
+<% if @email_correspondence_form.errors.any? && @email_correspondence_form.send(:email_subject_or_body_missing) && @email_correspondence_form.send(:email_file_removed_or_missing) %>
+  </div>
+<% end %>
+
+<fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Attachments
+  </legend>
+
+  <div class="govuk-body govuk-hint">
+    If you have multiple files, compress them in a zip
+  </div>
+
+  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: :base) %>">
+
+    <% file_upload_field = capture do %>
+
+      <% if form.object.email_attachment_id.present? %>
+        <p class="govuk-body">Currently selected attachment: <%= link_to form.object.cached_email_attachment.filename, form.object.cached_email_attachment, class: "govuk-link" %></p>
+        <%= form.hidden_field :email_attachment_id %>
+      <% end %>
+
+      <%= form.govuk_file_field :email_attachment,
+                                label: { text: ((form.object.email_attachment.present? || form.object.email_attachment_id.present?) ? "Select replacement file" : "Upload a file") }
+      %>
+    <% end %>
+
+    <% if email.email_attachment.present? %>
+
+      <p class="govuk-body">
+        Currently attached file:
+        <%= link_to "#{email.email_attachment.filename} (opens in new tab)", email.email_attachment, target: "_blank", rel: "noreferrer noopener" %>
+      </p>
+
+      <%= form.govuk_radio_buttons_fieldset(:email_attachment_action, legend: { text:  "Replace or remove email attachment", size: 's' }, small: true) do %>
+        <%= form.govuk_radio_button :email_attachment_action, 'keep', label: { text: "Keep file" }, link_errors: true, size: 's' %>
+        <%= form.govuk_radio_button :email_attachment_action, 'remove', label: { text: "Remove file" } %>
+        <%= form.govuk_radio_button :email_attachment_action, 'replace', label: { text: "Upload a replacement file" }  do %>
+          <%= file_upload_field %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= file_upload_field %>
+    <% end %>
+
+    <div>
+      <%= form.govuk_text_area :attachment_description,
+                               label: { text: "Attachment description" },
+                               max_chars: 10_000
+      %>
+
+    </div>
+  </div>
+</fieldset>

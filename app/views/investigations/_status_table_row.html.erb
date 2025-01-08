@@ -1,0 +1,39 @@
+<% badges = [] %>
+<% if investigation.serious? %>
+  <% badges << capture do %>
+    <%= tag.span t(:risk_level_serious, scope: "case.badges"),
+          class: "opss-tag opss-tag--risk1"
+    %>
+  <% end %>
+<% end %>
+<% if investigation.high? %>
+  <% badges << capture do %>
+    <%= tag.span t(:risk_level_high, scope: "case.badges"),
+          class: "opss-tag opss-tag--risk1"
+    %>
+  <% end %>
+<% end %>
+<% if investigation.is_closed? %>
+  <% badges << capture do %>
+    <%= tag.span t(:closed, scope: "case.badges"),
+          class: "opss-tag opss-tag--risk3"
+    %>
+  <% end %>
+<% end %>
+
+<tr class="govuk-table__row">
+  <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :status %>" class="govuk-visually-hidden">
+    Type
+  </th>
+  <td headers="<%= dom_id investigation, :item %> <%= dom_id investigation, :status %>" colspan="5" class="govuk-table__cell">
+    <%= tag.span investigation.case_type.upcase_first, class: class_names("opss-tag", "opss-tag--std", investigation.is_closed? && "opss-cross-through") unless investigation.case_type.blank? %>
+    <% if investigation.products.count.zero? && ["team_cases", "your_cases"].include?(@page_name) %>
+      <span class="govuk-visually-hidden"> | </span>
+      <span class="opss-tag opss-tag--risk4">This notification has no product</span>
+    <% end %>
+    <% badges.each do |badge| %>
+      <span class="govuk-visually-hidden"> | </span>
+      <%= badge %>
+    <% end %>
+  </td>
+</tr>

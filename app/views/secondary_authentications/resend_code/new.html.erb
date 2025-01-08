@@ -1,0 +1,27 @@
+<% title = "Resend security code" %>
+<% page_title(title, errors: @user.errors.any?) %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: new_secondary_authentication_path) %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @user, url: resend_secondary_authentication_code_path, method: "post", builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can resend it.</p>
+      <% if @user.mobile_number_change_allowed? %>
+        <%= govuk_details(summary_text: "Change where the text message is sent", open: @user.errors.any?) do %>
+          <%= form.govuk_phone_field(
+            :mobile_number,
+            label: { text: "Mobile number" },
+            class: ["govuk-!-width-two-thirds"],
+            autocomplete: "tel"
+          ) %>
+        <% end %>
+      <% else %>
+        <p class="govuk-body">If you no longer have access to the phone with the number you registered for this service, <a href="mailto:<%= t(:enquiries_email) %>?subject=Update mobile number" class="govuk-link">email OPSS</a> to reset the number.</p>
+      <% end %>
+      <%= form.govuk_submit("Resend security code") %>
+    <% end %>
+  </div>
+</div>

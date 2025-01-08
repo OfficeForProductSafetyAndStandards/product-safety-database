@@ -1,0 +1,20 @@
+<% page_heading = "You can’t upload a mix of multiple non-compliant and unsafe products - Upload multiple products" %>
+<% page_title page_heading %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: triage_bulk_upload_products_path) %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Upload multiple products</span>
+      You can’t upload a mix of multiple non-compliant and unsafe products
+    </h1>
+    <p class="govuk-body">
+      Each unsafe product requires a <a href="<%= prism.perform_risk_triage_path %>" class="govuk-link">risk triage</a> or <a href="<%= your_prism_risk_assessments_path %>" class="govuk-link">risk assessment</a>.
+    </p>
+    <p class="govuk-body">
+      You can only upload multiple non-compliant products.
+    </p>
+    <%= govuk_button_link_to("Return to product list", your_products_path) %>
+  </div>
+</div>

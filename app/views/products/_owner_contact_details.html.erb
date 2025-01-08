@@ -1,0 +1,38 @@
+<h1 class="govuk-heading-l govuk-!-margin-bottom-3">Contact the product record owner</h1>
+<p class="govuk-body-s opss-secondary-text govuk-!-margin-bottom-8">
+  You can contact the current product record owner with editorial requests, amendments, or additional information or general enquiries.
+</p>
+
+<% contact_html = capture do %>
+  <% if product.owning_team.team_recipient_email.present? %>
+    <p class="govuk-body">
+      <span class="govuk-visually-hidden">Email: </span>
+      <%= mail_to product.owning_team.team_recipient_email, nil, class: "govuk-link govuk-link--no-visited-state" %>
+    </p>
+  <% end %>
+<% end %>
+<%
+  date_case_closed = local_assigns[:investigation_closed_at]
+  psd_ref = date_case_closed.present? ? product.psd_ref(timestamp: date_case_closed.to_i, investigation_was_closed: true) : product.psd_ref
+  rows = [
+    {
+      key: { text: "Product record" },
+      value: { text: psd_ref }
+    },
+    {
+      key: { text: "Record owner" },
+      value: { text: product.owning_team.name }
+    },
+    {
+      key: { text: "Organisation" },
+      value: { text: product.owning_team.organisation.name }
+    }
+  ]
+  if contact_html.present?
+    rows << {
+      key: { text: "Contact details" },
+      value: { text: contact_html }
+    }
+  end
+%>
+<%= govuk_summary_list(rows:) %>

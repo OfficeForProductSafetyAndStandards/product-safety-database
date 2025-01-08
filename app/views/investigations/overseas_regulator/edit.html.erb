@@ -1,0 +1,30 @@
+<% page_heading = "Was the allegation made by an overseas regulator?" %>
+<% page_title page_heading, errors: @overseas_regulator_form.errors.any? %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with scope: :investigation, model: @overseas_regulator_form, url: investigation_overseas_regulator_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+      <%= form.govuk_error_summary %>
+
+      <% select_menu_html = capture do %>
+        <%= form.govuk_collection_select :notifying_country,
+                                         options_for_overseas_regulator(Country.overseas_countries, @overseas_regulator_form),
+                                         :value,
+                                         :text,
+                                         label: { text: "Select which country" } %>
+      <% end %>
+
+
+      <%= form.govuk_radio_buttons_fieldset(:is_from_overseas_regulator, legend: { size: 'l', text: "<h1 class=\"govuk-fieldset__heading\">Was the allegation made by an overseas regulator?</h1>".html_safe }, hint: { text: "Select no if the allegation was from the <abbr>UK</abbr>.".html_safe }) do %>
+        <%= form.govuk_radio_button :is_from_overseas_regulator, true, label: { text: t("investigations.overseas_regulator.option_yes") }, link_errors: true  do %>
+          <%= select_menu_html %>
+        <% end %>
+        <%= form.govuk_radio_button :is_from_overseas_regulator, false, label: { text: t("investigations.overseas_regulator.option_no") } %>
+      <% end %>
+
+      <div class="govuk-button-group">
+        <%= form.govuk_submit "Save" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>

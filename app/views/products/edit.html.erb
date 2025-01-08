@@ -1,0 +1,31 @@
+<%= page_title "Edit product", errors: @product_form.errors.any? %>
+<%= form_with model: @product_form, scope: :product, url: product_path(@product_form.id), method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form.govuk_error_summary  %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2"><%= @product_form.name %></h1>
+      <p class="govuk-body govuk-!-margin-bottom-7 opss-secondary-text">If a record of a product does not already exist in the Product Safety Database (<%= psd_abbr title: false %>), you can create a product record for the product. This will also generate a new <%= psd_abbr %> product record reference number.</p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <% not_allowed = if @product.owning_team == nil
+                          false
+                        elsif @product.owning_team == current_user.team
+                          false
+                        elsif current_user.is_superuser?
+                          false
+                        else
+                          true
+                        end
+      %>
+      <%= render "form", form: form, product_form: @product_form, countries: @countries, search: false, disable_permanent_fields: true,  disable_image_upload: true, is_not_allowed: not_allowed %>
+    </div>
+  </div>
+<% end %>

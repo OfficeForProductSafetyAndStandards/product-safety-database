@@ -1,0 +1,24 @@
+<table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table-items--sm opss-table--borders">
+  <caption class="govuk-table__caption govuk-visually-hidden">Businesses: a simple data table.</caption>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Trading name</th>
+      <th scope="col" class="govuk-table__header">Registered or Legal name</th>
+      <th scope="col" class="govuk-table__header">Company number</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <% businesses.each do |business| %>
+      <%= render "table_row", business: business %>
+    <% end %>
+  </tbody>
+  <% if @count > 11 %>
+    <tfoot class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Trading name</th>
+        <th scope="col" class="govuk-table__header">Registered or Legal name</th>
+        <th scope="col" class="govuk-table__header">Company number</th>
+      </tr>
+    </tfoot>
+  <% end %>
+</table>

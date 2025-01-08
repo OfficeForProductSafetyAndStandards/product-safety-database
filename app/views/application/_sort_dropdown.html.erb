@@ -1,0 +1,16 @@
+<div class="<%= custom_classes ? custom_classes : "govuk-grid-column-one-third" %>">
+  <div class="govuk-form-group opss-text-align-right">
+    <fieldset id="sort-by-fieldset" class="opss-border-none govuk-!-padding-0 opss-nojs-hide">
+      <label class="govuk-label govuk-body-s" for="sort_by">
+          Sort <span class="govuk-visually-hidden">the results</span> by
+      </label>
+      <select class="govuk-select govuk-!-margin-bottom-1" id="sort_by">
+        <%= options_for_sort_by(sort_by_items, selected_value, sort_direction) %>
+      </select>
+    </fieldset>
+    <dl class="govuk-list opss-float-right opss-dl-select opss-js-enabled-hidden">
+      <dt>Sort <span class="govuk-visually-hidden">the results</span> by</dt>
+      <%= definition_list_items_for_sort_by(sort_by_items, selected_value, sort_direction) %>
+    </dl>
+  </div>
+</div>

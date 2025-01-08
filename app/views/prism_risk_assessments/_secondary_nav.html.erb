@@ -1,0 +1,28 @@
+<a href="#page-content" class="govuk-skip-link opss-skip-link">
+  Skip to the main content
+</a>
+<nav aria-label="Secondary">
+  <ul class="govuk-list opss-left-nav">
+    <% if @page_name == "your_prism_risk_assessments" %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "Your risk assessments", your_prism_risk_assessments_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_prism_risk_assessments") %>
+      </li>
+    <% if @page_name == "team_prism_risk_assessments" %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "Team risk assessments", team_prism_risk_assessments_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_prism_risk_assessments") %>
+      </li>
+    <% unless ["team_prism_risk_assessments", "your_prism_risk_assessments"].include? @page_name %>
+      <li class="opss-left-nav__active">
+    <% else %>
+      <li>
+    <% end %>
+        <%= link_to "All risk assessments - Search", all_prism_risk_assessments_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_prism_risk_assessments", "your_prism_risk_assessments"].include? @page_name) %>
+      </li>
+    </ul>
+  </nav>

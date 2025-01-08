@@ -1,0 +1,51 @@
+<%= form_with(model: correspondence_form, url:, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+      <%= form.govuk_error_summary(presenter: ErrorSummaryPresenter)  %>
+
+      <span class="govuk-caption-l"><%= investigation.pretty_description %></span>
+
+      <h1 class="govuk-heading-l">Record phone call</h1>
+
+      <%= form.govuk_fieldset legend: {text: "Who was the call with?"} do %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <%= form.govuk_text_field :correspondent_name, label: {text: "Name"} %>
+            <%= form.govuk_text_field :phone_number, label: {text: "Phone number"}, hint: {text: "Please include any dialing codes etc"} %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= form.govuk_date_field :correspondence_date, correspondence_date: true, legend: { text: "Date of call" } %>
+
+
+      <%= form.govuk_text_field :overview, label: {text: "Summary"}, hint: {text: "Give an overview of the phone call"}, size: 'm', width: 'two-thirds' %>
+
+      <%= form.govuk_fieldset legend: {text: "Details"} do %>
+        <span id="details-hint" class="govuk-hint govuk-!-width-full">Upload the transcript if you have one, or enter notes below</span>
+        <div class="govuk-form-group">
+          <%= form.hidden_field :existing_transcript_file_id %>
+          <% file_upload_field = capture do %>
+            <%= form.govuk_file_field :transcript, label: {text: "Upload a file"} %>
+          <% end %>
+
+          <% if form.object.transcript.present? %>
+            <p id="current-attachment-details">
+              Currently selected file:
+              <%= link_to "#{form.object.transcript.filename} (opens in new tab)", url_for(form.object.transcript), target: "_blank", rel: "noreferrer noopener" %>
+            </p>
+
+            <%= govuk_details(summary_text: "Replace this file", text: file_upload_field) %>
+          <% else %>
+            <%= file_upload_field %>
+          <% end %>
+        </div>
+
+        <%= form.govuk_text_area :details, label: {text: "Notes"}, width: 'two-thirds', max_chars: 32_767 %>
+
+      <% end %>
+
+      <%= form.govuk_submit form.object.persisted? ? "Update phone call" : "Add phone call" %>
+    </div>
+<% end %>

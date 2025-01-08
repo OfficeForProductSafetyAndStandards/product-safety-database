@@ -1,0 +1,18 @@
+<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_notification_details.title"), errors: @change_notification_details_form.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @change_notification_details_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.notification_details.title") %></span>
+        <%= t("notifications.create.index.sections.notification_details.tasks.add_notification_details.title") %>
+      </h1>
+      <%= f.govuk_text_field :user_title, label: { text: "Notification title", size: "m" }, hint: { text: "A recommended format for the notification title includes the name of the product(s) and the hazard associated with it." } %>
+      <%= f.govuk_text_area :description, label: { text: "Notification summary <span class=\"govuk-body-s\">(optional)</span>".html_safe, size: "m" }, hint: { text: "The notification summary provides a clear, concise overview to help users unfamiliar with the notification's details understand it better." }, max_chars: 10_000 %>
+      <%= f.govuk_collection_radio_buttons :reported_reason, reported_reason_options, :id, :name, :description, legend: { text: "Why are you creating the notification?" }, bold_labels: false %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

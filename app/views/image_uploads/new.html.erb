@@ -1,0 +1,70 @@
+<% title = "Add an image" %>
+<%= page_title title, errors: @image_upload.errors.any? %>
+<%= form_with model: @image_upload, builder: GOVUKDesignSystemFormBuilder::FormBuilder, url: associated_image_uploads_path(@parent) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form.govuk_error_summary %>
+      <span class="govuk-caption-l"><%= @parent.pretty_description %></span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-1"><%= title %></h1>
+
+      <% if (@parent.is_a?(Investigation) || @parent.is_a?(Product)) %>
+        <% hint_text = @parent.is_a?(Investigation) ? "To provide visual evidence of the product hazard or incident/accident, you can upload either a single image or multiple images to the notification." : "Image files will be saved to the product images." %>
+        <div class="govuk-hint"><%= hint_text %></div>
+        <div class="govuk-hint">Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF. Maximum file size: 100MB.</div>
+      <% end %>
+      <% #had the put the file upload twice, the hidden field is to prevent the form from
+         #failing if not file is supplied, then return the errors
+      %>
+      <%= form.hidden_field :file_upload, value: nil %>
+      <%= form.govuk_file_field :file_upload, label: { text: 'Identification photograph', hidden: true } %>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      <% if @parent.is_a?(Investigation) && params[:image_upload_id].present? %>
+        <% params[:image_upload_id].each do |image_upload_id| %>
+          <input type="hidden" name="image_upload_id[]" value="<%= image_upload_id %>">
+        <% end %>
+        <table class="govuk-table">
+          <caption class="govuk-visually-hidden">
+            A table of images already uploaded for this notification during the current session.
+          </caption>
+          <thead class="govuk-table__head govuk-visually-hidden">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">File name</th>
+            <th scope="col" class="govuk-table__header opss-text-align-right">Remove file</th>
+          </tr>
+          </thead>
+          <tbody class="govuk-table__body" data-cy-case-id="<%= @parent.pretty_id %>">
+          <% params[:image_upload_id].each do |image_upload_id| %>
+            <%
+              image_upload = @parent.image_uploads.find_by(id: image_upload_id)
+              next unless image_upload
+            %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <a href="<%= url_for(image_upload.file_upload) %>" class="govuk-link" rel="noreferrer noopener" target="_blank"><%= image_upload.file_upload.filename %></a>
+              </td>
+              <td class="govuk-table__cell opss-text-align-right">
+                <a href="<%= remove_investigation_image_upload_path(@parent, image_upload, multiple: true, image_upload_id: (params[:image_upload_id] - [image_upload_id])) %>" class="govuk-link">Remove</a>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+          <% if params[:image_upload_id].size > 11 %>
+            <tfoot class="govuk-table__head govuk-visually-hidden">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">File name</th>
+              <th scope="col" class="govuk-table__header opss-text-align-right">Remove file</th>
+            </tr>
+            </tfoot>
+          <% end %>
+        </table>
+      <% end %>
+
+      <%= form.govuk_submit "Upload" %>
+
+      <% if @parent.is_a?(Investigation) %>
+        <p class="govuk-body"><a href="<%= investigation_images_path(@parent) %>" class="govuk-link">Finish uploading images</a></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

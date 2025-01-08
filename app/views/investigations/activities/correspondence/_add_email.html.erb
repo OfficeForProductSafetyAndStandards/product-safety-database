@@ -1,0 +1,44 @@
+<div class="govuk-body">
+  <% if activity.metadata["overview"].present? %>
+    Summary: <%= activity.metadata["overview"] %><br>
+  <% end %>
+
+  <% if activity.metadata["correspondence_date"].present? %>
+    Date of email: <%= activity.correspondence_date %><br>
+  <% end %>
+
+  <% if activity.metadata["correspondent_name"].present? %>
+    Contact: <%= activity.metadata["correspondent_name"] %><br>
+  <% end %>
+
+  <% if activity.metadata["correspondent_email"].present? %>
+    Email address: <%= activity.metadata["correspondent_email"] %><br>
+  <% end %>
+
+  <% if activity.metadata["subject"].present? %>
+    Subject: <%= activity.metadata["subject"] %><br>
+  <% end %>
+
+  <% if activity.metadata["details"].present? %>
+    Email: <%= format_with_line_breaks(activity.metadata["details"]) %><br>
+  <% end %>
+
+  <% if activity.metadata["email_file_name"].present? %>
+    Email: <%= activity.metadata["email_file_name"] %><br>
+  <% end %>
+
+  <% if activity.metadata["email_attachment_name"].present? %>
+    Email attachment: <%= activity.metadata["email_attachment_name"] %><br>
+  <% end %>
+
+  <% if activity.metadata["email_attachment_description"].present? %>
+    Attachment description: <%= activity.metadata["email_attachment_description"] %><br>
+  <% end %>
+
+  <% if activity.metadata["email_body"].present? %>
+    <%= activity.metadata["email_body"] %><br>
+  <% end %>
+
+</div>
+
+<%= link_to "View email", investigation_email_path(activity.investigation, activity.correspondence_id), class: "govuk-link--no-visited-state" %>

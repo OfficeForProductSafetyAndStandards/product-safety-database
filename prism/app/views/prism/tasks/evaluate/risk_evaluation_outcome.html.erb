@@ -1,0 +1,34 @@
+<% content_for :page_title, "Risk evaluation outcome" %>
+<% @errors = @evaluation.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @evaluation, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Evaluate product risk and submit assessment</span>
+        Risk evaluation outcome
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">Overall product risk recorded in the assessment</p>
+        <p class="govuk-body"><%= overall_product_risk_level.risk_level_tag_html %></p>
+      <% end %>
+      <p class="govuk-body">The <abbr>PRISM</abbr> <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=28" class="govuk-link" rel="noreferrer noopener" target="_blank">guide</a> contains information to help you in deciding on the tolerability of the risk.</p>
+      <%=
+        f.govuk_collection_radio_buttons :risk_tolerability,
+        [
+          OpenStruct.new(id: "tolerable", name: "Risk is tolerable", description: "Risk management action is not normally required, however action may still be needed to address any relevant non-compliance."),
+          OpenStruct.new(id: "intolerable", name: "Risk is intolerable", description: "Risk management action will normally be required to reduce the risk to a tolerable level and to comply with the law.")
+        ],
+        :id,
+        :name,
+        :description,
+        legend: { text: "How would you describe the risk presented by the product?" },
+        bold_labels: false
+      %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

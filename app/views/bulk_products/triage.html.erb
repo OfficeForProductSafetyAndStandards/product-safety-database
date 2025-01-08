@@ -1,0 +1,23 @@
+<% page_heading = "How would you describe the products in terms of their compliance and safety? - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_triage_form.errors.any? %>
+<%= form_with model: @bulk_products_triage_form, url: triage_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        How would you describe the products in terms of their compliance and safety?
+      </h1>
+      <%= form.govuk_radio_buttons_fieldset(:compliance_and_safety, legend: nil) do %>
+        <%= form.govuk_radio_button :compliance_and_safety, "unsafe", label: { text: "Products are unsafe" }, hint: { text: "Products pose significant risk and might require risk assessment." }, link_errors: true %>
+        <%= form.govuk_radio_button :compliance_and_safety, "non_compliant", label: { text: "Products are non-compliant" }, hint: { text: "For example, incomplete markings, product labelling or documentation non-compliance." } do %>
+          <%= form.govuk_text_area :hazard_description, label: { text: "Why are the products non-compliant?" }, max_chars: 10_000 %>
+        <% end %>
+        <%= form.govuk_radio_button :compliance_and_safety, "mixed", label: { text: "Mix of non-compliant and unsafe products" } %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Continue") %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,20 @@
+<%= page_title(t("notifications.create.index.sections.business_details.tasks.add_business_contact.title"), errors: @add_contact_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @add_contact_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
+        <%= t("notifications.create.index.sections.business_details.tasks.add_business_contact.title") %>
+      </h1>
+      <%= f.govuk_text_field :name, label: { text: "Full name (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :job_title, label: { text: "Job title or role description (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :email, label: { text: "Email (optional)" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :phone_number, label: { text: "Phone (optional)" }, hint: { text: "For international numbers include the country code." }, width: "two-thirds" %>
+      <%= f.hidden_field :contact_id %>
+      <%= f.hidden_field :business_id %>
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>

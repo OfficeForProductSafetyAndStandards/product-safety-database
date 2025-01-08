@@ -1,0 +1,43 @@
+<% page_heading = "Record a corrective action - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_create_corrective_action_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: choose_products_for_corrective_actions_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_create_corrective_action_form, scope: :corrective_action, url: create_corrective_action_bulk_upload_products_path(product_ids: params[:product_ids]), method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Record a corrective action
+      </h1>
+      <div class="govuk-inset-text">
+        <h2 class="govuk-heading-m">Products selected for corrective action</h2>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @products.decorate.each do |product| %>
+            <li><%= sanitize(product.name_with_brand) %></li>
+          <% end %>
+        </ul>
+      </div>
+      <%= render "investigations/corrective_actions/form",
+                 f: f,
+                 corrective_action: @bulk_products_create_corrective_action_form,
+                 investigation: @bulk_products_upload.investigation,
+                 allow_product_linking: false,
+                 allow_business_linking: false %>
+      <% file_field = capture do %>
+        <%= f.hidden_field :existing_document_file_id %>
+        <%= render "related_attachment_fields", form: f, file_blob: @file_blob, attachment_name: :file %>
+      <% end %>
+      <%= f.govuk_radio_buttons_fieldset :related_file, legend: { text: "Are there any files related to the action?", size: "m" } do %>
+        <%= f.govuk_radio_button :related_file, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= file_field %>
+        <% end %>
+        <%= f.govuk_radio_button :related_file, false, label: { text: "No" } %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit("Continue") %>
+      </div>
+    </div>
+  </div>
+<% end %>

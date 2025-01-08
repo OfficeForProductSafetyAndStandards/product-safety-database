@@ -1,0 +1,43 @@
+<h2 class="govuk-heading-m">Contacts</h2>
+
+<p class="govuk-body">
+  <%= link_to "Add contact", new_business_contact_path(@business), class: "govuk-link" %>
+</p>
+
+<hr class="govuk-section-break govuk-section-break--m">
+
+<% if @business.contacts.any? %>
+  <% @business.contacts.each do |contact| %>
+    <table class="govuk-table govuk-!-margin-bottom-0">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row" %>
+          <%= contact.name %>
+        </th>
+        <td class="govuk-table__cell" %>
+          <%= contact.job_title %>
+        </td>
+        <td class="govuk-table__cell">
+          <%= contact.phone_number %>
+        </td>
+        <td class="govuk-table__cell">
+          <%= contact.email %>
+        </td>
+      </tr>
+    </table>
+
+    <div class="govuk-button-group">
+      <%= link_to "Edit contact",
+        edit_business_contact_path(@business, contact),
+        class: "govuk-link"
+      %>
+      <%= link_to "Remove contact",
+        remove_business_contact_path(@business, contact),
+        class: "govuk-link"
+      %>
+    </div>
+  <% end %>
+<% else %>
+  <p class="govuk-body">
+    No contacts
+  </p>
+<% end %>

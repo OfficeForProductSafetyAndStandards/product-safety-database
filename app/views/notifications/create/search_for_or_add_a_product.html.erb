@@ -1,0 +1,143 @@
+<%= page_title(t("notifications.create.index.sections.product.tasks.search_for_or_add_a_product.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l"><%= t("notifications.create.index.sections.product.title") %></span>
+          <%= t("notifications.create.index.sections.product.tasks.search_for_or_add_a_product.title") %>
+        </h1>
+      </div>
+      <% unless @manage %>
+        <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+          <%= govuk_button_link_to "Add a new product", new_product_path(notification_pretty_id: @notification.pretty_id), secondary: true %>
+        </div>
+      <% end %>
+    </div>
+    
+    <% if @manage %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <p class="govuk-body">You have added <%= pluralize(@existing_product_ids.length, "product") %>.
+          <% if @notification.tasks_status["add_notification_details"] == "completed" %>
+            <p class="govuk-body">You have completed adding products. If removal of any products is necessary, please delete the current notification and create a new one.</p>
+          <% else %>
+            <p class="govuk-body">Once you complete adding products, you will not be able to subsequently remove any products without deleting the current notification and creating a new one.</p>
+          <% end %>
+          <%=
+            govuk_summary_list do |summary_list|
+              @notification.investigation_products.decorate.each do |investigation_product|
+                summary_list.with_row do |row|
+                  row.with_key(text: sanitize(investigation_product.product.name_with_brand))
+                  row.with_action(text: "Remove", href: remove_product_notification_create_index_path(investigation_product_id: investigation_product.id), visually_hidden_text: "product from notification") unless @notification.tasks_status["add_notification_details"] == "completed"
+                end
+              end
+            end
+          %>
+          <%= form_with model: @add_another_product, url: request.fullpath, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+            <%= f.govuk_error_summary %>
+            <%= f.govuk_collection_radio_buttons :add_another_product, [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")], :id, :name, inline: true, legend: { text: "Do you need to add another product?", size: "m" } %>
+            <%= f.govuk_submit "Continue", name: "final", value: "true" %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+          <nav aria-label="Secondary">
+            <ul class="govuk-list opss-left-nav">
+              <li class="<%= "opss-left-nav__active" unless ["team_products", "your_products"].include?(@page_name) %>">
+                <%= link_to "All products", wizard_path, class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" unless ["team_products", "your_products"].include?(@page_name)) %>
+              </li>
+              <li class="<%= "opss-left-nav__active" if @page_name == "team_products" %>">
+                <%= link_to "Team products", "#{wizard_path}?page_name=team_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "team_products") %>
+              </li>
+              <li class="<%= "opss-left-nav__active" if @page_name == "your_products" %>">
+                <%= link_to "Your products", "#{wizard_path}?page_name=your_products", class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if @page_name == "your_products") %>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="govuk-grid-column-three-quarters">
+          <% unless ["team_products", "your_products"].include?(@page_name) %>
+            <%= form_with url: wizard_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="moj-search">
+                    <div class="govuk-form-group">
+                      <label for="q-field" class="govuk-label moj-search__label">Search by product name, description or PSD reference</label>
+                      <input id="q-field" class="govuk-input moj-search__input" aria-describedby="q-hint" type="search" name="q" value="<%= params[:q] %>">
+                    </div>
+                    <button type="submit" formnovalidate="formnovalidate" class="govuk-button moj-search__button" data-module="govuk-button" data-prevent-double-click="true">
+                      <span class="govuk-visually-hidden">Search</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-third">
+                  <%= f.govuk_collection_select :sort_by, sort_by_options, :id, :name, label: { text: "Sort by" }, options: { selected: params[:sort_by] } %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+          
+          <% if @records.any? %>
+            <p class="govuk-body"><%= "There #{pluralize(@records_count, 'is', 'are')} currently #{@records_count} product#{'s' if @records_count != 1}." %></p>
+            <%=
+              govuk_table do |table|
+                table.with_caption(size: "s", text: "Product details")
+                table.with_body do |body|
+                  @records.decorate.each do |record|
+                    image = if record.virus_free_images.present?
+                      image_tag(record.virus_free_images.first.file_upload, width: 80, alt: record.virus_free_images.first.file_upload.filename)
+                    else
+                      image_tag("no-product-image.jpg", width: 80, height: 80, alt: "No product image available")
+                    end
+
+                    details = <<~DETAILS.strip
+                      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">#{sanitize(record.name_with_brand)}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Category:</strong> #{sanitize(record.category)}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-0"><strong>Sub-category:</strong> #{sanitize(record.subcategory)}</p>
+                      <p class="govuk-body-s govuk-!-margin-bottom-1"><strong>PSD reference:</strong> #{sanitize(record.psd_ref)}</p>
+                      #{
+                        if record.barcode.present? || record.product_code.present? || record.unformatted_description.present?
+                          govuk_details(summary_text: "More details", classes: "govuk-!-font-size-16 govuk-!-margin-bottom-0") do
+                            details = []
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Barcode:</strong> #{sanitize(record.barcode)}</p>" if record.barcode.present?
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Other product identifiers:</strong> #{sanitize(record.product_code)}</p>" if record.product_code.present?
+                            details << "<p class=\"govuk-body-s govuk-!-margin-bottom-0\"><strong>Product description:</strong> #{sanitize(record.unformatted_description)}</p>" if record.unformatted_description.present?
+                            details.join.html_safe
+                          end
+                        end
+                      }
+                    DETAILS
+
+                    select_button = form_with url: "#{wizard_path}?product_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
+                      f.govuk_submit "Select", name: "draft", value: true, secondary: true
+                    end
+
+                    body.with_row do |row|
+                      row.with_cell(text: image.html_safe)
+                      row.with_cell(header: true, text: details.html_safe)
+                      if @existing_product_ids.include?(record.id)
+                        row.with_cell(text: "")
+                      else
+                        row.with_cell(text: select_button)
+                      end
+                    end
+                  end
+                end
+              end
+            %>
+            <%= govuk_pagination(pagy: @pagy) %>
+          <% else %>
+            <p class="govuk-body">
+              <%= "There are no product records." unless @search_query.present? %>
+              <%= "There are no product records for \"#{@search_query}\"." if @search_query.present? %>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

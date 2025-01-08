@@ -1,0 +1,1107 @@
+en:
+  enquiries_email: "opss.enquiries@businessandtrade.gov.uk"
+  mail:
+    notification_risk_level_updated:
+      verb_with_level:
+        increased: "Increased to high"
+        decreased: "Decreased to low"
+        set: "set to %{level}"
+        changed: "changed to %{level}"
+        removed: "removed"
+    team_added_to_notification:
+      message_from: "Message from %{user_name}:"
+    team_removed_from_notification:
+      message_from: "Message from %{user_name}:"
+    notification_permission_changed_for_team:
+      message_from: "Message from %{user_name}:"
+      permission:
+        edit: "edit full notification"
+        readonly: "view full notification"
+
+  why_reporting_form:
+    no_checkboxes_selected: "Choose at least one option"
+    reason:
+      unsafe: "As unsafe"
+      non_compliant: "As non-compliant"
+      unsafe_and_non_compliant: "As unsafe and non-compliant"
+      safe_and_compliant: "As safe and compliant"
+  invite_user_to_team:
+    invite_sent: "Invite sent to %{email}"
+  delete_team:
+    change_case_owner_rationale: "%{team} was merged into %{new_team} by %{user}. %{team} previously owned this notification."
+    add_remove_team_message: "%{team} was merged into %{new_team} by %{user}. %{team} previously had access to this notification."
+  change_case_status:
+    email_subject_text: "%{case_type} was %{status}"
+    email_update_text_closed: "%{case_type} was closed by %{name}. Emails about edits made to notifications are not sent when edits are made to closed notifications."
+    email_update_text_reopened: "%{case_type} was re-opened by %{name}."
+  change_case_visibility:
+    email_subject_text: "%{case_type} was %{visibility}"
+    email_update_text: "%{case_type} was %{visibility} by %{name}."
+  change_risk_validation:
+    validated: "has been validated"
+    validation_removed: "has had validation removed"
+  add_phone_call_to_case:
+    email_subject_text: "%{case_type} updated"
+  update_phone_call:
+    email_subject_text: "%{case_type} updated"
+  create_case: "Create a notification"
+  case:
+    badges:
+      coronavirus_related: "COVID-19 related notification"
+      closed: "Notification closed"
+      restricted: "Restricted notification"
+      risk_level_high: "High risk notification"
+      risk_level_serious: "Serious risk notification"
+    coronavirus_related:
+      true: "Coronavirus related notification"
+    protected_details: "Only teams added to the notification can view %{data_type}."
+    is_private:
+      false: Visible to all
+      true: Restricted for legal privilege
+  supporting_information:
+    restricted_generic:
+      title: "Attachment"
+    sorting:
+      date_of_activity: "Date of activity"
+      date_added: "Date added"
+      title: "Title"
+  products:
+    titles:
+      team_products: Team products
+      your_products: Your products
+      all_products: All Products - Search
+    counterfeit: This is a product record for a counterfeit product
+    genuine: This product record is about a genuine product
+
+  businesses:
+    titles:
+      team_businesses: Team businesses
+      your_businesses: Your businesses
+      all_businesses: All Businesses - Search
+    form:
+      trading_name:
+        label: Trading name
+        hint: The name the business is known as.
+      legal_name:
+        label: Registered or legal name
+        hint_html: As it appears on Companies House for <abbr>UK</abbr> businesses (usually ends in 'Ltd' or 'Limited').
+      company_number:
+        label: Company number
+        hint_html: In the <abbr>UK</abbr> this is an eight-digit number assigned to incorporated businesses.
+    contacts:
+      form:
+        legend:
+          title: Contacts
+          hint: These are the details for a contact at the business.
+    locations:
+      address_form:
+        legend:
+          title: Official address
+          hint: You can add additional addresses after you have added the business.
+  investigations:
+    activities:
+      business:
+        destroy:
+          view_business: "View business"
+    businesses:
+      destroy:
+        business_successfully_deleted: "Business was successfully removed."
+      form:
+        remove_business_legend: "Do you want to remove the business from the notification?"
+        yes_label: "Yes"
+        no_label: "No"
+        reason_for_removing_the_business_from_the_case: "Reason for removing the business from the notification"
+        cancel: "Cancel"
+      remove:
+        cannot_remove_business_warning: "Cannot remove the business from the notification because it's associated with the following supporting information:"
+        remove_business_warning_html: Remove a business from a notification if it's not relevant. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>.
+      empty: This notification has not added any businesses.
+    business_types:
+      new:
+        heading: What is the business type?
+        hint: What is the business role as an economic operator in the supply chain?
+        types:
+          retailer:
+            label: Retailer
+            hint: This includes traditional retailers and retailers selling directly to customers via their own online presence.
+          online_seller:
+            label: Online seller
+            hint: This includes businesses primarily selling products to end users via an online marketplace such as Amazon.
+          online_marketplace:
+            label: Online marketplace
+            hint: Online platforms whose primary business is connecting traders and consumers and hosting third party sellers/sales.
+          authorised_representative:
+            label: Authorised representative
+            uk:
+              label: UK Authorised representative
+              value: uk_authorised_representative
+            eu:
+              label: EU Authorised representative
+              value: eu_authorised_representative
+          manufacturer:
+            label: Manufacturer
+          exporter:
+            label: Exporter
+          importer:
+            label: Importer
+          fulfillment_house:
+            label: Fulfillment house
+          distributor:
+            label: Distributor
+          responsible_person:
+            label: Responsible person
+          other:
+            label: Other online platform
+    overseas_regulator:
+      option_yes: "Yes"
+      option_no: "No"
+    tabs:
+      businesses:
+        remove_business_hint: "Removing a business from a notification cannot be undone"
+        remove:
+          remove_business_warning: "Remove a business from a notification if it's not relevant to the investigation. Business details can be changed from the Businesses tab."
+    titles:
+      team_cases: Team notifications
+      your_cases: Your notifications
+      assigned_cases: Assigned notifications
+      all_cases: All notifications – Search
+    filters:
+      teams_added_to_case: "Teams added to notification"
+      my_team: "My team"
+      other_team: "Other team"
+    no_cases:
+      title:
+        team_cases: The team has no open notifications.
+        your_cases: You have no open notifications.
+        assigned_cases: There are no open notifications your team has been added to.
+      subtitle_html: |
+        You can find all other notifications in the
+        <a href="%{cases_path}" class="govuk-link govuk-link--no-visited-state">all notifications</a> search page.
+    corrective_actions:
+      form:
+        geographic_scopes:
+          local: "Local"
+          great_britain: "Great Britain"
+          northern_ireland: "Northern Ireland"
+          eea_wide: "European Economic Area (EEA)"
+          eu_wide: "European Union (EU)"
+          worldwide: "Worldwide"
+          unknown: "Unknown"
+      helper:
+        not_specified: "Not specified"
+        has_online_recall_information:
+          has_online_recall_information_no: "Not published online"
+          has_online_recall_information_not_relevant: "Not relevant"
+          has_online_recall_information_not_provided: "Not provided"
+
+      create:
+        success: "Corrective action was successfully recorded."
+      update:
+        success: "Corrective action was successfully updated."
+      form:
+        yes: "Yes"
+        no: "No"
+        not_relevant: "Not relevant"
+        has_online_recall_information_legend: "Has the business responsible published product recall information online?"
+        online_recall_information_hint: "For example http://www.example.com or https://www.example.com"
+        online_recall_information_label: "Online recall information"
+    overview:
+      case_risk_level:
+        key: Notification risk level
+        action:
+          change: Change
+          set: Set
+        visually_hidden_text: risk level
+      safety_and_compliance:
+        key: Safety and compliance
+        reported_as: Reported as
+        primary_hazard: Primary hazard
+        description: Hazard description
+        compliance: Compliance
+        activity_log:
+          unsafe: Unsafe
+          non_compliant: Non-compliant
+          unsafe_and_non_compliant: Unsafe and non-compliant
+          safe_and_compliant: Safe and compliant
+          not_provided: Not provided
+        unsafe: Product reported as unsafe
+        non_compliant: Product reported as non-compliant
+        unsafe_and_non_compliant: Product reported as unsafe and non-compliant
+        safe_and_compliant: Product reported as safe and compliant
+        not_provided: Not provided
+      risk_assessments:
+        key:
+          one: Risk assessment
+          other: Risk assessments
+        value_html:
+          zero: No risk assessments
+          one: |
+            <p class="govuk-body">1 risk assessment</p>
+            <p class="govuk-body">Completed by %{assessed_by} on %{assessed_on}</p>
+            <p class="govuk-body">Assessed risk: %{assessed_risk}</p>
+          other: |
+            <p class="govuk-body">%{count} risk assessments</p>
+            <p class="govuk-body">Most recent by %{assessed_by} on %{assessed_on}</p>
+            <p class="govuk-body">Assessed risk: %{assessed_risk}</p>
+        action:
+          zero: Add
+          one: View
+          other: View
+        visually_hidden_text:
+          zero: risk assessment
+          one: risk assessment
+          other: risk assessments
+      hazards:
+        key: Hazards
+      compliance:
+        key: Compliance
+    coronavirus_related:
+      show:
+        title: "Is the notification related to the coronavirus outbreak?"
+        submit_button: "Update coronavirus status"
+        yes_label: "Yes, it is (or could be)"
+        no_label: "No, this is business as usual"
+        hint: "For example, notifications relating to hand sanitiser or personal protective equipment (PPE)"
+      success: "Coronavirus status updated on %{case_type}"
+    risk_validation:
+      validate: "Validate"
+      not_validated: "No"
+      validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
+      page_title: "Risk level validated"
+      validated_success_message: "The notification risk level has been validated"
+      validation_removed_success_message: "Notification risk level validation removed"
+      activity:
+        added: "The notification risk level has been validated"
+        removed: Notification risk level validation removed
+    risk_level:
+      show:
+        title:
+          set: "Set notification risk level"
+          change: "Change notification risk level"
+        risk_assessment_details_for_case_html:
+          zero: This notification does not have a risk assessment. You may want to <a class="govuk-link" href="%{add_risk_assessment_href}">add a risk assessment</a> before setting the notification risk level.
+          one: This notification has <a class="govuk-link" href="%{risk_assessment_href}">1 risk assessment</a> added, assessing the risk as %{risk_assessment_risk_levels}.
+          other:  This notification has <a class="govuk-link" href="%{supporting_information_href}">%{count} risk assessments</a> added, assessing the risk as %{risk_assessment_risk_levels}.
+        legend: Notification risk level
+        levels:
+          serious: "Serious risk"
+          high: "High risk"
+          medium: "Medium risk"
+          low: "Low risk"
+          not_conclusive: "Not conclusive"
+      success:
+        set: "The notification risk level was updated"
+        changed: "The notification risk level was updated"
+        removed: "Notification risk level removed"
+    status:
+      close:
+        title: "Close notification"
+        label: "Why are you closing the notification?"
+        hint: "For example, the product is low risk, so no further activity is expected."
+        action: "Close notification"
+      reopen:
+        title: "Re-open notification"
+        label: "Why are you re-opening the notification?"
+        hint: "For example, the business responsible needs to take further action."
+        action: "Re-open notification"
+    visibility:
+      updated: "%{case_type} has been %{status}"
+      show: "%{future_status} notification"
+      why: "Why is this notification being %{future_status}ed?"
+      restrict:
+        title: "Restrict this notification"
+        label: "Why is the notification being restricted?"
+        action: "Restrict this notification"
+      unrestrict:
+        title: "Unrestrict this notification"
+        label: "Why is the notification being unrestricted?"
+        action: "Unrestrict this notification"
+    test_results:
+      edit:
+        result_date: This test was funded under the <abbr>OPSS</abbr> Sampling Protocol and was issued on %{date}.
+        result_certificate_reference: "(<abbr>TSO</abbr> Sample Reference Number: %{reference_number})."
+        result_certificate_no_reference: (No <abbr>TSO</abbr> Sample Reference Number was recorded).
+    ts_investigations:
+      coronavirus:
+        caption: "Report an unsafe or non-compliant product"
+  prism_risk_assessments:
+    titles:
+      your_prism_risk_assessments: Your risk assessments
+      team_prism_risk_assessments: Team risk assessments
+      all_prism_risk_assessments: All risk assessments
+  audit_activity:
+    investigation:
+      coronavirus_related: Notification is related to the coronavirus outbreak.
+      update_coronavirus_status:
+        title:
+          true: "Status updated: coronavirus related"
+          false: "Status updated: not coronavirus related"
+        body:
+          true: "The notification is related to the coronavirus outbreak."
+          false: "The notification is not related to the coronavirus outbreak."
+      update_status:
+        title: "%{case_type} %{status}"
+        subtitle: "by %{user_name}, %{date}"
+      update_visibility:
+        title: "%{case_type} %{visibility}"
+        subtitle: "by %{user_name}, %{date}"
+      risk_level_updated:
+        title:
+          set: "Notification risk level set to %{level}"
+          changed: "Notification risk level changed to %{level}"
+          removed: "Notification risk level removed"
+      team_added:
+        permission:
+          edit: "edit full notification"
+          readonly: "view full notification"
+        title: "%{team_name} added to %{case_type}"
+        subtitle: "Team added by %{user_name}, %{date}"
+        body: "Permission level given: %{permission}."
+      team_deleted:
+        title: "%{team_name} removed from %{case_type}"
+        subtitle: "Team removed by %{user_name}, %{date}"
+      team_permission_changed:
+        permission:
+          edit: "edit full notification"
+          readonly: "view full notification"
+        title: "%{team_name}'s notification permission level changed"
+        subtitle: "Notification permissions updated by %{user_name}, %{date}"
+        body: "Permission level changed to '%{new_permission}' from '%{old_permission}'."
+      update_notifying_country:
+        body: "Notifying country changed from %{previous_country} to %{new_country}."
+      update_overseas_regulator:
+        body_set: Overseas regulator set to %{new_country}
+        body_changed: "Overseas regulator changed from %{previous_country} to %{new_country}"
+  cases:
+    filters:
+      coronavirus_cases_only: "Coronavirus notifications only"
+      serious_and_high_risk_level_only: "Serious and high risk notifications only"
+  test_results:
+    opss_funded:
+      yes_html: "Yes <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>Funded under the <abbr>OPSS</abbr> Sampling Protocol</span>"
+      no: "No"
+  notifications:
+    create:
+      index:
+        sections:
+          product:
+            title: Choose the product for your notification
+            tasks:
+              search_for_or_add_a_product:
+                title: Search for or add a product
+          notification_details:
+            title: Add notification and product safety details
+            tasks:
+              add_notification_details:
+                title: Add notification details
+              add_product_safety_and_compliance_details:
+                title: Add product safety and compliance details
+              add_number_of_affected_units:
+                title: Add the number of affected products
+          business_details:
+            title: Add businesses and their roles in the supply chain
+            tasks:
+              search_for_or_add_a_business:
+                title: Search for or add a business
+              add_business_details:
+                title: Add business details
+              add_business_roles:
+                title: Add the business's role
+              add_business_details_duplicate:
+                title: We found a similar business
+              add_business_location:
+                title: Add business addresses
+              add_business_contact:
+                title: Add business contact details
+              confirm_business_details:
+                title: Business details
+          evidence:
+            title: Add product identification and evidence details
+            tasks:
+              add_product_identification_details:
+                title: Add product identification details
+              add_product_identification_details_batch_numbers:
+                title: Add batch numbers
+              add_product_identification_details_customs_codes:
+                title: Add customs codes
+              add_product_identification_details_ucr_numbers:
+                title: Add Unique Consignment Reference (UCR) numbers
+              add_test_reports:
+                title: Add test reports
+                select_product:
+                  title: Select a product to attach a test report
+                opss_funding:
+                  title: Was the test funded under the OPSS sampling protocol for Local Authorities?
+                opss_funding_details:
+                  title: Add the test certificate details
+                report_details:
+                  title: Add test report
+              add_supporting_images:
+                title: Add supporting images
+              add_supporting_documents:
+                title: Add supporting documents
+              add_risk_assessments:
+                title: Add risk assessments
+                select_product:
+                  title: Select a product to attach a risk assessment
+                prism_or_legacy:
+                  title: Add risk assessment
+                legacy:
+                  title: Add legacy risk assessment
+              determine_notification_risk_level:
+                title: Evaluate notification risk level
+          corrective_actions:
+            title: Add corrective actions
+            tasks:
+              record_a_corrective_action:
+                title: Record a corrective action
+                corrective_action_taken:
+                  title: Have you taken a corrective action for the unsafe or non-compliant product(s)?
+                later:
+                  title: You can record the corrective action later
+                select_products:
+                  title: Select products to record a corrective action
+          submit:
+            title: Submit notification
+            tasks:
+              check_notification_details_and_submit:
+                title: Check the notification details and submit
+              confirmation:
+                title: Notification submitted
+
+  errors:
+    format: "%{message}"
+    messages:
+      invalid_image_type: "The selected file must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF"
+      # Full list available at https://guides.rubyonrails.org/i18n.html#error-message-interpolation
+      # with default values at https://github.com/rails/rails/blob/master/activemodel/lib/active_model/locale/en.yml
+      inclusion: "%{attribute} is not included in the list"
+      exclusion: "%{attribute} is reserved"
+      invalid: "%{attribute} is invalid"
+      taken: "%{attribute} has already been taken"
+      confirmation: "%{attribute} doesn’t match %{attribute}"
+      accepted: "%{attribute} must be accepted"
+      empty: "%{attribute} cannot be empty"
+      blank: "%{attribute} cannot be blank"
+      present: "%{attribute} must be blank"
+      too_long:
+        one: "%{attribute} is too long (maximum is 1 character)"
+        other: "%{attribute} is too long (maximum is %{count} characters)"
+      too_short:
+        one: "%{attribute} is too short (minimum is 1 character)"
+        other: "%{attribute} is too short (minimum is %{count} characters)"
+      wrong_length:
+        one: "%{attribute} is the wrong length (should be 1 character)"
+        other: "%{attribute} is the wrong length (should be %{count} characters)"
+      not_a_number: "%{attribute} is not a number"
+      not_an_integer: "%{attribute} must be an integer"
+      greater_than: "%{attribute} must be greater than %{count}"
+      greater_than_or_equal_to: "%{attribute} must be greater than or equal to %{count}"
+      equal_to: "%{attribute} must be equal to %{count}"
+      less_than: "%{attribute} must be less than %{count}"
+      less_than_or_equal_to: "%{attribute} must be less than or equal to %{count}"
+      other_than: "%{attribute} must be other than %{count}"
+      odd: "%{attribute} must be odd"
+      even: "%{attribute} must be even"
+
+      # Our own
+      date_missing_component: "%{attribute} must include a %{missing_components}"
+    attributes:
+      email_address:
+        invalid: "Enter an email address in the correct format, like name@example.com"
+
+  activemodel:
+    errors:
+      models:
+        add_business_to_notification_form:
+          attributes:
+            relationship:
+              inclusion: Select a business type
+        set_business_type_on_case_form:
+          attributes:
+            type:
+              blank: Select a business type
+              inclusion: Select a business type
+            online_marketplace_id:
+              blank: Select an online marketplace
+              inclusion: Select an online marketplace
+            authorised_representative_choice:
+              blank: Select an authorised representative region
+              inclusion: Select an authorised representative region
+        remove_business_form:
+          attributes:
+            remove:
+              inclusion: "Select yes if you want to remove the business from the notification"
+            reason:
+              blank: "Enter the reason for removing the business from the notification"
+        accident_or_incident_form:
+          attributes:
+            is_date_known:
+              inclusion: Select yes if you know when the %{type} happened
+            investigation_product_id:
+              blank: Select the product involved in the %{type}
+            severity:
+              inclusion: Select the severity of the %{type}
+            usage:
+              inclusion: Select how the product was being used
+            date:
+              in_future: Date sent must be today or in the past
+              blank: Enter date
+              must_be_real: Date must be a real date
+              incomplete: Date must include a %{missing_date_parts}
+              recent_date: Date must be on or after 1 January 1970
+        accident_or_incident_type_form:
+          attributes:
+            type:
+              inclusion: Select the type of information you're adding
+        remove_product_form:
+          attributes:
+            remove_product:
+              inclusion: Select yes if you want to remove the product from the notification
+            reason:
+              blank: Enter the reason for removing the product
+        notifying_country_form:
+          attributes:
+            notifying_country_overseas:
+              inclusion: Enter the notifying country
+            notifying_country_uk:
+              inclusion: Enter the notifying country
+            overseas_or_uk:
+              inclusion: Select if the notifying country is overseas or in the UK
+        overseas_regulator_form:
+          attributes:
+            is_from_overseas_regulator:
+              inclusion: Select yes if the allegation was made by an overseas regulator
+            notifying_country:
+              inclusion: Select which country
+        comment_form:
+          attributes:
+            body:
+              blank: Enter a comment
+        test_result_form:
+          attributes:
+            investigation_product_id:
+              blank: "Select the product which was tested"
+            legislation:
+              inclusion: "Select the legislation that relates to this test"
+            standards_product_was_tested_against:
+              blank: "Enter the standard the product was tested against"
+            result:
+              inclusion: "Select result of the test"
+            document:
+              blank: "Provide the test results file"
+            date:
+              blank: Enter date of the test
+              must_be_real: Date of test must be a real date
+              incomplete: Date of test must include a %{missing_date_parts}
+              in_future: Date of test must be today or in the past
+              recent_date: Date of test must be on or after 1 January 1970
+            failure_details:
+              blank: Enter details about how the product failed to meet the requirements
+            further_test_results:
+              blank: Select yes if there are other test results to report
+        product_form:
+          attributes:
+            authenticity:
+              inclusion: "You must state whether the product is a counterfeit"
+            product_category:
+              blank: "Enter a valid product category"
+            barcode:
+              invalid: "Enter a valid barcode number"
+              too_long: "The barcode must be between 5 and 15 digits"
+              too_short: "The barcode must be between 5 and 15 digits"
+              only_integer: "Enter a valid barcode number"
+              not_a_number: "Enter a valid barcode number"
+            has_markings:
+              inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
+            markings:
+              blank: "Select the product marking(s)"
+            when_placed_on_market:
+              blank: "Select yes if the product was placed on the market before 1 January 2021"
+        risk_assessment_form:
+          attributes:
+            assessed_on:
+              blank: Enter the date of the assessment
+              in_future: Date of assessment must be today or in the past
+              must_be_real: Date of assessment must be a real date
+              incomplete: Date of assessment must include a %{missing_date_parts}
+              recent_date: Date of assessment must be on or after 1 January 1970
+            risk_level:
+              blank: Select the risk level
+            assessed_by:
+              blank: Select who completed the assessment
+            assessed_by_team_id:
+              blank: Select trading standards or another market surveilance authority
+            assessed_by_business_id:
+              blank: Select business related to the notification
+            assessed_by_other:
+              blank: Enter organisation name
+            investigation_product_ids:
+              blank: You must choose at least one product
+            risk_assessment_file:
+              blank: You must upload the risk assessment
+        update_risk_level_from_risk_assessment_form:
+          attributes:
+            update_case_risk_level_to_match_investigation:
+              inclusion: Select yes if you want to match the notification risk level to the risk assessment level
+        add_team_to_notification_form:
+          attributes:
+            team_id:
+              blank: "Select a team to add to the notification"
+            message:
+              blank: Enter a message to the team
+            include_message:
+              inclusion: "Select whether you want to include a message"
+            permission_level:
+              blank: "Select the permission level the team should have"
+        change_notification_owner_form:
+          attributes:
+            owner_id:
+              blank: Select notification owner
+              not_found: User or team not found
+        change_case_summary_form:
+          attributes:
+            summary:
+              blank: Enter the notification summary
+              too_long: Summary must be 10,000 characters or fewer
+        change_notification_status_form:
+          attributes:
+            new_status:
+              same_as_existing: The %{case_type} is already %{status}
+        correspondence_type_form:
+          attributes:
+            type:
+              blank: "Select the type of correspondence you’re adding"
+        document_form:
+          attributes:
+            document:
+              blank: "Select a file"
+            title:
+              blank: "Enter a document title"
+        edit_notification_collaborator_form:
+          attributes:
+            include_message:
+              inclusion: "Select whether you want to include a message"
+            message:
+              blank: "Enter a message to the team"
+            permission_level:
+              blank: "Select the permission level the team should have"
+          select_different_permission_level: "This team already has this permission level. Select a different option or return to the notification."
+        invite_user_to_team_form:
+          attributes:
+            email:
+              blank: "Enter an email address in the correct format, like name@example.com"
+              email: "Enter an email address in the correct format, like name@example.com"
+              user_deleted: "Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored."
+              not_whitelisted: "The email address is not recognised. Check you’ve entered it correctly, or email %{opss_enquiries_email} to add it to the approved list."
+              already_in_team: "%{email} is already a member of %{team}"
+              existing_user: "You cannot invite this person to join your team because they are already a member of another team. Contact %{opss_enquiries_email} if the person’s team needs to be changed."
+        risk_level_form:
+          attributes:
+            risk_level:
+              inclusion: "Select the risk level"
+              not_allowed: "Invalid option"
+        supporting_information_type_form:
+          attributes:
+            type:
+              blank: "Select the type of information you’re adding"
+        why_reporting_form:
+          attributes:
+            hazard_type:
+              blank: "Enter the primary hazard"
+            reported_reason:
+              blank: "Select the options which are reasons for concern"
+        edit_why_reporting_form:
+          attributes:
+            reported_reason:
+              blank: "Select the options which are reasons for concern"
+            non_compliant_reason:
+              blank: "Enter why the product is non-compliant"
+            hazard_type:
+              blank: "Select the primary hazard"
+            hazard_description:
+              blank: "Enter why the product is unsafe"
+        change_notification_name_form:
+          attributes:
+            user_title:
+              blank: "Enter a notification name"
+        reference_number_form:
+          attributes:
+            has_complainant_reference:
+              inclusion: "Select yes to add a reference number to the notification"
+            complainant_reference:
+              blank: "Enter a reference number"
+        email_correspondence_form:
+          attributes:
+            correspondence_date:
+              blank: Enter the date sent
+              must_be_real: Date sent must be a real date
+              incomplete: Date sent must include a %{missing_date_parts}
+              in_future: Date sent must be today or in the past
+              recent_date: Date sent must be on or after 1 January 1970
+            email_file:
+              blank: Select a replacement file
+            email_attachment:
+              blank: Select a replacement email attachment file
+        phone_call_correspondence_form:
+          attributes:
+            correspondence_date:
+              blank: Enter the date of call
+              must_be_real: Date of call must be a real date
+              incomplete: Date of call must include a %{missing_date_parts}
+              in_future: Date of call must be today or in the past
+              recent_date: Date of call must be on or after 1 January 1970
+        corrective_action_form:
+          attributes:
+            investigation_product_id:
+              blank: "Select the product the corrective action relates to"
+            date_decided:
+              blank: "Enter the date the corrective action came into effect"
+              must_be_real: "Enter a real date when the corrective action came into effect"
+              incomplete: "The date the corrective action came into effect must include a %{missing_date_parts}"
+              recent_date: "The date the corrective action came into effect must be on or after 1 January 1970 and within the next 50 years"
+            further_corrective_action:
+              inclusion: "Select whether or not you have further corrective action to record"
+            measure_type:
+              blank: You must state whether the action is mandatory or voluntary
+              inclusion: "You must choose either mandatory or voluntary"
+            duration:
+              blank: "You must state how long the action will be in place"
+              inclusion: "You must choose one of Permanently, Temporarily or Unknown"
+            geographic_scopes:
+              blank: "Select the geographic scope of the action"
+              inclusion: "Select the geographic scope of the action"
+            action:
+              inclusion: "Select type of corrective action"
+            other_action:
+              blank: "Enter type of corrective action"
+            has_online_recall_information:
+              inclusion: "Select yes if the business responsible has published recall information online"
+            online_recall_information:
+              blank: "Enter the webpage where the business responsible published recall information"
+        reason_for_creating_form:
+          attributes:
+            case_is_safe:
+              inclusion: "Select a product is of concern if the product might be unsafe or non-compliant"
+        risk_validation_form:
+          attributes:
+            risk_validation_change_rationale:
+              blank: Enter details
+            is_risk_validated:
+              inclusion:  "Select yes if you have validated the notification risk level"
+        product_duplicate_confirmation_form:
+          attributes:
+            correct:
+              inclusion: Select yes if this is the same product
+        product_duplicate_check_form:
+          attributes:
+            has_barcode:
+              inclusion: Select yes if you have the product barcode number
+            barcode:
+              invalid: Enter a valid barcode number
+              too_long: The barcode must be between 5 and 15 digits
+              too_short: The barcode must be between 5 and 15 digits
+              only_integer: Enter a valid barcode number
+              not_a_number: Enter a valid barcode number
+        set_test_result_certificate_on_case_form:
+          attributes:
+            tso_certificate_issue_date:
+              blank: Enter the date the test certificate was issued
+              incomplete: Enter the date the test certificate was issued
+              in_future: The date the test certificate was issued must be today or in the past
+        bulk_products_triage_form:
+          attributes:
+            compliance_and_safety:
+              inclusion: Select how you would describe the products in terms of their compliance and safety
+            hazard_description:
+              blank: Enter why the products are non-compliant
+              too_long: The reason why the products are non-compliant must be %{count} characters or less
+        bulk_products_create_case_form:
+          attributes:
+            name:
+              blank: Enter a name for the notification
+              too_long: The notification name must be %{count} characters or less
+            reference_number:
+              blank: Enter a reference number
+            reference_number_provided:
+              inclusion: Select yes if you want to add a reference number
+        bulk_products_add_business_type_form:
+          attributes:
+            type:
+              inclusion: Select the business type
+            online_marketplace_id:
+              blank: Select the online marketplace or enter another online platform name
+            authorised_representative_choice:
+              blank: Select whether the authorised representative is a UK or EU Authorised representative
+        bulk_products_add_business_details_form:
+          attributes:
+            trading_name:
+              blank: Enter a trading name
+              invalid: Enter a valid trading name
+        bulk_products_upload_products_file_form:
+          attributes:
+            products_file_upload:
+              blank: Select a file
+              too_large: The selected file must be smaller than 30MB
+              too_small: The selected file must not be empty
+              wrong_type: The selected file must be an Excel file (XLSX)
+              missing_worksheet: The selected file must have a sheet named "Non compliance Form"
+              wrong_headers: The selected file does not have the correct headers
+              no_products: The selected file does not contain any products
+              malformed_products: The selected file contains one or more products with errors
+        bulk_products_choose_products_for_corrective_actions_form:
+          attributes:
+            product_ids:
+              blank: Select at least one product to add a corrective action for
+        declaration_form:
+          attributes:
+            agree:
+              accepted: You must agree to the declaration to use this service
+        change_notification_details_form:
+          attributes:
+            user_title:
+              blank: Enter a notification title
+            description:
+              too_long: The notification description must be %{count} characters or less
+            reported_reason:
+              blank: Choose why you are creating the notification
+        change_notification_product_safety_compliance_details_form:
+          attributes:
+            unsafe:
+              blank: Choose at least one issue
+            primary_hazard:
+              blank: Choose the primary harm
+            primary_hazard_description:
+              blank: Enter additional information about the product harm
+              too_long: Additional information about the product harm must be %{count} characters or less
+            noncompliance_description:
+              blank: Enter a description of the product non-compliance issues
+              too_long: Description of the product non-compliance issues must be %{count} characters or less
+            is_from_overseas_regulator:
+              inclusion: Choose whether the safety issue was reported by an overseas regulator
+            notifying_country:
+              inclusion: Choose the country of the overseas regulator
+            add_reference_number:
+              inclusion: Choose whether you want to add your own reference number
+            reference_number:
+              blank: Enter a reference number
+        number_of_affected_units_form:
+          attributes:
+            affected_units_status:
+              inclusion: Choose how to define the number of units affected
+        choose_investigation_product_form:
+          attributes:
+            investigation_product_id:
+              blank: Choose a product
+        choose_investigation_products_form:
+          attributes:
+            investigation_product_ids:
+              blank: Choose one or more products
+        corrective_action_taken_form:
+          attributes:
+            corrective_action_taken_yes_no:
+              inclusion: Choose whether a corrective action has been taken
+            corrective_action_taken_no_specific:
+              inclusion: Choose whether a corrective action has been taken
+            corrective_action_not_taken_reason:
+              blank: Enter the reason for not taking a corrective action
+              too_long: The reason for not taking a corrective action must be %{count} characters or less
+        add_business_details_form:
+          attributes:
+            trading_name:
+              blank: Enter a trading name
+        add_location_form:
+          attributes:
+            country:
+              blank: Choose a country
+        add_business_details_duplicate_form:
+          attributes:
+            resolution:
+              blank: Choose either the existing PSD record or your manual entry
+
+  activerecord:
+    models:
+      collaboration/access/edit: "edit"
+      collaboration/access/read_only: "readonly"
+    errors:
+      models:
+        investigation/enquiry:
+          attributes:
+            date_received:
+              blank: Enter the date the enquiry was received
+              must_be_real: Date enquiry received must be a real date
+              incomplete: Date enquiry received must include a %{missing_date_parts}
+              in_future: Date enquiry received must be today or in the past
+        test/result:
+          attributes:
+            investigation_product:
+              required: "Select the product which was tested"
+        test/request:
+          attributes:
+            date:
+              blank: "Enter date of the test request"
+              invalid: "Enter a real date of the test request"
+              date_missing_component: "Enter date of the test request and include a %{missing_components}"
+        corrective_action:
+          attributes:
+            product:
+              required: "Select the product the corrective action relates to"
+            date_decided:
+              blank: "Enter date the corrective action was decided"
+              invalid: "Enter a real date when the corrective action was decided"
+              date_missing_component: "Enter date the corrective action was decided and include a %{missing_components}"
+            measure_type:
+              blank: You must state whether the action is mandatory or voluntary
+              inclusion: "You must choose either mandatory or voluntary"
+            duration:
+              blank: "You must state how long the action will be in place"
+              inclusion: "You must choose one of Permanently, Temporarily or Unknown"
+            action:
+              inclusion: "Select type of corrective action"
+            other_action:
+              blank: "Enter type of corrective action"
+        alert:
+          attributes:
+            summary:
+              required: "Enter an alert subject"
+            description:
+              required: "Enter a summary"
+        correspondence:
+          attributes:
+            correspondence_date:
+              invalid: "Enter a real correspondence date"
+        image_upload:
+          attributes:
+            file_upload:
+              blank: "Select a file"
+        investigation:
+          attributes:
+            product_category:
+              blank: "Enter a valid product category"
+            hazard_type:
+              blank: "Enter the primary hazard"
+        user:
+          attributes:
+            mobile_number:
+              blank: "Enter your mobile number"
+              invalid: "Enter your mobile number in the correct format, like 07700 900 982"
+            name:
+              blank: "Enter your full name"
+            password:
+              blank: "Enter a password"
+              too_common: "Choose a less frequently used password"
+              too_short: "Password is too short"
+    attributes:
+      corrective_action:
+        measure_type:
+          one: "Type of measure"
+          mandatory: "Mandatory"
+          voluntary: "Voluntary"
+        duration:
+          one: "Duration of action"
+          permanent: "Permanently"
+          temporary: "Temporarily"
+          unknown: "Unknown"
+  product:
+    counterfeit: "Counterfeit"
+    genuine: "Genuine"
+    unsure: "Unsure"
+    missing: "Not provided"
+    unknown: "Unknown"
+    not_relevant: "Not relevant"
+    not_provided: "Not provided"
+    none: "None"
+    before_2021: "Before 1 January 2021"
+    on_or_after_2021: "On or after 1 January 2021"
+    unknown_date: "Unable to ascertain"
+    affected_units_status:
+      exact: "Exact"
+      approx: "Approximate"
+      unknown: "Unknown"
+      not_relevant: "Not relevant"
+  accident_or_incident:
+    usage:
+      during_normal_use: "Normal use"
+      during_misuse: "Misuse"
+      with_adult_supervision: "With the supervision of an adult"
+      without_adult_supervision: "Without the supervision of an adult"
+      unknown_usage: "Unknown use"
+    severity:
+      serious: "Serious"
+      high: "High"
+      medium: "Medium"
+      low: "Low"
+      unknown_severity: "Unknown"
+    date:
+      unknown: "Unknown"
+  corrective_action:
+    attributes:
+      geographic_scopes:
+        local: "Local"
+        great_britain: "Great Britain"
+        northern_ireland: "Northern Ireland"
+        eea_wide: "European Economic Area (EEA)"
+        eu_wide: "European Union (EU)"
+        worldwide: "Worldwide"
+        unknown: "Unknown"
+      actions:
+        ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on the marketing of the product and any accompanying measures"
+        destruction_of_the_product: "Destruction of the product"
+        import_rejected_at_border: "Import rejected at border"
+        making_the_marketing_of_the_product_subject_to_prior_conditions: "Making the marketing of the product subject to prior conditions"
+        marking_the_product_with_appropriate_warnings_on_the_risks: "Marking the product with appropriate warnings on the risks"
+        recall_of_the_product_from_end_users:  "Recall of the product from end users"
+        removal_of_the_listing_by_the_online_marketplace: "Removal of the listing by the online marketplace"
+        temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban on the supply, offer to supply and display of the product"
+        warning_consumers_of_the_risks: "Warning consumers of the risks"
+        withdrawal_of_the_product_from_the_market: "Withdrawal of the product from the market"
+        product_back_into_compliance: "Product brought back into compliance"
+        seizure_of_goods: "Seizure of goods"
+        modification_programme: "Modification programme"
+        referred_to_overseas_regulator: "Referred to an overseas regulator"
+        product_no_longer_available_for_sale: "Product is no longer available for sale"
+        other: "Other"
+    not_taken_reason:
+      referred_to_another_authority: I need to refer the issue to another authority
+      not_enough_information: I don't have enough information to take a corrective action
+  enter_email_address: "Enter your email address"
+  file_added: "The file was added"
+  file_updated: "File has been updated"
+  file_removed: "File was successfully removed"
+  image_added: "The image was uploaded"
+  image_updated: "The image was updated"
+  image_removed: "The image was successfully removed"
+  otp_code:
+    blank: "Enter the security code"
+    too_short: "You haven’t entered enough numbers"
+    too_long: "You’ve entered too many numbers"
+    incorrect: "Incorrect security code"
+    expired: "The security code has expired. New code sent."
+    numericality: "The code must be 5 numbers"
+  sign_in_form:
+    email:
+      wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"
+  sign_user_in:
+    email:
+      wrong_email_or_password: "Enter correct email address and password"
+  support:
+    array:
+      two_words_connector: " and "
+      last_word_connector: " and "
+  attachments:
+    unauthorised: "Not authorised to view this attachment"
+  business:
+    type:
+      retailer: "Retailer"
+      online_seller: "Online seller"
+      online_marketplace: "Online marketplace"
+      manufacturer: "Manufacturer"
+      exporter: "Exporter"
+      importer: "Importer"
+      fulfillment_house: "Fulfillment house"
+      distributor: "Distributor"
+      responsible_person: "Responsible person"
+      other: "Other"
+      authorised_representative:
+        uk_authorised_representative: "UK Authorised representative"
+        eu_authorised_representative: "EU Authorised representative"

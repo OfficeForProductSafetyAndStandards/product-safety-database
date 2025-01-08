@@ -1,0 +1,32 @@
+
+<% coronavirus_and_high_risk_label = capture do %>
+  Coronavirus and <br class="opss-br-desktop">serious and high risk
+<% end %>
+
+<%= govukRadios(
+   form: form,
+   key: :priority,
+   classes: "govuk-radios govuk-radios--small",
+   formGroup: {
+     classes: "opss-form-group opss-form-group--sm-labels"
+   },
+   fieldset: {
+     legend: {
+       text: "Notification priority",
+       is_page_heading: false,
+       classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+     }
+   },
+   items: [
+     {
+       id: "priority_all",
+       text: "All",
+       value: "all"
+     },
+     {
+       id: "serious_and_high_risk_level_only",
+       text: "Serious and high risk",
+       value: "serious_and_high_risk_level_only"
+     }
+   ]
+) %>

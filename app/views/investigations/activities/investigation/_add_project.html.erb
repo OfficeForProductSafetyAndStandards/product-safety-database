@@ -1,0 +1,15 @@
+<h4 class="govuk-heading-s">Project details</h4>
+
+<% if activity.metadata['investigation']['coronavirus_related'] %>
+  <p class="govuk-body">
+    <%= t("audit_activity.investigation.coronavirus_related") %>
+  </p>
+<% end %>
+
+<% if activity.metadata['investigation']['description'] %>
+  <p class="govuk-body">
+    <%= activity.metadata['investigation']['description'] %>
+  </p>
+<% end %>
+
+<%= render "investigations/activities/investigation/owner", owner: activity.owner if activity.owner %>

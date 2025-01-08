@@ -1,0 +1,28 @@
+<% content_for :masthead do %>
+  <div class="govuk-width-container">
+    <div class="govuk-phase-banner">
+      <p class="govuk-phase-banner__content">
+        <strong class="govuk-tag govuk-phase-banner__content__tag">
+          Beta
+        </strong>
+        <span class="govuk-phase-banner__text">
+          This is a new service – your <a href="https://www.gov.uk/done/product-safety-database" class="govuk-link" target="_blank" rel="noreferrer noopener">feedback<span class="govuk-visually-hidden"> (opens in new tab)</span></a> will help us to improve it.
+        </span>
+      </p>
+    </div>
+  </div>
+  <main id="main-content" role="main">
+    <div class="app-masthead">
+      <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds-from-desktop">
+            <h1 class="govuk-heading-xl app-masthead__title">Product Safety Database</h1>
+            <p class="govuk-body-l app-masthead__description">Report, track and share product safety information with the product safety community.</p>
+            <%= govuk_start_button(text: "Sign in", href: new_user_session_path, classes: ["govuk-button--inverse"]) %>
+            <p class="govuk-body app-masthead__description">or <a href="mailto:<%= t(:enquiries_email) %>" class="govuk-link govuk-link--inverse">email OPSS</a> if you think you should have access.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+<% end %>

@@ -1,0 +1,15 @@
+<div class="govuk-body">
+  <%= "Date of #{activity.type}:" %> <%= activity.date  %>
+  <br>
+  Product: <%= activity.object.investigation_product.name  %>
+  <br>
+  Severity: <%= activity.severity %>
+  <br>
+  Product usage: <%= activity.usage  %>
+  <br>
+  <% unless activity.additional_info.blank? %>
+    Additional information: <%=  activity.additional_info %>
+  <% end %>
+</div>
+
+<%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]), class: "govuk-link" %>

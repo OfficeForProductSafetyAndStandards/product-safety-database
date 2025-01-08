@@ -1,0 +1,155 @@
+name: Publish Staging redacted export to S3
+
+on:
+  schedule:
+    - cron: "0 12 * * 0"
+  workflow_dispatch:
+
+jobs:
+  redact_and_upload_export:
+    name: Redact and upload database export
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.15.x
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install libpq-dev
+
+      - uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install RubyGems
+        run: |
+          gem install bundler --no-doc
+          bundle config path vendor/bundle
+          bundle check || bundle install --without development --jobs=4 --retry=3
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Get yarn cache
+        id: yarn-cache
+        run: |
+          echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install Node.js dependencies
+        run: yarn install
+
+      - name: Copy jq binary
+        run: cp infrastructure/env/jq redex/jq
+
+      - name: Create schema artifact
+        env:
+          # NOTE: These services do not need to be running for this job
+          DATABASE_URL: postgres://postgres@localhost:5432
+          OPENSEARCH_URL: http://localhost:9200
+          REDIS_URL: redis://localhost:6379
+          RAILS_ENV: test
+          ANTIVIRUS_URL: http://localhost:3006/safe
+          ANTIVIRUS_USERNAME: av
+          ANTIVIRUS_PASSWORD: password
+          PSD_HOST: example.com
+          PSD_HOST_SUPPORT: example.com
+          PSD_HOST_REPORT: example.com
+          EMAIL_WHITELIST_ENABLED: false
+          TWO_FACTOR_AUTHENTICATION_ENABLED: false
+          CI: true
+        run: |
+          bin/rails redacted_export:generate_sql > redex/create_redacted_schema.sql
+
+      - name: Install cf client
+        env:
+          CF_CLI_VERSION: v7
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Export database
+        id: export-database
+        env:
+          SPACE: staging
+          APP_NAME: psd-web
+          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+        run: |
+          MAIN_DATABASE_SERVICE_NAME=psd-database
+          SECRETS_SERVICE_NAME=psd-redex-env
+
+          TIMESTAMP=$(date +'%F-%H-%M-%S')
+          TEMP_DB_SERVICE_NAME=psd-redex-db-$TIMESTAMP
+          export TEMP_APP_NAME=psd-redex-app-$TIMESTAMP
+
+          echo "temp-db-service-name=$TEMP_DB_SERVICE_NAME" >> $GITHUB_OUTPUT
+          echo "temp-app-name=$TEMP_APP_NAME" >> $GITHUB_OUTPUT
+
+          cf api api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o 'beis-opss' -s $SPACE
+
+          PSD_DATABASE_GUID=$(cf service $MAIN_DATABASE_SERVICE_NAME --guid)
+          PSD_DATABASE_PLAN=$(cf service $MAIN_DATABASE_SERVICE_NAME | awk -F ':' '$1=="plan" { gsub(/ /,"", $NF); print $NF }')
+          cf create-service postgres $PSD_DATABASE_PLAN $TEMP_DB_SERVICE_NAME -c "{\"restore_from_latest_snapshot_of\": \"$PSD_DATABASE_GUID\"}"
+          echo "::group::Waiting for db"
+          until cf service $TEMP_DB_SERVICE_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 30; echo "Waiting for db..."; done
+          echo "::endgroup::"
+
+          cf push $TEMP_APP_NAME --task -f redex/manifest.yml --var app-name=$TEMP_APP_NAME --var db-name=$TEMP_DB_SERVICE_NAME --var env-name=$SECRETS_SERVICE_NAME
+
+          echo "Exporting schema..."
+          cf run-task $TEMP_APP_NAME --wait
+          cf logs $TEMP_APP_NAME --recent 2>&1 | grep --silent "TASK SCRIPT COMPLETED"
+
+          echo "Cleaning up temporary apps..."
+          sleep 5
+          cf delete $TEMP_APP_NAME -f
+          sleep 5
+          cf delete-service $TEMP_DB_SERVICE_NAME -f
+
+          echo "Exporting files..."
+          cf run-task $APP_NAME --name 'redacted-export-s3-copy' --command 'bin/rails redacted_export:copy_s3_objects' --wait
+
+          cf logout
+
+      - name: Alert team via Slack of export failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"exportbot\", \"text\": \"Staging redacted export has failed!\n\nCF Service: ${{ steps.export-database.outputs.temp-db-service-name }}\nCF App: ${{ steps.export-database.outputs.temp-app-name }}\", \"icon_emoji\": \":disappointed:\"}" $SLACK_WEBHOOK
+
+      - name: Try to delete the temporary DB
+        if: failure()
+        env:
+          SPACE: staging
+          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+        run: |
+          cf api api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o 'beis-opss' -s $SPACE
+          cf delete ${{ steps.export-database.outputs.temp-app-name }} -f
+          sleep 5
+          cf delete-service ${{ steps.export-database.outputs.temp-db-service-name }} -f
+          cf logout

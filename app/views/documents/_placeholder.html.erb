@@ -1,0 +1,10 @@
+<div class="app-document-preview__placeholder" aria-hidden="true">
+  <% if spreadsheet?(document) %>
+    <%= image_tag "document_placeholder_spreadsheet.png", alt: "" %>
+  <% else %>
+    <%= image_tag "document_placeholder_document.png", alt: "" %>
+  <% end %>
+  <span class="app-document-preview__filetype">
+    <%= document_file_extension(document)  %>
+  </span>
+</div>

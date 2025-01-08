@@ -1,0 +1,83 @@
+<% page_heading = "Provide the business details - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_add_business_details_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: create_business_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_add_business_details_form, url: add_business_details_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Provide the business details
+      </h1>
+      <%= form.govuk_fieldset legend: { text: "Name and company number", size: "s" } do %>
+        <%= form.govuk_text_field(
+          :trading_name,
+          label: { text: t("businesses.form.trading_name.label") },
+          hint: { text: t("businesses.form.trading_name.hint") },
+          class: ["govuk-!-width-two-thirds"]
+        ) %>
+        <%= form.govuk_text_field(
+          :legal_name,
+          label: { text: t("businesses.form.legal_name.label") },
+          hint: { html: t("businesses.form.legal_name.hint_html") },
+          class: ["govuk-!-width-two-thirds"]
+        ) %>
+        <%= form.govuk_text_field(
+          :company_number,
+          label: { text: t("businesses.form.company_number.label") },
+          hint: { html: t("businesses.form.company_number.hint_html") },
+          class: ["govuk-!-width-one-third"]
+        ) %>
+      <% end %>
+      <%= form.fields_for :locations, @bulk_products_upload.investigation_business.business.primary_location do |ff| %>
+        <% id_name = (@bulk_products_upload.investigation_business.business.primary_location.country.blank? && @bulk_products_add_business_details_form.errors[:country].any?) ? "bulk-products-add-business-details-form-country-field-error" : "bulk-products-add-business-details-form-country-field" %>
+        <%= ff.govuk_fieldset legend: {text: "Official address", size: 's'} do %>
+          <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
+          <%= ff.govuk_text_field :address_line_1,
+                                    width: 'two-thirds',
+                                    label: {text: "Building and street <span class=\"govuk-visually-hidden\">line 1 of 2</span>".html_safe }
+          %>
+
+          <%= ff.govuk_text_field :address_line_2,
+                                    width: 'two-thirds',
+                                    label: {text: "Building and street line 2 of 2", hidden: true}
+          %>
+
+          <%= ff.govuk_text_field :city,
+                                    width: 'two-thirds',
+                                    label: {text: "Town or city"}
+          %>
+
+          <%= ff.govuk_text_field :county,
+                                    width: 'two-thirds',
+                                    label: {text: "County"}
+          %>
+
+          <%= ff.govuk_text_field :postal_code,
+                                    width: 'one-quarter',
+                                    label: {text: "Postcode"}
+          %>
+
+          <% items = [OpenStruct.new(value: "", text: "")] + all_countries_with_uk_first.map { |country| OpenStruct.new(value: country[1], text: country[0] )}%>
+          <%= form.govuk_collection_select :country,
+                                           items,
+                                           :value,
+                                           :text,
+                                           id: id_name,
+                                           label: { text: "Country" },
+                                           width: "two-thirds"
+          %>
+
+        <% end %>
+      <% end %>
+      <%= form.fields_for :contacts, @bulk_products_upload.investigation_business.business.primary_contact do |ff| %>
+        <%= render "businesses/contacts/form", form: ff %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Continue") %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+<h2 class="govuk-heading-m">Full detail</h2>
+
+<p class="govuk-body">
+  <%= link_to "Edit details", edit_business_path(@business), class: "govuk-link" %>
+</p>
+
+<hr class="govuk-section-break govuk-section-break--l">
+
+<%= business_summary_list(@business) %>

@@ -1,0 +1,55 @@
+name: Deploy User Research Environment
+
+on:
+  workflow_dispatch:
+
+concurrency: research_environment
+
+jobs:
+  deploy:
+    name: Deploy the application
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install cf client
+        env:
+          CF_CLI_VERSION: v7
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Deploy to PaaS
+        env:
+          SPACE: research
+          APP_NAME: psd-web
+          DOMAIN: psd-research.london.cloudapps.digital
+          DOMAIN_SUPPORT: psd-research-support.london.cloudapps.digital
+          DOMAIN_REPORT: psd-research-report.london.cloudapps.digital
+          WEB_DISK_QUOTA: 2G
+          WORKER_DISK_QUOTA: 2G
+          WEB_MEMORY: 2G
+          WORKER_MEMORY: 1G
+          WEB_INSTANCES: 1
+          WORKER_INSTANCES: 1
+          WEB_MAX_THREADS: 5
+          WORKER_MAX_THREADS: 10
+          CF_USERNAME: ${{ secrets.PaaSUsernameResearch }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordResearch }}
+          SENTRY_SERVICE_NAME: psd-sentry-env
+        run: |
+          cf api api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o 'beis-opss' -s $SPACE
+          chmod +x ./deploy.sh
+          ./deploy.sh
+          cf logout
+
+      - name: Alert team via Slack of deployment failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"User Research deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK

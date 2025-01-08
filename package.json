@@ -1,0 +1,36 @@
+{
+  "name": "psd-web",
+  "version": "1.0.0",
+  "license": "MIT",
+  "engines": {
+    "node": "18.15.x",
+    "yarn": "1.22.x"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "accessible-autocomplete": "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main",
+    "esbuild": "^0.24.2",
+    "govuk-frontend": "5.7.1",
+    "postcss": "^8.4.49",
+    "sass": "^1.83.1",
+    "standard": "^17.1.2",
+    "stimulus-checkbox-select-all": "^5.3.0",
+    "stimulus-clipboard": "^4.0.1",
+    "stimulus-rails-nested-form": "^4.1.0",
+    "stimulus-reveal-controller": "^4.1.0",
+    "stylelint": "^14.16.1",
+    "stylelint-config-gds": "^0.3.0"
+  },
+  "scripts": {
+    "lint:css": "yarn stylelint 'app/assets/stylesheets/**/*.(s)?css'",
+    "lint:js": "yarn standard",
+    "build": "esbuild app/javascript/application.js --target=es2016 --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
+    "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --quiet-deps --no-source-map --load-path=node_modules"
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-gds/scss",
+      "./css-rules"
+    ]
+  }
+}

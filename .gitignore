@@ -1,0 +1,81 @@
+# dotenv environment variables file
+.env
+.env.development
+.env.test
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+### Rails ###
+*.rbc
+capybara-*.html
+.irb_history
+.rspec
+/log
+/tmp
+/public/system
+/coverage/
+/spec/tmp
+
+config/initializers/secret_token.rb
+config/master.key
+
+## Environment normalization:
+/.bundle
+/vendor/bundle
+
+# Ignore precompiled javascript packs
+/public/packs
+/public/packs-test
+
+# Ignore yarn files
+/yarn-error.log
+
+# Ignore uploaded files in development
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+### Ruby ###
+*.gem
+/.config
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+*examples.txt
+
+# Redis snapshots. See https://redis.io/topics/persistence
+dump.rdb
+
+# Entity relationship diagram
+erd.pdf
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
+/node_modules
+
+.DS_Store
+
+.idea/
+
+.tool-versions

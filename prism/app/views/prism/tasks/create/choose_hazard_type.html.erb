@@ -1,0 +1,39 @@
+<% content_for :page_title, "Choose hazard type" %>
+<% @errors = @harm_scenario.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Create product harm scenarios</span>
+        Choose hazard type
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+      <% end %>
+      <%= f.govuk_radio_buttons_fieldset :hazard_type, legend: { text: "What is the hazard type?", size: "m" } do %>
+        <%= f.govuk_radio_button :hazard_type, "mechanical", label: { text: "Mechanical" }, hint: { text: "Examples: Sharp edges, trapping hazards, crushing hazards, impact hazards, entanglement hazards." }, link_errors: true %>
+        <%= f.govuk_radio_button :hazard_type, "size_and_shape", label: { text: "Size, shape and weight" }, hint: { text: "Examples: Small parts with the potential to be inhaled or ingested. Suffocation or strangulation hazards such as blind cords and clothing with sashes or drawstrings. Heavy products with the potential to topple." } %>
+        <%= f.govuk_radio_button :hazard_type, "electrical", label: { text: "Electrical" }, hint: { text: "Examples: Live 240v conductors; arcing; overload; short circuit." } %>
+        <%= f.govuk_radio_button :hazard_type, "fire_and_explosion", label: { text: "Fire and explosion" }, hint: { text: "Examples: Ignition sources and fuel sources, e.g. naked flames, hot surfaces, poorly designed machinery, flammable furniture and furnishings." } %>
+        <%= f.govuk_radio_button :hazard_type, "thermal", label: { text: "Thermal" }, hint: { text: "Examples: Hot or cold surfaces of equipment." } %>
+        <%= f.govuk_radio_button :hazard_type, "ergonomic", label: { text: "Ergonomic" }, hint: { text: "Examples: Poorly designed chairs and I.T equipment." } %>
+        <%= f.govuk_radio_button :hazard_type, "noise_and_vibration", label: { text: "Noise and vibration" }, hint: { text: "Examples: Noisy and vibrating machinery." } %>
+        <%= f.govuk_radio_button :hazard_type, "microbiological", label: { text: "Microbiological" }, hint: { text: "Examples: Bacteria, viruses, e.g. bacterial contamination of cosmetics." } %>
+        <%= f.govuk_radio_button :hazard_type, "chemical", label: { text: "Chemical" }, hint: { text: "Examples: Substances that are carcinogenic, toxic, corrosive etc. e.g. cadmium in jewellery, cadmium and other heavy metals (lead, nickel, mercury & arsenic) in care products, phthalates in toys, asbestos in building materials or as a contaminant in consumer products." } %>
+        <%= f.govuk_radio_button :hazard_type, "lack_of_protection", label: { text: "Lack of protection" }, hint: { text: "Examples: Smoke alarms that fail to activate; infant car seats and PPE that do not provide the specified level of protection." } %>
+        <%= f.govuk_radio_button :hazard_type, "functional", label: { text: "Functional" }, hint: { text: "Hazards that arise not directly from the product, but from how or where the product will foreseeably be used, e.g. products that will be used in or next to water (drowning risk)." } %>
+        <%= f.govuk_radio_button :hazard_type, "other", label: { text: "Other" } do %>
+          <%= f.govuk_text_field :other_hazard_type, label: { text: "Name of hazard type" } %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_text_area :description, label: { text: "Hazard description", size: "m" }, hint: { text: "Describe the specific hazard(s) found in the product." } %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

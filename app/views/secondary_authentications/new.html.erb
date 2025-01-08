@@ -1,0 +1,29 @@
+<% title = "Check your phone" %>
+<% page_title(title, errors: @secondary_authentication_form.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @secondary_authentication_form, url: secondary_authentication_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <p class="govuk-body">
+        <% if @secondary_authentication_form.operation == SecondaryAuthentication::INVITE_USER %>
+          You need to confirm your identity. We have sent you a security code by text message.
+        <% else %>
+          We have sent you a security code by text message.
+        <% end %>
+      </p>
+      <%= form.hidden_field :user_id, value: @secondary_authentication_form.user_id %>
+      <%= form.govuk_text_field(
+        :otp_code,
+        label: { text: "Enter security code" },
+        class: ["govuk-input--width-5"],
+        inputmode: "numeric",
+        autocomplete: "one-time-code"
+      ) %>
+      <%= form.govuk_submit("Continue") %>
+    <% end %>
+    <div class="govuk-body">
+      <a href="<%= new_resend_secondary_authentication_code_path %>" class="govuk-link">Not received a text message?</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="govuk-grid-column-two-thirds">
+  <div class="govuk-form-group govuk-!-padding-bottom-2">
+    <%= form.label :q, "Search", class: "govuk-label" %>
+    <div class="govuk-input__wrapper opss-search__wrapper">
+      <%= form.search_field :q, class: "govuk-input govuk-!-width-full", spellcheck: false, "aria-describedby": "search-hint" %>
+      <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+        <span class="govuk-visually-hidden">Submit search</span>
+      </button>
+    </div>
+  </div>
+</div>

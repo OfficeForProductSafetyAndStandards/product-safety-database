@@ -1,0 +1,51 @@
+---
+applications:
+- name: ((app-name))
+  buildpacks:
+    - https://github.com/cloudfoundry/apt-buildpack.git#v0.3.2
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.10.1
+  path: .
+  stack: cflinuxfs3
+  routes:
+    - route: ((psd-host))
+    - route: ((psd-host-support))
+    - route: ((psd-host-report))
+  env:
+    PSD_HOST: ((psd-host))
+    PSD_HOST_SUPPORT: ((psd-host-support))
+    PSD_HOST_REPORT: ((psd-host-report))
+    STATEMENT_TIMEOUT: 60s
+    RAILS_MAX_THREADS: ((web-max-threads))
+  timeout: 180
+  services:
+    - opss-log-drain
+    - psd-auth-env
+    - psd-aws-env
+    - psd-database
+    - psd-opensearch-1
+    - psd-email-whitelist-env
+    - psd-health-env
+    - psd-notify-env
+    - psd-queue-6
+    - psd-rails-env
+    - ((sentry-service-name))
+    - psd-session-6
+    - psd-sidekiq-env
+    - psd-two-factor-auth-env
+    - psd-web-scout-env
+    - antivirus-auth-env
+    - psd-redacted-export-env
+    - psd-support-portal-env
+    - psd-report-portal-env
+  processes:
+    - type: web
+      command: bin/rake cf:on_first_instance db:migrate && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+      instances: ((web-instances))
+      memory: ((web-memory))
+      disk_quota: ((web-disk-quota))
+    - type: worker
+      command: RAILS_MAX_THREADS=((worker-max-threads)) bin/sidekiq -C config/sidekiq.yml
+      health-check-type: process
+      instances: ((worker-instances))
+      memory: ((worker-memory))
+      disk_quota: ((worker-disk-quota))

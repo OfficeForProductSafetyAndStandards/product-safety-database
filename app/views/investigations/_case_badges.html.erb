@@ -1,0 +1,35 @@
+<% badges = [] %>
+<% if investigation.serious? %>
+  <% badges << capture do %>
+    <%= govuk_tag(text: t(:risk_level_serious, scope: "case.badges"), colour: "red") %>
+  <% end %>
+<% end %>
+<% if investigation.high? %>
+  <% badges << capture do %>
+    <%= govuk_tag(text: t(:risk_level_high, scope: "case.badges"), colour: "red") %>
+  <% end %>
+<% end %>
+<% if investigation.is_closed? %>
+  <% badges << capture do %>
+    <%= govuk_tag(text: t(:closed, scope: "case.badges"), colour: "grey") %>
+  <% end %>
+<% end %>
+<% if investigation.is_private? %>
+  <% badges << capture do %>
+    <%= govuk_tag(text: t(:restricted, scope: "case.badges"), colour: "grey") %>
+  <% end %>
+<% end %>
+
+<% if local_assigns[:split_badges_in_rows_of_two] && badges.size > 2 %>
+  <% badges.in_groups_of(2) do |grouped_badge| %>
+    <div>
+      <% grouped_badge.each do |badge| %>
+        <%= badge %>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <% badges.each do |badge| %>
+    <%= badge %>
+  <% end %>
+<% end %>

@@ -1,0 +1,32 @@
+<% display_link = local_assigns[:display_link].nil? ? policy(@investigation).update? : local_assigns[:display_link] %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters opss-desktop-min-height--s">
+    <% unless current_tab == "overview" %><span class="govuk-caption-m"><%= investigation.pretty_description %></span><% end %>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3"><%= case_page_heading %>
+      <% if current_tab == "overview" %>
+        <span class="govuk-!-font-weight-regular govuk-!-font-size-27 govuk-!-margin-left-2"><%= investigation.pretty_id %></span>
+      <% end %>
+    </h1>
+    <% if secondary_text %>
+      <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-7"><%= secondary_text %></p>
+    <% end %>
+  </div>
+
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-4">
+    <div class="opss-text-align-right">
+      <% if display_link && link_text.present? %>
+        <%= link_to link_text, href, data: { cy: link_text.parameterize }, class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-padding-bottom-6">
+  <% if current_tab ||= nil %>
+    <%= investigation_sub_nav(investigation, current_tab: current_tab) %>
+  <% end %>
+
+  <section id="page-content" class="govuk-grid-column-three-quarters" role="region">
+    <%= yield %>
+  </section>
+</div>

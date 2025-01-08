@@ -1,0 +1,77 @@
+<% page_heading = @email.title %>
+<% page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Email</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+    <%= govuk_warning_text(text: t("case.protected_details", data_type: "email correspondence")) %>
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @email.created_at.to_formatted_s(:govuk) %>
+      </p>
+    </div>
+    <% rows = [
+      {
+        key: { text: "Date of email" },
+        value: { text: @email.correspondence_date.to_formatted_s(:govuk) }
+      }
+    ]
+
+      direction_key =
+        if @email.outbound?
+          "To"
+        elsif @email.inbound?
+          "From"
+        else
+          "Contact"
+        end
+
+      if @email.correspondent_name.present? || @email.email_address.present?
+        rows << {
+          key: { text: direction_key },
+          value: { text: name_and_contact_details(@email.correspondent_name, @email.email_address) }
+        }
+      end
+
+      if @email.email_subject.present?
+
+        rows << {
+          key: { text: "Subject" },
+          value: { text: @email.email_subject }
+        }
+
+      end
+
+      if @email.details.present?
+
+        rows << {
+          key: { text: "Email content" },
+          value: { text: format_with_line_breaks(@email.details) }
+        }
+
+      end
+
+      if @email.email_file.attached?
+        rows << {
+          key: { text: "Email" },
+          value: { text: link_to(filename_with_size(@email.email_file), @email.email_file) }
+        }
+      end
+    %>
+    <%= govuk_summary_list(rows:) %>
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Edit email", edit_investigation_email_path(@investigation, @email), class: "govuk-link" %></p>
+    <% end %>
+  </div>
+
+  <% if @email.email_attachment.attached? %>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">Attachments</h2>
+      <p class="govuk-body"><%= link_to @email.email_attachment.filename, @email.email_attachment, class: "govuk-link" %></p>
+      <%= document_placeholder(@email.email_attachment) %>
+      <% if @email.email_attachment.blob.metadata["description"].present? %>
+        <p class="govuk-body"><%= @email.email_attachment.blob.metadata["description"] %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

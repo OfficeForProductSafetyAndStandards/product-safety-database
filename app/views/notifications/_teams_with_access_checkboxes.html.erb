@@ -1,0 +1,19 @@
+<%= govukCheckboxes(
+  key: "",
+  form: form,
+  items: [
+    {
+      key: "teams_with_access_my_team",
+      text: "My team",
+      value: true,
+    },
+    {
+      key: "teams_with_access_others",
+      text: "Others",
+      value: true,
+      conditional: {
+        html: other_teams(form)
+      }
+    }
+  ]
+) %>

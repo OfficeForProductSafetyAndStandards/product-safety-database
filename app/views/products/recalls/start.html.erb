@@ -1,0 +1,30 @@
+<%= page_title "Product recall tool" %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-l">
+      Preparing product recall information
+    </h1>
+    <p class="govuk-body-l opss-secondary-text">
+      Preparing and formatting <abbr title="Product Safety Database">PSD</abbr> data for the Product Recalls and Alerts digital service.
+    </p>
+    <p class="govuk-body-s opss-secondary-text">
+      –&nbsp;<a href="https://www.gov.uk/guidance/product-recalls-and-alerts" class="govuk-link govuk-link--no-visited-state" target="_blank">Product Recalls and Alerts (opens in a new tab)</a>
+    </p>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <p class="govuk-body">
+      This tool provides a convenient process for porting information from the <abbr>PSD</abbr> to the Product Recalls and Alerts digital service. It will generate a <abbr title="Portable Document Format">PDF</abbr> (with product images) and you can add or edit information before transforming it into the required Markdown format, ready to ‘copy and paste’ directly into the recall service.
+    </p>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= @product.product_name_with_cases %>
+    <div class="govuk-form-group">
+      <%= govuk_start_button(text: "Start now", href: product_recall_path(product_id: @product.id, id: "select-images")) %>
+    </div>
+  </div>
+</div>

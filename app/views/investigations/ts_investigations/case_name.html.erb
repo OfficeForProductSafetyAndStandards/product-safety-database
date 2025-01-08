@@ -1,0 +1,28 @@
+<% page_heading = "What is the notification name?" %>
+<%= page_title page_heading, errors: @notification_name_form.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with scope: :investigation, model: @notification_name_form, url: wizard_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+      <%= render "/investigations/case_names/form", form: form, heading: "What is the notification name?" %>
+
+       <div class="govuk-button-group">
+         <%= form.govuk_submit "Save", class: "govuk-button" %>
+         <%= link_to "Cancel", product_path(@product), class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-s">Notification name examples</h2>
+    <p class="govuk-body-s opss-secondary-text">
+      A suggested format for the <abbr>PSD</abbr> would be, brand name, model name and description of the hazard.
+    </p>
+    <ul id="case-name-examples" class="govuk-list govuk-list--bullet govuk-list--spaced govuk-!-font-size-16 opss-secondary-text">
+      <li>Microsoft Xbox Series X gaming console causing burns</li>
+      <li>Chairplan Gary office chair - flammable health risk</li>
+      <li>JoJo Maman Bébé James bear causing injuries</li>
+      <li>Minolta Compact 220 handheld camera - damage to sight</li>
+      <li>Hoover H3W998 washing machine, electric shock</li>
+    </ul>
+  </div>
+</div>

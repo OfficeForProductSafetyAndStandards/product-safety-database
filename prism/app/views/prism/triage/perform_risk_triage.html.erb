@@ -1,0 +1,22 @@
+<% content_for :page_title, "Perform risk triage" %>
+<% @back_link_href = params[:id].present? ? full_risk_assessment_required_path(params[:id]) : root_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Perform risk triage</h1>
+    <p class="govuk-body">The purpose of risk triage is to sense check whether a full risk assessment is required and to give an early indication of what the risk level is likely to be.</p>
+    <p class="govuk-body">The <abbr title="Product Safety Risk Assessment Methodology">PRISM</abbr> triage guide will take you through steps needed to determine whether the product requires a full assessment.</p>
+    <div class="govuk-inset-text">
+      <p class="govuk-body">You'll need to download the Excel file (120KB) to start the risk triage.</p>
+    </div>
+    <%= govuk_button_link_to("Download PRISM triage Excel tool", "/files/prism-toolkit-risk-triage.xlsx", download: "", secondary: true) %>
+    <% if params[:id].present? %>
+      <div class="govuk-button-group">
+        <%= govuk_button_link_to("Continue with risk assessment", continue_with_risk_assessment_path(params[:id])) %>
+        <a href="<%= main_app.your_prism_risk_assessments_path %>" class="govuk-link">No risk assessment required</a>
+      </div>
+    <% else %>
+      <%= govuk_button_link_to("Return to risk assessments dashboard", main_app.your_prism_risk_assessments_path) %>
+    <% end %>
+  </div>
+</div>

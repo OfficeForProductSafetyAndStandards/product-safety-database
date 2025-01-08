@@ -1,0 +1,18 @@
+<% page_heading = @accident_or_incident.page_title %>
+<% page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @accident_or_incident.date_added %>
+      </p>
+    </div>
+
+    <%= govuk_summary_list(rows: accident_or_incident_summary_list_rows(@accident_or_incident)) %>
+
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Edit #{@accident_or_incident.type.downcase}", edit_investigation_accident_or_incident_path(@investigation, @accident_or_incident), class: "govuk-link" %></p>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+shared:
+  account_id: <%= ENV["AWS_ACCOUNT_ID"] %>
+  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
+  region: <%= ENV["AWS_REGION"] %>
+  source_bucket: <%= ENV["AWS_S3_BUCKET"] %>
+  destination_bucket: <%= ENV["REDACTED_EXPORT_BUCKET"] %>
+  role_arn: <%= ENV["REDACTED_EXPORT_ROLE_ARN"] %>

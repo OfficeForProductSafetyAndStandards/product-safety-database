@@ -1,0 +1,66 @@
+<div class="govuk-body">
+
+  <p>Corrective action updated:</p>
+
+  <% if activity.new_summary %>
+    Summary: <b><%= activity.new_summary %></b><br>
+  <% end %>
+
+  <% if activity.new_action %>
+    Action: <b><%= activity.new_action %></b><br>
+  <% end %>
+
+  <% if activity.new_date_decided %>
+    Event date: <b><%= activity.new_date_decided %></b><br>
+  <% end %>
+
+  <% if activity.new_legislation %>
+    Legislation: <b><%= activity.new_legislation %></b><br>
+  <% end %>
+
+  <% if activity.new_online_recall_information&.match?("http") %>
+    Recall information: <%= activity.new_online_recall_information %><br>
+  <% elsif activity.new_online_recall_information.present? %>
+    Recall information: <strong><%= activity.new_online_recall_information %></strong><br>
+  <% end %>
+
+  <% if activity.investigation_product_updated? %>
+    Product: <%= activity.investigation_product.name %><br>
+  <% end %>
+
+  <% if activity.business_updated? %>
+    <% if activity.business %>
+      Business: <%= link_to activity.new_business.trading_name, activity.new_business, class: "govuk-link--no-visited-state" %><br>
+    <% else %>
+      Business: Removed
+    <% end %>
+  <% end %>
+
+  <% if activity.new_measure_type %>
+    Type of action: <b><%= activity.new_measure_type %></b><br>
+  <% end %>
+
+  <% if activity.new_duration %>
+    Duration: <b><%= activity.new_duration %></b><br>
+  <% end %>
+
+  <% if activity.new_geographic_scopes %>
+    Geographic scopes: <b><%= activity.new_geographic_scopes %></b><br>
+  <% end %>
+
+  <% if activity.further_details_changed? %>
+    Details: <%= updated_field activity.new_details %><br>
+  <% end %>
+
+  <% if activity.new_filename %>
+    Attached: <%= updated_field activity.new_filename %><br>
+  <% elsif activity.old_filename %>
+    Attachment removed: <b><%= activity.old_filename %></b><br>
+  <% end %>
+
+  <% if activity.file_description_changed? %>
+    Attachment description: <%= updated_field activity.new_file_description %><br>
+  <% end %>
+</div>
+
+<%= link_to "View corrective action", investigation_corrective_action_path(activity.investigation, activity.metadata["corrective_action_id"]), class: "govuk-link--no-visited-state" %>

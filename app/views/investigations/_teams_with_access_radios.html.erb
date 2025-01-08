@@ -1,0 +1,36 @@
+<%= govukRadios(
+  form: form,
+  key: :teams_with_access,
+  formGroup: {
+    classes: "opss-form-group opss-form-group--sm-labels"
+  },
+  classes: "govuk-radios govuk-radios--small",
+  fieldset: {
+    legend: {
+      text: "Teams added to notifications",
+      is_page_heading: false,
+      classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+    }
+  },
+  items: [
+    {
+      id: "teams_with_access_all",
+      text: "All",
+      value: "all",
+      checked: true
+    },
+    {
+      id: "teams_with_access_my_team",
+      text: "My team",
+      value: "my_team"
+    },
+    {
+      id: "teams_with_access_other",
+      text: "Others",
+      value: "other",
+      conditional: {
+        html: other_teams(form)
+      }
+    }
+  ]
+) %>

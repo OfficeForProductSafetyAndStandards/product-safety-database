@@ -1,0 +1,31 @@
+<% tbody_classes = class_names('govuk-table__body', "opss-grey-record" => product.retired?) %>
+<tbody class="<%= tbody_classes %>">
+  <tr class="govuk-table__row">
+      <th class="govuk-visually-hidden">
+          Product
+      </th>
+      <th id="item-<%= index %>" colspan="4" scope="colgroup" class="govuk-table__header">
+        <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %>
+        <% if product.retired? %>
+          <span class="govuk-!-font-size-16 govuk-!-font-weight-regular opss-no-wrap">(Retired product record)</span>
+        <% end %>
+      </th>
+  </tr>
+  <tr class="govuk-table__row">
+      <th headers="item-<%= index %>" id="meta-<%= index %>" class="govuk-visually-hidden">
+          Metadata
+      </th>
+      <td headers="psdref item-<%= index %> meta-<%= index %>" class="govuk-table__cell opss-no-wrap">
+        <%= product.psd_ref %>
+      </td>
+      <td headers="cat item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.category %>
+      </td>
+      <td headers="prodtype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.subcategory %>
+      </td>
+      <td headers="counterfeit item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.counterfeit_value %>
+      </td>
+  </tr>
+</tbody>

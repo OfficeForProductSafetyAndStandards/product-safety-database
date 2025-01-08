@@ -1,0 +1,54 @@
+<h4 class="govuk-heading-m">Product images</h4>
+<p class="govuk-body-s opss-secondary-text">
+  There are <%= @product.virus_free_images.count %> images added to this product record. <br class="opss-br-desktop">
+  <% if @product.virus_free_images.count > 0 %>
+    These are the product images – they <strong>are not</strong> notification evidence images.
+  <% end %>
+</p>
+
+<% @product.virus_free_images.each do |image| %>
+  <% image = image.decorate %>
+  <ul class="govuk-list govuk-!-margin-top-9">
+    <li>
+      <dl class="govuk-summary-list govuk-!-padding-bottom-9 opss-summary-list-mixed opss-summary-list-mixed--narrow-dt opss-summary-list-mixed--image">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Image
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <figure class="opss-margin-bottom-1-desktop">
+              <% link_content = capture do %>
+                <%= image_tag(image.file_upload) %>
+                <span class="govuk-visually-hidden">(opens in new tab)</span>
+              <% end %>
+              <%= link_to link_content, image.file_upload, target: "_blank", rel: "noreferrer noopener", title: "Opens in a new tab" %>
+            </figure>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Updated
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= image.updated_at.to_date.to_formatted_s(:govuk) %>
+          </dd>
+        </div>
+      </dl>
+    </li>
+
+  </ul>
+<% end %>
+
+<% if @product.owning_team.nil? || @product.owning_team == current_user.team %>
+  <% if policy(@investigation_product).edit_product? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      To edit the images for this product go to the full <%= link_to(product_path(@product), class: "govuk-link govuk-link--no-visited-state") do %><span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record page <span class="govuk-visually-hidden">to access its images</span><% end %>
+    </p>
+  <% end %>
+<% else %>
+  <% if @investigation_product.investigation_closed_at.blank? %>
+    <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+      You cannot edit these images, but you can <%= link_to(owner_investigation_investigation_product_path(@investigation_product.investigation, @investigation_product), class: "govuk-link govuk-link--no-visited-state") do %>contact the <span class="govuk-visually-hidden"><%= @product.psd_ref %></span> product record owner<span class="govuk-visually-hidden"> about its images</span><% end %><br class="opss-br-desktop">with additional product information or corrections
+    </p>
+  <% end %>
+<% end %>

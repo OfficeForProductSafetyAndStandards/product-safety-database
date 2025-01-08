@@ -1,0 +1,77 @@
+<% if investigation.products.none? %>
+  <%= govuk_warning_text do %>
+    A product has not been added to this notification.
+    <p class="govuk-body">Notifications without products are subject to deletion during notification audits.</p>
+  <% end %>
+<% end %>
+
+<section class="govuk-grid-column-full govuk-!-padding-top-3 govuk-!-padding-bottom-1 opss-desktop-padding-top-3 opss-desktop-padding-bottom-4 govuk-!-padding-right-3 govuk-!-padding-left-3 opss-border-all opss-grey-bg opss-3-col-flow govuk-!-margin-bottom-6">
+  <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0 opss-summary-list-mixed opss-summary-list-mixed--sm">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Product&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.products.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_product_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a product</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Business&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.businesses.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_business_types_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a business</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Notification image&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.number_of_related_images %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_image_upload_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a notification image</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Accident / Incident&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.unexpected_events.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_accident_or_incidents_type_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> an accident or incident</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Corrective action&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.corrective_actions.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_corrective_action_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a corrective action</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Prism risk assessment&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.risk_assessments.size + @investigation.prism_risk_assessments.submitted.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_prism_risk_assessment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a prism risk assessment</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Risk assessment&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.risk_assessments.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_risk_assessment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a risk assessment</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Correspondence&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.correspondences.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_correspondence_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a correspondence</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Test result&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.test_results.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_funding_source_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a test result</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Other supporting <br class="opss-br-desktop">information&nbsp;<span class="govuk-!-font-weight-regular opss-no-wrap">(<%= @investigation.generic_supporting_information_attachments.size %><span class="govuk-visually-hidden"> added</span>)</span></dt>
+      <% if policy(@investigation).update? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_document_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a document or attachment</span></a></dd>
+      <% end %>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Comment</dt>
+      <% if policy(@investigation).comment? %>
+        <dd class="govuk-summary-list__actions"><a href="<%= new_investigation_activity_comment_path(investigation) %>" class="govuk-link govuk-link--no-visited-state opss-no-wrap">Add<span class="govuk-visually-hidden"> a comment</span></a></dd>
+      <% end %>
+    </div>
+  </dl>
+</section>

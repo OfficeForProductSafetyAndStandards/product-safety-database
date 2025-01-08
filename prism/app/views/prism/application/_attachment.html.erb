@@ -1,0 +1,12 @@
+<% if file.attached? %>
+  <p class="govuk-body opss-file-attachment">
+    <img src="<%= file_icon_url(file.blob.content_type) %>" width="32" height="32" alt="">
+    <% if file.metadata["safe"] == true %>
+      <a href="<%= main_app.rails_storage_proxy_path(file) %>" class="govuk-link" rel="noreferrer noopener" target="_blank"><%= file.blob.filename %></a>
+    <% elsif file.metadata["safe"] == false %>
+      <%= file.blob.filename %> (failed virus scan)
+    <% else %>
+      <%= file.blob.filename %> (pending virus scan)
+    <% end %>
+  </p>
+<% end %>

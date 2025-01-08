@@ -1,0 +1,15 @@
+<% page_heading = "Edit phone call: #{@phone_call.title}" %>
+<% page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Phone call</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @phone_call.created_at.to_formatted_s(:govuk) %>
+      </p>
+    </div>
+
+    <%= render 'investigations/record_phone_calls/form', correspondence_form: @correspondence_form, investigation: @investigation, url: investigation_phone_call_path(@investigation, @phone_call) %>
+  </div>
+</div>

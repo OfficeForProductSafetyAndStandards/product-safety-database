@@ -1,0 +1,32 @@
+<% page_heading = "Record a corrective action" %>
+<%= page_title page_heading, errors: @corrective_action_form.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_actions_path(@investigation.pretty_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+        <%= page_heading %>
+      </h1>
+      <%= render "form",
+                 f: f,
+                 corrective_action: @corrective_action_form,
+                 investigation: @investigation,
+                 file_blob: @file_blob,
+                 allow_product_linking: true,
+                 allow_business_linking: true %>
+      <% file_field = capture do %>
+        <%= f.hidden_field :existing_document_file_id %>
+        <%= render "related_attachment_fields", form: f, file_blob: @file_blob, attachment_name: :file %>
+      <% end %>
+      <%= f.govuk_radio_buttons_fieldset :related_file, legend: { text: "Are there any files related to the action?", size: "m" } do %>
+        <%= f.govuk_radio_button :related_file, true, label: { text: "Yes" }, link_errors: true do %>
+          <%= file_field %>
+        <% end %>
+        <%= f.govuk_radio_button :related_file, false, label: { text: "No" } %>
+      <% end %>
+      <%= f.govuk_submit("Add corrective action") %>
+    <% end %>
+  </div>
+</div>

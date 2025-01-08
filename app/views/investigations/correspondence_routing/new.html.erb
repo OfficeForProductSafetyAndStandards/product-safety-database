@@ -1,0 +1,14 @@
+<% page_heading = "What type of correspondence are you adding?" %>
+<% page_title(page_heading, errors: @correspondence_type_form.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @correspondence_type_form, url: investigation_correspondence_index_path(@investigation), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <%= form.govuk_collection_radio_buttons :type, CorrespondenceTypeForm::AVAILABLE_TYPES.map { |k, v| OpenStruct.new(id: k, name: v) }, :id, :name, legend: { text: page_heading, size: "l", tag: "h1" } %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Continue") %>
+        <%= link_to "Cancel", investigation_supporting_information_index_path(@investigation), class: "govuk-link" %>
+      </div>
+    <% end %>
+  </div>
+</div>

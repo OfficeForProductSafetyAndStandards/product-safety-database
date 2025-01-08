@@ -1,0 +1,24 @@
+<% label_classes = local_assigns[:label_classes].presence %>
+
+<%= form.govuk_fieldset legend: {text: "Contacts", size: 's'} do %>
+  <div id="contact-hint" class="govuk-hint govuk-!-font-size-16"><%= t('.legend.hint') %></div>
+
+  <%= form.govuk_text_field :name, width: 'two-thirds', label: -> do %>
+    <label class=<%= label_classes %>>Name</label>
+  <% end %>
+
+  <%= form.govuk_text_field :email, width: 'two-thirds', label: -> do %>
+    <label class=<%= label_classes %>>Email</label>
+  <% end %>
+
+  <%= form.govuk_phone_field :phone_number, width: 'two-thirds', label: -> do %>
+    <label class=<%= label_classes %>>Telephone</label>
+  <% end, hint: {text: "For international numbers include the country code.",
+                 size: 'm',
+                 style: "font-size: 1rem !important; line-height: 1.25 !important"} %>
+
+  <%= form.govuk_text_field :job_title,
+                              width: 'two-thirds',
+                              label: {text: "Job title or role description"} %>
+
+<% end %>

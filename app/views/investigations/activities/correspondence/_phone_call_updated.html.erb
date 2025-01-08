@@ -1,0 +1,51 @@
+<div class="govuk-body">
+
+  <% if activity.new_correspondent_name.present? %>
+    <% if activity.new_correspondent_name.removed? %>
+      Name: <%= activity.new_correspondent_name.titleize %>
+    <% else %>
+      Name: <strong><%= activity.new_correspondent_name %></strong>
+    <% end %>
+    <br />
+  <% end %>
+
+  <% if activity.new_phone_number.present? %>
+    <% if activity.new_phone_number.removed? %>
+      Phone number: <%= activity.new_phone_number.titleize %>
+    <% else  %>
+      Phone number: <strong><%= activity.new_phone_number %></strong>
+    <% end %>
+    <br />
+  <% end %>
+
+  <% if activity.new_correspondence_date %>
+    Date of call: <strong><%= activity.new_correspondence_date %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_summary.present? %>
+    <% if activity.new_summary.removed? %>
+      Summary: <%= activity.new_summary.titleize %>
+    <% else %>
+      Summary: <strong><%= activity.new_summary %></strong>
+    <% end %>
+    <br />
+  <% end %>
+
+  <% if activity.new_transcript %>
+    Transcript: <strong><%= link_to activity.new_transcript, url_for(activity.correspondence.transcript), class: "govuk-link--no-visited-state" %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_notes.present? %>
+    <% if activity.new_notes.removed? %>
+      Notes: <%= activity.new_notes.titleize %>
+    <% else %>
+      Notes: <strong><%= activity.new_notes %></strong>
+      <% end %>
+    <br />
+  <% end %>
+</div>
+<p class="govuk-body">
+  <%= link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link govuk-link--no-visited-state" %>
+</p>

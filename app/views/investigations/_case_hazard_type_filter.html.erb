@@ -1,0 +1,7 @@
+<%= govukSelect(
+  key: "hazard_type",
+  form: form,
+  items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+  label: { text: "Hazard type" },
+  formGroup: { classes: "govuk-!-margin-right-1" }
+) %>

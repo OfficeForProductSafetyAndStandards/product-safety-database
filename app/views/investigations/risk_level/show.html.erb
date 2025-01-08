@@ -1,0 +1,42 @@
+<% page_heading = @investigation.risk_level_set? ? t(".title.change") : t(".title.set") %>
+<% page_title page_heading, errors: @risk_level_form.errors.any? %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+    <p class="govuk-body">The notification risk level will usually match the risk assessment.</p>
+    <p class="govuk-body">It can differ from risk assessments if necessary - such as when there are conflicting assessments, or where the assessment was provided by a third party.</p>
+
+    <div class="govuk-inset-text">
+      <%= t(".risk_assessment_details_for_case_html",
+        count: @investigation.risk_assessments.count,
+        add_risk_assessment_href: new_investigation_risk_assessment_path(@investigation.pretty_id),
+        supporting_information_href: investigation_supporting_information_index_path(@investigation.pretty_id),
+        risk_assessment_href: (@investigation.risk_assessments.count == 1 ? investigation_risk_assessment_path(@investigation.pretty_id, @investigation.risk_assessments.first) : nil),
+        risk_assessment_risk_levels: to_sentence(@investigation.risk_assessment_risk_levels.collect {|desc| tag.strong(desc.downcase) })
+      ) %>
+    </div>
+
+    <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put do |form| %>
+      <%= error_summary @risk_level_form.errors %>
+
+      <% radio_items = (Investigation.risk_levels.keys - ["other", "not_conclusive"]).map do |level|
+          { text: t(".levels.#{level}"), value: level }
+         end
+         radio_items << { divider: "or" }
+         radio_items << { text: t(".levels.not_conclusive"), value: "not_conclusive" }
+      %>
+
+      <%= govukRadios(
+        form: form,
+        key: :risk_level,
+        fieldset: { legend: { text: t(".legend"), isPageHeading: false } },
+        items: radio_items
+      ) %>
+
+      <div class="govuk-button-group">
+        <%= govukButton(text: t("Save")) %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>

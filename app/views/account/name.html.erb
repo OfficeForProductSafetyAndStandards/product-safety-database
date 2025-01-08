@@ -1,0 +1,12 @@
+<% title = "Change your name" %>
+<% page_title title, errors: @user.errors.any? %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @user, url: account_name_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <%= form.govuk_text_field(:name, label: { text: "Full name" }, class: ["govuk-!-width-two-thirds"], autocomplete: "name") %>
+      <%= form.govuk_submit("Save") %>
+    <% end %>
+  </div>
+</div>

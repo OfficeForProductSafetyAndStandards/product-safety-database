@@ -1,0 +1,31 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_product_identification_details_ucr_numbers.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @investigation_product, url: ucr_numbers_notification_create_index_path, method: :patch, data: { controller: "nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_product_identification_details_ucr_numbers.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
+        </ul>
+      <% end %>
+      <template data-nested-form-target="template">
+        <%= f.fields_for :ucr_numbers, @investigation_product.ucr_numbers.new, child_index: "NEW_RECORD" do |ucr_fields| %>
+          <%= render "ucr_numbers_form", f: ucr_fields %>
+        <% end %>
+      </template>
+      <%= f.fields_for :ucr_numbers do |ucr_fields| %>
+        <%= render "ucr_numbers_form", f: ucr_fields %>
+      <% end %>
+      <div data-nested-form-target="target"></div>
+      <button type="button" data-action="nested-form#add" class="govuk-button govuk-button--secondary opss-nojs-hide">Add UCR number</button>
+      <%= f.govuk_submit "Save" do %>
+        <a href="<%= wizard_path(:add_product_identification_details) %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

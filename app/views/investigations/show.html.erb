@@ -1,0 +1,15 @@
+<% display_link = policy(@investigation).change_owner_or_status? %>
+<% href = @investigation.is_closed? ? reopen_investigation_status_path(@investigation) : close_investigation_status_path(@investigation) %>
+<% link_text = @investigation.is_closed? ? "Re-open notification" : "Close notification" %>
+<% secondary_text = @investigation.is_closed? ? "This notification is closed." : "From here you can find all the information about this notification. If you have editing rights for this notification, you can add products, businesses and supporting information." %>
+
+<%= render "incomplete_bulk_products_upload_notification" %>
+<%= render "investigations/navigable_case_nav", investigation: @investigation,
+                                                current_tab: "overview",
+                                                case_page_heading: "Notification",
+                                                secondary_text:,
+                                                display_link:,
+                                                href:,
+                                                link_text: do %>
+  <%= render "investigations/tabs/overview" %>
+<% end %>

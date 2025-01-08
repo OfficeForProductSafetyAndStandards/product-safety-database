@@ -1,0 +1,25 @@
+<h2 class="govuk-heading-m">Products</h2>
+<% if @business.products.any? %>
+  <% @business.investigation_products.each do |investigation_product| %>
+    <%=
+      govuk_summary_list do |summary_list|
+        product = investigation_product.product.decorate
+
+        summary_list.with_row do |row|
+          row.with_key(text: "Product ID")
+          row.with_value(text: formatted_product(investigation_product.product_id))
+        end
+        summary_list.with_row do |row|
+          row.with_key(text: "Name")
+          row.with_value(text: product.name)
+        end
+        summary_list.with_row do |row|
+          row.with_key(text: "Brand")
+          row.with_value(text: product.brand)
+        end
+      end
+    %>
+  <% end %>
+<% else %>
+  <p class="govuk-body">No products</p>
+<% end %>

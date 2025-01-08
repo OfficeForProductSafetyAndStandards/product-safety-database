@@ -1,0 +1,38 @@
+---
+# The two coranvirus-related categories come first, rather than being
+# alphabetical, to make it quicker to select them from the dropdown.
+product_category:
+  - Personal protective equipment (PPE)
+  - Chemical products
+  - Childcare articles and children's equipment
+  - Clothing, textiles and fashion items
+  - Communication and media equipment
+  - Construction products
+  - Cosmetics
+  - Decorative articles
+  - Eco-design
+  - Electrical appliances and equipment
+  - Explosive atmospheres equipment
+  - Food-imitating products
+  - Furniture
+  - Gadgets
+  - Gas appliances and components
+  - Hand tools
+  - Hobby / sports equipment
+  - Jewellery
+  - Kitchen / cooking accessories
+  - Laser pointers
+  - Lifts
+  - Lighters
+  - Lighting chains
+  - Lighting equipment
+  - Machinery
+  - Measuring instruments
+  - Motor vehicles (including spare parts)
+  - Pressure equipment / vessels
+  - Pyrotechnic articles
+  - Rail and guided transport
+  - Recreational crafts
+  - Stationery
+  - Toys
+  - Waste

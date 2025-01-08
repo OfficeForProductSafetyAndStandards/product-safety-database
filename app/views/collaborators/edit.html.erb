@@ -1,0 +1,25 @@
+<% title = @collaborator.name %>
+<% page_title title, errors: @edit_form.errors.any? %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <% remove_hint = @investigation.is_private? ? "Will not ordinarily be able to view notification details as it is restricted." :  "Will have default view rights." %>
+      <%= form.govuk_radio_buttons_fieldset(:permission_level, legend: { text: "Permission level" }) do %>
+        <%= form.govuk_radio_button :permission_level, Collaboration::Access::ReadOnly.model_name.human, label: { text: "View full notification" }, hint: { text: "View full notification details including correspondence." }, link_errors: true %>
+        <%= form.govuk_radio_button :permission_level, Collaboration::Access::Edit.model_name.human, label: { text: "Edit full notification" }, hint: { text: "View and edit all notification details. Cannot add or remove teams or close the notification." } %>
+        <%= form.govuk_radio_divider %>
+        <%= form.govuk_radio_button :permission_level, EditNotificationCollaboratorForm::PERMISSION_LEVEL_DELETE, label: { text: "Remove #{@collaborator.name} from the notification" }, hint: { text: remove_hint } %>
+      <% end %>
+      <p class="govuk-body">We’ll email <%= @collaborator.name %> to let them know that their permission level has been changed.</p>
+      <%= form.govuk_radio_buttons_fieldset(:include_message, legend: { text: "Do you want to include more information?" }) do %>
+        <%= form.govuk_radio_button :include_message, "true", label: { text: "Yes, add a message" }, link_errors: true do %>
+          <%= form.govuk_text_area :message, label: { text: "Message to #{@collaborator.name}" }, hint: { text: "Message will also be included on the notification timeline" } %>
+        <% end %>
+        <%= form.govuk_radio_button :include_message, "false", label: { text: "No" } %>
+      <% end %>
+      <%= form.govuk_submit("Update team") %>
+    <% end %>
+  </div>
+</div>

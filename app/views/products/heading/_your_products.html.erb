@@ -1,0 +1,18 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">Your products</h1>
+    <p class="govuk-body opss-secondary-text govuk-!-margin-bottom-1">
+      <%= "There are #{count} product records included in open notifications where you are the notification owner." %>
+    </p>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-button-group opss-text-align-right">
+      <% if current_user.can_bulk_upload_products? %>
+        <%= link_to triage_bulk_upload_products_path, class: "govuk-link govuk-link--no-visited-state", data: { cy: "upload-multiple-products" } do %>
+          Upload multiple products
+        <% end %>
+      <% end %>
+      <%= govuk_button_link_to("Create a product record", duplicate_check_products_path, secondary: true, "data-cy": "new-product") %>
+    </div>
+  </div>
+</div>

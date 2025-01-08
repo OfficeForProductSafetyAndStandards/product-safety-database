@@ -1,0 +1,18 @@
+---
+applications:
+- name: ((app-name))
+  buildpacks:
+    - https://github.com/cloudfoundry/apt-buildpack.git#v0.3.2
+    - https://github.com/cloudfoundry/binary-buildpack.git#v1.1.7
+  path: .
+  stack: cflinuxfs3
+  timeout: 180
+  services:
+    - ((db-name))
+    - ((env-name))
+  processes:
+    - type: task
+      command: ./task.sh
+      env:
+        DB_NAME: ((db-name))
+        ENV_NAME: ((env-name))

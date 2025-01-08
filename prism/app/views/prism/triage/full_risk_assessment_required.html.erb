@@ -1,0 +1,24 @@
+<% content_for :page_title, "Does the product require a full risk assessment?" %>
+<% @back_link_href = @prism_risk_assessment.less_than_serious_risk.present? ? serious_risk_rebuttable_path(@prism_risk_assessment) : serious_risk_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form_model, url: full_risk_assessment_required_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%=
+        f.govuk_collection_radio_buttons :full_risk_assessment_required,
+        [
+          OpenStruct.new(id: true, name: "Yes", description: "It’s clear that the product non-compliance will present risk and a full risk assessment is required."),
+          OpenStruct.new(id: false, name: "Not clear", description: "I would like to undertake risk triage to determine whether the product needs a full risk assessment and/or to give an early indication of what the risk level is likely to be.")
+        ],
+        :id,
+        :name,
+        :description,
+        legend: { text: "Does the product require a full risk assessment?", size: "l" },
+        hint: { text: "For more information on risk triage, refer to the <a href=\"https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=9\" class=\"govuk-link\" target=\"_blank\" rel=\"noreferrer noopener\"><abbr>PRISM</abbr> guidance (opens in a new tab)</a>.".html_safe },
+        bold_labels: false
+      %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<%= form.govuk_date_field :assessed_on, assessed_on: true, legend: { text: "Date of assessment" }, hint: { text: "For example, 31 1 2020" } %>
+
+<%= form.govuk_radio_buttons_fieldset(:risk_level, legend: { text:  "What was the risk level?" }) do %>
+  <%= form.govuk_radio_button :risk_level, "serious", label: { text: t("investigations.risk_level.show.levels.serious") }, link_errors: true %>
+  <% (Investigation.risk_levels.keys - ["serious", "other", "not_conclusive"]).map do |level| %>
+    <%= form.govuk_radio_button :risk_level, level, label: { text: t("investigations.risk_level.show.levels.#{level}") } %>
+  <% end %>
+  <%= form.govuk_radio_divider %>
+  <%= form.govuk_radio_button :risk_level, "not_conclusive", label: { text: t("investigations.risk_level.show.levels.not_conclusive") } %>
+<% end %>
+
+<%- teams_html = capture do %>
+  <%= form.govuk_collection_select :assessed_by_team_id,
+                                   risk_assessment_form.other_teams.map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                   :value,
+                                   :text,
+                                   label: { text: "Choose team" } %>
+<% end %>
+
+<%- businesses_html = capture do %>
+  <% hint = investigation.new_record? ? nil : safe_join(["If the business isn’t listed, you should ", link_to("add it to the notification", new_investigation_business_path(investigation)), " first."]) %>
+
+  <%= form.govuk_collection_select :assessed_by_business_id,
+                                   risk_assessment_form.businesses_select_items.map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                   :value,
+                                   :text,
+                                   label: { text: "Choose business" },
+                                   hint: {text: hint}%>
+<% end %>
+
+<%- someone_else_html = capture do %>
+  <%= form.govuk_text_field :assessed_by_other, label: {text: "Organisation name"} %>
+<% end %>
+
+<% assessed_by_radio_items = []
+
+   assessed_by_radio_items.push(text: "Another team or market surveilance authority", value: :another_team, conditional: { html: teams_html })
+   assessed_by_radio_items.push(text: "A business related to the notification", value: :business, conditional: { html: businesses_html }) unless risk_assessment_form.businesses_select_items.length == 1
+   assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: { html: someone_else_html })
+
+%>
+
+<%= form.govuk_radio_buttons_fieldset(:assessed_by, legend: { text: "Who completed the assessment?" }) do %>
+  <%= form.govuk_radio_button :assessed_by, :my_team, label: { text: current_user.team.name }, link_errors: true %>
+  <% assessed_by_radio_items.each do |radio_item| %>
+    <%= form.govuk_radio_button :assessed_by, radio_item[:value], label: { text: radio_item[:text] } do %>
+      <%= radio_item[:conditional][:html] %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if risk_assessment_form.investigation_products.length > 1 %>
+  <%= form.govuk_collection_check_boxes :investigation_product_ids,
+                                        risk_assessment_form.investigation_products.map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                        :value,
+                                        :text,
+                                        legend: { text: "Which products were assessed?" },
+                                        hint: { text: "You must choose at least one. Only products already added to the notification are listed." } %>
+<% else %>
+
+  <h2 class="govuk-heading-m">Product assessed</h2>
+
+  <p class="govuk-body"><%= risk_assessment_form.investigation_products.first[:text] %></p>
+
+  <%= form.fields_for :investigation_product_ids do |field| %>
+    <%= field.hidden_field nil, value: risk_assessment_form.investigation_products.first[:value] %>
+  <% end %>
+<% end %>
+
+<% if form.object.old_file.present? %>
+  <%= form.govuk_fieldset legend: { text: "Upload the risk assessment" } do %>
+    <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.old_file } %>
+
+    <%= govuk_details(summary_text: "Replace this file") do %>
+      <%= form.govuk_file_field :risk_assessment_file, label: { text: "Select file", size: "s" } %>
+    <% end %>
+  <% end %>
+<% elsif form.object.risk_assessment_file.present? %>
+  <%= form.hidden_field :risk_assessment_file, value: form.object.risk_assessment_file.id %>
+  <%= form.govuk_fieldset legend: { text: "Upload the risk assessment" } do %>
+    <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.risk_assessment_file } %>
+    <%= govuk_details(summary_text: "Replace this file") do %>
+      <%= form.govuk_file_field :risk_assessment_file, label: { text: "Select file", size: "s" } %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= form.govuk_file_field :risk_assessment_file, legend: { text: "Upload the risk assessment" }, label: { text: "Upload the risk assessment" } %>
+<% end %>
+
+<%= form.govuk_text_area :details,
+                         label: { text: "Further details (optional)", size: 'm' }
+%>

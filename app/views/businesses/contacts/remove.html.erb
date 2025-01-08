@@ -1,0 +1,39 @@
+<%= page_title "View contact" %>
+<div class="govuk-grid-row govuk-!-padding-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">
+      <%= "Business: #{@business.trading_name}" %>
+    </span>
+    <h1 class="govuk-heading-l">Remove contact</h1>
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Name</th>
+          <td class="govuk-table__cell">
+            <%= @contact.name %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Email</th>
+          <td class="govuk-table__cell"><%= @contact.email %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Phone number</th>
+          <td class="govuk-table__cell"><%= @contact.phone_number %></td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">
+            Job title or role description
+          </th>
+          <td class="govuk-table__cell">
+            <%= @contact.job_title %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= form_with url: business_contact_path(@business, @contact), method: :delete do |form| %>
+  <%= govukButton text: "Remove contact", classes: "govuk-button govuk-button--warning" %>
+<% end %>

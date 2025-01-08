@@ -1,0 +1,16 @@
+<% page_heading = "Edit #{@accident_or_incident.type.downcase}" %>
+<% page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @accident_or_incident_form, url: investigation_accident_or_incident_path(@investigation, @accident_or_incident), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= form.govuk_error_summary(presenter: ErrorSummaryPresenter)  %>
+
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+      <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, type: @accident_or_incident.type %>
+
+      <%= form.govuk_submit "Update #{@accident_or_incident.type.downcase}" %>
+    <% end %>
+  </div>
+</div>

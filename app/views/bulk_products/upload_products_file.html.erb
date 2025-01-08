@@ -1,0 +1,67 @@
+<% page_heading = "Upload products by Excel - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_upload_products_file_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: add_business_details_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_upload_products_file_form, url: upload_products_file_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        Upload products by Excel
+      </h1>
+      <p class="govuk-body"><a href="/files/PSD%20High%20volume%20product%20entry%20Non%20compliance%20Form%20-%20V7.xlsx" class="govuk-link" download>Download a template Excel file</a> to see an example of the format required.</p>
+      <p class="govuk-body">The Excel file provided includes all the essential product details needed to create new products on the <abbr>PSD</abbr>.</p>
+      <% if @bulk_products_upload_products_file_form.products_file.present? %>
+        <p class="govuk-body opss-file-attachment">
+          Current file:
+          <% if @bulk_products_upload_products_file_form.products_file.metadata["safe"] == true %>
+            <a href="<%= rails_storage_proxy_path(@bulk_products_upload_products_file_form.products_file) %>" class="govuk-link" rel="noreferrer noopener" target="_blank"><%= @bulk_products_upload_products_file_form.products_file.filename %></a>
+          <% elsif @bulk_products_upload_products_file_form.products_file.metadata["safe"] == false %>
+            <%= @bulk_products_upload_products_file_form.products_file.filename %> (failed virus scan)
+          <% else %>
+            <%= @bulk_products_upload_products_file_form.products_file.filename %> (pending virus scan)
+          <% end %>
+        </p>
+      <% end %>
+      <%= form.govuk_file_field :products_file_upload, label: nil, accept: ".xlsx" %>
+      <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
+      <% if @bulk_products_upload_products_file_form.product_error_messages.present? %>
+        <h2 class="govuk-heading-m">Product errors</h2>
+        <table class="govuk-table opss-table--borders">
+          <caption class="govuk-table__caption govuk-visually-hidden">Product errors: a simple data table.</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Entry number</th>
+              <th scope="col" class="govuk-table__header">Error message(s)</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <% @bulk_products_upload_products_file_form.product_error_messages.each_pair do |entry_number, errors| %>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  <%= entry_number %>
+                </th>
+                <td class="govuk-table__cell">
+                  <%= errors.full_messages.join("<br>").html_safe %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <% if @bulk_products_upload_products_file_form.product_error_messages.size > 11 %>
+            <tfoot class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Entry number</th>
+                <th scope="col" class="govuk-table__header">Error message(s)</th>
+              </tr>
+            </tfoot>
+          <% end %>
+        </table>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Continue") %>
+      </div>
+    </div>
+  </div>
+<% end %>

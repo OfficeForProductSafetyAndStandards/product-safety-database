@@ -1,0 +1,48 @@
+<%= page_title "Home Page" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Welcome to the Product Safety Database
+    </h1>
+    <p class="govuk-body-l">
+      The place to create notifications for unsafe or non-compliant products.
+    </p>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: all_products_path, method: :get do %>
+      <div class="moj-search govuk-!-margin-bottom-8">
+        <div class="govuk-form-group">
+          <label for="q-field" class="govuk-label govuk-label--s moj-search__label">Search for products to create a notification</label>
+          <input id="q-field" class="govuk-input moj-search__input" aria-describedby="q-hint" type="search" name="q">
+        </div>
+        <button type="submit" formnovalidate="formnovalidate" class="govuk-button moj-search__button" data-module="govuk-button" data-prevent-double-click="true">
+          <span class="govuk-visually-hidden">Search</span>
+        </button>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l">
+      How to create a product safety notification
+    </h2>
+    <ul class="govuk-list">
+      <li class="app-chevron-card-list__entry">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">
+          <a href="<%= all_products_path %>" class="govuk-link app-chevron-card-list__link">1. Search for or add products</a>
+        </h3>
+        <p class="govuk-body">Find or add products for the notification</p>
+      </li>
+      <li class="app-chevron-card-list__entry">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">
+          <a href="<%= current_user.can_use_notification_task_list? ? notifications_create_index_path : create_a_case_page_index_path %>" class="govuk-link app-chevron-card-list__link">2. Create a product safety notification</a>
+        </h3>
+        <p class="govuk-body">Start notification for selected unsafe or non-compliant products</p>
+      </li>
+    </ul>
+  </div>
+</div>

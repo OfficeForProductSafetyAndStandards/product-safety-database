@@ -1,0 +1,21 @@
+<div class="govuk-body">
+  Date of assessment: <strong><%= activity.assessed_on %></strong>
+  <br>
+  Risk level: <strong><%= activity.risk_level %></strong>
+  <br>
+  Assessed by: <strong><%= activity.assessed_by_name %></strong>
+  <br>
+  Product assessed: <strong><%= activity.products_assessed %></strong>
+
+  <% if activity.risk_assessment_file %>
+    <br>
+    Attached: <strong><%= link_to activity.risk_assessment_file.filename, url_for(activity.risk_assessment_file), class: "govuk-link--no-visited-state" %></strong>
+  <% end %>
+
+  <% if activity.further_details %>
+    <br>
+    Further details: <strong><%= activity.further_details %></strong>
+  <% end %>
+</div>
+
+<%= link_to "View risk assessment", investigation_risk_assessment_path(activity.investigation, activity.risk_assessment), class: "govuk-link--no-visited-state" %>

@@ -1,0 +1,16 @@
+<% title = "Edit attachment" %>
+<% page_title title, errors: @document_form.errors.any? %>
+<%= form_with model: @document_form, scope: :document, builder: GOVUKDesignSystemFormBuilder::FormBuilder, url: associated_document_path(@parent, @file), method: :patch do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form.govuk_error_summary %>
+      <%= render "page_heading", title: "Edit attachment" %>
+      <%= render "documents/document_preview", document: @file, dimensions: [480, 320] %>
+
+      <%= form.govuk_text_field :title, label: { text: "Document title", size: "m" } %>
+      <%= form.govuk_text_area :description, label: { text: "Description" }, maxchars: 10_000 %>
+
+      <%= form.govuk_submit "Update attachment" %>
+    </div>
+  </div>
+<% end %>

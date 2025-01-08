@@ -1,0 +1,47 @@
+<div class="govuk-body">
+
+  <p>Changes:</p>
+
+  <% if activity.new_overview %>
+    Summary: <%= updated_field(activity.new_overview) %><br>
+  <% end %>
+
+  <% if activity.new_correspondence_date %>
+    Date of email: <%= updated_field(activity.new_correspondence_date.to_formatted_s(:govuk)) %><br>
+  <% end %>
+
+  <% if activity.new_correspondent_name %>
+    Name: <%= updated_field(activity.new_correspondent_name) %><br>
+  <% end %>
+
+  <% if activity.new_email_direction %>
+    Email direction: <%= updated_field(activity.new_email_direction) %><br>
+  <% end %>
+
+  <% if activity.new_email_address %>
+    Email address: <%= updated_field(activity.new_email_address) %><br>
+  <% end %>
+
+  <% if activity.new_email_subject %>
+    Subject: <%= updated_field(activity.new_email_subject) %><br>
+  <% end %>
+
+  <% if activity.new_details %>
+    Email: <%= updated_field(activity.new_details) %><br>
+  <% end %>
+
+  <% if activity.email_file_changed? %>
+    Email file: <%= updated_field(activity.new_email_file) %><br>
+  <% end %>
+
+  <% if activity.email_attachment_changed? %>
+    Email attachment: <%= updated_field(activity.new_email_attachment) %><br>
+  <% end %>
+
+  <% if activity.new_attachment_description %>
+    Attachment description: <%= updated_field(activity.new_attachment_description) %><br>
+  <% end %>
+
+</div>
+
+<%= link_to "View email", investigation_email_path(activity.investigation, activity.email_id), class: "govuk-link--no-visited-state" %>

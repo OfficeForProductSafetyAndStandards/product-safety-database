@@ -1,0 +1,39 @@
+<% content_for :page_title, "Add steps to harm" %>
+<% @errors = @harm_scenario.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, data: { controller: "nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary(presenter: Prism::HarmScenarioStepErrorSummaryPresenter) %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Create product harm scenarios</span>
+        Add steps to harm
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= sanitize(hazard_type) %></p>
+        <p class="govuk-body"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+        <p class="govuk-body"><%= sanitize(@harm_scenario.description) %></p>
+        <p class="govuk-body">Affected users: <%= sanitize(affected_users) %></p>
+      <% end %>
+      <p class="govuk-text">Creating a harm scenario requires consideration of how the identified hazard could cause harm to people in three key areas: the existence of a hazard, exposure to risk, and resulting harm. The scenario will normally contain between three and five steps to harm. The nature of probability is such that the more steps there are, in general the lower the probability will be. It is rare that more than five steps are necessary. Further information can be found in the <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1128532/prism-guidance-v01A.pdf#page=16" class="govuk-link" target="_blank" rel="noreferrer noopener"><abbr>PRISM</abbr> guidance (opens in a new tab)</a>.</p>
+      <div id="opss-steps">
+        <template data-nested-form-target="template">
+          <%= f.fields_for :harm_scenario_steps, Prism::HarmScenarioStep.new, child_index: "NEW_RECORD" do |step_fields| %>
+            <%= render partial: "harm_scenario_step_fields", locals: { f: step_fields, show_index: false } %>
+          <% end %>
+        </template>
+        <%= f.fields_for :harm_scenario_steps do |step_fields| %>
+          <%= render partial: "harm_scenario_step_fields", locals: { f: step_fields, show_index: true } %>
+        <% end %>
+      </div>
+      <div data-nested-form-target="target"></div>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" data-action="nested-form#add">Add another step</a></p>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

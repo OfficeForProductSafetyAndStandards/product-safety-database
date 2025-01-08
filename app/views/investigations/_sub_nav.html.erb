@@ -1,0 +1,23 @@
+<nav class="govuk-grid-column-one-quarter govuk-!-padding-right-0" aria-label="Secondary">
+  <a href="#page-content" class="govuk-skip-link opss-skip-link">Skip to the main content</a>
+  <ul class="govuk-list opss-left-nav">
+    <% items.each do |item| %>
+      <li class="<%= class_names("opss-left-nav__active" => item[:active]) %>">
+        <%= link_to(item[:href], class: "govuk-link govuk-link--no-visited-state", 'aria-current':("page" if item[:active]), data: { cy: item[:text].parameterize }) do %>
+          <%= item[:html] || item[:text] + item[:count].to_s %>
+        <% end %>
+        <% if item[:active] && item[:sub_items] %>
+          <ul class="govuk-list">
+            <% item[:sub_items].each do |sub_item| %>
+              <li>
+                <%= link_to(sub_item[:href], class: "govuk-link govuk-link--no-visited-state", data: { cy: sub_item[:text]&.parameterize }) do %>
+                  <%= sub_item[:html] || sub_item[:text].present? ? sub_item[:text] : "" + sub_item[:count].to_s %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

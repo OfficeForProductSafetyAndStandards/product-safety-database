@@ -1,0 +1,64 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.prism_or_legacy.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+      <%= t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.prism_or_legacy.title") %>
+    </h1>
+    <%= govuk_inset_text do %>
+      <p class="govuk-body">For</p>
+      <ul class="govuk-list">
+        <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
+      </ul>
+    <% end %>
+    <h2 class="govuk-heading-m">Related risk assessments</h2>
+      <% if @related_prism_risk_assessments.size.positive? %>
+        <%= form_with url: with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+          <p class="govuk-body">Select a related risk assessment to add to the notification.</p>
+          <table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table--borders">
+            <caption class="govuk-table__caption govuk-visually-hidden">PRISM risk assessments: a simple data table.</caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Assessment title</th>
+                <th scope="col" class="govuk-table__header">Created by</th>
+                <th scope="col" class="govuk-table__header">Last updated</th>
+                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Add assessment to notification</span></th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <% @related_prism_risk_assessments.each do |prism_risk_assessment| %>
+                <tr class="govuk-table__row">
+                  <th scope="row" class="govuk-table__header">
+                    <%= sanitize(prism_risk_assessment.name.presence || "Unknown") %>
+                  </th>
+                  <td class="govuk-table__cell">
+                    <%= sanitize(prism_risk_assessment.user_and_organisation.join("<br>").html_safe) %>
+                  </td>
+                  <td class="govuk-table__cell">
+                    <%= date_or_recent_time_ago prism_risk_assessment.updated_at %>
+                  </td>
+                  <td class="govuk-table__cell">
+                    <%= f.govuk_submit("Add", name: "entity_id", value: prism_risk_assessment.id, class: "govuk-!-margin-bottom-0") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+            <% if @related_prism_risk_assessments.size > 11 %>
+              <tfoot class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header">Assessment title</th>
+                  <th scope="col" class="govuk-table__header">Created by</th>
+                  <th scope="col" class="govuk-table__header">Last updated</th>
+                  <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Add assessment to notification</span></th>
+                </tr>
+              </tfoot>
+            <% end %>
+          </table>
+        <% end %>
+      <% else %>
+        <p class="govuk-body">There are no risk assessments for <%= sanitize(@investigation_product.decorate.product.name_with_brand) %>. <strong>To conduct a new risk assessment</strong>, use the 'Risk Assessments' section of the Product Safety Database.</p>
+      <% end %>
+    <%= govuk_button_link_to("Add legacy risk assessment", with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id, entity_id: "new"), secondary: true) %>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<%= page_title "Remove attachment" %>
+<% content_for :after_header do %>
+  <%= link_to "Back", attachments_tab_path(@parent, @file), class: "govuk-back-link" %>
+<% end %>
+
+<%= render "page_heading", title: "Remove attachment" %>
+<%= render "documents/document_preview", document: @file, dimensions: [480, 320] %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Title</th>
+          <td class="govuk-table__cell">
+            <%= @file.metadata[:title] %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">Type</th>
+          <td class="govuk-table__cell">
+            <%= @file.metadata[:document_type] %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">
+            Description
+          </th>
+          <td class="govuk-table__cell">
+            <%= @file.metadata[:description] %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="row">
+            URL
+          </th>
+          <td class="govuk-table__cell">
+            <%= @file.filename %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= form_with url: associated_document_path(@parent, @file), builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :delete do |form| %>
+  <%= form.govuk_submit "Delete attachment", class: "govuk-button govuk-button--warning" %>
+<% end %>

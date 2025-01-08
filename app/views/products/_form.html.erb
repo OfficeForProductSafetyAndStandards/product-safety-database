@@ -1,0 +1,114 @@
+<% category_items = [OpenStruct.new(value: "", text: "")] + product_categories.map{|x| OpenStruct.new(value: x, text: x)}  %>
+<%= form.govuk_collection_select :category,
+                                 category_items,
+                                 :value,
+                                 :text,
+                                 label: { text: "Product category", size: "m" }, hint: { text: "Select a Category from drop down" }, disabled: local_assigns[:is_not_allowed]  %>
+<%= form.govuk_text_field :subcategory, label: { text: 'Product subcategory', size: 'm' }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
+
+<% if product_form.authenticity_unsure? %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Is the product counterfeit?</legend>
+    <p class="govuk-body">The original record was recorded as 'unsure'</p>
+  </fieldset>
+<% else %>
+  <% counterfeit_radio_items =  conditionally_disabled_items_for_authenticity(product_form, disable_all_items: local_assigns[:disable_permanent_fields]).map{|x| OpenStruct.new(value: x[:value], text: x[:text], disabled: x[:disabled])}%>
+  <%= form.govuk_radio_buttons_fieldset(:authenticity, legend: {text: "Is the product counterfeit?"}, hint: {text: local_assigns[:disable_permanent_fields] ? "The counterfeit status will be permanent for this product record. You can create an alternative product record if required" : "The counterfeit status will be permanent for this product record. You can create the product record later, or create an alternative product record when required", size: "16"}) do %>
+    <%= form.govuk_radio_button :authenticity, counterfeit_radio_items[0].value, label: {text: counterfeit_radio_items[0].text}, link_errors: true, disabled: counterfeit_radio_items[0].disabled %>
+    <%= form.govuk_radio_button :authenticity, counterfeit_radio_items[1].value, label: {text: counterfeit_radio_items[1].text}, disabled: counterfeit_radio_items[1].disabled %>
+    <%= form.govuk_radio_button :authenticity, counterfeit_radio_items[2].value, label: {text: counterfeit_radio_items[2].text}, disabled: counterfeit_radio_items[2].disabled %>
+  <% end %>
+<% end %>
+
+<% markings_list = [OpenStruct.new(id: "UKCA", name: "UKCA"), OpenStruct.new(id: "UKNI", name: "UKNI"), OpenStruct.new(id: "CE", name: "CE")] %>
+
+<%= form.govuk_radio_buttons_fieldset(:has_markings, legend: { size: 'm', text: "Does the product have UKCA, UKNI, or CE marking?" }) do %>
+  <%= form.govuk_radio_button :has_markings, 'markings_yes', label: { text: "Yes" }, link_errors: true do %>
+      <%= form.govuk_collection_check_boxes :markings,
+                                            markings_list,
+                                            :id,
+                                            :name,
+                                            hint_text: "Select all markings that apply",
+                                            legend: { text: "Select product marking", size: 's' } %>
+  <% end %>
+  <%= form.govuk_radio_button :has_markings, 'markings_no', label: { text: "No" } %>
+  <%= form.govuk_radio_button :has_markings, 'markings_unknown', label: { text: "Unknown" } %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Number of units affected?", text: "The number of units affected is notification related data (and has now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
+
+<%= form.govuk_text_field :brand,
+                          label: {text: "Manufacturer's brand name", size: 'm'},
+                          hint: {text: 'For example, Dyson or Sony<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The manufacturer\'s brand name will be permanent for this product record</span>'.html_safe},
+                          disabled: local_assigns[:disable_permanent_fields]
+%>
+
+
+<%= form.govuk_text_field :name,
+                          label: {text: "Product name", size: 'm'},
+                          hint: {text: 'Include model name and model number, for example \'PlayStation 5\'<span class="govuk-visually-hidden">.</span><br><span class="govuk-!-font-size-16">The product name will be permanent for this product record</span>'.html_safe},
+                          disabled: local_assigns[:disable_permanent_fields]
+%>
+
+<% if !local_assigns[:disable_image_upload] %>
+  <% if form.object.existing_image_file_id.present? %>
+    <%= form.hidden_field :existing_image_file_id, value: form.object.existing_image_file_id %>
+      <%= form.govuk_file_field :image,
+                                label: { text: 'Upload a product image', size: 'm' },
+                                hint: { text: 'Please ensure that the image you are uploading is in the correct orientation prior to uploading it.</br>
+                            Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.'.html_safe } %>
+
+      <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.image } %>
+  <% else %>
+    <%= form.govuk_file_field :image,
+                            label: { text: 'Upload a product image', size: 'm' },
+                            hint: { text: 'Please ensure that the image you are uploading is in the correct orientation prior to uploading it.</br>
+                            Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF.'.html_safe } %>
+  <% end %>
+<% end %>
+
+
+<%= form.govuk_collection_radio_buttons :when_placed_on_market,
+                                        items_for_before_2021_radio(product_form).map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                        :value,
+                                        :text, legend: {text: "Was the product placed on the market before 1 January 2021?"}%>
+
+
+<%= form.govuk_number_field :barcode,
+                          label: {text: "Barcode number (GTIN, EAN or UPC)", size: 'm'},
+                          hint: {text: "Normally 8, 12, or 13 digits"}
+%>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Batch numbers", text: "Batch numbers are notification related data (and have now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
+
+<%= form.govuk_text_area :product_code, label: { text: 'Other product identifiers', size: 'm' }, hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." } %>
+
+<%= form.govuk_text_field :webpage, label: { text: 'Webpage', size: 'm' }, hint: { text: "The manufacturer's page for the product, or a link to where it can be bought" } %>
+
+
+<%= form.govuk_collection_select :country_of_origin,
+                                 [OpenStruct.new(value: "", text: "")] + options_for_country_of_origin(countries, product_form).map{|x| OpenStruct.new(value: x[:value], text: x[:text])},
+                                 :value,
+                                 :text,
+                                 label: { text: "Country of origin", size: "m" },
+                                 hint: { text: "Where the product was manufactured" } %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= opss_aside title: "Customs codes", text: "Customs codes are notification related data (and have now moved to the notification page).", classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-9" %>
+  </div>
+</div>
+
+
+<%= form.govuk_text_area :description, label: { text: "Description of product", size: 'm' }, hint: { text: "Details about the product you haven't included above. For example, colour, size, packaging description. Do not include details of damage or incidents" } %>
+
+<%= form.hidden_field :notification_pretty_id, value: product_form.notification_pretty_id || params[:notification_pretty_id] %>
+
+<%= form.govuk_submit local_assigns[:submit_text] || "Save", class: "govuk-button", data: { cy: "save" } %>

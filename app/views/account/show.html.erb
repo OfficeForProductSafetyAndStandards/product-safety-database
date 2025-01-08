@@ -1,0 +1,41 @@
+<% title = "Your account" %>
+<% page_title title %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l"><%= title %></h1>
+    <%= govuk_summary_list(
+      rows: [
+        {
+          key: { text: "Name" },
+          value: { text: current_user.name },
+          actions: [
+            {
+              href: account_name_path,
+              text: "Change",
+              visually_hidden_text: "name"
+            }
+          ]
+        },
+        {
+          key: { text: "Email address" },
+          value: { text: current_user.email }
+        },
+        {
+          key: { text: "Mobile number" },
+          value: { text: current_user.mobile_number }
+        },
+        {
+          key: { text: "Password" },
+          value: { text: "********" }
+        },
+        {
+          key: { text: "Your team" },
+          value: { text: link_to(current_user.team.name, current_user.team, class: "govuk-link") }
+        }
+      ]
+    ) %>
+    <div class="govuk-inset-text">
+      If you need to change your details, email <%= mail_to t(:enquiries_email), nil, class: "govuk-link" %>
+    </div>
+  </div>
+</div>

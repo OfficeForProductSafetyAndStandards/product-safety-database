@@ -1,0 +1,36 @@
+<% page_heading = @corrective_action.page_title %>
+<% page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Corrective action</span>
+    <h1 class="<%= @corrective_action.display_medium_title_text_size? ? "govuk-heading-m" : "govuk-heading-l" %>"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @corrective_action.date_added %>
+      </p>
+    </div>
+
+    <%= govuk_summary_list(rows: corrective_action_summary_list_rows(@corrective_action)) %>
+
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Edit corrective action", edit_investigation_corrective_action_path(@investigation, @corrective_action), class: "govuk-link" %></p>
+    <% end %>
+  </div>
+
+  <% if @corrective_action.document.attached? %>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">Attachments</h2>
+
+      <p class="govuk-body"><%= link_to @corrective_action.document_blob.filename, @corrective_action.document, class: "govuk-link" %></p>
+
+      <%= document_placeholder(@corrective_action.document) %>
+
+      <% if @corrective_action.document.metadata["description"].present? %>
+        <p class="govuk-body"><%= @corrective_action.document.metadata["description"] %></p>
+      <% end %>
+
+    </div>
+  <% end %>
+</div>

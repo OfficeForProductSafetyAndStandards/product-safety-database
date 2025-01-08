@@ -1,0 +1,5 @@
+<% if investigation.is_private? || investigation.is_closed? || investigation.serious? || investigation.high? %>
+  <div class="psd-case-card__status-area">
+    <%= render "investigations/case_badges", investigation: investigation, classes: "psd-case-card__badge", split_badges_in_rows_of_two: true %>
+  </div>
+<% end %>

@@ -1,0 +1,93 @@
+<% page_heading = "Add assessment to a notification" %>
+<%= page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with url: add_to_case_prism_risk_assessments_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <span class="govuk-caption-l"><%= sanitize(@prism_risk_assessment.name) %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
+      <div class="govuk-inset-text">
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+      </div>
+      <h2 class="govuk-heading-m">Related notifications</h2>
+      <% if (@related_investigations.size + @associated_investigations.size).positive? %>
+        <p class="govuk-body">Select the product notification to which you'd like to add the assessment. If you find that the notification doesn't fit your assessment, you have the option to create a new notification.</p>
+        <table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table--borders">
+          <caption class="govuk-table__caption govuk-visually-hidden">Notifications: a simple data table.</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Notification name</th>
+              <th scope="col" class="govuk-table__header">Created by</th>
+              <th scope="col" class="govuk-table__header">Last updated</th>
+              <th scope="col" class="govuk-table__header">Status</th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">View notification</span></th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Add assessment to notification</span></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <% @related_investigations.each do |investigation| %>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  <%= sanitize(investigation.title) %><br><%= sanitize(investigation.pretty_id) %>
+                </th>
+                <td class="govuk-table__cell">
+                  <%= sanitize(investigation.creator_user.team.name) %>
+                </td>
+                <td class="govuk-table__cell">
+                  <%= date_or_recent_time_ago investigation.updated_at %>
+                </td>
+                <td class="govuk-table__cell">
+                  <span class="opss-tag opss-tag--std"><%= investigation.is_closed? ? "Notification closed" : "Notification open" %></span>
+                </td>
+                <td class="govuk-table__cell">
+                  <a href="<%= investigation_path(investigation) %>" class="govuk-link">View<span class="govuk-visually-hidden"> notification</span></a>
+                </td>
+                <td class="govuk-table__cell">
+                  <%= form.govuk_submit "Add", name: "investigation_pretty_id", value: investigation.pretty_id %>
+                </td>
+              </tr>
+            <% end %>
+            <% @associated_investigations.each do |investigation| %>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  <%= sanitize(investigation.title) %><br><%= sanitize(investigation.pretty_id) %>
+                </th>
+                <td class="govuk-table__cell">
+                  <%= sanitize(investigation.creator_user.team.name) %>
+                </td>
+                <td class="govuk-table__cell">
+                  <%= date_or_recent_time_ago investigation.updated_at %>
+                </td>
+                <td class="govuk-table__cell">
+                  <span class="opss-tag opss-tag--std"><%= investigation.is_closed? ? "Notification closed" : "Notification open" %></span>
+                </td>
+                <td class="govuk-table__cell">
+                  <a href="<%= investigation_path(investigation) %>" class="govuk-link">View<span class="govuk-visually-hidden"> notification</span></a>
+                </td>
+                <td class="govuk-table__cell">
+                  Added to notification
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <% if (@related_investigations.size + @associated_investigations.size) > 11 %>
+            <tfoot class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Notification name</th>
+                <th scope="col" class="govuk-table__header">Created by</th>
+                <th scope="col" class="govuk-table__header">Last updated</th>
+                <th scope="col" class="govuk-table__header">Status</th>
+                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">View notification</span></th>
+                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Add assessment to notification</span></th>
+              </tr>
+            </tfoot>
+          <% end %>
+        </table>
+        <%= form.hidden_field :prism_risk_assessment_id, value: @prism_risk_assessment.id %>
+      <% else %>
+        <p class="govuk-body">There are no notifications for <%= sanitize(@prism_risk_assessment.product_name) %>. You can create a new product notification.</p>
+      <% end %>
+      <%= govukButton(text: "Create a new product notification", href: new_investigation_ts_investigation_path(product_id: @prism_risk_assessment.product_id, prism_risk_assessment_id: @prism_risk_assessment.id), classes: "govuk-button--secondary") %>
+    <% end %>
+  </div>
+</div>

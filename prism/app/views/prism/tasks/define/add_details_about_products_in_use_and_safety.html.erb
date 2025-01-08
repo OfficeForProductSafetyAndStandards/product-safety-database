@@ -1,0 +1,39 @@
+<% content_for :page_title, "Add details about products in use and safety" %>
+<% @errors = @product_market_detail.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @product_market_detail, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Define the product</span>
+        Add details about products in use and safety
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+      <% end %>
+      <%= f.govuk_text_field :selling_organisation, label: { text: "Name of the business that sold the product", size: "m" }, hint: { text: "This information is essential for product traceability." } %>
+      <%= f.govuk_radio_buttons_fieldset :total_products_sold_estimatable, legend: { text: "Can the total number of product items in use across the UK be reasonably estimated?", size: "m" } do %>
+        <%= f.govuk_radio_button :total_products_sold_estimatable, true, label: { text: "Yes" }, hint: { text: "Based on information provided by the business or other evidence." }, link_errors: true do %>
+          <%= f.govuk_number_field :total_products_sold, label: { text: "Estimated number of products in use" }, width: 4 %>
+        <% end %>
+        <%= f.govuk_radio_button :total_products_sold_estimatable, false, label: { text: "No" }, hint: { text: "Insufficient information available to make a reasonable estimate." } %>
+      <% end %>
+      <%= f.govuk_select(
+        :safety_legislation_standards,
+        options_for_select([""] + Rails.application.config.legislation_constants["legislation"].sort + ["Not yet determined"], @product_market_detail.safety_legislation_standards),
+        label: { text: "Product safety legislation", size: "m" },
+        hint: { text: "Search applicable safety legislation and choose the ones you feel are relevant to your product." },
+        multiple: true
+      ) %>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+      <% content_for :extra_javascript do %>
+        <%= javascript_tag type: "module", nonce: true do -%>
+          window.callAutocompleteWhenReady("product-market-detail-safety-legislation-standards-field", { showAllValues: true })
+          window.callAutocompleteWhenReady("product-market-detail-safety-legislation-standards-field-error", { showAllValues: true })
+        <% end -%>
+      <% end %>
+    <% end %>
+  </div>
+</div>

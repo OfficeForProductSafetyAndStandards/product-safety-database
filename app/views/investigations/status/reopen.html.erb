@@ -1,0 +1,12 @@
+<%= page_title t(".title"), errors: @change_notification_status_form.errors.any? %>
+<% unless @change_notification_status_form.errors[:new_status].empty? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l"><%= t(".title") %></h1>
+
+      <p><%= @change_notification_status_form.errors[:new_status].first %>. Do you want to <%= link_to "close it", close_investigation_status_path(@investigation) %>?</p>
+    </div>
+  </div>
+<% else %>
+  <%= render partial: "form", locals: { form_path: reopen_investigation_status_path(@investigation), i18n_scope: ".investigations.status.reopen" } %>
+<% end %>

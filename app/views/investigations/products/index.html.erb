@@ -1,0 +1,8 @@
+<%= render "investigations/navigable_case_nav", investigation: @investigation,
+                                                current_tab: "products",
+                                                case_page_heading: "Products",
+                                                secondary_text: "These are the product records included in the notification.",
+                                                href: new_investigation_product_path(@investigation),
+                                                link_text: "Add a product to the notification" do %>
+  <%= render "investigations/tabs/products" %>
+<% end %>

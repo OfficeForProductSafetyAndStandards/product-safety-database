@@ -1,0 +1,7 @@
+<div class="nested-form-wrapper" data-new-record="<%= f.object.new_record? %>" data-i18n-scope="prism.harm_scenario_steps" data-index="<%= f.index %>" id="step-<%= f.index %>">
+  <h2 class="govuk-heading-m opss-step-heading">Step<% if show_index %> <%= f.index + 1 %><% end %></h2>
+  <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" data-action="nested-form#remove">Remove</a></p>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  <%= f.govuk_text_area :description, label: { text: "Step description", size: "s" } %>
+  <%= f.hidden_field :_destroy %>
+</div>

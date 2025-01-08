@@ -1,0 +1,41 @@
+<%= govukRadios(
+  form: form,
+  key: :created_by,
+  formGroup: {
+    classes: "opss-form-group opss-form-group--sm-labels"
+  },
+  classes: "govuk-radios govuk-radios--small",
+  fieldset: {
+    legend: {
+      text: "Created by",
+      is_page_heading: false,
+      classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+    }
+  },
+  items: [
+    {
+      id: "created_by_all",
+      text: "All",
+      value: "all",
+      checked: true
+    },
+    {
+      id: "created_by_me",
+      text: "Me",
+      value: "me"
+    },
+    {
+      id: "created_by_my_team",
+      text: "Me and my team",
+      value: "my_team"
+    },
+    {
+      id: "created_by_others",
+      text: "Others",
+      value: "others",
+      conditional: {
+        html: created_by(form)
+      }
+    }
+  ]
+) %>

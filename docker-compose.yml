@@ -1,0 +1,76 @@
+services:
+  db:
+    build:
+      context: ./docker/db
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+
+  antivirus:
+    image: beisopss/antivirus:master
+    env_file:
+      - ./docker/env.antivirus
+    environment:
+      - PORT=3006
+    ports:
+      - "3006:3006"
+
+  opensearch:
+    image: opensearchproject/opensearch:1.2.3
+    environment:
+      - "discovery.type=single-node"
+      - "OPENSEARCH_JAVA_OPTS=-Xms750m -Xmx750m"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    volumes:
+      - opensearch-volume:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+
+  redis:
+    image: redis
+    hostname: redis
+    ports:
+      - 6379:6379
+
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    command: bin/rails s -p 3000 -b 0.0.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
+      - ${PWD-.}:/psd
+      - bundle-cache:/usr/local/bundle/gems
+    depends_on:
+      - db
+      - opensearch
+      - redis
+      - worker
+    env_file:
+      - ./docker/env.psd
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./docker/worker/Dockerfile
+    command: bin/sidekiq -C config/sidekiq.yml
+    env_file:
+      - ./docker/env.psd
+    volumes:
+      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
+      - ${PWD-.}:/psd
+      - bundle-cache:/usr/local/bundle/gems
+    depends_on:
+      - db
+      - opensearch
+      - redis
+
+volumes:
+  postgres-volume:
+  opensearch-volume:
+  bundle-cache:

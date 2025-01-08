@@ -1,0 +1,23 @@
+<% displayable_highlights = get_displayable_highlights(highlights, investigation) %>
+
+<div class="govuk-grid-row psd-case-card <%="psd-case-card--closed" if investigation.is_closed? %>">
+  <div class="govuk-grid-column-one-half">
+    <span class="govuk-caption-m govuk-!-font-size-16">
+      <%= sanitize(investigation.pretty_description) %>
+    </span>
+    <span>
+      <%= link_to sanitize(investigation.title), investigation_path(investigation), class: "govuk-!-font-weight-bold" %>
+    </span>
+    <%= render "investigations/case_card_status_area", investigation: investigation %>
+  </div>
+  <div class="govuk-grid-column-one-half">
+    <% displayable_highlights.each do |highlight| %>
+      <span class="govuk-caption-m govuk-!-font-size-16">
+        <%= sanitize(highlight[:label]) %>
+      </span>
+      <span>
+        <%= sanitize(highlight[:content]) %>
+      </span>
+    <% end %>
+  </div>
+</div>

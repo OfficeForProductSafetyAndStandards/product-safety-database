@@ -1,0 +1,34 @@
+<% content_for :page_title, "Is the product or hazard of a type where a serious risk can generally be deemed to exist?" %>
+<% @back_link_href = root_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @prism_risk_assessment, url: serious_risk_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%=
+        f.govuk_collection_radio_buttons :risk_type,
+        [
+          OpenStruct.new(id: "serious_risk", name: "Yes"),
+          OpenStruct.new(id: "normal_risk", name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "Is the product or hazard of a type where a serious risk can generally be deemed to exist?", size: "l" },
+        hint: { text: 'In some, limited circumstances it is appropriate to start from the point that a non-compliant product is likely to present a serious risk. This is on the basis of the outcome of risk assessment activity already undertaken for that product type or hazard type. The relevant types of products or hazards for which a serious risk can be deemed to exist are those described within the <abbr title="Office for Product Safety and Standards">OPSS</abbr> “<a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1121889/prism-products-and-hazards-deemed-serious-risk-v01.pdf" class="govuk-link" target="_blank" rel="noreferrer noopener">Products and hazards deemed serious risk</a>” guide. Therefore before answering ‘yes’ below, you <strong>must</strong> check this guide to ensure that the product or hazard subject to your risk assessment is within the guide’s scope. If it is not, you must answer ‘no’ below.'.html_safe },
+        bold_labels: false,
+        inline: true
+      %>
+      <% if params[:investigation_id].present? %>
+        <%= f.hidden_field :investigation_id, value: params[:investigation_id] %>
+      <% end %>
+      <% if params[:product_ids].present? %>
+        <% params[:product_ids].each do |product_id| %>
+          <%= f.hidden_field :product_ids, value: product_id, multiple: true %>
+        <% end %>
+      <% end %>
+      <% final_product_id = params[:product_id].presence || @product_id.presence %>
+      <%= f.hidden_field :product_id, value: final_product_id %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

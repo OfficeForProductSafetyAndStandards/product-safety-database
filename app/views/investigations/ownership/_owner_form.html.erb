@@ -1,0 +1,59 @@
+<%= form_with(model: change_notification_owner_form, method: :put, url: wizard_path) do |form| %>
+  <%= govukErrorSummary form: form %>
+  <%= yield %>
+
+  <% someone_else_in_your_team_dropdown = capture do %>
+  <%= render "investigations/ownership/owner_selection",
+  form: form,
+  key: :select_team_member,
+  items: @team_members,
+  label: "Select team member"
+  %>
+  <% end %>
+
+  <% items = add_your_team_values([], investigation, someone_else_in_your_team_dropdown) %>
+
+  <% unless @other_teams_added_to_case.empty? %>
+    <% items << { divider: "Other teams added to the notification" } %>
+    <%
+      teams = @other_teams_added_to_case.each do |team|
+        items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }
+      end
+    %>
+  <% end %>
+
+  <% items.push divider: "Other" %>
+
+  <%
+    teams = @default_opss_teams.each do |team|
+      items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }
+    end
+  %>
+
+  <% other_teams = capture do %>
+    <%= render "investigations/ownership/owner_selection",
+      form: form,
+      key: :select_other_team,
+      items: @other_teams,
+      label: "Select other team name"
+    %>
+  <% end %>
+  <% items.push text: "Other team", value: "other_team", conditional: { html: other_teams } %>
+
+  <% someone_else = capture do %>
+    <%= render "investigations/ownership/owner_selection",
+      form: form,
+      key: :select_someone_else,
+      items: @other_users,
+      label: "Select other user"
+    %>
+  <% end %>
+  <% items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else } %>
+
+  <%= govukRadios form: form, key: :owner_id, items: items, classes: "opss-radios__divider--title" %>
+
+  <div class="govuk-button-group">
+    <%= form.submit "Continue", class: "govuk-button" %>
+    <%= link_to "Cancel", investigation_path(investigation), class: "govuk-link" %>
+  </div>
+<% end %>

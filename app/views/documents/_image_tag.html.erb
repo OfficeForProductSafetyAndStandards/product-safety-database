@@ -1,0 +1,6 @@
+<% if image.variable? %>
+  <% class_name ||= 'app-image' %>
+  <%= image_tag image.variant(resize_to_limit: dimensions), class: class_name, alt: image.metadata["title"] %>
+<% else %>
+  <span>Preview not available: <%= image.metadata["title"] %></span>
+<% end %>

@@ -1,0 +1,14 @@
+exclude_patterns:
+- "db/"
+- "test/"
+- "spec/"
+- "config/initializers/sidekiq.rb"
+- "app/assets/10-million-password-list-top-1000000.txt"
+- "infrastructure/"
+- "docker/"
+- "app/services/update_corrective_action.rb"
+checks:
+  return-statements:
+    enabled: true
+    config:
+      threshold: 5

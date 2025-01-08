@@ -1,0 +1,39 @@
+<%= page_title(t("notifications.create.index.sections.notification_details.tasks.add_number_of_affected_units.title"), errors: @multiple_number_of_affected_units_form.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @multiple_number_of_affected_units_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary(presenter: @multiple_number_of_affected_units_form.formatted_error_messages) %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.notification_details.title") %></span>
+        <%= t("notifications.create.index.sections.notification_details.tasks.add_number_of_affected_units.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+        <% @notification.investigation_products.decorate.each do |investigation_product| %>
+          <li class="govuk-body-l"><%= sanitize(investigation_product.decorate.product.name_with_brand) %></li>
+        <% end %>
+        </ul>
+      <% end %>
+      <% @multiple_number_of_affected_units_form.number_of_affected_units_forms.each do |number_of_affected_units_form| %>
+        <%= govuk_summary_card(title: sanitize(@notification.investigation_products.find(number_of_affected_units_form.investigation_product_id).product.decorate.name_with_brand)) do %>
+          <%= f.fields_for :number_of_affected_units_forms, number_of_affected_units_form do |ip_f| %>
+            <%= ip_f.hidden_field :investigation_product_id, value: number_of_affected_units_form.investigation_product_id %>
+            <%= ip_f.govuk_radio_buttons_fieldset :affected_units_status, legend: nil do %>
+              <%= ip_f.govuk_radio_button :affected_units_status, "exact", label: { text: "Exact number" }, link_errors: true do %>
+                <%= ip_f.govuk_number_field :exact_units, label: { text: "How many units are affected?" } %>
+              <% end %>
+              <%= ip_f.govuk_radio_button :affected_units_status, "approx", label: { text: "Approximate number" } do %>
+                <%= ip_f.govuk_number_field :approx_units, label: { text: "How many units are affected?" } %>
+              <% end %>
+              <%= ip_f.govuk_radio_button :affected_units_status, "unknown", label: { text: "Unknown" } %>
+              <%= ip_f.govuk_radio_divider %>
+              <%= ip_f.govuk_radio_button :affected_units_status, "not_relevant", label: { text: "Not relevant" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_submit "Save and complete tasks in this section", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

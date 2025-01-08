@@ -1,0 +1,15 @@
+<%= page_title("Remove risk assessment", errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: remove_with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id, entity_id: @risk_assessment.id), method: :delete, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        Are you sure you want to remove this risk assessment from your notification?
+      </h1>
+      <p class="govuk-body">This action will permanently delete the risk assessment for <strong><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></strong>. Please confirm if you wish to proceed.</p>
+      <%= f.govuk_submit "Remove risk assessment", warning: true do %>
+        <a href="<%= notification_create_path(@notification, "add_risk_assessments") %>" class="govuk-link">Cancel</a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

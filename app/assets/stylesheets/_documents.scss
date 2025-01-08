@@ -1,0 +1,154 @@
+$secondary-hover-colour: #171819; // same as footer links
+$image-border-colour: rgba($govuk-text-colour, .15);
+
+%placeholder-content {
+  border: 3px dashed govuk-colour("dark-grey");
+  @include govuk-font($size: 19);
+  text-align: center;
+  color: govuk-colour("dark-grey");
+
+  a,
+  a:visited {
+    color: govuk-colour("dark-grey");
+
+    &:hover {
+      color: $secondary-hover-colour;
+    }
+  }
+
+  @include govuk-responsive-padding(6, "top");
+  @include govuk-responsive-padding(6, "bottom");
+  @include govuk-responsive-padding(4, "left");
+  @include govuk-responsive-padding(4, "right");
+}
+
+.app-document-preview {
+  @include govuk-responsive-margin(6, "bottom");
+}
+
+// Generic thumbnail graphics
+
+// Adapted from https://github.com/alphagov/whitehall/blob/7b5c5a086b89cb62ffba62b152a0a8dcfc10c8e6/app/assets/stylesheets/frontend/helpers/_attachment.scss
+
+$thumbnail-width: 99px;
+$thumbnail-border: 5px;
+
+.app-document-preview__placeholder {
+  position: relative; // Needed so text can overlay correctly
+  width: calc($thumbnail-width / 2);
+
+  @include govuk-media-query($from: tablet) {
+    width: $thumbnail-width;
+  }
+
+  @include govuk-responsive-margin(6, "right");
+  vertical-align: top;
+  margin-top: $thumbnail-border;
+  margin-left: $thumbnail-border;
+
+  padding-bottom: govuk-spacing(3);
+
+  img {
+    display: block;
+    width: 100%;
+    background: govuk-colour("white");
+    outline: $thumbnail-border solid rgba(govuk-colour("black"), .2);
+    box-shadow: 0 2px 2px rgba(govuk-colour("black"), .4);
+  }
+}
+
+// For tablet and up, show file extension over thumbnail graphic
+.app-document-preview__filetype {
+  display: none;
+
+  @include govuk-media-query($from: tablet) {
+    display: inherit;
+
+    position: absolute;
+    top: 12px;
+    left: 13px;
+    width: 75px;
+    height: 30px;
+    color: govuk-colour("white");
+    @include govuk-font(19, $weight: bold, $line-height: 30px);
+    text-align: center;
+    user-select: none;
+  }
+}
+
+// Shown while images are being processed
+.app-document-preview__processing {
+  @extend %placeholder-content;
+}
+
+.document-list {
+  .document-preview {
+    vertical-align: top;
+  }
+
+  .document-details {
+    vertical-align: top;
+
+    .document-title,
+    .document-updated {
+      display: inline-block;
+      color: inherit;
+    }
+
+    .edit-document-link {
+      display: block;
+    }
+
+    .delete-document-link {
+      margin-bottom: .5em;
+      margin-top: .5em;
+    }
+  }
+}
+
+.app-generic-attachment__thumbnail {
+  float: left;
+}
+
+.app-document-preview__image {
+
+  max-width: 200px;
+
+  @include govuk-media-query($from: tablet) {
+    max-width: 300px;
+  }
+
+  img {
+    background-color: govuk-colour("dark-grey");
+    display: inline-block;
+
+    // Subtle border around images
+    outline: 1px solid $image-border-colour;
+    outline-offset: -1px;
+
+    // Make sure images don't get bigger than container
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.app-document-preview__image-without-preview {
+  @extend %placeholder-content;
+}
+
+@mixin preview-image-size($max-width) {
+  .app-document-preview__image {
+    max-width: $max-width;
+    @if $max-width != inherit {
+      max-width: $max-width * .75;
+    }
+
+    @include govuk-media-query($from: tablet) {
+      max-width: $max-width;
+    }
+  }
+}
+
+.app-document-preview--small {
+  @include preview-image-size(200px);
+}

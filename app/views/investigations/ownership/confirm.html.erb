@@ -1,0 +1,19 @@
+<% page_heading = "Confirm ownership change" %>
+<%= page_title page_heading, errors: @investigation.errors.any? %>
+<%= form_with(model: @form, scope: :change_notification_owner_form, url: investigation_ownership_index_path(@investigation), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form.govuk_error_summary %>
+      <%= render "minimal_investigation_heading", investigation: @investigation, title: page_heading %>
+      <p class="govuk-body">
+        You are changing the notification owner to:
+        <strong><%= @potential_owner.display_name(viewer: current_user) %></strong>.
+      </p>
+      <%= form.govuk_text_area(:owner_rationale, label: { text: "Message to new notification owner (optional)" }, rows: 3, max_chars: 5000) %>
+      <div class="govuk-button-group">
+        <%= form.govuk_submit("Confirm change") %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link" %>
+      </div>
+    </div>
+  </div>
+<% end %>

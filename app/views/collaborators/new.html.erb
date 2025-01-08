@@ -1,0 +1,25 @@
+<% title = "Add a team to the notification" %>
+<% page_title title, errors: @form.errors.any? %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @form, url: investigation_collaborators_path(@investigation), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <% team_select_items = [OpenStruct.new(id: "", name: "")] + @teams.map { |team| OpenStruct.new(id: team.id, name: team.name, selected: (team.id == @form.team_id)) } %>
+      <%= form.govuk_collection_select(:team_id, team_select_items, :id, :name, label: { text: "Choose team", size: "s" }) %>
+      <p class="govuk-body">We’ll email the team to let them know they’ve been added to the notification.</p>
+      <% permission_level_items = [
+        OpenStruct.new(id: Collaboration::Access::ReadOnly.model_name.human, name: "View full notification", description: "View full notification details including correspondence."),
+        OpenStruct.new(id: Collaboration::Access::Edit.model_name.human, name: "Edit full notification", description: "View and edit all notification details. Cannot add or remove teams or close the notification.")
+      ] %>
+      <%= form.govuk_collection_radio_buttons(:permission_level, permission_level_items, :id, :name, :description, legend: { text: "Permission level" }, bold_labels: false) %>
+      <%= form.govuk_radio_buttons_fieldset(:include_message, legend: { text: "Do you want to include instructions or more information?" }) do %>
+        <%= form.govuk_radio_button :include_message, "true", label: { text: "Yes, add a message" }, link_errors: true do %>
+          <%= form.govuk_text_area :message, label: { text: "Message to the team" }, hint: { text: "Message will also be included on the notification timeline" } %>
+        <% end %>
+        <%= form.govuk_radio_button :include_message, "false", label: { text: "No" } %>
+      <% end %>
+      <%= form.govuk_submit("Add team to this notification") %>
+    <% end %>
+  </div>
+</div>

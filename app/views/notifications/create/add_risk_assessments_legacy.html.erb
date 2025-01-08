@@ -1,0 +1,52 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.legacy.title"), errors: @risk_assessment_form.errors.any?) %>
+<% assessed_on_error = @risk_assessment_form.errors.include?(:assessed_on) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @risk_assessment_form, url: with_product_and_entity_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id, entity_id: "new"), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_risk_assessments.legacy.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+          <li class="govuk-body-l"><%= sanitize(@investigation_product.decorate.product.name_with_brand) %></li>
+        </ul>
+      <% end %>
+      <%= f.govuk_date_field :assessed_on, legend: { text: "Date of assessment" }, hint: { text: 'For example, 31 1 2020' } %>
+      <%= f.govuk_radio_buttons_fieldset :risk_level, legend: { text: "What was the risk level?", size: "m" } do %>
+        <%= f.govuk_radio_button :risk_level, "serious", label: { text: "Serious risk" }, link_errors: true %>
+        <%= f.govuk_radio_button :risk_level, "high", label: { text: "High risk" } %>
+        <%= f.govuk_radio_button :risk_level, "medium", label: { text: "Medium risk" } %>
+        <%= f.govuk_radio_button :risk_level, "low", label: { text: "Low risk" } %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :risk_level, "not_conclusive", label: { text: "Not conclusive" } %>
+      <% end %>
+      <%= f.govuk_radio_buttons_fieldset :assessed_by, legend: { text: "Who completed the assessment?", size: "m" } do %>
+        <%= f.govuk_radio_button :assessed_by, "my_team", label: { text: current_user.team.name }, link_errors: true %>
+        <%= f.govuk_radio_button :assessed_by, "another_team", label: { text: "Another team or market surveillance authority" } do %>
+          <%= f.govuk_collection_select :assessed_by_team_id, team_options, :id, :name, label: { text: "Choose team" } %>
+        <% end %>
+        <%= f.govuk_radio_button :assessed_by, "other", label: { text: "Someone else" } do %>
+          <%= f.govuk_text_field :assessed_by_other, label: { text: "Organisation name" } %>
+        <% end %>
+      <% end %>
+      <%= f.hidden_field :existing_risk_assessment_file_file_id %>
+      <% if @risk_assessment_form.risk_assessment_file.present? %>
+        <p id="current-attachment-details">
+          Currently selected file:
+          <%= link_to "#{@risk_assessment_form.risk_assessment_file.filename} (opens in new tab)", @risk_assessment_form.risk_assessment_file, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+        </p>
+        <%= govuk_details(summary_text: "Replace this file") do %>
+          <%= f.govuk_file_field :risk_assessment_file, label: { text: "Upload the risk assessment", size: "m" } %>
+        <% end %>
+      <% else %>
+        <%= f.govuk_file_field :risk_assessment_file, label: { text: "Upload the risk assessment", size: "m" } %>
+      <% end %>
+      <%= f.govuk_text_area :details, label: { text: "Further details (optional)", size: "m" }, max_chars: 32_767 %>
+      <%= f.govuk_submit "Add risk assessment" %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<% content_for :page_title, "Determine severity of harm" %>
+<% @errors = @harm_scenario.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @harm_scenario, url: wizard_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Create product harm scenarios</span>
+        Determine severity of harm
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <p class="govuk-body-l"><%= sanitize(hazard_type) %></p>
+        <p class="govuk-body"><%= sanitize(@prism_risk_assessment.product_name) %></p>
+        <p class="govuk-body"><%= sanitize(@harm_scenario.description) %></p>
+        <p class="govuk-body">Affected users: <%= sanitize(affected_users) %></p>
+      <% end %>
+      <p class="govuk-body">Choose the level of severity of harm most appropriate for the effect the hazard will have upon the subject in the context of the harm scenario.</p>
+      <%= f.govuk_collection_radio_buttons :severity, severity_radios, :id, :name, :description, legend: nil, bold_labels: false %>
+      <%=
+        f.govuk_collection_radio_buttons :multiple_casualties,
+        [
+          OpenStruct.new(id: true, name: "Yes"),
+          OpenStruct.new(id: false, name: "No")
+        ],
+        :id,
+        :name,
+        legend: { text: "Does the hazard have the potential to harm more than one person in a single incident?" },
+        hint: { text: "For example those hazards that can result in fires or explosions, and hazardous chemicals in some types of cosmetics." },
+        bold_labels: false,
+        inline: true
+      %>
+      <%= f.hidden_field :back_to, value: params[:back_to] %>
+      <%= f.govuk_submit "Save and continue" do %>
+        <%= f.govuk_submit "Save as draft", secondary: true, name: "draft", value: "true" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

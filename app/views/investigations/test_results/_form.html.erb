@@ -1,0 +1,69 @@
+<% date_error = test_result_form.errors.include?(:date) %>
+
+<% if allow_product_linking %>
+  <% if investigation.investigation_products.empty? %>
+    <h2 class="govuk-heading-m">Which product was tested?</h2>
+    <p class="govuk-body">There are no products associated with this notification.</p>
+  <% elsif investigation.investigation_products.one? %>
+    <h2 class="govuk-heading-m">Which product was tested?</h2>
+    <p class="govuk-body"><%= sanitize(investigation.investigation_products.first.product.decorate.name_with_brand) %></p>
+    <%= f.hidden_field :investigation_product_id, value: investigation.investigation_products.first.id %>
+  <% else %>
+    <%= f.govuk_collection_radio_buttons :investigation_product_id, investigation.investigation_products.decorate.map { |ip| OpenStruct.new(id: ip.id, name: "#{sanitize(ip.product.name_with_brand)} (#{sanitize(ip.psd_ref)})") }, :id, :name, legend: { text: "Which product was tested?", size: "m" }, hint: { text: "Only products already added to the notification are listed." } %>
+  <% end %>
+<% end %>
+
+<%= f.govuk_collection_select :legislation, legislation_options, :id, :name, label: { text: "Under which legislation?", size: "m" }, hint: { text: "Select the relevant legislation from the list." } %>
+
+<%= f.govuk_text_field :standards_product_was_tested_against, label: { text: "Which standard was the product tested against?", size: "m" }, hint: { text: "For example, EN71. Use a comma to separate multiple standards." } %>
+
+<div class="govuk-form-group<%= date_error ? ' govuk-form-group--error' : '' %>">
+  <fieldset class="govuk-fieldset" aria-describedby="test-result-form-date-hint<%= date_error ? ' test-result-form-date-error' : '' %>">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Date of test</legend>
+    <div class="govuk-hint" id="test-result-form-date-hint">For example, 12 5 2023</div>
+    <% if date_error %>
+    <p class="govuk-error-message" id="test-result-form-date-error">
+      <span class="govuk-visually-hidden">Error: </span><%= test_result_form.errors.full_messages_for(:date).first %>
+    </p>
+    <% end %>
+    <div class="govuk-date-input">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="test_result_date_day">Day</label>
+          <input id="test_result_date_day" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result[date][day]" type="text" inputmode="numeric" value="<%= test_result_form.date&.day %>">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="test_result_date_month">Month</label>
+          <input id="test_result_date_month" class="govuk-input govuk-date-input__input govuk-input--width-2<%= date_error ? ' govuk-input--error' : '' %>" name="test_result[date][month]" type="text" inputmode="numeric" value="<%= test_result_form.date&.month %>">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="test_result_date_year">Year</label>
+          <input id="test_result_date_year" class="govuk-input govuk-date-input__input govuk-input--width-4<%= date_error ? ' govuk-input--error' : '' %>" name="test_result[date][year]" type="text" inputmode="numeric" value="<%= test_result_form.date&.year %>">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+<%= f.govuk_radio_buttons_fieldset :result, legend: { text: "What was the result?", size: "m" } do %>
+  <%= f.govuk_radio_button :result, "passed", label: { text: "Pass" }, link_errors: true %>
+  <%= f.govuk_radio_button :result, "failed", label: { text: "Fail" } do %>
+    <%= f.govuk_text_area :failure_details, label: { text: "How the product failed" }, hint: { text: "Describe how the product was tested and how it failed to meet the requirements." }, max_chars: 32_767 %>
+  <% end %>
+  <%= f.govuk_radio_button :result, "other", label: { text: "Other" } %>
+<% end %>
+
+<%= f.govuk_text_area :details, label: { text: "Further details (optional)", size: "m" }, max_chars: 32_767 %>
+
+<%= f.hidden_field :existing_document_file_id %>
+<%= render "related_attachment_fields",
+           form: f,
+           file_blob: @test_result_form.document,
+           attachment_name: :document_form,
+           title: "Test report attachment",
+           error_field: :document
+%>

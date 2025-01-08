@@ -1,0 +1,56 @@
+<%
+  any_row_has_actions = local_assigns[:rows].any? { |row| row.dig(:actions, :items)&.any? }
+  dl_attributes = {
+    class: class_names("govuk-summary-list", local_assigns[:classes]),
+  }.merge!(local_assigns[:attributes] || {})
+%>
+<%= tag.dl **dl_attributes do %>
+  <% local_assigns[:rows].each do |row| %>
+    <% if row %>
+      <%
+        this_row_has_actions = row.dig(:actions, :items)&.any?
+        row_classes = class_names("govuk-summary-list__row", { "govuk-summary-list__row--no-actions" => (any_row_has_actions && !this_row_has_actions) }, row[:classes])
+      %>
+      <div class="<%= row_classes %>">
+        <dt class="<%= class_names("govuk-summary-list__key", row.dig(:key, :classes)) %>">
+          <%= row.dig(:key, :html).presence || row.dig(:key, :text) %>
+        </dt>
+        <dd class="<%= class_names("govuk-summary-list__value", row.dig(:value, :classes)) %>">
+          <%= row.dig(:value, :html).presence || row.dig(:value, :text) %>
+          <% if row.dig(:value, :secondary_text) %>
+            <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>
+              <%= row[:value][:secondary_text][:text] ? row[:value][:secondary_text][:text] : sanitize(row[:value][:secondary_text][:html]) %>
+            </span>
+          <% end %>
+        </dd>
+        <% if row&.dig(:values)&.any? %>
+          <% row.dig(:values).each do |value| %>
+            <% if value.dig(:text).present? %>
+              <dd class="<%= class_names("govuk-summary-list__value", value.dig(:classes)) %>">
+                <%= value.dig(:text) %>
+              </dd>
+            <% elsif value.dig(:html).present? %>
+              <%= value.dig(:html) %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if row.dig(:actions, :items)&.any? %>
+          <% row.dig(:actions, :items).each {|action| action.merge!(classes: "govuk-link--no-visited-state") } %>
+          <dd class="<%= class_names("govuk-summary-list__actions", row.dig(:actions, :classes)) %>">
+            <% if row.dig(:actions, :items).size == 1 %>
+              <%= render "components/govuk_action_link", **row.dig(:actions, :items).first %>
+            <% else %>
+              <ul class="govuk-summary-list__actions-list">
+                <% row.dig(:actions, :items).each do |action| %>
+                  <li class="govuk-summary-list__actions-list-item">
+                    <%= render "components/govuk_action_link", **action %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </dd>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

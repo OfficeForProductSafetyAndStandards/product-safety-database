@@ -1,0 +1,78 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *  require_tree .
+ *= require_self
+ */
+
+$govuk-images-path: "";
+$govuk-fonts-path: "";
+
+$govuk-global-styles: true;
+
+@import "govuk-frontend/dist/govuk/all";
+@import "accessible-autocomplete/src/autocomplete";
+@import "autocomplete";
+
+.opss-nojs-hide {
+  display: none;
+}
+
+body.js-enabled .opss-nojs-hide {
+  display: inline;
+}
+
+.js-enabled {
+  .opss-js-enabled-hidden {
+    display: none;
+  }
+}
+
+.govuk-header nav {
+  float: right;
+}
+
+.govuk-header__navigation {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.opss-file-attachment {
+  margin-top: govuk-spacing(2);
+  padding: govuk-spacing(2);
+  background-color: govuk-colour("light-grey");
+
+  img {
+    vertical-align: middle;
+  }
+}
+
+.opss-table__cell--error {
+  padding-left: 10px;
+  border-left: 5px solid $govuk-error-colour;
+}
+
+.opss-panel {
+  padding: govuk-spacing(2);
+  background-color: govuk-colour("light-grey");
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Keep section numbers in line with the rest of the column
+.opss-task-list-group {
+  margin-left: govuk-spacing(2);
+}

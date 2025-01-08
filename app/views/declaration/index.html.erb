@@ -1,0 +1,21 @@
+<% title = "Declaration" %>
+<% page_title(title, errors: @declaration_form.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @declaration_form, url: declaration_accept_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <%= form.govuk_check_boxes_fieldset :agree, multiple: false, legend: nil do %>
+        <p>By continuing you agree:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>to the <a href="<%= help_terms_and_conditions_path %>" class="govuk-link" target="_blank" rel="noreferrer noopener">terms and conditions<span class="govuk-visually-hidden"> (opens in new tab)</span></a> and <a href="<%= help_privacy_notice_path %>" class="govuk-link" target="_blank" rel="noreferrer noopener">privacy policy<span class="govuk-visually-hidden"> (opens in new tab)</span></a></li>
+          <li>not to share information from the Product Safety Database outside your organisation</li>
+          <li>that you have the right to share the information you enter</li>
+          <li>that the information you provide is correct to the best of your knowledge</li>
+        </ul>
+        <%= form.govuk_check_box :agree, 1, 0, multiple: false, link_errors: true, label: { text: "I agree" } %>
+      <% end %>
+      <%= form.govuk_submit("Continue") %>
+    <% end %>
+  </div>
+</div>

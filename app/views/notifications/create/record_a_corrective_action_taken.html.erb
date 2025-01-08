@@ -1,0 +1,23 @@
+<%= page_title(t("notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.corrective_action_taken.title"), errors: @corrective_action_taken_form.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @corrective_action_taken_form, url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.hidden_field :corrective_action_taken_yes_no, value: "" %>
+      <%= f.govuk_radio_buttons_fieldset :corrective_action_taken_yes_no, legend: { text: "<span class=\"govuk-caption-l\">#{t('notifications.create.index.sections.corrective_actions.title')}</span>#{t('notifications.create.index.sections.corrective_actions.tasks.record_a_corrective_action.corrective_action_taken.title')}".html_safe, size: "l" } do %>
+        <%= f.govuk_radio_button :corrective_action_taken_yes_no, true, label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :corrective_action_taken_yes_no, false, label: { text: "No" } do %>
+          <%= f.govuk_radio_buttons_fieldset :corrective_action_taken_no_specific, legend: nil do %>
+            <%= f.govuk_radio_button :corrective_action_taken_no_specific, "referred_to_another_authority", label: { text: "I need to refer the issue to another authority" }, link_errors: true %>
+            <%= f.govuk_radio_button :corrective_action_taken_no_specific, "not_enough_information", label: { text: "I don't have enough information to take a corrective action" } %>
+            <%= f.govuk_radio_button :corrective_action_taken_no_specific, "other", label: { text: "I have another reason for not taking a corrective action" } do %>
+              <%= f.govuk_text_field :corrective_action_not_taken_reason, label: { text: "Provide the reason for not taking a corrective action" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>

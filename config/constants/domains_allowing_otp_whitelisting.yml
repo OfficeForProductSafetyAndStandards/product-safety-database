@@ -1,0 +1,11 @@
+---
+domains-regexps:
+  - !ruby/regexp /staging\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /staging-support\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /staging-report\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /pre-prod\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /pre-prod-support\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /pre-prod-report\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /psd-pr-\d{3,5}\.london\.cloudapps\.digital/
+  - !ruby/regexp /psd-pr-\d{3,5}-support\.london\.cloudapps\.digital/
+  - !ruby/regexp /psd-pr-\d{3,5}-report\.london\.cloudapps\.digital/

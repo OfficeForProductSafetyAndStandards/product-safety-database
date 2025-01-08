@@ -1,0 +1,113 @@
+// Template used by case list, products list, businesses list
+%psd-card {
+
+  color: govuk-colour("black");
+  @include govuk-font(19, $weight: bold);
+
+  // Internal links use expand to their container
+  position: relative;
+
+  @include govuk-responsive-margin(1, "bottom");
+
+  // Internal columns already provide left and right padding
+  padding-left: 0;
+  padding-right: 0;
+  @include govuk-responsive-padding(3, "top");
+  @include govuk-responsive-padding(3, "bottom");
+
+  margin-left: 0;
+  margin-right: 0;
+
+  // Expand clickable area to whole card
+  a {
+    &:before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      border: 1px solid govuk-colour("light-grey");
+    }
+
+    &:hover:before {
+      border: 1px solid $govuk-text-colour;
+    }
+
+    // TODO: update this for govuk-frontend@3.0
+    &:focus:before {
+      border: 1px solid $govuk-text-colour;
+      box-shadow: inset 0 0 0 2px;
+      outline: 3px solid $govuk-focus-colour;
+    }
+  }
+
+  // For highlighting search terms
+  em {
+    font-style: normal; // not italic
+    border-bottom: 3px solid govuk-colour("yellow");
+    margin-right: 1px;
+    background-color: lighten(govuk-colour("yellow"), 25%);
+    padding: 2px 0 0;
+  }
+}
+
+.psd-case-card {
+  @extend %psd-card;
+}
+
+.psd-case-card__status-area {
+  @include govuk-responsive-margin(1, "top");
+  @include govuk-responsive-margin(1, "bottom");
+}
+
+.psd-case-card__badge {
+  user-select: none;
+}
+
+// Cases that are restricted and not viewable by the current user
+.psd-case-card--restricted-access {
+
+  // Make everything grey
+  color: govuk-colour("dark-grey");
+
+  // Restricted cases use different markup
+  span {
+    &:before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      border: 1px solid govuk-colour("light-grey");
+    }
+  }
+}
+
+@include mq ($from: desktop) {
+  .psd-case-card > .govuk-grid-column-one-quarter:last-of-type {
+    text-align: right;
+  }
+
+  .psd-case-card a:before,
+  .psd-case-card--restricted-access span:before {
+    border-left: none 0 !important;
+    border-right: none 0 !important;
+  }
+
+  .psd-case-card .govuk-grid-column-one-half,
+  .psd-case-card > .govuk-grid-column-one-quarter:last-of-type {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  div.psd-case-card a:focus:before {
+    outline: none;
+    background-color: none;
+    box-shadow: none;
+    text-decoration: none;
+  }
+}

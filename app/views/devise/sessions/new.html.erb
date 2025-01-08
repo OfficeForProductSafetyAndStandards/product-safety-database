@@ -1,0 +1,19 @@
+<% title = "Sign in" %>
+<% page_title(title, errors: resource.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_for(resource, as: resource_name, url: user_session_path, method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= error_summary resource.errors %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <p class="govuk-body">
+        If you don’t have an account, ask someone in your team to send you an invite or <a href="mailto:<%= t(:enquiries_email) %>" class="govuk-link">email OPSS</a>.
+      </p>
+      <%= form.govuk_email_field(:email, label: { text: "Email address" }, class: ["govuk-!-width-two-thirds"]) %>
+      <%= form.govuk_password_field(:password, label: { text: "Password" }, class: ["govuk-!-width-two-thirds"]) %>
+      <%= form.govuk_submit("Continue") %>
+      <div class="govuk-body">
+        <a href="<%= new_password_path(resource) %>" class="govuk-link">Forgot your password?</a>
+      </div>
+    <% end %>
+  </div>
+</div>

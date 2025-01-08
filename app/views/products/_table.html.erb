@@ -1,0 +1,30 @@
+<table class="govuk-table opss-table-items opss-table-items--sm">
+  <caption class="govuk-visually-hidden">
+      Products: 5 columns with each notification described across rows within each table body.
+  </caption>
+  <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+          <th class="govuk-visually-hidden">&nbsp;</th>
+          <th id="psdref" scope="col" class="govuk-table__header"><%= psd_abbr title: false %> ref</th>
+          <th id="cat" scope="col" class="govuk-table__header">Category</th>
+          <th id="prodtype" scope="col" class="govuk-table__header">Product type</th>
+          <th id="haztype" scope="col" class="govuk-table__header">Counterfeit</th>
+      </tr>
+  </thead>
+
+  <% products.each_with_index do |product, index| %>
+    <%= render "table_row", product: product, index: index%>
+  <% end %>
+
+  <% if @count > 11 %>
+    <tfoot class="govuk-table__head">
+      <tr class="govuk-table__row">
+          <th class="govuk-visually-hidden">&nbsp;</th>
+          <th scope="col" class="govuk-table__header"><%= psd_abbr title: false %> ref</th>
+          <th scope="col" class="govuk-table__header">Category</th>
+          <th scope="col" class="govuk-table__header">Product type</th>
+          <th scope="col" class="govuk-table__header">Counterfeit</th>
+      </tr>
+    </tfoot>
+  <% end %>
+</table>

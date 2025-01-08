@@ -1,0 +1,74 @@
+<%= page_title(t("notifications.create.index.sections.business_details.tasks.confirm_business_details.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("notifications.create.index.sections.business_details.title") %></span>
+      <%= t("notifications.create.index.sections.business_details.tasks.confirm_business_details.title") %>
+    </h1>
+    <%= form_with url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h2 class="govuk-heading-m">Business details</h2>
+      <%=
+        govuk_summary_list do |summary_list|
+          summary_list.with_row do |row|
+            row.with_key(text: "Trading name")
+            row.with_value(text: sanitize(@business.trading_name))
+            row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}") unless @business.investigations.any?
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Registered or legal name")
+            row.with_value(text: sanitize(@business.legal_name))
+            row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}")  unless @business.investigations.any?
+          end
+          summary_list.with_row do |row|
+            row.with_key(text: "Companies house number")
+            row.with_value(text: sanitize(@business.company_number))
+            row.with_action(text: "Change", href: "#{wizard_path(:add_business_details, business_id: @business.id)}")  unless @business.investigations.any?
+          end
+        end
+      %>
+      <h2 class="govuk-heading-m">Addresses</h2>
+      <% @business.locations.each do |location| %>
+        <%=
+          govuk_summary_list do |summary_list|
+            summary_list.with_row do |row|
+              row.with_value(text: sanitize([location.address_line_1, location.address_line_2, location.city, location.county, location.postal_code, country_from_code(location.country)].reject(&:blank?).join(", ")))
+            end
+          end
+        %>
+      <% end %>
+      <p><%= govuk_link_to "Add another address", wizard_path(:add_business_location, business_id: @business.id) %></p>
+      <h2 class="govuk-heading-m">Contacts</h2>
+
+      <% if @business.contacts.any? %>
+        <% @business.contacts.each do |contact| %>
+          <%=
+            govuk_summary_list do |summary_list|
+              summary_list.with_row do |row|
+                row.with_key(text: "Name")
+                row.with_value(text: sanitize(contact.name))
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Job title")
+                row.with_value(text: sanitize(contact.job_title))
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Email")
+                row.with_value(text: sanitize(contact.email))
+              end
+              summary_list.with_row do |row|
+                row.with_key(text: "Phone number")
+                row.with_value(text: sanitize(contact.phone_number))
+              end
+            end
+          %>
+        <% end %>
+        <p><%= govuk_link_to "Add another contact", wizard_path(:add_business_contact, business_id: @business.id) %></p>
+      <% else %>
+        <p><%= govuk_link_to "Add a contact", wizard_path(:add_business_contact, business_id: @business.id) %></p>
+      <% end %>
+      <%= f.hidden_field :business_id, value: @business.id %>
+      <%= f.govuk_submit "Use business details" %>
+    <% end %>
+  </div>
+</div>

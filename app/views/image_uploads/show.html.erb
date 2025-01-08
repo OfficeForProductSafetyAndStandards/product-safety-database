@@ -1,0 +1,50 @@
+<% page_heading = "Attachment" %>
+<%= page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @image_upload.created_at.to_formatted_s(:govuk) %>
+      </p>
+    </div>
+
+    <% rows = [
+        {
+          key: {
+            text: "Type"
+          },
+          value: {
+            text: @image_upload.event_type
+          }
+        },
+        {
+          key: {
+            text: "Event date"
+          },
+          value: {
+            text: @image_upload.created_at.to_formatted_s(:govuk)
+          }
+        },
+        {
+          key: {
+            text: "Added"
+          },
+          value: {
+            text: @image_upload.created_at.to_formatted_s(:govuk)
+          }
+        }
+      ] %>
+    <%= govuk_summary_list(rows:) %>
+
+    <% if imageable_policy(@parent).remove? %>
+      <p class="govuk-body"><%= link_to "Remove image", remove_associated_image_upload_path(@parent, @image_upload), class: "govuk-link" %></p>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Attachment</h2>
+    <p class="govuk-body"><%= link_to @image_upload.file_upload.filename, @image_upload.file_upload, class: "govuk-link" %></p>
+
+    <%= image_upload_placeholder(@image_upload) %>
+  </div>
+</div>

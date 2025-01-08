@@ -1,0 +1,9 @@
+<p class="govuk-body">
+  <%= I18n.t(".body", scope: activity.class.i18n_scope, new_permission: activity.new_permission, old_permission: activity.old_permission) %>
+</p>
+
+<% if activity.metadata["message"] %>
+  <p class="govuk-body">
+    <%= activity.metadata["message"] %>
+  </p>
+<% end %>

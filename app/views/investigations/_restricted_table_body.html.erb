@@ -1,0 +1,22 @@
+<tbody class="govuk-table__body">
+  <tr class="govuk-table__row">
+    <th class="govuk-visually-hidden">
+      Notification title
+    </th>
+    <th id="<%= dom_id investigation, :item %>" colspan="4" scope="colgroup" class="govuk-table__header">
+      <%= "#{sanitize(investigation.case_type&.capitalize)} restricted" %>
+    </th>
+  </tr>
+  <tr class="govuk-table__row">
+    <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :meta %>" class="govuk-visually-hidden">
+      Metadata
+    </th>
+    <td headers="case <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+      <%= investigation.pretty_id %>
+    </td>
+    <td headers="caseowner <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell" colspan="2">
+      &nbsp;
+    </td>
+  </tr>
+  <%= render "investigations/status_table_row", investigation: investigation %>
+</tbody>

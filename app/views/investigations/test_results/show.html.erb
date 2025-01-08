@@ -1,0 +1,26 @@
+<% page_heading = @test_result.title %>
+<% page_title page_heading %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Test result</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">Added <%= @test_result.date_added %></p>
+    </div>
+
+    <%= govuk_summary_list(rows: test_result_summary_rows(@test_result)) %>
+
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Edit test result", edit_investigation_test_result_path(@investigation, @test_result), class: "govuk-link" %></p>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Attachment</h2>
+
+    <% if @test_result&.document.present? %>
+      <p class="govuk-body"><%= link_to @test_result.document.filename, @test_result.document, class: "govuk-link" %></p>
+      <%= document_placeholder(@test_result.document) %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<% if activity.attachment.image? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <%= render "documents/document_preview",
+               document: activity.attachment,
+               dimensions: [100, 100],
+               class_name: "product-image" %>
+    </div>
+  </div>
+<% else %>
+  <%= link_to "View document (opens in new tab)", activity.attachment, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+<% end %>

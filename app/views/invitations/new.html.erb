@@ -1,0 +1,15 @@
+<%= page_title "Invite a team member to #{@team.decorate.display_name(viewer: current_user)}", errors: @invite_user_to_team_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: @team) %>
+<% end %>
+<%= form_with model: @invite_user_to_team_form, url: team_invitations_path(@team), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l">Invite a team member</h1>
+      <%= form.govuk_text_field(:name, label: { text: "Full name" }, class: ["govuk-!-width-two-thirds"]) %>
+      <%= form.govuk_email_field(:email, label: { text: "Email address" }, class: ["govuk-!-width-two-thirds"]) %>
+      <%= form.govuk_submit("Send invitation email") %>
+    </div>
+  </div>
+<% end %>

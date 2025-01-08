@@ -1,0 +1,48 @@
+<%= page_title I18n.t(".businesses.titles.#{@page_name}") %>
+
+<%= render "businesses/heading/#{@page_name}", count: @count %>
+
+<%= form_with(model: @search, scope: "", url: businesses_path, method: :get, html: { role: "search" }) do |form| %>
+  <div class="govuk-grid-row opss-full-height">
+    <%= render 'businesses/filters', search: @search, form: form %>
+    <section class="govuk-grid-column-three-quarters" id="page-content">
+      <% if ["team_businesses", "your_businesses"].exclude?(@page_name) %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group govuk-!-padding-bottom-2">
+              <%= form.label :q, "Search", class: "govuk-label" %>
+              <div class="govuk-input__wrapper opss-search__wrapper">
+                <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
+                <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
+                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", spellcheck: false, "aria-describedby" => "search-hint" %>
+                <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+                  <span class="govuk-visually-hidden">Submit search</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third"  if (@count > 11) %>
+        </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <%= render "search_statement", count: @count, keywords: params[:q], filters: params.except(:controller, :action, :q).select { |k,v| v == "true" } %>
+          </div>
+        </div>
+      <% elsif (@count > 11) %>
+        <div class="govuk-grid-row">
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third opss-float-right-desktop" %>
+        </div>
+      <% end %>
+
+      <% if @businesses.any? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full" role="region" aria-label="Businesses">
+            <%= render "table", businesses: @businesses %>
+            <%= govuk_pagination(pagy: @pagy) %>
+          </div>
+        </div>
+      <% elsif ["team_businesses", "your_businesses"].include?(@page_name) %>
+        <%= render "businesses/no_businesses", page_name: @page_name %>
+      <% end %>
+    </section>
+<% end %>

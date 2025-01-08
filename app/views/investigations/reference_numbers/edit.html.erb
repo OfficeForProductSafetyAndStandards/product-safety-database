@@ -1,0 +1,37 @@
+<% page_heading = "Edit the reference number" %>
+<%= page_title page_heading, errors: @notification.errors.any? %>
+
+<% hint_html = capture do %>
+  <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this notification.</div>
+
+  <%= govuk_details(summary_text: "Help with adding a number") do %>
+    <p class="govuk-body">
+      This might be a number already created in a different internal system for your notification, or a number you intend to use globally across different systems to reference your notification.
+      The reference number will be searchable in the <%= psd_abbr %> notification search page. (You can add or edit this number later).
+    </p>
+  <% end %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with scope: :investigation, model: @notification, url: investigation_reference_numbers_path, method: :put do |form| %>
+      <%= govukInput(
+        key: :complainant_reference,
+        id: "complainant_reference",
+        form: form,
+        hint: { html: hint_html},
+        label: {
+          text: "Edit the reference number",
+          isPageHeading: true,
+          classes: "govuk-label--l govuk-!-margin-bottom-2"
+        },
+        classes: "govuk-input--width-20"
+      ) %>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@notification), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    <% end %>
+  </div>
+</div>

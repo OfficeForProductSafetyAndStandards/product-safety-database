@@ -1,0 +1,68 @@
+<%= f.hidden_field :has_online_recall_information, value: "has_online_recall_information_not_relevant" %>
+<%= f.govuk_radio_buttons_fieldset :action, legend: { text: "What action is being taken?", size: "m" } do %>
+  <%= f.govuk_radio_button :action, "removal_of_the_listing_by_the_online_marketplace", label: { text: "Removal of the listing by the online marketplace" }, link_errors: true %>
+  <%= f.govuk_radio_button :action, "import_rejected_at_border", label: { text: "Import rejected at border" } %>
+  <%= f.govuk_radio_button :action, "destruction_of_the_product", label: { text: "Destruction of the product" } %>
+  <%= f.govuk_radio_button :action, "recall_of_the_product_from_end_users", label: { text: "Recall of the product from end users" } do %>
+    <%= f.govuk_radio_buttons_fieldset :has_online_recall_information, legend: { text: "Has the business responsible published product recall information online?" } do %>
+      <%= f.govuk_radio_button :has_online_recall_information, "has_online_recall_information_yes", label: { text: "Yes" }, link_errors: true do %>
+        <%= f.govuk_text_field :online_recall_information, label: { text: "Location of recall information" }, hint: { text: "For example http://www.example.com or https://www.example.com" } %>
+      <% end %>
+      <%= f.govuk_radio_button :has_online_recall_information, "has_online_recall_information_no", label: { text: "No" } %>
+    <% end %>
+  <% end %>
+  <%= f.govuk_radio_button :action, "withdrawal_of_the_product_from_the_market", label: { text: "Withdrawal of the product from the market" }, hint: { text: "For example, removal of the product from sales and distribution channels" } %>
+  <%= f.govuk_radio_button :action, "temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product", label: { text: "Temporary ban on the supply, offer to supply and display of the product" }, hint: { text: "For example, suspension of the product distribution, sales and display" } %>
+  <%= f.govuk_radio_button :action, "referred_to_overseas_regulator", label: { text: "Referred to an overseas regulator" } %>
+  <%= f.govuk_radio_button :action, "making_the_marketing_of_the_product_subject_to_prior_conditions", label: { text: "Making the marketing of the product subject to prior conditions" } %>
+  <%= f.govuk_radio_button :action, "product_back_into_compliance", label: { text: "Product brought back into compliance" } %>
+  <%= f.govuk_radio_button :action, "warning_consumers_of_the_risks", label: { text: "Warning consumers of the risks" } %>
+  <%= f.govuk_radio_button :action, "ban_on_the_marketing_of_the_product_and_any_accompanying_measures", label: { text: "Ban on the marketing of the product and any accompanying measures" } %>
+  <%= f.govuk_radio_button :action, "marking_the_product_with_appropriate_warnings_on_the_risks", label: { text: "Marking the product with appropriate warnings on the risks" } %>
+  <%= f.govuk_radio_button :action, "seizure_of_goods", label: { text: "Seizure of goods" } %>
+  <%= f.govuk_radio_button :action, "modification_programme", label: { text: "Modification programme" } %>
+  <%= f.govuk_radio_button :action, "product_no_longer_available_for_sale", label: { text: "Product is no longer available for sale" } %>
+<% end %>
+<%= f.govuk_date_field :date_decided, legend: { text: 'What date did the corrective action come in to effect?' }, hint: { text: 'This may be in the future for example, 15 7 2024.' } %>
+<% if allow_product_linking %>
+  <% if investigation.investigation_products.empty? %>
+    <h2 class="govuk-heading-m">Which product is subject to action?</h2>
+    <p class="govuk-body">There are no products associated with this notification.</p>
+  <% elsif investigation.investigation_products.one? %>
+    <h2 class="govuk-heading-m">Which product is subject to action?</h2>
+    <p class="govuk-body"><%= sanitize(investigation.investigation_products.first.product.decorate.name_with_brand) %></p>
+    <%= f.hidden_field :investigation_product_id, value: investigation.investigation_products.first.id %>
+  <% else %>
+    <%= f.govuk_collection_radio_buttons :investigation_product_id, investigation.investigation_products.decorate.map { |ip| OpenStruct.new(id: ip.id, name: "#{ip.product.name_with_brand} (#{ip.psd_ref})") }, :id, :name, legend: { text: "Which product is subject to action?", size: "m" }, hint: { text: "Only products already added to the notification are listed." } %>
+  <% end %>
+<% end %>
+
+<%= f.govuk_select :legislation, options_for_select([""] + Rails.application.config.legislation_constants["legislation"].sort, corrective_action.legislation), label: { text: "Under which legislation?", size: "m" }, hint: { text: "Search applicable legislation and choose the ones you feel are relevant." }, multiple: true %>
+
+<% if allow_business_linking %>
+  <% if investigation.investigation_businesses.present? %>
+    <%= f.govuk_collection_radio_buttons :business_id, investigation.investigation_businesses.decorate.map { |ib| OpenStruct.new(id: ib.business.id, name: "#{ib.business.trading_name} (#{ib.pretty_relationship})") }, :id, :name, legend: { text: "Which business is responsible?", size: "m" }, hint: { text: "Only businesses already added to the notification are listed." } %>
+  <% else %>
+    <h2 class="govuk-heading-m">Which business is responsible?</h2>
+    <p class="govuk-body">There are no businesses associated with this notification.</p>
+  <% end %>
+<% end %>
+
+<%= f.govuk_collection_radio_buttons :measure_type, [OpenStruct.new(id: "mandatory", name: "Yes"), OpenStruct.new(id: "voluntary", name: "No, it’s voluntary")], :id, :name, legend: { text: "Is the corrective action mandatory?", size: "m" } %>
+
+<%= f.govuk_check_boxes_fieldset :geographic_scopes, legend: { text: "In which geographic regions has this corrective action been taken?" }, data: { controller: "dynamic-checkbox-states" } do %>
+  <%= f.govuk_check_box :geographic_scopes, "local", label: { text: "Local" }, hint: { text: "Covers specific areas and nearby border checkpoints." }, link_errors: true, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "unknown" } %>
+  <%= f.govuk_check_box :geographic_scopes, "great_britain", label: { text: "Great Britain" }, hint: { text: "Covers England, Scotland and Wales." }, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "local,unknown" } %>
+  <%= f.govuk_check_box :geographic_scopes, "northern_ireland", label: { text: "Northern Ireland" }, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "local,unknown" } %>
+  <%= f.govuk_check_box :geographic_scopes, "eea_wide", label: { text: "European Economic Area (EEA)" }, hint: { text: "Covers EU countries and also Iceland, Liechtenstein and Norway." }, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "local,eu_wide,unknown" } %>
+  <%= f.govuk_check_box :geographic_scopes, "eu_wide", label: { text: "European Union (EU)" }, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "local,unknown" } %>
+  <%= f.govuk_check_box :geographic_scopes, "worldwide", label: { text: "Worldwide" }, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "local,great_britain,northern_ireland,eea_wide,eu_wide,unknown" } %>
+  <%= f.govuk_check_box :geographic_scopes, "unknown", label: { text: "Unknown" }, data: { action: "input->dynamic-checkbox-states#update", "dynamic-checkbox-states-disable-targets": "local,great_britain,northern_ireland,eea_wide,eu_wide,worldwide" } %>
+<% end %>
+
+<%= f.govuk_text_area :details, label: { text: "Further details (optional)", size: "m" }, max_chars: 32_767 %>
+
+<%= javascript_tag type: "module", nonce: true do -%>
+  window.callAutocompleteWhenReady("corrective-action-legislation-field", { showAllValues: true })
+  window.callAutocompleteWhenReady("corrective-action-legislation-field-error", { showAllValues: true })
+<% end -%>

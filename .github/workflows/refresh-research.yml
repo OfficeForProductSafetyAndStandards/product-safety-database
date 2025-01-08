@@ -1,0 +1,64 @@
+name: Refresh User Research Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      stateFile:
+        description: State file
+        required: true
+        default: populated.sql
+        type: choice
+        options:
+          - empty.sql
+          - populated.sql
+
+concurrency: research_environment
+
+jobs:
+  refresh:
+    name: Refresh the data
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install cf client
+        env:
+          CF_CLI_VERSION: v7
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Refresh data
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWSAccessKeyId }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSecretAccessKey }}
+          AWS_REGION: eu-west-2
+          CF_USERNAME: ${{ secrets.PaaSUsernameResearch }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordResearch }}
+        run: |
+          cf api api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o 'beis-opss' -s research
+
+          cf rename-service psd-database psd-database-old
+
+          cf create-service postgres small-13 psd-database -c '{"enable_extensions": ["pgcrypto"]}'
+          echo "::group::Waiting for db"
+          until cf service psd-database > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 30; echo "Waiting for db..."; done
+          echo "::endgroup::"
+
+          aws s3 sync s3://${{ secrets.ResearchStatesS3BucketName }} .
+
+          cf install-plugin conduit -f
+          cf conduit psd-database -- psql < ${{ inputs.stateFile }}
+
+          cf stop psd-web
+          cf unbind-service psd-web psd-database-old
+          cf bind-service psd-web psd-database
+
+          cf restage psd-web
+          cf run-task psd-web --command 'bin/rails db:migrate notifications:index' -k 2G --wait
+
+          cf delete-service -f psd-database-old
+
+          cf logout

@@ -1,0 +1,31 @@
+<% title = "Add attachment" %>
+<%= page_title title, errors: @document_form.errors.any? %>
+<%= form_with model: @document_form, scope: :document, builder: GOVUKDesignSystemFormBuilder::FormBuilder, url: associated_documents_path(@parent) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form.govuk_error_summary %>
+      <span class="govuk-caption-l"><%= @parent.pretty_description %></span>
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-1"><%= title %></h1>
+
+      <% if (@parent.is_a?(Investigation) || @parent.is_a?(Product)) %>
+        <% hint_text = @parent.is_a?(Investigation) ? "Image files will be saved to the notification images page." : "Image files will be saved to the product images." %>
+        <div class="govuk-hint govuk-!-margin-bottom-8"><%= hint_text %></div>
+      <% end %>
+      <% if form.object.document.present? %>
+        <%= form.hidden_field :document, value: form.object.document.id %>
+        <%= form.govuk_fieldset legend: { text: "Upload a file" } do %>
+          <%= form.govuk_file_field :document, label: { text: "", hidden: true } %>
+          <%= render partial: "active_storage/blobs/blob", locals: { blob: form.object.document } %>
+        <% end %>
+      <% else %>
+        <%= form.govuk_file_field :document, label: { text: "Upload a file" } %>
+      <% end %>
+
+
+      <%= form.govuk_text_field :title, label: { text: "Document title", size: "m" } %>
+      <%= form.govuk_text_area :description, label: { text: "Description" }, attributes: { maxlength: 10_000 } %>
+
+      <%= form.govuk_submit "Save attachment" %>
+    </div>
+  </div>
+<% end %>

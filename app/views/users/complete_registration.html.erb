@@ -1,0 +1,23 @@
+<% title = "Create an account" %>
+<% page_title(title, errors: @user.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @user, url: user_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l"><%= title %></h1>
+      <%= hidden_field_tag :invitation, params[:invitation] %>
+      <%= form.govuk_text_field(:name, label: { text: "Full name" }, class: ["govuk-!-width-two-thirds"], autocomplete: "name") %>
+      <%= form.govuk_phone_field(:mobile_number, label: { text: "Mobile number" }, class: ["govuk-!-width-two-thirds"], autocomplete: "tel") %>
+      <%#
+        This field is to enable password managers to capture the username as
+        well as the password, but should not be visible to users, nor should
+        the controller process the input.
+      %>
+      <div class="app-password-manager-hidden">
+        <%= form.govuk_email_field(:username, value: @user.email, disabled: true, tabindex: "-1", "aria-hidden": true, autocomplete: "username") %>
+      </div>
+      <%= form.govuk_password_field(:password, label: { text: "Password" }, hint: { text: "At least 8 characters" }, class: ["govuk-!-width-two-thirds"], autocomplete: "new-password") %>
+      <%= form.govuk_submit("Continue") %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<%= govukCheckboxes(
+  key: "",
+  form: form,
+  items: [
+    {
+      key: "non_compliant",
+      text: "Non-compliant",
+      value: true
+    },
+    {
+      key: "unsafe",
+      text: "Unsafe",
+      value: true
+    },
+    {
+      key: "unsafe_and_non_compliant",
+      text: "Unsafe and non-compliant",
+      value: true
+    },
+    {
+      key: "safe_and_compliant",
+      text: "Safe and compliant",
+      value: true
+    }
+  ]
+) %>

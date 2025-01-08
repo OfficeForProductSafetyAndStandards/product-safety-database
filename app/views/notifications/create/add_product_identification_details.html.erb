@@ -1,0 +1,63 @@
+<%= page_title(t("notifications.create.index.sections.evidence.tasks.add_product_identification_details.title"), errors: false) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: wizard_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("notifications.create.index.sections.evidence.title") %></span>
+        <%= t("notifications.create.index.sections.evidence.tasks.add_product_identification_details.title") %>
+      </h1>
+      <%= govuk_inset_text do %>
+        <p class="govuk-body">For</p>
+        <ul class="govuk-list">
+        <% @notification.investigation_products.decorate.each do |investigation_product| %>
+          <li class="govuk-body-l"><%= sanitize(investigation_product.product.name_with_brand) %></li>
+        <% end %>
+        </ul>
+      <% end %>
+      <p class="govuk-body">Add product identification details if known.</p>
+      <% @notification.investigation_products.decorate.each do |investigation_product| %>
+        <%=
+          govuk_summary_list(
+            card: { title: sanitize(investigation_product.product.name_with_brand) },
+            rows: [
+              {
+                key: { text: "Batch numbers" },
+                value: { text: investigation_product.batch_number.presence || "Not provided" },
+                actions: [
+                  {
+                    text: "Add",
+                    href: batch_numbers_notification_create_index_path(@notification, investigation_product.id),
+                    visually_hidden_text: "batch numbers"
+                  }
+                ]
+              },              {
+                key: { text: "Customs codes" },
+                value: { text: investigation_product.customs_code.presence || "Not provided" },
+                actions: [
+                  {
+                    text: "Add",
+                    href: customs_codes_notification_create_index_path(@notification, investigation_product.id),
+                    visually_hidden_text: "customs codes"
+                  }
+                ]
+              },
+              {
+                key: { text: "Unique Consignment Reference (UCR) numbers" },
+                value: { text: investigation_product.ucr_numbers.pluck(:number).join(", ").presence || "Not provided" },
+                actions: [
+                  {
+                    text: "Add",
+                    href: ucr_numbers_notification_create_index_path(@notification, investigation_product.id),
+                    visually_hidden_text: "unique consignment reference numbers"
+                  }
+                ]
+              }
+            ]
+          )
+        %>
+      <% end %>
+      <%= f.govuk_submit "Continue", name: "final", value: "true" %>
+    <% end %>
+  </div>
+</div>

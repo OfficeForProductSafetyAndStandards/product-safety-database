@@ -1,0 +1,30 @@
+<div class="govuk-body">
+
+  <p>Changes:</p>
+
+  <% if activity.new_assessed_on %>
+    Date of assessment: <b><%= activity.new_assessed_on.to_formatted_s(:govuk) %></b><br>
+  <% end %>
+
+  <% if activity.risk_level_changed? %>
+    Risk level: <b><%= activity.new_risk_level_description %></b><br>
+  <% end %>
+
+  <% if activity.assessed_by_changed? %>
+    Assessed by: <b><%= risk_assessed_by(team: activity.new_assessed_by_team, business: activity.new_assessed_by_business, other: activity.new_assessed_by_other) %></b><br>
+  <% end %>
+
+  <% if activity.products_changed? %>
+    <%= "Product".pluralize(activity.new_products.count) %> assessed: <b><%= to_sentence(activity.new_products.map(&:name)) %></b><br>
+  <% end %>
+
+  <% if activity.new_filename %>
+    Attached: <b><%= activity.new_filename %></b><br>
+  <% end %>
+
+  <% if activity.new_details %>
+    Further details: <b><%= activity.new_details %></b><br>
+  <% end %>
+</div>
+
+<%= link_to "View risk assessment", investigation_risk_assessment_path(activity.investigation, activity.risk_assessment_id), class: "govuk-link--no-visited-state" %>

@@ -1,0 +1,24 @@
+<div class="govuk-body">
+  <p>Changes:</p>
+  <% if activity.date_changed? %>
+    <%= "Date of #{activity.type}:" %> <b><%= activity.new_date %></b><br>
+  <% end %>
+
+  <% if activity.investigation_product_updated? %>
+    Product: <b><%= activity.investigation_product.name %></b><br>
+  <% end %>
+
+  <% if activity.severity_changed? %>
+    Severity: <b><%= activity.new_severity %></b><br>
+  <% end %>
+
+  <% if activity.usage_changed? %>
+    Product usage: <b><%= activity.new_usage %></b><br>
+  <% end %>
+
+  <% if activity.additional_info_changed? %>
+    Additional Information: <b><%= activity.additional_info %></b><br>
+  <% end %>
+</div>
+
+<%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]), class: "govuk-link" %>

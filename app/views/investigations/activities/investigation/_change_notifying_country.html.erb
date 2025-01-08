@@ -1,0 +1,3 @@
+<p class="govuk-body">
+  <%= I18n.t(".audit_activity.investigation.update_notifying_country.body", previous_country: country_from_code(activity.previous_country, Country.notifying_countries), new_country: country_from_code(activity.new_country, Country.notifying_countries) ) %>
+</p>

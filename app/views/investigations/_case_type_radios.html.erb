@@ -1,0 +1,43 @@
+<%= govukRadios(
+  form: form,
+  key: :case_type,
+  formGroup: {
+    classes: "opss-form-group opss-form-group--sm-labels"
+  },
+  classes: "govuk-radios govuk-radios--small",
+  fieldset: {
+    legend: {
+      text: "Type",
+      is_page_heading: false,
+      classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+    }
+  },
+  items: [
+    {
+      id: "case_type_all",
+      text: "All",
+      value: "all",
+      checked: true
+    },
+    {
+      id: "case_type_notification",
+      text: "Notification",
+      value: "notification"
+    },
+    {
+      id: "case_type_allegation",
+      text: "Allegation",
+      value: "allegation"
+    },
+    {
+      id: "case_type_enquiry",
+      text: "Enquiry",
+      value: "enquiry"
+    },
+    {
+      id: "case_type_project",
+      text: "Project",
+      value: "project"
+    }
+  ]
+) %>

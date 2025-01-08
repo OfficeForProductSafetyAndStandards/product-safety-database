@@ -1,0 +1,41 @@
+<% page_heading = "Edit the batch numbers" %>
+<%= page_title page_heading %>
+<%= form_with model: @investigation_product, url: investigation_product_batch_numbers_path, method: :put do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <% hint_html = capture do %>
+        <span class="govuk-!-display-block govuk-!-margin-bottom-2">
+          You can add and edit batch numbers for <%= @investigation_product.name %>.
+        </span>
+
+        <span class="govuk-!-display-block govuk-!-font-size-16">
+          Use a comma and a space to separate multiple batch numbers. For example, <br class="opss-br-desktop">37364361, 98774776<span class="govuk-visually-hidden">.</span>
+        </span>
+      <% end %>
+
+      <%= govukInput(
+            form: form,
+            label: {
+              text: page_heading,
+              classes: "govuk-label--l",
+              isPageHeading: true
+            },
+            hint: {
+              html: hint_html,
+              classes: "govuk-hint govuk-!-margin-bottom-5"
+            },
+            id: "batch_number",
+            key: :batch_number,
+            name: "batch_number",
+            attributes: { maxlength: 45 },
+            classes: "govuk-!-width-two-thirds",
+          )
+       %>
+
+       <div class="govuk-button-group">
+         <%= form.submit "Save", class: "govuk-button" %>
+         <%= link_to "Cancel", investigation_path(@investigation_product.investigation), class: "govuk-link govuk-link--no-visited-state" %>
+       </div>
+    </div>
+  </div>
+<% end %>

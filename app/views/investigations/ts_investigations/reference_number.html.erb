@@ -1,0 +1,41 @@
+<% page_heading = "Do you want to add a reference number?" %>
+<%= page_title page_heading, errors: @reference_number_form.errors.any? %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with scope: :investigation, model: @reference_number_form, url: wizard_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+      <%= form.govuk_error_summary %>
+
+      <% existing_reference_field_html = capture do %>
+        <%= form.govuk_text_field :complainant_reference,
+                                  label: { text: "Reference number" },
+                                  width: 20%>
+      <% end %>
+
+      <% hint_html = capture do %>
+        <div id="ref-number-hint" class="govuk-hint">You can add your own reference number to this notification.</div>
+
+        <%= govuk_details(summary_text: "Help with adding a number") do %>
+          <p class="govuk-body">
+            This might be a number already created in a different internal system for your notification, or a number you intend to use globally across different systems to reference your notification.
+            The reference number will be searchable in the <%= psd_abbr %> notification search page. (You can add or edit this number later).
+          </p>
+        <% end %>
+      <% end %>
+
+      <%
+        def is_checked
+           return "checked" if @has_reference_number == "Yes"
+           ""
+        end
+      %>
+      <%= form.govuk_radio_buttons_fieldset(:has_complainant_reference, legend: { size: 'l', text: "Do you want to add a reference number?" }, hint: {text: hint_html}) do %>
+        <%= form.govuk_radio_button :has_complainant_reference, true, checked: is_checked, label: { text: "Yes" }, link_errors: true do %>
+          <%= existing_reference_field_html %>
+        <% end %>
+        <%= form.govuk_radio_button :has_complainant_reference, false, label: { text: "No" } %>
+      <% end %>
+
+      <%= form.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

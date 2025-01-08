@@ -1,0 +1,31 @@
+<%= render "incomplete_bulk_products_upload_notification" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">All products – Search</h1>
+    <p class="govuk-body opss-secondary-text">
+      Search all product records in the Product Safety Database (<%= psd_abbr %>).
+    </p>
+    <%= govuk_details(summary_text: "Help with the products search") do %>
+      <p class="govuk-body">
+        <span id="search-hint">You can search for one or more products by using the keywords that describe them or use a single <%= psd_abbr title: false %> reference number to find a specific product record.</span> You can also sort the ordering of the search results.
+      </p>
+      <p class="govuk-body">
+        You can filter the results by product category.
+        <% if policy(Product).can_view_retired_products? %>
+          As an OPSS user you can also include 'retired' product records in your search. (These are records which are no longer active and are now considered less relevant).
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-button-group opss-text-align-right">
+      <% if current_user.can_bulk_upload_products? %>
+        <%= link_to triage_bulk_upload_products_path, class: "govuk-link govuk-link--no-visited-state", data: { cy: "upload-multiple-products" } do %>
+          Upload multiple products
+        <% end %>
+      <% end %>
+      <%= govuk_button_link_to("Create a product record", duplicate_check_products_path, secondary: true, "data-cy": "new-product") %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+<%= page_title "Record phone call", errors: @correspondence_form.errors.any? %>
+<%= render 'investigations/record_phone_calls/form', correspondence_form: @correspondence_form, investigation: @investigation, url: investigation_phone_calls_path(@investigation) %>

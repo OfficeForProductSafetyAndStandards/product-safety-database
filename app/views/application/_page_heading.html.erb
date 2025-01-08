@@ -1,0 +1,10 @@
+<% if @parent.is_a?(Investigation) %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "investigation_heading", investigation: @parent.decorate %>
+    </div>
+  </div>
+<% end %>
+<%= render "product_heading", product: (@product_form || @parent) if @parent.is_a?(Product) %>
+
+<h2 class="govuk-heading-m govuk-!-margin-bottom-2"><%= title %></h2>

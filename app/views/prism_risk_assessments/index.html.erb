@@ -1,0 +1,74 @@
+<%= page_title I18n.t(".prism_risk_assessments.titles.#{@page_name}") %>
+
+<%= render "prism_risk_assessments/heading/#{@page_name}" %>
+
+<%= form_with(model: @search, scope: "", url: all_prism_risk_assessments_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :get, html: { role: "search" }) do |form| %>
+  <div class="govuk-grid-row opss-full-height">
+    <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+      <%= render "prism_risk_assessments/secondary_nav" %>
+    </section>
+    <section class="govuk-grid-column-three-quarters" id="page-content">
+      <% if ["team_prism_risk_assessments", "your_prism_risk_assessments"].exclude?(@page_name) %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group govuk-!-padding-bottom-2">
+              <%= form.label :q, "Search", class: "govuk-label" %>
+              <div class="govuk-input__wrapper opss-search__wrapper">
+                <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
+                <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
+                <%= form.search_field :q, class: "govuk-input govuk-!-width-full", spellcheck: false, "aria-describedby" => "search-hint" %>
+                <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+                  <span class="govuk-visually-hidden">Submit search</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third" if (@count > 11) %>
+        </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <%= render "search_statement", count: @count, keywords: params[:q] %>
+          </div>
+        </div>
+      <% elsif (@count > 11) %>
+        <div class="govuk-grid-row">
+          <%= render_sort_by form, @sort_by_items, @selected_sort_by, @selected_sort_direction, "govuk-grid-column-one-third opss-float-right-desktop" %>
+        </div>
+      <% end %>
+
+      <% if @page_name == "your_prism_risk_assessments" && @draft_prism_risk_assessments.any? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full" role="region" aria-label="Draft risk assessments">
+            <h2 class="govuk-heading-m">Draft risk assessments</h2>
+            <%= render "table", prism_risk_assessments: @draft_prism_risk_assessments, type: "draft" %>
+            <%= govuk_pagination(pagy: @draft_pagy) %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @submitted_prism_risk_assessments.any? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full" role="region" aria-label="Risk assessments">
+            <% if @page_name == "your_prism_risk_assessments" && @draft_prism_risk_assessments.any? %>
+              <h2 class="govuk-heading-m">Submitted risk assessments</h2>
+            <% end %>
+            <%= render "table", prism_risk_assessments: @submitted_prism_risk_assessments, type: "submitted" %>
+            <%= govuk_pagination(pagy: @submitted_pagy) %>
+          </div>
+        </div>
+      <% elsif @page_name == "your_prism_risk_assessments" && @draft_prism_risk_assessments.blank? %>
+        <p class="govuk-body">You haven't added any risk assessments yet.</p>
+      <% elsif @page_name == "team_prism_risk_assessments" %>
+        <p class="govuk-body">There are no risk assessments created by members of your team.</p>
+      <% end %>
+
+    </section>
+  </div>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-quarter">&nbsp;</div>
+  <div class="govuk-grid-column-three-quarters">
+    <%= govuk_button_link_to("Start a new risk assessment", all_products_path) %>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<% page_title "Add contact", errors: @contact.errors.any? %>
+<h1 class="govuk-heading-l">Add contact</h1>
+
+<%= form_with(model: @contact, url: business_contacts_path(@business), builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= govukErrorSummary form: form %>
+      <% heading_html = capture do %>
+        <span class="govuk-caption-l"><%= "Business: #{@business.trading_name}" %></span>
+        <h1 class="govuk-heading-l">Add contact</h1>
+      <% end %>
+      <%= render "form", form: form, legend: { html: heading_html } %>
+      <%= govukButton text: "Save" %>
+    </div>
+  </div>
+<% end %>

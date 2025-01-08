@@ -1,0 +1,65 @@
+<%= render('investigations/actions', investigation: @investigation) unless @investigation.is_closed? %>
+<%= render('investigations/actions', investigation: @investigation) if @investigation.is_closed? && current_user.is_superuser?  %>
+
+<% team_list_html = capture do %>
+  <% if @investigation.teams_with_access.length > 1 %>
+    <ul class="govuk-list govuk-list--bullet">
+      <% @investigation.teams_with_access.each do |team| %>
+        <li><%= team.name %></li>
+      <% end %>
+    </ul>
+  <% elsif @investigation.teams_with_access.length == 1 %>
+    <%= @investigation.teams_with_access.first.name %>
+  <% else %>
+    No teams added
+  <% end %>
+<% end %>
+
+<%= govuk_summary_list(
+    rows: case_rows(@investigation, current_user, team_list_html)
+) %>
+
+<h3 id="safety" class="govuk-heading-m govuk-!-margin-top-6 opss-float-left">
+  Safety and compliance
+</h3>
+<% if policy(@investigation).update?(user: current_user) %>
+  <a href="<%= edit_investigation_reported_reason_path(@investigation) %>" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19 govuk-!-margin-top-6 opss-float-right">
+    Edit<span class="govuk-visually-hidden"> the safety and compliance</span>
+  </a>
+<% end %>
+<%= govuk_summary_list(rows: safety_and_compliance_rows(@investigation)) %>
+
+<h3 id="product-info-1" class="govuk-heading-m govuk-!-margin-top-9">
+  Notification specific product information
+</h3>
+
+<% if @investigation.investigation_products.empty? %>
+  <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
+    You can add this information after a product has been added to the notification.
+  </h4>
+
+  <%= govuk_summary_list(rows: investigation_product_rows) %>
+<% else %>
+  <% @investigation.investigation_products.each_with_index do |investigation_product, index| %>
+    <h4 class="govuk-body govuk-!-font-weight-regular govuk-!-margin-bottom-1 opss-secondary-text">
+      <%= investigation_product.name %> (<%= investigation_product.product.paper_trail.version_at(investigation_product.investigation_closed_at).psd_ref(timestamp: investigation_product.investigation_closed_at.to_i, investigation_was_closed: investigation_product.investigation_closed_at.present?) %>)
+    </h4>
+    <%= govuk_summary_list(
+      rows: investigation_product_rows(investigation_product.decorate, current_user),
+      html_attributes: {
+        id: "product-#{index}"
+      }
+    ) %>
+  <% end %>
+<% end %>
+
+<% if @investigation.complainant %>
+  <section class="govuk-!-margin-top-9 opss-grouping">
+    <h3 id="source" class="govuk-heading-m opss-grouping__heading-m">Notification source</h3>
+    <%= @investigation.source_details_summary_list(view_protected_details: policy(@investigation).view_protected_details?) %>
+  </section>
+<% end %>
+
+<% unless policy(@investigation).update?(user: current_user) %>
+  <p class="govuk-body-s govuk-!-margin-top-7 govuk-!-margin-bottom-2 opss-secondary-text opss-text-align-right">Only teams added to the notification with editing rights can edit the notification.</p>
+<% end %>

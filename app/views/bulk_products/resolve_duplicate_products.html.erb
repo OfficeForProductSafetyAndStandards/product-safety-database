@@ -1,0 +1,101 @@
+<% page_heading = "We found duplicate product records - Upload multiple products" %>
+<% page_title page_heading, errors: @bulk_products_resolve_duplicate_products_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govuk_back_link(href: upload_products_file_bulk_upload_products_path) %>
+<% end %>
+<%= form_with model: @bulk_products_resolve_duplicate_products_form, url: resolve_duplicate_products_bulk_upload_products_path, method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= form.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Upload multiple products</span>
+        We found duplicate product records
+      </h1>
+      <p class="govuk-body">Product records with the same barcode already exist in the database.</p>
+      <% @duplicate_products_length = @duplicate_products.length - 1 %>
+      <% @duplicate_products.decorate.each_with_index do |product, index| %>
+        <div class="opss-panels">
+          <!-- Existing record -->
+          <div class="opss-panels__pair opss-panels__pair--merged--left" data-type="panel" data-identifier="<%= product.barcode %>" data-variant="existing">
+            <h2 class="govuk-heading-m"><%= sanitize(product.name_with_brand) %></h2>
+            <p class="govuk-body"><%= govuk_tag(text: "Existing PSD record", colour: "yellow") %></p>
+            <%=
+              govuk_summary_list(actions: false) do |summary_list|
+                summary_list.with_row do |row|
+                  row.with_key(text: "<abbr>PSD</abbr> <span title=\"reference\">ref</span>".html_safe)
+                  row.with_value(text: product.psd_ref)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Brand name")
+                  row.with_value(text: product.brand)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product name")
+                  row.with_value(text: product.name)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Barcode")
+                  row.with_value(text: product.barcode)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Counterfeit")
+                  row.with_value(text: product.counterfeit_value)
+                end
+              end
+            %>
+            <% if product.virus_free_images.present? %>
+              <%= govuk_details(summary_text: "Product image", text: image_tag(product.virus_free_images.first.file_upload, alt: product.virus_free_images.first.file_upload.filename, class: "opss-details-img")) %>
+            <% end %>
+            <%= govuk_button_link_to("Select", "#", secondary: true, class: "opss-nojs-hide opss-variant-select-button", "data-identifier": product.barcode, "data-variant": "existing") %>
+          </div>
+          <!-- New record -->
+          <% new_record = new_record_for_product(product).decorate %>
+          <div class="opss-panels__pair opss-panels__pair--merged--right" data-type="panel" data-identifier="<%= product.barcode %>" data-variant="new">
+            <h2 class="govuk-heading-m"><%= sanitize(new_record.name_with_brand) %></h2>
+            <p class="govuk-body"><%= govuk_tag(text: "Imported Excel record", colour: "green") %></p>
+            <%=
+              govuk_summary_list(actions: false) do |summary_list|
+                summary_list.with_row do |row|
+                  row.with_key(text: "<abbr>PSD</abbr> <span title=\"reference\">ref</span>".html_safe)
+                  row.with_value(text: "Not available")
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Brand name")
+                  row.with_value(text: new_record.brand)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Product name")
+                  row.with_value(text: new_record.name)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Barcode")
+                  row.with_value(text: new_record.barcode)
+                end
+                summary_list.with_row do |row|
+                  row.with_key(text: "Counterfeit")
+                  row.with_value(text: new_record.counterfeit_value)
+                end
+              end
+            %>
+            <%= govuk_button_link_to("Select", "#", secondary: true, class: "opss-nojs-hide opss-variant-select-button", "data-identifier": product.barcode, "data-variant": "new") %>
+          </div>
+        </div>
+        <div class="opss-js-enabled-hidden">
+          <%= form.fields_for :resolution do |resolution_form| %>
+            <%= resolution_form.govuk_radio_buttons_fieldset(product.barcode, legend: { text: "What would you like to do?", size: "m" }, class: ["opss-variant-select-form"]) do %>
+              <%= resolution_form.govuk_radio_button product.barcode, "existing_record;#{product.id}", label: { text: "Use existing PSD record" }, checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "existing_record;#{product.id}", "data-type": "form", "data-identifier": product.barcode, "data-variant": "existing" %>
+              <%= resolution_form.govuk_radio_button product.barcode, "new_record", label: { text: "Use imported Excel record" }, checked: @bulk_products_resolve_duplicate_products_form.resolution[product.barcode] == "new_record", "data-type": "form", "data-identifier": product.barcode, "data-variant": "new", link_errors: true %>
+            <% end %>
+          <% end %>
+        </div>
+        <% if index < @duplicate_products_length %>
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <% end %>
+      <% end %>
+      <div class="govuk-button-group">
+        <%= form.hidden_field :random_uuid, value: SecureRandom.uuid %>
+        <%= form.govuk_submit("Continue") %>
+      </div>
+    </div>
+  </div>
+<% end %>

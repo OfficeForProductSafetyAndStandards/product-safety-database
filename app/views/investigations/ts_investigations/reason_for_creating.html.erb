@@ -1,0 +1,15 @@
+<% page_heading = "Why are you creating a notification?" %>
+<%= page_title page_heading, errors: @reason_for_creating_form.errors.any? %>
+
+<%= form_with scope: :investigation, model: @reason_for_creating_form, url: wizard_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :put do |form| %>
+  <%= form.govuk_error_summary %>
+  <%= form.govuk_radio_buttons_fieldset(:case_is_safe, legend: { size: "l", text: "Why are you creating a notification?", style: "margin-bottom: 35px" }) do %>
+    <%= form.govuk_radio_button :case_is_safe, "no", label: { text: "A product is of concern" }, link_errors: true %>
+    <%= form.govuk_radio_button :case_is_safe, "yes", label: { text: "A product is safe and compliant" }, hint: { text: "This helps other market surveillance authorities avoid testing the same product again.", style: "font-size: 0.975rem" } %>
+  <% end %>
+
+  <div class="govuk-button-group">
+    <%= form.govuk_submit "Continue", class: "govuk-button" %>
+    <%= link_to "Cancel", @product ? product_path(@product) : "/", class: "govuk-link govuk-link--no-visited-state" %>
+  </div>
+<% end %>

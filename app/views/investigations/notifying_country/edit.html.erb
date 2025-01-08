@@ -1,0 +1,72 @@
+<% page_heading = "Change the notifying country" %>
+<% page_title page_heading, errors: @notifying_country_form.errors.any? %>
+<%= form_with scope: :investigation, model: @notifying_country_form, url: investigation_notifying_country_path(@investigation), method: :put do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= error_summary @notifying_country_form.errors %>
+      <%= govukRadios(
+        fieldset: {
+          legend: {
+            text: "Change the notifying country",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+          hint: { text: "Select the notifying country.", class: "govuk-hint govuk-!-margin-bottom-5" },
+          idPrefix: "overseas_or_uk",
+          name: "investigation[overseas_or_uk]",
+          key: :overseas_or_uk,
+          items: [
+            {
+              value: "overseas",
+              text: "Overseas countries",
+              id: "overseas_or_uk_overseas",
+              checked: params.dig(:investigation, :overseas_or_uk) == "overseas" || !@notifying_country_form.country&.match?(/country:GB/),
+              conditional: {
+                html: govukSelect(
+                  form: form,
+                  key: :notifying_country_overseas,
+                  items: options_for_notifying_country(Country.overseas_countries, @notifying_country_form),
+                  id: "notifying-country-overseas",
+                  name: "investigation[notifying_country_overseas]",
+                  label: {
+                    text: "Select which overseas country",
+                    classes: "govuk-label"
+                  },
+                )
+              }
+            },
+            {
+              value: "uk",
+              text: sanitize("<abbr>UK</abbr> nations"),
+              id: "overseas_or_uk_uk",
+              checked: params.dig(:investigation, :overseas_or_uk) == "uk" || @notifying_country_form.country&.match?(/country:GB/),
+              conditional: {
+                html: govukSelect(
+                  form: form,
+                  key: :notifying_country_uk,
+                  items: options_for_notifying_country(Country.uk_countries, @notifying_country_form),
+                  id: "notifying-country-uk",
+                  name: "investigation[notifying_country_uk]",
+                  label: {
+                    text: "Select which country or collection of countries",
+                    classes: "govuk-label"
+                  },
+                  hint: {
+                    text: "Great Britain (England, Scotland and Wales) does not include Northern Ireland.",
+                    classes: "govuk-!-font-size-16"
+                  },
+                )
+              }
+            }
+          ]
+        )
+     %>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Save", class: "govuk-button" %>
+        <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %>
+      </div>
+    </div>
+  </div>
+<% end %>

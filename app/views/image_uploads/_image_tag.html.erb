@@ -1,0 +1,6 @@
+<% if image.file_upload.variable? %>
+  <% class_name ||= 'app-image' %>
+  <%= image_tag image.file_upload.variant(resize_to_limit: dimensions), class: class_name, alt: image.file_upload.filename %>
+<% else %>
+  <span>Preview not available: <%= image.file_upload.filename %></span>
+<% end %>

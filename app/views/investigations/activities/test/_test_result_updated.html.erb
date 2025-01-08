@@ -1,0 +1,42 @@
+<div class="govuk-body">
+
+  <p>Changes:</p>
+
+  <% if activity.new_date_of_test %>
+    Date of test: <strong><%= activity.new_date_of_test.to_formatted_s(:govuk) %></strong><br>
+  <% end %>
+
+  <% if activity.new_result %>
+    Result: <strong><%= activity.new_result %></strong><br>
+  <% end %>
+
+  <% if activity.new_failure_details && activity.show_new_failure_details? %>
+    Reason for failure: <strong><%= activity.new_failure_details %></strong><br>
+  <% end %>
+
+  <% if activity.new_details %>
+    Further details: <strong><%= activity.new_details %></strong><br>
+  <% end %>
+
+  <% if activity.new_legislation %>
+    Legislation: <strong><%= activity.new_legislation %></strong><br>
+  <% end %>
+
+  <% if activity.new_standards_product_was_tested_against %>
+    Standards: <strong><%= activity.new_standards_product_was_tested_against.join(", ") %></strong><br>
+  <% end %>
+
+  <% if activity.new_product %>
+    Product: <%= activity.new_product.name %><br>
+  <% end %>
+
+  <% if activity.new_filename %>
+    Attached: <strong><%= activity.new_filename %></strong><br>
+  <% end %>
+
+  <% if activity.new_file_description %>
+    Attachment description: <strong><%= activity.new_file_description %></strong><br>
+  <% end %>
+</div>
+
+<%= link_to "View test result", investigation_test_result_path(activity.investigation, activity.metadata["test_result_id"]), class: "govuk-link--no-visited-state" %>

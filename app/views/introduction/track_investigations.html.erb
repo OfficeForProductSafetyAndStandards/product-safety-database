@@ -1,0 +1,20 @@
+<%= page_title "Track notifications" %>
+<div class="app-introduction-card">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l app-introduction-card__title">
+        Manage and track notifications
+      </h1>
+      <p class="govuk-body-l app-introduction-card__description">
+        You can manage notifications and pass them onto another market surveillance authority, track the progress of notifications, and export data.
+      </p>
+      <p class="govuk-body-l app-introduction-card__description">
+        You will also receive alerts from the Office for Product Safety and Standards about serious product safety issues.
+      </p>
+      <div class="govuk-button-group">
+        <%= govuk_button_link_to("Continue", introduction_share_data_path, inverse: true) %>
+        <a href="<%= introduction_skip_path %>" class="govuk-link govuk-link--inverse">Skip introduction</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+  <%= render "products/secondary_nav" %>
+
+  <% unless ["team_products", "your_products"].include? @page_name %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-6 govuk-!-margin-right-6">
+  <% end %>
+  <% if ["team_products", "your_products"].exclude? @page_name %>
+    <h2 class="govuk-heading-s">Filters<span class="govuk-visually-hidden">:</span></h2>
+    <%= govuk_skip_link(text: "Skip to results", href: "#page-content") %>
+    <%= govukSelect(
+      key: "category",
+      form: form,
+      items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + product_categories.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+      label: { text: "Category" },
+      formGroup: { classes: "govuk-!-margin-right-1" }
+    ) %>
+
+    <% if policy(Product).can_view_retired_products? %>
+      <%= govukRadios(
+      form: form,
+      key: :retired_status,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
+      fieldset: {
+        legend: {
+          text: "Product record status",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--s govuk-!-font-weight-regular"
+        }
+      },
+      items: [
+      {
+        id: "active",
+        text: "Active",
+        value: "active",
+        checked: true
+      },
+      {
+        id: "retired",
+        text: "Retired",
+        value: "retired"
+      },
+      {
+        id: "all",
+        text: "All",
+        value: "all"
+      }
+      ]
+      ) %>
+    <% end %>
+
+    <% if current_user.is_opss? %>
+      <%= govuk_details(summary_text: "Country of origin", classes: "opss-details--plain", id: "products-countries") do %>
+        <% Country.all.each do |country| %>
+          <div class="govuk-checkboxes__item">
+            <%= form.check_box :countries, { multiple: true, checked: params.dig(:search_params, :countries)&.include?(country[1]), class: "govuk-checkboxes__input" }, country[1], false %>
+            <%= form.label "countries_#{country[1].downcase.remove(':')}", country[0], { class: "govuk-label govuk-checkboxes__label" } %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <%= govuk_details(summary_text: "Notification type", classes: "opss-details--plain", id: "products-notification-type") do %>
+        <%= govukCheckboxes(
+          key: "",
+          form: form,
+          items: [
+            {
+              key: "notification",
+              text: "Notification",
+              value: true
+            },
+            {
+              key: "allegation",
+              text: "Allegation",
+              value: true
+            },
+            {
+              key: "enquiry",
+              text: "Enquiry",
+              value: true
+            },
+            {
+              key: "project",
+              text: "Project",
+              value: true
+            }
+          ]
+        ) %>
+      <% end %>
+    <% end %>
+
+    <div class="govuk-button-group">
+      <%= form.submit "Apply", name: nil, type: "submit", class: "govuk-button" %>
+      <a href="<%= all_products_path %>" class="govuk-link govuk-link--no-visited-state">Reset</a>
+    </div>
+
+    <% if @products.any? %>
+      <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
+        <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-16">
+          Request this list as a downloadable <br class="opss-br-desktop">
+          <%= link_to(generate_product_exports_path(params: product_export_params), class: "govuk-link govuk-link--no-visited-state") do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+        </p>
+      </div>
+    <% end %>
+  <% end %>
+</section>

@@ -1,0 +1,101 @@
+// Apply GOVUK typography
+// See https://github.com/alphagov/accessible-autocomplete/issues/285
+.autocomplete__wrapper * {
+  @include govuk-typography-common;
+}
+
+// Fix invisible arrow when used as dropdown
+// See https://github.com/alphagov/accessible-autocomplete/issues/351
+.autocomplete__wrapper {
+  z-index: 0;
+}
+
+// Add a clear button.
+.autocomplete-select-with-clear {
+  width: calc(100% - 48px);
+  display: inline-block;
+
+  // Hide IE browser input clear button (that doesn't work anyway)
+  .autocomplete__input::-ms-clear,
+  .autocomplete__hint::-ms-clear {
+    display: none;
+  }
+}
+
+.autocomplete__clear-button {
+  background: transparent;
+  border-color: transparent;
+  cursor: pointer;
+  width: 44px;
+  margin: 2px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  float: right;
+}
+
+.autocomplete__clear-button:focus {
+  @include govuk-focused-text;
+}
+
+.autocomplete__clear-viewbox {
+  cursor: pointer;
+  width: 30px;
+  height: 30px; // Set explicitly as IE needs it
+}
+
+.autocomplete__clear-icon {
+  stroke: govuk-colour("black");
+  fill: transparent;
+  stroke-linecap: round;
+  stroke-width: 5;
+}
+
+@include govuk-media-query($from: tablet) {
+  .autocomplete__hint,
+  .autocomplete__input,
+  .autocomplete__option {
+    font-size: 19px;
+  }
+
+  .autocomplete__hint,
+  .autocomplete__input {
+    line-height: 25px;
+  }
+
+  .autocomplete__wrapper input,
+  .autocomplete__wrapper li {
+    font-size: 19px;
+  }
+}
+
+// Apply error styling
+.govuk-form-group--error {
+  .autocomplete__input {
+    border: $govuk-border-width-form-element solid $govuk-error-colour;
+  }
+
+  // Remove error colour when focused
+  .autocomplete__input:focus,
+  .autocomplete__input--focused {
+    border-color: $govuk-input-border-colour;
+    // Remove `box-shadow` inherited from `:focus` as `input--error`
+    // already has the thicker border.
+    box-shadow: none;
+  }
+
+  // Make sure hint has same border width as input
+  .autocomplete__hint {
+    border-width: $govuk-border-width-form-element;
+  }
+
+  // Reposition dropdown arrow to account for thicker border
+  .autocomplete__dropdown-arrow-down {
+    top: 12px;
+  }
+
+  // Reposition clear button
+  .autocomplete__clear-button {
+    margin-top: 4px;
+  }
+}

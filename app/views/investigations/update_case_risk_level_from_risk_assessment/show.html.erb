@@ -1,0 +1,27 @@
+<% page_heading = "Notification risk level" %>
+<% page_title page_heading, errors: @update_risk_level_from_risk_assessment_form.errors.any? %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @update_risk_level_from_risk_assessment_form, url: investigation_risk_assessment_update_case_risk_level_path(@investigation, @risk_assessment), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <% items = [
+        OpenStruct.new(
+          value: "true",
+          text: safe_join(["Yes, set the notification risk level to ", tag.strong(@risk_assessment.risk_level_description.downcase)])
+        ),
+        OpenStruct.new(
+          value: "false",
+          text: "No, keep the current notification risk level unchanged"
+        )
+      ] %>
+      <%= form.govuk_collection_radio_buttons :update_case_risk_level_to_match_investigation,
+                                              items,
+                                              :value,
+                                              :text,
+                                              is_page_heading: true,
+                                              legend: { text: "Do you want to match this notification risk level to the risk assessment level?", size: 'l', style: "margin-bottom: 25px" } %>
+      <%= form.govuk_submit "Save" %>
+    <% end %>
+  </div>
+</div>

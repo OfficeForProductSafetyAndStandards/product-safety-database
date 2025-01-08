@@ -1,0 +1,50 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body opss-secondary-text">
+      <% if @product.virus_free_images.one? %>
+        There is one product image.
+      <% else %>
+        There are <%= @product.virus_free_images.size %> product images.
+      <% end %>
+    </p>
+  </div>
+  <% if imageable_policy(@product).create? %>
+    <div class="govuk-grid-column-one-third">
+      <div class="opss-text-align-right opss-margin-bottom-1-desktop">
+        <%= link_to "Add an image", new_product_image_upload_path(@product), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if @product.virus_free_images.any? %>
+  <ul class="govuk-list govuk-!-margin-top-6">
+    <% @product.virus_free_images.each do |image| %>
+      <li>
+        <%= govuk_summary_list(rows: [
+          {
+            key: { text: "Image" },
+            value: { text: product_image_preview(image, [400, 400]) },
+          },
+          {
+            key: { text: "Updated" },
+            value: { text: image_upload_updated_date_in_govuk_format(image) },
+          }
+        ], classes: "opss-summary-list-mixed opss-summary-list-mixed--image") %>
+        <% if imageable_policy(@product).destroy? %>
+          <div class="opss-text-align-right govuk-!-margin-bottom-8">
+            <ul class="govuk-list">
+              <li class="govuk-!-display-inline govuk-!-margin-left-2">
+                <a class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 opss-text-underline-offset" href="<%= remove_product_image_upload_path(@product, image) %>">Remove this image</a>
+              </li>
+            </ul>
+          </div>
+        <% end %>
+      </li>
+
+    <% end %>
+  </ul>
+  <p class="govuk-body-s govuk-!-margin-bottom-1 opss-secondary-text opss-text-align-right">
+    These are product images – they <strong>are not</strong> notification evidence images.
+  </p>
+<% end %>

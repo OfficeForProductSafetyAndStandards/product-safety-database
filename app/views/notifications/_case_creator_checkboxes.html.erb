@@ -1,0 +1,24 @@
+<%= govukCheckboxes(
+  key: "",
+  form: form,
+  items: [
+    {
+      key: "created_by_me",
+      text: "Me",
+      value: true
+    },
+    {
+      key: "created_by_my_team",
+      text: "Me and my team",
+      value: true
+    },
+    {
+      key: "created_by_others",
+      text: "Others",
+      value: true,
+      conditional: {
+        html: created_by(form)
+      }
+    },
+  ]
+) %>
