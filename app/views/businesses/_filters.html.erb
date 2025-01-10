@@ -1,7 +1,4 @@
 <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
-  <a href="#page-content" class="govuk-skip-link opss-skip-link">
-    Skip to the main content
-  </a>
   <%= render 'businesses/secondary_nav' %>
 
   <% if ["team_businesses", "your_businesses"].exclude?(@page_name) && current_user.is_opss? %>
