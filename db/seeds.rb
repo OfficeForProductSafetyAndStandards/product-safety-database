@@ -32,9 +32,9 @@ user = User.find_by(email: "seed_user@example.com") || User.create!(
   mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
 )
 
-user.roles.create!(name: 'notification_task_list_user')
-user.roles.create!(name: 'super_user')
-user.roles.create!(name: 'team_admin')
+user.roles.create!(name: "notification_task_list_user")
+user.roles.create!(name: "super_user")
+user.roles.create!(name: "team_admin")
 
 # Roles
 roles = %w[
