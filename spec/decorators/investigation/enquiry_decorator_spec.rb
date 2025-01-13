@@ -15,12 +15,57 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_mailer do
   describe "#source_details_summary_list" do
     let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details: false) }
 
-    it "displays the Received date" do
-      expect(source_details_summary_list).to summarise("Received date", text: investigation.date_received.to_formatted_s(:govuk))
+    context "when date_received and received_type are present" do
+      it "displays the Received date" do
+        expect(source_details_summary_list).to summarise("Received date", text: investigation.date_received.to_formatted_s(:govuk))
+      end
+
+      it "displays the Received by" do
+        expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
+      end
+
+      it "displays the Source type" do
+        expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
+      end
     end
 
-    it "displays the Received by" do
-      expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
+    context "when date_received is nil" do
+      let(:investigation) { create(:enquiry, date_received: nil) }
+
+      it "displays the Received date with empty value" do
+        expect(source_details_summary_list).to summarise("Received date", text: nil)
+      end
+
+      it "displays other fields" do
+        expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
+        expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
+      end
+    end
+
+    context "when received_type is nil" do
+      let(:investigation) { create(:enquiry, received_type: nil) }
+
+      it "displays the Received by with empty value" do
+        expect(source_details_summary_list).to summarise("Received by", text: nil)
+      end
+
+      it "displays other fields" do
+        expect(source_details_summary_list).to summarise("Received date", text: investigation.date_received.to_formatted_s(:govuk))
+        expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
+      end
+    end
+
+    context "when both date_received and received_type are nil" do
+      let(:investigation) { create(:enquiry, date_received: nil, received_type: nil) }
+
+      it "displays the Received date and Received by with empty values" do
+        expect(source_details_summary_list).to summarise("Received date", text: nil)
+        expect(source_details_summary_list).to summarise("Received by", text: nil)
+      end
+
+      it "displays the Source type" do
+        expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
+      end
     end
   end
 
