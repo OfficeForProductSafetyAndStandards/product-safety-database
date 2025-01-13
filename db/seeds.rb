@@ -28,7 +28,13 @@ user = User.find_by(email: "seed_user@example.com") || User.create!(
   password_confirmation: "testpassword",
   organisation:,
   team:,
+  mobile_number_verified: true,
+  mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
 )
+
+user.roles.create!(name: "notification_task_list_user")
+user.roles.create!(name: "super_user")
+user.roles.create!(name: "team_admin")
 
 # Roles
 roles = %w[
@@ -91,7 +97,7 @@ product_categories = Rails.application.config.product_constants["product_categor
 end
 
 # Notifications
-10.times do
+40.times do
   notification = Investigation::Notification.new(
     description: Faker::Hipster.sentence(word_count: 20),
     is_closed: false,
