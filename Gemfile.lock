@@ -388,7 +388,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.17.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.17.2-x86_64-linux-gnu)
+    nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (6.2.0)
       jwt (>= 1.5, < 3)
