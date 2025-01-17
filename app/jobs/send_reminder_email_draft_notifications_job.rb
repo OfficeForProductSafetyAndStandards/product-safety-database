@@ -23,6 +23,7 @@ private
       send_mails(drafts, days_old, remaining_days, last_reminder, last_line)
     end
   rescue StandardError => e
+    Sentry.capture_exception(e)
     Rails.logger.error "Failed to send reminder emails for drafts days old due to: #{e.message}"
   end
 
@@ -45,7 +46,7 @@ private
         pretty_id: draft.pretty_id,
         last_reminder: last_reminder,
         last_line: last_line
-      )
+      ).deliver_later
     end
   end
 
@@ -59,9 +60,9 @@ private
 
   def reminder_last_line(last_reminder)
     if last_reminder
-      "This will be the final reminder before the notification will be automatically deleted in 3 days, if the status remains on 'Draft'."
+      I18n.t(".final_reminder", scope: "mail.send_email_reminder_to_submit_draft")
     else
-      "If the status of this notification remains in 'Draft', another reminder email will be sent in the next coming days."
+      I18n.t(".another_email", scope: "mail.send_email_reminder_to_submit_draft")
     end
   end
 end

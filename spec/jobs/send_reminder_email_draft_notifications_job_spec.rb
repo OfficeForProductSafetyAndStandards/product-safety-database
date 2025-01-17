@@ -73,9 +73,9 @@ RSpec.describe SendReminderEmailDraftNotificationsJob, :with_stubbed_antivirus, 
 
       it "sends the final reminder email with the correct details" do
         allow(NotifyMailer).to receive(:send_email_reminder).and_return(mailer)
-        described_class.new.send(:send_mails, [draft], 87, 3, true, "This will be the final reminder before the notification will be automatically deleted in 3 days, if the status remains on 'Draft'.")
+        described_class.new.send(:send_mails, [draft], 87, 3, true, I18n.t(".final_reminder", scope: "mail.send_email_reminder_to_submit_draft"))
         expect(NotifyMailer).to have_received(:send_email_reminder).with(
-          user: user, remaining_days: 3, last_reminder: true, last_line: "This will be the final reminder before the notification will be automatically deleted in 3 days, if the status remains on 'Draft'.",
+          user: user, remaining_days: 3, last_reminder: true, last_line: I18n.t(".final_reminder", scope: "mail.send_email_reminder_to_submit_draft"),
           days: 87, title: draft.user_title, pretty_id: draft.pretty_id
         )
       end
@@ -85,12 +85,12 @@ RSpec.describe SendReminderEmailDraftNotificationsJob, :with_stubbed_antivirus, 
   describe "#reminder_last_line" do
     it "returns the final reminder text if last_reminder is true" do
       line = described_class.new.send(:reminder_last_line, true)
-      expect(line).to eq("This will be the final reminder before the notification will be automatically deleted in 3 days, if the status remains on 'Draft'.")
+      expect(line).to eq(I18n.t(".final_reminder", scope: "mail.send_email_reminder_to_submit_draft"))
     end
 
     it "returns the regular reminder text if last_reminder is false" do
       line = described_class.new.send(:reminder_last_line, false)
-      expect(line).to eq("If the status of this notification remains in 'Draft', another reminder email will be sent in the next coming days.")
+      expect(line).to eq(I18n.t(".another_email", scope: "mail.send_email_reminder_to_submit_draft"))
     end
   end
 
