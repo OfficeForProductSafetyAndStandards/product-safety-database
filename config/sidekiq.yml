@@ -34,3 +34,6 @@
     soft_delete_draft_notifications_job:
       cron: "30 1 * * *"
       class: "SoftDeleteDraftNotificationsJob"
+    send_draft_notification_reminder_job:
+      cron: "0 5 * * *"
+      class: "SendReminderEmailDraftNotificationsJob" 

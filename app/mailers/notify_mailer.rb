@@ -20,7 +20,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       notification_export: "f6c9a4ad-2050-4f76-bbad-d73bd9747d18",
       business_export: "68df2257-07f5-4768-b50a-74ffa3cb7fd3",
       unsafe_file: "3ba1da4f-a6e4-4d29-a03c-8996fe711c26",
-      unsafe_attachment: "6960b99c-7c60-4e28-a7ea-d29a0d0f3d0e"
+      unsafe_attachment: "6960b99c-7c60-4e28-a7ea-d29a0d0f3d0e",
+      draft_notification_reminder: "4defeadb-cb64-49dc-8e36-89e52e5ea3b1"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -288,6 +289,23 @@ class NotifyMailer < GovukNotifyRails::Mailer
       name: user.name,
       record_type:,
       id:
+    )
+
+    mail(to: user.email)
+  end
+
+  def send_email_reminder(user:, remaining_days:, days:, title:, pretty_id:, last_reminder:, last_line:)
+    set_template(TEMPLATES[:draft_notification_reminder])
+    set_reference("Draft Notification submission reminder")
+
+    set_personalisation(
+      name: user.name,
+      remaining_days:,
+      days:,
+      title:,
+      investigation_url: investigation_url(pretty_id:),
+      last_reminder:,
+      last_line:
     )
 
     mail(to: user.email)
