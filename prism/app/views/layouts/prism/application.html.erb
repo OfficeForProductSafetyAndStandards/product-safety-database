@@ -12,8 +12,14 @@
   <link rel="manifest" href="<%= image_path("manifest.json") %>">
   <%= stylesheet_link_tag "prism/application" %>
   <%= csrf_meta_tags %>
+  <% if Rails.env.production? && analytics_cookies_accepted? %>
+    <%= render "shared/ga_head" %>
+  <% end %>
 </head>
 <body class="govuk-template__body app-body-class">
+  <% if Rails.env.production? && analytics_cookies_accepted? %>
+    <%= render "shared/ga_body" %>
+  <% end %>
   <%= javascript_tag nonce: true do -%>
     document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
   <% end -%>
