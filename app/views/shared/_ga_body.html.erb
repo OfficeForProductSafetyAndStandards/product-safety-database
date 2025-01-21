@@ -1,5 +1,9 @@
 <!-- Google Tag Manager (noscript) -->
-<noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2S954RK" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
+<% gtm_containers.each do |container| %>
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=<%= container %>"
+            height="0" width="0" style="display:none;visibility:hidden">
+    </iframe>
+  </noscript>
+<% end %>
 <!-- End Google Tag Manager (noscript) -->

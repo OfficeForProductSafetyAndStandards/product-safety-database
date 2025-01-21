@@ -1,6 +1,8 @@
 module Prism
   class ApplicationController < ActionController::Base
     include Pagy::Backend
+    include CookiesConcern
+    helper ::GoogleTagManagerHelper
 
     protect_from_forgery with: :exception
 
