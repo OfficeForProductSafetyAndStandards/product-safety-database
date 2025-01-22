@@ -303,7 +303,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       remaining_days:,
       days:,
       title:,
-      investigation_url: investigation_url(pretty_id:),
+      investigation_url: notification_create_index_url(notification_pretty_id: pretty_id),
       last_reminder:,
       last_line:
     )
