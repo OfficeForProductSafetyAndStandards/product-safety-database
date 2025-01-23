@@ -381,13 +381,13 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.2-arm64-darwin)
+    nokogiri (1.17.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.2-x64-mingw-ucrt)
+    nokogiri (1.17.2-x64-mingw-ucrt)
       racc (~> 1.4)
-    nokogiri (1.18.2-x86_64-darwin)
+    nokogiri (1.17.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.2-x86_64-linux-gnu)
+    nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (6.2.0)
       jwt (>= 1.5, < 3)
@@ -819,7 +819,7 @@ DEPENDENCIES
   net-imap
   net-pop
   net-smtp
-  nokogiri (= 1.18.2)
+  nokogiri (= 1.17.2)
   opensearch-ruby
   pagy (~> 9.3.3)
   paper_trail
