@@ -120,16 +120,28 @@ module InvestigationsHelper
     wheres[:reported_reason] = reported_reasons unless reported_reasons.empty?
 
     if paginate
-      Investigation.pagy_search(
-        query,
-        where: wheres,
-        order: @search.sorting_params,
-        misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
-        page: page_number,
-        per_page: page_size,
-        body_options: { track_total_hits: true },
-        scroll: scroll_time(scroll)
-      )
+      if page_number.to_i > 500
+        Investigation.search(
+          query,
+          where: wheres,
+          order: @search.sorting_params,
+          misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+          scroll: "5m",
+          body_options: { track_total_hits: true },
+          limit: 10_000
+        )
+      else
+        Investigation.pagy_search(
+          query,
+          where: wheres,
+          order: @search.sorting_params,
+          misspellings: { edit_distance: searching_for_investigation_pretty_id?(query) ? 0 : 2 },
+          page: page_number,
+          per_page: page_size,
+          body_options: { track_total_hits: true },
+          scroll: scroll_time(scroll)
+        )
+      end
     else
       Investigation.search(
         query,

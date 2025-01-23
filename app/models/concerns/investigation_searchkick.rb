@@ -11,5 +11,20 @@ module InvestigationSearchkick
     def should_index?
       submitted? && deleted_at.nil?
     end
+
+    def self.scroll_results(skip)
+      scroll_batch_size = 1000
+      scroll_batches = skip / scroll_batch_size
+
+      scroll_batches.times { scroll }
+
+      remaining_skip = skip % scroll_batch_size
+      batch = scroll
+      results = batch.drop(remaining_skip).take(20)
+
+      clear_scroll
+
+      results
+    end
   end
 end

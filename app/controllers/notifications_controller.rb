@@ -13,10 +13,21 @@ class NotificationsController < ApplicationController
     # Find the most recent incomplete bulk products upload for the current user, if any
     @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
 
-    @pagy, @answer  = pagy_searchkick(new_opensearch_for_investigations(20, paginate: true))
-    @count          = count_to_display
+    search_results = new_opensearch_for_investigations(20, paginate: true)
+
+    if params[:page].to_i > 500
+      @answer = search_results
+      @count = search_results.total_count
+      @pagy = Pagy.new(count: @count, page: params[:page], items: 20)
+      skip = (params[:page].to_i - 1) * 20
+      @answer = search_results.scroll_results(skip)
+    else
+      @pagy, @answer = pagy_searchkick(search_results)
+      @count = count_to_display
+    end
+
     @investigations = InvestigationDecorator
-                        .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
+                       .decorate_collection(@answer.includes([{ owner_user: :organisation, owner_team: :organisation }, :products]))
     @page_name = "all_cases"
   end
 
