@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_20_122808) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_23_123240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -301,6 +301,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_20_122808) do
     t.datetime "risk_validated_at", precision: nil
     t.string "risk_validated_by"
     t.string "state"
+    t.datetime "submitted_at"
     t.jsonb "tasks_status", default: {}
     t.string "type", null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -308,6 +309,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_20_122808) do
     t.index ["custom_risk_level"], name: "index_investigations_on_custom_risk_level"
     t.index ["deleted_at"], name: "index_investigations_on_deleted_at"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
+    t.index ["submitted_at"], name: "index_investigations_on_submitted_at"
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
 

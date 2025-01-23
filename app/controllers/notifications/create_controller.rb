@@ -1207,11 +1207,17 @@ module Notifications
     end
 
     def pre_submission_tasks
+      capture_submitted_at_date
       add_incident_management_team
     end
 
     def add_incident_management_team
       AddImtToNotification.call!(notification: @notification, user: current_user)
+    end
+
+    def capture_submitted_at_date
+      @notification.submitted_at = Time.zone.now.utc
+      @notification.save!
     end
   end
 end

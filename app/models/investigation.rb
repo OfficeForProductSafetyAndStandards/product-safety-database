@@ -96,7 +96,7 @@ class Investigation < ApplicationRecord
                        :date_closed, :date_received, :description, :hazard_description, :hazard_type,
                        :is_closed, :is_private, :non_compliant_reason, :notifying_country, :pretty_id,
                        :product_category, :received_type, :reported_reason, :risk_level, :risk_validated_at,
-                       :risk_validated_by, :type, :updated_at, :user_title, :deleted_at, :deleted_by
+                       :risk_validated_by, :type, :updated_at, :user_title, :deleted_at, :deleted_by, :submitted_at
 
   self.ignored_columns += %w[ahoy_visit_id]
 
