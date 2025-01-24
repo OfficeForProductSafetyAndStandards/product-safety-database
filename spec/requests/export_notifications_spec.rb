@@ -100,7 +100,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_mail
         end
 
         it "includes the submitted_at field" do
-          create(:notification, submitted_at: Time.zone.now.utc)
+          notification = create(:notification, submitted_at: Time.zone.now.utc)
 
           Investigation.reindex
 
