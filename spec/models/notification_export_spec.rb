@@ -162,6 +162,11 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_antivirus, :w
         expect(sheet.cell(2, 29)).to eq investigation.risk_validated_at&.to_s
       end
 
+      it "includes date submitted_at" do
+        expect(sheet.cell(1, 30)).to eq "Date_Submitted"
+        expect(sheet.cell(2, 30)).to be_nil
+      end
+
       it "includes notifiers reference for other team" do
         expect(sheet.cell(3, 19)).to eq "Restricted"
       end
@@ -200,6 +205,10 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_antivirus, :w
 
       it "includes date validated for other team" do
         expect(sheet.cell(3, 29)).to eq other_team_investigation.risk_validated_at ? "Restricted" : nil
+      end
+
+      it "includes date submitted_at for other team" do
+        expect(sheet.cell(3, 30)).to be_nil
       end
     end
 
@@ -276,6 +285,21 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_antivirus, :w
           sheet_ids = sheet.column(1).drop(1)
           expect(sheet_ids).to contain_exactly(investigation.pretty_id, safe_and_compliant_notification.pretty_id, unsafe_and_non_compliant_notification.pretty_id, non_compliant_notification.pretty_id)
         end
+      end
+    end
+
+    context "with submitted at date included" do
+      let!(:submitted_investigation) { create(:notification, creator: user, state: "submitted", submitted_at: 1.day.ago) }
+
+      before do
+        Investigation.search_index.refresh
+      end
+
+      it "includes submitted at date for the notification" do
+        sheet_ids = sheet.column(1).drop(1)
+        expect(sheet_ids).to include(submitted_investigation.pretty_id)
+        sheet_ids = sheet.column(30).drop(1)
+        expect(sheet_ids).to include(submitted_investigation.submitted_at.utc.strftime("%Y-%m-%d %H:%M:%S %z"))
       end
     end
   end

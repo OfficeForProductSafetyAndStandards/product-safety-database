@@ -98,6 +98,19 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_mail
             expect(exported_data.cell(2, 25)).to eq "Restricted"
           end
         end
+
+        it "includes the submitted_at field" do
+          create(:notification, submitted_at: Time.zone.now.utc)
+
+          Investigation.reindex
+
+          get generate_notification_exports_path
+
+          aggregate_failures do
+            expect(exported_data.cell(1, 30)).to eq "Date_Submitted"
+            expect(exported_data.cell(2, 30)).to eq notification.submitted_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          end
+        end
       end
     end
 
