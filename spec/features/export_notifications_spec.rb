@@ -22,7 +22,7 @@ RSpec.describe "notification export", :with_opensearch, :with_stubbed_antivirus,
            product_code: "W2020-10/1")
   end
 
-  let!(:investigation) { create(:notification, products: [product], user_title: "MyBrand washing machine", reported_reason: "unsafe") }
+  let!(:investigation) { create(:notification, products: [product], user_title: "MyBrand washing machine", reported_reason: "unsafe", submitted_at: Time.zone.now.utc) }
   let!(:allegation_serious) { create(:allegation, risk_level: "serious", description: "Serious risk case", creator: other_user_same_team) }
   let!(:allegation_other_team) { create(:allegation, creator: other_user, read_only_teams: [user.team]) }
   let!(:allegation_closed) { create(:allegation, :closed, creator: user) }
@@ -132,5 +132,20 @@ RSpec.describe "notification export", :with_opensearch, :with_stubbed_antivirus,
       expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
       expect(spreadsheet.cell(4, 1)).to eq(allegation_other_team.pretty_id)
     end
+  end
+
+  it "with no filters selected - the new column date submitted is exported" do
+    expect(page).to have_text investigation.pretty_id
+
+    click_link "XLSX (spreadsheet)"
+    expect(page).to have_content "Your notification export is being prepared. You will receive an email when your export is ready to download."
+
+    expect(email.action_name).to eq "notification_export"
+    expect(email.personalization[:name]).to eq user.name
+    expect(email.personalization[:download_export_url]).to eq notification_export_url(export)
+
+    expect(spreadsheet.last_row).to eq(5)
+    expect(spreadsheet.cell(2, 1)).to eq(investigation.pretty_id)
+    expect(spreadsheet.cell(2, 30)).to eq(investigation.submitted_at.strftime("%Y-%m-%d %H:%M:%S %z"))
   end
 end

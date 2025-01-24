@@ -130,7 +130,8 @@ private
                      Date_Created
                      Last_Updated
                      Date_Closed
-                     Date_Validated], types: Array.new(29, :string)
+                     Date_Validated
+                     Date_Submitted], types: Array.new(30, :string)
   end
 
   def find_notifications(ids)
@@ -196,7 +197,8 @@ private
       is_other_team ? "Restricted" : notification.created_at, # date_created
       is_other_team ? "Restricted" : notification.updated_at, # last_updated
       is_other_team ? "Restricted" : notification.date_closed, # date_closed
-      is_other_team ? "Restricted" : restrict_data_for_non_opss_user(notification.risk_validated_at) # date_validated
+      is_other_team ? "Restricted" : restrict_data_for_non_opss_user(notification.risk_validated_at), # date_validated
+      notification.submitted_at # date_submitted
     ]
   end
 
