@@ -12,7 +12,7 @@
 
       <% if @draft_notifications.any? %>
         <%=
-          govuk_table do |table|       
+          govuk_table do |table|
           if Flipper.enabled?(:submit_notification_reminder)
             table.with_caption(size: "m") do
                   safe_join([
@@ -25,9 +25,9 @@
                 end
           else
             table.with_caption(
-              size: "m", 
+              size: "m",
               text: "Draft notifications"
-            )          
+            )
           end
 
             table.with_head do |head|
@@ -77,7 +77,7 @@
                   row.with_cell(header: true, text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe)
                   row.with_cell(text: sanitize(notification.user_title))
                   row.with_cell(text: notification.updated_at.to_formatted_s(:govuk))
-                  row.with_cell(text: govuk_tag(text: "Submitted", colour: "green").html_safe)
+                  row.with_cell(text: "#{govuk_tag(text: 'Submitted', colour: 'green').html_safe}<br><br>#{notification.submitted_at? ?notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}".html_safe)
                   row.with_cell(text: sanitize("<a href=\"#{notification_path(notification)}\" class=\"govuk-link\">Update notification</a>", tags: %w(a), attributes: %w(href class)).html_safe)
                 end
               end
