@@ -772,7 +772,7 @@ private
   end
 
   def case_risk_level_value(investigation)
-    investigation.risk_level == "high" || investigation.risk_level == "serious" ? "<span class='opss-tag opss-tag--risk1 opss-tag--lrg'>#{investigation.risk_level.capitalize} risk</span>".html_safe : investigation.risk_level_description
+    %w[high serious].include?(investigation.risk_level) ? "<span class='opss-tag opss-tag--risk1 opss-tag--lrg'>#{investigation.risk_level.capitalize} risk</span>".html_safe : investigation.risk_level_description
   end
 
   def risk_validated_value(investigation)

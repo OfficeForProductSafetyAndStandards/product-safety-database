@@ -11,8 +11,8 @@ class EditWhyReportingForm
   attribute :reported_reason
 
   validates :reported_reason, presence: true
-  validates :hazard_type, :hazard_description, presence: true, if: -> { reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant" }
-  validates :non_compliant_reason, presence: true, if: -> { reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant" }
+  validates :hazard_type, :hazard_description, presence: true, if: -> { %w[unsafe unsafe_and_non_compliant].include?(reported_reason) }
+  validates :non_compliant_reason, presence: true, if: -> { %w[non_compliant unsafe_and_non_compliant].include?(reported_reason) }
 
   def assign_to(investigation)
     investigation.assign_attributes(
@@ -38,11 +38,11 @@ class EditWhyReportingForm
   end
 
   def reported_reason_unsafe
-    reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant"
+    %w[unsafe unsafe_and_non_compliant].include?(reported_reason)
   end
 
   def reported_reason_non_compliant
-    reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant"
+    %w[non_compliant unsafe_and_non_compliant].include?(reported_reason)
   end
 
 private
