@@ -67,7 +67,7 @@ class SearchParams
     if sort_by.blank?
       return SortByHelper::SORT_BY_RELEVANT if q.present?
 
-      return SortByHelper::SORT_BY_CREATED_AT if page_name == "team_cases" || page_name == "your_cases"
+      return SortByHelper::SORT_BY_CREATED_AT if %w[team_cases your_cases].include?(page_name)
 
       return SortByHelper::SORT_BY_UPDATED_AT
     end
@@ -89,7 +89,7 @@ class SearchParams
   end
 
   def sort_by_items(with_relevant_option: false)
-    items = if page_name == "team_cases" || page_name == "your_cases"
+    items = if %w[team_cases your_cases].include?(page_name)
               [
                 SortByHelper::SortByItem.new("Newest notifications", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_DESC),
                 SortByHelper::SortByItem.new("Oldest notifications", SortByHelper::SORT_BY_CREATED_AT, SortByHelper::SORT_DIRECTION_ASC),

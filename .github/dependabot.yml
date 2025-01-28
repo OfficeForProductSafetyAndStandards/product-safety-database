@@ -6,7 +6,6 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "nokogiri"
-        versions: ["1.17.2"]  
     groups:
       dependencies:
         update-types:

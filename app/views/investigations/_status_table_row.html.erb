@@ -21,7 +21,7 @@
   <% end %>
 <% end %>
 
-<tr class="govuk-table__row">
+<tr class="govuk-table__row" aria-rowindex="<%= calculate_row_index(investigation_counter, 3) %>">
   <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :status %>" class="govuk-visually-hidden">
     Type
   </th>
