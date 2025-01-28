@@ -568,6 +568,17 @@ module InvestigationsHelper
     %w[team_cases your_cases assigned_cases].freeze
   end
 
+  def calculate_row_index(investigation_counter, row_number)
+    # Each investigation has 3 rows (title, meta, status)
+    # So for investigation 0, rows are 1,2,3
+    # For investigation 1, rows are 4,5,6 etc.
+    (investigation_counter * 3) + row_number
+  end
+
+  def investigation_owner(investigation)
+    sanitize(investigation.owner_display_name_for(viewer: current_user))
+  end
+
 private
 
   def search_result_values(_search_terms, number_of_results)

@@ -1,5 +1,5 @@
 <% if policy(investigation).view_non_protected_details? %>
-  <%= render "investigations/full_table_body", investigation: investigation.decorate, sorted_by: sorted_by, page_name: page_name %>
+  <%= render "investigations/full_table_body", investigation: investigation.decorate, sorted_by: sorted_by, page_name: page_name, investigation_counter: investigation_counter %>
 <% else %>
-  <%= render "investigations/restricted_table_body", investigation: investigation.decorate, page_name: page_name %>
+  <%= render "investigations/restricted_table_body", investigation: investigation.decorate, page_name: page_name, investigation_counter: investigation_counter %>
 <% end %>

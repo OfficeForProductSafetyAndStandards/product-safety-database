@@ -65,14 +65,14 @@
       <% if @records.any? %>
         <p class="govuk-body"><% if @records_count == 1 %>There is currently 1 business.<% else %>There are currently <%= @records_count %> businesses.<% end %></p>
         <%=
-          govuk_table do |table|
+          govuk_table(html_attributes: { role: "table" }) do |table|
             table.with_head do |head|
               head.with_row do |row|
-                row.with_cell(text: "Trading name")
-                row.with_cell(text: "Registered or Legal name")
-                row.with_cell(text: "Companies House number")
-                row.with_cell(text: "Address")
-                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Select business</span>".html_safe)
+                row.with_cell(text: "Trading name", header: true, html_attributes: { scope: "col" })
+                row.with_cell(text: "Registered or Legal name", header: true, html_attributes: { scope: "col" })
+                row.with_cell(text: "Companies House number", header: true, html_attributes: { scope: "col" })
+                row.with_cell(text: "Address", header: true, html_attributes: { scope: "col" })
+                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Select business</span>".html_safe, header: true, html_attributes: { scope: "col" })
               end
             end
 
@@ -86,8 +86,18 @@
                               end.join("<hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">")
                             end
 
-                select_button = form_with url: "#{wizard_path}?business_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f|
-                  f.govuk_submit "Select", name: "draft", value: true, secondary: true
+                select_button = if @existing_business_ids.include?(record.id)
+                  ""
+                else
+                  "<span id=\"desc-#{record.id}\" class=\"govuk-visually-hidden\">
+                    Trading name: #{sanitize(record.trading_name)}.
+                    Registered or Legal name: #{sanitize(record.legal_name)}.
+                    Companies House number: #{sanitize(record.company_number)}.
+                    Address: #{sanitize(addresses)}.
+                  </span>".html_safe +
+                  form_with(url: "#{wizard_path}?business_id=#{record.id}", method: :put, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f|
+                    f.govuk_submit "Select", name: "draft", value: true, secondary: true, "aria-describedby": "desc-#{record.id}"
+                  end
                 end
 
                 body.with_row do |row|
@@ -95,11 +105,7 @@
                   row.with_cell(text: sanitize(record.legal_name))
                   row.with_cell(text: sanitize(record.company_number))
                   row.with_cell(text: sanitize(addresses).html_safe)
-                  if @existing_business_ids.include?(record.id)
-                    row.with_cell(text: "")
-                  else
-                    row.with_cell(text: select_button)
-                  end
+                  row.with_cell(text: select_button.html_safe)
                 end
               end
             end

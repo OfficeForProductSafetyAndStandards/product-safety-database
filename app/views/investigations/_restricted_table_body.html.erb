@@ -1,22 +1,25 @@
 <tbody class="govuk-table__body">
-  <tr class="govuk-table__row">
-    <th class="govuk-visually-hidden">
-      Notification title
-    </th>
-    <th id="<%= dom_id investigation, :item %>" colspan="4" scope="colgroup" class="govuk-table__header">
+  <tr class="govuk-table__row" id="<%= dom_id investigation, :title %>" aria-rowindex="<%= calculate_row_index(investigation_counter, 1) %>">
+    <th scope="row" class="govuk-table__header" colspan="4" headers="case">
+      <span id="desc-<%= investigation.id %>" class="govuk-visually-hidden">
+        Notification number: <%= investigation.pretty_id %>.
+        <%= non_search_cases_page_names.include?(page_name) ? "Created: #{investigation.created_at.to_formatted_s(:govuk)}" : "Owner: #{investigation_owner(investigation)}" %>.
+        <%= page_name == "assigned_cases" ? "Assigner: #{sanitize(investigation.owner_team&.name)}" : "Hazard type: #{sanitize(investigation.hazard_type.presence || "Not provided")}" %>.
+        Product count: <%= pluralize investigation.products.count, "product" %>.
+      </span>
       <%= "#{sanitize(investigation.case_type&.capitalize)} restricted" %>
     </th>
   </tr>
-  <tr class="govuk-table__row">
-    <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :meta %>" class="govuk-visually-hidden">
+  <tr class="govuk-table__row" id="<%= dom_id investigation, :meta %>" aria-rowindex="<%= calculate_row_index(investigation_counter, 2) %>">
+    <th headers="case" id="<%= dom_id investigation, :meta_header %>" class="govuk-visually-hidden">
       Metadata
     </th>
-    <td headers="case <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+    <td headers="case <%= dom_id investigation, :meta_header %>" class="govuk-table__cell">
       <%= investigation.pretty_id %>
     </td>
-    <td headers="caseowner <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell" colspan="2">
+    <td headers="caseowner <%= dom_id investigation, :meta_header %>" class="govuk-table__cell" colspan="2">
       &nbsp;
     </td>
   </tr>
-  <%= render "investigations/status_table_row", investigation: investigation %>
+  <%= render "investigations/status_table_row", investigation: investigation, investigation_counter: investigation_counter %>
 </tbody>
