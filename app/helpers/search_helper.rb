@@ -10,7 +10,7 @@ module SearchHelper
   def get_owner_filter(user)
     return if @search.case_owner == "all"
 
-    if @search.case_owner == "my_team" || @search.case_owner == "me"
+    if %w[my_team me].include?(@search.case_owner)
       compute_included_terms(user)
     end
   end
