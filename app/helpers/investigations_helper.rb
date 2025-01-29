@@ -579,6 +579,9 @@ module InvestigationsHelper
     sanitize(investigation.owner_display_name_for(viewer: current_user))
   end
 
+  # Include the new table accessibility helper
+  include TableAccessibilityHelper
+
 private
 
   def search_result_values(_search_terms, number_of_results)

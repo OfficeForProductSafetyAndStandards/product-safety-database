@@ -35,14 +35,14 @@
                 </tr>
               </thead>
 
-              <% @investigations.each do |investigation| %>
+              <% @investigations.each_with_index do |investigation, index| %>
                 <% result = @answer.find { |rs| rs.id.to_i == investigation.id } %>
                 <% if !policy(investigation).view_non_protected_details? %>
-                  <%= render "investigations/restricted_table_body", investigation: investigation.decorate %>
+                  <%= render "investigations/restricted_table_body", investigation: investigation.decorate, investigation_counter: index %>
                 <% elsif result.respond_to?(:highlight) %>
-                  <%= render "investigations/highlight_table_body", investigation: investigation.decorate, highlights: result.highlight, sorted_by: @search.sort_by %>
+                  <%= render "investigations/highlight_table_body", investigation: investigation.decorate, highlights: result.highlight, sorted_by: @search.sort_by, investigation_counter: index %>
                 <% else %>
-                  <%= render "investigations/full_table_body", investigation: investigation.decorate, sorted_by: @search.sort_by %>
+                  <%= render "investigations/full_table_body", investigation: investigation.decorate, sorted_by: @search.sort_by, investigation_counter: index %>
                 <% end %>
               <% end %>
 

@@ -1,15 +1,16 @@
-<tbody class="govuk-table__body">
+<tbody class="govuk-table__body" data-cy-case-id="<%= investigation.pretty_id %>">
   <tr class="govuk-table__row" id="<%= dom_id investigation, :title %>" aria-rowindex="<%= calculate_row_index(investigation_counter, 1) %>">
-    <th scope="row" class="govuk-table__header" colspan="4" headers="case">
-      <span id="desc-<%= investigation.id %>" class="govuk-visually-hidden">
-        Notification number: <%= investigation.pretty_id %>.
-        <%= non_search_cases_page_names.include?(page_name) ? "Created: #{investigation.created_at.to_formatted_s(:govuk)}" : "Owner: #{investigation_owner(investigation)}" %>.
-        <%= page_name == "assigned_cases" ? "Assigner: #{sanitize(investigation.owner_team&.name)}" : "Hazard type: #{sanitize(investigation.hazard_type.presence || "Not provided")}" %>.
-        Product count: <%= pluralize investigation.products.count, "product" %>.
+    <th scope="row" class="govuk-table__header" colspan="5" headers="case" id="item_investigation_<%= investigation.id %>">
+      <% description_id = screen_reader_description_id("notification", investigation) %>
+      <span id="<%= description_id %>" class="govuk-visually-hidden">
+        <%= notification_screen_reader_description(investigation, @page_name) %>
       </span>
-      <%= "#{sanitize(investigation.case_type&.capitalize)} restricted" %>
+      <span aria-describedby="<%= description_id %>">
+        <%= "#{sanitize(investigation.case_type&.capitalize)} restricted" %>
+      </span>
     </th>
   </tr>
+
   <tr class="govuk-table__row" id="<%= dom_id investigation, :meta %>" aria-rowindex="<%= calculate_row_index(investigation_counter, 2) %>">
     <th headers="case" id="<%= dom_id investigation, :meta_header %>" class="govuk-visually-hidden">
       Metadata
@@ -17,9 +18,16 @@
     <td headers="case <%= dom_id investigation, :meta_header %>" class="govuk-table__cell">
       <%= investigation.pretty_id %>
     </td>
-    <td headers="caseowner <%= dom_id investigation, :meta_header %>" class="govuk-table__cell" colspan="2">
-      &nbsp;
+    <td headers="caseowner <%= dom_id investigation, :meta_header %>" class="govuk-table__cell">
+      <%= investigation_owner(investigation) %>
+    </td>
+    <td headers="haztype <%= dom_id investigation, :meta_header %>" class="govuk-table__cell">
+      <%= sanitize(investigation.hazard_type.presence || "Not provided") %>
+    </td>
+    <td headers="prodcount <%= dom_id investigation, :meta_header %>" class="govuk-table__cell">
+      <%= pluralize investigation.products.count, "product" %>
     </td>
   </tr>
+
   <%= render "investigations/status_table_row", investigation: investigation, investigation_counter: investigation_counter %>
 </tbody>

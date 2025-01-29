@@ -7,36 +7,38 @@ RSpec.describe "Table accessibility" do
 
   before do
     allow(NotifyMailer).to receive(:notification_created).and_return(mail_message)
-    investigation # Create the investigation
+    investigation
     sign_in(user)
   end
 
   describe "notifications tables" do
-    it "has proper accessibility attributes" do
-      visit "/notifications/your-notifications"
+    context "when viewing notification tables" do
+      it "implements WCAG 2.1 table structure requirements" do
+        visit "/notifications/your-notifications"
 
-      # Check table class
-      expect(page).to have_css("table.govuk-table")
+        expect(page).to have_css("table.govuk-table")
 
-      # Check header cells have scope
-      within "table" do
-        expect(page).to have_css("th[scope='col']")
+        within "table" do
+          expect(page).to have_css("th[scope='col']")
+        end
+
+        expect(page).to have_css(
+          "caption.govuk-visually-hidden",
+          text: "Notifications data: 5 columns with each notification described across rows within each table body.",
+          visible: :all
+        )
+
+        expect(page).to have_css("a[aria-describedby]")
       end
 
-      # Check hidden descriptions
-      expect(page).to have_css("caption.govuk-visually-hidden", text: "Notifications data: 5 columns with each notification described across rows within each table body.", visible: :all)
+      it "implements proper row hierarchy for screen readers" do
+        visit "/notifications/team-notifications"
 
-      # Check links have aria-describedby
-      expect(page).to have_css("a[aria-describedby]")
-    end
-
-    it "has proper row indices" do
-      visit "/notifications/team-notifications"
-
-      within "tbody" do
-        expect(page).to have_css("tr[aria-rowindex='1']")
-        expect(page).to have_css("tr[aria-rowindex='2']")
-        expect(page).to have_css("tr[aria-rowindex='3']")
+        within "tbody" do
+          expect(page).to have_css("tr[aria-rowindex='1']")
+          expect(page).to have_css("tr[aria-rowindex='2']")
+          expect(page).to have_css("tr[aria-rowindex='3']")
+        end
       end
     end
   end
