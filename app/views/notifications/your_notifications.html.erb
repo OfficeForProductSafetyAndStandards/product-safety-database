@@ -12,7 +12,7 @@
 
       <% if @draft_notifications.any? %>
         <%=
-          govuk_table do |table|
+          govuk_table(html_attributes: { role: "table" }) do |table|
           if Flipper.enabled?(:submit_notification_reminder)
             table.with_caption(size: "m") do
                   safe_join([
@@ -32,22 +32,44 @@
 
             table.with_head do |head|
               head.with_row do |row|
-                row.with_cell(text: "Product name(s)")
-                row.with_cell(text: "Notification title")
-                row.with_cell(text: "Last updated")
-                row.with_cell(text: "Status")
-                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Make changes/delete notification</span>".html_safe)
+                row.with_cell(text: "Product name(s)", html_attributes: { scope: "col" })
+                row.with_cell(text: "Notification title", html_attributes: { scope: "col" })
+                row.with_cell(text: "Last updated", html_attributes: { scope: "col" })
+                row.with_cell(text: "Status", html_attributes: { scope: "col" })
+                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Actions</span>".html_safe, html_attributes: { scope: "col" })
               end
             end
 
-            @draft_notifications.each do |notification|
+            @draft_notifications.each_with_index do |notification, index|
               table.with_body do |body|
                 body.with_row do |row|
-                  row.with_cell(header: true, text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe)
-                  row.with_cell(text: sanitize(notification.user_title.presence || "Not provided"))
-                  row.with_cell(text: notification.updated_at.to_formatted_s(:govuk))
-                  row.with_cell(text: govuk_tag(text: "Draft", colour: "grey").html_safe)
-                  row.with_cell(text: sanitize("<a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\">Make changes</a><hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\"><a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\">Delete</a>", tags: %w(a hr), attributes: %w(href class)).html_safe)
+                  product_value = notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join(", ") || "Not provided"
+                  title_value = notification.user_title.presence || "Not provided"
+                  updated_value = notification.updated_at.to_formatted_s(:govuk)
+                  status_value = "Draft"
+
+                  row.with_cell(
+                    header: true,
+                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe
+                  )
+                  row.with_cell(text: sanitize(title_value))
+                  row.with_cell(text: updated_value)
+                  row.with_cell(text: govuk_tag(text: status_value, colour: "grey").html_safe)
+                  row.with_cell(
+                    text: sanitize(
+                      "<span id=\"desc-#{notification.id}\" class=\"govuk-visually-hidden\">
+                        Product name(s): #{product_value}.
+                        Notification title: #{title_value}.
+                        Last updated: #{updated_value}.
+                        Status: #{status_value}.
+                      </span>
+                      <a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-#{notification.id}\">Make changes</a>
+                      <hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">
+                      <a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-#{notification.id}\">Delete</a>",
+                      tags: %w(a hr span),
+                      attributes: %w(href class id aria-describedby)
+                    ).html_safe
+                  )
                 end
               end
             end
@@ -58,27 +80,47 @@
 
       <% if @submitted_notifications.any? %>
         <%=
-          govuk_table do |table|
+          govuk_table(html_attributes: { role: "table" }) do |table|
             table.with_caption(size: "m", text: "Submitted notifications")
 
             table.with_head do |head|
               head.with_row do |row|
-                row.with_cell(text: "Product name(s)")
-                row.with_cell(text: "Notification title")
-                row.with_cell(text: "Last updated")
-                row.with_cell(text: "Status")
-                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Update notification</span>".html_safe)
+                row.with_cell(text: "Product name(s)", html_attributes: { scope: "col" })
+                row.with_cell(text: "Notification title", html_attributes: { scope: "col" })
+                row.with_cell(text: "Last updated", html_attributes: { scope: "col" })
+                row.with_cell(text: "Status", html_attributes: { scope: "col" })
+                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Actions</span>".html_safe, html_attributes: { scope: "col" })
               end
             end
 
-            @submitted_notifications.each do |notification|
+            @submitted_notifications.each_with_index do |notification, index|
               table.with_body do |body|
                 body.with_row do |row|
-                  row.with_cell(header: true, text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe)
-                  row.with_cell(text: sanitize(notification.user_title))
-                  row.with_cell(text: notification.updated_at.to_formatted_s(:govuk))
-                  row.with_cell(text: "#{govuk_tag(text: 'Submitted', colour: 'green').html_safe}<br><br>#{notification.submitted_at? ?notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}".html_safe)
-                  row.with_cell(text: sanitize("<a href=\"#{notification_path(notification)}\" class=\"govuk-link\">Update notification</a>", tags: %w(a), attributes: %w(href class)).html_safe)
+                  product_value = notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join(", ")
+                  title_value = notification.user_title
+                  updated_value = notification.updated_at.to_formatted_s(:govuk)
+                  status_value = "Submitted #{notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}"
+
+                  row.with_cell(
+                    header: true,
+                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe
+                  )
+                  row.with_cell(text: sanitize(title_value))
+                  row.with_cell(text: updated_value)
+                  row.with_cell(text: "#{govuk_tag(text: 'Submitted', colour: 'green').html_safe}<br><br>#{notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}".html_safe)
+                  row.with_cell(
+                    text: sanitize(
+                      "<span id=\"desc-submitted-#{notification.id}\" class=\"govuk-visually-hidden\">
+                        Product name(s): #{product_value}.
+                        Notification title: #{title_value}.
+                        Last updated: #{updated_value}.
+                        Status: #{status_value}.
+                      </span>
+                      <a href=\"#{notification_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-submitted-#{notification.id}\">Update notification</a>",
+                      tags: %w(a span),
+                      attributes: %w(href class id aria-describedby)
+                    ).html_safe
+                  )
                 end
               end
             end

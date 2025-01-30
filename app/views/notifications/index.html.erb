@@ -30,25 +30,25 @@
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th class="govuk-visually-hidden">&nbsp;</th>
-                  <th id="case" scope="col" class="govuk-table__header">Notification number</th>
+                  <th id="case" scope="col" class="govuk-table__header" aria-label="Notification number">Notification number</th>
                   <% if non_search_cases_page_names.include? @page_name %>
-                    <th id="casecreated" scope="col" class="govuk-table__header">Notification created</th>
+                    <th id="casecreated" scope="col" class="govuk-table__header" aria-label="Notification created">Notification created</th>
                   <% else %>
-                    <th id="caseowner" scope="col" class="govuk-table__header">Notification owner</th>
+                    <th id="caseowner" scope="col" class="govuk-table__header" aria-label="Notification owner">Notification owner</th>
                   <% end %>
 
                   <% if @page_name == "assigned_cases" %>
-                    <th id="assigner" scope="col" class="govuk-table__header">Assigner</th>
+                    <th id="assigner" scope="col" class="govuk-table__header" aria-label="Assigner">Assigner</th>
                   <% else %>
-                    <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
+                    <th id="haztype" scope="col" class="govuk-table__header" aria-label="Hazard type">Hazard type</th>
                   <% end %>
 
-                  <th scope="col" class="govuk-table__header">Product count</th>
+                  <th id="prodcount" scope="col" class="govuk-table__header" aria-label="Product count">Product count</th>
 
                   <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
-                    <th id="created" scope="col" class="govuk-table__header">Created</th>
+                    <th id="created" scope="col" class="govuk-table__header" aria-label="Created">Created</th>
                   <% else %>
-                    <th id="updated" scope="col" class="govuk-table__header">Updated</th>
+                    <th id="updated" scope="col" class="govuk-table__header" aria-label="Updated">Updated</th>
                   <% end %>
                 </tr>
               </thead>
@@ -63,21 +63,23 @@
                 <tfoot class="govuk-table__head">
                   <tr class="govuk-table__row">
                     <th class="govuk-visually-hidden">&nbsp;</th>
-                    <th scope="col" class="govuk-table__header">Notification number</th>
-                    <th scope="col" class="govuk-table__header">Notification <%= non_search_cases_page_names.include?(@page_name) ? "created" : "owner" %></th>
+                    <th scope="col" class="govuk-table__header" aria-label="Notification number">Notification number</th>
+                    <th scope="col" class="govuk-table__header" aria-label="<%= non_search_cases_page_names.include?(@page_name) ? "Notification created" : "Notification owner" %>">
+                      Notification <%= non_search_cases_page_names.include?(@page_name) ? "created" : "owner" %>
+                    </th>
 
                     <% if @page_name == "assigned_cases" %>
-                      <th scope="col" class="govuk-table__header">Assigner</th>
+                      <th scope="col" class="govuk-table__header" aria-label="Assigner">Assigner</th>
                     <% else %>
-                      <th scope="col" class="govuk-table__header">Hazard type</th>
+                      <th scope="col" class="govuk-table__header" aria-label="Hazard type">Hazard type</th>
                     <% end %>
 
-                    <th scope="col" class="govuk-table__header">Product count</th>
+                    <th scope="col" class="govuk-table__header" aria-label="Product count">Product count</th>
 
                     <% if query_params[:sort_by] == SortByHelper::SORT_BY_CREATED_AT && non_search_cases_page_names.exclude?(@page_name) %>
-                      <th scope="col" class="govuk-table__header">Created</th>
+                      <th scope="col" class="govuk-table__header" aria-label="Created">Created</th>
                     <% else %>
-                      <th scope="col" class="govuk-table__header">Updated</th>
+                      <th scope="col" class="govuk-table__header" aria-label="Updated">Updated</th>
                     <% end %>
                   </tr>
                 </tfoot>
