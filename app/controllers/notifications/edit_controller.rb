@@ -109,8 +109,6 @@ module Notifications
         @business = Business.find(params[:business_id])
         @locations = @business.locations
         @contacts = @business.contacts
-      when :add_supporting_images
-        @image_upload = ImageUpload.new(upload_model: @notification)
       end
 
       render_wizard
@@ -231,34 +229,6 @@ module Notifications
 
         return redirect_to wizard_path(:search_for_or_add_a_business)
 
-      when :add_supporting_images
-        if params[:final].blank?
-          flash[:success] = nil
-
-          @image_upload = ImageUpload.new(upload_model: @notification)
-
-          if image_upload_params[:file_upload].present?
-            file = ActiveStorage::Blob.create_and_upload!(
-              io: image_upload_params[:file_upload],
-              filename: image_upload_params[:file_upload].original_filename,
-              content_type: image_upload_params[:file_upload].content_type
-            )
-            file.analyze_later
-            @image_upload = ImageUpload.new(file_upload: file, upload_model: @notification, created_by: current_user.id)
-
-            if @image_upload.valid?
-              @image_upload.save!
-              @notification.image_upload_ids.push(@image_upload.id)
-              @notification.save!
-              flash[:success] = "Supporting image uploaded successfully"
-            end
-          end
-
-          return render_wizard
-        else
-          flash[:success] = "You have updated the notification!"
-          return redirect_to notification_path(@notification)
-        end
       end
 
       if params[:draft] == "true" || params[:final] == "true"

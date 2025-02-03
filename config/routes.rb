@@ -213,6 +213,14 @@ Rails.application.routes.draw do
             put ":investigation_product_id:test_report_id", to: "test_reports#update_with_notification_product_test"
           end
         end
+
+        resource :add_supporting_images, controller: "add_supporting_images", only: %i[show], path: "add-supporting-images" do
+          member do
+            post "", to: "add_supporting_images#update"
+            get ":upload_id/remove", to: "add_supporting_images#remove_upload", as: "remove_upload"
+            delete ":upload_id/remove", to: "add_supporting_images#remove_upload"
+          end
+        end
       end
     end
 
