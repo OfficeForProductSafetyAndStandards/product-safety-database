@@ -305,7 +305,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       title:,
       investigation_url: notification_create_index_url(notification_pretty_id: pretty_id),
       last_reminder:,
-      last_line:
+      last_line:,
+      notification_id: pretty_id
     )
 
     mail(to: user.email)
