@@ -18,23 +18,36 @@ module Notifications
       @image_upload = ImageUpload.new(upload_model: @notification)
 
       if image_upload_params[:file_upload].present?
-        file = ActiveStorage::Blob.create_and_upload!(
-          io: image_upload_params[:file_upload],
-          filename: image_upload_params[:file_upload].original_filename,
-          content_type: image_upload_params[:file_upload].content_type
-        )
-        file.analyze_later
-        @image_upload = ImageUpload.new(file_upload: file, upload_model: @notification, created_by: current_user.id)
+        begin
+          file = ActiveStorage::Blob.create_and_upload!(
+            io: image_upload_params[:file_upload],
+            filename: image_upload_params[:file_upload].original_filename,
+            content_type: image_upload_params[:file_upload].content_type
+          )
+          file.analyze_later
+          @image_upload = ImageUpload.new(file_upload: file, upload_model: @notification, created_by: current_user.id)
 
-        if @image_upload.valid?
-          @image_upload.save!
-          @notification.image_upload_ids.push(@image_upload.id)
-          @notification.save!
-          flash[:success] = "Supporting image uploaded successfully"
+          if @image_upload.valid?
+            @image_upload.save!
+            @notification.image_upload_ids.push(@image_upload.id)
+            @notification.save!
+            flash[:success] = "Supporting image uploaded successfully"
+
+            if params[:final] == "true"
+              flash[:success] = "You have updated the notification!"
+              redirect_to notification_path(@notification)
+            else
+              redirect_to notification_add_supporting_images_path(@notification)
+            end
+          else
+            file.purge
+            render :add_supporting_images
+          end
+        rescue ActiveStorage::IntegrityError
+          @image_upload.errors.add(:file_upload, "must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF file")
+          render :add_supporting_images
         end
-      end
-
-      if params[:final] == "true"
+      elsif params[:final] == "true"
         flash[:success] = "You have updated the notification!"
         redirect_to notification_path(@notification)
       else

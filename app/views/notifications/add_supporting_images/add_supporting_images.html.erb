@@ -30,7 +30,8 @@
       <p class="govuk-body">To provide visual evidence of the product harm or incident/accident, you can upload either a single image or multiple images to the notification.</p>
 
       <%= f.hidden_field :file_upload, value: "" %>
-      <%= f.govuk_file_field :file_upload, label: nil, hint: { text: "Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF. Maximum file size: 100MB." } %>
+      <p class="govuk-body">Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF. Maximum file size: 100MB.</p>
+      <%= f.govuk_file_field :file_upload, label: nil %>
       <%= f.govuk_submit "Upload image", secondary: true %>
 
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
