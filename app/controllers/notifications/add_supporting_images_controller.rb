@@ -34,7 +34,12 @@ module Notifications
         end
       end
 
-      redirect_to notification_add_supporting_images_path(@notification)
+      if params[:final] == "true"
+        flash[:success] = "You have updated the notification!"
+        redirect_to notification_path(@notification)
+      else
+        redirect_to notification_add_supporting_images_path(@notification)
+      end
     end
 
     def remove_upload
