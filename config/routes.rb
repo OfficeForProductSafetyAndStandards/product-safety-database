@@ -186,7 +186,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :edit, only: %i[index show update] do
+        resources :edit do
           collection do
             get "remove-business/:investigation_business_id", to: "edit#remove_business", as: "remove_business"
             delete "remove-business/:investigation_business_id", to: "edit#remove_business"
@@ -195,8 +195,6 @@ Rails.application.routes.draw do
             get "search_for_or_add_a_business/duplicate/:business_id", to: "edit#show_duplicate_business", as: "duplicate_business"
             patch "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
             put "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
-
-            get ":step/remove-upload/:upload_id", to: "edit#remove_upload", as: "remove_upload"
           end
         end
 
