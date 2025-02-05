@@ -186,6 +186,8 @@ Rails.application.routes.draw do
           end
         end
 
+        # These routes need to appear before the next scope block to avoid clashing with the
+        # `:investigation_product_id/:entity_id` routes.
         resources :edit do
           collection do
             get "remove-business/:investigation_business_id", to: "edit#remove_business", as: "remove_business"
