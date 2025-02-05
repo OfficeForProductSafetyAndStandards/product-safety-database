@@ -34,7 +34,6 @@ module Notifications
             flash[:success] = "Supporting image uploaded successfully"
 
             if params[:final] == "true"
-              flash[:success] = "You have updated the notification!"
               redirect_to notification_path(@notification)
             else
               redirect_to notification_add_supporting_images_path(@notification)
@@ -48,7 +47,6 @@ module Notifications
           render :add_supporting_images
         end
       elsif params[:final] == "true"
-        flash[:success] = "You have updated the notification!"
         redirect_to notification_path(@notification)
       else
         redirect_to notification_add_supporting_images_path(@notification)
