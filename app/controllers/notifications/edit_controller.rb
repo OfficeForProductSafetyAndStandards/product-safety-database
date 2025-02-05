@@ -296,18 +296,6 @@ module Notifications
       end
     end
 
-    def remove_upload
-      upload = ImageUpload.find(params[:upload_id])
-      if upload.upload_model == @notification
-        @notification.image_upload_ids.delete(upload.id)
-        @notification.save!
-        upload.destroy!
-        flash[:success] = "Supporting image removed successfully"
-      end
-      @image_upload = ImageUpload.new(upload_model: @notification)
-      redirect_to notification_edit_path(@notification, :add_supporting_images)
-    end
-
   private
 
     def disallow_non_role_users
@@ -376,10 +364,6 @@ module Notifications
 
     def add_contact_params
       params.require(:add_contact_form).permit(:name, :job_title, :email, :phone_number, :business_id, :contact_id)
-    end
-
-    def image_upload_params
-      params.require(:image_upload).permit(:file_upload)
     end
   end
 end
