@@ -1,4 +1,18 @@
 FactoryBot.define do
+  factory :image_upload do
+    association :upload_model, factory: :notification
+
+    after(:build) do |image_upload|
+      file = ActiveStorage::Blob.create_and_upload!(
+        io: File.open(Rails.root.join("test/fixtures/files/testImage.png")),
+        filename: "testImage.png",
+        content_type: "image/png"
+      )
+      file.analyze_later
+      image_upload.file_upload.attach(file)
+    end
+  end
+
   trait :with_image_upload_info do
     transient do
       document_file { Rails.root.join("test/fixtures/files/testImage.png") }

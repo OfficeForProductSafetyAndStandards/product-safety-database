@@ -3,6 +3,8 @@ module Notifications
     include BreadcrumbHelper
 
     before_action :set_notification
+    before_action :validate_step
+    before_action :check_notification_is_open
     before_action :set_image_upload, only: [:show]
     before_action :set_remove_image_upload, only: [:remove_upload]
 
@@ -40,10 +42,12 @@ module Notifications
             end
           else
             file.purge
+            flash[:error] = @image_upload.errors.full_messages.to_sentence
             render :add_supporting_images
           end
         rescue ActiveStorage::IntegrityError
           @image_upload.errors.add(:file_upload, "must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF file")
+          flash[:error] = @image_upload.errors.full_messages.to_sentence
           render :add_supporting_images
         end
       elsif params[:final] == "true"
@@ -55,11 +59,18 @@ module Notifications
 
     def remove_upload
       if request.delete?
-        @image_upload.destroy!
-        @notification.image_upload_ids.delete(@image_upload.id)
-        @notification.save!
-        flash[:success] = "Supporting image removed successfully"
-        redirect_to notification_add_supporting_images_path(@notification)
+        if @image_upload.upload_model != @notification
+          head :forbidden
+        else
+          ActiveRecord::Base.transaction do
+            @notification.image_upload_ids.delete(@image_upload.id)
+            @notification.save!
+            @image_upload.file_upload.purge
+            @image_upload.destroy!
+          end
+          flash[:success] = "Supporting image removed successfully"
+          redirect_to notification_add_supporting_images_path(@notification)
+        end
       else
         render :remove_upload
       end
@@ -67,9 +78,38 @@ module Notifications
 
   private
 
+    def validate_step
+      # Ensure objects exist
+      unless @notification && current_user
+        redirect_to "/404" and return
+      end
+
+      user_team = current_user.team
+
+      # Check if the current user or their team is authorized to edit the notification
+      authorized_to_edit =
+        [@notification.creator_user, @notification.owner_user].include?(current_user) ||
+        [@notification.owner_team, @notification.creator_team].include?(user_team) ||
+        @notification.teams_with_edit_access.include?(user_team)
+
+      # Check if the user's team has read-only access
+      has_read_only_access = @notification.teams_with_read_only_access.include?(user_team)
+
+      # Return forbidden if not authorized or has read-only access
+      if !authorized_to_edit || has_read_only_access
+        render "errors/forbidden", status: :forbidden and return
+      end
+    end
+
     def set_notification
       @notification = Investigation.find_by!(pretty_id: params[:notification_pretty_id])
-      authorize @notification, :update?
+    end
+
+    def check_notification_is_open
+      return unless @notification.is_closed?
+
+      flash[:warning] = "Cannot edit a closed notification"
+      redirect_to notification_path(@notification)
     end
 
     def set_image_upload
@@ -78,7 +118,6 @@ module Notifications
 
     def set_remove_image_upload
       @image_upload = ImageUpload.find(params[:upload_id])
-      raise ActiveRecord::RecordNotFound unless @image_upload.upload_model == @notification
     end
 
     def image_upload_params
