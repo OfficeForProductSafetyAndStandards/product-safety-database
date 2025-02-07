@@ -1,12 +1,13 @@
 require "rails_helper"
 
-RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_mailer, type: :controller do
+RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antivirus, :with_stubbed_mailer, type: :controller do
   include_context "with stubbed antivirus"
   let(:notification) { create(:notification) }
-  let(:file) { fixture_file_upload("testImage.png", "image/png") }
+  let(:file) { Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/testImage.png"), "image/png") }
   let(:image_upload) do
     upload = create(:image_upload, upload_model: notification)
-    notification.update!(image_upload_ids: [upload.id])
+    notification.image_upload_ids.push(upload.id)
+    notification.save!
     upload
   end
   let(:other_notification) { create(:notification) }
@@ -93,16 +94,23 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_maile
       end
 
       context "with invalid params" do
-        let(:file) { fixture_file_upload("test.txt", "text/plain") }
+        let(:file) { Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/testImage.png"), "image/png") }
+        let(:image_upload) { ImageUpload.new }
+        let(:errors) { instance_double(ActiveModel::Errors, full_messages: ["Invalid file"]) }
+
+        before do
+          allow(ImageUpload).to receive(:new).and_return(image_upload)
+          allow(image_upload).to receive_messages(valid?: false, errors: errors)
+        end
 
         it "does not create an image upload" do
-          expect { update_request }.not_to(change(ImageUpload, :count))
+          expect { update_request }.not_to change(ImageUpload, :count)
         end
 
         it "renders the show template with error" do
           update_request
           expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
-          expect(flash[:error]).to be_present
+          expect(flash[:error]).to eq("Invalid file")
         end
       end
     end
@@ -186,7 +194,7 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_maile
         expect {
           delete :remove_upload, params: {
             notification_pretty_id: notification.pretty_id,
-            upload_id: 999_999
+            upload_id: 0
           }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
