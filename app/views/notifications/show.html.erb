@@ -206,7 +206,7 @@
         summary_list.with_row do |row|
           row.with_key(text: "Supporting images")
           row.with_value(text: if @notification.image_uploads.any?
-            safe_join(@notification.image_uploads.map { |upload| link_to upload.file_upload.filename, url_for(upload.file_upload), target: '_blank' }, tag.br)
+            safe_join(@notification.image_uploads.map(&:file_upload).map { |file| link_to file&.filename, url_for(file), target: '_blank' }, tag.br)
           else
             "Not provided"
           end)
