@@ -145,9 +145,19 @@ module Notifications
 
     def authorized_to_edit?
       user_team = current_user.team
-      [@notification.creator_user, @notification.owner_user].include?(current_user) ||
-        [@notification.owner_team, @notification.creator_team].include?(user_team) ||
-        @notification.teams_with_edit_access.include?(user_team)
+      user_is_creator_or_owner? || team_is_creator_or_owner?(user_team) || team_has_edit_access?(user_team)
+    end
+
+    def user_is_creator_or_owner?
+      [@notification.creator_user, @notification.owner_user].include?(current_user)
+    end
+
+    def team_is_creator_or_owner?(team)
+      [@notification.owner_team, @notification.creator_team].include?(team)
+    end
+
+    def team_has_edit_access?(team)
+      @notification.teams_with_edit_access.include?(team)
     end
 
     def set_notification
