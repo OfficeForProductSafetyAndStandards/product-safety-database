@@ -50,7 +50,6 @@ module Notifications
       ActiveRecord::Base.transaction do
         @notification.image_upload_ids.delete(@image_upload.id)
         @notification.save!
-        @image_upload.file_upload.purge
         @image_upload.destroy!
       end
     end
