@@ -4,7 +4,6 @@ module Notifications
 
     before_action :set_notification
     before_action :validate_step
-    before_action :check_notification_is_open
     before_action :set_image_upload, only: [:show]
     before_action :set_remove_image_upload, only: [:remove_upload]
 
@@ -126,13 +125,6 @@ module Notifications
 
     def set_notification
       @notification = Investigation.find_by!(pretty_id: params[:notification_pretty_id])
-    end
-
-    def check_notification_is_open
-      return unless @notification.is_closed?
-
-      flash[:warning] = "Cannot edit a closed notification"
-      redirect_to notification_path(@notification)
     end
 
     def set_image_upload

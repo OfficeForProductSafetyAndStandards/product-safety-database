@@ -48,16 +48,4 @@ RSpec.describe "Supporting Images Management", :with_stubbed_antivirus, :with_st
       expect(flash[:success]).to eq("Supporting image removed successfully")
     end
   end
-
-  context "with closed notification" do
-    let(:notification) { create(:notification, :closed, creator: user, pretty_id: "2403-0002") }
-
-    it "prevents uploads to closed notifications" do
-      post notification_add_supporting_images_path(notification_pretty_id: notification.pretty_id),
-           params: { image_upload: { file_upload: image_file } }
-
-      expect(flash[:warning]).to eq("Cannot edit a closed notification")
-      expect(response).to redirect_to(notification_path(notification))
-    end
-  end
 end

@@ -50,21 +50,9 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antiv
   describe "GET #show" do
     let(:show_request) { get :show, params: { notification_pretty_id: notification.pretty_id } }
 
-    context "when notification is open" do
-      it "renders the show template" do
-        show_request
-        expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
-      end
-    end
-
-    context "when notification is closed" do
-      before { notification.update!(is_closed: true) }
-
-      it "redirects to the notification page" do
-        show_request
-        expect(response).to redirect_to(notification_path(notification))
-        expect(flash[:warning]).to eq("Cannot edit a closed notification")
-      end
+    it "renders the show template" do
+      show_request
+      expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
     end
 
     include_examples "requires edit permission"
@@ -78,49 +66,37 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antiv
       }
     end
 
-    context "when notification is open" do
-      context "with valid params" do
-        it "adds an image to the notification" do
-          expect { update_request }.to change { notification.reload.image_upload_ids.count }.by(1)
-            .and change(ImageUpload, :count).by(1)
-        end
-
-        it "redirects with success message" do
-          update_request
-          expect(response).to redirect_to(notification_add_supporting_images_path(notification))
-          expect(flash[:success]).to eq("Supporting image uploaded successfully")
-        end
+    context "with valid params" do
+      it "adds an image to the notification" do
+        expect { update_request }.to change { notification.reload.image_upload_ids.count }.by(1)
+          .and change(ImageUpload, :count).by(1)
       end
 
-      context "with invalid params" do
-        let(:file) { fixture_file_upload("testImage.png", "image/png") }
-        let(:image_upload) { ImageUpload.new }
-        let(:errors) { instance_double(ActiveModel::Errors, full_messages: ["Invalid file"]) }
-
-        before do
-          allow(ImageUpload).to receive(:new).and_return(image_upload)
-          allow(image_upload).to receive_messages(valid?: false, errors: errors)
-        end
-
-        it "does not create an image upload" do
-          expect { update_request }.not_to(change(ImageUpload, :count))
-        end
-
-        it "renders the show template with error" do
-          update_request
-          expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
-          expect(flash[:error]).to be_present
-        end
+      it "redirects with success message" do
+        update_request
+        expect(response).to redirect_to(notification_add_supporting_images_path(notification))
+        expect(flash[:success]).to eq("Supporting image uploaded successfully")
       end
     end
 
-    context "when notification is closed" do
-      before { notification.update!(is_closed: true) }
+    context "with invalid params" do
+      let(:file) { fixture_file_upload("testImage.png", "image/png") }
+      let(:image_upload) { ImageUpload.new }
+      let(:errors) { instance_double(ActiveModel::Errors, full_messages: ["Invalid file"]) }
 
-      it "redirects with error" do
+      before do
+        allow(ImageUpload).to receive(:new).and_return(image_upload)
+        allow(image_upload).to receive_messages(valid?: false, errors: errors)
+      end
+
+      it "does not create an image upload" do
+        expect { update_request }.not_to(change(ImageUpload, :count))
+      end
+
+      it "renders the show template with error" do
         update_request
-        expect(response).to redirect_to(notification_path(notification))
-        expect(flash[:warning]).to eq("Cannot edit a closed notification")
+        expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
+        expect(flash[:error]).to be_present
       end
     end
   end
@@ -133,21 +109,9 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antiv
       }
     end
 
-    context "when notification is open" do
-      it "renders the remove_upload template" do
-        get_remove_upload_request
-        expect(response).to render_template(:remove_upload)
-      end
-    end
-
-    context "when notification is closed" do
-      before { notification.update!(is_closed: true) }
-
-      it "redirects with error" do
-        get_remove_upload_request
-        expect(response).to redirect_to(notification_path(notification))
-        expect(flash[:warning]).to eq("Cannot edit a closed notification")
-      end
+    it "renders the remove_upload template" do
+      get_remove_upload_request
+      expect(response).to render_template(:remove_upload)
     end
   end
 
@@ -159,79 +123,60 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antiv
       }
     end
 
-    context "when notification is open" do
-      let(:image_id) { image_upload.id }
-      let(:notif) { notification }
+    let(:image_id) { image_upload.id }
+    let(:notif) { notification }
 
-      before do
-        # Ensure the image is attached to the notification
-        notif.image_upload_ids = [image_id]
-        notif.save!
-      end
-
-      it "removes the image from the notification" do
-        expect {
-          delete :remove_upload, params: {
-            notification_pretty_id: notif.pretty_id,
-            upload_id: image_id
-          }
-        }.to change { notif.reload.image_upload_ids.count }.by(-1)
-          .and change(ImageUpload, :count).by(-1)
-      end
-
-      it "redirects with success message" do
-        delete :remove_upload, params: {
-          notification_pretty_id: notification.pretty_id,
-          upload_id: image_upload.id
-        }
-
-        expect(response).to redirect_to(notification_add_supporting_images_path(notification))
-        expect(flash[:success]).to eq("Supporting image removed successfully")
-      end
-
-      it "handles attempts to remove non-existent images" do
-        expect {
-          delete :remove_upload, params: {
-            notification_pretty_id: notification.pretty_id,
-            upload_id: 0
-          }
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
-      context "when trying to remove an image from another notification" do
-        let(:other_notification) { create(:notification) }
-        let(:other_image) do
-          upload = create(:image_upload, upload_model: other_notification)
-          other_notification.update!(image_upload_ids: [upload.id])
-          upload
-        end
-
-        it "forbids removing images from other notifications" do
-          delete :remove_upload, params: {
-            notification_pretty_id: notification.pretty_id,
-            upload_id: other_image.id
-          }
-
-          expect(other_notification.reload.image_upload_ids).to include(other_image.id)
-          expect(response).to have_http_status(:forbidden)
-        end
-      end
+    before do
+      # Ensure the image is attached to the notification
+      notif.image_upload_ids = [image_id]
+      notif.save!
     end
 
-    context "when notification is closed" do
-      before { notification.update!(is_closed: true) }
+    it "removes the image from the notification" do
+      expect {
+        delete :remove_upload, params: {
+          notification_pretty_id: notif.pretty_id,
+          upload_id: image_id
+        }
+      }.to change { notif.reload.image_upload_ids.count }.by(-1)
+        .and change(ImageUpload, :count).by(-1)
+    end
 
-      let(:delete_request) do
+    it "redirects with success message" do
+      delete :remove_upload, params: {
+        notification_pretty_id: notification.pretty_id,
+        upload_id: image_upload.id
+      }
+
+      expect(response).to redirect_to(notification_add_supporting_images_path(notification))
+      expect(flash[:success]).to eq("Supporting image removed successfully")
+    end
+
+    it "handles attempts to remove non-existent images" do
+      expect {
         delete :remove_upload, params: {
           notification_pretty_id: notification.pretty_id,
-          upload_id: image_upload.id
+          upload_id: 0
         }
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    context "when trying to remove an image from another notification" do
+      let(:other_notification) { create(:notification) }
+      let(:other_image) do
+        upload = create(:image_upload, upload_model: other_notification)
+        other_notification.update!(image_upload_ids: [upload.id])
+        upload
       end
 
-      it "redirects with error" do
-        delete_request
-        expect(response).to redirect_to(notification_path(notification))
-        expect(flash[:warning]).to eq("Cannot edit a closed notification")
+      it "forbids removing images from other notifications" do
+        delete :remove_upload, params: {
+          notification_pretty_id: notification.pretty_id,
+          upload_id: other_image.id
+        }
+
+        expect(other_notification.reload.image_upload_ids).to include(other_image.id)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
