@@ -212,6 +212,8 @@ Rails.application.routes.draw do
           end
         end
 
+        # Supporting images routes must be defined before generic resource routes
+        # to prevent conflicts with :id parameters and ensure proper routing precedence
         resource :add_supporting_images, controller: "add_supporting_images", only: %i[show], path: "add-supporting-images" do
           member do
             post "", to: "add_supporting_images#update"
