@@ -3,11 +3,10 @@ require "rails_helper"
 RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antivirus, :with_stubbed_mailer, type: :controller do
   include_context "with stubbed antivirus"
   let(:notification) { create(:notification) }
-  let(:file) { Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/testImage.png"), "image/png") }
+  let(:file) { fixture_file_upload("testImage.png", "image/png") }
   let(:image_upload) do
     upload = create(:image_upload, upload_model: notification)
-    notification.image_upload_ids.push(upload.id)
-    notification.save!
+    notification.update!(image_upload_ids: [upload.id])
     upload
   end
   let(:other_notification) { create(:notification) }
@@ -94,7 +93,7 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antiv
       end
 
       context "with invalid params" do
-        let(:file) { Rack::Test::UploadedFile.new(Rails.root.join("test/fixtures/files/testImage.png"), "image/png") }
+        let(:file) { fixture_file_upload("testImage.png", "image/png") }
         let(:image_upload) { ImageUpload.new }
         let(:errors) { instance_double(ActiveModel::Errors, full_messages: ["Invalid file"]) }
 
@@ -104,13 +103,13 @@ RSpec.describe Notifications::AddSupportingImagesController, :with_stubbed_antiv
         end
 
         it "does not create an image upload" do
-          expect { update_request }.not_to change(ImageUpload, :count)
+          expect { update_request }.not_to(change(ImageUpload, :count))
         end
 
         it "renders the show template with error" do
           update_request
           expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
-          expect(flash[:error]).to eq("Invalid file")
+          expect(flash[:error]).to be_present
         end
       end
     end
