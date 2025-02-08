@@ -57,7 +57,9 @@ module Notifications
     def handle_file_upload
       create_and_attach_file
     rescue ActiveStorage::IntegrityError
-      handle_integrity_error
+      @image_upload.errors.add(:file_upload, "must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF file")
+      flash[:error] = @image_upload.errors.full_messages.to_sentence
+      render :add_supporting_images
     end
 
     def create_and_attach_file
@@ -68,7 +70,9 @@ module Notifications
         save_image_upload
         handle_redirect
       else
-        handle_invalid_upload(file)
+        file.purge
+        flash[:error] = @image_upload.errors.full_messages.to_sentence
+        render :add_supporting_images
       end
     end
 
@@ -97,18 +101,6 @@ module Notifications
       flash[:success] = "Supporting image uploaded successfully"
     end
 
-    def handle_invalid_upload(file)
-      file.purge
-      flash[:error] = @image_upload.errors.full_messages.to_sentence
-      render :add_supporting_images
-    end
-
-    def handle_integrity_error
-      @image_upload.errors.add(:file_upload, "must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF file")
-      flash[:error] = @image_upload.errors.full_messages.to_sentence
-      render :add_supporting_images
-    end
-
     def handle_redirect
       if params[:final] == "true"
         redirect_to notification_path(@notification)
@@ -118,45 +110,18 @@ module Notifications
     end
 
     def validate_step
-      ensure_objects_exist
-      ensure_user_has_edit_access
-    end
+      return redirect_to "/404" unless @notification && current_user
 
-    def ensure_objects_exist
-      return if @notification && current_user
-
-      redirect_to "/404"
-    end
-
-    def ensure_user_has_edit_access
-      return if user_can_edit?
-
-      render "errors/forbidden", status: :forbidden
+      render "errors/forbidden", status: :forbidden unless user_can_edit?
     end
 
     def user_can_edit?
-      !has_read_only_access? && authorized_to_edit?
-    end
-
-    def has_read_only_access?
-      @notification.teams_with_read_only_access.include?(current_user.team)
-    end
-
-    def authorized_to_edit?
       user_team = current_user.team
-      user_is_creator_or_owner? || team_is_creator_or_owner?(user_team) || team_has_edit_access?(user_team)
-    end
+      return false if @notification.teams_with_read_only_access.include?(user_team)
 
-    def user_is_creator_or_owner?
-      [@notification.creator_user, @notification.owner_user].include?(current_user)
-    end
-
-    def team_is_creator_or_owner?(team)
-      [@notification.owner_team, @notification.creator_team].include?(team)
-    end
-
-    def team_has_edit_access?(team)
-      @notification.teams_with_edit_access.include?(team)
+      [@notification.creator_user, @notification.owner_user].include?(current_user) ||
+        [@notification.owner_team, @notification.creator_team].include?(user_team) ||
+        @notification.teams_with_edit_access.include?(user_team)
     end
 
     def set_notification
