@@ -195,9 +195,6 @@ Rails.application.routes.draw do
             get "search_for_or_add_a_business/duplicate/:business_id", to: "edit#show_duplicate_business", as: "duplicate_business"
             patch "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
             put "search_for_or_add_a_business/duplicate/:business_id", to: "edit#update_duplicate_business"
-
-            # These routes need to appear before the next scope block to avoid clashing with the
-            # # `:investigation_product_id/:entity_id` routes.
           end
         end
 
@@ -212,6 +209,16 @@ Rails.application.routes.draw do
             get ":investigation_product_id/:test_report_id", to: "test_reports#show_with_notification_product_test", as: "with_product_testid"
             patch ":investigation_product_id/:test_report_id", to: "test_reports#update_with_notification_product_test"
             put ":investigation_product_id:test_report_id", to: "test_reports#update_with_notification_product_test"
+          end
+        end
+
+        # Supporting images routes must be defined before generic resource routes
+        # to prevent conflicts with :id parameters and ensure proper routing precedence
+        resource :add_supporting_images, controller: "add_supporting_images", only: %i[show], path: "add-supporting-images" do
+          member do
+            post "", to: "add_supporting_images#update"
+            get ":upload_id/remove", to: "add_supporting_images#remove_upload", as: "remove_upload"
+            delete ":upload_id/remove", to: "add_supporting_images#remove_upload"
           end
         end
       end
