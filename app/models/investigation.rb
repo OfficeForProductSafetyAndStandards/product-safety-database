@@ -59,6 +59,8 @@ class Investigation < ApplicationRecord
 
   has_many_attached :documents
 
+  has_many :document_uploads, class_name: "DocumentUpload", as: :upload_model, dependent: :destroy
+
   has_one :complainant, dependent: :destroy
   has_many :collaborations
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::Access::Edit"
@@ -208,6 +210,10 @@ class Investigation < ApplicationRecord
   end
 
   def sends_notifications?
+    !is_closed
+  end
+
+  def can_be_updated?
     !is_closed
   end
 
