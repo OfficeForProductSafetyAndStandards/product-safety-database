@@ -113,6 +113,8 @@ module Notifications
                      Product.not_retired
                             .where("products.name ILIKE ?", "%#{@search_query}%")
                             .or(Product.not_retired.where("products.description ILIKE ?", "%#{@search_query}%"))
+                            .or(Product.not_retired.where("products.brand ILIKE ?", "%#{@search_query}%"))
+                            .or(Product.not_retired.where("products.product_code ILIKE ?", "%#{@search_query}%"))
                             .or(Product.not_retired.where("CONCAT('psd-', products.id) = LOWER(?)", @search_query))
                             .or(Product.not_retired.where(id: @search_query))
                             .order(sort_by)
