@@ -11,11 +11,11 @@ class DocumentForm
   attribute :existing_document_file_id
   attribute :document
 
-  validates :document, presence: true, if: -> { existing_document_file_id.blank? }
+  validates :document, presence: { message: "Select a file" }, if: -> { existing_document_file_id.blank? }
   validate :file_size_below_max, if: -> { document.present? && existing_document_file_id.present? }
   validate :file_size_above_min, if: -> { document.present? && existing_document_file_id.present? }
   validate :file_is_free_of_viruses, if: -> { document.present? && existing_document_file_id.present? }
-  validates :title, presence: true
+  validates :title, presence: { message: "Enter a document title" }
   validates :description, length: { maximum: 10_000 }
 
   before_validation do
