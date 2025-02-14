@@ -36,9 +36,10 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
         allow(notification).to receive(:can_be_updated?).and_return(false)
       end
 
-      it "redirects to the notification page" do
+      it "returns forbidden status" do
         get notification_add_supporting_documents_path(notification)
-        expect(response).to redirect_to(notification_path(notification))
+        expect(response).to render_template("errors/forbidden")
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

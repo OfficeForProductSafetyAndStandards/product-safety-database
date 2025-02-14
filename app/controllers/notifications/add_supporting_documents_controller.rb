@@ -53,8 +53,7 @@ module Notifications
     def validate_step
       return if @notification.can_be_updated? && policy(@notification).update?
 
-      redirect_to notification_path(@notification),
-                  warning: "Notification cannot be updated"
+      render "errors/forbidden", status: :forbidden
     end
 
     def set_document_upload
