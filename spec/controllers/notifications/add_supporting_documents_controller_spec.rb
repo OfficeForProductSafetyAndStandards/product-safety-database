@@ -52,9 +52,10 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
         allow(notification).to receive(:can_be_updated?).and_return(false)
       end
 
-      it "redirects to the notification page" do
+      it "returns forbidden status" do
         get :show, params: { notification_pretty_id: notification.pretty_id }
-        expect(response).to redirect_to(notification_path(notification))
+        expect(response).to render_template("errors/forbidden")
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
