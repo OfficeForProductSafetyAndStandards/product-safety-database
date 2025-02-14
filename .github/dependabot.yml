@@ -6,6 +6,7 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "nokogiri"
+      - dependency-name: "active_storage_validations"
     groups:
       dependencies:
         update-types:
