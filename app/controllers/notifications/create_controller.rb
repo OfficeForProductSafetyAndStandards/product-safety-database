@@ -1184,7 +1184,7 @@ module Notifications
     end
 
     def record_a_corrective_action_details_params
-      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action_form]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action_form]["date_decided(2i)"])
+      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action_form]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action_form]["date_decided(2i)"]).merge("date_decided(3i)" => params[:corrective_action_form]["date_decided(3i)"])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
       allowed_params[:legislation].reject!(&:blank?)
       allowed_params[:geographic_scopes].reject!(&:blank?)
