@@ -27,7 +27,7 @@ RSpec.feature "Notification summary screen", :with_opensearch, :with_stubbed_ant
     end
 
     it "displays the submitted date" do
-      expect(page).to have_content("Submitted date: #{notification.submitted_at.strftime('%-d %B %Y')}")
+      expect(page).to have_content("Submitted: #{notification.submitted_at.strftime('%-d %B %Y')}")
     end
   end
 
@@ -39,7 +39,7 @@ RSpec.feature "Notification summary screen", :with_opensearch, :with_stubbed_ant
     end
 
     it "displays 'Not provided' for the submitted date" do
-      expect(page).to have_content("Submitted date: Not provided")
+      expect(page).to have_content("Submitted: Not provided")
     end
   end
 end
