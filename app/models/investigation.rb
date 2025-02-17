@@ -59,8 +59,6 @@ class Investigation < ApplicationRecord
 
   has_many_attached :documents
 
-  has_many :document_uploads, class_name: "DocumentUpload", as: :upload_model, dependent: :destroy
-
   has_one :complainant, dependent: :destroy
   has_many :collaborations
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::Access::Edit"
@@ -100,7 +98,7 @@ class Investigation < ApplicationRecord
                        :product_category, :received_type, :reported_reason, :risk_level, :risk_validated_at,
                        :risk_validated_by, :type, :updated_at, :user_title, :deleted_at, :deleted_by, :submitted_at
 
-  self.ignored_columns += %w[ahoy_visit_id]
+  self.ignored_columns += %w[ahoy_visit_id document_upload_ids]
 
   # All sub-classes share this policy class
   def self.policy_class
