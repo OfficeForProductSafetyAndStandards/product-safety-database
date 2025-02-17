@@ -27,7 +27,7 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
 
   before do
     sign_in(user)
-    allow(notification).to receive(:can_be_updated?).and_return(true)
+    allow(notification).to receive(:is_closed?).and_return(false)
     allow(NotifyMailer).to receive(:notification_created).and_return(mailer)
     allow(InvestigationPolicy).to receive(:new).and_return(policy)
   end
@@ -49,7 +49,7 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
       let(:policy) { instance_double(InvestigationPolicy, update?: false) }
 
       before do
-        allow(notification).to receive(:can_be_updated?).and_return(false)
+        allow(notification).to receive(:is_closed?).and_return(true)
       end
 
       it "returns forbidden status" do
@@ -79,7 +79,7 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
       let(:policy) { instance_double(InvestigationPolicy, update?: false) }
 
       before do
-        allow(notification).to receive(:can_be_updated?).and_return(false)
+        allow(notification).to receive(:is_closed?).and_return(true)
       end
 
       it "does not attach a document" do
@@ -107,7 +107,7 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
       let(:policy) { instance_double(InvestigationPolicy, update?: false) }
 
       before do
-        allow(notification).to receive(:can_be_updated?).and_return(false)
+        allow(notification).to receive(:is_closed?).and_return(true)
       end
 
       it "does not remove the document" do
