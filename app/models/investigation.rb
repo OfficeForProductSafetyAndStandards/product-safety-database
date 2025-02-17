@@ -211,10 +211,6 @@ class Investigation < ApplicationRecord
     !is_closed
   end
 
-  def can_be_updated?
-    !is_closed
-  end
-
   def non_owner_teams_with_edit_access
     teams_with_edit_access.order(:name) - [owner.team]
   end

@@ -44,7 +44,7 @@ module Notifications
     end
 
     def validate_step
-      return if @notification.can_be_updated? && policy(@notification).update?
+      return if !@notification.is_closed? && policy(@notification).update?
 
       render "errors/forbidden", status: :forbidden
     end
