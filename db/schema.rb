@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_13_162357) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_17_150315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -284,7 +284,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_13_162357) do
     t.datetime "deleted_at", precision: nil
     t.string "deleted_by"
     t.text "description"
-    t.bigint "document_upload_ids", default: [], array: true
     t.text "hazard_description"
     t.string "hazard_type"
     t.bigint "image_upload_ids", default: [], array: true
