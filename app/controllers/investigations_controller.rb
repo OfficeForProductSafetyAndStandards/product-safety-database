@@ -6,7 +6,7 @@ class InvestigationsController < ApplicationController
   before_action :set_investigation, only: %i[show created cannot_close confirm_deletion destroy]
   before_action :set_last_case_view_cookie, only: %i[index your_cases assigned_cases team_cases]
 
-  breadcrumb "cases.label", :your_cases_investigations
+  breadcrumb "Notifications", :your_notifications_path
 
   # GET /cases
   def index

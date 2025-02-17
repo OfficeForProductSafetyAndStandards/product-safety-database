@@ -110,7 +110,7 @@ protected
   end
 
   def set_business_breadcrumbs
-    breadcrumb "businesses.label", :businesses_path
+    breadcrumb "Businesses", :businesses_path
     breadcrumb breadcrumb_business_label, breadcrumb_business_path
     breadcrumb @business.trading_name, business_path(@business) if @business&.persisted?
   end
