@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe "Adding supporting documents to a notification", :with_stubbed_antivirus, type: :request do
   let(:user) { create(:user, :activated, :opss_user) }
   let(:notification) { create(:supporting_document_notification, creator_user: user) }
-  let(:document_upload) { create(:document_upload, upload_model: notification) }
+  let(:document) { fixture_file_upload("testImage.png", "image/png") }
   let(:policy) { instance_double(InvestigationPolicy, update?: true) }
   let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
-  let(:valid_params) { { document_upload: { file_upload: fixture_file_upload("testImage.png", "image/png"), title: "Test" } } }
-  let(:invalid_params) { { document_upload: { file_upload: nil, title: "" } } }
+  let(:valid_params) { { document_form: { document: fixture_file_upload("testImage.png", "image/png"), title: "Test" } } }
+  let(:invalid_params) { { document_form: { document: nil, title: "" } } }
 
   before do
     sign_in(user)
@@ -23,9 +23,9 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
         expect(response).to have_http_status(:ok)
       end
 
-      it "creates a new document upload" do
+      it "creates a new document form" do
         get notification_add_supporting_documents_path(notification)
-        expect(assigns(:document_upload)).to be_a_new(DocumentUpload)
+        expect(assigns(:document_form)).to be_an_instance_of(DocumentForm)
       end
     end
 
@@ -46,16 +46,16 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
 
   describe "POST /notifications/:notification_pretty_id/add-supporting-documents" do
     context "when user can update the notification" do
-      it "creates a new document upload" do
+      it "attaches a new document" do
         expect {
           post notification_add_supporting_documents_path(notification), params: valid_params
-        }.to change(DocumentUpload, :count).by(1)
+        }.to change { notification.documents.count }.by(1)
       end
 
-      it "does not create a document upload with invalid params" do
+      it "does not attach a document with invalid params" do
         expect {
           post notification_add_supporting_documents_path(notification), params: invalid_params
-        }.not_to change(DocumentUpload, :count)
+        }.not_to(change { notification.documents.count })
       end
     end
 
@@ -66,24 +66,24 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
         allow(notification).to receive(:can_be_updated?).and_return(false)
       end
 
-      it "does not create a document upload" do
+      it "does not attach a document" do
         expect {
           post notification_add_supporting_documents_path(notification), params: valid_params
-        }.not_to change(DocumentUpload, :count)
+        }.not_to(change { notification.documents.count })
       end
     end
   end
 
   describe "DELETE /notifications/:notification_pretty_id/add-supporting-documents/:upload_id/remove" do
     context "when user can update the notification" do
-      it "removes the document upload" do
-        document_upload.update!(upload_model: notification)
-        notification.document_upload_ids << document_upload.id
-        notification.save!
+      it "removes the document" do
+        document = fixture_file_upload("testImage.png", "image/png")
+        notification.documents.attach(document)
+        document_id = notification.documents.first.id
 
         expect {
-          delete remove_upload_notification_add_supporting_documents_path(notification, document_upload)
-        }.to change(DocumentUpload, :count).by(-1)
+          delete remove_upload_notification_add_supporting_documents_path(notification, document_id)
+        }.to change { notification.documents.count }.by(-1)
       end
     end
 
@@ -94,14 +94,14 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
         allow(notification).to receive(:can_be_updated?).and_return(false)
       end
 
-      it "does not remove the document upload" do
-        document_upload # Create the document upload
-        notification.document_upload_ids << document_upload.id
-        notification.save!
+      it "does not remove the document" do
+        document = fixture_file_upload("testImage.png", "image/png")
+        notification.documents.attach(document)
+        document_id = notification.documents.first.id
 
         expect {
-          delete remove_upload_notification_add_supporting_documents_path(notification, document_upload)
-        }.not_to change(DocumentUpload, :count)
+          delete remove_upload_notification_add_supporting_documents_path(notification, document_id)
+        }.not_to(change { notification.documents.count })
       end
     end
   end
