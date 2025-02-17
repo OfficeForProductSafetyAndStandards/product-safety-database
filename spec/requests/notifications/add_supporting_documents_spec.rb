@@ -4,7 +4,7 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
   let(:user) { create(:user, :activated, :opss_user) }
   let(:notification) { create(:supporting_document_notification, creator_user: user) }
   let(:document) { fixture_file_upload("testImage.png", "image/png") }
-  let(:policy) { instance_double(InvestigationPolicy, update?: true) }
+  let(:policy) { instance_double(InvestigationPolicy, update?: true, view_non_protected_details?: true) }
   let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
   let(:valid_params) { { document_form: { document: fixture_file_upload("testImage.png", "image/png"), title: "Test" } } }
   let(:invalid_params) { { document_form: { document: nil, title: "" } } }
@@ -30,7 +30,7 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
     end
 
     context "when user cannot update the notification" do
-      let(:policy) { instance_double(InvestigationPolicy, update?: false) }
+      let(:policy) { instance_double(InvestigationPolicy, update?: false, view_non_protected_details?: false) }
 
       before do
         allow(notification).to receive(:is_closed?).and_return(true)
@@ -60,7 +60,7 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
     end
 
     context "when user cannot update the notification" do
-      let(:policy) { instance_double(InvestigationPolicy, update?: false) }
+      let(:policy) { instance_double(InvestigationPolicy, update?: false, view_non_protected_details?: false) }
 
       before do
         allow(notification).to receive(:is_closed?).and_return(true)
@@ -88,7 +88,7 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
     end
 
     context "when user cannot update the notification" do
-      let(:policy) { instance_double(InvestigationPolicy, update?: false) }
+      let(:policy) { instance_double(InvestigationPolicy, update?: false, view_non_protected_details?: false) }
 
       before do
         allow(notification).to receive(:is_closed?).and_return(true)

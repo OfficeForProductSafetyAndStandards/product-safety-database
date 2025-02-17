@@ -51,12 +51,12 @@ module Notifications
 
     def validate_step
       if @notification.is_closed?
-        head :forbidden
+        render "errors/forbidden", status: :forbidden
         return false
       end
 
       unless policy(@notification).update?
-        head :forbidden
+        render "errors/forbidden", status: :forbidden
         return false
       end
       true
@@ -64,7 +64,7 @@ module Notifications
 
     def validate_view_access
       unless policy(@notification).view_non_protected_details?
-        head :forbidden
+        render "errors/forbidden", status: :forbidden
         return false
       end
       true
