@@ -11,7 +11,7 @@ module Notifications
     before_action :validate_step, except: %i[index from_product add_product remove_product remove_business]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers update_batch_numbers update_customs_codes update_ucr_numbers delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
-    breadcrumb "Notifications", :your_notifications_path
+    breadcrumb "notifications.label", :your_notifications_path
 
     def index
       if params[:notification_pretty_id].present?
@@ -1184,7 +1184,7 @@ module Notifications
     end
 
     def record_a_corrective_action_details_params
-      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action_form]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action_form]["date_decided(2i)"]).merge("date_decided(3i)" => params[:corrective_action_form]["date_decided(3i)"])
+      allowed_params = params.require(:corrective_action_form).permit(:action, :has_online_recall_information, :online_recall_information, :business_id, :measure_type, :details, :related_file, :existing_document_file_id, :document, legislation: [], geographic_scopes: []).merge("date_decided(1i)" => params[:corrective_action_form]["date_decided(1i)"]).merge("date_decided(2i)" => params[:corrective_action_form]["date_decided(2i)"])
       # The form builder inserts an empty hidden field that needs to be removed before validation and saving
       allowed_params[:legislation].reject!(&:blank?)
       allowed_params[:geographic_scopes].reject!(&:blank?)
