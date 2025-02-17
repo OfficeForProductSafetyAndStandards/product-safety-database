@@ -8,7 +8,7 @@ module Notifications
     before_action :set_steps
     before_action :setup_wizard
     before_action :validate_step, except: %i[index remove_business]
-    breadcrumb "Notifications", :your_notifications_path
+    breadcrumb "notifications.label", :your_notifications_path
 
     def index
       set_notification
