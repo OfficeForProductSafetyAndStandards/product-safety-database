@@ -4,21 +4,22 @@ module Notifications
 
     before_action :set_notification
     before_action :validate_step
-    before_action :set_document_upload, only: [:show]
-    before_action :set_remove_document_upload, only: [:remove_upload]
+    before_action :set_document_form, only: [:show]
+    before_action :set_remove_document, only: [:remove_upload]
 
     breadcrumb "Notifications", :your_notifications_path
 
     def show
-      @document_upload = @notification.document_uploads.build
       render "add_supporting_documents"
     end
 
     def update
       flash[:success] = nil
-      @document_upload = @notification.document_uploads.build(document_upload_params)
+      @document_form = DocumentForm.new(document_form_params)
+      @document_form.cache_file!(current_user)
 
-      if @document_upload.save
+      if @document_form.valid?
+        @notification.documents.attach(@document_form.document)
         flash[:success] = "Supporting document uploaded successfully"
         redirect_to notification_add_supporting_documents_path(@notification)
       else
@@ -28,7 +29,7 @@ module Notifications
 
     def remove_upload
       if request.delete?
-        remove_document
+        @upload.destroy!
         flash[:success] = "Supporting document removed successfully"
         redirect_to notification_add_supporting_documents_path(@notification)
       else
@@ -37,14 +38,6 @@ module Notifications
     end
 
   private
-
-    def remove_document
-      ActiveRecord::Base.transaction do
-        @notification.document_upload_ids.delete(@document_upload.id)
-        @notification.save!
-        @document_upload.destroy!
-      end
-    end
 
     def set_notification
       @notification = Investigation.find_by!(pretty_id: params[:notification_pretty_id])
@@ -56,16 +49,16 @@ module Notifications
       render "errors/forbidden", status: :forbidden
     end
 
-    def set_document_upload
-      @document_upload = @notification.document_uploads.build
+    def set_document_form
+      @document_form = DocumentForm.new
     end
 
-    def set_remove_document_upload
-      @document_upload = @notification.document_uploads.find(params[:upload_id])
+    def set_remove_document
+      @upload = @notification.documents.find(params[:upload_id])
     end
 
-    def document_upload_params
-      params.require(:document_upload).permit(:file_upload, :title)
+    def document_form_params
+      params.require(:document_form).permit(:document, :title)
     end
   end
 end
