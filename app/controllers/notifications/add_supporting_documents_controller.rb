@@ -2,8 +2,10 @@ module Notifications
   class AddSupportingDocumentsController < ApplicationController
     include BreadcrumbHelper
 
+    before_action :authenticate_user!
     before_action :set_notification
-    before_action :validate_step
+    before_action :validate_step, except: [:show]
+    before_action :validate_view_access, only: [:show]
     before_action :set_document_form, only: [:show]
     before_action :set_remove_document, only: [:remove_upload]
 
@@ -14,6 +16,7 @@ module Notifications
     end
 
     def update
+      validate_step
       flash[:success] = nil
       @document_form = DocumentForm.new(document_form_params)
       @document_form.cache_file!(current_user)
@@ -28,6 +31,7 @@ module Notifications
     end
 
     def remove_upload
+      validate_step
       if request.delete?
         @upload.destroy!
         flash[:success] = "Supporting document removed successfully"
@@ -41,12 +45,29 @@ module Notifications
 
     def set_notification
       @notification = Investigation.find_by!(pretty_id: params[:notification_pretty_id])
+    rescue ActiveRecord::RecordNotFound
+      head :not_found
     end
 
     def validate_step
-      return if !@notification.is_closed? && policy(@notification).update?
+      if @notification.is_closed?
+        head :forbidden
+        return false
+      end
 
-      render "errors/forbidden", status: :forbidden
+      unless policy(@notification).update?
+        head :forbidden
+        return false
+      end
+      true
+    end
+
+    def validate_view_access
+      unless policy(@notification).view_non_protected_details?
+        head :forbidden
+        return false
+      end
+      true
     end
 
     def set_document_form
