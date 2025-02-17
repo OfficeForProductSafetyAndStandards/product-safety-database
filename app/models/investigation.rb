@@ -162,7 +162,7 @@ class Investigation < ApplicationRecord
   # array of IDs. This allows investigations to be versioned along with their associated image
   # uploads as they were at the time of the versioned investigation.
   def image_uploads
-    ImageUpload.where(id: image_upload_ids)
+    ImageUpload.where(upload_model: self)
   end
 
   def enquiry?
