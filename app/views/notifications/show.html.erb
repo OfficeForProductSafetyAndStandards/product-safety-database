@@ -20,7 +20,7 @@
       <strong>Notification number:</strong> <%= sanitize(@notification.pretty_id) %><br>
       <strong>Last updated:</strong> <%= date_or_recent_time_ago(@notification.updated_at) %><br>
       <strong>Created:</strong> <%= @notification.created_at.to_formatted_s(:govuk) %><br>
-      <strong>Submitted date:</strong> <%= @notification.submitted_at? ? @notification.submitted_at.to_formatted_s(:govuk) : "Not provided" %><br>
+      <strong>Submitted:</strong> <%= @notification.submitted_at? ? @notification.submitted_at.to_formatted_s(:govuk) : "Not provided" %><br>
       <strong>Created by:</strong> <%= sanitize(@notification.creator_user.name) %> (<%= sanitize(@notification.creator_team.name) %>)<br>
     </p>
 
