@@ -17,14 +17,11 @@ module Notifications
 
     def update
       validate_step
-      flash[:success] = nil
       @document_form = DocumentForm.new(document_form_params)
       @document_form.cache_file!(current_user)
 
-      if @document_form.valid?
-        @notification.documents.attach(@document_form.document)
-        flash[:success] = "Supporting document uploaded successfully"
-        redirect_to notification_add_supporting_documents_path(@notification)
+      if save_document
+        flash_and_redirect_success
       else
         render "add_supporting_documents"
       end
@@ -33,9 +30,8 @@ module Notifications
     def remove_upload
       validate_step
       if request.delete?
-        @upload.destroy!
-        flash[:success] = "Supporting document removed successfully"
-        redirect_to notification_add_supporting_documents_path(@notification)
+        remove_document
+        flash_and_redirect_removal_success
       else
         render "remove_upload"
       end
@@ -50,24 +46,17 @@ module Notifications
     end
 
     def validate_step
-      if @notification.is_closed?
-        render "errors/forbidden", status: :forbidden
-        return false
-      end
+      return true if policy(@notification).update? && !@notification.is_closed?
 
-      unless policy(@notification).update?
-        render "errors/forbidden", status: :forbidden
-        return false
-      end
-      true
+      render "errors/forbidden", status: :forbidden
+      false
     end
 
     def validate_view_access
-      unless policy(@notification).view_non_protected_details?
-        render "errors/forbidden", status: :forbidden
-        return false
-      end
-      true
+      return true if policy(@notification).view_non_protected_details?
+
+      render "errors/forbidden", status: :forbidden
+      false
     end
 
     def set_document_form
@@ -80,6 +69,27 @@ module Notifications
 
     def document_form_params
       params.require(:document_form).permit(:document, :title)
+    end
+
+    def save_document
+      return false unless @document_form.valid?
+
+      @notification.documents.attach(@document_form.document)
+      true
+    end
+
+    def flash_and_redirect_success
+      flash[:success] = "Supporting document uploaded successfully"
+      redirect_to notification_add_supporting_documents_path(@notification)
+    end
+
+    def remove_document
+      @upload.destroy!
+    end
+
+    def flash_and_redirect_removal_success
+      flash[:success] = "Supporting document removed successfully"
+      redirect_to notification_add_supporting_documents_path(@notification)
     end
   end
 end
