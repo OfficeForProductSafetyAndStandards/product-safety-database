@@ -7,7 +7,7 @@ module Notifications
     before_action :set_image_upload, only: [:show]
     before_action :set_remove_image_upload, only: [:remove_upload]
 
-    breadcrumb -> { t("notifications.label") }, :your_notifications_path
+    breadcrumb "notifications.label", :your_notifications
 
     def show
       @image_upload = ImageUpload.new(upload_model: @notification)
