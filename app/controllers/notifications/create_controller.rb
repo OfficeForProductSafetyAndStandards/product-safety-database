@@ -11,7 +11,7 @@ module Notifications
     before_action :validate_step, except: %i[index from_product add_product remove_product remove_business]
     before_action :set_notification_product, only: %i[show_batch_numbers show_customs_codes show_ucr_numbers update_batch_numbers update_customs_codes update_ucr_numbers delete_ucr_number show_with_notification_product update_with_notification_product remove_with_notification_product]
 
-    breadcrumb -> { t("notifications.label") }, :your_notifications_path
+    breadcrumb "notifications.label", :your_notifications
 
     def index
       if params[:notification_pretty_id].present?
@@ -286,6 +286,7 @@ module Notifications
 
           return redirect_to wizard_path(:record_a_corrective_action) if @investigation_products.blank?
 
+          @manage = true # Always show the fieldset when adding a corrective action
           return render :record_a_corrective_action_details
         elsif @notification.corrective_action_taken == "yes"
           investigation_products = @notification.investigation_products

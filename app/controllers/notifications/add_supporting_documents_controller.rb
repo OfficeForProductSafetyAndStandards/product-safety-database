@@ -9,7 +9,7 @@ module Notifications
     before_action :set_document_form, only: [:show]
     before_action :set_remove_document, only: [:remove_upload]
 
-    breadcrumb -> { t("notifications.label") }, :your_notifications_path
+    breadcrumb "notifications.label", :your_notifications
 
     def show
       render "add_supporting_documents"
