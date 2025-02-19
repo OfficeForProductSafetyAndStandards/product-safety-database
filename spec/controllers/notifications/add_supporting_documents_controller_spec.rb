@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_antivirus, type: :controller do
+RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_antivirus, :with_stubbed_mailer, type: :controller do
   let(:creator_user) { create(:user, :activated, :opss_user) }
   let(:owner_user) { create(:user, :activated, :opss_user) }
   let(:other_user) { create(:user, :activated, :opss_user) }
