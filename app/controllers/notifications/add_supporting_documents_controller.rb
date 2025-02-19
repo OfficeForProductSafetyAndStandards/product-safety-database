@@ -64,6 +64,7 @@ module Notifications
     def save_document
       return false unless @document_form.valid?
 
+      @document_form.cache_file!(current_user)
       @notification.documents.attach(@document_form.document)
       true
     end
@@ -75,6 +76,10 @@ module Notifications
 
     def remove_document
       @upload.destroy!
+      true
+    rescue StandardError => e
+      Rails.logger.error("Failed to remove document: #{e.message}")
+      false
     end
 
     def flash_and_redirect_removal_success
