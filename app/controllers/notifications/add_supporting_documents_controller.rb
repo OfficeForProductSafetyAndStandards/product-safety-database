@@ -4,8 +4,7 @@ module Notifications
 
     before_action :authenticate_user!
     before_action :set_notification
-    before_action :validate_step, except: [:show]
-    before_action :validate_view_access, only: [:show]
+    before_action :validate_step
     before_action :set_document_form, only: [:show]
     before_action :set_remove_document, only: [:remove_upload]
 
@@ -44,14 +43,7 @@ module Notifications
     end
 
     def validate_step
-      return true if policy(@notification).update? && !@notification.is_closed?
-
-      render "errors/forbidden", status: :forbidden
-      false
-    end
-
-    def validate_view_access
-      return true if policy(@notification).view_non_protected_details?
+      return true if action_name == "show" ? policy(@notification).view_non_protected_details? : (policy(@notification).update? && !@notification.is_closed?)
 
       render "errors/forbidden", status: :forbidden
       false
