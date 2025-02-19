@@ -16,7 +16,6 @@ module Notifications
     end
 
     def update
-      validate_step
       @document_form = DocumentForm.new(document_form_params)
       @document_form.cache_file!(current_user)
 
@@ -28,7 +27,6 @@ module Notifications
     end
 
     def remove_upload
-      validate_step
       if request.delete?
         remove_document
         flash_and_redirect_removal_success
