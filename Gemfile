@@ -4,8 +4,8 @@ ruby "3.2.1"
 gem "aasm", "~> 5.5"
 gem "active_model_serializers", "~> 0.10.15"
 gem "active_storage_validations", "~> 1.4.0"
-gem "aws-sdk-s3", "~> 1.179"
-gem "aws-sdk-s3control", "~> 1.101"
+gem "aws-sdk-s3", "~> 1.181"
+gem "aws-sdk-s3control", "~> 1.102"
 gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
@@ -26,7 +26,7 @@ gem "jsbundling-rails"
 gem "lograge", "~> 0.14"
 gem "mini_magick", "~> 4.13"
 gem "opensearch-ruby"
-gem "phonelib", "~> 0.10.3"
+gem "phonelib", "~> 0.10.4"
 
 # ActionMailer dependencies
 gem "net-imap"
@@ -120,7 +120,7 @@ group :test do
   gem "simplecov-lcov"
   gem "super_diff"
   gem "timecop", "~> 0.9"
-  gem "webmock", "~> 3.24"
+  gem "webmock", "~> 3.25"
 end
 
 gem "data_migrate"
