@@ -286,7 +286,6 @@ module Notifications
 
           return redirect_to wizard_path(:record_a_corrective_action) if @investigation_products.blank?
 
-          # @manage = true # Always show the fieldset when adding a corrective action
           return render :record_a_corrective_action_details
         elsif @notification.corrective_action_taken == "yes"
           investigation_products = @notification.investigation_products
