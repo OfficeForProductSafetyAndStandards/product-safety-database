@@ -117,6 +117,39 @@ FactoryBot.define do
       end
     end
 
+    trait :with_supporting_document do
+      after(:create) do |investigation|
+        investigation.documents.attach(
+          io: File.open(Rails.root.join("test/fixtures/files/test_result.txt")),
+          filename: "test_result.txt",
+          content_type: "text/plain"
+        )
+      end
+    end
+
+    trait :with_antivirus_checked_supporting_document do
+      transient do
+        document_title { Faker::Lorem.sentence }
+        document_description { Faker::Lorem.paragraph }
+      end
+
+      after(:create) do |investigation, evaluator|
+        file = ActiveSupportHelper.create_file(
+          investigation,
+          evaluator,
+          metadata: {
+            analyzed: true,
+            identified: true,
+            safe: true,
+            title: evaluator.document_title,
+            description: evaluator.document_description,
+            updated: Time.zone.now.iso8601
+          }
+        )
+        investigation.documents.attach(file)
+      end
+    end
+
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
     # Cases created by non OPSS users must have a product assigned to them.
