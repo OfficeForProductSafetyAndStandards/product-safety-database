@@ -2,7 +2,6 @@ module Notifications
   class AddSupportingDocumentsController < ApplicationController
     include BreadcrumbHelper
 
-    before_action :authenticate_user!
     before_action :set_notification
     before_action :validate_step
     before_action :set_document_form, only: [:show]
@@ -43,10 +42,23 @@ module Notifications
     end
 
     def validate_step
-      return true if action_name == "show" ? policy(@notification).view_non_protected_details? : (policy(@notification).update? && !@notification.is_closed?)
+      return redirect_to "/404" unless @notification && current_user
 
-      render "errors/forbidden", status: :forbidden
-      false
+      if action_name == "show"
+        authorize @notification, :view_non_protected_details?
+      else
+        authorize @notification, :update?
+        render "errors/forbidden", status: :forbidden if @notification.is_closed?
+      end
+    end
+
+    def user_can_edit?
+      user_team = current_user.team
+      return false if @notification.teams_with_read_only_access.include?(user_team)
+
+      [@notification.creator_user, @notification.owner_user].include?(current_user) ||
+        [@notification.owner_team, @notification.creator_team].include?(user_team) ||
+        @notification.teams_with_edit_access.include?(user_team)
     end
 
     def set_document_form

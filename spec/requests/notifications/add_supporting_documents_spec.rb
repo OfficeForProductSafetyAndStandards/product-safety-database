@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Adding supporting documents to a notification", :with_stubbed_antivirus, type: :request do
   let(:user) { create(:user, :activated, :opss_user) }
-  let(:notification) { create(:supporting_document_notification, creator_user: user) }
+  let(:notification) { create(:notification, :with_supporting_document, creator_user: user) }
   let(:document) { fixture_file_upload("testImage.png", "image/png") }
   let(:policy) { instance_double(InvestigationPolicy, update?: true, view_non_protected_details?: true) }
   let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }

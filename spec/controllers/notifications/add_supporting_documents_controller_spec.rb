@@ -9,9 +9,8 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
   let(:edit_access_team) { create(:team) }
   let(:read_only_team) { create(:team) }
   let(:notification) do
-    create(:supporting_document_notification,
-           creator_user: creator_user,
-           creator_team: creator_team,
+    create(:notification,
+           creator: creator_user,
            owner_user: owner_user,
            owner_team: owner_team)
   end
@@ -88,13 +87,19 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
       }.to change { notification.documents.count }.by(1)
     end
 
+    let(:notification_with_document) do
+      create(:notification, :with_supporting_document,
+             creator: creator_user,
+             owner_user: owner_user,
+             owner_team: owner_team)
+    end
+
     it "allows document removal" do
-      notification.documents.attach(document)
-      document_id = notification.documents.first.id
+      document_id = notification_with_document.documents.first.id
 
       expect {
-        delete :remove_upload, params: { notification_pretty_id: notification.pretty_id, upload_id: document_id }
-      }.to change { notification.documents.count }.by(-1)
+        delete :remove_upload, params: { notification_pretty_id: notification_with_document.pretty_id, upload_id: document_id }
+      }.to change { notification_with_document.documents.count }.by(-1)
     end
   end
 
