@@ -87,4 +87,10 @@ class InvestigationPolicy < ApplicationPolicy
   def can_be_deleted?
     record.products.none?
   end
+
+  def can_access_draft?
+    return true unless record.is_a?(Investigation::Notification) && record.draft?
+
+    [record.creator_user, record.owner].include?(user)
+  end
 end

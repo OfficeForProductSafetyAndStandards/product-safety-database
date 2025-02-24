@@ -101,6 +101,20 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/:pretty_id
   def show
+    # Handle draft notifications
+    if @notification.draft?
+      # If user doesn't have permission to access this draft, show forbidden error
+      unless policy(@notification).can_access_draft?
+        render "errors/forbidden", status: :forbidden
+        return
+      end
+
+      # If user has permission, redirect to the notification creation workflow
+      redirect_to notification_create_index_path(@notification)
+      return
+    end
+
+    # For non-draft notifications, redirect to standard investigation path if user can't use notification task list
     return redirect_to investigation_path(@notification) unless current_user.can_use_notification_task_list?
 
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
