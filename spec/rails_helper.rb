@@ -58,4 +58,30 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.filter_rails_from_backtrace!
+
+  # Suppress RSpec mock warnings about nil expectations
+  config.mock_with :rspec do |mocks|
+    mocks.allow_message_expectations_on_nil = true
+  end
+
+  config.before(:suite) do
+    # Disable verbose logging during tests
+    ActiveRecord::Base.logger.level = Logger::INFO
+    Rails.logger.level = Logger::INFO
+    ActiveJob::Base.logger.level = Logger::INFO
+    ActionMailer::Base.logger.level = Logger::INFO
+
+    # Disable all loggers
+    ActiveRecord::Base.logger = Logger.new(nil)
+    Rails.logger = Logger.new(nil)
+    ActiveJob::Base.logger = Logger.new(nil)
+    ActionMailer::Base.logger = Logger.new(nil)
+
+    # Disable Elasticsearch/Searchkick logging
+    if defined?(Searchkick)
+      Searchkick.class_eval do
+        def self.warn(*); end
+      end
+    end
+  end
 end
