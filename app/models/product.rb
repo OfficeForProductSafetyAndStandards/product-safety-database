@@ -119,4 +119,9 @@ class Product < ApplicationRecord
   def get_notification_images
     investigations.flat_map(&:image_uploads)
   end
+
+  def get_investigations_count_for_display
+    investigations.where(type: ["Investigation::Allegation", "Investigation::Project", "Investigation::Enquiry"])
+                  .or(investigations.where(type: "Investigation::Notification", state: "submitted")).count
+  end
 end

@@ -71,7 +71,7 @@
         accordion.with_section(heading_text: "Images (#{@product.virus_free_images.size})") do
           render("images", product: @product)
         end
-        accordion.with_section(heading_text: "Notifications (#{@product.unique_investigation_products.size})") do
+        accordion.with_section(heading_text: "Notifications (#{@product.get_investigations_count_for_display})") do
           render("cases", product: @product)
         end
       end
