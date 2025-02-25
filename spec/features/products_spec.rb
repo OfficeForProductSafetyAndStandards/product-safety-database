@@ -98,14 +98,14 @@ RSpec.feature "Products listing", :with_stubbed_mailer, type: :feature do
       end
     end
 
-    context "when over 10k cases exist" do
+    context "when over 10k products exist" do
       before do
         not_retired_products_double = instance_double(ActiveRecord::Relation)
         allow(Product).to receive(:not_retired).and_return(not_retired_products_double)
         allow(not_retired_products_double).to receive(:count).and_return(10_001)
       end
 
-      it "shows total number of cases" do
+      it "shows total number of products" do
         visit products_path
         expect(page).to have_content "There are currently 10001 products."
       end
