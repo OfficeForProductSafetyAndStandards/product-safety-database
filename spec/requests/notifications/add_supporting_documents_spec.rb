@@ -4,20 +4,24 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
   let(:user) { create(:user, :activated, :opss_user) }
   let(:notification) { create(:notification, :with_supporting_document, creator_user: user) }
   let(:document) { fixture_file_upload("testImage.png", "image/png") }
-  let(:policy) { instance_double(InvestigationPolicy, update?: true, view_non_protected_details?: true) }
   let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
   let(:valid_params) { { document_form: { document: fixture_file_upload("testImage.png", "image/png"), title: "Test" } } }
   let(:invalid_params) { { document_form: { document: nil, title: "" } } }
+  let(:controller) { Notifications::AddSupportingDocumentsController.new }
 
   before do
     sign_in(user)
-    allow(notification).to receive(:is_closed?).and_return(false)
     allow(NotifyMailer).to receive(:notification_created).and_return(mailer)
-    allow(InvestigationPolicy).to receive(:new).and_return(policy)
+    allow(Notifications::AddSupportingDocumentsController).to receive(:new).and_return(controller)
+    allow(controller).to receive(:current_user).and_return(user)
   end
 
   describe "GET /notifications/:notification_pretty_id/add-supporting-documents" do
     context "when user can update the notification" do
+      before do
+        allow(controller).to receive(:user_can_edit?).and_return(true)
+      end
+
       it "renders successfully" do
         get notification_add_supporting_documents_path(notification)
         expect(response).to have_http_status(:ok)
@@ -30,10 +34,8 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
     end
 
     context "when user cannot update the notification" do
-      let(:policy) { instance_double(InvestigationPolicy, update?: false, view_non_protected_details?: false) }
-
       before do
-        allow(notification).to receive(:is_closed?).and_return(true)
+        allow(controller).to receive(:user_can_edit?).and_return(false)
       end
 
       it "returns forbidden status" do
@@ -46,6 +48,10 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
 
   describe "POST /notifications/:notification_pretty_id/add-supporting-documents" do
     context "when user can update the notification" do
+      before do
+        allow(controller).to receive(:user_can_edit?).and_return(true)
+      end
+
       it "attaches a new document" do
         expect {
           post notification_add_supporting_documents_path(notification), params: valid_params
@@ -60,10 +66,8 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
     end
 
     context "when user cannot update the notification" do
-      let(:policy) { instance_double(InvestigationPolicy, update?: false, view_non_protected_details?: false) }
-
       before do
-        allow(notification).to receive(:is_closed?).and_return(true)
+        allow(controller).to receive(:user_can_edit?).and_return(false)
       end
 
       it "does not attach a document" do
@@ -76,6 +80,10 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
 
   describe "DELETE /notifications/:notification_pretty_id/add-supporting-documents/:upload_id/remove" do
     context "when user can update the notification" do
+      before do
+        allow(controller).to receive(:user_can_edit?).and_return(true)
+      end
+
       it "removes the document" do
         document = fixture_file_upload("testImage.png", "image/png")
         notification.documents.attach(document)
@@ -88,10 +96,8 @@ RSpec.describe "Adding supporting documents to a notification", :with_stubbed_an
     end
 
     context "when user cannot update the notification" do
-      let(:policy) { instance_double(InvestigationPolicy, update?: false, view_non_protected_details?: false) }
-
       before do
-        allow(notification).to receive(:is_closed?).and_return(true)
+        allow(controller).to receive(:user_can_edit?).and_return(false)
       end
 
       it "does not remove the document" do

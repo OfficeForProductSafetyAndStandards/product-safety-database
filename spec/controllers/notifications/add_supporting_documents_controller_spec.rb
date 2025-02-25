@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_antivirus, :with_stubbed_mailer, type: :controller do
-  let(:creator_user) { create(:user, :activated, :opss_user) }
-  let(:owner_user) { create(:user, :activated, :opss_user) }
+  let(:creator_user) { create(:user, :activated, :opss_user, team: creator_team) }
+  let(:owner_user) { create(:user, :activated, :opss_user, team: owner_team) }
   let(:other_user) { create(:user, :activated, :opss_user) }
   let(:creator_team) { create(:team) }
   let(:owner_team) { create(:team) }
@@ -11,11 +11,15 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
   let(:notification) do
     create(:notification,
            creator: creator_user,
-           owner_user: owner_user,
-           owner_team: owner_team)
+           creator_team: creator_team,
+           edit_access_teams: [edit_access_team],
+           read_only_teams: [read_only_team]).tap do |n|
+      n.owner_user = owner_user
+      n.owner_team = owner_team
+      n.save!
+    end
   end
   let(:document) { fixture_file_upload("testImage.png", "image/png") }
-  let(:policy) { instance_double(InvestigationPolicy, update?: true, view_non_protected_details?: true) }
   let(:mailer) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
   let(:valid_params) do
     {
@@ -37,19 +41,11 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
   end
 
   before do
-    notification.teams_with_edit_access << edit_access_team
-    notification.teams_with_read_only_access << read_only_team
     sign_in(creator_user)
-    allow(notification).to receive(:is_closed?).and_return(false)
     allow(NotifyMailer).to receive(:notification_created).and_return(mailer)
-    allow(InvestigationPolicy).to receive(:new).and_return(policy)
   end
 
   shared_examples "forbidden access" do
-    before do
-      allow(policy).to receive_messages(update?: false, view_non_protected_details?: false)
-    end
-
     it "returns forbidden status" do
       get :show, params: { notification_pretty_id: notification.pretty_id }
       expect(response).to have_http_status(:forbidden)
@@ -72,10 +68,6 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
   end
 
   shared_examples "allowed access" do
-    before do
-      allow(policy).to receive_messages(update?: true, view_non_protected_details?: true)
-    end
-
     it "allows viewing the form" do
       get :show, params: { notification_pretty_id: notification.pretty_id }
       expect(response).to render_template("add_supporting_documents")
@@ -90,8 +82,13 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
     let(:notification_with_document) do
       create(:notification, :with_supporting_document,
              creator: creator_user,
-             owner_user: owner_user,
-             owner_team: owner_team)
+             creator_team: creator_team,
+             edit_access_teams: [edit_access_team],
+             read_only_teams: [read_only_team]).tap do |n|
+        n.owner_user = owner_user
+        n.owner_team = owner_team
+        n.save!
+      end
     end
 
     it "allows document removal" do
@@ -103,72 +100,44 @@ RSpec.describe Notifications::AddSupportingDocumentsController, :with_stubbed_an
     end
   end
 
-  context "when notification is open" do
-    before do
-      allow(notification).to receive(:is_closed?).and_return(false)
-    end
-
-    context "when user is the creator" do
-      include_examples "allowed access"
-    end
-
-    context "when user is the owner" do
-      before { sign_in(owner_user) }
-
-      include_examples "allowed access"
-    end
-
-    context "when user is in the creator team" do
-      before { sign_in(create(:user, :activated, team: creator_team)) }
-
-      include_examples "allowed access"
-    end
-
-    context "when user is in the owner team" do
-      before { sign_in(create(:user, :activated, team: owner_team)) }
-
-      include_examples "allowed access"
-    end
-
-    context "when user is in a team with edit access" do
-      before { sign_in(create(:user, :activated, team: edit_access_team)) }
-
-      include_examples "allowed access"
-    end
-
-    context "when user is in a team with read-only access" do
-      before { sign_in(create(:user, :activated, team: read_only_team)) }
-
-      include_examples "forbidden access"
-    end
-
-    context "when user has no access" do
-      before { sign_in(other_user) }
-
-      include_examples "forbidden access"
-    end
+  context "when user is the creator" do
+    include_examples "allowed access"
   end
 
-  context "when notification is closed" do
-    before do
-      allow(notification).to receive(:is_closed?).and_return(true)
-    end
+  context "when user is the owner" do
+    before { sign_in(owner_user) }
 
-    context "when user is the creator" do
-      include_examples "forbidden access"
-    end
+    include_examples "allowed access"
+  end
 
-    context "when user is the owner" do
-      before { sign_in(owner_user) }
+  context "when user is in the creator team" do
+    before { sign_in(create(:user, :activated, team: creator_team)) }
 
-      include_examples "forbidden access"
-    end
+    include_examples "allowed access"
+  end
 
-    context "when user is in a team with edit access" do
-      before { sign_in(create(:user, :activated, team: edit_access_team)) }
+  context "when user is in the owner team" do
+    before { sign_in(create(:user, :activated, team: owner_team)) }
 
-      include_examples "forbidden access"
-    end
+    include_examples "allowed access"
+  end
+
+  context "when user is in a team with edit access" do
+    before { sign_in(create(:user, :activated, team: edit_access_team)) }
+
+    include_examples "allowed access"
+  end
+
+  context "when user is in a team with read-only access" do
+    before { sign_in(create(:user, :activated, team: read_only_team)) }
+
+    include_examples "forbidden access"
+  end
+
+  context "when user has no access" do
+    before { sign_in(other_user) }
+
+    include_examples "forbidden access"
   end
 
   context "with invalid notification ID" do

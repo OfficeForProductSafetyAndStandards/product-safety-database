@@ -17,11 +17,11 @@ module Businesses
     def edit; end
 
     def create
-      @location = @business.locations.create!(location_params.merge({ added_by_user: current_user }))
+      @location = @business.locations.build(location_params.merge({ added_by_user: current_user }))
       if @location.save
         redirect_to business_url(@business, anchor: "locations"), flash: { success: "Location was successfully created." }
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 

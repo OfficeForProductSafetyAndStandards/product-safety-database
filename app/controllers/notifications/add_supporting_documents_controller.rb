@@ -44,12 +44,7 @@ module Notifications
     def validate_step
       return redirect_to "/404" unless @notification && current_user
 
-      if action_name == "show"
-        authorize @notification, :view_non_protected_details?
-      else
-        authorize @notification, :update?
-        render "errors/forbidden", status: :forbidden if @notification.is_closed?
-      end
+      render "errors/forbidden", status: :forbidden unless user_can_edit?
     end
 
     def user_can_edit?
