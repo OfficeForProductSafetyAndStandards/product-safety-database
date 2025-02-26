@@ -3,7 +3,8 @@ class Location < ApplicationRecord
 
   default_scope { order(created_at: :asc) }
 
-  validates :name, :country, presence: true
+  validates :name, presence: { message: "Location name cannot be blank" }
+  validates :country, presence: { message: "Country cannot be blank" }
 
   belongs_to :business
   belongs_to :added_by_user, class_name: :User, optional: true
