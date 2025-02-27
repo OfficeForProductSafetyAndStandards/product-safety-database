@@ -10,7 +10,7 @@ class NotificationsController < ApplicationController
 
   # GET /notifications
   def index
-    # Find the most recent incomplete bulk products upload for the current user, if any
+    # Retrieve incomplete bulk products upload to allow users to continue their work
     @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil).order(updated_at: :desc).first
 
     @pagy, @answer  = pagy_searchkick(new_opensearch_for_investigations(20, paginate: true))
@@ -101,11 +101,16 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/:pretty_id
   def show
-    return redirect_to investigation_path(@notification) unless current_user.can_use_notification_task_list?
+    if @notification.draft?
+      handle_draft_notification
+      return
+    end
+
+    redirect_to investigation_path(@notification) and return unless current_user.can_use_notification_task_list?
 
     breadcrumb breadcrumb_case_label, breadcrumb_case_path
 
-    # Find the most recent incomplete bulk products upload for the current user and case, if any
+    # Retrieve incomplete bulk products upload to allow users to continue their work
     @incomplete_bulk_products_upload = BulkProductsUpload.where(user: current_user, submitted_at: nil, investigation: @notification).order(updated_at: :desc).first
   end
 
@@ -145,5 +150,14 @@ private
 
   def set_notification
     @notification = Investigation::Notification.includes(:creator_user, :creator_team, :owner_user, :owner_team, :comments).find_by!(pretty_id: params[:pretty_id])
+  end
+
+  def handle_draft_notification
+    unless policy(@notification).can_access_draft?
+      render "errors/forbidden", status: :forbidden
+      return
+    end
+
+    redirect_to notification_create_index_path(@notification)
   end
 end
