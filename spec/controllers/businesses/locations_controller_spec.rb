@@ -72,13 +72,17 @@ RSpec.describe Businesses::LocationsController, type: :controller do
       end
 
       it "renders the new template" do
-        post :create, params: invalid_params
+        post :create, params: { business_id: business.id, location: { name: "" } }
         expect(response).to render_template(:new)
       end
 
-      it "sets validation errors on the location" do
-        post :create, params: invalid_params
-        expect(assigns(:location).errors[:name]).to include("Name cannot be blank")
+      it "sets validation error for blank location name" do
+        post :create, params: { business_id: business.id, location: { name: "" } }
+        expect(assigns(:location).errors[:name]).to include("Location name cannot be blank")
+      end
+
+      it "sets validation error for blank country" do
+        post :create, params: { business_id: business.id, location: { country: "" } }
         expect(assigns(:location).errors[:country]).to include("Country cannot be blank")
       end
     end
