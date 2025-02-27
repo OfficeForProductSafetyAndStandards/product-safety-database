@@ -36,7 +36,7 @@
                 row.with_cell(text: "Notification title", html_attributes: { scope: "col" })
                 row.with_cell(text: "Last updated", html_attributes: { scope: "col" })
                 row.with_cell(text: "Status", html_attributes: { scope: "col" })
-                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Actions</span>".html_safe, html_attributes: { scope: "col" })
+                row.with_cell(text: "Change or Delete", html_attributes: { scope: "col" })
               end
             end
 
@@ -48,27 +48,45 @@
                   updated_value = notification.updated_at.to_formatted_s(:govuk)
                   status_value = "Draft"
 
+                  # Create visually hidden spans with header text for screen readers
+                  product_with_header = content_tag(:span, "Product name: ", class: "govuk-visually-hidden") +
+                                        sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe
+
+                  title_with_header = content_tag(:span, "Notification title: ", class: "govuk-visually-hidden") +
+                                      sanitize(title_value)
+
+                  updated_with_header = content_tag(:span, "Last updated: ", class: "govuk-visually-hidden") +
+                                        updated_value
+
+                  # Fix status column to avoid extra spaces
+                  status_with_header = content_tag(:span, "Status: ", class: "govuk-visually-hidden") +
+                                       content_tag(:span, status_value, class: "govuk-tag govuk-tag--grey")
+
+                  # Fix actions column to use "Change or Delete" instead of "Actions"
+                  actions_with_header = content_tag(:span, "Change or Delete: ", class: "govuk-visually-hidden") +
+                                        sanitize(
+                                          "<a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\">Make changes</a>
+                                          <hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">
+                                          <a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\">Delete</a>",
+                                          tags: %w(a hr),
+                                          attributes: %w(href class)
+                                        ).html_safe
+
                   row.with_cell(
                     header: true,
-                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).presence&.join("<br>") || "Not provided", tags: %w(br)).html_safe
+                    text: product_with_header
                   )
-                  row.with_cell(text: sanitize(title_value))
-                  row.with_cell(text: updated_value)
-                  row.with_cell(text: govuk_tag(text: status_value, colour: "grey").html_safe)
                   row.with_cell(
-                    text: sanitize(
-                      "<span id=\"desc-#{notification.id}\" class=\"govuk-visually-hidden\">
-                        Product name(s): #{product_value}.
-                        Notification title: #{title_value}.
-                        Last updated: #{updated_value}.
-                        Status: #{status_value}.
-                      </span>
-                      <a href=\"#{notification_create_index_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-#{notification.id}\">Make changes</a>
-                      <hr class=\"govuk-section-break govuk-section-break--m govuk-section-break--visible\">
-                      <a href=\"#{delete_notification_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-#{notification.id}\">Delete</a>",
-                      tags: %w(a hr span),
-                      attributes: %w(href class id aria-describedby)
-                    ).html_safe
+                    text: title_with_header
+                  )
+                  row.with_cell(
+                    text: updated_with_header
+                  )
+                  row.with_cell(
+                    text: status_with_header
+                  )
+                  row.with_cell(
+                    text: actions_with_header
                   )
                 end
               end
@@ -89,7 +107,7 @@
                 row.with_cell(text: "Notification title", html_attributes: { scope: "col" })
                 row.with_cell(text: "Last updated", html_attributes: { scope: "col" })
                 row.with_cell(text: "Status", html_attributes: { scope: "col" })
-                row.with_cell(text: "<span class=\"govuk-visually-hidden\">Actions</span>".html_safe, html_attributes: { scope: "col" })
+                row.with_cell(text: "Change or Delete", html_attributes: { scope: "col" })
               end
             end
 
@@ -101,25 +119,48 @@
                   updated_value = notification.updated_at.to_formatted_s(:govuk)
                   status_value = "Submitted #{notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}"
 
+                  # Create visually hidden spans with header text for screen readers
+                  product_with_header = content_tag(:span, "Product name: ", class: "govuk-visually-hidden") +
+                                        sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe
+
+                  title_with_header = content_tag(:span, "Notification title: ", class: "govuk-visually-hidden") +
+                                      sanitize(title_value)
+
+                  updated_with_header = content_tag(:span, "Last updated: ", class: "govuk-visually-hidden") +
+                                        updated_value
+
+                  # Fix status column to avoid extra spaces
+                  submitted_tag = content_tag(:span, "Submitted", class: "govuk-tag govuk-tag--green")
+                  submitted_date = notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"
+                  status_with_header = content_tag(:span, "Status: ", class: "govuk-visually-hidden") +
+                                       submitted_tag +
+                                       content_tag(:br) +
+                                       content_tag(:br) +
+                                       submitted_date
+
+                  # Fix actions column to use "Change or Delete" instead of "Actions"
+                  actions_with_header = content_tag(:span, "Change or Delete: ", class: "govuk-visually-hidden") +
+                                        sanitize(
+                                          "<a href=\"#{notification_path(notification)}\" class=\"govuk-link\">Update notification</a>",
+                                          tags: %w(a),
+                                          attributes: %w(href class)
+                                        ).html_safe
+
                   row.with_cell(
                     header: true,
-                    text: sanitize(notification.investigation_products.decorate.map(&:product).map(&:name_with_brand).join("<br>"), tags: %w(br)).html_safe
+                    text: product_with_header
                   )
-                  row.with_cell(text: sanitize(title_value))
-                  row.with_cell(text: updated_value)
-                  row.with_cell(text: "#{govuk_tag(text: 'Submitted', colour: 'green').html_safe}<br><br>#{notification.submitted_at? ? notification.submitted_at.to_formatted_s(:govuk) : "Date not provided"}".html_safe)
                   row.with_cell(
-                    text: sanitize(
-                      "<span id=\"desc-submitted-#{notification.id}\" class=\"govuk-visually-hidden\">
-                        Product name(s): #{product_value}.
-                        Notification title: #{title_value}.
-                        Last updated: #{updated_value}.
-                        Status: #{status_value}.
-                      </span>
-                      <a href=\"#{notification_path(notification)}\" class=\"govuk-link\" aria-describedby=\"desc-submitted-#{notification.id}\">Update notification</a>",
-                      tags: %w(a span),
-                      attributes: %w(href class id aria-describedby)
-                    ).html_safe
+                    text: title_with_header
+                  )
+                  row.with_cell(
+                    text: updated_with_header
+                  )
+                  row.with_cell(
+                    text: status_with_header
+                  )
+                  row.with_cell(
+                    text: actions_with_header
                   )
                 end
               end
