@@ -37,19 +37,23 @@ private
 
   def add_product_to_sheets(product)
     product.investigation_products.uniq(&:investigation_id).each do |investigation_product|
-      product_info_sheet.add_row(attributes_for_info_sheet(product, investigation_product:), types: :text)
+      attributes = attributes_for_info_sheet(product, investigation_product:)
+      product_info_sheet.add_row(attributes, types: :text) if attributes
     end
 
     product.test_results.sort.each do |test_result|
-      test_results_sheet.add_row(attributes_for_test_results_sheet(product, test_result.decorate), types: :text)
+      attributes = attributes_for_test_results_sheet(product, test_result.decorate)
+      test_results_sheet.add_row(attributes, types: :text) if attributes
     end
 
     product.risk_assessments.sort.each do |risk_assessment|
-      risk_assessments_sheet.add_row(attributes_for_risk_assessments_sheet(product, risk_assessment.decorate), types: :text)
+      attributes = attributes_for_risk_assessments_sheet(product, risk_assessment.decorate)
+      risk_assessments_sheet.add_row(attributes, types: :text) if attributes
     end
 
     product.corrective_actions.sort.each do |corrective_action|
-      corrective_actions_sheet.add_row(attributes_for_corrective_actions_sheet(product, corrective_action.decorate), types: :text)
+      attributes = attributes_for_corrective_actions_sheet(product, corrective_action.decorate)
+      corrective_actions_sheet.add_row(attributes, types: :text) if attributes
     end
   end
 
@@ -160,6 +164,8 @@ private
 
   def attributes_for_info_sheet(product, investigation_product:)
     investigation = investigation_product.investigation.decorate
+    return if is_draft_notifcation(investigation)
+
     [
       product.psd_ref,
       product.id,
@@ -190,6 +196,8 @@ private
 
   def attributes_for_test_results_sheet(product, test_result)
     investigation = test_result.investigation.decorate
+    return if is_draft_notifcation(investigation)
+
     [
       product.psd_ref,
       product.id,
@@ -211,6 +219,8 @@ private
 
   def attributes_for_risk_assessments_sheet(product, risk_assessment)
     investigation = risk_assessment.investigation.decorate
+    return if is_draft_notifcation(investigation)
+
     [
       product.psd_ref,
       product.id,
@@ -229,6 +239,8 @@ private
 
   def attributes_for_corrective_actions_sheet(product, corrective_action)
     investigation = corrective_action.investigation.decorate
+    return if is_draft_notifcation(investigation)
+
     [
       product.psd_ref,
       product.id,
@@ -299,5 +311,11 @@ private
     return text if user.is_opss?
 
     "Restricted"
+  end
+
+  def is_draft_notifcation(investigation)
+    return true if investigation.state == "draft" && investigation.type == "Investigation::Notification"
+
+    false
   end
 end
