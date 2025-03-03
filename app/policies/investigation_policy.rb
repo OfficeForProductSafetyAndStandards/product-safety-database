@@ -1,13 +1,12 @@
 class InvestigationPolicy < ApplicationPolicy
-  # Ability to view the entire case including protected details
+  # Determines if the user has read-only access to the case
   def readonly?
     record.teams_with_read_only_access.include?(user.team)
   end
 
-  # Used for all updating of the case, including adding and removing related
-  # records, such as products, businesses and documents, with the exception of
-  # changing the notification owner, its status (eg 'open' or 'closed'), and whether
-  # or not it is 'restricted'.
+  # Determines if the user can update the case details and related records
+  # This includes adding/removing products, businesses, documents, etc.
+  # Does not include changing ownership, status, or restriction level
   def update?(user: @user)
     return false if record.is_closed? && !user.has_role?(:super_user)
 
@@ -18,14 +17,12 @@ class InvestigationPolicy < ApplicationPolicy
     record.draft? && (record.owner == user || user.has_role?(:super_user))
   end
 
-  # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),
-  # and whether or not it is 'restricted'.
+  # Determines if the user can change case ownership, status, or restriction level
   def change_owner_or_status?(user: @user)
     record.owner.in_same_team_as?(user) || record.owner == user || user.has_role?(:super_user)
   end
 
-  # Ability to add and remove other teams as collaborators, and to set their
-  # permission levels.
+  # Determines if the user can manage team collaborations and permission levels
   def manage_collaborators?
     return false if record.is_closed?
     return false if record.owner.nil?
@@ -37,9 +34,8 @@ class InvestigationPolicy < ApplicationPolicy
     change_owner_or_status?(user:) && record.is_private? || user.has_role?(:super_user)
   end
 
-  # Ability to see most of the details of the case, with the exception of
-  # 'protected' details, such as personal contact details or correspondance
-  # with businesses.
+  # Determines if the user can view basic case details
+  # Protected details like personal contact info remain hidden
   def view_non_protected_details?(user: @user, private: @record.is_private)
     return true unless private
 
@@ -86,5 +82,13 @@ class InvestigationPolicy < ApplicationPolicy
 
   def can_be_deleted?
     record.products.none?
+  end
+
+  # Determines if the user can access a draft notification
+  # Only creators and owners can access draft notifications
+  def can_access_draft?
+    return true unless record.is_a?(Investigation::Notification) && record.draft?
+
+    [record.creator_user, record.owner].include?(user)
   end
 end
