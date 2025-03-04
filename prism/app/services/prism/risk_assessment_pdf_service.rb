@@ -156,9 +156,9 @@ module Prism
       return if file.nil?
 
       if file.attached?
-        filename = if file.metadata["safe"] == true
+        filename = if file.metadata&.dig("safe") == true
                      file.blob.filename
-                   elsif file.metadata["safe"] == false
+                   elsif file.metadata&.dig("safe") == false
                      "#{file.blob.filename} (failed virus scan)"
                    else
                      "#{file.blob.filename} (pending virus scan)"

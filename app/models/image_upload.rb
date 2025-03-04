@@ -18,9 +18,9 @@ private
 
   def file_is_free_of_viruses
     # Don't run this validation unless document has been analyzed by antivirus analyzer
-    return unless file_upload.metadata&.key?("safe")
+    return unless file_upload&.metadata&.key?("safe")
 
-    return if file_upload.metadata["safe"] == true
+    return if file_upload&.metadata&.dig("safe") == true
 
     errors.add(:base, :virus, message: "File upload must be virus free")
   end

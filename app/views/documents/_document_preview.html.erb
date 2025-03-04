@@ -2,8 +2,8 @@
   hide_link ||= false
   class_name ||= ""
   custom_image_classes ||= ""
-  analyzed = document.metadata["analyzed"]
-  safe = document.metadata["safe"]
+  analyzed = document.metadata&.dig("analyzed")
+  safe = document.metadata&.dig("safe")
   image_class = if document.variable?
                   "app-document-preview__image"
                 else

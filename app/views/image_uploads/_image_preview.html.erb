@@ -2,8 +2,8 @@
   hide_link ||= false
   class_name ||= ""
   custom_image_classes ||= ""
-  analyzed = image.file_upload.metadata["analyzed"]
-  safe = image.file_upload.metadata["safe"]
+  analyzed = image.file_upload&.metadata&.dig("analyzed")
+  safe = image.file_upload&.metadata&.dig("safe")
   image_class = if image.file_upload.variable?
                   "app-document-preview__image"
                 else

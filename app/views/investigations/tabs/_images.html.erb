@@ -10,8 +10,8 @@
 
 <%
   @investigation.images.each.with_index(1) do |image, image_number|
-    analyzed = image.metadata["analyzed"]
-    safe = image.metadata["safe"]
+    analyzed = image&.metadata&.dig("analyzed")
+    safe = image&.metadata&.dig("safe")
     metadata_ok_for_display = safe || !analyzed
     image_title = metadata_ok_for_display ? image.title : "The image file has not finished uploading"
 %>
@@ -77,8 +77,8 @@
 <%
   @investigation.image_uploads.each.with_index(@investigation.images.size + 1) do |image_upload, image_number|
     image = image_upload.file_upload
-    analyzed = image.metadata["analyzed"]
-    safe = image.metadata["safe"]
+    analyzed = image&.metadata&.dig("analyzed")
+    safe = image&.metadata&.dig("safe")
     metadata_ok_for_display = safe || !analyzed
 %>
   <section class="govuk-!-margin-bottom-9">

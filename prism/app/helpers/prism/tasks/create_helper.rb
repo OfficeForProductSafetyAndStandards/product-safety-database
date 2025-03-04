@@ -159,7 +159,7 @@ module Prism
         harm_scenario_step.description,
         "Probability of harm: #{probability_of_harm(**harm_scenario_step.probability_of_harm)}",
         "Evidence: #{t("prism.harm_scenario_steps.probability_evidence.#{harm_scenario_step.probability_evidence}")}",
-        ("<a href=\"#{main_app.rails_storage_proxy_path(file)}\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">#{file.blob.filename}</a>" if file && file.metadata["safe"] == true),
+        ("<a href=\"#{main_app.rails_storage_proxy_path(file)}\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">#{file.blob.filename}</a>" if file && file.metadata&.dig("safe") == true),
       ].join("<br>")
     end
 

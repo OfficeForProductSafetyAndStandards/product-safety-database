@@ -53,7 +53,7 @@ class DocumentUploadsController < ApplicationController
     # Reload the uploaded file to get the latest metadata
     @document_upload.file_upload.try(:reload)
 
-    if @document_upload.file_upload.metadata["safe"] && @document_upload.file_upload.metadata["analyzed"]
+    if @document_upload.file_upload&.metadata&.dig("safe") && @document_upload.file_upload&.metadata["analyzed"]
       flash[:success] = @document_upload.file_upload.image? ? t(:image_added) : t(:file_added, type: @parent.model_name.human.downcase)
     else
       file_type = @document_upload.file_upload.image? ? "image" : "file"
