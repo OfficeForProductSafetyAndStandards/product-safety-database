@@ -49,8 +49,8 @@ class ImageUploadsController < ApplicationController
     # Reload the uploaded file to get the latest metadata
     @image_upload.file_upload.try(:reload)
 
-    if @image_upload.file_upload.metadata["analyzed"]
-      if @image_upload.file_upload.metadata["safe"]
+    if @image_upload.file_upload&.metadata&.dig("analyzed")
+      if @image_upload.file_upload&.metadata&.dig("safe")
         flash[:success] = t(:image_added)
       else
         flash[:warning] = "File upload must be virus free"

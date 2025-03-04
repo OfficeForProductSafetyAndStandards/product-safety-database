@@ -27,7 +27,7 @@ class DocumentsController < ApplicationController
       user: current_user,
     }))
 
-    if @document_form.document.metadata["safe"] && @document_form.document.metadata["analyzed"]
+    if @document_form.document&.metadata&.dig("safe") && @document_form.document&.metadata["analyzed"]
       flash[:success] = @document_form.document.image? ? t(:image_added) : t(:file_added, type: @parent.model_name.human.downcase)
     else
       file_type = @document_form.document.image? ? "image" : "file"
