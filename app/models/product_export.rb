@@ -37,7 +37,7 @@ private
 
   def add_product_to_sheets(product)
     # Filter investigations once
-    valid_products_investigations = product.investigation_products.uniq(&:investigation_id).reject { |ip| is_draft_notifcation(ip.investigation.decorate) }
+    valid_products_investigations = product.investigation_products.uniq(&:investigation_id).reject { |ip| draft_notifcation?(ip.investigation.decorate) }
     valid_products_investigations_lookup = valid_products_investigations.map(&:investigation_id)
 
     valid_products_investigations.each do |investigation_product|
@@ -311,7 +311,7 @@ private
     "Restricted"
   end
 
-  def is_draft_notifcation(investigation)
+  def draft_notifcation?(investigation)
     return true if investigation.state == "draft" && investigation.type == "Investigation::Notification"
 
     false
