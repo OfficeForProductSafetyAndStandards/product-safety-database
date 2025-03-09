@@ -85,5 +85,9 @@ class Investigation < ApplicationRecord
 
       Rails.logger.info "Completed soft deleting old draft notifications. Processed: #{processed_count}"
     end
+
+    def virus_free_images
+      image_uploads.select { |image_upload| image_upload&.file_upload&.metadata&.dig("safe") }
+    end
   end
 end

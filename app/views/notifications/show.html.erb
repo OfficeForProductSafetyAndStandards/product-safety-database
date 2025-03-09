@@ -205,8 +205,8 @@
       govuk_summary_list do |summary_list|
         summary_list.with_row do |row|
           row.with_key(text: "Supporting images")
-          row.with_value(text: if @notification.image_uploads.any?
-            safe_join(@notification.image_uploads.map(&:file_upload).map { |file| link_to file&.filename, url_for(file), target: '_blank' }, tag.br)
+          row.with_value(text: if @notification.virus_free_images.present?
+            safe_join(@notification.virus_free_images&.map(&:file_upload).map { |file| link_to file&.filename, url_for(file), target: '_blank' }, tag.br)
           else
             "Not provided"
           end)

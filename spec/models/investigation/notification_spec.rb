@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Investigation::Notification, :with_stubbed_mailer do
+RSpec.describe Investigation::Notification, :with_stubbed_antivirus, :with_stubbed_mailer do
   subject(:notification) { build(:notification) }
 
   describe "#case_type" do
@@ -141,6 +141,46 @@ RSpec.describe Investigation::Notification, :with_stubbed_mailer do
       it "logs the error and continues processing" do
         described_class.soft_delete_old_drafts!
         expect(Rails.logger).to have_received(:error).with("Failed to soft delete notification #{old_draft.id}: #{error_message}")
+      end
+    end
+  end
+
+  describe "#virus_free_images" do
+    let(:notification) { create(:notification) }
+
+    context "when all images are virus-free" do
+      let!(:safe_image) { create(:image_upload, :with_antivirus_safe_image_upload, upload_model: notification) }
+      let!(:safe_image_two) { create(:image_upload, :with_antivirus_safe_image_upload, upload_model: notification) }
+
+      before do
+        allow(notification).to receive(:image_uploads).and_return([safe_image, safe_image_two])
+      end
+
+      it "returns all images" do
+        expect(notification.virus_free_images).to contain_exactly(safe_image, safe_image_two)
+      end
+    end
+
+    context "when some images are infected" do
+      let!(:safe_image) { create(:image_upload, :with_antivirus_safe_image_upload, upload_model: notification) }
+      let(:unsafe_image) { create(:image_upload, :with_virus_image_upload, upload_model: notification) }
+
+      before do
+        allow(notification).to receive(:image_uploads).and_return([safe_image, unsafe_image])
+      end
+
+      it "returns only virus-free images" do
+        expect(notification.virus_free_images).to contain_exactly(safe_image)
+      end
+    end
+
+    context "when image_uploads is empty" do
+      before do
+        allow(notification).to receive(:image_uploads).and_return([])
+      end
+
+      it "returns empty array" do
+        expect(notification.virus_free_images).to be_empty
       end
     end
   end
