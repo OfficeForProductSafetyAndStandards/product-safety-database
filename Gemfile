@@ -34,7 +34,7 @@ gem "net-smtp"
 
 gem "loaf", "~> 0.10"
 gem "matrix", "~> 0.4"
-gem "nokogiri", "1.17.2"
+gem "nokogiri", force_ruby_platform: true
 gem "pagy", "~> 9.3.3"
 gem "paper_trail"
 gem "pg", "~> 1.5"
