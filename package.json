@@ -9,8 +9,8 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "accessible-autocomplete": "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main",
-    "esbuild": "^0.25.0",
-    "govuk-frontend": "5.8.0",
+    "esbuild": "^0.25.1",
+    "govuk-frontend": "5.9.0",
     "postcss": "^8.5.3",
     "sass": "^1.85.1",
     "standard": "^17.1.2",
