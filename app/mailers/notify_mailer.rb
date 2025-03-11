@@ -309,6 +309,15 @@ class NotifyMailer < GovukNotifyRails::Mailer
       notification_id: pretty_id
     )
 
-    mail(to: user.email)
+    mail_options = { to: user.email }
+
+    # Set urgent priority headers for final reminder emails only
+    if last_reminder
+      mail_options["Importance"] = "high"
+      mail_options["X-Priority"] = "1"
+      mail_options["X-MSMail-Priority"] = "High"
+    end
+
+    mail(mail_options)
   end
 end
