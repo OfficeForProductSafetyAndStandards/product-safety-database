@@ -1,4 +1,4 @@
-<% page_heading = "Add corrective action" %>
+<% page_heading = "Record a corrective action" %>
 <%= page_title page_heading, errors: @corrective_action_form.errors.any? %>
 
 <div class="govuk-grid-row">
@@ -24,9 +24,9 @@
         <%= f.govuk_radio_button :related_file, true, label: { text: "Yes" }, link_errors: true do %>
           <%= file_field %>
         <% end %>
-        <%= f.govuk_radio_button :related_file, false, label: { text: "No" }, checked: true %>
+        <%= f.govuk_radio_button :related_file, false, label: { text: "No" } %>
       <% end %>
-      <%= f.govuk_submit("Add corrective action") %>
+      <%= f.govuk_submit("Record a corrective action") %>
     <% end %>
   </div>
 </div>
