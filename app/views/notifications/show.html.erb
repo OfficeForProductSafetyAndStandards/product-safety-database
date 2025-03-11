@@ -228,7 +228,7 @@
         govuk_summary_list(
           card: {
             title: sanitize(corrective_action.investigation_product.product.decorate.name_with_brand),
-            actions: show_edit_link? ? [govuk_link_to("Change", edit_investigation_corrective_action_path(@notification, corrective_action))] : []
+            actions: show_edit_link? ? [govuk_link_to("Change", notification_edit_record_a_corrective_action_path(@notification, corrective_action))] : []
           },
           rows: [
             {
@@ -278,7 +278,7 @@
       %>
     <% end %>
 
-    <%= govuk_button_link_to "Add corrective action", new_investigation_corrective_action_path(@notification), secondary: true %>
+    <%= govuk_button_link_to "Add corrective action", notification_new_record_a_corrective_action_path(@notification), secondary: true %>
 
     <h2 class="govuk-heading-m">Comments</h2>
     <div class="timeline opss-timeline">
