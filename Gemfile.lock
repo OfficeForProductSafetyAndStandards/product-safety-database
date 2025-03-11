@@ -448,7 +448,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.1.10)
+    rack (3.1.12)
     rack-protection (4.1.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -842,7 +842,7 @@ DEPENDENCIES
   pry-doc (~> 1.5)
   puma (~> 6.6)
   pundit (~> 2.4)
-  rack (~> 3.1.10)
+  rack (~> 3.1.12)
   rails (~> 7.1.5.1)
   rails-controller-testing (~> 1.0)
   rails-erd
