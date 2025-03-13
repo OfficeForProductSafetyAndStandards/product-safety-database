@@ -39,8 +39,8 @@ RSpec.describe "notifications/record_a_corrective_action/edit", type: :view do
     expect(rendered).to include("Corrective action form rendered")
   end
 
-  it "renders the related attachment fields" do
-    expect(rendered).to include("Attachment fields rendered")
+  it "includes a file upload field" do
+    expect(rendered).to have_css("input[type='file'][name='corrective_action[document]']")
   end
 
   it "has a submit button with the correct text" do

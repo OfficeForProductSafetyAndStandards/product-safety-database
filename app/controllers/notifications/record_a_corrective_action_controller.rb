@@ -66,7 +66,6 @@ module Notifications
       }
 
       @corrective_action_form.cache_file!(current_user)
-      @file_blob = @corrective_action.document_blob
 
       if @corrective_action_form.valid?
         UpdateCorrectiveAction.call!(
@@ -144,6 +143,7 @@ module Notifications
         :details,
         :related_file,
         :document,
+        :existing_document_file_id,
         geographic_scopes: [],
         legislation: []
       ).merge(
