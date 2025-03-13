@@ -1,4 +1,4 @@
 repository: product-safety-database
 builder:
   name: paketobuildpacks/builder-jammy-full
-  version: 0.3.417
+  version: 0.3.431
