@@ -252,4 +252,148 @@ RSpec.describe Notifications::RecordACorrectiveActionController, :with_stubbed_a
       expect(controller).to have_received(:breadcrumb).with(notification.pretty_id, notification_path(notification))
     end
   end
+
+  # Verifies the controller's authorization logic to ensure proper access control
+  describe "authorization validation" do
+    let(:other_user) { create(:user, :activated, :opss_user) }
+
+    shared_examples "forbidden access" do
+      it "returns forbidden status for new action" do
+        get :new, params: { notification_pretty_id: notification.pretty_id }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "returns forbidden status for create action" do
+        post :create, params: valid_params
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "returns forbidden status for edit action" do
+        get :edit, params: { notification_pretty_id: notification.pretty_id, id: corrective_action.id }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "returns forbidden status for update action" do
+        patch :update, params: { notification_pretty_id: notification.pretty_id, id: corrective_action.id, corrective_action: valid_params[:corrective_action] }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    shared_examples "allowed access" do
+      let(:success_result) { instance_double(Interactor::Context, success?: true) }
+
+      # Centralizes form stubbing to reduce duplication and improve maintainability
+      def stub_form_methods(form, additional_stubs = {})
+        allow(form).to receive(:date_decided=)
+        allow(form).to receive(:cache_file!).with(anything)
+        allow(form).to receive_messages(additional_stubs) if additional_stubs.present?
+        form
+      end
+
+      let(:form_for_create) do
+        instance_double(CorrectiveActionForm, valid?: true).tap do |form|
+          stub_form_methods(form, date_decided: nil, serializable_hash: {})
+        end
+      end
+
+      let(:form_for_edit) do
+        instance_double(CorrectiveActionForm).tap do |form|
+          allow(form).to receive(:related_file=)
+          allow(form).to receive(:existing_document_file_id=)
+          allow(form).to receive(:load_document_file)
+          allow(form).to receive(:changes_applied)
+        end
+      end
+
+      let(:form_for_update) do
+        instance_double(CorrectiveActionForm, valid?: true).tap do |form|
+          stub_form_methods(form, {
+            date_decided: nil,
+            serializable_hash: {},
+            action: "mandatory_recall",
+            has_online_recall_information: "has_online_recall_information_no",
+            online_recall_information: nil,
+            legislation: ["General Product Safety Regulations 2005"],
+            business_id: business.id,
+            measure_type: "Mandatory",
+            duration: "permanent",
+            geographic_scopes: ["Great Britain"],
+            details: "Test details",
+            related_file: nil,
+            document: nil,
+            changes: nil
+          })
+        end
+      end
+
+      # Isolates controller authorization logic by stubbing external dependencies
+      before do
+        allow(CorrectiveActionForm).to receive(:new).and_return(form_for_create)
+        allow(AddCorrectiveActionToNotification).to receive(:call).and_return(success_result)
+        allow(CorrectiveActionForm).to receive(:from).and_return(form_for_edit)
+        allow(CorrectiveActionForm).to receive(:new).and_return(form_for_update)
+        allow(UpdateCorrectiveAction).to receive(:call!)
+      end
+
+      it "allows access to new action" do
+        get :new, params: { notification_pretty_id: notification.pretty_id }
+        expect(response).to be_successful
+      end
+
+      it "allows access to create action" do
+        post :create, params: valid_params
+        expect(response).to redirect_to(notification_path(notification))
+      end
+
+      it "allows access to edit action" do
+        get :edit, params: { notification_pretty_id: notification.pretty_id, id: corrective_action.id }
+        expect(response).to be_successful
+      end
+
+      it "allows access to update action" do
+        patch :update, params: { notification_pretty_id: notification.pretty_id, id: corrective_action.id, corrective_action: valid_params[:corrective_action] }
+        expect(response).to redirect_to(notification_path(notification))
+      end
+    end
+
+    context "when user is the creator" do
+      include_examples "allowed access"
+    end
+
+    context "when user is the owner" do
+      before { sign_in(owner_user) }
+
+      include_examples "allowed access"
+    end
+
+    context "when user is in the creator team" do
+      before { sign_in(create(:user, :activated, team: creator_team)) }
+
+      include_examples "allowed access"
+    end
+
+    context "when user is in the owner team" do
+      before { sign_in(create(:user, :activated, team: owner_team)) }
+
+      include_examples "allowed access"
+    end
+
+    context "when user is in a team with edit access" do
+      before { sign_in(create(:user, :activated, team: edit_access_team)) }
+
+      include_examples "allowed access"
+    end
+
+    context "when user is in a team with read-only access" do
+      before { sign_in(create(:user, :activated, team: read_only_team)) }
+
+      include_examples "forbidden access"
+    end
+
+    context "when user has no access" do
+      before { sign_in(other_user) }
+
+      include_examples "forbidden access"
+    end
+  end
 end
