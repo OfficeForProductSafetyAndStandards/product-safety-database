@@ -2,6 +2,7 @@ module Notifications
   class RecordACorrectiveActionController < ApplicationController
     include CorrectiveActionsConcern
     before_action :set_notification
+    before_action :validate_step
     before_action :set_corrective_action, only: %i[edit update]
     before_action :set_notification_breadcrumbs
 
@@ -102,6 +103,25 @@ module Notifications
 
     def set_corrective_action
       @corrective_action = @notification.corrective_actions.find(params[:id])
+    end
+
+    def validate_step
+      # Ensure objects exist
+      unless @notification && current_user
+        redirect_to "/404" and return
+      end
+
+      # Return forbidden status if not authorized
+      render "errors/forbidden", status: :forbidden unless user_can_edit?
+    end
+
+    def user_can_edit?
+      user_team = current_user.team
+      return false if @notification.teams_with_read_only_access.include?(user_team)
+
+      [@notification.creator_user, @notification.owner_user].include?(current_user) ||
+        [@notification.owner_team, @notification.creator_team].include?(user_team) ||
+        @notification.non_owner_teams_with_edit_access.include?(user_team)
     end
 
     def set_notification_breadcrumbs
