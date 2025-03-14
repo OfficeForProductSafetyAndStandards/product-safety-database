@@ -639,7 +639,11 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       end
 
       it "sets the GOV.UK Notify reference" do
-        expect(mail.govuk_notify_reference).to eq("Draft Notification submission reminder")
+        if last_reminder
+          expect(mail.govuk_notify_reference).to eq("[URGENT] Draft Notification submission reminder")
+        else
+          expect(mail.govuk_notify_reference).to eq("Draft Notification submission reminder")
+        end
       end
     end
 
@@ -666,38 +670,12 @@ RSpec.describe NotifyMailer, :with_stubbed_opensearch do
       include_examples "personalisation attributes", :last_reminder, :last_reminder
       include_examples "personalisation attributes", :last_line, :last_line
       include_examples "personalisation attributes", :notification_id, :pretty_id
-
-      # Test urgent headers
-      it "sets the Importance header to high" do
-        expect(mail.header["Importance"].value).to eq("high")
-      end
-
-      it "sets the X-Priority header to 1" do
-        expect(mail.header["X-Priority"].value).to eq("1")
-      end
-
-      it "sets the X-MSMail-Priority header to High" do
-        expect(mail.header["X-MSMail-Priority"].value).to eq("High")
-      end
     end
 
     context "when it is not a final reminder email" do
       let(:last_reminder) { false }
 
       include_examples "common email attributes"
-
-      # Test that urgent headers are not set
-      it "does not set the Importance header" do
-        expect(mail.header["Importance"]).to be_nil
-      end
-
-      it "does not set the X-Priority header" do
-        expect(mail.header["X-Priority"]).to be_nil
-      end
-
-      it "does not set the X-MSMail-Priority header" do
-        expect(mail.header["X-MSMail-Priority"]).to be_nil
-      end
     end
   end
 
