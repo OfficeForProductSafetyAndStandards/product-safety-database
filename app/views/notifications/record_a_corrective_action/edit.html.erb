@@ -15,16 +15,29 @@
                  investigation: @notification,
                  allow_product_linking: true,
                  allow_business_linking: true %>
-      <% file_field = capture do %>
-        <%= f.hidden_field :existing_document_file_id %>
-        <%= render "related_attachment_fields", form: f, file_blob: @file_blob, attachment_name: :file %>
-      <% end %>
-      <%= f.hidden_field :related_file, value: nil %>
-      <% remove_file_text = @corrective_action_form.related_file? ? "Remove attached file" : "No" %>
+      <%= f.hidden_field :existing_document_file_id %>
       <%= f.govuk_radio_buttons_fieldset :related_file, legend: { text: "Are there any files related to the action?", size: "m" } do %>
         <%= f.govuk_radio_button :related_file, true, label: { text: "Yes" }, checked: @corrective_action_form.document.present?, link_errors: true do %>
-          <%= file_field %>
+          <% if @corrective_action_form.document.present? %>
+            <%= f.hidden_field :document, value: @corrective_action_form.existing_document_file_id %>
+            <% if @corrective_action_form.document.is_a?(ActiveStorage::Blob) %>
+              <p id="current-attachment-details">
+                Currently selected file:
+                <%= link_to "#{@corrective_action_form.document.filename.to_s} (opens in new tab)", @corrective_action_form.document, class: "govuk-link", target: "_blank", rel: "noreferrer noopener" %>
+              </p>
+            <% else %>
+              <p id="current-attachment-details">
+                File attached
+              </p>
+            <% end %>
+            <%= govuk_details(summary_text: "Replace this file") do %>
+              <%= f.govuk_file_field :document, label: nil, hint: { text: "If you have multiple files, compress them in a zip file." } %>
+            <% end %>
+          <% else %>
+            <%= f.govuk_file_field :document, label: nil, hint: { text: "If you have multiple files, compress them in a zip file." } %>
+          <% end %>
         <% end %>
+        <% remove_file_text = @corrective_action_form.related_file? ? "Remove attached file" : "No" %>
         <%= f.govuk_radio_button :related_file, false, label: { text: remove_file_text } %>
       <% end %>
       <%= f.govuk_submit("Update corrective action") %>
