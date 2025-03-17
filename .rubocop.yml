@@ -49,3 +49,9 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/MultipleExpectations:
   Max: 2
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - staging
+    - production

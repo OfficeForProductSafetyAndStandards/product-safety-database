@@ -68,7 +68,28 @@ module ProductSafetyDatabase
 
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
 
-    config.secondary_authentication_enabled = ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
+    # In staging, we need a way to temporarily disable 2FA for load testing
+    # while maintaining it enabled by default for security
+    if Rails.env.staging?
+      # Start with 2FA enabled for security by default
+      config.secondary_authentication_enabled = true
+
+      # Use method aliasing to maintain the original accessor while providing
+      # dynamic Flipper-based control once the app is fully initialized
+      class << config
+        alias_method :original_secondary_authentication_enabled, :secondary_authentication_enabled
+
+        def secondary_authentication_enabled
+          # Fall back to original value during app boot before Flipper is available
+          return original_secondary_authentication_enabled unless defined?(Flipper)
+
+          Flipper.enabled?(:two_factor_authentication)
+        end
+      end
+    else
+      config.secondary_authentication_enabled = ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
+    end
+
     config.whitelisted_2fa_code = ENV["WHITELISTED_2FA_CODE"]
     config.vcap_application = ENV["VCAP_APPLICATION"]
     config.two_factor_attempts = 10
