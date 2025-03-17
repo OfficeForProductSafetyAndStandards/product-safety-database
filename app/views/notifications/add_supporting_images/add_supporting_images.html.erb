@@ -21,10 +21,10 @@
       <%= f.govuk_file_field :file_upload, label: nil, hint: { text: "Acceptable file formats: GIF, JPEG, PNG, WEBP or HEIC/HEIF. Maximum file size: 100MB." } %>
       <%= f.govuk_submit "Upload image", secondary: true %>
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-      <% if @notification.image_uploads.present? %>
+      <% if @notification.virus_free_images.present? %>
         <%=
           govuk_summary_list do |summary_list|
-            @notification.image_uploads.each do |image_upload|
+            @notification.virus_free_images.each do |image_upload|
               summary_list.with_row do |row|
                 row.with_key(text: sanitize(image_upload.file_upload.filename.to_s))
                 row.with_action(text: "View", href: url_for(image_upload.file_upload), visually_hidden_text: "supporting image", html_attributes: { target: "_blank", rel: "noreferrer noopener" })
