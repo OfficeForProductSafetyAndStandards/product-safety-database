@@ -151,9 +151,9 @@ GEM
     ast (2.4.2)
     attr_extras (7.1.0)
     awesome_print (1.9.2)
-    aws-eventstream (1.3.1)
-    aws-partitions (1.1054.0)
-    aws-sdk-core (3.219.0)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1068.0)
+    aws-sdk-core (3.220.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -166,7 +166,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3control (1.103.0)
+    aws-sdk-s3control (1.104.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.11.0)
@@ -291,11 +291,11 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    govuk-components (5.8.0)
+    govuk-components (5.9.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
       view_component (>= 3.18, < 3.22)
-    govuk_design_system_formbuilder (5.8.0)
+    govuk_design_system_formbuilder (5.9.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -377,7 +377,7 @@ GEM
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.8)
-    minitest (5.25.4)
+    minitest (5.25.5)
     msgpack (1.7.2)
     multi_json (1.15.0)
     mutex_m (0.3.0)
@@ -393,7 +393,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.3)
+    nokogiri (1.18.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     notifications-ruby-client (6.2.0)
@@ -420,7 +420,7 @@ GEM
     pdf-core (0.10.0)
     pg (1.5.9)
     pg (1.5.9-x64-mingw-ucrt)
-    phonelib (0.10.5)
+    phonelib (0.10.6)
     pp (0.6.2)
       prettyprint
     prawn (2.5.0)
@@ -578,7 +578,7 @@ GEM
     rswag-ui (2.16.0)
       actionpack (>= 5.2, < 8.1)
       railties (>= 5.2, < 8.1)
-    rubocop (1.73.2)
+    rubocop (1.74.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -589,14 +589,15 @@ GEM
       rubocop-ast (>= 1.38.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.38.1)
+    rubocop-ast (1.39.0)
       parser (>= 3.3.1.0)
-    rubocop-capybara (2.21.0)
-      rubocop (~> 1.41)
-    rubocop-govuk (5.0.9)
-      rubocop (= 1.73.2)
-      rubocop-ast (= 1.38.1)
-      rubocop-capybara (= 2.21.0)
+    rubocop-capybara (2.22.1)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-govuk (5.1.0)
+      rubocop (= 1.74.0)
+      rubocop-ast (= 1.39.0)
+      rubocop-capybara (= 2.22.1)
       rubocop-rails (= 2.30.3)
       rubocop-rake (= 0.7.1)
       rubocop-rspec (= 3.5.0)
@@ -652,14 +653,14 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sentry-rails (5.22.4)
+    sentry-rails (5.23.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.22.4)
-    sentry-ruby (5.22.4)
+      sentry-ruby (~> 5.23.0)
+    sentry-ruby (5.23.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-sidekiq (5.22.4)
-      sentry-ruby (~> 5.22.4)
+    sentry-sidekiq (5.23.0)
+      sentry-ruby (~> 5.23.0)
       sidekiq (>= 3.0)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
@@ -703,7 +704,7 @@ GEM
       tilt (~> 2.0)
       yard (~> 0.9, >= 0.9.24)
       yard-solargraph (~> 0.1)
-    spring (4.2.1)
+    spring (4.3.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (4.2.1)
@@ -796,7 +797,7 @@ DEPENDENCIES
   active_storage_validations (~> 1.4.0)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.182)
-  aws-sdk-s3control (~> 1.103)
+  aws-sdk-s3control (~> 1.104)
   bootsnap
   byebug (~> 11.1)
   capybara
@@ -818,9 +819,9 @@ DEPENDENCIES
   flipper
   flipper-active_record
   flipper-ui
-  govuk-components (~> 5.8)
+  govuk-components (~> 5.9)
   govuk-design-system-rails (~> 0.10.5)!
-  govuk_design_system_formbuilder (~> 5.8)
+  govuk_design_system_formbuilder (~> 5.9)
   govuk_notify_rails
   image_processing
   interactor
@@ -842,7 +843,7 @@ DEPENDENCIES
   paper_trail
   parallel_tests (~> 5.1.0)
   pg (~> 1.5)
-  phonelib (~> 0.10.5)
+  phonelib (~> 0.10.6)
   prawn (~> 2.5)
   prawn-table (~> 0.2)
   prism!
@@ -866,7 +867,7 @@ DEPENDENCIES
   rswag-api
   rswag-specs
   rswag-ui
-  rubocop (~> 1.73)
+  rubocop (~> 1.74)
   rubocop-govuk (~> 5.0)
   rubocop-performance (~> 1.24)
   rubocop-rspec (~> 3.0)
@@ -884,7 +885,7 @@ DEPENDENCIES
   simplecov-console
   simplecov-lcov
   solargraph (~> 0.52)
-  spring (~> 4.2)
+  spring (~> 4.3)
   spring-commands-rspec (~> 1.0)
   sprockets
   sprockets-rails
