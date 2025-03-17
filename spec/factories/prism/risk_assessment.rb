@@ -26,7 +26,7 @@ FactoryBot.define do
         create(:prism_associated_product, risk_assessment: risk_assessment, product: product)
       end
     end
-    
+
     trait :serious_risk do
       risk_type { "serious_risk" }
       tasks_status do
