@@ -10,7 +10,7 @@
         <p class="govuk-body-l"><%= @product.name %></p>
       </div>
       <h2 class="govuk-heading-m">Related risk assessments</h2>
-      <% if @related_prism_risk_assessments&.size.positive? %>
+      <% if @related_prism_risk_assessments.present? %>
         <p class="govuk-body">Select a related risk assessment to add to the notification. If you find that the assessment doesn't fit your notification, you have the choice to either start a new assessment or attach one you've previously created.</p>
         <table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table--borders">
           <caption class="govuk-table__caption govuk-visually-hidden">PRISM risk assessments: a simple data table.</caption>
@@ -39,7 +39,7 @@
                   <a href="<%= prism.view_submitted_assessment_risk_assessment_tasks_path(prism_risk_assessment) %>" class="govuk-link">View<span class="govuk-visually-hidden"> assessment</span></a>
                 </td>
                 <td class="govuk-table__cell">
-                  <%= form.govuk_submit "Add", value: prism_risk_assessment.id %>
+                  <%= form.govuk_submit("Add", name: "prism_risk_assessment_id", value: prism_risk_assessment.id, class: "govuk-!-margin-bottom-0") %>
                 </td>
               </tr>
             <% end %>

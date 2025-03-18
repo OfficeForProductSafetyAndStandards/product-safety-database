@@ -13,7 +13,7 @@
       </ul>
     <% end %>
     <h2 class="govuk-heading-m">Related risk assessments</h2>
-      <% if @related_prism_risk_assessments.size.positive? %>
+      <% if @related_prism_risk_assessments.present? %>
         <%= form_with url: with_product_notification_create_index_path(@notification, step: "add_risk_assessments", investigation_product_id: @investigation_product.id), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
           <p class="govuk-body">Select a related risk assessment to add to the notification.</p>
           <table class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table--borders">
