@@ -21,6 +21,8 @@ private
       attachment.purge
       if attachment.record_type == "Activity"
         Activity.find(attachment.record_id).destroy!
+      elsif attachment.record_type == "ImageUpload"
+        ImageUpload.find(attachment.record_id).destroy!
       end
     end
   end

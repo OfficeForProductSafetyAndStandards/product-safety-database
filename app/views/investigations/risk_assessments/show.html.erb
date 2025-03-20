@@ -63,8 +63,12 @@
   </div>
   <div class="govuk-grid-column-one-third">
     <h2 class="govuk-heading-m">Attachment</h2>
-    <p class="govuk-body"><%= link_to @risk_assessment&.risk_assessment_file&.filename, @risk_assessment&.risk_assessment_file, class: "govuk-link" %></p>
-
+    
+    <% if @risk_assessment&.risk_assessment_file&.attached? %>
+      <p class="govuk-body">
+        <%= link_to @risk_assessment.risk_assessment_file.filename, @risk_assessment.risk_assessment_file, class: "govuk-link" %>
+      </p>
+    <% end %>
     <%= document_placeholder(@risk_assessment&.risk_assessment_file) %>
   </div>
 </div>
