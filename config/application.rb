@@ -68,22 +68,31 @@ module ProductSafetyDatabase
 
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
 
-    # In staging, we need a way to temporarily disable 2FA for load testing
-    # while maintaining it enabled by default for security
-    if Rails.env.staging?
+    # Detect if we're in the staging CloudFoundry space regardless of Rails.env
+    staging_space = ENV["VCAP_APPLICATION"].to_s.include?("staging")
+
+    # Use Flipper for 2FA in the staging space, regardless of Rails environment
+    if Rails.env.staging? || (Rails.env.production? && staging_space)
       # Start with 2FA enabled for security by default
       config.secondary_authentication_enabled = true
 
-      # Use method aliasing to maintain the original accessor while providing
-      # dynamic Flipper-based control once the app is fully initialized
+      # Override the accessor method to use Flipper
       class << config
         alias_method :original_secondary_authentication_enabled, :secondary_authentication_enabled
 
         def secondary_authentication_enabled
-          # Fall back to original value during app boot before Flipper is available
           return original_secondary_authentication_enabled unless defined?(Flipper)
 
           Flipper.enabled?(:two_factor_authentication)
+        end
+      end
+
+      # Ensure Rails.configuration also returns the correct value
+      class << Rails
+        unless method_defined?(:configuration)
+          def configuration
+            application.config
+          end
         end
       end
     else
