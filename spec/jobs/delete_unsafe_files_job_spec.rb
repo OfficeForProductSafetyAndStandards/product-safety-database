@@ -1,169 +1,162 @@
 require "rails_helper"
 
-# TODO: Refactor this test.
 RSpec.describe DeleteUnsafeFilesJob do
   describe "#perform", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-    subject(:job) { described_class.new }
+    subject(:perform_job) { job.perform }
 
+    let(:job) { described_class.new }
     let(:user) { create(:user) }
 
-    context "when there are unsafe files" do
+    RSpec.shared_context "with unsafe blob" do
       before do
         delivered_emails.clear
-      end
-
-      context "when blob is attached" do
-        context "when blob is attached to an activity" do
-          let(:investigation) { create(:allegation) }
-          let!(:activity) { create(:audit_activity_test_result, :with_document, investigation:) }
-
-          before do
-            delivered_emails.clear
-          end
-          # rubocop:disable RSpec/MultipleExpectations
-          # rubocop:disable RSpec/ExampleLength
-
-          context "when the blob has a created_by field in the metadata" do
-            before do
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false, created_by: user.id }))
-            end
-
-            it "deletes document, blob and does not send email" do
-              expect(ActiveStorage::Attachment.count).to eq 1
-              expect(ActiveStorage::Blob.count).to eq 1
-              expect(Activity.where(type: activity.type).count).to eq 1
-
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false }))
-
-              job.perform
-
-              expect(ActiveStorage::Attachment.count).to eq 0
-              expect(ActiveStorage::Blob.count).to eq 0
-              expect(Activity.where(type: activity.type).count).to eq 0
-
-              email = delivered_emails.last
-              expect(email).to be_nil
-            end
-          end
-
-          context "when the blob does not have a created_by field in the metadata" do
-            before do
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false }))
-            end
-
-            it "deletes document, blob and does not send email" do
-              expect(ActiveStorage::Attachment.count).to eq 1
-              expect(ActiveStorage::Blob.count).to eq 1
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false }))
-
-              job.perform
-
-              expect(ActiveStorage::Attachment.count).to eq 0
-              expect(ActiveStorage::Blob.count).to eq 0
-
-              email = delivered_emails.last
-              expect(email).to be_nil
-            end
-          end
-        end
-
-        context "when blob is not attached to an activity" do
-          before do
-            create(:product, :with_document)
-          end
-
-          context "when the blob has a created_by field in the metadata" do
-            before do
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false, created_by: user.id }))
-            end
-
-            it "deletes document, blob and does send email" do
-              expect(ActiveStorage::Attachment.count).to eq 1
-              expect(ActiveStorage::Blob.count).to eq 1
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false }))
-
-              job.perform
-
-              expect(ActiveStorage::Attachment.count).to eq 0
-              expect(ActiveStorage::Blob.count).to eq 0
-
-              email = delivered_emails.last
-              expect(email.recipient).to eq user.email
-              expect(email.action_name).to eq "unsafe_attachment"
-            end
-          end
-
-          context "when the blob does not have a created_by field in the metadata" do
-            before do
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false }))
-            end
-
-            it "deletes document, blob and does not send email" do
-              expect(ActiveStorage::Attachment.count).to eq 1
-              expect(ActiveStorage::Blob.count).to eq 1
-              blob = ActiveStorage::Blob.first
-              blob.update!(metadata: blob.metadata.merge({ safe: false }))
-
-              job.perform
-
-              expect(ActiveStorage::Attachment.count).to eq 0
-              expect(ActiveStorage::Blob.count).to eq 0
-
-              email = delivered_emails.last
-              expect(email).to be_nil
-            end
-          end
-        end
-      end
-
-      context "when blob is not attached" do
-        let!(:product) { create(:product, :with_document) }
-
-        before do
-          blob = ActiveStorage::Blob.first
-          blob.update!(metadata: blob.metadata.merge({ safe: false }))
-        end
-
-        it "deletes blob and does not send email" do
-          product.documents.detach
-          expect(ActiveStorage::Attachment.count).to eq 0
-          expect(ActiveStorage::Blob.count).to eq 1
-
-          job.perform
-
-          expect(ActiveStorage::Blob.count).to eq 0
-
-          email = delivered_emails.last
-          expect(email).to be_nil
-        end
+        blob.update!(metadata: blob.metadata.merge({ safe: false }.merge(created_by_metadata)))
       end
     end
 
-    context "when there are no unsafe files" do
-      before do
-        create(:product, :with_document)
+    RSpec.shared_examples "deletes unsafe content" do
+      it "deletes the attachment" do
+        expect { perform_job }.to change(ActiveStorage::Attachment, :count).by(-1)
       end
 
-      context "when the blob has a created_by field in the metadata" do
-        it "does not delete any blobs, attachments or send any emails" do
-          expect(ActiveStorage::Attachment.count).to eq 1
-          expect(ActiveStorage::Blob.count).to eq 1
+      it "deletes the blob" do
+        expect { perform_job }.to change(ActiveStorage::Blob, :count).by(-1)
+      end
+    end
 
-          job.perform
+    RSpec.shared_examples "keeps files intact" do
+      it "maintains existing attachments" do
+        expect { perform_job }.not_to change(ActiveStorage::Attachment, :count)
+      end
 
-          expect(ActiveStorage::Attachment.count).to eq 1
-          expect(ActiveStorage::Blob.count).to eq 1
+      it "maintains existing blobs" do
+        expect { perform_job }.not_to change(ActiveStorage::Blob, :count)
+      end
+
+      it "sends no emails" do
+        perform_job
+        expect(delivered_emails).to be_empty
+      end
+    end
+
+    context "when blob is attached to an activity" do
+      let(:investigation) { create(:allegation) }
+      let!(:activity) { create(:audit_activity_test_result, :with_document, investigation:) }
+      let(:blob) { ActiveStorage::Blob.first }
+
+      context "when blob has created_by metadata" do
+        let(:created_by_metadata) { { created_by: user.id } }
+
+        include_context "with unsafe blob"
+
+        include_examples "deletes unsafe content"
+
+        it "deletes the activity" do
+          expect { perform_job }.to change(Activity, :count).by(-1)
+          expect { activity.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it "does not send email" do
+          perform_job
+          expect(delivered_emails.last).to be_nil
         end
       end
-      # rubocop:enable RSpec/MultipleExpectations
-      # rubocop:enable RSpec/ExampleLength
+
+      context "when blob has no created_by metadata" do
+        let(:created_by_metadata) { {} }
+
+        include_context "with unsafe blob"
+        include_examples "deletes unsafe content"
+      end
+    end
+
+    context "with unsafe unattached blob" do
+      let!(:product) { create(:product, :with_document) }
+
+      before do
+        delivered_emails.clear
+        blob = ActiveStorage::Blob.first
+        blob.update!(metadata: { safe: false })
+        product.documents.detach
+      end
+
+      it "deletes the blob" do
+        expect { perform_job }.to change(ActiveStorage::Blob, :count).by(-1)
+      end
+
+      it "sends no email" do
+        perform_job
+        expect(delivered_emails).to be_empty
+      end
+    end
+
+    context "with safe attached blob" do
+      before do
+        create(:product, :with_document)
+        delivered_emails.clear
+      end
+
+      include_examples "keeps files intact"
+    end
+
+    context "with safe unattached blob" do
+      before do
+        product = create(:product, :with_document)
+        product.documents.detach
+        delivered_emails.clear
+      end
+
+      include_examples "keeps files intact"
+    end
+  end
+
+  describe "#delete_attachments", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+    subject(:delete_attachments) { job.send(:delete_attachments, attachments, user) }
+
+    let(:job) { described_class.new }
+    let(:user) { create(:user) }
+    let(:mailer_double) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
+    let(:notify_mailer) { class_spy(NotifyMailer, unsafe_attachment: mailer_double) }
+
+    before do
+      allow(NotifyMailer).to receive(:unsafe_attachment).and_return(mailer_double)
+      allow(mailer_double).to receive(:deliver_later)
+    end
+
+    context "when attachment belongs to an ImageUpload" do
+      let!(:image_upload) { create(:image_upload) }
+      let!(:attachments) { ActiveStorage::Attachment.where(record: image_upload) }
+
+      it "deletes the image upload" do
+        expect { delete_attachments }.to change(ImageUpload, :count).by(-1)
+      end
+
+      it "deletes the attachment" do
+        expect { delete_attachments }.to change(ActiveStorage::Attachment, :count).by(-1)
+        expect(ActiveStorage::Attachment.exists?(attachments.first.id)).to be false
+      end
+
+      it "sends email notification" do
+        delete_attachments
+        expect(NotifyMailer).to have_received(:unsafe_attachment)
+          .with(user: user, record_type: "ImageUpload", id: image_upload.id)
+      end
+    end
+
+    context "when user is nil" do
+      let(:user) { nil }
+      let!(:image_upload) { create(:image_upload) }
+      let!(:attachments) { ActiveStorage::Attachment.where(record: image_upload) }
+
+      it "deletes the attachment" do
+        expect { delete_attachments }.to change(ActiveStorage::Attachment, :count).by(-1)
+        expect(ActiveStorage::Attachment.exists?(attachments.first.id)).to be false
+      end
+
+      it "does not send email notification" do
+        expect(NotifyMailer).not_to have_received(:unsafe_attachment)
+        delete_attachments
+      end
     end
   end
 end
