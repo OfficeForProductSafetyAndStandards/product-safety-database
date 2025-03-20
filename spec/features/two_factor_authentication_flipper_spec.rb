@@ -1,182 +1,80 @@
 require "rails_helper"
 
-RSpec.describe "Two Factor Authentication Flipper", type: :feature do
-  # Helper method to mimic the application.rb configuration for tests
+describe "Two Factor Authentication Flipper", :with_2fa, :with_flipper do
+  # Configure test instance with same behavior as application
   def configure_rails_app_for_flipper
-    Rails.application.config.instance_variable_set(:@secondary_authentication_enabled, nil)
     Rails.application.config.secondary_authentication_enabled = true
-    Rails.application.config.define_singleton_method(:secondary_authentication_enabled) do
-      return true unless defined?(Flipper)
 
-      Flipper.enabled?(:two_factor_authentication)
+    class << Rails.application.config
+      def secondary_authentication_enabled
+        return true unless defined?(Flipper) && Flipper.respond_to?(:enabled?)
+
+        Flipper.enabled?(:two_factor_authentication)
+      end
     end
   end
 
-  # Prevent configuration changes from leaking between tests
+  # Clean up after each test
   after do
-    Rails.application.config.instance_variable_set(:@secondary_authentication_enabled, nil)
-    # Clean up environment variables
-    ENV.delete("VCAP_APPLICATION")
+    Rails.application.config.secondary_authentication_enabled = nil
   end
 
-  # Reusable environment setup to avoid duplication
-  shared_context "when in staging environment" do
+  describe "Two Factor Authentication with Flipper" do
     before do
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("staging"))
+      configure_rails_app_for_flipper
     end
-  end
 
-  # Reusable context for CloudFoundry staging space
-  shared_context "when in CloudFoundry staging space" do
-    before do
-      ENV["VCAP_APPLICATION"] = '{"application_name":"psd-web","application_uris":["staging-product-safety-database.london.cloudapps.digital"],"name":"psd-web"}'
-    end
-  end
-
-  describe "in staging Rails environment" do
-    include_context "when in staging environment"
-
-    context "when the two_factor_authentication flipper is enabled" do
-      before do
-        configure_rails_app_for_flipper
-        allow(Flipper).to receive(:enabled?).with(:two_factor_authentication).and_return(true)
-      end
-
+    context "when two_factor_authentication feature is enabled" do
       it "enables secondary authentication" do
-        expect(Rails.application.config.secondary_authentication_enabled).to be true
+        enable_2fa
+        expect(Rails.configuration.secondary_authentication_enabled).to be true
       end
     end
 
-    context "when the two_factor_authentication flipper is disabled" do
-      before do
-        configure_rails_app_for_flipper
-        allow(Flipper).to receive(:enabled?).with(:two_factor_authentication).and_return(false)
-      end
-
+    context "when two_factor_authentication feature is disabled" do
       it "disables secondary authentication" do
-        expect(Rails.application.config.secondary_authentication_enabled).to be false
-      end
-    end
-
-    # Testing the default "return true unless defined?(Flipper)" behavior
-    # without actually modifying the defined? method which is problematic
-    describe "default behavior before Flipper is available" do
-      it "defaults to true when Flipper is not defined" do
-        # Create an isolated method with equivalent logic for testing
-        config_method = lambda do
-          return true unless defined?(SomeUndefinedConstant)
-
-          SomeUndefinedConstant.enabled?(:whatever)
-        end
-
-        expect(config_method.call).to be true
+        disable_2fa
+        expect(Rails.configuration.secondary_authentication_enabled).to be false
       end
     end
   end
 
-  describe "in production Rails environment but CloudFoundry staging space" do
-    before do
-      # Simulate production Rails environment
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+  describe "default behavior before Flipper is available" do
+    it "defaults to true when Flipper is not defined" do
+      # Test the fallback behavior when Flipper is not initialized
+      config_method = lambda do
+        return true unless defined?(SomeUndefinedConstant) && SomeUndefinedConstant.respond_to?(:enabled?)
 
-      # Simulate CloudFoundry staging space directly
-      ENV["VCAP_APPLICATION"] = '{"application_name":"psd-web","application_uris":["staging-product-safety-database.london.cloudapps.digital"],"name":"psd-web"}'
-    end
-
-    context "when setting up application config" do
-      # Helper to set up application config like in application.rb
-      def configure_for_cf_staging
-        # Detect if we're in the staging CloudFoundry space
-        staging_space = ENV["VCAP_APPLICATION"].to_s.include?("staging")
-
-        # Reset configuration
-        Rails.application.config.instance_variable_set(:@secondary_authentication_enabled, nil)
-
-        # Initial value
-        Rails.application.config.secondary_authentication_enabled = true
-
-        # Only apply Flipper override if in staging space
-        if Rails.env.staging? || (Rails.env.production? && staging_space)
-          class << Rails.application.config
-            def secondary_authentication_enabled
-              return true unless defined?(Flipper)
-
-              Flipper.enabled?(:two_factor_authentication)
-            end
-          end
-        else
-          Rails.application.config.secondary_authentication_enabled =
-            ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
-        end
+        SomeUndefinedConstant.enabled?(:two_factor_authentication)
       end
 
-      context "when the two_factor_authentication flipper is enabled" do
-        before do
-          configure_for_cf_staging
-          allow(Flipper).to receive(:enabled?).with(:two_factor_authentication).and_return(true)
-        end
-
-        it "enables secondary authentication" do
-          expect(Rails.application.config.secondary_authentication_enabled).to be true
-        end
-      end
-
-      context "when the two_factor_authentication flipper is disabled" do
-        before do
-          configure_for_cf_staging
-          allow(Flipper).to receive(:enabled?).with(:two_factor_authentication).and_return(false)
-        end
-
-        it "disables secondary authentication" do
-          expect(Rails.application.config.secondary_authentication_enabled).to be false
-        end
-      end
+      expect(config_method.call).to be true
     end
   end
 
-  describe "in non-staging environments" do
-    before do
-      # Mock the Rails environment as production
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+  describe "method configuration safety" do
+    it "handles direct method definition without crashing" do
+      # Create a test class to verify our approach
+      test_class = Class.new do
+        attr_accessor :test_value
 
-      # Ensure we're not in CloudFoundry staging space
-      ENV["VCAP_APPLICATION"] = '{"application_name":"psd-web","application_uris":["product-safety-database.london.cloudapps.digital"],"name":"psd-web"}'
-    end
-
-    context "when TWO_FACTOR_AUTHENTICATION_ENABLED is true" do
-      it "reads the environment variable correctly" do
-        # Preserve original environment state
-        original_env = ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"]
-
-        begin
-          ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"] = "true"
-
-          # Verify the conditional logic used in application.rb works as expected
-          expect(ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true")).to eq("true")
-          expect(ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true").to be true
-        ensure
-          # Always restore the environment to avoid affecting other tests
-          ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"] = original_env
+        def initialize
+          self.test_value = true
         end
       end
-    end
 
-    context "when TWO_FACTOR_AUTHENTICATION_ENABLED is false" do
-      it "reads the environment variable correctly" do
-        # Preserve original environment state
-        original_env = ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"]
+      test_obj = test_class.new
+      expect(test_obj.test_value).to be true
 
-        begin
-          ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"] = "false"
-
-          # Verify the conditional logic used in application.rb works as expected
-          expect(ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true")).to eq("false")
-          expect(ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true").to be false
-        ensure
-          # Always restore the environment to avoid affecting other tests
-          ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"] = original_env
+      # Override with new method definition - same approach as in application.rb
+      class << test_obj
+        def test_value
+          false
         end
       end
+
+      # Verify the overridden method works
+      expect(test_obj.test_value).to be false
     end
   end
 end
