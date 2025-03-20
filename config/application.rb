@@ -68,35 +68,18 @@ module ProductSafetyDatabase
 
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
 
-    # Detect if we're in the staging CloudFoundry space regardless of Rails.env
-    staging_space = ENV["VCAP_APPLICATION"].to_s.include?("staging")
+    # Always default to secure configuration - 2FA enabled
+    config.secondary_authentication_enabled = true
 
-    # Use Flipper for 2FA in the staging space, regardless of Rails environment
-    if Rails.env.staging? || (Rails.env.production? && staging_space)
-      # Start with 2FA enabled for security by default
-      config.secondary_authentication_enabled = true
+    # Define method that dynamically checks Flipper at runtime
+    class << config
+      def secondary_authentication_enabled
+        # Security-first approach: if Flipper isn't available, default to requiring 2FA
+        return true unless defined?(Flipper) && Flipper.respond_to?(:enabled?)
 
-      # Override the accessor method to use Flipper
-      class << config
-        alias_method :original_secondary_authentication_enabled, :secondary_authentication_enabled
-
-        def secondary_authentication_enabled
-          return original_secondary_authentication_enabled unless defined?(Flipper)
-
-          Flipper.enabled?(:two_factor_authentication)
-        end
+        # Use Flipper feature flag to determine if 2FA should be enabled
+        Flipper.enabled?(:two_factor_authentication)
       end
-
-      # Ensure Rails.configuration also returns the correct value
-      class << Rails
-        unless method_defined?(:configuration)
-          def configuration
-            application.config
-          end
-        end
-      end
-    else
-      config.secondary_authentication_enabled = ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
     end
 
     config.whitelisted_2fa_code = ENV["WHITELISTED_2FA_CODE"]
