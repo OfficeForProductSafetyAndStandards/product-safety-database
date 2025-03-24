@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  url: <%= ENV.fetch('DATABASE_URL', 'postgres://postgres@localhost:5432') %>
+  url: <%= ENV['DATABASE_URL'] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 development:
   <<: *default
