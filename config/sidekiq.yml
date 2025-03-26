@@ -31,9 +31,9 @@
     generate_rollups_job:
       cron: "45 23 * * *"
       class: "GenerateRollupsJob"
-    soft_delete_draft_notifications_job:
+    hard_delete_draft_notifications_job:
       cron: "30 1 * * *"
-      class: "SoftDeleteDraftNotificationsJob"
+      class: "HardDeleteDraftNotificationsJob"
     send_draft_notification_reminder_job:
       cron: "0 5 * * *"
-      class: "SendReminderEmailDraftNotificationsJob" 
+      class: "SendReminderEmailDraftNotificationsJob"

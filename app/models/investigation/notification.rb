@@ -66,24 +66,18 @@ class Investigation < ApplicationRecord
       AuditActivity::Investigation::AddCase
     end
 
-    def self.soft_delete_old_drafts!
-      Rails.logger.info "Starting to soft delete old draft notifications"
+    def self.hard_delete_old_drafts!
+      Rails.logger.info "Starting to hard delete old draft notifications"
       processed_count = 0
 
       old_drafts.find_each do |notification|
-        notification.mark_as_deleted!
-        notification.update!(deleted_by: "System")
-        AuditActivity::Investigation::AutomaticallyClosedCase.create!(
-          investigation: notification,
-          metadata: AuditActivity::Investigation::AutomaticallyClosedCase.build_metadata(notification)
-        )
-        notification.reindex
+        notification.destroy!
         processed_count += 1
       rescue StandardError => e
-        Rails.logger.error "Failed to soft delete notification #{notification.id}: #{e.message}"
+        Rails.logger.error "Failed to hard delete notification #{notification.id}: #{e.message}"
       end
 
-      Rails.logger.info "Completed soft deleting old draft notifications. Processed: #{processed_count}"
+      Rails.logger.info "Completed hard deleting old draft notifications. Processed: #{processed_count}"
     end
 
     def virus_free_images
