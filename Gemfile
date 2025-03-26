@@ -109,7 +109,7 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.13"
   gem "rubocop", "~> 1.74"
-  gem "rubocop-govuk", "~> 5.0"
+  gem "rubocop-govuk", "~> 5.1"
   gem "rubocop-performance", "~> 1.24"
   gem "rubocop-rspec", "~> 3.0", require: false
   gem "selenium-webdriver", "~> 4"
