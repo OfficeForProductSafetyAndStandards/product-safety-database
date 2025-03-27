@@ -1,0 +1,3 @@
+#!/bin/bash
+# Super-short script to start the Rails server with network access
+bin/dev-server "$@"
