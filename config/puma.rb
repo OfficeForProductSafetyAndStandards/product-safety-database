@@ -21,6 +21,11 @@ port ENV.fetch("PORT", 3000)
 #
 environment ENV.fetch("RAILS_ENV") { "development" }
 
+# In development, bind to all network interfaces for local network access
+if ENV.fetch("RAILS_ENV", "development") == "development"
+  bind ENV.fetch("BIND", "tcp://0.0.0.0:#{ENV.fetch('PORT', 3000)}")
+end
+
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 

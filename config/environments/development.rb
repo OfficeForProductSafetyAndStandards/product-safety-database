@@ -4,6 +4,9 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.hosts << ENV["PSD_HOST_SUPPORT"]
   config.hosts << ENV["PSD_HOST_REPORT"]
+  config.hosts << /[a-z0-9]+\.ngrok-free\.app/
+  config.hosts << /[0-9.]+/ # Allow IP addresses
+  config.hosts.clear # Allow requests from any domain in development
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
@@ -73,8 +76,24 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
+  # Configure asset host if specified
+  config.asset_host = ENV["ASSET_HOST"] if ENV["ASSET_HOST"].present?
+
+  # Use HTTP for URL generation in development
+  protocol = ENV.fetch("RAILS_PROTOCOL", "http")
+  host = ENV.fetch("PSD_HOST", "localhost")
+  port = ENV.fetch("PORT", 3000)
+
+  # Set default URL options without using lambdas
+  config.action_controller.default_url_options = {
+    host: host,
+    port: port,
+    protocol: protocol
+  }
+
   config.action_mailer.default_url_options = {
-    host: "localhost",
-    port: 3000
+    host: host,
+    port: port,
+    protocol: protocol
   }
 end
