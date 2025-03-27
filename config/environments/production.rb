@@ -1,4 +1,8 @@
 require "active_support/core_ext/integer/time"
+require "cf-app-utils"
+require "cgi"
+require "json"
+require "uri"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -107,4 +111,31 @@ Rails.application.configure do
     host: ENV["PSD_HOST"],
     protocol: "https"
   }
+
+  # Connection setup (GOV PaaS)
+  if ENV["VCAP_SERVICES"]
+    ENV["OPENSEARCH_URL"] = CF::App::Credentials.find_by_service_name("cosmetics-opensearch-1")["uri"]
+    ENV["DATABASE_URL"] = CF::App::Credentials.find_by_service_label("postgres")["uri"]
+    ENV["REDIS_URL"] = CF::App::Credentials.find_by_service_label("redis")["uri"]
+  end
+
+  # Connection setup (DBT Platform)
+  if ENV["COPILOT_ENVIRONMENT_NAME"]
+    if ENV["OPENSEARCH_URL"]
+      ENV["OPENSEARCH_URL"] = URI.parse(CGI.unescape(ENV["OPENSEARCH_URL"]))
+    end
+
+    if ENV["DATABASE_CREDENTIALS"]
+      database_credentials = JSON.parse(ENV["DATABASE_CREDENTIALS"])
+
+      engine = database_credentials["engine"]
+      username = database_credentials["username"]
+      password = database_credentials["password"]
+      host = database_credentials["host"]
+      port = database_credentials["port"]
+      dbname = database_credentials["dbname"]
+
+      ENV["DATABASE_URL"] = "#{engine}://#{username}:#{password}@#{host}:#{port}/#{dbname}"
+    end
+  end
 end
