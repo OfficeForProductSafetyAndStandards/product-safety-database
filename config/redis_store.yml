@@ -9,4 +9,4 @@ test:
   <<: *default
 
 production:
-  url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_name("psd-queue-6")["uri"] %>
+  <<: *default
