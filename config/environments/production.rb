@@ -114,9 +114,13 @@ Rails.application.configure do
 
   # Connection setup (GOV PaaS)
   if ENV["VCAP_SERVICES"]
-    ENV["OPENSEARCH_URL"] = CF::App::Credentials.find_by_service_name("cosmetics-opensearch-1")["uri"]
-    ENV["DATABASE_URL"] = CF::App::Credentials.find_by_service_label("postgres")["uri"]
-    ENV["REDIS_URL"] = CF::App::Credentials.find_by_service_label("redis")["uri"]
+    opensearch_service = CF::App::Credentials.find_by_service_name("psd-opensearch-1")
+    postgres_service = CF::App::Credentials.find_by_service_label("postgres")
+    redis_service = CF::App::Credentials.find_by_service_label("redis")
+
+    ENV["OPENSEARCH_URL"] = opensearch_service["uri"] if opensearch_service
+    ENV["DATABASE_URL"] = postgres_service["uri"] if postgres_service
+    ENV["REDIS_URL"] = redis_service["uri"] if redis_service
   end
 
   # Connection setup (DBT Platform)
