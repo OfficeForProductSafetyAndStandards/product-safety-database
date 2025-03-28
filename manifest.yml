@@ -33,7 +33,6 @@ applications:
     - psd-sidekiq-env
     - psd-two-factor-auth-env
     - psd-web-scout-env
-    - antivirus-auth-env
     - psd-redacted-export-env
     - psd-support-portal-env
     - psd-report-portal-env
