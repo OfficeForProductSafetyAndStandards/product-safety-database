@@ -68,7 +68,20 @@ module ProductSafetyDatabase
 
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
 
-    config.secondary_authentication_enabled = ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
+    # Always default to secure configuration - 2FA enabled
+    config.secondary_authentication_enabled = true
+
+    # Define method that dynamically checks Flipper at runtime
+    class << config
+      def secondary_authentication_enabled
+        # Security-first approach: if Flipper isn't available, default to requiring 2FA
+        return true unless defined?(Flipper) && Flipper.respond_to?(:enabled?)
+
+        # Use Flipper feature flag to determine if 2FA should be enabled
+        Flipper.enabled?(:two_factor_authentication)
+      end
+    end
+
     config.whitelisted_2fa_code = ENV["WHITELISTED_2FA_CODE"]
     config.vcap_application = ENV["VCAP_APPLICATION"]
     config.two_factor_attempts = 10

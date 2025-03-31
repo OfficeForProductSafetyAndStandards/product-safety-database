@@ -36,19 +36,29 @@ private
   end
 
   def add_product_to_sheets(product)
-    product.investigation_products.uniq(&:investigation_id).each do |investigation_product|
+    # Filter investigations once
+    valid_products_investigations = product.investigation_products.uniq(&:investigation_id).reject { |ip| draft_notifcation?(ip.investigation.decorate) }
+    valid_products_investigations_lookup = valid_products_investigations.map(&:investigation_id)
+
+    valid_products_investigations.each do |investigation_product|
       product_info_sheet.add_row(attributes_for_info_sheet(product, investigation_product:), types: :text)
     end
 
     product.test_results.sort.each do |test_result|
+      next unless valid_products_investigations_lookup.include?(test_result.investigation_id)
+
       test_results_sheet.add_row(attributes_for_test_results_sheet(product, test_result.decorate), types: :text)
     end
 
     product.risk_assessments.sort.each do |risk_assessment|
+      next unless valid_products_investigations_lookup.include?(risk_assessment.investigation_id)
+
       risk_assessments_sheet.add_row(attributes_for_risk_assessments_sheet(product, risk_assessment.decorate), types: :text)
     end
 
     product.corrective_actions.sort.each do |corrective_action|
+      next unless valid_products_investigations_lookup.include?(corrective_action.investigation_id)
+
       corrective_actions_sheet.add_row(attributes_for_corrective_actions_sheet(product, corrective_action.decorate), types: :text)
     end
   end
@@ -299,5 +309,11 @@ private
     return text if user.is_opss?
 
     "Restricted"
+  end
+
+  def draft_notifcation?(investigation)
+    return true if investigation.state == "draft" && investigation.type == "Investigation::Notification"
+
+    false
   end
 end

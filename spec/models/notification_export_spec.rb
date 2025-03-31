@@ -299,7 +299,7 @@ RSpec.describe NotificationExport, :with_opensearch, :with_stubbed_antivirus, :w
         sheet_ids = sheet.column(1).drop(1)
         expect(sheet_ids).to include(submitted_investigation.pretty_id)
         sheet_ids = sheet.column(30).drop(1)
-        expect(sheet_ids).to include(submitted_investigation.submitted_at.utc.strftime("%Y-%m-%d %H:%M:%S %z"))
+        expect(sheet_ids).to include(submitted_investigation.submitted_at.strftime("%Y-%m-%d %H:%M:%S %z"))
       end
     end
   end

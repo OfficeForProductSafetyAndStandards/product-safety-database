@@ -1,4 +1,8 @@
 require "active_support/core_ext/integer/time"
+require "cf-app-utils"
+require "cgi"
+require "json"
+require "uri"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -27,7 +31,7 @@ Rails.application.configure do
   # config.assets.css_compressor = :sass
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -107,4 +111,35 @@ Rails.application.configure do
     host: ENV["PSD_HOST"],
     protocol: "https"
   }
+
+  # Connection setup (GOV PaaS)
+  if ENV["VCAP_SERVICES"]
+    opensearch_service = CF::App::Credentials.find_by_service_name("psd-opensearch-1")
+    postgres_service = CF::App::Credentials.find_by_service_label("postgres")
+    redis_service = CF::App::Credentials.find_by_service_label("redis")
+
+    ENV["OPENSEARCH_URL"] = opensearch_service["uri"] if opensearch_service
+    ENV["DATABASE_URL"] = postgres_service["uri"] if postgres_service
+    ENV["REDIS_URL"] = redis_service["uri"] if redis_service
+  end
+
+  # Connection setup (DBT Platform)
+  if ENV["COPILOT_ENVIRONMENT_NAME"]
+    if ENV["OPENSEARCH_URL"]
+      ENV["OPENSEARCH_URL"] = URI.parse(CGI.unescape(ENV["OPENSEARCH_URL"]))
+    end
+
+    if ENV["DATABASE_CREDENTIALS"]
+      database_credentials = JSON.parse(ENV["DATABASE_CREDENTIALS"])
+
+      engine = database_credentials["engine"]
+      username = database_credentials["username"]
+      password = database_credentials["password"]
+      host = database_credentials["host"]
+      port = database_credentials["port"]
+      dbname = database_credentials["dbname"]
+
+      ENV["DATABASE_URL"] = "#{engine}://#{username}:#{password}@#{host}:#{port}/#{dbname}"
+    end
+  end
 end

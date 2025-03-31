@@ -1,7 +1,7 @@
 <h2 class="govuk-heading-m">Notifications</h2>
 <div style="text-align: left">
-  <% if @business.investigation_businesses.any? %>
-    <% @business.investigation_businesses.each do |investigation_business| %>
+  <% if @business.submitted_investigation_businesses.any? %>
+    <% @business.submitted_investigation_businesses.each do |investigation_business| %>
       <%=
         govuk_summary_list do |summary_list|
           investigation = investigation_business.investigation.decorate

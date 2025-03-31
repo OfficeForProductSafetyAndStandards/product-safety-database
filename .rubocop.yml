@@ -3,7 +3,7 @@ inherit_gem:
     - config/default.yml
     - config/rails.yml
 
-require:
+plugins:
   - rubocop-performance
   - rubocop-rspec
 
@@ -49,3 +49,13 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/MultipleExpectations:
   Max: 2
+
+Style/NumericLiterals:
+  Exclude:
+    - 'db/data_schema.rb'
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - staging
+    - production

@@ -19,9 +19,7 @@ class Collaboration < ApplicationRecord
         .order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name"))
     end
 
-    def changeable?
-      self.class.changeable?
-    end
+    delegate :changeable?, to: :class
 
     def self.changeable_classes
       descendants.select(&:changeable?)

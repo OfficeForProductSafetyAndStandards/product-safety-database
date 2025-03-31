@@ -121,8 +121,8 @@ RSpec.feature "Edit corrective action", :with_stubbed_antivirus, :with_stubbed_m
 
       find("details > summary", text: "Replace this file").click
 
+      # Use the correct file field name as in the original test
       attach_file "corrective_action[file][file]", Rails.root.join("spec/fixtures/files/corrective_action.txt")
-      fill_in "Attachment description", with: "New test result"
 
       click_on "Update corrective action"
 

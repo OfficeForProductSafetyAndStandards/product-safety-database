@@ -91,6 +91,34 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
     end
   end
 
+  scenario "displays only submitted notifications on business record page" do
+    business = create(:business)
+    # Create a draft notification linked to the business
+    draft_notification = create(:notification, user_title: "Draft notification title")
+    draft_notification.update_column(:state, "draft")
+    puts "Draft notification state: #{draft_notification.reload.state}"
+    create(:investigation_business, business: business, investigation: draft_notification)
+
+    # Create a submitted notification linked to the business
+    submitted_notification = create(:notification, user_title: "Submitted notification title")
+    submitted_notification.update_column(:state, "submitted")
+    puts "Submitted notification state: #{submitted_notification.reload.state}"
+    create(:investigation_business, business: business, investigation: submitted_notification)
+
+    visit business_path(business)
+
+    # Check that the tab header shows the correct count
+    expect(page).to have_link("Notifications (1)")
+
+    # Check that the submitted notification is displayed
+    expect(page).to have_text(submitted_notification.pretty_id)
+    expect(page).to have_text("Submitted notification title")
+
+    # Check that the draft notification is not displayed
+    expect(page).not_to have_text(draft_notification.pretty_id)
+    expect(page).not_to have_text("Draft notification title")
+  end
+
   scenario "search by business type" do
     visit all_businesses_path
     find("details#business-type").click

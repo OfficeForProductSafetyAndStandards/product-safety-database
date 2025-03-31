@@ -115,6 +115,37 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_antivirus, :
     expect(page).to have_link("old_risk_assessment.txt")
   end
 
+  scenario "Adding a corrective action with file upload" do
+    sign_in(user)
+    visit "/cases/#{notification.pretty_id}"
+    click_link "Add a corrective action"
+
+    expect(page).to have_current_path("/cases/#{notification.pretty_id}/corrective-actions/new")
+    expect(page).to have_selector("h1", text: "Record a corrective action")
+    expect(page).not_to have_error_messages
+    expect_to_have_notification_breadcrumbs
+
+    # Add a file attachment
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+    end
+
+    file_path = Rails.root.join("spec/fixtures/files/test_result.txt")
+    attach_file "corrective_action[file][file]", file_path
+    fill_in "Attachment description", with: "Test result file"
+
+    # Use the existing method to fill and submit the form
+    fill_and_submit_form
+
+    # Verify the corrective action was created successfully
+    expect_to_be_on_supporting_information_page(case_id: notification.pretty_id)
+    expect_to_have_notification_breadcrumbs
+
+    # Check that the file is listed
+    click_link CorrectiveAction.first.decorate.supporting_information_title
+    expect(page).to have_link("test_result.txt")
+  end
+
   def expect_confirmation_page_to_show_entered_data
     expect(page).to have_summary_item(key: "Action", value: CorrectiveAction.actions[action])
     expect(page).to have_summary_item(key: "Event date", value: "1 May 2020")

@@ -34,6 +34,16 @@ class Business < ApplicationRecord
   redacted_export_with :id, :added_by_user_id, :company_number, :created_at,
                        :legal_name, :trading_name, :updated_at
 
+  def submitted_investigation_businesses
+    investigation_businesses.reject do |ib|
+      ib.investigation.is_a?(Investigation::Notification) && ib.investigation.state == "draft"
+    end
+  end
+
+  def submitted_notifications_count
+    submitted_investigation_businesses.count
+  end
+
   def supporting_information
     corrective_actions + risk_assessments
   end

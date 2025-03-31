@@ -231,6 +231,14 @@ Rails.application.routes.draw do
             delete ":upload_id/remove", to: "add_supporting_documents#remove_upload"
           end
         end
+
+        # Routes for record_a_corrective_action
+        get "edit/record_a_corrective_action/:id", to: "record_a_corrective_action#edit", as: "edit_record_a_corrective_action"
+        put "edit/record_a_corrective_action/:id", to: "record_a_corrective_action#update"
+        patch "edit/record_a_corrective_action/:id", to: "record_a_corrective_action#update"
+
+        get "add/record_a_corrective_action", to: "record_a_corrective_action#new", as: "new_record_a_corrective_action"
+        post "add/record_a_corrective_action", to: "record_a_corrective_action#create"
       end
     end
 
