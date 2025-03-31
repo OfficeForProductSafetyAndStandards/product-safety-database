@@ -50,6 +50,10 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/MultipleExpectations:
   Max: 2
 
+Style/NumericLiterals:
+  Exclude:
+    - 'db/data_schema.rb'
+
 Rails/UnknownEnv:
   Environments:
     - development
