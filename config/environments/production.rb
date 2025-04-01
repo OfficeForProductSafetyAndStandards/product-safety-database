@@ -121,6 +121,10 @@ Rails.application.configure do
     ENV["OPENSEARCH_URL"] = opensearch_service["uri"] if opensearch_service
     ENV["DATABASE_URL"] = postgres_service["uri"] if postgres_service
     ENV["REDIS_URL"] = redis_service["uri"] if redis_service
+
+    # Set Redis URLs for session and queue services to support DBT platform migration
+    ENV["SESSION_URL"] ||= CF::App::Credentials.find_by_service_name("psd-session-6")["uri"] if CF::App::Credentials.find_by_service_name("psd-session-6")
+    ENV["QUEUE_URL"] ||= CF::App::Credentials.find_by_service_name("psd-queue-6")["uri"] if CF::App::Credentials.find_by_service_name("psd-queue-6")
   end
 
   # Connection setup (DBT Platform)
