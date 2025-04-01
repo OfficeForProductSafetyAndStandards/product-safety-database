@@ -5,8 +5,16 @@ Rails.application.load_tasks
 
 RSpec.describe "investigations:update_submitted_date", :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :opss_user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user]) }
-  let!(:investigation_with_nil_submitted_at) { create(:notification, submitted_at: nil, created_at: 1.day.ago) }
-  let!(:investigation_with_submitted_at) { create(:notification, submitted_at: Time.zone.now, created_at: 2.days.ago) }
+  let!(:investigation_with_submitted_at) do
+    travel_to(2.days.ago) do
+      create(:notification, submitted_at: 2.days.from_now)
+    end
+  end
+  let!(:investigation_with_nil_submitted_at) do
+    travel_to(1.day.ago) do
+      create(:notification, submitted_at: nil)
+    end
+  end
 
   before do
     # Clear the task before each test to ensure it can be re-invoked
