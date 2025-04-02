@@ -8,12 +8,15 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
       return { error: "No file provided" } if file.nil?
 
       begin
-        uri = URI(Rails.application.config.antivirus_url)
+        antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+        uri = URI(antivirus_url)
         req = Net::HTTP::Post.new(uri)
         req.basic_auth(ENV["ANTIVIRUS_USERNAME"], ENV["ANTIVIRUS_PASSWORD"])
+        req["Content-Type"] = "application/octet-stream"
+        req["filename"] = "file"
 
         File.open(file) do |f|
-          req.set_form([["file", f]], "multipart/form-data")
+          req.body = f.read
 
           response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: Rails.env.production?) do |http|
             http.request(req)
@@ -22,7 +25,7 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
           case response
           when Net::HTTPSuccess
             body = JSON.parse(response.body)
-            { safe: body["safe"] }
+            { safe: !body.fetch("infected", false) }
           else
             { error: "HTTP request failed with status #{response.code}" }
           end

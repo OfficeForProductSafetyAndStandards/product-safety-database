@@ -1,7 +1,7 @@
 RSpec.shared_context "with stubbed Antivirus API", shared_context: :metadata do
   before do
-    antivirus_url = Rails.application.config.antivirus_url
-    stubbed_response = JSON.generate(safe: true)
+    antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+    stubbed_response = JSON.generate(infected: false)
     stub_request(
       :any, /#{Regexp.quote(antivirus_url)}/
     ).to_return(
@@ -14,8 +14,8 @@ end
 
 RSpec.shared_context "with stubbed failing Antivirus API", shared_context: :metadata do
   before do
-    antivirus_url = Rails.application.config.antivirus_url
-    stubbed_response = JSON.generate(safe: false)
+    antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+    stubbed_response = JSON.generate(infected: true)
     stub_request(
       :any, /#{Regexp.quote(antivirus_url)}/
     ).to_return(
