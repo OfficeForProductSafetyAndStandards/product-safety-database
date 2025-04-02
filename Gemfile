@@ -77,7 +77,7 @@ gem "report_portal", path: "report_portal"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
-  gem "byebug", "~> 11.1"
+  gem "byebug", "~> 12.0"
   gem "dotenv-rails", "~> 3.1"
   gem "faker", "~> 3.5"
   gem "parallel_tests", "~> 5.1.0"
