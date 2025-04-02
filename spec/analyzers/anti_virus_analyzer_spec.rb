@@ -4,12 +4,12 @@ require "webmock/rspec"
 RSpec.describe AntiVirusAnalyzer do
   let(:blob) { create(:active_storage_blob, :with_file) }
   let(:analyzer) { described_class.new(blob) }
-  let(:antivirus_url) { "http://example.com/scan" }
+  let(:antivirus_url) { "http://example.com" }
+  let(:antivirus_scan_url) { "#{antivirus_url}/v2/scan-chunked" }
 
   before do
-    allow(Rails.application.config).to receive(:antivirus_url).and_return(antivirus_url)
-
     env_vars = {
+      "ANTIVIRUS_URL" => antivirus_url,
       "ANTIVIRUS_USERNAME" => "av",
       "ANTIVIRUS_PASSWORD" => "password",
       "TMPDIR" => "/tmp"
@@ -19,7 +19,14 @@ RSpec.describe AntiVirusAnalyzer do
       env_vars[key]
     end
 
-    stub_request(:post, antivirus_url).to_return(status: 200, body: { safe: true }.to_json)
+    stub_request(:post, antivirus_scan_url)
+      .with(
+        headers: {
+          "Content-Type" => "application/octet-stream",
+          "Filename" => "file"
+        }
+      )
+      .to_return(status: 200, body: { infected: false }.to_json)
   end
 
   describe ".accept?" do
@@ -44,11 +51,35 @@ RSpec.describe AntiVirusAnalyzer do
         it "returns the scan result" do
           expect(analyzer.metadata).to eq({ safe: true })
         end
+
+        context "when the file is infected" do
+          before do
+            stub_request(:post, antivirus_scan_url)
+              .with(
+                headers: {
+                  "Content-Type" => "application/octet-stream",
+                  "Filename" => "file"
+                }
+              )
+              .to_return(status: 200, body: { infected: true }.to_json)
+          end
+
+          it "returns file as unsafe" do
+            expect(analyzer.metadata).to eq({ safe: false })
+          end
+        end
       end
 
       context "when request fails" do
         before do
-          stub_request(:post, antivirus_url).to_return(status: 500)
+          stub_request(:post, antivirus_scan_url)
+            .with(
+              headers: {
+                "Content-Type" => "application/octet-stream",
+                "Filename" => "file"
+              }
+            )
+            .to_return(status: 500)
         end
 
         it "returns an error" do
@@ -58,7 +89,14 @@ RSpec.describe AntiVirusAnalyzer do
 
       context "when JSON parsing fails" do
         before do
-          stub_request(:post, antivirus_url).to_return(status: 200, body: "Invalid JSON")
+          stub_request(:post, antivirus_scan_url)
+            .with(
+              headers: {
+                "Content-Type" => "application/octet-stream",
+                "Filename" => "file"
+              }
+            )
+            .to_return(status: 200, body: "Invalid JSON")
         end
 
         it "returns an error" do
@@ -68,7 +106,14 @@ RSpec.describe AntiVirusAnalyzer do
 
       context "when request times out" do
         before do
-          stub_request(:post, antivirus_url).to_timeout
+          stub_request(:post, antivirus_scan_url)
+            .with(
+              headers: {
+                "Content-Type" => "application/octet-stream",
+                "Filename" => "file"
+              }
+            )
+            .to_timeout
         end
 
         it "returns an error" do
