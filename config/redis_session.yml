@@ -9,4 +9,5 @@ test:
   <<: *default
 
 production:
-  <<: *default
+  url: <%= ENV['SESSION_URL'] %>
+  db: 1
