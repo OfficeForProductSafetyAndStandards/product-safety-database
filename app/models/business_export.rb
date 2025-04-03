@@ -13,7 +13,7 @@ class BusinessExport < ApplicationRecord
   end
 
   def export!
-    return unless params # Optional: Add an early return or raise an exception if params are mandatory
+    return unless params
 
     Axlsx::Package.new do |p|
       book = p.workbook
@@ -63,7 +63,7 @@ private
   end
 
   def attributes_business_info_sheet(business)
-    investigation_business = business.investigation_businesses.first
+    investigation_business = business.submitted_investigation_businesses&.presence&.first
 
     [
       business.id,

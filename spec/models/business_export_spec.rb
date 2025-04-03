@@ -1,93 +1,64 @@
 require "rails_helper"
 
 RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
-  let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let!(:business) { create(:business).decorate }
-  let!(:business_2) { create(:business).decorate }
-  let!(:investigation_business) { create(:investigation_business, business:, investigation:).decorate }
-  let!(:investigation) { create(:allegation).decorate }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:params) { {} }
   let(:business_export) { described_class.create!(user:, params:) }
+  let(:exported_data) { business_export.export_file.open { |file| Roo::Excelx.new(file) } }
+  let(:sheet) { exported_data.sheet("Businesses") }
 
   describe "#export!" do
-    before do
-      create(:location, business:)
-      create(:contact, business:)
+    context "when exporting regular business data" do
+      let!(:business) { create(:business).decorate }
+      let!(:business_two) { create(:business).decorate }
+      let!(:investigation) { create(:allegation).decorate }
+      let!(:investigation_business) { create(:investigation_business, business:, investigation:).decorate }
 
-      business_export.export!
+      before do
+        create(:location, business:)
+        create(:contact, business:)
+        business_export.export!
+      end
+
+      it "includes headers in the first row" do
+        expect(sheet.row(1)[0..18]).to eq %w[ID trading_name legal_name company_number types primary_contact_email primary_contact_job_title primary_contact_phone_number primary_location_address_line_1 primary_location_address_line_2 primary_location_city primary_location_country primary_location_county primary_location_phone_number primary_location_postal_code created_at updated_at case_id]
+      end
+
+      it "exports business with investigation data" do
+        expect(sheet.row(2)[0..18]).to eq [business.id.to_s, business.trading_name, business.legal_name, business.company_number, investigation_business.relationship, business.primary_contact.try(:email), business.primary_contact.try(:job_title), business.primary_contact.try(:phone_number), business.primary_location.try(:address_line_1), business.primary_location.try(:address_line_2), business.primary_location.try(:city), business.primary_location.try(:country), business.primary_location.try(:county), business.primary_location.try(:phone_number), business.primary_location.try(:postal_code), business.created_at.to_formatted_s(:xmlschema), business.updated_at.to_formatted_s(:xmlschema), investigation.pretty_id]
+      end
+
+      it "exports business without investigation data" do
+        expect(sheet.row(3)[0..18]).to eq [business_two.id.to_s, business_two.trading_name, business_two.legal_name, business_two.company_number, nil, business_two.primary_contact.try(:email), business_two.primary_contact.try(:job_title), business_two.primary_contact.try(:phone_number), business_two.primary_location.try(:address_line_1), business_two.primary_location.try(:address_line_2), business_two.primary_location.try(:city), business_two.primary_location.try(:country), business_two.primary_location.try(:county), business_two.primary_location.try(:phone_number), business_two.primary_location.try(:postal_code), business_two.created_at.to_formatted_s(:xmlschema), business_two.updated_at.to_formatted_s(:xmlschema), nil]
+      end
     end
 
-    let!(:exported_data) { business_export.export_file.open { |file| Roo::Excelx.new(file) } }
-    let!(:sheet) { exported_data.sheet("Businesses") }
+    context "when business has draft notifications" do
+      let!(:business_with_draft_notification) { create(:business) }
+      let!(:draft_notification) do
+        create(:notification, user_title: "Draft notification title").tap do |notification|
+          notification.update_column(:state, "draft")
+        end
+      end
+      let!(:investigation_business_draft) do
+        create(:investigation_business,
+               business: business_with_draft_notification,
+               investigation: draft_notification)
+      end
 
-    # rubocop:disable RSpec/MultipleExpectations
-    # rubocop:disable RSpec/ExampleLength
-    it "exports business data" do
-      expect(sheet.cell(1, 1)).to eq "ID"
-      expect(sheet.cell(2, 1)).to eq business.id.to_s
-      expect(sheet.cell(3, 1)).to eq business_2.id.to_s
+      before do
+        business_export.export!
+      end
 
-      expect(sheet.cell(1, 2)).to eq "trading_name"
-      expect(sheet.cell(2, 2)).to eq business.trading_name
-      expect(sheet.cell(3, 2)).to eq business_2.trading_name
+      it "has correct relationship" do
+        expect(investigation_business_draft.investigation_id).to eq draft_notification.id
+        expect(investigation_business_draft.business_id).to eq business_with_draft_notification.id
+      end
 
-      expect(sheet.cell(1, 3)).to eq "legal_name"
-      expect(sheet.cell(2, 3)).to eq business.legal_name
-      expect(sheet.cell(3, 3)).to eq business_2.legal_name
-
-      expect(sheet.cell(1, 4)).to eq "company_number"
-      expect(sheet.cell(2, 4)).to eq business.company_number
-      expect(sheet.cell(3, 4)).to eq business_2.company_number
-
-      expect(sheet.cell(1, 5)).to eq "types"
-      expect(sheet.cell(2, 5)).to eq investigation_business.relationship
-      expect(sheet.cell(3, 5)).to be_nil
-
-      expect(sheet.cell(1, 6)).to eq "primary_contact_email"
-      expect(sheet.cell(2, 6)).to eq business.primary_contact.try(:email)
-      expect(sheet.cell(3, 6)).to eq business_2.primary_contact.try(:email)
-
-      expect(sheet.cell(1, 7)).to eq "primary_contact_job_title"
-      expect(sheet.cell(2, 7)).to eq business.primary_contact.try(:job_title)
-      expect(sheet.cell(3, 7)).to eq business_2.primary_contact.try(:job_title)
-
-      expect(sheet.cell(1, 8)).to eq "primary_contact_phone_number"
-      expect(sheet.cell(2, 8)).to eq business.primary_contact.try(:phone_number)
-      expect(sheet.cell(3, 8)).to eq business_2.primary_contact.try(:phone_number)
-
-      expect(sheet.cell(1, 9)).to eq "primary_location_address_line_1"
-      expect(sheet.cell(2, 9)).to eq business.primary_location.try(:address_line_1)
-      expect(sheet.cell(3, 9)).to eq business_2.primary_location.try(:address_line_1)
-
-      expect(sheet.cell(1, 10)).to eq "primary_location_address_line_2"
-      expect(sheet.cell(2, 10)).to eq business.primary_location.try(:address_line_2)
-      expect(sheet.cell(3, 10)).to eq business_2.primary_location.try(:address_line_2)
-
-      expect(sheet.cell(1, 11)).to eq "primary_location_city"
-      expect(sheet.cell(2, 11)).to eq business.primary_location.try(:city)
-      expect(sheet.cell(3, 11)).to eq business_2.primary_location.try(:city)
-
-      expect(sheet.cell(1, 12)).to eq "primary_location_country"
-      expect(sheet.cell(2, 12)).to eq business.primary_location.try(:country)
-      expect(sheet.cell(3, 12)).to eq business_2.primary_location.try(:country)
-
-      expect(sheet.cell(1, 13)).to eq "primary_location_county"
-      expect(sheet.cell(2, 13)).to eq business.primary_location.try(:county)
-      expect(sheet.cell(3, 13)).to eq business_2.primary_location.try(:county)
-
-      expect(sheet.cell(1, 14)).to eq "primary_location_phone_number"
-      expect(sheet.cell(2, 14)).to eq business.primary_location.try(:phone_number)
-      expect(sheet.cell(3, 14)).to eq business_2.primary_location.try(:phone_number)
-
-      expect(sheet.cell(1, 15)).to eq "primary_location_postal_code"
-      expect(sheet.cell(2, 15)).to eq business.primary_location.try(:postal_code)
-      expect(sheet.cell(3, 15)).to eq business_2.primary_location.try(:postal_code)
-
-      expect(sheet.cell(1, 18)).to eq "case_id"
-      expect(sheet.cell(2, 18)).to eq investigation.pretty_id
-      expect(sheet.cell(3, 18)).to be_nil
+      it "excludes draft notification data from export" do
+        business_row = sheet.row(2)[0..18]
+        expect(business_row).to eq [business_with_draft_notification.id.to_s, business_with_draft_notification.trading_name, business_with_draft_notification.legal_name, business_with_draft_notification.company_number, nil, business_with_draft_notification.primary_contact.try(:email), business_with_draft_notification.primary_contact.try(:job_title), business_with_draft_notification.primary_contact.try(:phone_number), business_with_draft_notification.primary_location.try(:address_line_1), business_with_draft_notification.primary_location.try(:address_line_2), business_with_draft_notification.primary_location.try(:city), business_with_draft_notification.primary_location.try(:country), business_with_draft_notification.primary_location.try(:county), business_with_draft_notification.primary_location.try(:phone_number), business_with_draft_notification.primary_location.try(:postal_code), business_with_draft_notification.created_at.to_formatted_s(:xmlschema), business_with_draft_notification.updated_at.to_formatted_s(:xmlschema), nil]
+      end
     end
-    # rubocop:enable RSpec/MultipleExpectations
-    # rubocop:enable RSpec/ExampleLength
   end
 end

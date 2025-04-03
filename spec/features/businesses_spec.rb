@@ -96,13 +96,11 @@ RSpec.feature "Business listing", :with_stubbed_mailer, type: :feature do
     # Create a draft notification linked to the business
     draft_notification = create(:notification, user_title: "Draft notification title")
     draft_notification.update_column(:state, "draft")
-    puts "Draft notification state: #{draft_notification.reload.state}"
     create(:investigation_business, business: business, investigation: draft_notification)
 
     # Create a submitted notification linked to the business
     submitted_notification = create(:notification, user_title: "Submitted notification title")
     submitted_notification.update_column(:state, "submitted")
-    puts "Submitted notification state: #{submitted_notification.reload.state}"
     create(:investigation_business, business: business, investigation: submitted_notification)
 
     visit business_path(business)
