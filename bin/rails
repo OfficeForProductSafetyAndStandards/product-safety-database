@@ -1,4 +1,15 @@
 #!/usr/bin/env ruby
+
+# Check if this is a server command and not already called from dev-server
+if (ARGV[0] == 's' || ARGV[0] == 'server') && ENV['FROM_DEV_SERVER'] != 'true'
+  # Run our custom dev-server script instead
+  dev_server_path = File.join(__dir__, 'dev-server')
+  if File.exist?(dev_server_path) && File.executable?(dev_server_path)
+    exec dev_server_path
+  end
+end
+
+# Fall back to normal Rails behavior for all other commands or if dev-server doesn't exist
 APP_PATH = File.expand_path("../config/application", __dir__)
 require_relative "../config/boot"
 require "rails/commands"

@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+require 'socket'
+
+# Find the local IP address
+def local_ip
+  # Get all IP addresses for this machine
+  ip_addresses = Socket.ip_address_list.select do |addr|
+    addr.ipv4? && !addr.ipv4_loopback? && !addr.ipv4_multicast?
+  end
+
+  # Get the first private network address (192.168.x.x, 10.x.x.x, or 172.16-31.x.x)
+  ip = ip_addresses.find do |addr|
+    a, b, c, d = addr.ip_address.split('.').map(&:to_i)
+    (a == 192 && b == 168) || (a == 10) || (a == 172 && b >= 16 && b <= 31)
+  end
+
+  ip&.ip_address || '127.0.0.1'
+end
+
+ip = local_ip
+port = ENV.fetch('PORT', 3000)
+url = "http://#{ip}:#{port}"
+localhost_url = "http://localhost:#{port}"
+
+puts "\n========================================================"
+puts "Starting server accessible from your local network at:"
+puts "Local access: \033[1;32m#{localhost_url}\033[0m"
+puts "Network access: \033[1;32m#{url}\033[0m"
+puts "========================================================\n\n"
+
+# Mark that we're running from dev-server to prevent recursion
+ENV['FROM_DEV_SERVER'] = 'true'
+
+# Start the server directly using the system command
+system("bin/rails server -b 0.0.0.0")

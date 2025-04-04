@@ -9,6 +9,12 @@ trusted_connect_sources = [:self,
                            "https://*.google-analytics.com",
                            "https://stats.g.doubleclick.net"]
 
+# Add your local network IP to allowed connect sources in development
+if Rails.env.development?
+  local_asset_host = ENV.fetch("ASSET_HOST", nil)
+  trusted_connect_sources << local_asset_host if local_asset_host.present?
+end
+
 # Configuration
 Rails.application.config.content_security_policy do |policy|
   # Core security directives
@@ -16,8 +22,12 @@ Rails.application.config.content_security_policy do |policy|
   policy.object_src :none
   policy.child_src :self
   policy.frame_ancestors :none
-  policy.upgrade_insecure_requests true
-  policy.block_all_mixed_content true
+
+  # Only force HTTPS in production
+  unless Rails.env.development?
+    policy.upgrade_insecure_requests true
+    policy.block_all_mixed_content true
+  end
 
   # Script handling with nonce support
   nonce_only = ->(request) { "'nonce-#{request.content_security_policy_nonce}'" }
