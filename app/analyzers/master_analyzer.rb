@@ -12,15 +12,28 @@ class MasterAnalyzer < ActiveStorage::Analyzer
 
         analyzer = analyzer_class.new(@blob)
         begin
+          Rails.logger.debug("MasterAnalyzer: Running #{analyzer_class.name} on blob #{@blob.id}")
           metadata = analyzer.metadata
-          combined_metadata.merge!(metadata) if metadata.present?
+          if metadata.present?
+            Rails.logger.debug("MasterAnalyzer: #{analyzer_class.name} returned #{metadata.inspect}")
+            combined_metadata.merge!(metadata)
+          else
+            Rails.logger.debug("MasterAnalyzer: #{analyzer_class.name} returned no metadata")
+          end
         rescue ActiveStorage::FileNotFoundError => e
-          Rails.logger.warn("File not found for blob #{@blob.id}: #{e.message}")
+          Rails.logger.warn("MasterAnalyzer: File not found for blob #{@blob.id}: #{e.message}")
           next
+        rescue StandardError => e
+          Rails.logger.error("MasterAnalyzer: Error in #{analyzer_class.name} for blob #{@blob.id}: #{e.message}")
+          Rails.logger.error(e.backtrace.join("\n"))
+          # Add error information to metadata
+          error_key = "#{analyzer_class.name.underscore}_error".to_sym
+          combined_metadata[error_key] = e.message
         end
       end
     end
 
+    Rails.logger.debug("MasterAnalyzer: Combined metadata for blob #{@blob.id}: #{combined_metadata.inspect}")
     combined_metadata
   end
 end
