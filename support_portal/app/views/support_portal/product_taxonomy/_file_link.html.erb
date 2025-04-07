@@ -1,0 +1,9 @@
+<% if file.attached? %>
+  <%= link_to file.filename.to_s,
+              Rails.application.routes.url_helpers.rails_storage_proxy_path(file, only_path: true),
+              class: "govuk-link",
+              rel: "noreferrer noopener",
+              target: "_blank" %>
+<% else %>
+  -
+<% end %>
