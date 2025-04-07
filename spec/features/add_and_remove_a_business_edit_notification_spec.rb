@@ -8,6 +8,8 @@ RSpec.feature "Editing business details during Edit Notification journey", :with
   let!(:opss_imt) { create(:team, name: "OPSS Incident Management") }
   let(:user2) { create(:user, :activated, has_viewed_introduction: true, team: opss_imt, roles: %w[notification_task_list_user]) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team, roles: %w[notification_task_list_user]) }
+  let(:super_user) { create(:user, :activated, has_viewed_introduction: true, roles: %w[notification_task_list_user super_user]) }
+  let!(:notification) { create(:notification, user_title: "Test Notification", creator: user) }
 
   before do
     sign_in(user)
@@ -86,6 +88,35 @@ RSpec.feature "Editing business details during Edit Notification journey", :with
       click_button "Continue"
       expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/edit\/search_for_or_add_a_business\?search/)
       expect(page).to have_content(business_one.trading_name)
+    end
+  end
+
+  scenario "when super user manages businesses in Edit notification journey" do
+    sign_out
+    sign_in(super_user)
+    visit "/notifications"
+    if page.has_link?("Test Notification")
+      click_link "Test Notification"
+      expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}/)
+
+      click_link "Add or Remove business"
+      expect(page).to have_current_path(/\/notifications\/\d{4}-\d{4}\/edit\/search_for_or_add_a_business/)
+
+      click_button "Select", match: :first
+      expect(page).to have_content("Business details")
+
+      click_button "Use business details"
+      expect(page).to have_content("Add businesses and their roles in the supply chain")
+
+      check "Retailer"
+      click_button "Save and continue"
+      expect(page).to have_content("Do you need to add another business?")
+
+      within_fieldset "Do you need to add another business?" do
+        choose "No"
+      end
+      click_button "Continue"
+      expect(page).to have_content(notification.user_title)
     end
   end
 

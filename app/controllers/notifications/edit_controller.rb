@@ -328,8 +328,8 @@ module Notifications
       authorized_to_edit =
         [@notification.creator_user, @notification.owner_user].include?(current_user) ||
         [@notification.owner_team, @notification.creator_team].include?(user_team) ||
-        @notification.non_owner_teams_with_edit_access.include?(user_team)
-
+        @notification.non_owner_teams_with_edit_access.include?(user_team) ||
+        current_user.is_superuser?
       # Redirect if not authorized
       redirect_to "/403" unless authorized_to_edit
     end
