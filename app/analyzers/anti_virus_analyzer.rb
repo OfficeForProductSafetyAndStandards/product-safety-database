@@ -5,46 +5,55 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
 
   def metadata
     download_blob_to_tempfile do |file|
-      return { error: "No file provided" } if file.nil?
-
+      file_obj = nil
       begin
         antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
-        uri = URI(antivirus_url)
-        req = Net::HTTP::Post.new(uri)
-        req.basic_auth(ENV["ANTIVIRUS_USERNAME"], ENV["ANTIVIRUS_PASSWORD"])
-        req["Content-Type"] = "application/octet-stream"
-        req["filename"] = "file"
 
-        File.open(file) do |f|
-          req.body = f.read
+        file_obj = File.new(file.path, "rb")
+        file_content = file_obj.read
 
-          response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: Rails.env.production?) do |http|
-            http.request(req)
-          end
+        Rails.logger.debug("AntiVirusAnalyzer: Connecting to #{antivirus_url}")
 
-          case response
-          when Net::HTTPSuccess
-            body = JSON.parse(response.body)
-            { safe: !body.fetch("infected", false) }
+        response = RestClient::Request.execute(
+          method: :post,
+          url: antivirus_url,
+          user: ENV["ANTIVIRUS_USERNAME"],
+          password: ENV["ANTIVIRUS_PASSWORD"],
+          headers: {
+            "Content-Type" => "application/octet-stream",
+            "Transfer-Encoding" => "chunked",
+          },
+          payload: file_content,
+        )
+
+        if response.code == 200
+          result = JSON.parse(response.body)
+          Rails.logger.debug("AntiVirusAnalyzer: Response: #{result.inspect}")
+          if result["malware"]
+            Rails.logger.info("AntiVirusAnalyzer: Malware detected: #{result['reason']}")
+            { safe: false, message: result["reason"] }
           else
-            { error: "HTTP request failed with status #{response.code}" }
+            Rails.logger.debug("AntiVirusAnalyzer: File is safe")
+            { safe: true }
           end
+        else
+          Rails.logger.error("AntiVirusAnalyzer: HTTP Error - Status: #{response.code}, Body: #{response.body}")
+          { safe: false, message: response.body }
         end
-      rescue Errno::ENOENT
-        { error: "File not found locally" }
-      rescue JSON::ParserError
-        { error: "Invalid JSON response" }
-      rescue Net::ReadTimeout
-        { error: "Request timed out" }
       rescue StandardError => e
-        { error: "An unexpected error occurred: #{e.message}" }
+        Rails.logger.error("AntiVirusAnalyzer: Error scanning file: #{e.class} - #{e.message}")
+        Rails.logger.error(e.backtrace.join("\n"))
+        { safe: false, error: e.message }
       ensure
-        file.close unless file.closed?
+        file_obj&.close if file_obj && !file_obj.closed?
       end
     end
   rescue ActiveStorage::FileNotFoundError
+    Rails.logger.error("AntiVirusAnalyzer: File not found in storage")
     { error: "File not found in storage" }
   rescue StandardError => e
+    Rails.logger.error("AntiVirusAnalyzer: Failed to download blob: #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
     { error: "Failed to download blob: #{e.message}" }
   end
 end

@@ -19,14 +19,16 @@ RSpec.describe AntiVirusAnalyzer do
       env_vars[key]
     end
 
+    # Set up a default successful response for RestClient
     stub_request(:post, antivirus_scan_url)
       .with(
         headers: {
           "Content-Type" => "application/octet-stream",
-          "Filename" => "file"
+          "Transfer-Encoding" => "chunked",
+          "Authorization" => "Basic YXY6cGFzc3dvcmQ="
         }
       )
-      .to_return(status: 200, body: { infected: false }.to_json)
+      .to_return(status: 200, body: { malware: false, reason: nil, time: 0.001 }.to_json)
   end
 
   describe ".accept?" do
@@ -47,6 +49,12 @@ RSpec.describe AntiVirusAnalyzer do
     end
 
     context "when file download succeeds" do
+      # Mock the File operations to prevent actual file I/O
+      before do
+        file_double = instance_double(File, read: "Hello, World!", closed?: false, close: nil)
+        allow(File).to receive(:new).and_return(file_double)
+      end
+
       context "when request is successful" do
         it "returns the scan result" do
           expect(analyzer.metadata).to eq({ safe: true })
@@ -58,32 +66,31 @@ RSpec.describe AntiVirusAnalyzer do
               .with(
                 headers: {
                   "Content-Type" => "application/octet-stream",
-                  "Filename" => "file"
+                  "Transfer-Encoding" => "chunked",
+                  "Authorization" => "Basic YXY6cGFzc3dvcmQ="
                 }
               )
-              .to_return(status: 200, body: { infected: true }.to_json)
+              .to_return(status: 200, body: { malware: true, reason: "Test-Virus-Found", time: 0.001 }.to_json)
           end
 
           it "returns file as unsafe" do
-            expect(analyzer.metadata).to eq({ safe: false })
+            expect(analyzer.metadata).to eq({ safe: false, message: "Test-Virus-Found" })
           end
         end
       end
 
       context "when request fails" do
         before do
-          stub_request(:post, antivirus_scan_url)
-            .with(
-              headers: {
-                "Content-Type" => "application/octet-stream",
-                "Filename" => "file"
-              }
-            )
-            .to_return(status: 500)
+          # Use RestClient::ExceptionWithResponse
+          response = instance_double(RestClient::Response, code: 500, body: "Server Error")
+          exception = RestClient::InternalServerError.new(response)
+          allow(RestClient::Request).to receive(:execute).and_raise(exception)
         end
 
         it "returns an error" do
-          expect(analyzer.metadata).to eq({ error: "HTTP request failed with status 500" })
+          result = analyzer.metadata
+          expect(result[:safe]).to be(false)
+          expect(result[:error]).to include("500 Internal Server Error")
         end
       end
 
@@ -93,31 +100,29 @@ RSpec.describe AntiVirusAnalyzer do
             .with(
               headers: {
                 "Content-Type" => "application/octet-stream",
-                "Filename" => "file"
+                "Transfer-Encoding" => "chunked",
+                "Authorization" => "Basic YXY6cGFzc3dvcmQ="
               }
             )
             .to_return(status: 200, body: "Invalid JSON")
         end
 
         it "returns an error" do
-          expect(analyzer.metadata).to eq({ error: "Invalid JSON response" })
+          expect(analyzer.metadata[:safe]).to be(false)
+          expect(analyzer.metadata[:error]).to include("unexpected token")
         end
       end
 
       context "when request times out" do
         before do
-          stub_request(:post, antivirus_scan_url)
-            .with(
-              headers: {
-                "Content-Type" => "application/octet-stream",
-                "Filename" => "file"
-              }
-            )
-            .to_timeout
+          # Use Timeout::Error instead of RestClient::Exceptions::OpenTimeout
+          allow(RestClient::Request).to receive(:execute).and_raise(Timeout::Error.new("Connection timed out"))
         end
 
         it "returns an error" do
-          expect(analyzer.metadata).to eq({ error: "An unexpected error occurred: execution expired" })
+          result = analyzer.metadata
+          expect(result[:safe]).to be(false)
+          expect(result[:error]).to include("Connection timed out")
         end
       end
     end

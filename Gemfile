@@ -26,6 +26,7 @@ gem "jsbundling-rails"
 gem "mini_magick"
 gem "opensearch-ruby"
 gem "phonelib", "~> 0.10.6"
+gem "rest-client", "~> 2.1"
 
 # ActionMailer dependencies
 gem "net-imap"
