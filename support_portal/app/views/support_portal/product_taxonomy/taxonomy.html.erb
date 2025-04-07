@@ -1,0 +1,16 @@
+<% content_for :page_title, "Current product taxonomy" %>
+<% @back_link_href = product_taxonomy_index_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column">
+    <%=
+      govuk_accordion do |accordion|
+        @records.each do |category, subcategories|
+          accordion.with_section(heading_text: category) do
+            subcategories.map { |subcategory| "<p>#{subcategory.name}</p>" }.join.html_safe
+          end
+        end
+      end
+    %>
+  </div>
+</div>
