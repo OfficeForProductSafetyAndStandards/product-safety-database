@@ -9,5 +9,6 @@ test:
   <<: *default
 
 production:
+  <<: *default
   url: <%= ENV['QUEUE_URL'] %>
-  db: 0
+
