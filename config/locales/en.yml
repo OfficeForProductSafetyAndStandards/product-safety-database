@@ -19,7 +19,7 @@ en:
         readonly: "view full notification"
     send_email_reminder_to_submit_draft:
       final_reminder: "This will be the final reminder before the notification will be automatically deleted in 3 days, if the status remains on 'Draft'."
-      another_email: "If the status of this notification remains in 'Draft', another reminder email will be sent in the next coming days."   
+      another_email: "If the status of this notification remains in 'Draft', another reminder email will be sent in the next coming days."
 
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
@@ -994,6 +994,10 @@ en:
               blank: "Enter a password"
               too_common: "Choose a less frequently used password"
               too_short: "Password is too short"
+        product_taxonomy_import:
+          attributes:
+            import_file:
+              blank: "Select a file"
     attributes:
       corrective_action:
         measure_type:
