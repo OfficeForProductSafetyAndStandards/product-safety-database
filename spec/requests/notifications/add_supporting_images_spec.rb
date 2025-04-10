@@ -23,6 +23,13 @@ RSpec.describe "Supporting Images Management", :with_stubbed_antivirus, :with_st
       get notification_add_supporting_images_path(notification_pretty_id: notification.pretty_id)
       expect(response).to render_template("notifications/add_supporting_images/add_supporting_images")
     end
+
+    it "displays information alert when images are present" do
+      upload_test_image
+      get notification_add_supporting_images_path(notification_pretty_id: notification.pretty_id)
+
+      expect(response.body).to include("View link will open image in a new browser tab")
+    end
   end
 
   describe "POST /notifications/:pretty_id/add-supporting-images" do
