@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a product", :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Adding a product", :with_flipper, :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user)       { create(:user, :activated) }
   let(:attributes) do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing", "unsure").sample)
@@ -250,5 +250,42 @@ RSpec.feature "Adding a product", :with_product_form_helper, :with_stubbed_antiv
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "The selected file must be a GIF, JPEG, PNG, WEBP or HEIC/HEIF"
+  end
+
+  context "when a product taxonomy export file exists" do
+    let(:product_taxonomy_import) { create(:product_taxonomy_import, :with_export_file, state: "completed") }
+
+    before do
+      product_taxonomy_import
+    end
+
+    context "with the feature flag on" do
+      before do
+        enable_feature(:new_taxonomy)
+        visit "/products/new" # revisit the page after creating the import
+      end
+
+      it "links to the file" do
+        expect(page).to have_link("Download a full list of main and sub-categories", href: Rails.application.routes.url_helpers.rails_storage_proxy_path(product_taxonomy_import.export_file, only_path: true))
+        expect(page).to have_selector("#product-category-hint", text: "Download a full list of main and sub-categories. Updated #{Time.zone.now.strftime('%d %B %Y')}.Please ensure you are viewing the latest version of the full category list.Select a category from the drop down")
+      end
+    end
+
+    context "with the feature flag off" do
+      before do
+        disable_feature(:new_taxonomy)
+        visit "/products/new" # revisit the page after creating the import
+      end
+
+      it "does not link to the file" do
+        expect(page).to have_selector("#product-category-hint", text: "Select a category from the drop down")
+      end
+    end
+  end
+
+  context "when a product taxonomy export file does not exist" do
+    it "does not link to the file" do
+      expect(page).to have_selector("#product-category-hint", text: "Select a category from the drop down")
+    end
   end
 end
