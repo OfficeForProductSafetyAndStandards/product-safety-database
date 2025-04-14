@@ -31,6 +31,7 @@ class ProductsController < ApplicationController
   def new
     @product_form = ProductForm.new
     @product_form.barcode = params[:barcode] if params[:barcode].present?
+    @taxonomy_export_file_details = taxonomy_export_file_details
   end
 
   def owner
@@ -181,5 +182,19 @@ private
       params[:allegation].blank? &&
       params[:enquiry].blank? &&
       params[:project].blank?
+  end
+
+  def taxonomy_export_file_details
+    latest_product_taxonomy_import = ProductTaxonomyImport.completed.last
+    latest_file = latest_product_taxonomy_import&.export_file
+
+    if Flipper.enabled?(:new_taxonomy) && latest_file.present?
+      {
+        path: Rails.application.routes.url_helpers.rails_storage_proxy_path(latest_file, only_path: true),
+        updated_at: latest_product_taxonomy_import.created_at
+      }
+    else
+      {}
+    end
   end
 end
