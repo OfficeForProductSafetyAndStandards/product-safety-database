@@ -11,7 +11,7 @@ class BulkProductsUpload < ApplicationRecord
   def self.current_bulk_upload_template_path
     latest_file = ProductTaxonomyImport.completed.last&.bulk_upload_template_file
 
-    if latest_file.present?
+    if Flipper.enabled?(:new_taxonomy) && latest_file.present?
       Rails.application.routes.url_helpers.rails_storage_proxy_path(latest_file, only_path: true)
     else
       "/files/product_bulk_upload_template.xlsx"
