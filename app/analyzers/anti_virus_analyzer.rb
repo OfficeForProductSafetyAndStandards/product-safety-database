@@ -7,24 +7,47 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
     download_blob_to_tempfile do |file|
       file_obj = nil
       begin
-        antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+        # Check if URL already has /scan endpoint (DBT platform)
+        is_dbt_scan_url = ENV["ANTIVIRUS_URL"] && ENV["ANTIVIRUS_URL"].include?("/scan")
 
-        file_obj = File.new(file.path, "rb")
-        file_content = file_obj.read
+        # Set up the base URL based on platform
+        if is_dbt_scan_url
+          # DBT platform - use URL as-is since it already contains /scan
+          antivirus_url = ENV["ANTIVIRUS_URL"]
+          platform_name = "DBT"
+        else
+          # GOV.UK PaaS - append /v2/scan-chunked to URL
+          antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+          platform_name = "PaaS"
+        end
 
-        Rails.logger.debug("AntiVirusAnalyzer: Connecting to #{antivirus_url}")
+        Rails.logger.debug("AntiVirusAnalyzer: Connecting to #{antivirus_url} (#{platform_name} format)")
 
-        response = RestClient::Request.execute(
+        # Common request parameters
+        request_params = {
           method: :post,
           url: antivirus_url,
           user: ENV["ANTIVIRUS_USERNAME"],
-          password: ENV["ANTIVIRUS_PASSWORD"],
-          headers: {
+          password: ENV["ANTIVIRUS_PASSWORD"]
+        }
+
+        # Platform-specific request configuration
+        if is_dbt_scan_url
+          # DBT platform uses multipart/form-data
+          request_params[:payload] = { file: File.new(file.path, "rb") }
+        else
+          # GOV.UK PaaS uses application/octet-stream
+          file_obj = File.new(file.path, "rb")
+          file_content = file_obj.read
+          request_params[:headers] = {
             "Content-Type" => "application/octet-stream",
             "Transfer-Encoding" => "chunked",
-          },
-          payload: file_content,
-        )
+          }
+          request_params[:payload] = file_content
+        end
+
+        # Make the request
+        response = RestClient::Request.execute(request_params)
 
         if response.code == 200
           result = JSON.parse(response.body)
