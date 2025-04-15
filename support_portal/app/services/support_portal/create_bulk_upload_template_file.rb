@@ -14,9 +14,10 @@ module SupportPortal
       export_package = Axlsx::Package.new
       export_workbook = export_package.workbook
 
-      # Add all the content
-      create_main_worksheet(export_workbook)
-      create_hidden_worksheets(export_workbook)
+      # Add all the content and data validations
+      main_worksheet = create_main_worksheet(export_workbook)
+      product_categories_worksheet = create_hidden_worksheets(export_workbook)
+      add_data_validations(export_workbook, main_worksheet, product_categories_worksheet)
 
       # Create the XLSX
       output_file = serialize_to_file(type: "bulk_upload_template", axlsx_package: export_package)
@@ -34,8 +35,8 @@ module SupportPortal
         styles = add_styles(sheet)
         add_header_rows(sheet, styles)
         add_content_rows(sheet, styles)
-        add_data_validations(sheet)
         set_column_widths(sheet)
+        sheet
       end
     end
 
@@ -71,30 +72,33 @@ module SupportPortal
       1138.times { |index| sheet.add_row(empty_row, style: index.odd? ? styles[:bg_white] : styles[:bg_grey]) }
     end
 
-    def add_data_validations(sheet)
-      sheet.add_data_validation("B4:B1145", type: :list, formula1: "Categories!$A$1:$A$#{::ProductCategory.count}")
-      sheet.add_data_validation("C4:C1145", type: :list, formula1: "Subcategories!$A$1:$A$#{::ProductSubcategory.count}")
-      sheet.add_data_validation("E4:E1145", type: :list, formula1: "Countries!$A$1:$A$#{::Country.all.length}")
-      sheet.add_data_validation("L4:L1145", type: :list, formula1: '"Yes, No, Uncertain"')
-      sheet.add_data_validation("M4:M1145", type: :list, formula1: "Markings!$A$1:$A$9")
-      sheet.add_data_validation("N4:N1145", type: :list, formula1: '"Yes, No, Unable to ascertain"')
-    end
-
     def set_column_widths(sheet)
       sheet.column_info[0].width = 20
     end
 
     def create_hidden_worksheets(export_workbook)
       # Add hidden worksheets to support data validations
-      export_workbook.add_worksheet(name: "Categories", state: :hidden) do |sheet|
-        ::ProductCategory.all.find_each do |category|
-          sheet.add_row([category.name])
-        end
-      end
+      product_categories_worksheet = export_workbook.add_worksheet(name: "Product categories", state: :hidden) do |sheet|
+        # Get all product subcategories grouped by their parent product category
+        grouped_product_subcategories = ::ProductSubcategory.joins(:product_category).reorder("product_categories.name ASC, product_subcategories.name ASC").group_by(&:product_category)
 
-      export_workbook.add_worksheet(name: "Subcategories", state: :hidden) do |sheet|
-        ::ProductSubcategory.all.find_each do |subcategory|
-          sheet.add_row([subcategory.name])
+        # Add empty rows and columns for all the data we'll need
+        # This is required since Axlsx works with sparse worksheets, hence cells are not accessible until a row including them has been added
+        empty_row = Array.new(grouped_product_subcategories.length + 1) { "" } # one column per category plus one for the list of categories
+        max_subcategories_count = grouped_product_subcategories.max_by { |_, product_subcategories| product_subcategories.length }&.last&.length || 0
+        (max_subcategories_count + 1).times { sheet.add_row(empty_row) }
+
+        # Add product categories in column A, and associated product subcategories in consecutive columns with the product category as the heading
+        sheet.rows[0].cells[0].value = "Product category*"
+        grouped_product_subcategories.each_with_index do |(product_category, product_subcategories), product_category_index|
+          next_cell_index = product_category_index + 1
+
+          sheet.rows[next_cell_index].cells[0].value = product_category.name
+          sheet.rows[0].cells[next_cell_index].value = product_category.name
+
+          product_subcategories.each_with_index do |product_subcategory, product_subcategory_index|
+            sheet.rows[product_subcategory_index + 1].cells[next_cell_index].value = product_subcategory.name
+          end
         end
       end
 
@@ -104,7 +108,7 @@ module SupportPortal
         end
       end
 
-      # If you change these, you must also update the data validation formula that references this worksheet.
+      # If you change these, you must also update the data validation formula that references this worksheet in `add_data_validations`
       export_workbook.add_worksheet(name: "Markings", state: :hidden) do |sheet|
         sheet.add_row(%w[UKCA])
         sheet.add_row(%w[UKNI])
@@ -116,6 +120,25 @@ module SupportPortal
         sheet.add_row(%w[No])
         sheet.add_row(%w[Unknown])
       end
+
+      product_categories_worksheet
+    end
+
+    def add_data_validations(export_workbook, main_worksheet, product_categories_worksheet)
+      # Add defined names to support the product category/subcategory data validations
+      # These limit the product category column, and the product subcategory column to the relevant product subcategories
+      # See https://www.contextures.com/xlDataVal15.html for more information on dependent lists
+      export_workbook.add_defined_name("'Product categories'!$A$2:INDEX('Product categories'!$A:$A,COUNTA('Product categories'!$A:$A))", name: "Master")
+      export_workbook.add_defined_name("'Product categories'!$A$2:INDEX('Product categories'!$1:$#{product_categories_worksheet.rows.length},#{product_categories_worksheet.rows.length},COUNTA('Product categories'!$1:$1))", name: "ValData")
+      export_workbook.add_defined_name("COUNTA(INDEX(ValData,,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0)))", name: "Counter")
+      export_workbook.add_defined_name("INDEX(ValData,1,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0)): INDEX(ValData,Counter,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0))", name: "UseList")
+
+      main_worksheet.add_data_validation("B4:B1145", type: :list, formula1: "Master")
+      main_worksheet.add_data_validation("C4:C1145", type: :list, formula1: "UseList")
+      main_worksheet.add_data_validation("E4:E1145", type: :list, formula1: "Countries!$A$1:$A$#{::Country.all.length}")
+      main_worksheet.add_data_validation("L4:L1145", type: :list, formula1: '"Yes, No, Uncertain"')
+      main_worksheet.add_data_validation("M4:M1145", type: :list, formula1: "Markings!$A$1:$A$9")
+      main_worksheet.add_data_validation("N4:N1145", type: :list, formula1: '"Yes, No, Unable to ascertain"')
     end
   end
 end

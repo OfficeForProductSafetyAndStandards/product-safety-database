@@ -17,18 +17,19 @@ RSpec.describe SupportPortal::CreateBulkUploadTemplateFile, :with_test_queue_ada
     ]
   end
   let(:visible_worksheets) { ["Non compliance Form"] }
-  let(:hidden_worksheets) { %w[Categories Subcategories Countries Markings] }
-  let(:all_worksheets) { visible_worksheets + hidden_worksheets }
+  let(:hidden_worksheets_product_categories) { ["Product categories"] }
+  let(:hidden_worksheets) { %w[Countries Markings] }
+  let(:all_worksheets) { visible_worksheets + hidden_worksheets_product_categories + hidden_worksheets }
   let(:data_validations) do
     [
       have_attributes(
         type: "list",
-        formula1: have_attributes(expression: "Categories!$A$1:$A$2"),
+        formula1: have_attributes(expression: "Master"),
         sqref: [have_attributes(col_range: 1..1, row_range: 3..1144)]
       ),
       have_attributes(
         type: "list",
-        formula1: have_attributes(expression: "Subcategories!$A$1:$A$4"),
+        formula1: have_attributes(expression: "UseList"),
         sqref: [have_attributes(col_range: 2..2, row_range: 3..1144)]
       ),
       have_attributes(
@@ -85,16 +86,16 @@ RSpec.describe SupportPortal::CreateBulkUploadTemplateFile, :with_test_queue_ada
           expect(product_taxonomy_import.bulk_upload_template_file).to be_attached
         end
 
-        it "has five worksheets" do
+        it "has four worksheets" do
           expect(worksheets.map(&:sheet_name)).to match_array(all_worksheets)
         end
 
-        it "hides all worksheet except the form worksheet" do
+        it "hides all worksheets except the form worksheet" do
           visible_worksheets.each do |worksheet_name|
             expect(worksheet_by_name(worksheet_name).state).to be_nil
           end
 
-          hidden_worksheets.each do |worksheet_name|
+          (hidden_worksheets_product_categories + hidden_worksheets).each do |worksheet_name|
             expect(worksheet_by_name(worksheet_name).state).to eq("hidden")
           end
         end
@@ -104,7 +105,12 @@ RSpec.describe SupportPortal::CreateBulkUploadTemplateFile, :with_test_queue_ada
           expect(worksheet_by_name("Non compliance Form").sheet_data.rows[3].size).to eq(14) # columns for row 3 (to skip first two rows which have merged cells)
         end
 
-        it "has the correct number of rows and columns for the hidden worksheets" do
+        it "has the correct number of rows and columns for the product categories hidden worksheet" do
+          expect(worksheet_by_name("Product categories").sheet_data.size).to eq(3) # rows
+          expect(worksheet_by_name("Product categories").sheet_data.rows[0].size).to eq(3) # columns
+        end
+
+        it "has the correct number of rows and columns for the other hidden worksheets" do
           hidden_worksheets.each do |worksheet_name|
             expect(worksheet_by_name(worksheet_name).sheet_data.rows[0].size).to eq(1) # columns
           end

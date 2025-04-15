@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BulkProductsUpload, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.describe BulkProductsUpload, :with_flipper, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   subject(:destroy_abandoned_records) { described_class.destroy_abandoned_records! }
 
   let(:bulk_products_upload_one) { create(:bulk_products_upload) }
@@ -33,9 +33,25 @@ RSpec.describe BulkProductsUpload, :with_stubbed_antivirus, :with_stubbed_mailer
         file_uploaded_import
       end
 
-      it "returns the bulk upload template file for the latest completed product taxonomy import" do
-        expect(described_class.current_bulk_upload_template_path).to start_with("/rails/active_storage/blobs/proxy/")
-        expect(described_class.current_bulk_upload_template_path).to end_with("/bulk_upload_template.xlsx")
+      context "with the feature flag on" do
+        before do
+          enable_feature(:new_taxonomy)
+        end
+
+        it "returns the bulk upload template file for the latest completed product taxonomy import" do
+          expect(described_class.current_bulk_upload_template_path).to start_with("/rails/active_storage/blobs/proxy/")
+          expect(described_class.current_bulk_upload_template_path).to end_with("/bulk_upload_template.xlsx")
+        end
+      end
+
+      context "with the feature flag off" do
+        before do
+          disable_feature(:new_taxonomy)
+        end
+
+        it "returns the fallback path" do
+          expect(described_class.current_bulk_upload_template_path).to eq("/files/product_bulk_upload_template.xlsx")
+        end
       end
     end
 
