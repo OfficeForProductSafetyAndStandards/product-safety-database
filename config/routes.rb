@@ -498,6 +498,7 @@ Rails.application.routes.draw do
       resources :products, only: %i[index create show] do
         collection do
           get :named_parameter_search
+          get :product_subcategories
         end
       end
     end

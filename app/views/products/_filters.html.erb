@@ -9,7 +9,7 @@
     <%= govukSelect(
       key: "category",
       form: form,
-      items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + product_categories.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
+      items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + @product_categories.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
       label: { text: "Category" },
       formGroup: { classes: "govuk-!-margin-right-1" }
     ) %>

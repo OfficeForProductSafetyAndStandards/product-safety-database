@@ -1,14 +1,23 @@
-<% category_items = [OpenStruct.new(value: "", text: "")] + product_categories.map { |x| OpenStruct.new(value: x, text: x) } %>
+<% category_items = [OpenStruct.new(value: "", text: "")] + @product_categories.map { |x| OpenStruct.new(value: x, text: x) } %>
 <%
   category_hint = if @taxonomy_export_file_details.present?
     link = link_to "Download a full list of main and sub-categories", @taxonomy_export_file_details[:path], class: "govuk-link", rel: "noreferrer noopener", target: "_blank"
-    "#{link}. Updated #{@taxonomy_export_file_details[:updated_at].strftime("%d %B %Y")}.<br>Please ensure you are viewing the latest version of the full category list.<br>Select a category from the drop down".html_safe
+    "#{link}. Updated #{@taxonomy_export_file_details[:updated_at].strftime("%d %B %Y")}.<br>Please ensure you are viewing the latest version of the full category list.<br><br>Once you select the main category, you will be able to select a related sub-category.".html_safe
   else
     "Select a category from the drop down"
   end
 %>
-<%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Product category", size: "m" }, hint: { text: category_hint }, disabled: local_assigns[:is_not_allowed] %>
-<%= form.govuk_text_field :subcategory, label: { text: "Product subcategory", size: "m" }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
+<% subcategory_items = [OpenStruct.new(value: "", text: "")] + @product_subcategories.map { |x| OpenStruct.new(value: x, text: x) } %>
+
+<% if Flipper.enabled?(:new_taxonomy) %>
+  <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Main category", size: "m" }, hint: { text: category_hint }, disabled: local_assigns[:is_not_allowed], "aria-controls": "product-category-conditional" %>
+  <div class="opss-select__conditional govuk-radios__conditional" id="product-category-conditional">
+    <%= form.govuk_collection_select :subcategory, subcategory_items, :value, :text, label: { text: "Sub-category", size: "m" }, hint: { text: "Filtered by your main category selection" }, disabled: local_assigns[:is_not_allowed] %>
+  </div>
+<% else %>
+  <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Product category", size: "m" }, hint: { text: category_hint }, disabled: local_assigns[:is_not_allowed] %>
+  <%= form.govuk_text_field :subcategory, label: { text: "Product subcategory", size: "m" }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
+<% end %>
 
 <% if product_form.authenticity_unsure? %>
   <fieldset class="govuk-fieldset">
