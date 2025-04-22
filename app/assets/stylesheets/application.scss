@@ -10,6 +10,7 @@ $govuk-global-styles: true;
 @import "autocomplete";
 @import "case-card";
 @import "documents";
+@import "helpers/conditional-select";
 @import "helpers/password-manager-hidden";
 @import "helpers/product-recall-form";
 @import "helpers/nested-form";

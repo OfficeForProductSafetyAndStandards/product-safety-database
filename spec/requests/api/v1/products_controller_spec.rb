@@ -138,6 +138,29 @@ Search for a Product using named parameters.
     end
   end
 
+  path "/api/v1/products/product_subcategories" do
+    get "List of product subcategories and their parent product category" do
+      description "Get a list of all product subcategories with their parent category"
+      tags "Products"
+      produces "application/json"
+
+      response "200", "Product subcategories returned" do
+        let!(:product_subcategories) { [create(:product_subcategory), create(:product_subcategory)] }
+        let(:product_subcategories_with_categories) do
+          product_subcategories.map { |product_subcategory| [product_subcategory.name, product_subcategory.product_category.name] }
+        end
+
+        run_test! do |response|
+          expect(response).to have_http_status(:ok)
+
+          json = JSON.parse(response.body)
+          expect(json.size).to eq(2)
+          expect(json).to match_array(product_subcategories_with_categories)
+        end
+      end
+    end
+  end
+
   path "/api/v1/products" do
     post "Creates a Product" do
       description "Creates a Product in PSD"

@@ -35,8 +35,7 @@ class ProductForm
   before_validation { trim_whitespace(:brand) }
   before_validation { nilify_blanks(:barcode, :brand) }
 
-  validates :category, presence: true
-  validates :subcategory, presence: true
+  validates :category, :subcategory, presence: true, unless: -> { Flipper.enabled?(:new_taxonomy) }
   validates :authenticity, inclusion: { in: Product.authenticities.keys }
   validates :has_markings, inclusion: { in: Product.has_markings.keys }
   validates :name, presence: true
@@ -45,6 +44,8 @@ class ProductForm
   validates :barcode, allow_nil: true, length: { minimum: 5, maximum: 15 }, if: -> { barcode =~ /\A\d+\z/ }
   validates :country_of_origin, presence: true
   validates :description, length: { maximum: 10_000 }
+  validate :valid_category
+  validate :valid_subcategory
   validate :acceptable_image
 
   validate :markings_validity, if: -> { has_markings == "markings_yes" }
@@ -122,6 +123,21 @@ class ProductForm
   end
 
 private
+
+  def valid_category
+    return unless Flipper.enabled?(:new_taxonomy)
+    return if ProductCategory.pluck(:name).include?(category)
+
+    errors.add(:category, :inclusion)
+  end
+
+  def valid_subcategory
+    return unless Flipper.enabled?(:new_taxonomy)
+    return if category.blank?
+    return if ProductSubcategory.joins(:product_category).where(product_category: { name: category }).pluck(:name).include?(subcategory)
+
+    errors.add(:subcategory, :inclusion)
+  end
 
   def markings_validity
     markings.delete("") unless markings.nil?

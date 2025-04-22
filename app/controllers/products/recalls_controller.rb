@@ -8,6 +8,7 @@ module Products
     before_action :authorize_user
     before_action :product
     before_action :case
+    before_action :product_category_details
     before_action :online_marketplaces, only: %i[show update]
 
     def show
@@ -48,6 +49,11 @@ module Products
       @case ||= @product.investigations&.first
     end
 
+    def product_category_details
+      @product_categories = product_categories
+      @product_subcategories = product_subcategories
+    end
+
     def online_marketplaces
       @online_marketplaces = OnlineMarketplace.approved.order(:name)
     end
@@ -63,6 +69,22 @@ module Products
 
     def product_safety_report?
       @form.attributes["type"] == "product_safety_report"
+    end
+
+    def product_categories
+      if Flipper.enabled?(:new_taxonomy)
+        ProductCategory.all.pluck(:name)
+      else
+        helpers.product_categories
+      end
+    end
+
+    def product_subcategories
+      if Flipper.enabled?(:new_taxonomy)
+        ProductSubcategory.all.pluck(:name)
+      else
+        []
+      end
     end
   end
 end

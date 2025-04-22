@@ -6,6 +6,7 @@ class ProductsController < ApplicationController
 
   before_action :set_search_params, only: %i[index]
   before_action :set_product, only: %i[show edit update owner]
+  before_action :set_product_category_details, only: %i[index new create edit update]
   before_action :set_countries, only: %i[new update edit]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
   before_action :set_last_product_view_cookie, only: %i[index your_products team_products]
@@ -31,7 +32,6 @@ class ProductsController < ApplicationController
   def new
     @product_form = ProductForm.new
     @product_form.barcode = params[:barcode] if params[:barcode].present?
-    @taxonomy_export_file_details = taxonomy_export_file_details
   end
 
   def owner
@@ -122,6 +122,12 @@ private
     @search = SearchParams.new(query_params.except(:page_name))
   end
 
+  def set_product_category_details
+    @product_categories = product_categories
+    @product_subcategories = product_subcategories
+    @taxonomy_export_file_details = taxonomy_export_file_details
+  end
+
   def product_params
     params.require(:product).permit(
       :name, :brand, :category, :subcategory, :product_code,
@@ -182,6 +188,22 @@ private
       params[:allegation].blank? &&
       params[:enquiry].blank? &&
       params[:project].blank?
+  end
+
+  def product_categories
+    if Flipper.enabled?(:new_taxonomy)
+      ProductCategory.all.pluck(:name)
+    else
+      helpers.product_categories
+    end
+  end
+
+  def product_subcategories
+    if Flipper.enabled?(:new_taxonomy)
+      ProductSubcategory.all.pluck(:name)
+    else
+      []
+    end
   end
 
   def taxonomy_export_file_details
