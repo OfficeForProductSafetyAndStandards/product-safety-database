@@ -6,4 +6,5 @@ ruby "3.3.4"
 # Specify your gem's dependencies in prism.gemspec.
 gemspec
 
+gem "nokogiri", force_ruby_platform: true
 gem "sprockets-rails"
