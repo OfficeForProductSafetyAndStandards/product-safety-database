@@ -4,12 +4,19 @@ require "faker"
 ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapter
 
 def create_blob(filename, title: nil, description: nil)
+  valid_path = File.expand_path(filename)
+  seed_files_dir = File.expand_path("./db/seed_files")
+
+  unless valid_path.start_with?(seed_files_dir) && File.exist?(valid_path)
+    raise "Invalid seed file: #{filename}"
+  end
+
   ActiveStorage::Blob.create_and_upload!(
-    io: File.open(filename),
-    filename:,
+    io: File.open(valid_path),
+    filename: File.basename(valid_path),
     content_type: "image/jpeg",
     metadata: {
-      title: title || filename,
+      title: title || File.basename(valid_path),
       description:,
       updated: Time.zone.now.iso8601
     }
@@ -70,7 +77,7 @@ end
 
 # Products
 country_codes = Country.all.map(&:second)
-all_seed_files = Dir.glob("./db/seed_files/*")
+all_seed_files = Dir.glob(File.expand_path("./db/seed_files/*")).select { |f| File.file?(f) }
 hazard_types = Rails.application.config.hazard_constants["hazard_type"]
 product_categories = Rails.application.config.product_constants["product_category"]
 
@@ -91,7 +98,11 @@ product_categories = Rails.application.config.product_constants["product_categor
   product = CreateProduct.call!(product_params.merge({ user: })).product
   product.update!(owning_team: team)
 
-  blob = create_blob(all_seed_files.sample, title: Faker::Commerce.product_name, description: Faker::Hipster.sentence(word_count: 10))
+  next unless all_seed_files.any?
+
+  blob = create_blob(all_seed_files.sample,
+                     title: Faker::Commerce.product_name,
+                     description: Faker::Hipster.sentence(word_count: 10))
   product.documents.attach(blob)
   AuditActivity::Document::Add.from(blob, product)
 end
@@ -124,15 +135,19 @@ end
   product = Product.all.sample
   AddProductToNotification.call!(notification:, product:, user:)
 
-  if rand(100) > 50
-    blob = create_blob(all_seed_files.sample, title: Faker::Commerce.product_name, description: Faker::Hipster.sentence(word_count: 10))
+  if rand(100) > 50 && all_seed_files.any?
+    blob = create_blob(all_seed_files.sample,
+                       title: Faker::Commerce.product_name,
+                       description: Faker::Hipster.sentence(word_count: 10))
     notification.documents.attach(blob)
     AuditActivity::Document::Add.from(blob, notification)
   end
 
-  next unless rand(100) > 30
+  next unless rand(100) > 30 && all_seed_files.any?
 
-  blob = create_blob(all_seed_files.sample, title: Faker::Commerce.product_name, description: Faker::Hipster.sentence(word_count: 10))
+  blob = create_blob(all_seed_files.sample,
+                     title: Faker::Commerce.product_name,
+                     description: Faker::Hipster.sentence(word_count: 10))
   notification.documents.attach(blob)
   AuditActivity::Document::Add.from(blob, notification)
 end
@@ -181,7 +196,10 @@ risk_levels = RiskAssessment.risk_levels.values
   }
 
   AddRiskAssessmentToNotification.call!(risk_assessment_params.merge(notification: investigation_product.investigation, user:, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
-  RiskAssessment.first.risk_assessment_file.attach(create_blob(all_seed_files.sample, title: "Fork close up"))
+
+  if all_seed_files.any?
+    RiskAssessment.first.risk_assessment_file.attach(create_blob(all_seed_files.sample, title: "Fork close up"))
+  end
 end
 
 # Businesses
