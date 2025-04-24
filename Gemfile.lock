@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails.git
-  revision: 3243b6f04f4313dc82eeff7a3c1a8e152a8161db
+  revision: 2f44c42f707bf2b96556d82792267189d6dc482f
   specs:
-    govuk-design-system-rails (0.10.5)
+    govuk-design-system-rails (0.10.6)
 
 PATH
   remote: prism
@@ -836,7 +836,7 @@ DEPENDENCIES
   flipper-active_record
   flipper-ui
   govuk-components (~> 5.9)
-  govuk-design-system-rails (~> 0.10.5)!
+  govuk-design-system-rails (~> 0.10.6)!
   govuk_design_system_formbuilder (~> 5.9)
   govuk_notify_rails
   image_processing
