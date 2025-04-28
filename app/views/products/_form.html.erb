@@ -10,10 +10,17 @@
 <% subcategory_items = [OpenStruct.new(value: "", text: "")] + @product_subcategories.map { |x| OpenStruct.new(value: x, text: x) } %>
 
 <% if Flipper.enabled?(:new_taxonomy) %>
-  <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Main category", size: "m" }, hint: { text: category_hint }, disabled: local_assigns[:is_not_allowed], "aria-controls": "product-category-conditional" %>
-  <div class="opss-select__conditional govuk-radios__conditional" id="product-category-conditional">
-    <%= form.govuk_collection_select :subcategory, subcategory_items, :value, :text, label: { text: "Sub-category", size: "m" }, hint: { text: "Filtered by your main category selection" }, disabled: local_assigns[:is_not_allowed] %>
-  </div>
+  <% if local_assigns[:is_not_allowed] %>
+    <%= form.govuk_text_field :category, label: { text: "Main category", size: "m" }, disabled: true %>
+    <div class="govuk-radios__conditional">
+      <%= form.govuk_text_field :subcategory, label: { text: "Sub-category", size: "m" }, disabled: true %>
+    </div>
+  <% else %>
+    <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Main category", size: "m" }, hint: { text: category_hint }, "aria-controls": "product-category-conditional" %>
+    <div class="opss-select__conditional govuk-radios__conditional" id="product-category-conditional">
+      <%= form.govuk_collection_select :subcategory, subcategory_items, :value, :text, label: { text: "Sub-category", size: "m" }, hint: { text: "Filtered by your main category selection" } %>
+    </div>
+  <% end %>
 <% else %>
   <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Product category", size: "m" }, hint: { text: category_hint }, disabled: local_assigns[:is_not_allowed] %>
   <%= form.govuk_text_field :subcategory, label: { text: "Product subcategory", size: "m" }, hint: { text: "For example, 'Face mask' or 'Washing machine'" } %>
