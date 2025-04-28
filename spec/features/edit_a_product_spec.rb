@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Editing a product", :with_opensearch, :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Editing a product", :with_flipper, :with_opensearch, :with_product_form_helper, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:product_code)      { Faker::Barcode.issn }
   let(:webpage)           { Faker::Internet.url }
   let(:user)              { create(:user, :activated, has_viewed_introduction: true) }
@@ -235,6 +235,20 @@ RSpec.feature "Editing a product", :with_opensearch, :with_product_form_helper, 
     it "informs the user" do
       visit edit_product_path(product)
       expect(page).to have_content("The original record was recorded as 'unsure'")
+    end
+  end
+
+  context "when using the new taxonomy" do
+    before do
+      create(:product_subcategory, name: product.subcategory, product_category: create(:product_category, name: product.category))
+      enable_feature(:new_taxonomy)
+      sign_in user
+    end
+
+    it "disallows editing the category and sub-category" do
+      visit edit_product_path(product)
+      expect(page).to have_field("Main category", with: product.category, disabled: true)
+      expect(page).to have_field("Sub-category", with: product.subcategory, disabled: true)
     end
   end
 end
