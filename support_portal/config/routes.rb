@@ -34,4 +34,9 @@ SupportPortal::Engine.routes.draw do
   end
 
   resources :history, only: %i[index]
+  resources :product_taxonomy, path: "product-taxonomy", only: %i[index new create] do
+    collection do
+      get "taxonomy"
+    end
+  end
 end

@@ -19,7 +19,7 @@ en:
         readonly: "view full notification"
     send_email_reminder_to_submit_draft:
       final_reminder: "This will be the final reminder before the notification will be automatically deleted in 3 days, if the status remains on 'Draft'."
-      another_email: "If the status of this notification remains in 'Draft', another reminder email will be sent in the next coming days."   
+      another_email: "If the status of this notification remains in 'Draft', another reminder email will be sent in the next coming days."
 
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
@@ -607,8 +607,12 @@ en:
           attributes:
             authenticity:
               inclusion: "You must state whether the product is a counterfeit"
-            product_category:
-              blank: "Enter a valid product category"
+            category:
+              blank: Enter a valid product category
+              inclusion: Select the main category
+            subcategory:
+              blank: Enter a valid product subcategory
+              inclusion: Select the sub-category
             barcode:
               invalid: "Enter a valid barcode number"
               too_long: "The barcode must be between 5 and 15 digits"
@@ -994,6 +998,10 @@ en:
               blank: "Enter a password"
               too_common: "Choose a less frequently used password"
               too_short: "Password is too short"
+        product_taxonomy_import:
+          attributes:
+            import_file:
+              blank: "Select a file"
     attributes:
       corrective_action:
         measure_type:

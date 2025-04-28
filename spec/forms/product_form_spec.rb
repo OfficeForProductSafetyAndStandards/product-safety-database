@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProductForm do
+RSpec.describe ProductForm, :with_flipper do
   subject(:form) { described_class.new(attributes) }
 
   let(:attributes) { attributes_for(:product) }
@@ -140,6 +140,156 @@ RSpec.describe ProductForm do
 
         it "de-duplicates the list" do
           expect(form.markings).to eq([Product::MARKINGS.first])
+        end
+      end
+    end
+  end
+
+  describe "category validations" do
+    context "when the feature flag is on" do
+      before do
+        enable_feature(:new_taxonomy)
+      end
+
+      shared_examples "is invalid" do
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:category)).to eq ["Select the main category"]
+        end
+      end
+
+      context "when no category has been selected" do
+        before do
+          form.category = ""
+        end
+
+        it_behaves_like "is invalid"
+      end
+
+      context "when an invalid category has been selected" do
+        before do
+          form.category = "abc"
+        end
+
+        it_behaves_like "is invalid"
+      end
+
+      context "when a valid category has been selected" do
+        let(:subcategory) { create(:product_subcategory) }
+
+        before do
+          form.category = subcategory.product_category.name
+          form.subcategory = subcategory.name
+        end
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
+      end
+    end
+
+    context "when the feature flag is off" do
+      before do
+        disable_feature(:new_taxonomy)
+      end
+
+      context "when no category has been selected" do
+        before do
+          form.category = ""
+        end
+
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:category)).to eq ["Enter a valid product category"]
+        end
+      end
+
+      context "when a category has been selected" do
+        before do
+          form.category = "PPE"
+          form.subcategory = "PPE"
+        end
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
+      end
+    end
+  end
+
+  describe "subcategory validations" do
+    context "when the feature flag is on" do
+      before do
+        enable_feature(:new_taxonomy)
+      end
+
+      shared_examples "is invalid" do
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:subcategory)).to eq ["Select the sub-category"]
+        end
+      end
+
+      context "when no subcategory has been selected" do
+        let(:category) { create(:product_category) }
+
+        before do
+          form.category = category.name
+          form.subcategory = ""
+        end
+
+        it_behaves_like "is invalid"
+      end
+
+      context "when an invalid sub-category has been selected" do
+        let(:category) { create(:product_category) }
+
+        before do
+          form.category = category.name
+          form.subcategory = "abc"
+        end
+
+        it_behaves_like "is invalid"
+      end
+
+      context "when a valid subcategory has been selected" do
+        let(:subcategory) { create(:product_subcategory) }
+
+        before do
+          form.category = subcategory.product_category.name
+          form.subcategory = subcategory.name
+        end
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
+      end
+    end
+
+    context "when the feature flag is off" do
+      before do
+        disable_feature(:new_taxonomy)
+      end
+
+      context "when no subcategory has been entered" do
+        before do
+          form.subcategory = ""
+        end
+
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:subcategory)).to eq ["Enter a valid product subcategory"]
+        end
+      end
+
+      context "when a subcategory has been entered" do
+        before do
+          form.category = "PPE"
+          form.subcategory = "PPE"
+        end
+
+        it "is valid" do
+          expect(form).to be_valid
         end
       end
     end

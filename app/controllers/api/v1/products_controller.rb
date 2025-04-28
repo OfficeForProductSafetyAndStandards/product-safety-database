@@ -4,6 +4,7 @@ class Api::V1::ProductsController < Api::BaseController
   before_action :product, only: :show
   before_action :set_search_params, only: %i[index]
   before_action :set_named_search_params, only: %i[named_parameter_search]
+  skip_before_action :authenticate_api_token!, only: %i[product_subcategories]
 
   def index
     @pagy, @results = search_for_products
@@ -16,6 +17,10 @@ class Api::V1::ProductsController < Api::BaseController
     @count = count_to_display
     @products = ProductDecorator.decorate_collection(@results)
     render :index
+  end
+
+  def product_subcategories
+    render json: ProductSubcategory.joins(:product_category).pluck(:name, :"product_categories.name")
   end
 
   def create

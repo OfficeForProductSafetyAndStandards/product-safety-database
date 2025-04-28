@@ -6,6 +6,7 @@ class ProductsController < ApplicationController
 
   before_action :set_search_params, only: %i[index]
   before_action :set_product, only: %i[show edit update owner]
+  before_action :set_product_category_details, only: %i[index new create edit update]
   before_action :set_countries, only: %i[new update edit]
   before_action :set_sort_by_items, only: %i[index your_products team_products]
   before_action :set_last_product_view_cookie, only: %i[index your_products team_products]
@@ -121,6 +122,12 @@ private
     @search = SearchParams.new(query_params.except(:page_name))
   end
 
+  def set_product_category_details
+    @product_categories = product_categories
+    @product_subcategories = product_subcategories
+    @taxonomy_export_file_details = taxonomy_export_file_details
+  end
+
   def product_params
     params.require(:product).permit(
       :name, :brand, :category, :subcategory, :product_code,
@@ -181,5 +188,35 @@ private
       params[:allegation].blank? &&
       params[:enquiry].blank? &&
       params[:project].blank?
+  end
+
+  def product_categories
+    if Flipper.enabled?(:new_taxonomy)
+      ProductCategory.all.pluck(:name)
+    else
+      helpers.product_categories
+    end
+  end
+
+  def product_subcategories
+    if Flipper.enabled?(:new_taxonomy)
+      ProductSubcategory.all.pluck(:name)
+    else
+      []
+    end
+  end
+
+  def taxonomy_export_file_details
+    latest_product_taxonomy_import = ProductTaxonomyImport.completed.last
+    latest_file = latest_product_taxonomy_import&.export_file
+
+    if Flipper.enabled?(:new_taxonomy) && latest_file.present?
+      {
+        path: Rails.application.routes.url_helpers.rails_storage_proxy_path(latest_file, only_path: true),
+        updated_at: latest_product_taxonomy_import.created_at
+      }
+    else
+      {}
+    end
   end
 end

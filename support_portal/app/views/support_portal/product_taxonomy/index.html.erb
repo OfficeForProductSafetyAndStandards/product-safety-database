@@ -1,0 +1,56 @@
+<% content_for :page_title, "Product taxonomy" %>
+<% @back_link_href = support_root_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Product taxonomy file uploads</h2>
+  </div>
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    <a href="<%= taxonomy_product_taxonomy_index_path %>" class="govuk-button govuk-button--secondary">View current product taxonomy</a>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column">
+    <%=
+      govuk_table do |table|
+        table.with_head do |head|
+          head.with_row do |row|
+            row.with_cell(text: "Uploaded by")
+            row.with_cell(text: "Date/time")
+            row.with_cell(text: "Status")
+            row.with_cell(text: "Uploaded file")
+            row.with_cell(text: "Export file")
+            row.with_cell(text: "Bulk upload template file")
+          end
+        end
+        table.with_body do |body|
+          @records.each do |record|
+            body.with_row do |row|
+              row.with_cell(text: record.user.name)
+              row.with_cell(text: display_date_time(record.created_at))
+              row.with_cell(text: record.status)
+              row.with_cell do
+                render "file_link", file: record.import_file
+              end
+              row.with_cell do
+                render "file_link", file: record.export_file
+              end
+              row.with_cell do
+                render "file_link", file: record.bulk_upload_template_file
+              end
+            end
+          end
+        end
+      end
+    %>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column">
+    <a href="<%= new_product_taxonomy_path %>" class="govuk-button">Upload new product taxonomy file</a>
+  </div>
+</div>
+
+<%= govuk_pagination(pagy: @pagy) %>

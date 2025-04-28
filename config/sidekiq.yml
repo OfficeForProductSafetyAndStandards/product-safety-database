@@ -3,6 +3,7 @@
 :queues:
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-imports
   - searchkick
   - active_storage_purge
 :scheduler:
