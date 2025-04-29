@@ -340,7 +340,7 @@
 
 "accessible-autocomplete@https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main":
   version "2.0.4"
-  resolved "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main#f043b72a5530664a47a1a8e451258920135b9303"
+  resolved "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main#1d57bdfb62b92dde17834fbdb2d2129572d31e70"
   dependencies:
     preact "^8.3.1"
 
