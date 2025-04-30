@@ -129,7 +129,7 @@ private
       workbook.worksheets[0].sheet_data.rows.each_with_index do |row, index|
         next if index.zero? # ignore the heading row
 
-        if row[0].value.blank? || row[1].value.blank?
+        if row[0]&.value.blank? || row[1]&.value.blank?
           errors.add(:import_file, :missing_data, message: "The selected file has incomplete data on row #{index + 1}")
         end
 
