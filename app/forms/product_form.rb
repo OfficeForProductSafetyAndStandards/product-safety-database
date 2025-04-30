@@ -126,6 +126,7 @@ private
 
   def valid_category
     return unless Flipper.enabled?(:new_taxonomy)
+    return unless id.nil? # don't validate for editing since fields are disabled and not saved
     return if ProductCategory.pluck(:name).include?(category)
 
     errors.add(:category, :inclusion)
@@ -133,6 +134,7 @@ private
 
   def valid_subcategory
     return unless Flipper.enabled?(:new_taxonomy)
+    return unless id.nil? # don't validate for editing since fields are disabled and not saved
     return if category.blank?
     return if ProductSubcategory.joins(:product_category).where(product_category: { name: category }).pluck(:name).include?(subcategory)
 

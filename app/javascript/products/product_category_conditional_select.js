@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const parentElement = document.querySelector('#product-category-field, #product-category-field-error, #product-recall-form-product-type-field, #product-recall-form-product-type-field-error')
   const childElement = document.querySelector('#product-subcategory-field, #product-subcategory-field-error, #product-recall-form-subcategory-field, #product-recall-form-subcategory-field-error')
 
-  if (parentElement && childElement) {
+  if (parentElement && childElement && !parentElement.disabled && !childElement.disabled) {
     // Get a list of all product subcategories and their parent product categories
     // from the API - this happens once per page load of a relevant page
     const productSubcategoriesApi = await fetch('/api/v1/products/product_subcategories')

@@ -138,11 +138,18 @@ private
   end
 
   def product_params_for_update
-    params.require(:product).permit(
-      :category, :subcategory, :product_code,
-      :webpage, :description, :country_of_origin, :barcode,
-      :when_placed_on_market, :has_markings, markings: []
-    )
+    if Flipper.enabled?(:new_taxonomy)
+      params.require(:product).permit(
+        :product_code, :webpage, :description, :country_of_origin, :barcode,
+        :when_placed_on_market, :has_markings, markings: []
+      )
+    else
+      params.require(:product).permit(
+        :category, :subcategory, :product_code,
+        :webpage, :description, :country_of_origin, :barcode,
+        :when_placed_on_market, :has_markings, markings: []
+      )
+    end
   end
 
   def query_params
