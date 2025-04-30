@@ -40,7 +40,7 @@
         <a href="#content-09" class="govuk-link govuk-link--no-visited-state">Viewing product record information</a>
       </li>
       <li>
-        <a href="#content-10" class="govuk-link govuk-link--no-visited-state">Editing a product record</a>
+        <a href="#content-10" class="govuk-link govuk-link--no-visited-state">Edit a product record</a>
       </li>
       <li>
         <a href="#content-11" class="govuk-link govuk-link--no-visited-state">Find a business record</a>
@@ -57,22 +57,52 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-  <div class="govuk-!-margin-top-5 govuk-!-margin-bottom-5 govuk-!-padding-top-5 govuk-!-padding-right-4 govuk-!-padding-bottom-1 govuk-!-padding-left-5 opss-blue-border-all">
-    <h2 class="govuk-heading-s">
-      In early 2024 – How notifications work and are created has been changed
-    </h2>
-    <p class="govuk-body">
-      A notification can now be created from the notification page and the user works through a task list, from which they can add all the supporting information required, before submitting the notification. Users can add to the notification post-submission, such as adding supporting evidence.
-    </p>
-    <p class="govuk-body">
-      As part of this new journey, businesses are now their own entity. Before, basic information on a business formed part of the <abbr>PSD</abbr> notification along with what role in the supply chain the businesses occupied. Now, a user can search for and add an existing <abbr>PSD</abbr> business record to a notification or create a new record as part of the notification creation process. This provides the basic information about a business whilst the business role is still specific to the notification.
-    </p>
-    <p class="govuk-body">
-      This means the same business record can have multiple roles in the same notification and can be added to multiple notifications.
-    </p>
-    <p class="govuk-body">
-      <a href="/files/psd-2-enhancements.pdf" class="govuk-link" download>Read more on these changes</a>.
-    </p>
+    <div class="govuk-!-margin-top-5 govuk-!-margin-bottom-5 govuk-!-padding-top-5 govuk-!-padding-right-4 govuk-!-padding-bottom-1 govuk-!-padding-left-5 opss-blue-border-all">
+      <% if Flipper.enabled?(:new_taxonomy) %>
+      <h2 class="govuk-heading-s">
+        April 2025 – How product record main category and subcategory are selected has been changed
+      </h2>
+      <p class="govuk-body">
+        The PSD product subcategory for a product record will no longer be a free text field (which allows users to input any text they want) but will now be mapped to the Global Product Classification (GPC) secondary classification reference data (further information can be found <a href="https://www.gs1.org/standards/gpc/how-gpc-works" class="govuk-link" target="_blank" rel="noreferrer noopener">here</a>).
+      </p>
+      <p class="govuk-body">
+        The product main category will still be aligned to the Safety Gate primary classification categories. Going forward products will be categorised as follows:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Primary classification (PSD main product category) – Safety Gate</li>
+        <li>Secondary classification (PSD product subcategory) – GPC</li>
+      </ul>
+      <p class="govuk-body">
+        Users will now complete the following steps:
+      </p>
+      <figure class="opss-keep-for-desktop">
+        <img loading="lazy" src="<%= image_path "help/about/main_category.png" %>" class="opss-border-all opss-desktop-img-s" alt="Choosing a main category for a product">
+        <figcaption class="govuk-body govuk-body-s">Step 1: Select Main category</figcaption>
+      </figure>
+      <figure class="opss-keep-for-desktop">
+        <img loading="lazy" src="<%= image_path "help/about/sub_category.png" %>" class="opss-border-all opss-desktop-img-s" alt="Choosing a sub-category for a product">
+        <figcaption class="govuk-body govuk-body-s">Step 2: Select related Sub-category</figcaption>
+      </figure>
+      <p class="govuk-body">
+        A breakdown of the new main categories and their associated subcategories is available <%= link_to "here", @taxonomy_export_file_path, class: "govuk-link", rel: "noreferrer noopener", target: "_blank" %>.
+      </p>
+      <% else %>
+      <h2 class="govuk-heading-s">
+        In early 2024 – How notifications work and are created has been changed
+      </h2>
+      <p class="govuk-body">
+        A notification can now be created from the notification page and the user works through a task list, from which they can add all the supporting information required, before submitting the notification. Users can add to the notification post-submission, such as adding supporting evidence.
+      </p>
+      <p class="govuk-body">
+        As part of this new journey, businesses are now their own entity. Before, basic information on a business formed part of the <abbr>PSD</abbr> notification along with what role in the supply chain the businesses occupied. Now, a user can search for and add an existing <abbr>PSD</abbr> business record to a notification or create a new record as part of the notification creation process. This provides the basic information about a business whilst the business role is still specific to the notification.
+      </p>
+      <p class="govuk-body">
+        This means the same business record can have multiple roles in the same notification and can be added to multiple notifications.
+      </p>
+      <p class="govuk-body">
+        <a href="/files/psd-2-enhancements.pdf" class="govuk-link" download>Read more on these changes</a>.
+      </p>
+      <% end %>
     </div>
   </div>
 </div>
@@ -252,7 +282,7 @@
     <p class="govuk-body">
       Which team currently owns and has editing permission for the product record is also displayed. Any team can still include the product record within their own notification.
     </p>
-    <h3 class="govuk-heading-m" id="content-10">10. Editing a product record</h3>
+    <h3 class="govuk-heading-m" id="content-10">10. Edit a product record</h3>
     <p class="govuk-body">
       Only one team has editing permission for a product record at any one time. This is to avoid conflicting edits which may compromise the product record.
     </p>
