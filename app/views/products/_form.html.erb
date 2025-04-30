@@ -2,7 +2,7 @@
 <%
   category_hint = if @taxonomy_export_file_details.present?
     link = link_to "Download a full list of main and sub-categories", @taxonomy_export_file_details[:path], class: "govuk-link", rel: "noreferrer noopener", target: "_blank"
-    "#{link}. Updated #{@taxonomy_export_file_details[:updated_at].strftime("%d %B %Y")}.<br>Please ensure you are viewing the latest version of the full category list.<br><br>Once you select the main category, you will be able to select a related sub-category.".html_safe
+    "Updated #{@taxonomy_export_file_details[:updated_at].strftime("%d %B %Y")}. #{link}.<br>Please ensure you are viewing the latest version of the full category list.<br><br>Once you select the main category, you will be able to select a related sub-category.".html_safe
   else
     "Select a category from the drop down"
   end

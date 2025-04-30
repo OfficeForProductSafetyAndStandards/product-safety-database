@@ -352,7 +352,7 @@ RSpec.feature "Adding a product", :with_flipper, :with_product_form_helper, :wit
 
       it "links to the file" do
         expect(page).to have_link("Download a full list of main and sub-categories", href: Rails.application.routes.url_helpers.rails_storage_proxy_path(product_taxonomy_import.export_file, only_path: true))
-        expect(page).to have_selector("#product-category-hint", text: "Download a full list of main and sub-categories. Updated #{Time.zone.now.strftime('%d %B %Y')}.Please ensure you are viewing the latest version of the full category list.Once you select the main category, you will be able to select a related sub-category.")
+        expect(page).to have_selector("#product-category-hint", text: "Updated #{Time.zone.now.strftime('%d %B %Y')}. Download a full list of main and sub-categories.Please ensure you are viewing the latest version of the full category list.Once you select the main category, you will be able to select a related sub-category.")
       end
     end
 
