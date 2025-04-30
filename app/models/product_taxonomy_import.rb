@@ -120,7 +120,7 @@ private
       end
 
       # We're expecting at least one row of data
-      if workbook.worksheets[0].sheet_data.rows.size.zero?
+      if workbook.worksheets[0].sheet_data.rows.empty?
         errors.add(:import_file, :no_data, message: "The selected file does not have any data")
         return # rubocop:disable Lint/NonLocalExitFromIterator
       end
