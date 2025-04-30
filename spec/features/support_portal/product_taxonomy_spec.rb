@@ -10,6 +10,7 @@ RSpec.feature "Product taxonomy", :with_stubbed_antivirus, :with_stubbed_mailer,
   let(:taxonomy_file) { Rails.root.join "test/fixtures/files/taxonomy.xlsx" }
   let(:text_file) { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
   let(:empty_file) { Rails.root.join "test/fixtures/files/empty_file.xlsx" }
+  let(:blank_file) { Rails.root.join "test/fixtures/files/blank_file.xlsx" }
   let(:invalid_file) { Rails.root.join "test/fixtures/files/invalid.xlsx" }
   let(:invalid_file_too_many_worksheets) { Rails.root.join "test/fixtures/files/taxonomy_too_many_worksheets.xlsx" }
   let(:invalid_file_too_many_columns) { Rails.root.join "test/fixtures/files/taxonomy_too_many_columns.xlsx" }
@@ -61,6 +62,11 @@ RSpec.feature "Product taxonomy", :with_stubbed_antivirus, :with_stubbed_mailer,
     click_on "Upload product taxonomy file"
 
     expect(page).to have_link("The selected file must be larger than 0MB", href: "#product-taxonomy-import-import-file-field-error")
+
+    attach_file "product_taxonomy_import[import_file]", blank_file
+    click_on "Upload product taxonomy file"
+
+    expect(page).to have_link("The selected file does not have any data", href: "#product-taxonomy-import-import-file-field-error")
 
     attach_file "product_taxonomy_import[import_file]", invalid_file
     click_on "Upload product taxonomy file"
