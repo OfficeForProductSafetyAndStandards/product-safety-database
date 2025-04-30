@@ -139,7 +139,7 @@ private
       ary = row.cells.map { |cell| cell&.value&.to_s }
 
       # Ignore completely empty rows or rows with just an entry number
-      next if ary.drop(1).compact.empty?
+      next if ary.drop(1).compact_blank.empty?
 
       entry_number, category, subcategory, customs_code, country_of_origin, barcode, name, description, number_of_affected_units, brand, batch_number, counterfeit, markings, marketed_before_brexit, *_extra_cells = ary
       authenticity = counterfeit.blank? ? nil : { "Yes" => "counterfeit", "No" => "genuine", "Unsure" => "unsure" }[counterfeit&.strip]
