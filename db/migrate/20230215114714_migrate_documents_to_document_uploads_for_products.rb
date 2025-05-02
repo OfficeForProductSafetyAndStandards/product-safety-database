@@ -22,7 +22,7 @@ class MigrateDocumentsToDocumentUploadsForProducts < ActiveRecord::Migration[7.0
       # Update the product to add the new document upload.
       # Do not trigger callbacks which would create a new version and re-index
       # Opensearch.
-      attachment.record.update_column(:document_upload_ids, (attachment.record.document_upload_ids << document_upload.id))
+      attachment.record.update_column(:document_upload_ids, attachment.record.document_upload_ids << document_upload.id)
       # Attach the existing blob to the document upload
       attachment.update_columns(name: "file_upload", record_id: document_upload.id, record_type: "DocumentUpload")
 
