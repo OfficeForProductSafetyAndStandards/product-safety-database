@@ -128,9 +128,9 @@ module SupportPortal
       # Add defined names to support the product category/subcategory data validations
       # These limit the product category column, and the product subcategory column to the relevant product subcategories
       # See https://www.contextures.com/xlDataVal15.html for more information on dependent lists
-      export_workbook.add_defined_name("'Product categories'!$A$2:INDEX('Product categories'!$A:$A,COUNTA('Product categories'!$A:$A))", name: "Master")
+      export_workbook.add_defined_name("'Product categories'!$A$2:INDEX('Product categories'!$A:$A,ROWS('Product categories'!$A:$A)-COUNTBLANK('Product categories'!$A:$A))", name: "Master")
       export_workbook.add_defined_name("'Product categories'!$A$2:INDEX('Product categories'!$1:$#{product_categories_worksheet.rows.length},#{product_categories_worksheet.rows.length},COUNTA('Product categories'!$1:$1))", name: "ValData")
-      export_workbook.add_defined_name("COUNTA(INDEX(ValData,,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0)))", name: "Counter")
+      export_workbook.add_defined_name("ROWS(INDEX(ValData,,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0)))-COUNTBLANK(INDEX(ValData,,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0)))", name: "Counter")
       export_workbook.add_defined_name("INDEX(ValData,1,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0)): INDEX(ValData,Counter,MATCH('Non compliance Form'!XFD1,'Product categories'!$1:$1,0))", name: "UseList")
 
       main_worksheet.add_data_validation("B4:B1145", type: :list, formula1: "Master")
