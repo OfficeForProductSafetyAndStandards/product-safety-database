@@ -15,6 +15,7 @@ require "action_cable/engine"
 require "sprockets/railtie"
 require "rails/test_unit/railtie"
 require_relative "../lib/formatters/asim_formatter"
+require_relative "../lib/formatters/json_formatter"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -51,7 +52,9 @@ module ProductSafetyDatabase
     if ENV["ENABLE_ASIM_LOGGER"] == "true"
       config.lograge.enabled = true
       config.lograge.formatter = Formatters::AsimFormatter.new
-      config.logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
+      logger = Logger.new($stdout)
+      logger.formatter = Formatters::JsonFormatter.new
+      config.logger = ActiveSupport::TaggedLogging.new(logger)
       config.log_tags = JsonTaggedLogger::LogTagsConfig.generate(
         :request_id,
         :remote_ip,
