@@ -190,6 +190,54 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     expect_confirmation_banner("The products were uploaded with the notification number #{BulkProductsUpload.last.investigation.pretty_id}")
   end
 
+  scenario "Adding non-compliant products with a sparse template file" do
+    visit "/products/bulk-upload/triage"
+
+    expect(page).to have_content("How would you describe the products in terms of their compliance and safety?")
+
+    choose "Products are non-compliant"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Enter why the products are non-compliant")
+
+    fill_in "Why are the products non-compliant?", with: "Testing"
+    click_button "Continue"
+
+    expect(page).to have_content("Create a notification for multiple products")
+
+    fill_in "Notification name", with: "Test notification"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select yes if you want to add a reference number")
+
+    choose "Yes"
+    fill_in "Reference number", with: "1234"
+    click_button "Continue"
+
+    expect(page).to have_content("Add the business to the notification")
+
+    choose "Authorised representative"
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Select whether the authorised representative is a UK or EU Authorised representative")
+
+    choose "EU Authorised representative"
+    click_button "Continue"
+
+    expect(page).to have_content("Provide the business details")
+
+    fill_in "Trading name", with: "Fake name"
+    select "United Kingdom", from: "bulk-products-add-business-details-form-country-field", match: :first
+    click_button "Continue"
+
+    expect(page).to have_content("Upload products by Excel")
+
+    attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_empty_rows.xlsx"
+    click_button "Continue"
+
+    expect(page).to have_content("Review details of the products you are uploading")
+  end
+
   scenario "Resuming an incomplete journey" do
     visit "/products/bulk-upload/triage"
 

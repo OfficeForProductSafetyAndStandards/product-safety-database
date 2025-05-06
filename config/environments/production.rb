@@ -59,9 +59,15 @@ Rails.application.configure do
   }
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new($stdout)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  if ENV["ENABLE_ASIM_LOGGER"] == "true"
+    logger = ActiveSupport::Logger.new($stdout)
+    logger.formatter = Formatters::JsonFormatter.new
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  else
+    config.logger = ActiveSupport::Logger.new($stdout)
+      .tap  { |log| log.formatter = ::Logger::Formatter.new }
+      .then { |log| ActiveSupport::TaggedLogging.new(log) }
+  end
 
   # Prepend all log lines with the following tags.
   config.log_tags = %i[request_id]

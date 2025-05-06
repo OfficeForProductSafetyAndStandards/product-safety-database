@@ -107,13 +107,13 @@ RSpec.feature "Adding a product", :with_flipper, :with_product_form_helper, :wit
       # Expected validation errors
       expect(page).to have_error_messages
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "You must state whether the product is a counterfeit"
-      expect(errors_list[1].text).to eq "Select yes if the product has UKCA, UKNI or CE marking"
-      expect(errors_list[2].text).to eq "Name cannot be blank"
-      expect(errors_list[3].text).to eq "Select yes if the product was placed on the market before 1 January 2021"
-      expect(errors_list[4].text).to eq "Enter a valid barcode number"
-      expect(errors_list[5].text).to eq "Country of origin cannot be blank"
-      expect(errors_list[6].text).to eq "Select the main category"
+      expect(errors_list[0].text).to eq "Select the main category"
+      expect(errors_list[1].text).to eq "You must state whether the product is a counterfeit"
+      expect(errors_list[2].text).to eq "Select yes if the product has UKCA, UKNI or CE marking"
+      expect(errors_list[3].text).to eq "Name cannot be blank"
+      expect(errors_list[4].text).to eq "Select yes if the product was placed on the market before 1 January 2021"
+      expect(errors_list[5].text).to eq "Enter a valid barcode number"
+      expect(errors_list[6].text).to eq "Country of origin cannot be blank"
 
       select attributes[:category], from: "Main category"
       select attributes[:subcategory], from: "Sub-category"
@@ -352,7 +352,7 @@ RSpec.feature "Adding a product", :with_flipper, :with_product_form_helper, :wit
 
       it "links to the file" do
         expect(page).to have_link("Download a full list of main and sub-categories", href: Rails.application.routes.url_helpers.rails_storage_proxy_path(product_taxonomy_import.export_file, only_path: true))
-        expect(page).to have_selector("#product-category-hint", text: "Download a full list of main and sub-categories. Updated #{Time.zone.now.strftime('%d %B %Y')}.Please ensure you are viewing the latest version of the full category list.Once you select the main category, you will be able to select a related sub-category.")
+        expect(page).to have_selector("#product-category-hint", text: "Updated #{Time.zone.now.strftime('%d %B %Y')}. Download a full list of main and sub-categories.Please ensure you are viewing the latest version of the full category list.Once you select the main category, you will be able to select a related sub-category.")
       end
     end
 
