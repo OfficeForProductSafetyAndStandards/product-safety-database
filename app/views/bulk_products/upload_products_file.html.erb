@@ -16,9 +16,9 @@
       <% if @bulk_products_upload_products_file_form.products_file.present? %>
         <p class="govuk-body opss-file-attachment">
           Current file:
-          <% if @bulk_products_upload_products_file_form.products_file&.metadata&.dig("safe") == true %>
+          <% if @bulk_products_upload.products_file&.safe? %>
             <a href="<%= rails_storage_proxy_path(@bulk_products_upload_products_file_form.products_file) %>" class="govuk-link" rel="noreferrer noopener" target="_blank"><%= @bulk_products_upload_products_file_form.products_file.filename %></a>
-          <% elsif @bulk_products_upload_products_file_form.products_file&.metadata&.dig("safe") == false %>
+          <% elsif @bulk_products_upload.products_file&.virus? %>
             <%= @bulk_products_upload_products_file_form.products_file.filename %> (failed virus scan)
           <% else %>
             <%= @bulk_products_upload_products_file_form.products_file.filename %> (pending virus scan)

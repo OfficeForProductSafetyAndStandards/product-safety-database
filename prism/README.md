@@ -25,10 +25,6 @@ Once your migrations are ready, from the PSD application root, run `bundle exec 
 You can then run the migrations as usual. All PRISM table names must be prefixed with `prism_` to avoid potential clashes
 with PSD tables.
 
-### Antivirus API
-
-The [antivirus API](https://github.com/OfficeForProductSafetyAndStandards/antivirus) is used to virus scan user-uploaded files.
-
 ### Accounts
 
 #### GOV.UK Platform as a Service

@@ -12,7 +12,7 @@ Add the required hosts in `/etc/hosts`:
 127.0.0.1       psd-report
 ```
 
-To start all the required dependencies, run `docker compose up antivirus db redis opensearch`.
+To start all the required dependencies, run `docker compose up db redis opensearch`.
 
 Make a copy of the environment files for development and test:
 

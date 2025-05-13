@@ -2,8 +2,6 @@
   hide_link ||= false
   class_name ||= ""
   custom_image_classes ||= ""
-  analyzed = document.file_upload&.metadata&.dig("analyzed")
-  safe = document.file_upload&.metadata&.dig("safe")
   image_class = if document.file_upload.variable?
                   "app-document-preview__image"
                 else
@@ -13,7 +11,7 @@
 %>
 
 <div class="app-document-preview <%= class_name %>">
-  <% if analyzed && safe %>
+  <% if document.file_upload&.safe? %>
     <% if document.file_upload.image? %>
       <div class="<%= image_classes %>">
         <% if hide_link %>
