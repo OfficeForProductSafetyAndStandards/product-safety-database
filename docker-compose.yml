@@ -9,15 +9,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
 
-  antivirus:
-    image: beisopss/antivirus:master
-    env_file:
-      - ./docker/env.antivirus
-    environment:
-      - PORT=3006
-    ports:
-      - "3006:3006"
-
   opensearch:
     image: opensearchproject/opensearch:2.15.0
     environment:

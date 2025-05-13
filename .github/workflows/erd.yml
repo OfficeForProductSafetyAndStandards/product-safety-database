@@ -10,8 +10,8 @@ env:
   OPENSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
-  ANTIVIRUS_URL: http://localhost:3006/safe
-  ANTIVIRUS_USERNAME: av
+  ANTIVIRUS_URL: https://staging.clamav.uktrade.digital
+  ANTIVIRUS_USERNAME: username
   ANTIVIRUS_PASSWORD: password
   PSD_HOST: example.com
   PSD_HOST_SUPPORT: example.com
