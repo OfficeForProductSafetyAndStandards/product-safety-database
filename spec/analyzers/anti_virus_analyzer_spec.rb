@@ -10,7 +10,7 @@ RSpec.describe AntiVirusAnalyzer do
   before do
     env_vars = {
       "ANTIVIRUS_URL" => antivirus_url,
-      "ANTIVIRUS_USERNAME" => "av",
+      "ANTIVIRUS_USERNAME" => "username",
       "ANTIVIRUS_PASSWORD" => "password",
       "TMPDIR" => "/tmp"
     }
@@ -25,7 +25,7 @@ RSpec.describe AntiVirusAnalyzer do
         headers: {
           "Content-Type" => "application/octet-stream",
           "Transfer-Encoding" => "chunked",
-          "Authorization" => "Basic YXY6cGFzc3dvcmQ="
+          "Authorization" => "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
         }
       )
       .to_return(status: 200, body: { malware: false, reason: nil, time: 0.001 }.to_json)
@@ -67,7 +67,7 @@ RSpec.describe AntiVirusAnalyzer do
                 headers: {
                   "Content-Type" => "application/octet-stream",
                   "Transfer-Encoding" => "chunked",
-                  "Authorization" => "Basic YXY6cGFzc3dvcmQ="
+                  "Authorization" => "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
                 }
               )
               .to_return(status: 200, body: { malware: true, reason: "Test-Virus-Found", time: 0.001 }.to_json)
@@ -101,7 +101,7 @@ RSpec.describe AntiVirusAnalyzer do
               headers: {
                 "Content-Type" => "application/octet-stream",
                 "Transfer-Encoding" => "chunked",
-                "Authorization" => "Basic YXY6cGFzc3dvcmQ="
+                "Authorization" => "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
               }
             )
             .to_return(status: 200, body: "Invalid JSON")

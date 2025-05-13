@@ -12,11 +12,6 @@ class DocumentsController < ApplicationController
     @document_form = DocumentForm.new(document_params)
     @document_form.cache_file!(current_user)
 
-    # sleep to give the antivirus checks a chance to be completed before running document form validations
-    sleep 3
-
-    @document_form.document.try(:reload)
-
     unless @document_form.valid?
       @parent = @parent.decorate
       return render :new
@@ -27,11 +22,20 @@ class DocumentsController < ApplicationController
       user: current_user,
     }))
 
-    if @document_form.document&.metadata&.dig("safe") && @document_form.document&.metadata["analyzed"]
+    # Reload the uploaded file to get the latest metadata for virus status
+    @document_form.document.try(:reload)
+    file_type = @document_form.document.image? ? "image" : "file"
+    attachment = @parent.documents.find_by(blob_id: @document_form.document)
+
+    if attachment&.safe?
+      # File has been checked for viruses and is safe
       flash[:success] = @document_form.document.image? ? t(:image_added) : t(:file_added, type: @parent.model_name.human.downcase)
+    elsif attachment&.virus?
+      # File has been checked for viruses and is infected
+      flash[:warning] = "The #{file_type} is infected with a virus and will be deleted - please upload again"
     else
-      file_type = @document_form.document.image? ? "image" : "file"
-      flash[:information] = "The #{file_type} did not finish uploading - you must refresh the #{file_type}"
+      # File has not yet been checked for viruses
+      flash[:information] = "The #{file_type} has not yet been checked for viruses - refresh the page for an update"
     end
 
     return redirect_to(product_path(@parent, anchor: "images")) if is_a_product_image?

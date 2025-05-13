@@ -120,6 +120,9 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_complete_product.xlsx"
     click_button "Continue"
 
+    expect_warning_banner("The file has not yet been scanned for viruses. Press the Continue button to re-check the status.")
+    click_button "Continue"
+
     expect(page).to have_content("We found duplicate product records")
 
     click_button "Continue"
@@ -235,6 +238,9 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_empty_rows.xlsx"
     click_button "Continue"
 
+    expect_warning_banner("The file has not yet been scanned for viruses. Press the Continue button to re-check the status.")
+    click_button "Continue"
+
     expect(page).to have_content("Review details of the products you are uploading")
   end
 
@@ -305,6 +311,9 @@ RSpec.feature "Bulk upload products", :with_opensearch, :with_stubbed_antivirus,
     expect(page).to have_error_summary("The selected file contains one or more products with errors")
 
     attach_file "bulk_products_upload_products_file_form[products_file_upload]", "spec/fixtures/files/bulk_products_upload_complete_product.xlsx"
+    click_button "Continue"
+
+    expect_warning_banner("The file has not yet been scanned for viruses. Press the Continue button to re-check the status.")
     click_button "Continue"
 
     expect(page).to have_content("We found duplicate product records")

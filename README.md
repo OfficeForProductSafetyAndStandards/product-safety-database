@@ -12,9 +12,7 @@ The application is written in [Ruby on Rails](https://rubyonrails.org/).
 
 We're using ERB as our HTML templating language, ES6 JavaScript and [Sass](https://sass-lang.com/) for styling.
 
-We're using [Sidekiq](https://github.com/sidekiq/sidekiq) as our background processor to do things like send emails and handle attachments.
-
-We're processing attachments using our [antivirus API](https://github.com/OfficeForProductSafetyAndStandards/antivirus) for antivirus checking and [Imagemagick](https://imagemagick.org/) for thumbnailing.
+We're using [Sidekiq](https://github.com/sidekiq/sidekiq) as our background processor to do things like send emails and handle attachments, and [Imagemagick](https://imagemagick.org/) for thumbnailing.
 
 ## Getting started
 

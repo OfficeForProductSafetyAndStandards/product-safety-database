@@ -69,7 +69,7 @@ module ProductSafetyDatabase
     config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"
     config.notify_api_key = ENV.fetch("NOTIFY_API_KEY", "")
 
-    config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
+    config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "https://staging.clamav.uktrade.digital")
 
     # Always default to secure configuration - 2FA enabled
     config.secondary_authentication_enabled = true

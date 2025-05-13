@@ -136,39 +136,6 @@ RSpec.describe DocumentForm, :with_test_queue_adapter do
         end
       end
     end
-
-    context "with antivirus validation" do
-      context "when file is not yet scanned" do
-        before do
-          allow(form.document).to receive(:metadata).and_return({})
-        end
-
-        it "skips the validation" do
-          expect(form).to be_valid
-        end
-      end
-
-      context "when file is marked as safe" do
-        before do
-          allow(form.document).to receive(:metadata).and_return({ "safe" => true })
-        end
-
-        it "is valid" do
-          expect(form).to be_valid
-        end
-      end
-
-      context "when file is marked as unsafe" do
-        before do
-          allow(form.document).to receive(:metadata).and_return({ "safe" => false })
-        end
-
-        it "is invalid" do
-          expect(form).to be_invalid
-          expect(form.errors[:base]).to include("Files must be virus free")
-        end
-      end
-    end
   end
 
   describe "#initialize" do

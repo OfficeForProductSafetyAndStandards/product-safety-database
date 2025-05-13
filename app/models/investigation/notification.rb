@@ -81,7 +81,7 @@ class Investigation < ApplicationRecord
     end
 
     def virus_free_images
-      image_uploads.select { |image_upload| image_upload&.file_upload&.metadata&.dig("safe") }
+      image_uploads.select { |image_upload| image_upload&.file_upload&.safe? }
     end
   end
 end

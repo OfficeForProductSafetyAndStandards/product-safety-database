@@ -2,12 +2,27 @@ module SupportPortal
   class ProductTaxonomyImportJob < ApplicationJob
     queue_as :"psd-imports"
 
+    class FileNotVirusScanned < StandardError; end
+
     retry_on ActiveRecord::RecordNotFound, wait: 5.seconds, attempts: 3
+    retry_on FileNotVirusScanned, wait: 5.seconds, attempts: 3
     retry_on StandardError, wait: 30.seconds, attempts: 3
 
     def perform(product_taxonomy_import_id)
       product_taxonomy_import = ::ProductTaxonomyImport.find(product_taxonomy_import_id)
       product_taxonomy_import.update!(error_message: nil)
+
+      # Check if the file has a virus
+      if product_taxonomy_import.import_file.virus?
+        product_taxonomy_import.update!(error_message: "File failed virus scan")
+        return
+      end
+
+      # Check if the file has not yet been scanned for viruses and raise to trigger the retry mechanism
+      unless product_taxonomy_import.import_file.analyzed?
+        product_taxonomy_import.update!(error_message: "File not yet virus scanned")
+        raise FileNotVirusScanned
+      end
 
       begin
         update_result = UpdateProductTaxonomy.call(product_taxonomy_import: product_taxonomy_import)
