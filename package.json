@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "accessible-autocomplete": "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main",
+    "accessible-autocomplete": "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multiselect/tarball/main",
     "esbuild": "^0.25.3",
     "govuk-frontend": "5.10.0",
     "postcss": "^8.5.3",
-    "sass": "^1.87.0",
+    "sass": "^1.88.0",
     "standard": "^17.1.2",
     "stimulus-checkbox-select-all": "^5.3.0",
     "stimulus-clipboard": "^4.0.1",

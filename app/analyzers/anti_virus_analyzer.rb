@@ -7,7 +7,7 @@ class AntiVirusAnalyzer < ActiveStorage::Analyzer
     download_blob_to_tempfile do |file|
       file_obj = nil
       begin
-        antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+        antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "https://staging.clamav.uktrade.digital/v2/scan-chunked"
 
         file_obj = File.new(file.path, "rb")
         file_content = file_obj.read

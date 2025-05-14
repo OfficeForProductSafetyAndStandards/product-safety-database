@@ -342,11 +342,9 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.3.0.tgz#d06bbb384ebcf6c505fde1c3d0ed4ddffe0aaff8"
   integrity sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==
 
-"accessible-autocomplete@https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main":
-  version "2.0.6"
-  resolved "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multi/tarball/main#5c026e81bf51391c2270f24e18058ae07a31d862"
-  dependencies:
-    preact "^8.3.1"
+"accessible-autocomplete@https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multiselect/tarball/main":
+  version "3.0.1"
+  resolved "https://github.com/OfficeForProductSafetyAndStandards/accessible-autocomplete-multiselect/tarball/main#c3432606e1f5df990efcee76a2c72178ab97366b"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -2289,11 +2287,6 @@ postcss@^8.4.19, postcss@^8.5.3:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-preact@^8.3.1:
-  version "8.5.3"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-8.5.3.tgz#78c2a5562fcecb1fed1d0055fa4ac1e27bde17c1"
-  integrity sha512-O3kKP+1YdgqHOFsZF2a9JVdtqD+RPzCQc3rP+Ualf7V6rmRDchZ9MJbiGTT7LuyqFKZqlHSOyO/oMFmI2lVTsw==
-
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
@@ -2471,10 +2464,10 @@ safe-regex-test@^1.1.0:
     es-errors "^1.3.0"
     is-regex "^1.2.1"
 
-sass@^1.87.0:
-  version "1.87.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.87.0.tgz#8cceb36fa63fb48a8d5d7f2f4c13b49c524b723e"
-  integrity sha512-d0NoFH4v6SjEK7BoX810Jsrhj7IQSYHAHLi/iSpgqKc7LaIDshFRlSg5LOymf9FqQhxEHs2W5ZQXlvy0KD45Uw==
+sass@^1.88.0:
+  version "1.88.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.88.0.tgz#cd1495749bebd9e4aca86e93ee60b3904a107789"
+  integrity sha512-sF6TWQqjFvr4JILXzG4ucGOLELkESHL+I5QJhh7CNaE+Yge0SI+ehCatsXhJ7ymU1hAFcIS3/PBpjdIbXoyVbg==
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"

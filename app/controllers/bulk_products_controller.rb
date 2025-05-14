@@ -108,11 +108,17 @@ class BulkProductsController < ApplicationController
       @bulk_products_upload_products_file_form.load_products_file
       @bulk_products_upload.products_file.attach(@bulk_products_upload_products_file_form.products_file)
 
-      if @bulk_products_upload_products_file_form.valid?
+      if @bulk_products_upload_products_file_form.valid? && @bulk_products_upload.products_file&.safe?
         @bulk_products_upload.update!(products_cache: @bulk_products_upload_products_file_form.products)
 
+        flash[:information] = nil
+        flash[:warning] = nil
         redirect_to resolve_duplicate_products_bulk_upload_products_path(@bulk_products_upload)
+      elsif @bulk_products_upload.products_file&.virus?
+        flash[:warning] = "The file failed the virus scan. Please upload a virus-free file."
+        @bulk_products_upload.update!(products_cache: [])
       else
+        flash[:information] = "The file has not yet been scanned for viruses. Press the Continue button to re-check the status."
         @bulk_products_upload.update!(products_cache: [])
       end
     else

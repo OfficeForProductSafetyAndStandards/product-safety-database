@@ -37,25 +37,23 @@ module SupportPortal
         return render :new
       end
 
-      # sleep to give the antivirus checks a chance to be completed before running validations
-      sleep 3
-
       if @product_taxonomy_import.valid?(:validate_format)
         @product_taxonomy_import.save!
       else
         return render :new
       end
 
-      # Reload the uploaded file to get the latest metadata
+      # Reload the uploaded file to get the latest metadata for virus status
       @product_taxonomy_import.import_file.try(:reload)
 
-      if @product_taxonomy_import.import_file&.metadata&.dig("analyzed") && @product_taxonomy_import.import_file&.metadata["safe"]
-        @product_taxonomy_import.mark_as_file_uploaded!
-        ProductTaxonomyImportJob.perform_later(@product_taxonomy_import.id)
-        redirect_to product_taxonomy_index_path, notice: "Product taxonomy file uploaded - refresh to check progress"
-      else
-        render :new
+      if @product_taxonomy_import.import_file.virus?
+        flash[:warning] = "The product taxonomy file is infected with a virus and will be deleted - please upload again"
+        return render :new
       end
+
+      @product_taxonomy_import.mark_as_file_uploaded!
+      ProductTaxonomyImportJob.perform_later(@product_taxonomy_import.id)
+      redirect_to product_taxonomy_index_path, notice: "Product taxonomy file uploaded - refresh to check progress"
     end
 
   private

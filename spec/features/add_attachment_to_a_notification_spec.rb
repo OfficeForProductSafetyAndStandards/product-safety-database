@@ -120,7 +120,7 @@ RSpec.feature "Add an attachment to a notification", :with_stubbed_antivirus, :w
 
       click_button "Upload"
 
-      expect_warning_banner("File upload must be virus free")
+      expect_warning_banner("The image is infected with a virus and will be deleted - please upload again")
     end
   end
 

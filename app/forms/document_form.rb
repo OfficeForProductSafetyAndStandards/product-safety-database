@@ -14,7 +14,6 @@ class DocumentForm
   validates :document, presence: true, if: -> { existing_document_file_id.blank? }
   validate :file_size_below_max, if: -> { document.present? && existing_document_file_id.present? }
   validate :file_size_above_min, if: -> { document.present? && existing_document_file_id.present? }
-  validate :file_is_free_of_viruses, if: -> { document.present? && existing_document_file_id.present? }
   validates :title, presence: true
   validates :description, length: { maximum: 10_000 }
 
@@ -81,14 +80,5 @@ private
 
   def min_file_byte_size
     1.byte
-  end
-
-  def file_is_free_of_viruses
-    # don't run this validation unless document has been analyzed by antivirus analyzer
-    return unless document.metadata&.key?("safe")
-
-    return if document.metadata&.dig("safe") == true
-
-    errors.add(:base, :virus, message: "Files must be virus free")
   end
 end

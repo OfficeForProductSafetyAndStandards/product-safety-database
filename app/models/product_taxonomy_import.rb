@@ -21,7 +21,6 @@ class ProductTaxonomyImport < ApplicationRecord
 
   validates :import_file, attached: true, size: { less_than: 10.megabytes, message: "The selected file must be smaller than 10MB" }
   validates :import_file, attached: true, size: { greater_than: 1.byte, message: "The selected file must be larger than 0MB" }
-  validate :file_is_free_of_viruses
   validate :file_is_an_excel_workbook
   validate :file_is_in_expected_format, on: :validate_format
 
@@ -85,15 +84,6 @@ class ProductTaxonomyImport < ApplicationRecord
 
 private
 
-  def file_is_free_of_viruses
-    # Don't run this validation unless document has been analyzed by antivirus analyzer
-    return unless import_file&.metadata&.key?("safe")
-
-    return if import_file&.metadata&.dig("safe") == true
-
-    errors.add(:import_file, :virus, message: "The selected file must be virus free")
-  end
-
   def file_is_an_excel_workbook
     return unless import_file.attached?
 
@@ -120,7 +110,7 @@ private
       end
 
       # We're expecting at least one row of data
-      if workbook.worksheets[0].sheet_data.rows.empty?
+      if workbook.worksheets[0].sheet_data.rows.empty? || workbook.worksheets[0].sheet_data.rows.length == 1
         errors.add(:import_file, :no_data, message: "The selected file does not have any data")
         return # rubocop:disable Lint/NonLocalExitFromIterator
       end

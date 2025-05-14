@@ -37,9 +37,6 @@ class DocumentUploadsController < ApplicationController
       @document_upload = DocumentUpload.new(document_upload_params.merge(upload_model: @parent, created_by: current_user.id))
     end
 
-    # sleep to give the antivirus checks a chance to be completed before running document form validations
-    sleep 3
-
     if @document_upload.valid?
       @document_upload.save!
       # Manually attach the document upload to its parent model's ID array
@@ -50,14 +47,19 @@ class DocumentUploadsController < ApplicationController
       return render :new
     end
 
-    # Reload the uploaded file to get the latest metadata
+    # Reload the uploaded file to get the latest metadata for virus status
     @document_upload.file_upload.try(:reload)
+    file_type = @document_upload.file_upload.image? ? "image" : "file"
 
-    if @document_upload.file_upload&.metadata&.dig("safe") && @document_upload.file_upload&.metadata["analyzed"]
+    if @document_upload.file_upload.safe?
+      # File has been checked for viruses and is safe
       flash[:success] = @document_upload.file_upload.image? ? t(:image_added) : t(:file_added, type: @parent.model_name.human.downcase)
+    elsif @document_upload.file_upload.virus?
+      # File has been checked for viruses and is infected
+      flash[:warning] = "The #{file_type} is infected with a virus and will be deleted - please upload again"
     else
-      file_type = @document_upload.file_upload.image? ? "image" : "file"
-      flash[:information] = "The #{file_type} did not finish uploading - you must refresh the #{file_type}"
+      # File has not yet been checked for viruses
+      flash[:information] = "The #{file_type} has not yet been checked for viruses - refresh the page for an update"
     end
 
     redirect_to(product_path(@parent, anchor: "images"))

@@ -1,6 +1,6 @@
 RSpec.shared_context "with stubbed Antivirus API", shared_context: :metadata do
   before do
-    antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+    antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "https://staging.clamav.uktrade.digital/v2/scan-chunked"
 
     # For clamav-rest API, the opposite of "safe: true" is "malware: false"
     stubbed_response = '{"malware": false, "reason": null, "time": 0.001}'
@@ -16,7 +16,7 @@ end
 
 RSpec.shared_context "with stubbed failing Antivirus API", shared_context: :metadata do
   before do
-    antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "http://localhost:3000/v2/scan-chunked"
+    antivirus_url = ENV["ANTIVIRUS_URL"] ? "#{ENV['ANTIVIRUS_URL'].chomp('/')}/v2/scan-chunked" : "https://staging.clamav.uktrade.digital/v2/scan-chunked"
 
     # For clamav-rest API, this would be "malware: true"
     stubbed_response = '{"malware": true, "reason": "Test-Virus-Found", "time": 0.001}'

@@ -19,9 +19,12 @@ private
     attachments.each do |attachment|
       NotifyMailer.unsafe_attachment(user:, record_type: attachment.record_type, id: attachment.record_id).deliver_later if user && attachment.record_type != "Activity"
       attachment.purge
-      if attachment.record_type == "Activity"
+      case attachment.record_type
+      when "Activity"
         Activity.find(attachment.record_id).destroy!
-      elsif attachment.record_type == "ImageUpload"
+      when "DocumentUpload"
+        DocumentUpload.find(attachment.record_id).destroy!
+      when "ImageUpload"
         ImageUpload.find(attachment.record_id).destroy!
       end
     end

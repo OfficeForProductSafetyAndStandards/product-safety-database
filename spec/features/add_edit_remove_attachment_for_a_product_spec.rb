@@ -57,28 +57,6 @@ RSpec.feature "Add/edit/remove an attachment for a product", :with_stubbed_antiv
     expect_confirmation_banner("The image was successfully removed")
   end
 
-  context "when an image fails the antivirus check", :with_stubbed_failing_antivirus do
-    it "shows error" do
-      sign_in user
-      visit "/products/#{product.id}"
-
-      expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
-
-      click_link "Add an image"
-      expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
-
-      click_button "Upload"
-
-      expect(page).to have_error_summary("Select a file")
-
-      attach_file "image_upload[file_upload]", image
-
-      click_button "Upload"
-
-      expect_warning_banner("File upload must be virus free")
-    end
-  end
-
   context "when the product is owned by another team" do
     let(:owning_team) { create(:team) }
     let(:owning_user) { create(:user, :activated, has_viewed_introduction: true, team: owning_team) }

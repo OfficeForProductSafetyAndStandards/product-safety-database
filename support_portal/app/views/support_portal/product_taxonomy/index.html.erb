@@ -24,8 +24,8 @@
             row.with_cell(text: "Bulk upload template file")
           end
         end
-        table.with_body do |body|
-          @records.each do |record|
+        @records.each do |record|
+          table.with_body do |body|
             body.with_row do |row|
               row.with_cell(text: record.user.name)
               row.with_cell(text: display_date_time(record.created_at))
@@ -38,6 +38,11 @@
               end
               row.with_cell do
                 render "file_link", file: record.bulk_upload_template_file
+              end
+            end
+            if record.error_message.present?
+              body.with_row do |row|
+                row.with_cell(text: record.error_message, colspan: 6, classes: "govuk-hint")
               end
             end
           end

@@ -16,7 +16,6 @@ Rails.application.config.content_security_policy do |policy|
   policy.object_src :none
   policy.child_src :self
   policy.frame_ancestors :none
-  policy.upgrade_insecure_requests true
   policy.block_all_mixed_content true
 
   # Script handling with nonce support
@@ -36,6 +35,10 @@ Rails.application.config.content_security_policy do |policy|
 
   # Connect-src directive for Google Analytics
   policy.connect_src(*trusted_connect_sources)
+
+  if Rails.env.production?
+    policy.upgrade_insecure_requests true
+  end
 end
 
 # CSP nonce configuration
