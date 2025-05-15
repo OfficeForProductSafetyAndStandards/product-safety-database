@@ -186,7 +186,7 @@
               ] : []
             },
             {
-              key: { text: "Risk assessments" },
+              key: { text: "Other risk assessment" },
               value: { text: formatted_risk_assessments(investigation_product.prism_risk_assessments, investigation_product.risk_assessments.order(created_at: :asc), @notification.pretty_id).html_safe.presence || "Not provided" },
               actions: show_edit_link? ? [
                 {
