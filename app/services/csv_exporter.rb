@@ -17,8 +17,6 @@ class CsvExporter
     "locations" => %w[id added_by_user_id address_line_1 address_line_2 business_id city country county created_at name phone_number postal_code updated_at],
     "online_marketplaces" => %w[id approved_by_opss created_at name updated_at],
     "organisations" => %w[id created_at name updated_at],
-    "product_categories" => %w[id name created_at updated_at],
-    "product_subcategories" => %w[id product_category_id name created_at updated_at],
     "products" => %w[id added_by_user_id authenticity barcode brand category country_of_origin created_at description has_markings markings name owning_team_id product_code retired_at subcategory updated_at webpage when_placed_on_market],
     "risk_assessed_products" => %w[id created_at investigation_product_id risk_assessment_id updated_at],
     "risk_assessments" => %w[id added_by_team_id added_by_user_id assessed_by_business_id assessed_by_other assessed_by_team_id assessed_on created_at custom_risk_level details investigation_id risk_level updated_at],
