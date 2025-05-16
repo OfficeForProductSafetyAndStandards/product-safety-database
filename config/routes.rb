@@ -52,7 +52,7 @@ Rails.application.routes.draw do
   end
 
   # Main PSD app
-  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT"), ENV.fetch("PSD_HOST_REPORT")) do
+  constraints DomainExclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT", "psd-support"), ENV.fetch("PSD_HOST_REPORT", "psd-host-report")) do
     mount Prism::Engine => "/prism"
 
     concern :document_attachable do
@@ -461,12 +461,12 @@ Rails.application.routes.draw do
   end
 
   # Support portal
-  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT")) do
+  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_SUPPORT", "psd-host-support")) do
     mount SupportPortal::Engine => "/"
   end
 
   # Report portal
-  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_REPORT")) do
+  constraints DomainInclusionConstraint.new(ENV.fetch("PSD_HOST_REPORT", "psd-host-report")) do
     mount ReportPortal::Engine => "/"
   end
 
