@@ -16,9 +16,11 @@
       <%= form.govuk_text_field :subcategory, label: { text: "Sub-category", size: "m" }, disabled: true %>
     </div>
   <% else %>
-    <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Main category", size: "m" }, hint: { text: category_hint }, "aria-controls": "product-category-conditional" %>
-    <div class="opss-select__conditional govuk-radios__conditional" id="product-category-conditional">
-      <%= form.govuk_collection_select :subcategory, subcategory_items, :value, :text, label: { text: "Sub-category", size: "m" }, hint: { text: "Filtered by your main category selection" } %>
+    <%= form.govuk_collection_select :category, category_items, :value, :text, label: { text: "Main category", size: "m" }, hint: { text: category_hint }, "aria-controls": "product-category-conditional", class: "govuk-!-width-full" %>
+    <div class="govuk-form-group">
+      <div class="opss-select__conditional govuk-radios__conditional" id="product-category-conditional">
+        <%= form.govuk_collection_select :subcategory, subcategory_items, :value, :text, label: { text: "Sub-category", size: "m" }, hint: { text: "Filtered by your main category selection" }, class: "govuk-!-width-full" %>
+      </div>
     </div>
   <% end %>
 <% else %>
