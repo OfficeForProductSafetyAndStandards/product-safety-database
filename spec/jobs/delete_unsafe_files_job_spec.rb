@@ -1,6 +1,7 @@
 require "rails_helper"
+require "sidekiq/testing"
 
-RSpec.describe DeleteUnsafeFilesJob do
+RSpec.describe DeleteUnsafeFilesJob, type: :job do
   describe "#perform", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
     subject(:perform_job) { job.perform }
 
@@ -157,6 +158,32 @@ RSpec.describe DeleteUnsafeFilesJob do
         expect(NotifyMailer).not_to have_received(:unsafe_attachment)
         delete_attachments
       end
+    end
+  end
+
+  # test sidekiq with the Job
+  describe "#perform_later" do
+    before do
+      ActiveJob::Base.queue_adapter = :test
+      Sidekiq::Testing.fake!
+    end
+
+    it "adds job to the queue" do
+      expect {
+        described_class.perform_later
+      }.to have_enqueued_job(described_class)
+    end
+
+    it "adds job to specific queue" do
+      expect {
+        described_class.perform_later
+      }.to have_enqueued_job.on_queue(ENV["SIDEKIQ_QUEUE"] || "psd")
+    end
+
+    it "changes queue size" do
+      expect {
+        described_class.perform_later
+      }.to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
     end
   end
 end
