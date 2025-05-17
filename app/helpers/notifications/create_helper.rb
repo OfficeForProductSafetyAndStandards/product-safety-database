@@ -153,8 +153,8 @@ module Notifications
         (prism_risk_assessments.decorate + risk_assessments.decorate).map { |assessment| sanitize(assessment.supporting_information_full_title) }.compact.join("<br>")
       else
         risk_assessment_list = Investigation.find_by(pretty_id: notification_id).risk_assessments
-        if risk_assessment_list.nil?
-          "Not Provided"
+        if risk_assessment_list.blank?
+          "Not provided"
         else
           hyperlinks = ""
           risk_assessment_list.each_with_index do |risk, index|

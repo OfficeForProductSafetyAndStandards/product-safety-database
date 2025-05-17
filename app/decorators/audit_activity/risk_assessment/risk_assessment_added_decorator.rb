@@ -2,7 +2,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator < ApplicationD
   delegate_all
 
   def title(*)
-    "Risk assessment"
+    "Other risk assessment"
   end
 
   def assessed_on

@@ -24,7 +24,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def supporting_information_type
-    "Risk assessment"
+    "Other risk assessment"
   end
 
   def date_of_activity
